@@ -1,0 +1,18 @@
+﻿@{ 
+    ViewBag.Title = "text"; 
+    Layout = "_LayoutMinimal";
+}
+
+@section custom_head {
+    @Html.Partial("_css_Bootstrap")
+    @Html.Partial("_css_site")
+    <style>
+        body { margin: 0; padding: 0; }
+        canvas { width: 99%; height: 99% }
+    </style>
+}
+
+@Html.Partial("_js_Jquery")
+@Html.Partial("_js_Threejs")
+@Html.Partial("_js_Stats")
+<script src="/js/webgl/text/text.js"></script>

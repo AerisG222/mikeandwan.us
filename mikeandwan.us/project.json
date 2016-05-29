@@ -1,0 +1,76 @@
+{
+    "title": "mikeandwan.us",
+    "userSecretsId": "5237b663-2825-47a5-88a6-d24e89c9a436",
+    "authors": [ "Mike Morano <mmorano@mikeandwan.us>" ],
+    "description": "www.mikeandwan.us",
+    "version": "1.0.0-beta1",
+    "buildOptions": {
+        "debugType": "portable",
+        "preserveCompilationContext": true,
+        "emitEntryPoint": true,
+        "warningsAsErrors": true
+    },
+    "dependencies": {
+        "Microsoft.AspNetCore.Diagnostics": "1.0.0-rc2-final",
+        "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.0.0-rc2-final",
+        "Microsoft.AspNetCore.Hosting": "1.0.0-rc2-final",
+        "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0-rc2-final",
+        "Microsoft.AspNetCore.Hosting.Server.Abstractions": "1.0.0-rc2-final",
+        "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
+        "Microsoft.AspNetCore.Server.Kestrel": "1.0.0-rc2-final",
+        "Microsoft.AspNetCore.StaticFiles": "1.0.0-rc2-final",
+        "Microsoft.Extensions.Configuration.CommandLine": "1.0.0-rc2-final",
+        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc2-final",
+        "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0-rc2-final",
+        "Microsoft.Extensions.Logging.Console": "1.0.0-rc2-final",
+        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0-rc2-final",
+        "Maw.Data": { "target": "project" },
+        "Maw.Data.EntityFramework": { "target": "project" },
+        "Maw.Domain": { "target": "project" },
+        "Maw.TagHelpers": { "target": "project" },
+        "NMagickWand": "0.4.1"
+    },
+    "frameworks": {
+        "net451": {
+            "frameworkAssemblies": {
+                //"Microsoft.NETCore.Platforms": "1.0.1-rc2-24027",
+                "System.IO.Compression": "",
+                "System.IO.Compression.FileSystem": ""
+            }
+        },
+        "netcoreapp1.0": {
+            "dependencies": {
+                "Microsoft.NETCore.App": {
+                    "version": "1.0.0-rc2-3002702",
+                    "type": "platform"
+                },
+                "System.IO.Compression": "4.1.0-rc2-24027"
+            },
+            "imports": [
+                "dnxcore50",
+                "portable-net45+win8+wp8+wpa81",
+                "portable-net45+win8+wp8"
+            ]
+        }
+    },
+    "runtimeOptions": {
+        "configProperties": {
+            "System.GC.Server": true
+        }
+    },
+    "scripts": {
+        "postrestore": [ "npm install" ]
+    },
+    "publishOptions": {
+        "include": [ "wwwroot", "Views" ]
+    },
+    "copyToOutput": {
+        "include": [ "project.json" ]
+    },
+    "tools": { 
+        "Microsoft.Extensions.SecretManager.Tools": {
+            "version": "1.0.0-*",
+            "imports": "portable-net45+wp80+win8+wpa81+dnxcore50"
+        }
+    }
+}

@@ -1,0 +1,15 @@
+﻿<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-head">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="/">mikeandwan.us</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse-head">
+            @Html.Partial("_PrimaryNavPartial", (MawMvcApp.ViewModels.Navigation.NavigationZone) ViewBag.NavigationZone)
+            @Html.Partial("_AccountStatus", (MawMvcApp.ViewModels.Navigation.NavigationZone) ViewBag.NavigationZone)
+        </div>
+    </div>
+</nav>

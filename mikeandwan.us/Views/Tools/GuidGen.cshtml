@@ -1,0 +1,18 @@
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | guid generator"; 
+}
+
+@section header {
+    @Html.Partial("_PageHeader", "Guid Generator")
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "general", Item = "guid-gen" })
+}
+
+<p>This page allows you to generate GUIDs.  To get a new GUID, keep refreshing this page.</p>
+
+<p><strong>@ViewBag.Guid</strong></p>
+
+<p><a asp-controller="tools" asp-action="guidgen">Generate Another GUID</a></p>

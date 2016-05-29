@@ -1,0 +1,39 @@
+<mawdialog (buttonClick)="execute($event)">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="prefsDisplayMode" class="col-sm-6 control-label">Photo Display Mode</label>
+            <div class="col-sm-6">
+                <select id="prefsDisplayMode" class="form-control" [(ngModel)]="editDisplayMode">
+                    <option value="1">Inline View</option>
+                    <option value="2">Popup (optimized for small screens)</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="prefsThumbrowcount" class="col-sm-6 control-label">Thumbnail Rows Per Page</label>
+            <div class="col-sm-3">
+                <select id="prefsThumbrowcount" class="form-control" [(ngModel)]="editRowCount">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="prefsSlideshowInterval" class="col-sm-6 control-label">Slideshow Interval</label>
+            <div class="col-sm-3">
+                <select id="prefsSlideshowInterval" class="form-control" [(ngModel)]="editSlideshowInterval">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>20</option>
+                </select>
+            </div>
+        </div>
+    </form>
+</mawdialog>

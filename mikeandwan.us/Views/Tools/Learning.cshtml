@@ -1,0 +1,36 @@
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "learning"; 
+    ViewBag.AngularAppRoot = "/js/tools/learning/";
+}
+
+@section stylesheets {
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Inconsolata:700" />
+}
+
+@section scripts_head {
+    @Html.Partial("_js_Angular2")
+}
+
+@section scripts_footer {
+    <script>System.import('/js/tools/learning/bootstrap.js');</script>
+}
+
+@section header {
+    @Html.Partial("_PageHeader", "Learning")
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "learning", Item = "learning" })
+}
+
+<p>
+    This originally was a small tool that hopefully would help me learn Silverlight, and letters and numbers for my
+    daughter.  However, this was only partially successful - my daughter mastered her part, but I am still clueless
+    with Silverlight, but that is ok, as it is effectively dead.  Instead, this is now an attempt for me to learn
+    angular js, before a re-write of the more complicated picture application.
+</p>
+
+<section class="learning_char">
+    <learning>Loading...</learning>
+</section>

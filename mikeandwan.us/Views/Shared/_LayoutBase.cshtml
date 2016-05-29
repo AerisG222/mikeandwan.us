@@ -1,0 +1,43 @@
+@{ Layout = "_LayoutMinimal"; }
+
+@section custom_head {
+	@await RenderSectionAsync("custom_head", required: false)
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine:bold" />
+	@Html.Partial("_css_FontAwesome")
+	@Html.Partial("_css_Bootstrap")
+	@Html.Partial("_css_site")
+	@await RenderSectionAsync("stylesheets", required: false)
+	@Html.Partial("_js_Modernizr")
+	@await RenderSectionAsync("scripts_head", required: false)
+}
+
+@RenderBody()
+
+<footer class="container-fluid">
+	<div class="row social">
+		<div class="col-xs-12 text-center">
+			<a href="https://play.google.com/store/apps/developer?id=mmorano"><i class="fa fa-android"></i></a>
+			<a href="https://twitter.com/AerisG222"><i class="fa fa-tw"></i></a>
+			<a href="https://www.google.com/+MikeMorano222"><i class="fa fa-gp"></i></a>
+			<a href="https://www.linkedin.com/pub/mike-morano/0/b51/805"><i class="fa fa-ln"></i></a>
+			<a href="https://www.facebook.com/AerisG222"><i class="fa fa-fb"></i></a>
+			<a href="https://trello.com/aerisg222"><i class="fa fa-trello"></i></a>
+			<a href="https://github.com/AerisG222"><i class="fa fa-github"></i></a>
+			<a href="https://steamcommunity.com/profiles/76561197974977949/"><i class="fa fa-steam"></i></a>
+		</div>
+	</div>
+	<div class="row copyright">
+		<div class="col-xs-12 text-center">
+			<span>copyright &copy; @(DateTime.Now.Year) mike morano | all rights reserved</span>
+		</div>
+	</div>
+</footer>
+
+@Html.Partial("_js_Jquery")
+@Html.Partial("_js_Bootstrap")
+@Html.Partial("_js_Webshims")
+@* @Html.Partial("_js_Angular") *@
+@await RenderSectionAsync("scripts_footer", required: false)
+@Html.Partial("_js_GoogleAnalytics")

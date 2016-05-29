@@ -1,0 +1,5 @@
+<div class="row board_row" *ngFor="#boardRow of board" [hidden]="isGameOver">
+	<div class="col-sm-2" [class.col-sm-offset-1]="$first" *ngFor="#cardinf of boardRow">
+		<card #card [cardInfo]="cardinf" (select)="selectCard(card)"></card>
+	</div>
+</div>

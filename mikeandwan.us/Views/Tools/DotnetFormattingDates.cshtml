@@ -1,0 +1,23 @@
+@model IEnumerable<MawMvcApp.ViewModels.Tools.Dotnet.FormatExampleGroup>
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | .net date formatting"; 
+}
+
+@section header {
+    @Html.Partial("_PageHeader", "Date Formatting")
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-formatting-dates" })
+}
+
+<p>
+    The following are examples that show the output of formatting 
+    <strong>October 3, 1977 3:24.46.789 AM EST</strong>.
+	Note that there are many more things you can do as far as formatting dates in the framework.  For example
+    the samples below do not even broach the subject of culture specific formatting.  For (significantly) 
+    more detail, visit the API documentation at MSDN.
+</p>
+
+@Html.Partial("_DotnetFormatExampleGroupListing", Model)

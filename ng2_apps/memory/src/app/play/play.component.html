@@ -1,0 +1,16 @@
+<div class="container">
+	<div class="row vs_row">
+		<div class="col-sm-3 col-sm-offset-1">
+			<turtle-score [player]="player1"></turtle-score>
+		</div>
+		<div class="col-sm-2 text-center">
+			<span class="vs yellow">vs.</span>
+		</div>
+		<div class="col-sm-3">
+			<turtle-score [player]="player2"></turtle-score>
+		</div>
+	</div>
+	<game-board (match)="onHit($event)" (nonmatch)="onMiss()" *ngIf="!isGameOver"></game-board>
+	<winner-screen [player]="winningPlayer" (rematch)="startNewGame()" (newgame)="exit()" *ngIf="isGameOver && !isTie"></winner-screen>
+	<tie-screen [player1]="player1" [player2]="player2" (rematch)="startNewGame()" (newgame)="exit()" *ngIf="isGameOver && isTie"></tie-screen>
+</div>

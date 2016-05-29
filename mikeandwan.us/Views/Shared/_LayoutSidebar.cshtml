@@ -1,0 +1,31 @@
+@{ Layout = "_LayoutBase"; }
+
+@section custom_head {
+	@await RenderSectionAsync("custom_head", required: false)
+}
+
+@section stylesheets {
+    @await RenderSectionAsync("stylesheets", required: false)
+}
+
+@section scripts_head {
+	@await RenderSectionAsync("scripts_head", required: false)
+}
+
+@Html.Partial("_TopNav")
+
+<div class="container">
+    <article class="row">
+        <div class="col-sm-push-9 col-sm-3">
+            @await RenderSectionAsync("sidebar")
+        </div>
+        <div class="col-sm-pull-3 col-sm-9">
+            @await RenderSectionAsync("header")
+	        @RenderBody()
+        </div>
+    </article>
+</div>
+
+@section scripts_footer {
+	@await RenderSectionAsync("scripts_footer", required: false)
+}

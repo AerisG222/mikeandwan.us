@@ -1,0 +1,1 @@
+select concat('insert into maw.login_area (id, name) values (', id, ', ''', name, ''');') from login_area;

@@ -1,0 +1,19 @@
+﻿@{ Layout = "_LayoutBase"; }
+
+@section custom_head {
+    @RenderSection("custom_head", required: false)
+}
+
+@section stylesheets {
+    @RenderSection("stylesheets", required: false)
+}
+
+@section scripts_head {
+    @RenderSection("scripts_head", required: false)
+}
+
+@RenderBody()
+
+@section scripts_footer {
+    @RenderSection("scripts_footer", required: false)
+}

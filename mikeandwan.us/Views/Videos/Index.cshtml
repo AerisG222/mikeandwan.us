@@ -1,0 +1,21 @@
+@{
+    Layout = "_SinglePageAppLayout";
+    ViewBag.Title = "videos"; 
+    ViewBag.AngularAppRoot = "/js/videos/";
+}
+
+@section custom_head {
+    <base href="/videos/" />
+}
+
+@section scripts_head {
+    @Html.Partial("_js_Angular2")
+}
+
+@section scripts_footer {
+    <script>
+        System.import('/js/videos/bootstrap');
+    </script>
+}
+
+<videoapp>Loading...</videoapp>

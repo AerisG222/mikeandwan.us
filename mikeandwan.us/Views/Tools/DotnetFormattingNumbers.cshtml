@@ -1,0 +1,20 @@
+@model IEnumerable<MawMvcApp.ViewModels.Tools.Dotnet.FormatExampleGroup>
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | .net number formatting"; 
+}
+
+@section header {
+    @Html.Partial("_PageHeader", "Number Formatting")
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-formatting-numbers" })
+}
+
+<p>
+    The following are examples that show the output of formatting <strong>1,234.125678</strong>. Note
+    for the set of examples below, we use a double value unless otherwise stated.
+</p>
+
+@Html.Partial("_DotnetFormatExampleGroupListing", Model)

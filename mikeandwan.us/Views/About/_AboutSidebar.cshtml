@@ -1,0 +1,7 @@
+﻿@model string
+
+<div class="list-group">
+    <a asp-controller="about" asp-action="index" maw-active="@string.Equals(Model, "index", StringComparison.OrdinalIgnoreCase)">About Us</a>
+    <a asp-controller="about" asp-action="news" maw-active="@string.Equals(Model, "news", StringComparison.OrdinalIgnoreCase)">News</a>
+    <a asp-controller="about" asp-action="contact" maw-active="@string.Equals(Model, "contact", StringComparison.OrdinalIgnoreCase)">Contact</a>
+</div>

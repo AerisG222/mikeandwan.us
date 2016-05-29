@@ -1,0 +1,26 @@
+@{ 
+    ViewBag.Title = "games | money-spin";
+    ViewBag.AngularAppRoot = "/js/games/money_spin/"; 
+}
+
+@section custom_head {
+    <base href="/games/money-spin/" />
+}
+
+@section scripts_head {
+    @Html.Partial("_js_Angular2")
+}
+
+@section stylesheets {
+    <link rel="stylesheet" href="/css/games/memory.css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Permanent+Marker" />
+}
+
+@section scripts_footer {
+    @Html.Partial("_js_Threejs")
+    <script>System.import('/js/games/money_spin/bootstrap');</script>
+}
+
+<h2>Money Spin</h2>
+
+<moneyspin>Loading...</moneyspin>

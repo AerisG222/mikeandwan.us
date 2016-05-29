@@ -1,0 +1,30 @@
+
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | binary clock";
+    ViewBag.AngularAppRoot = "/js/tools/binaryClock";
+}
+
+@section scripts_head {
+    @Html.Partial("_js_Angular2")
+}
+
+@section scripts_footer {
+    <script>System.import('/js/tools/binaryClock/bootstrap.js');</script>
+}
+
+@section header {
+    @Html.Partial("_PageHeader", "Binary Clock")
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "binaryclock", Item = "binary-clock" })
+}
+
+<section>
+    <binaryclock>Loading...</binaryclock>
+
+    <p>
+        If you are unfamiliar with this, take a look at the <a href="/tools/binary-clock-about">binary clock primer</a>.
+    </p>    
+</section>

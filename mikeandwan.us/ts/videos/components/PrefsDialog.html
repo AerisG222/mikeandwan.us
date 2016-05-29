@@ -1,0 +1,12 @@
+<mawdialog [title]="title" (buttonClick)="execute($event)">
+    <form>
+        <div class="row">
+            <div class="col-sm-3">
+                <label for="prefsWide">Large Movies?</label>
+            </div>
+            <div class="col-sm-2">
+                <input id="prefsWide" type="checkbox" [(ngModel)]="form.preferLarge" />
+            </div>
+        </div>
+    </form>
+</mawdialog>

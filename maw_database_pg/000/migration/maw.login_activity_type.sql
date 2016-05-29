@@ -1,0 +1,1 @@
+select concat('insert into maw.login_activity_type (id, name) values (', id, ', ''', name, ''');') from login_activity_type;

@@ -1,0 +1,432 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Maw.Domain.Identity;
+
+
+namespace Maw.Data.Identity
+{
+    public class MawUserStore
+		: IUserStore<MawUser>, IUserPasswordStore<MawUser>, IUserRoleStore<MawUser>, IUserSecurityStampStore<MawUser>, IUserEmailStore<MawUser>, IDisposable
+    {
+        readonly IUserRepository _repo;
+		readonly ILogger _log;
+
+
+		#region ctor
+        public MawUserStore(IUserRepository repo, ILoggerFactory loggerFactory)
+        {
+			if(repo == null)
+			{
+				throw new ArgumentNullException(nameof(repo));
+			}
+
+			if(loggerFactory == null)
+			{
+				throw new ArgumentNullException(nameof(loggerFactory));
+			}
+
+            _repo = repo;
+			_log = loggerFactory.CreateLogger<MawUserStore>();
+        }
+		#endregion
+
+
+		#region IUserStore
+        public virtual Task<string> GetUserIdAsync(MawUser user, CancellationToken cancellationToken = default(CancellationToken))
+        {
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if(user == null)
+			{
+				throw new ArgumentNullException(nameof(user));
+			}
+
+			_log.LogInformation(string.Format("getting userid: {0}", user.Id));
+
+			return Task.FromResult(user.Id.ToString());
+        }
+
+
+        public virtual Task<string> GetUserNameAsync(MawUser user, CancellationToken cancellationToken = default(CancellationToken))
+        {
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if(user == null)
+			{
+				throw new ArgumentNullException(nameof(user));
+			}
+
+			return Task.FromResult(user.Username);
+        }
+
+
+        public virtual Task SetUserNameAsync(MawUser user, string userName, CancellationToken cancellationToken = default(CancellationToken))
+        {
+			cancellationToken.ThrowIfCancellationRequested();
+
+            // we do not currently support changing usernames
+            throw new NotImplementedException();
+        }
+
+
+        public virtual Task<string> GetNormalizedUserNameAsync(MawUser user, CancellationToken cancellationToken = default(CancellationToken))
+        {
+			cancellationToken.ThrowIfCancellationRequested();
+
+			return Task.FromResult(user.Username);
+        }
+
+
+        public virtual Task SetNormalizedUserNameAsync(MawUser user, string userName, CancellationToken cancellationToken = default(CancellationToken))
+        {
+			cancellationToken.ThrowIfCancellationRequested();
+
+            // we do not currently support changing usernames, just exit
+			return Task.FromResult(0);
+        }
+
+
+		public virtual async Task<IdentityResult> CreateAsync(MawUser user, CancellationToken cancellationToken = default(CancellationToken))
+        {
+			_log.LogInformation("creating new user: " + user.Username + " with hash: " + user.HashedPassword);
+
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if(user == null)
+			{
+				throw new ArgumentNullException(nameof(user));
+			}
+
+			var result = await _repo.AddUserAsync(user);
+            
+			if(result == 1)
+			{
+				return IdentityResult.Success;
+			}
+			else
+			{
+				return IdentityResult.Failed();
+			}
+        }
+
+
+		public virtual async Task<IdentityResult> UpdateAsync(MawUser user, CancellationToken cancellationToken = default(CancellationToken))
+        {
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if(user == null)
+			{
+				throw new ArgumentNullException(nameof(user));
+			}
+
+			var success = await _repo.UpdateUserAsync(user);
+
+			if(success)
+			{
+				return IdentityResult.Success;
+			}
+			else
+			{
+				return IdentityResult.Failed();
+			}
+        }
+
+
+		public virtual async Task<IdentityResult> DeleteAsync(MawUser user, CancellationToken cancellationToken = default(CancellationToken))
+        {
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if(1 == await _repo.RemoveUserAsync(user.Username))
+			{
+				return IdentityResult.Success;
+			}
+			else
+			{
+				return IdentityResult.Failed();
+			}
+        }
+
+
+        public virtual async Task<MawUser> FindByIdAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+			cancellationToken.ThrowIfCancellationRequested();
+
+			_log.LogInformation("attempting to find by ID: " + userId);
+
+            short id;
+
+            if(short.TryParse(userId, out id))
+            {
+                var user = await _repo.GetUserAsync(id);
+
+                if(user == null)
+                {
+                    throw new Exception("User was not found");
+                }
+
+                return user;
+            }
+
+			throw new ArgumentException("userId should be a number", nameof(userId));
+        }
+
+
+        public virtual async Task<MawUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default(CancellationToken))
+        {
+			cancellationToken.ThrowIfCancellationRequested();
+
+			_log.LogInformation("attempting to find by NAME: " + normalizedUserName);
+
+            var user = await _repo.GetUserAsync(normalizedUserName);
+
+            return user;
+        }
+		#endregion
+
+
+		#region IUserPasswordStore
+		public virtual Task SetPasswordHashAsync(MawUser user, string passwordHash, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if(user == null)
+			{
+				throw new ArgumentNullException(nameof(user));
+			}
+			
+			user.HashedPassword = passwordHash;
+			
+			return Task.FromResult(0);
+		}
+
+
+		public virtual Task<string> GetPasswordHashAsync(MawUser user, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if(user == null)
+			{
+				throw new ArgumentNullException(nameof(user));
+			}
+
+			return Task.FromResult(user.HashedPassword);
+		}
+
+
+		public virtual Task<bool> HasPasswordAsync(MawUser user, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if(user == null)
+			{
+				throw new ArgumentNullException(nameof(user));
+			}
+
+			var hasHash = !string.IsNullOrEmpty(user.HashedPassword);
+
+			return Task.FromResult(hasHash);
+		}
+		#endregion
+
+
+		#region IUserRoleStore
+		public virtual async Task AddToRoleAsync(MawUser user, string roleName, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if (user == null)
+			{
+				throw new ArgumentNullException(nameof(user));
+			}
+
+			if (String.IsNullOrWhiteSpace(roleName))
+			{
+				throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
+			}
+
+			await _repo.AddUserToRoleAsync(user.Username, roleName);
+		}
+
+
+		public virtual async Task RemoveFromRoleAsync(MawUser user, string roleName, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if (user == null)
+			{
+				throw new ArgumentNullException(nameof(user));
+			}
+
+			if (String.IsNullOrWhiteSpace(roleName))
+			{
+				throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
+			}
+
+			_log.LogInformation("removing " + user.Username + " from role " + roleName);
+
+			await _repo.RemoveUserFromRoleAsync(user.Username, roleName);
+		}
+
+
+		public virtual Task<IList<string>> GetRolesAsync(MawUser user, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if (user == null)
+			{
+				throw new ArgumentNullException(nameof(user));
+			}
+
+			_log.LogInformation("getting roles for: " + user.Username);
+
+			IList<string> list = user.GetRoles().ToList();
+
+			foreach(var r in list)
+			{
+				_log.LogInformation("    in role: " + r);
+			}
+
+			return Task.FromResult(list);
+		}
+
+
+		public virtual async Task<bool> IsInRoleAsync(MawUser user, string roleName, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if (user == null)
+			{
+				throw new ArgumentNullException(nameof(user));
+			}
+
+			if (String.IsNullOrWhiteSpace(roleName))
+			{
+				throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
+			}
+
+			_log.LogInformation("is user in role: " + user.Username + " : " + roleName);
+
+			var roles = await GetRolesAsync(user, cancellationToken);
+			var role = roles.SingleOrDefault(x => string.Equals(x, roleName, StringComparison.OrdinalIgnoreCase));
+
+			return role != null;
+		}
+
+
+		public virtual async Task<IList<MawUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if (String.IsNullOrWhiteSpace(roleName))
+			{
+				throw new ArgumentException("roleName can not be null or empty", nameof(roleName));
+			}
+
+			_log.LogInformation("getting users in role: " + roleName);
+
+			return await _repo.GetUsersInRoleAsync(roleName);
+		}
+		#endregion
+
+
+		#region ISecurityStampStore
+		public virtual Task SetSecurityStampAsync(MawUser user, string stamp, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if(string.IsNullOrEmpty(stamp))
+			{
+				throw new ArgumentException("stamp can not be null or empty", nameof(stamp));
+			}
+
+			user.SecurityStamp = stamp;
+			
+			return Task.FromResult(0);
+		}
+
+
+		public virtual Task<string> GetSecurityStampAsync(MawUser user, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			return Task.FromResult(user.SecurityStamp);
+		}
+		#endregion
+
+
+		#region IUserEmailStore
+		public async Task SetEmailAsync(MawUser user, string email, CancellationToken cancellationToken)
+		{
+			if (user == null)
+			{
+				throw new ArgumentNullException(nameof(user));
+			}
+
+			user.Email = email;
+
+			await _repo.UpdateUserAsync(user);
+		}
+
+
+		public Task<string> GetEmailAsync(MawUser user, CancellationToken cancellationToken)
+		{
+			if (user == null)
+			{
+				throw new ArgumentNullException(nameof(user));
+			}
+
+			return Task.FromResult(user.Email);
+		}
+
+
+		public Task<bool> GetEmailConfirmedAsync(MawUser user, CancellationToken cancellationToken)
+		{
+			return Task.FromResult(true);
+		}
+
+
+		public Task SetEmailConfirmedAsync(MawUser user, bool confirmed, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
+
+
+		public async Task<MawUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+		{
+			_log.LogInformation("find email: " + normalizedEmail);
+
+			return await _repo.GetUserByEmailAsync(normalizedEmail);
+		}
+
+
+		public Task<string> GetNormalizedEmailAsync(MawUser user, CancellationToken cancellationToken)
+		{
+			return Task.FromResult(user.Email);
+		}
+
+
+		public Task SetNormalizedEmailAsync(MawUser user, string normalizedEmail, CancellationToken cancellationToken)
+		{
+			return Task.FromResult(0);
+		}
+		#endregion
+
+
+		#region IDisposable
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing){
+                // clean up managed resources
+            }
+        }
+		#endregion
+    }
+}

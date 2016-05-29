@@ -1,0 +1,21 @@
+there are a few things you need to do in order to be able to use gmail for smtp...
+
+ref: http://www.mono-project.com/FAQ:_Security
+
+1) create new gmail user / pass
+2) login with this and accept license (this is only to be used for the site)
+3) configure forward for this address to a preferred email / distribution list
+4) gmail requires SSL/TLS, so you need to load certificates (as root):
+   > mozroots --import --ask-remove --machine
+   > certmgr -ssl -m smtps://smtp.gmail.com:465
+
+   - note: you will need to accept the warning about invalid certs in #4
+   - note: although the site uses ssl and gmail port 587, use the url above
+
+5) make sure your code properly specifies the gmail stuff, along with this account's
+   proper username / password.
+
+6) you need to enable 'less secure apps' on the gmail account (or improve security using the following):
+   - http://stackoverflow.com/questions/33496290/how-to-send-email-by-using-mailkit
+   - https://support.google.com/accounts/answer/6010255
+   

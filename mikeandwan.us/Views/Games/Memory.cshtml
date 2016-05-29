@@ -1,0 +1,25 @@
+﻿@{ 
+    ViewBag.Title = "games | memory";
+    ViewBag.AngularAppRoot = "/js/games/memory/";
+}
+
+@section custom_head {
+    <base href="/games/memory/" />
+}
+
+@section scripts_head {
+    @Html.Partial("_js_Angular2")
+}
+
+@section stylesheets {
+    <link rel="stylesheet" href="/css/games/memory.css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Permanent+Marker" />
+}
+
+@section scripts_footer {
+    <script>System.import('/js/games/memory/bootstrap');</script>
+}
+
+<h2>Memory</h2>
+
+<memory>Loading...</memory>

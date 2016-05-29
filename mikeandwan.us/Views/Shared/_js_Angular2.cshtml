@@ -1,0 +1,23 @@
+<script src="/js/libs/es6-shim/0.35.0/es6-shim.min.js"></script>
+<script src="/js/libs/systemjs/0.19.24/system-polyfills.js"></script>
+<script src="/js/libs/angular2/beta.11/angular2-polyfills.min.js"></script>
+<script src="/js/libs/systemjs/0.19.24/system.js"></script>
+<script src="/js/libs/rxjs/5.0.0-beta.2/Rx.min.js"></script>
+<script src="/js/libs/angular2/beta.11/angular2.min.js"></script>
+<script src="/js/libs/angular2/beta.11/http.min.js"></script>
+<script src="/js/libs/angular2/beta.11/router.min.js"></script>
+
+<script>
+	System.config({
+        packages: { 
+            '@Html.Raw(ViewBag.AngularAppRoot)': {
+                format: 'register', 
+                defaultExtension: 'js'
+            },
+            '/js/ng_maw/': {
+                format: 'register', 
+                defaultExtension: 'js'
+            }
+        }
+    });
+</script>

@@ -1,0 +1,40 @@
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | browser hell"; 
+}
+
+@section stylesheets {
+    <style>
+    td { height: 1px; width: 1px; }
+    </style>
+}
+
+@section header {
+    @Html.Partial("_PageHeader", "Browser Hell")
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "general", Item = "browser-hell" })
+}
+
+<p>
+This page is fairly straightforward.  It simply takes an image, and attempts to render the 
+image pixel by pixel using table cells.  It is a fairly interesting test of browser 
+performance, given the large number of cells.
+</p>
+
+<p>
+The image below is 640x480, which totals 307,200 cells.
+</p>
+
+<table>
+@for(int y = 0; y < ViewBag.ImageColors.GetLength(1); y++)
+{
+	<tr>
+	@for(int x = 0; x < ViewBag.ImageColors.GetLength(0); x++)
+	{
+		<td style="background-color: @ViewBag.ImageColors[x, y];"></td>
+	}
+	</tr>
+}
+</table>

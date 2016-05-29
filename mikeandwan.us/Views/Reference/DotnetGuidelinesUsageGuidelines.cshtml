@@ -1,0 +1,108 @@
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "reference | .net guidelines | usage guidelines"; 
+}
+
+@section header {
+    @Html.Partial("_PageHeader", ".Net Framework Design Guidelines")
+}
+
+@section sidebar {
+    @Html.Partial("_ReferenceSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-guidelines-usage-guidelines" })
+}
+
+<h2>Usage Guidelines</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-condensed">
+  	<tbody>
+	    <tr><td>Do</td><td>Prefer using collections over arrays in public APIs.</td></tr>
+	    <tr><td>Do Not</td><td>Use read-only array fields.</td></tr>
+	    <tr><td>Consider</td><td>Using jagged arrays instead of multidimensional arrays.</td></tr>
+	    <tr><td>Do</td><td>Name custom attribute classes with the suffix &ldquo;Attribute&rdquo;.</td></tr>
+	    <tr><td>Do</td><td>Apply the AttributeUsageAttribute to custom attributes.</td></tr>
+	    <tr><td>Do</td><td>Provide settable properties for optional arguments.</td></tr>
+	    <tr><td>Do</td><td>Provide get-only properties for required arguments.</td></tr>
+	    <tr><td>Do</td><td>Provide constructor parameters to initialize properties corresponding to required arguments.</td></tr>
+	    <tr><td>Avoid</td><td>Providing constructor parameters to initialize properties corresponding to the optional arguments.</td></tr>
+	    <tr><td>Avoid</td><td>Overloading custom attribute constructors.</td></tr>
+	    <tr><td>Do</td><td>Seal custom attribute classes, if possible.</td></tr>
+	    <tr><td>Do Not</td><td>Use weakly typed collections in public APIs.</td></tr>
+	    <tr><td>Do Not</td><td>Use ArrayList or List&lt;T&gt; in public APIs.</td></tr>
+	    <tr><td>Do Not</td><td>Use Hashtable or Dictionary&lt;TKey, Tvalue&gt; in public APIs.</td></tr>
+	    <tr><td>Do Not</td><td>Use IEnumerator&lt;T&gt;, IEnumerator, or any other type that implements either of these interfaces, except as the return type of the GetEnumerator method.</td></tr>
+	    <tr><td>Do Not</td><td>Implement both IEnumerator&lt;T&gt; and the IEnumerable&lt;T&gt; on the same type.</td></tr>
+	    <tr><td>Do</td><td>Use the least specialized type possible as a parameter type.</td></tr>
+	    <tr><td>Avoid</td><td>Using ICollection&lt;T&gt; or ICollection as a parameter just to access the Count property.</td></tr>
+	    <tr><td>Do Not</td><td>Provide settable collection properties</td></tr>
+	    <tr><td>Do</td><td>Use Collection&lt;T&gt; or a subclass of Collection&lt;T&gt; for properties or return values representing read / write collections.</td></tr>
+	    <tr><td>Do</td><td>Use ReadOnlyCollection&lt;T&gt; or a subclass of ReadOnlyCollection&lt;T&gt; for properties or return values representing read-only collections.</td></tr>
+	    <tr><td>Consider</td><td>Using subclasses of generic base collections instead of using the collections directly.</td></tr>
+	    <tr><td>Do</td><td>Return a subclass of Collection&lt;T&gt; or ReadOnlyCollection&lt;T&gt; from very commonly used methods and properties.</td></tr>
+	    <tr><td>Consider</td><td>Using a keyed collection if the items stored in the collection have unique keys (names, Ids, etc.).</td></tr>
+	    <tr><td>Do Not</td><td>Return null values from collection properties or from methods returning collections.</td></tr>
+	    <tr><td>Do Not</td><td>Return snapshot collections from properties.</td></tr>
+	    <tr><td>Do</td><td>Use either a snapshot collection or a live Ienumerable&lt;T&gt; to represent collections that are volatile (i.e., can change without explicitly modifying the collection).</td></tr>
+	    <tr><td>Do</td><td>Prefer collections over arrays.</td></tr>
+	    <tr><td>Consider</td><td>Using arrays in low-level APIs to minimize memory consumption and maximize performance.</td></tr>
+	    <tr><td>Do</td><td>Use byte arrays instead of collections of bytes.</td></tr>
+	    <tr><td>Do Not</td><td>Use arrays for properties if the property would have to return a new array (e.g., a copy of an internal array) every time the property getter is called.</td></tr>
+	    <tr><td>Do Not</td><td>Inherit from non generic base collections such as CollectionBase.</td></tr>
+	    <tr><td>Do</td><td>Implement IEnumerable&lt;T&gt; on strongly typed non generic collections (collections created before Generics were available).</td></tr>
+	    <tr><td>Avoid</td><td>Implementing collection interfaces on types with complex APIs unrelated to the concept of a collection.</td></tr>
+	    <tr><td>Do</td><td>Use the &ldquo;Collection&rdquo; suffix in names of abstractions implementing IEnumerable (or any of its descendants), unless the type also implements IDictionary or IDictionary&lt;TKey, TValue&gt;.</td></tr>
+	    <tr><td>Do</td><td>Use the &ldquo;Dictionary&rdquo; suffix in names of abstractions implementing IDictionary or IDictionary&lt;TKey, TValue&gt;.</td></tr>
+	    <tr><td>Avoid</td><td>Using any suffixes implying particular implementation, such as &ldquo;LinkedList&rdquo; or &ldquo;Hashtable,&rdquo; in names of collection abstractions.</td></tr>
+	    <tr><td>Consider</td><td>Prefixing collection names with the name of the item type.</td></tr>
+	    <tr><td>Consider</td><td>Using the &ldquo;ReadOnly&rdquo; prefix in names of read-only collections, if a corresponding writable collection might be added or already exists in the framework.</td></tr>
+	    <tr><td>Do Not</td><td>Implement ICloneable.</td></tr>
+	    <tr><td>Do Not</td><td>Use ICloneable in public APIs.</td></tr>
+	    <tr><td>Consider</td><td>Defining the Clone method on types that need a cloning mechanism.</td></tr>
+	    <tr><td>Do</td><td>Implement IEquatable&lt;T&gt; on value types.</td></tr>
+	    <tr><td>Do</td><td>Follow the same guidelines as for overriding Object.Equals when implementing IEquatable&lt;T&gt;.Equals</td></tr>
+	    <tr><td>Do</td><td>Override Object.Equals whenever implementing IEquatable&lt;T&gt;.</td></tr>
+	    <tr><td>Consider</td><td>Overloading operator== and operator!= whenever implementing IEquatable&lt;T&gt;.</td></tr>
+	    <tr><td>Do</td><td>Implement IEquatable&lt;T&gt; anytime you implement IComparable&lt;T&gt;.</td></tr>
+	    <tr><td>Consider</td><td>Overloading comparison operators (&lt;, &gt;, &lt;=, &gt;=) whenever you implement IComparable&lt;T&gt;.</td></tr>
+	    <tr><td>Do</td><td>Comply with the contract defined for Object.Equals when overriding the method.</td></tr>
+	    <tr><td>Do</td><td>Override GetHashCode whenever you override Equals.</td></tr>
+	    <tr><td>Consider</td><td>Implementing IEquatable&lt;T&gt; whenever overriding Object.Equals.</td></tr>
+	    <tr><td>Do Not</td><td>Throw exceptions from Equals.</td></tr>
+	    <tr><td>Do</td><td>Override Equals on value types.</td></tr>
+	    <tr><td>Do</td><td>Provide an overload of Equals taking the value type parameter by implementing IEquatable&lt;T&gt;.</td></tr>
+	    <tr><td>Consider</td><td>Overriding Equals to provide value equality if a reference type represents a value.</td></tr>
+	    <tr><td>Do</td><td>Override GetHashCode if you override Object.Equals.</td></tr>
+	    <tr><td>Do</td><td>Ensure that if the Object.Equals method returns true for any tow objects, GetHashCode returns the same value for these objects.</td></tr>
+	    <tr><td>Do</td><td>Make every effort to ensure that GetHashCode generates a random distribution of numbers for all objects of a type.</td></tr>
+	    <tr><td>Do</td><td>Ensure that GetHashCode returns exactly the same value regardless of any changes that are made to the object.</td></tr>
+	    <tr><td>Avoid</td><td>Throwing exceptions from GetHashCode.</td></tr>
+	    <tr><td>Do</td><td>Override ToString whenever an interesting human-readable string can be returned.</td></tr>
+	    <tr><td>Do</td><td>Try to keep the string returned from ToString short.</td></tr>
+	    <tr><td>Consider</td><td>Returning a unique string associated with the instance.</td></tr>
+	    <tr><td>Do</td><td>Prefer a friendly name over a unique but not readable ID.</td></tr>
+	    <tr><td>Do</td><td>String formatting based on the current thread culture when returning culture-dependent information.</td></tr>
+	    <tr><td>Do</td><td>Provide overload ToString(string format), or implement IFormattable, if the string returned from ToString() is culture sensitive or there are various ways to format the string.</td></tr>
+	    <tr><td>Do Not</td><td>Return an empty string or null from ToString.</td></tr>
+	    <tr><td>Avoid</td><td>Throwing exceptions from ToString.</td></tr>
+	    <tr><td>Do</td><td>Ensure that ToString has no observable side effects.</td></tr>
+	    <tr><td>Do</td><td>Report security-sensitive information through an override of ToString only after demanding an appropriate permission.</td></tr>
+	    <tr><td>Consider</td><td>Having the output of ToString be a valid input for any parsing methods on this type.</td></tr>
+	    <tr><td>Do</td><td>Use System.Uri to represent URI and URL data.</td></tr>
+	    <tr><td>Consider</td><td>Providing string-based overloads for most commonly used members with System.Uri parameters.</td></tr>
+	    <tr><td>Do Not</td><td>Automatically overload all Uri-based members with a version that accepts a string.</td></tr>
+	    <tr><td>Do</td><td>Call the Uri-based overloads if available.</td></tr>
+	    <tr><td>Do Not</td><td>Store URI/URL data in a string.</td></tr>
+	    <tr><td>Do Not</td><td>Use XmlNode or XmlDocument to represent XML data. Favor using instances of IXPathNavigable instead.</td></tr>
+	    <tr><td>Do</td><td>Use XmlReader or IXPathNavigable as input or output for methods that accept or return XML.</td></tr>
+	    <tr><td>Do</td><td>Implement IXPathNavigable on types representing an XML view of an underlying object model or data source.</td></tr>
+	    <tr><td>Do Not</td><td>Subclass XmlDocument if you want to create a type representing an XML view of an underlying object model or data source.</td></tr>
+	    <tr><td>Do Not</td><td>Overload one of the equality operators but not the other.</td></tr>
+	    <tr><td>Do</td><td>Ensure that Object.Equals and the equality operators have exactly the same semantics and similar performance characteristics.</td></tr>
+	    <tr><td>Avoid</td><td>Throwing exceptions from equality operators.</td></tr>
+	    <tr><td>Do</td><td>Overload the equality operators on value types, if equality is meaningful.</td></tr>
+	    <tr><td>Avoid</td><td>Overloading equality operators on mutable reference types.</td></tr>
+	    <tr><td>Consider</td><td>Not overloading equality operators on reference types, even if you override Equals or implement IEquatable&lt;T&gt;.</td></tr>
+	    <tr><td>Avoid</td><td>Overloading equality operators on reference types if the implementation would be significantly slower than that of reference equality.</td></tr>
+	</tbody>
+</table>
+</div>   

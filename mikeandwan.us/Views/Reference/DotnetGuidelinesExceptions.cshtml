@@ -1,0 +1,80 @@
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "reference | .net guidelines | exceptions"; 
+}
+
+@section header {
+    @Html.Partial("_PageHeader", ".Net Framework Design Guidelines")
+}
+
+@section sidebar {
+    @Html.Partial("_ReferenceSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-guidelines-exceptions" })
+}
+
+<h2>Exceptions</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-condensed">
+  	<tbody>
+	    <tr><td>Do Not</td><td>Return error codes.</td></tr>
+	    <tr><td>Do</td><td>Report execution failures by throwing exceptions.</td></tr>
+	    <tr><td>Consider</td><td>Terminating the process by calling System.Environment.FailFast (.net 2.0) instead of throwing an exception, if your code encounters a situation where it is unsafe for further execution.</td></tr>
+	    <tr><td>Do Not</td><td>Use exceptions for the normal flow of control, if possible.</td></tr>
+	    <tr><td>Consider</td><td>The performance implications of throwing exceptions.</td></tr>
+	    <tr><td>Do</td><td>Document all exceptions thrown by publicly callable members because of a violation of the member contract (rather than a system failure) and treat them as part of your contract.</td></tr>
+	    <tr><td>Do Not</td><td>Have public members that can either throw or not based on some option.</td></tr>
+	    <tr><td>Do Not</td><td>Have public members that return exceptions as the return value or an out parameter.</td></tr>
+	    <tr><td>Consider</td><td>Using exception builder methods.</td></tr>
+	    <tr><td>Do Not</td><td>Throw exceptions from exception filter blocks.</td></tr>
+	    <tr><td>Avoid</td><td>Explicitly throwing exceptions from finally blocks.</td></tr>
+	    <tr><td>Consider</td><td>Throwing existing exceptions residing in the System namespaces instead of creating custom exception types.</td></tr>
+	    <tr><td>Do</td><td>Create and throw custom exceptions if you have an error condition that can be programmatically handled in a different way than any other existing exception.</td></tr>
+	    <tr><td>Do Not</td><td>Create and throw new exceptions just to have your team's exception.</td></tr>
+	    <tr><td>Do</td><td>Throw the most specific (the most derived) exception that makes sense.</td></tr>
+	    <tr><td>Do</td><td>Provide a rich and meaningful message text targeted at the developer when throwing an exception.</td></tr>
+	    <tr><td>Do</td><td>Ensure that exception messages are grammatically correct.</td></tr>
+	    <tr><td>Do</td><td>Ensure that each sentence of the message text ends with a period.</td></tr>
+	    <tr><td>Avoid</td><td>Question marks and exclamation points in exception messages.</td></tr>
+	    <tr><td>Do Not</td><td>Disclose security-sensitive information in exception messages without demanding appropriate permissions.</td></tr>
+	    <tr><td>Consider</td><td>Localizing the exception messages thrown by your component if you expect your components to be used by developers speaking different languages.</td></tr>
+	    <tr><td>Do Not</td><td>Swallow errors by catching nonspecific exceptions, such as System.Exception, System.SystemException, and so on in framework code.</td></tr>
+	    <tr><td>Avoid</td><td>Swallowing errors by catching nonspecific exceptions, such as System.Exception, System.SystemException, and so on in application code.</td></tr>
+	    <tr><td>Do Not</td><td>Exclude any special exceptions when catching for the purpose of transferring exceptions.</td></tr>
+	    <tr><td>Consider</td><td>Catching a specific exception when you understand why it was thrown in a given context and can respond to the failure programmatically.</td></tr>
+	    <tr><td>Do Not</td><td>Overcatch. Exceptions should often be allowed to propagate up the call stack.</td></tr>
+	    <tr><td>Do</td><td>Use try-finally and avoid using try-catch for cleanup code.</td></tr>
+	    <tr><td>Do</td><td>Prefer using an empty throw when catching and rethrowing an exception.</td></tr>
+	    <tr><td>Do Not</td><td>Handle non-CLS-compliant exceptions (exceptions that don't derive from System.Exception) using a parameterless catch block.</td></tr>
+	    <tr><td>Consider</td><td>Wrapping specific exceptions thrown from a lower layer in a more appropriate exception, if the lower layer exception does not make sense in the context of the higher layer operation.</td></tr>
+	    <tr><td>Avoid</td><td>Catching and wrapping nonspecific exceptions.</td></tr>
+	    <tr><td>Do</td><td>Specify the inner exception when wrapping exceptions.</td></tr>
+	    <tr><td>Do Not</td><td>Throw System.Exception or System.SystemException</td></tr>
+	    <tr><td>Do Not</td><td>Catch System.Exception or System.SystemException in framework code, unless you intend to rethrow.</td></tr>
+	    <tr><td>Avoid</td><td>Catching System.Exception or System.SystemException, except in top-level exception handlers.</td></tr>
+	    <tr><td>Do Not</td><td>Throw or derive from System.ApplicationException.</td></tr>
+	    <tr><td>Do</td><td>Throw an InvalidOperationException if the object is in an inappropriate state.</td></tr>
+	    <tr><td>Do</td><td>Throw ArgumentException or one of its subtypes if bad arguments are passed to a member.</td></tr>
+	    <tr><td>Do</td><td>Set the ParamName property when throwing one of the ArgumentExceptions.</td></tr>
+	    <tr><td>Do</td><td>Use value for the name of the implicit value parameter of property setters.</td></tr>
+	    <tr><td>Do Not</td><td>Allow publicly callable APIs to explicitly or implicitly throw NullReferenceException, AccessViolationException, or IndexOutOfRangeException.</td></tr>
+	    <tr><td>Do Not</td><td>Explicitly throw StackOverflowException.</td></tr>
+	    <tr><td>Do Not</td><td>Catch StackOverflowException.</td></tr>
+	    <tr><td>Do Not</td><td>Explicitly throw OutOfMemoryException.</td></tr>
+	    <tr><td>Do Not</td><td>Explicitly throw InteropException, ComException, and SEHException.</td></tr>
+	    <tr><td>Do Not</td><td>Catch SEHException explicitly.</td></tr>
+	    <tr><td>Avoid</td><td>Deep exception hierarchies.</td></tr>
+	    <tr><td>Do</td><td>Derive exceptions from System.Exception or one of the other common base exceptions.</td></tr>
+	    <tr><td>Do</td><td>End exception class names with the &ldquo;Exception&rdquo; suffix.</td></tr>
+	    <tr><td>Do</td><td>Make exceptions serializable.</td></tr>
+	    <tr><td>Do</td><td>Provide (at least) these common constructors on all exceptions: 1. public SomeException(); 2. public SomeException(string message); 3. public SomeException(string message, Exception inner); 4. protected SomeException(SerializationInfo info, StreamingContext context);</td></tr>
+	    <tr><td>Do</td><td>Report security-sensitive information through an override of ToString only after demanding an appropriate permission.</td></tr>
+	    <tr><td>Do</td><td>Store useful security-sensitive information in a private exception state.</td></tr>
+	    <tr><td>Consider</td><td>Providing exception properties for programmatic access to extra information (besides the message string) relevant to the exception.</td></tr>
+	    <tr><td>Do Not</td><td>Use error codes because of concerns that exceptions might affect performance negatively.</td></tr>
+	    <tr><td>Consider</td><td>The Tester-Doer Pattern for members that might throw exceptions in common scenarios to avoid performance problems related to exceptions.</td></tr>
+	    <tr><td>Consider</td><td>The Try-Parse Pattern for members that might throw exceptions in common scenarios to avoid performance problems related to exceptions.</td></tr>
+	    <tr><td>Do</td><td>Use the prefix &ldquo;Try&rdquo; and Boolean return type for methods implementing this Pattern.</td></tr>
+	    <tr><td>Do</td><td>Provide an exception-throwing member for each member using the Try-Parse Pattern.</td></tr>
+	</tbody>
+</table>
+</div>   

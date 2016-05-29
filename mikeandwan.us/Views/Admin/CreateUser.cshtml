@@ -1,0 +1,47 @@
+@using Microsoft.AspNetCore.Identity
+@using MawMvcApp.ViewModels.Admin
+@model CreateUserModel
+@{ ViewBag.Title = "admin | create user"; }
+
+@Html.Partial("_PageHeader", "Create User")
+
+@Html.Partial("_identityResult", new IdentityResultModel("user", Model.Result))
+
+@if(Model.Result == null || !Model.Result.Succeeded) {
+	<form asp-controller="admin" asp-action="createuser" method="post" class="form-horizontal" autocomplete="off" role="form">
+		<div class="form-group" maw-for="@Model.Username">
+			<label asp-for="Username" class="col-sm-3 control-label"></label>
+	        <div class="col-sm-3">
+				<input asp-for="Username" class="form-control" autofocus="" />
+				<span asp-validation-for="Username" class="help-block"></span>
+	        </div>
+		</div>
+	    <div class="form-group" maw-for="@Model.FirstName">
+			<label asp-for="FirstName" class="col-sm-3 control-label"></label>
+	        <div class="col-sm-3">
+				<input asp-for="FirstName" class="form-control" />
+				<span asp-validation-for="FirstName" class="help-block"></span>
+	        </div>
+		</div>
+	    <div class="form-group" maw-for="@Model.LastName">
+			<label asp-for="LastName" class="col-sm-3 control-label"></label>
+	        <div class="col-sm-3">
+				<input asp-for="LastName" class="form-control" />
+				<span asp-validation-for="LastName" class="help-block"></span>
+	        </div>
+		</div>
+	    <div class="form-group" maw-for="@Model.Email">
+			<label asp-for="Email" class="col-sm-3 control-label"></label>
+	        <div class="col-sm-3">
+				<input asp-for="Email" class="form-control" />
+				<span asp-validation-for="Email" class="help-block"></span>
+	        </div>
+		</div>
+		
+	    <div class="form-group">
+	        <div class="col-sm-offset-3 col-sm-2">
+	            <button type="submit" class="btn btn-default">Submit</button>
+	        </div>
+	    </div>
+	</form>
+}

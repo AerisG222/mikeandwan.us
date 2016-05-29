@@ -1,0 +1,9 @@
+<div *ngFor="#row of displayedRows; #rowIndex = index" class="row thumbnail-list-row">
+    <div *ngFor="#item of row; #itemIndex = index" class="col-sm-3 col-lg-2 text-center" [ngClass]="{active: activeItem == item || hoverItem == item }">
+        <div class="thumbnail" (click)="selectItem(item, rowIndex, itemIndex)">
+            <img [src]="item.imageUrl" [ngStyle]="{height: item.imageHeight + 'px', width: item.imageWidth + 'px'}" />
+            <i class="badge fa" [ngClass]="item.icon" *ngIf="item.icon"> </i>
+        </div>
+        <a *ngIf="item.title" (click)="selectItem(item, rowIndex, itemIndex)" (mouseover)="hoverItem = item" (mouseout)="hoverItem = null">{{item.title}}</a>
+    </div>
+</div>

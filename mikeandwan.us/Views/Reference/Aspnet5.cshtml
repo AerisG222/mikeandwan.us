@@ -1,0 +1,177 @@
+﻿@{ 
+    ViewBag.Title = "ASPNET5 - MVC6 Overview"; 
+    Layout = "_LayoutMinimal";
+}
+
+@section custom_head {
+    @Html.Partial("_css_Reveal")
+}
+
+<div class="reveal">
+    <div class="slides">
+        
+        <section>
+            <h1>ASPNET5 / MVC6</h1>
+            <h2>Overview and Walkthrough</p>
+            
+            <h3 style="margin-top: 64px">Sept. 25, 2015</h3>
+        </section>
+        
+        <section>
+            <h3>It's an awesome time to be a Web Developer!</h3>
+        </section>
+        
+        <section>
+            <h2>Topics</h2>
+            <ul>
+                <li class="fragment">Re-imagined .Net</li>
+                <li class="fragment">Project Structure</li>
+                <li class="fragment">Fundamental Changes</li>
+                <li class="fragment">Limitations</li>
+                <li class="fragment">Deployment</li>
+                <li class="fragment">Release Schedule</li>
+                <li class="fragment">Tangential Topics of Interest</li>
+                <li class="fragment">Resources</li>
+                <li class="fragment">Q/A</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Re-imagined .Net</h2>
+            <ul>
+                <li>Open Source</li>
+                <li>Cross Platform</li>
+                <li>Target Frameworks
+                    <ul>
+                        <li>Full Framework (traditional)</li>
+                        <li>Core Framework</li>
+                    </ul>
+                </li>
+                <li>NuGet everywhere</li>
+                <li>New tools
+                    <ul>
+                        <li>dnvm</li>
+                        <li>dnu</li>
+                        <li>dnx</li>
+                        <li>Kestrel</li>
+                        <li>UserSecrets</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Project Structure</h2>
+            <ul>
+                <li>Goodbye *.csproj, Hello project.json</li>
+                <li>Goodbye global.asax, Hello Startup.cs</li>
+                <li>Goodbye web.config</li>
+                <li>Hello wwwroot</li>
+            <h3 style="margin-top: 36px;">walkthrough: Web project layout</h3>    
+        </section>
+        
+        <section>
+            <h2>Fundamental Changes</h2>
+            <ul>
+                <li>No more System.Web</li>
+                <li>Edit -> Refresh (no recompile)</li>
+                <li>Dependency Injection</li>
+                <li>Configuration &amp; UserSecrets</li>
+                <li>MVC6 = MVC + WebApi</li>
+                <li>Attribute Based Routing</li>
+                <li>Tag Helpers</li>
+                <li>Authentication &amp; Authorization</li>
+                <li>More async everywhere</li>
+                <li>Entity Framework 7 (code first only)</li>
+            </ul>
+            <h3 style="margin-top: 36px;">walkthrough</h3>
+        </section>
+        
+        <section>
+            <h2>Limitations</h2>
+            <ul>
+                <li>Not everything available in CoreFX
+                    <ul>
+                        <li>Charting</li>
+                        <li>Legacy EF</li>
+                        <li>many others</li>
+                    </ul>
+                </li>
+                <li>Above can be overcome with Full Framework</li>
+                <li>SignalR</li>
+                <li>Visual Basic</li>
+                <li>Web Pages 4</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Deployment</h2>
+            <ul>
+                <li>Your app is a Nuget Package</li>
+                <li>dnu to package application</li>
+                <li>All dependencies bundled (can include runtime)</li>
+                <li>Integrated pre-compilation</li>
+                <li>IIS + Kestrel</li>
+                <li>nginx + Kestrel</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Release Schedule</h2>
+            <ul>
+                <li>beta 8: Oct. 5 (feature complete)</li>
+                <li>rc1<sup>*</sup>: Nov 2015 (stabilization)</li>
+                <li>1.0: Q1 2016</li>
+            </ul>
+            <p style="margin-top:64px"><sup>*</sup>released with go-live license</p>
+        </section>
+        
+        <section>
+            <h2>Tangential Topics</h2>
+            <ul>
+                <li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
+                <li><a href="http://gulpjs.com/">GulpJS</a></li>
+                <li><a href="http://www.typescriptlang.org/">Typescript</a></li>
+                <li><a href="https://github.com/johnpapa/angular-styleguide">Angular Style Guide</a></li>
+                <li><a href="https://angular.io/">Angular</a></li>
+                <li><a href="http://getbootstrap.com/">Bootstrap 4</a></li>
+                <li><a href="https://modernizr.com/">Modernizr 3</a></li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Resources</h2>
+            <ul>
+                <li><a href="https://github.com/aspnet/">Github Repo</a></li>
+                <li><a href="https://live.asp.net/">Community Standup Meetings</a></li>
+                <li><a href="http://aspnet.readthedocs.org/en/latest/">Documentation</a></li>
+            </ul>    
+        </section>
+        
+        <section>
+            <h2>Questions?</h2>
+            <h2>Answers?</h2>
+        </section>
+    </div>
+</div>
+
+@Html.Partial("_js_Jquery")
+@Html.Partial("_js_Reveal")
+<script>
+    $(function() {
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+    
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+    
+            parallaxBackgroundImage: '/img/presentation/slide_bg.jpg',
+            parallaxBackgroundSize: '4284px 2844px'
+        });
+    });
+</script>
+        

@@ -1,0 +1,55 @@
+@model MawMvcApp.ViewModels.Tools.Dotnet.XslTransformModel
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | xsl transform"; 
+}
+
+@section header {
+    @Html.Partial("_PageHeader", "XSL Transform")
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "xsl-transform" })
+}
+
+<p>
+	This page allows you to view the output of an XSL Transform when applied to an XML document.
+</p>
+
+<form asp-controller="tools" asp-action="xsltransform" method="post" class="form-horizontal" autocomplete="off" role="form">
+    <div class="form-group" maw-for="@Model.XmlSource">
+		<label asp-for="XmlSource" class="col-sm-3 control-label"></label>
+        <div class="col-sm-9">
+			<textarea asp-for="XmlSource" rows="10" class="form-control" autofocus=""></textarea>
+			<span asp-validation-for="XmlSource" class="help-block"></span>
+        </div>
+	</div>
+	<div class="form-group" maw-for="@Model.XsltSource">
+		<label asp-for="XsltSource" class="col-sm-3 control-label"></label>	
+        <div class="col-sm-9">
+			<textarea asp-for="XsltSource" rows="10" class="form-control"></textarea>
+			<span asp-validation-for="XsltSource" class="help-block"></span>
+        </div>
+	</div>
+	
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-2">
+            <button type="submit" class="btn btn-default">Transform</button>
+        </div>
+    </div>
+</form>
+
+@if(Model.AttemptedTransform) {
+	<div class="row">
+		<div class="col-sm-12"> 
+			<h2>Transform Results:</h2>
+		       
+			@if(Model.AreErrors) {
+				<pre>@Model.TransformErrors</pre>
+			}
+			else {
+				<pre>@Model.TransformResult</pre>
+			}
+		</div>
+    </div>
+}

@@ -1,0 +1,5 @@
+<div>
+    <span *ngIf="!editable" style="width: 12px; display: inline-block;">&nbsp;</span>
+    <i *ngIf="editable" (click)="onRate(0)" class="fa fa-times-circle editable" (mouseleave)="setHover(-1)" (mouseenter)="setHover(0)"></i>
+    <i *ngFor="#rating of ratingRange; #idx = index" class="fa rating" [ngClass]="{editable: editable }" (mouseleave)="setHover(-1)" (mouseover)="setHover(rating)" (click)="onRate(rating)" [innerHTML]="ratingIcons[idx]"></i>
+</div>

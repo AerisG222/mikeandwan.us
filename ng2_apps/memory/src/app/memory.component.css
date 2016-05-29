@@ -1,0 +1,73 @@
+.vs { font-size:36px; padding: 8px; font-family: 'Permanent Marker', cursive; }
+.yellow { color: #cc0; }
+.vs_row, .board_row { margin-bottom: 12px; }
+.player { margin-bottom: 12px; }
+.player.not_selected img { filter: grayscale(75%); -webkit-filter: grayscale(75%); -ms-filter: grayscale(75%); -moz-filter: grayscale(75%); -o-filter: grayscale(75%); }
+.player:hover { cursor: pointer; }
+.player:hover img, .player.selected img { border-width: 4px; border-style: solid; filter: grayscale(0%); -webkit-filter: grayscale(0%); -ms-filter: grayscale(0%); -moz-filter: grayscale(0%); -o-filter: grayscale(0%); }
+.player.red:hover, .player.selected.red, .red.active { color: #c00; }
+.player.blue:hover, .player.selected.blue, .blue.active { color: #00c; }
+.player.purple:hover, .player.selected.purple, .purple.active { color: #c0c; }
+.player.orange:hover, .player.selected.orange, .orange.active { color: #cc7200; }
+.player.red img { border-color: #c00; }
+.player.blue img { border-color: #00c; }
+.player.purple img { border-color: #c0c; }
+.player.orange img { border-color: #cc7200; }
+.vertical-align { display: flex; align-items: center; }
+.scoreboard_player img { filter: grayscale(75%); }
+.scoreboard_player.active img { filter: grayscale(0%); }
+.scoreboard_score, .scoreboard_player { border-bottom: 4px solid #ccc; padding-top: 8px; }
+.scoreboard_score { padding-bottom: 8px; }
+.scoreboard_player { padding-bottom: 9px; }
+.scoreboard_score.red.active, .scoreboard_player.red.active { border-bottom-color: #c00; }
+.scoreboard_score.blue.active, .scoreboard_player.blue.active { border-bottom-color: #00c; }
+.scoreboard_score.purple.active, .scoreboard_player.purple.active { border-bottom-color: #c0c; }
+.scoreboard_score.orange.active, .scoreboard_player.orange.active { border-bottom-color: #cc7200; }
+
+/* thanks to: http://cssdeck.com/labs/pulsating-css3-input-search-box */
+.player.red.selected img { animation: glow_red 800ms ease-out infinite alternate; }
+.player.blue.selected img { animation: glow_blue 800ms ease-out infinite alternate; }
+.player.purple.selected img { animation: glow_purple 800ms ease-out infinite alternate; }
+.player.orange.selected img { animation: glow_orange 800ms ease-out infinite alternate; }
+
+@keyframes glow_red {
+    0% { border-color: #c00; box-shadow: 0 0 4px rgba(255,0,0,.5) }
+    100% { border-color: #f00; box-shadow: 0 0 24px rgba(255,0,0,.9) }
+}
+@keyframes glow_blue {
+    0% { border-color: #00c; box-shadow: 0 0 4px rgba(0,0,255,.5) }
+    100% { border-color: #33f; box-shadow: 0 0 24px rgba(0,0,255,.9) }
+}
+@keyframes glow_purple {
+    0% { border-color: #c0c; box-shadow: 0 0 4px rgba(204,0,204,.5) }
+    100% { border-color: #f0f; box-shadow: 0 0 24px rgba(255,0,255,.9) }
+}
+@keyframes glow_orange {
+    0% { border-color: #cc7200; box-shadow: 0 0 4px rgba(204,114,0,.5) }
+    100% { border-color: #ffa500; box-shadow: 0 0 24px rgba(255,165,0,.9) }
+}
+
+/* http://davidwalsh.name/css-flip */
+.flip-container { perspective: 1000; cursor: pointer; }
+.flip-container.flip .flipper { transform: rotateY(180deg); cursor: not-allowed; }
+.flip-container, .front, .back, .flip-container img { width: 120px; height: 120px; }
+.flipper { transition: 0.6s; transform-style: preserve-3d; position: relative; }
+.front, .back { backface-visibility: hidden; position: absolute; top: 0; left: 0; }
+.front { z-index: 2; transform: rotateY(0deg); }  /* transform is for ff31 */
+.back { transform: rotateY(180deg); }
+
+.flip-container.remove { animation: remove_card 800ms ease-out 1 normal forwards; }
+
+@keyframes remove_card {
+    0% { opacity: 1; transform: rotate(0deg) scale(1,1); }
+    100% { opacity: 0; transform: rotate(360deg) scale(0, 0); }
+}
+
+.overlay { top:0px; left:0px; position:absolute; z-index:1000; height:100%; width:100%; /* background-color:#808080; opacity:0.3; */}
+
+.animate-winner { animation: show_winner 800ms ease-out 1 normal forwards; }
+
+@keyframes show_winner {
+    0% { opacity: 0; transform: scale(0, 0); }
+    100% { opacity: 1; transform: scale(1, 1); }
+}

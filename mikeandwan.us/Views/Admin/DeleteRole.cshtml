@@ -1,0 +1,22 @@
+@using MawMvcApp.ViewModels.Admin
+@model DeleteRoleModel
+@{ ViewBag.Title = "admin | delete role"; }
+
+@Html.Partial("_PageHeader", "Delete Role")
+
+@Html.Partial("_identityResult", new IdentityResultModel("role", Model.Result))
+
+@if(Model.Result == null || !Model.Result.Succeeded) {
+	<p>Are you sure you would like to delete the role <strong>@Model.Role</strong>?</p>
+
+	<form asp-controller="admin" asp-action="deleterole" method="post" class="form-horizontal" autocomplete="off" role="form">
+		<input asp-for="Role" type="hidden" />
+
+	    <div class="form-group">
+	        <div class="col-sm-offset-3 col-sm-2">
+	            <button type="submit" name="delete" class="btn btn-default">Yes</button>
+	            <button type="submit" class="btn btn-default">No</button>
+	        </div>
+	    </div>
+	</form>
+}

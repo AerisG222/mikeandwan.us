@@ -1,0 +1,13 @@
+http://www.openssl.org/docs/HOWTO/certificates.txt
+https://www.openssl.org/docs/HOWTO/keys.txt
+http://nginx.org/en/docs/http/configuring_https_servers.html
+
+1. gen private key
+
+openssl genrsa -out privkey.pem 2048
+
+2. gen cert request
+
+openssl req -new -key privkey.pem -out cert.csr
+
+3. send the csr to the cert authority

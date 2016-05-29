@@ -1,0 +1,29 @@
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | networking | time"; 
+    ViewBag.AngularAppRoot = "/js/tools/time/";
+}
+
+@section scripts_head {
+    @Html.Partial("_js_Angular2")
+}
+
+@section scripts_footer {
+    <script>System.import('/js/tools/time/bootstrap.js');</script>
+}
+
+@section header {   
+    @Html.Partial("_PageHeader", "Time Calculator")
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "networking", Item = "networking-time" })
+}
+
+<p>
+    This page provides a calculator to view equivalent time measures.
+</p>
+    
+<section>
+    <time>Loading...</time>
+</section>

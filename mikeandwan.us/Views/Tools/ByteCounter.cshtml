@@ -1,0 +1,32 @@
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | byte counter"; 
+    ViewBag.AngularAppRoot = "/js/tools/byteCounter/";
+}
+
+@section scripts_head {
+    @Html.Partial("_js_Angular2")
+}
+
+@section scripts_footer {
+    <script>System.import('/js/tools/byteCounter/bootstrap.js');</script>
+}
+
+@section header {   
+    @Html.Partial("_PageHeader", "Byte Counter")
+}
+
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "byte-counter" })
+}
+
+<p>
+    I developed this page after often having a desire to quickly get a count of bytes that are used
+    in ViewState in an ASP.Net page.  Although I no longer use webforms and hence am not so concerned
+    with ViewState, this still can come in handy on occasions.
+</p>
+
+<section>
+    <bytecounter>Loading...</bytecounter>
+</section>

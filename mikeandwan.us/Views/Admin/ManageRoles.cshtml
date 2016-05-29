@@ -1,0 +1,25 @@
+@model IEnumerable<string>
+@{ ViewBag.Title = "admin | manage roles"; }
+
+@Html.Partial("_PageHeader", "Manage Roles")
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-condensed">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Members</th>
+			<th>Delete</th>
+		</tr>
+	</thead>
+	<tbody>
+	@foreach(string role in Model) {
+		<tr>
+			<td>@role</td>
+			<td><a asp-controller="admin" asp-action="editrolemembers" asp-route-id="@role">Edit</a></td>
+			<td><a asp-controller="admin" asp-action="deleterole" asp-route-id="@role">Delete</a></td>
+		</tr>	
+	}
+	</tbody>
+</table>
+</div>   

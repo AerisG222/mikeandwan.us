@@ -1,0 +1,3 @@
+CREATE SCHEMA IF NOT EXISTS video;
+
+GRANT USAGE ON SCHEMA video TO website;

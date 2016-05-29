@@ -1,0 +1,144 @@
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | reading binary clock"; 
+}
+
+@section header {
+    @Html.Partial("_PageHeader", "How to Read a Binary Clock")
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "binaryclock", Item = "binary-clock-about" })
+}
+
+<p>
+The binary clock is actually very easy to read once you have someone
+explain it.  That is what I will hopefully do on this page.
+</p>
+
+<p>
+Let's start by taking a look at a single moment in time, using the
+example below:
+</p>
+
+<center>
+<table class="binclock" cellspacing="2">
+<tr>
+  <td class="bc_off"></td>	  
+  <td class="bc_off"></td>
+  <td width="8"></td>
+  <td class="bc_off"></td>	  
+  <td class="bc_off"></td>
+  <td width="8"></td>
+  <td class="bc_off"></td>	  
+  <td class="bc_on"></td>
+</tr>
+<tr>
+  <td class="bc_off"></td>	  
+  <td class="bc_off"></td>
+  <td width="8"></td>
+  <td class="bc_on"></td>	  
+  <td class="bc_on"></td>
+  <td width="8"></td>
+  <td class="bc_off"></td>	  
+  <td class="bc_off"></td>
+</tr>
+<tr>
+  <td class="bc_off"></td>	  
+  <td class="bc_on"></td>
+  <td width="8"></td>
+  <td class="bc_off"></td>	  
+  <td class="bc_on"></td>
+  <td width="8"></td>
+  <td class="bc_on"></td>	  
+  <td class="bc_off"></td>
+</tr>
+<tr>
+  <td class="bc_on"></td>	  
+  <td class="bc_off"></td>
+  <td width="8"></td>
+  <td class="bc_on"></td>	  
+  <td class="bc_off"></td>
+  <td width="8"></td>
+  <td class="bc_on"></td>	  
+  <td class="bc_on"></td>
+</tr>
+<tr>
+ <td colspan="2" align="center"><strong>H</strong></td>
+ <td width="8"></td>
+  <td colspan="2" align="center"><strong>M</strong></td>
+ <td width="8"></td>
+ <td colspan="2" align="center"><strong>S</strong></td>
+</tr>
+</table>
+</center>
+
+<p>
+The first thing to notice when reading the clock, is that it is broken 
+up into three components: <em>hours</em>, <em>minutes</em>, and <em>seconds</em>.
+Each of these components are represented by the 3 columns, as indicated 
+above.  As you probably already expected, hours are represented in 
+24h time.
+</p>
+
+<p>
+Now that you know about what each of these columns represents, lets look 
+at how to read what the columns are telling us.  Luckily once you know how
+to read one column, you can read all three.  With that said, one 
+time component is made up of two closely packed columns.  The column on
+the left represents the tens digit, and the column on the right represents
+the ones digit.
+</p>
+
+<p>
+In order to determine the numeric value of one of these individual columns
+(the tens or ones digit), you need to do a bit of simple math.  Starting
+with the last row for the column, this represents 2^0.  The
+cell immediately above is 2^1, and above that is 2^2,
+and the topmost cell is 2^3.  So now you just count all of the 
+illuminated cells in that column to arrive at the number for the tens
+and ones digits.
+</p>
+
+<p>
+As a quick review, here is a quick listing of the important powers of 2:
+</p>
+
+2^0 = 1
+<br/>
+2^1 = 2
+<br/>
+2^2 = 4
+<br/>
+2^3 = 8
+
+<p>
+Now using the example at the top of the page, the hours are read as:
+<br/>
+Tens Digit = 2^0 = 1
+<br/>
+Ones Digit = 2^1 = 2
+<br/>
+And putting these together (do <em>not</em> add), but concatenate them
+so you get the hours component is 12.
+<p>
+
+<p>
+Likewise, for the minutes above you get:
+<br/>
+Tens: 2^0 + 2^2 = 1 + 4 = 5
+<br/>
+Ones: 2^1 + 2^2 = 2 + 4 = 6
+<br/>
+Which yields 56 for the minute component.
+</p>
+
+<p>
+Finally, for the seconds:
+<br/>
+Tens Digit = 2^0 + 2^1 = 1 + 2 = 3
+<br/>
+Ones Digit = 2^0 + 2^3 = 9
+<br/>
+Which yields the second value fo 39.
+</p>

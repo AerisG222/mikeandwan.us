@@ -1,0 +1,105 @@
+﻿@model SidebarModel
+
+@{
+    var generalPanelClass = "panel";
+    var generalGroupClass = "list-group collapse";
+
+    var networkingPanelClass = "panel";
+    var networkingGroupClass = "list-group collapse";
+
+    var binaryClockPanelClass = "panel";
+    var binaryClockGroupClass = "list-group collapse";
+
+    var learningPanelClass = "panel";
+    var learningGroupClass = "list-group collapse";
+
+    var dotnetPanelClass = "panel";
+    var dotnetGroupClass = "list-group collapse";
+
+    switch(Model.Group.ToLower()) {
+        case "general":
+            generalPanelClass += " panel-default";
+            generalGroupClass += " in";
+            break;
+        case "networking":
+            networkingPanelClass += " panel-default";
+            networkingGroupClass += " in";
+            break;
+        case "binaryclock":
+            binaryClockPanelClass += " panel-default";
+            binaryClockGroupClass += " in";
+            break;
+        case "learning":
+            learningPanelClass += " panel-default";
+            learningGroupClass += " in";
+            break;
+        case "dotnet":
+            dotnetPanelClass += " panel-default";
+            dotnetGroupClass += " in";
+            break;
+    }
+}
+
+<div class="panel-group" id="accordion">
+    <div class="@generalPanelClass">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#general">General</a>
+        </div>
+        <div id="general" class="@generalGroupClass">
+            <a asp-controller="tools" asp-action="RollTheDice" maw-active="@string.Equals(Model.Item, "roll-the-dice", StringComparison.OrdinalIgnoreCase)">Roll the Dice</a>
+            <a asp-controller="tools" asp-action="GoogleMaps" maw-active="@string.Equals(Model.Item, "google-maps", StringComparison.OrdinalIgnoreCase)">Google Maps</a>
+            <a asp-controller="tools" asp-action="WeekendCountdown" maw-active="@string.Equals(Model.Item, "weekend-countdown", StringComparison.OrdinalIgnoreCase)">Weekend Countdown</a>
+            <a asp-controller="tools" asp-action="Weather" maw-active="@string.Equals(Model.Item, "weather", StringComparison.OrdinalIgnoreCase)">Weather</a>
+            <a asp-controller="tools" asp-action="BrowserHell" maw-active="@string.Equals(Model.Item, "browser-hell", StringComparison.OrdinalIgnoreCase)">Browser Hell</a>
+            <a asp-controller="tools" asp-action="GpsConversion" maw-active="@string.Equals(Model.Item, "gps-conversion", StringComparison.OrdinalIgnoreCase)">GPS Conversion</a>
+            <a asp-controller="tools" asp-action="GuidGen" maw-active="@string.Equals(Model.Item, "guid-gen", StringComparison.OrdinalIgnoreCase)">GUID Generator</a>
+        </div>
+    </div>
+    <div class="@networkingPanelClass">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#networking">Networking</a>
+        </div>
+        <div id="networking" class="@networkingGroupClass">
+            <a asp-controller="tools" asp-action="NetworkingBandwidth" maw-active="@string.Equals(Model.Item, "networking-bandwidth", StringComparison.OrdinalIgnoreCase)">Bandwidth Calculator</a>
+            <a asp-controller="tools" asp-action="NetworkingFileSize" maw-active="@string.Equals(Model.Item, "networking-file-size", StringComparison.OrdinalIgnoreCase)">File Size</a>
+            <a asp-controller="tools" asp-action="NetworkingTime" maw-active="@string.Equals(Model.Item, "networking-time", StringComparison.OrdinalIgnoreCase)">Time</a>
+        </div>
+    </div>
+    <div class="@binaryClockPanelClass">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#binaryClock">Binary Clock</a>
+        </div>
+        <div id="binaryClock" class="@binaryClockGroupClass">
+            <a asp-controller="tools" asp-action="BinaryClock" maw-active="@string.Equals(Model.Item, "binary-clock", StringComparison.OrdinalIgnoreCase)">Binary Clock</a>
+            <a asp-controller="tools" asp-action="BinaryClockAbout" maw-active="@string.Equals(Model.Item, "binary-clock-about", StringComparison.OrdinalIgnoreCase)">About Binary Clock</a>
+        </div>
+    </div>
+    <div class="@dotnetPanelClass">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#dotnet">.Net</a>
+        </div>
+        <div id="dotnet" class="@dotnetGroupClass">
+            <a asp-controller="tools" asp-action="DotnetRegex" maw-active="@string.Equals(Model.Item, "dotnet-regex", StringComparison.OrdinalIgnoreCase)">Regular Expressions</a>
+            <a asp-controller="tools" asp-action="DotnetFormattingDates" maw-active="@string.Equals(Model.Item, "dotnet-formatting-dates", StringComparison.OrdinalIgnoreCase)">Date Formatting</a>
+            <a asp-controller="tools" asp-action="DotnetFormattingNumbers" maw-active="@string.Equals(Model.Item, "dotnet-formatting-numbers", StringComparison.OrdinalIgnoreCase)">Number Formatting</a>
+            <a asp-controller="tools" asp-action="ByteCounter" maw-active="@string.Equals(Model.Item, "byte-counter", StringComparison.OrdinalIgnoreCase)">Byte Counter</a>
+            <a asp-controller="tools" asp-action="DateDiff" maw-active="@string.Equals(Model.Item, "date-diff", StringComparison.OrdinalIgnoreCase)">Date Difference</a>
+            <a asp-controller="tools" asp-action="ColorConverter" maw-active="@string.Equals(Model.Item, "color-converter", StringComparison.OrdinalIgnoreCase)">Color Converter</a>
+            <a asp-controller="tools" asp-action="HtmlEncode" maw-active="@string.Equals(Model.Item, "html-encode", StringComparison.OrdinalIgnoreCase)">HTML Encode / Decode</a>
+            <a asp-controller="tools" asp-action="Paths" maw-active="@string.Equals(Model.Item, "paths", StringComparison.OrdinalIgnoreCase)">Paths</a>
+            <a asp-controller="tools" asp-action="RandomBytes" maw-active="@string.Equals(Model.Item, "random-bytes", StringComparison.OrdinalIgnoreCase)">Random Bytes</a>
+            <a asp-controller="tools" asp-action="UrlEncode" maw-active="@string.Equals(Model.Item, "url-encode", StringComparison.OrdinalIgnoreCase)">URL Encode / Decode</a>
+            <a asp-controller="tools" asp-action="XmlValidate" maw-active="@string.Equals(Model.Item, "xml-validate", StringComparison.OrdinalIgnoreCase)">XML Validator</a>
+            <a asp-controller="tools" asp-action="XsdValidate" maw-active="@string.Equals(Model.Item, "xsd-validate", StringComparison.OrdinalIgnoreCase)">XSD Validator</a>
+            <a asp-controller="tools" asp-action="XslTransform" maw-active="@string.Equals(Model.Item, "xsl-transform", StringComparison.OrdinalIgnoreCase)">XSL Transform</a>
+        </div>
+    </div>
+    <div class="@learningPanelClass">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#learning">Learning</a>
+        </div>
+        <div id="learning" class="@learningGroupClass">
+            <a asp-controller="tools" asp-action="Learning" maw-active="@string.Equals(Model.Item, "learning", StringComparison.OrdinalIgnoreCase)">Letters and Numbers</a>
+        </div>
+    </div>
+</div>

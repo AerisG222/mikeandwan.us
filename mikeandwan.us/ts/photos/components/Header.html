@@ -1,0 +1,14 @@
+<div class="row header">
+    <div class="col-sm-8">
+        <span class="h4">PHOTOS:</span>
+        <breadcrumbs></breadcrumbs>
+    </div>
+    <div class="col-sm-4 hidden-xs text-right">
+        <div class="btn-group">
+            <a target="_blank" class="btn btn-default btn-sm" *ngIf="downloadUrl" [href]="downloadUrl">Download <i class="fa fa-download"></i></a>
+            <button type="button" class="btn btn-default btn-sm" *ngIf="showRegularButton" (click)="toggleMapView()">Regular View <i class="fa fa-home"></i></button>
+            <button type="button" class="btn btn-default btn-sm" *ngIf="showMapButton" (click)="toggleMapView()">Map View <i class="fa fa-map-marker"></i></button>
+            <button type="button" class="btn btn-default btn-sm" (click)="clickConfig()">Settings <i class="fa fa-wrench"></i></button>
+        </div>
+    </div>
+</div>

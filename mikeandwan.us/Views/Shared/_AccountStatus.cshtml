@@ -1,0 +1,20 @@
+@using MawMvcApp.ViewModels
+@model MawMvcApp.ViewModels.Navigation.NavigationZone
+
+<ul class="nav navbar-nav navbar-right">
+    @if(User.Identity.IsAuthenticated) {
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-user"></i><i class="fa fa-caret-down"></i></a>
+            <ul class="dropdown-menu">
+                <li><a asp-controller="account" asp-action="changepassword">change password</a></li>
+                <li><a asp-controller="account" asp-action="editprofile">edit profile</a></li>
+                <li><a asp-controller="account" asp-action="logout">logout</a></li>
+            </ul>
+        </li>
+    }
+    else {
+        <li><a asp-controller="account" asp-action="login"><i class="fa fa-user"></i></a></li>
+    }
+
+	<li><a asp-controller="about" asp-action="contact"><i class="fa fa-envelope"></i></a></li>
+</ul>

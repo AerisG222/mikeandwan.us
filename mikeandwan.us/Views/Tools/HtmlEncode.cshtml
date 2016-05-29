@@ -1,0 +1,49 @@
+@model MawMvcApp.ViewModels.Tools.Dotnet.HtmlEncodeDecodeModel
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | html encoder / decoder"; 
+}
+
+@section header {
+    @Html.Partial("_PageHeader", "HTML Encoder / Decoder")
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "html-encode" })
+}
+
+<p>This page allows you to encode and decode values suitable for HTML content.</p>
+
+<form asp-controller="tools" asp-action="htmlencode" method="post" class="form-horizontal" autocomplete="off" role="form">
+	<input type="hidden" asp-for="Mode" value="Encode" />
+	<div class="form-group" maw-for="@Model.DecodedString">
+        <label asp-for="DecodedString" class="col-sm-3 control-label"></label>
+        <div class="col-sm-9">
+            <textarea asp-for="DecodedString" rows="8" class="form-control" autofocus=""></textarea>
+            <span asp-validation-for="DecodedString" class="help-block"></span>
+        </div>
+	</div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-2">
+            <button type="submit" class="btn btn-default">Encode</button>
+        </div>
+    </div>
+</form>
+
+<form asp-controller="tools" asp-action="htmlencode" method="post" class="form-horizontal" autocomplete="off" role="form">
+	<input type="hidden" asp-for="Mode" value="Decode" />
+    <div class="form-group" maw-for="@Model.EncodedString">
+        <label asp-for="EncodedString" class="col-sm-3 control-label"></label>
+        <div class="col-sm-9">
+            <textarea asp-for="EncodedString" rows="8" class="form-control"></textarea>
+            <span asp-validation-for="EncodedString" class="help-block"></span>
+        </div>
+	</div>
+	
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-2">
+            <button type="submit" class="btn btn-default">Decode</button>
+        </div>
+    </div>
+</form>

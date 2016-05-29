@@ -1,0 +1,29 @@
+{
+    "authors": [ "Mike Morano <mmorano@mikeandwan.us>" ],
+    "description": "TagHelpers for www.mikeandwan.us",
+    "version": "1.0.0-beta1",
+    "buildOptions": {
+        "debugType": "portable",
+        "warningsAsErrors": true,
+        "compile": {
+            "include": "*.cs"
+        }
+    },
+    "dependencies": {
+        "Microsoft.AspNetCore.Mvc.TagHelpers": "1.0.0-rc2-final"
+    },
+    "frameworks": {
+         "net451": { 
+             "frameworkAssemblies": {
+                 "System.Collections": "",
+                 "System.Runtime": ""
+            }
+         },
+         "netstandard1.5": {
+            "imports": [ 
+                "dotnet55", 
+                "portable-dnxcore50+net45+win8+wp8+wpa81" 
+            ]
+	    }
+    }
+}

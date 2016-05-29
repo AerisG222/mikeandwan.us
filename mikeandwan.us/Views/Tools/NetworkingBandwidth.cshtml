@@ -1,0 +1,31 @@
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | networking | bandwidth"; 
+    ViewBag.AngularAppRoot = "/js/tools/bandwidth/";
+}
+
+@section header {
+    @Html.Partial("_PageHeader", "Bandwidth Calculator")
+}
+
+@section scripts_head {
+    @Html.Partial("_js_Angular2")
+}
+
+@section scripts_footer {
+    <script>System.import('/js/tools/bandwidth/bootstrap.js');</script>
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "networking", Item = "networking-bandwidth" })
+}
+
+<p>
+  This page will provide definitions for common networking connections, as 
+  well as provide a calculator to view transfer time for different
+  connection types.
+</p>
+
+<section>
+    <bandwidth>Loading...</bandwidth>
+</section>

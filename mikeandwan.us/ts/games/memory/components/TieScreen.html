@@ -1,0 +1,11 @@
+<div class="row animate-winner">
+	<div class="col-sm-offset-2 col-sm-8 text-center">
+		<img [src]="player1.character.img" />
+		<img [src]="player2.character.img" />
+		<br/>
+		<span class="vs yellow">Tie!</span>
+		<br/>
+		<button type="button" class="btn btn-primary" (click)="onRematch()">Rematch</button>
+		<button type="button" class="btn btn-primary" (click)="onNewGame()">New Game</button>
+	</div>
+</div>

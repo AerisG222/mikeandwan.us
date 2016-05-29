@@ -1,0 +1,41 @@
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | networking | file size"; 
+    ViewBag.AngularAppRoot = "/js/tools/filesize/";
+}
+
+@section scripts_head {
+    @Html.Partial("_js_Angular2")
+}
+
+@section scripts_footer {
+    <script>System.import('/js/tools/filesize/bootstrap.js');</script>
+}
+ 
+@section header {  
+    @Html.Partial("_PageHeader", "File Size Calculator")
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "networking", Item = "networking-file-size" })
+}
+
+<p>
+  Use the form below to see the size of a file in different scales.
+</p>
+
+<br />
+
+<section>
+    <filesize>Loading...</filesize>
+
+    <br />
+
+    Note: 1 GB = 1,024 MB
+    <br/>
+    Note: 1 MB = 1,024 KB
+    <br/>
+    Note: 1 KB = 1,024 B
+    <br/>
+    Note: 1 B = 8 bits
+</section>

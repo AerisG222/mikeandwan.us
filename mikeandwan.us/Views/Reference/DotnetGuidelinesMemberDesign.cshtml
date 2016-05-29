@@ -1,0 +1,119 @@
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "reference | .net guidelines | member design"; 
+}
+
+@section header {
+    @Html.Partial("_PageHeader", ".Net Framework Design Guidelines")
+}
+
+@section sidebar {
+    @Html.Partial("_ReferenceSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-guidelines-member-design" })
+}
+
+<h2>Member Design</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-condensed">
+  	<tbody>
+	    <tr><td>Do</td><td>Try to use descriptive parameter names to indicate the default used by shorter overloads.</td></tr>
+	    <tr><td>Avoid</td><td>Arbitrarily varying parameter names in overloads.</td></tr>
+	    <tr><td>Avoid</td><td>Being inconsistent in the ordering of parameters in overloaded members.</td></tr>
+	    <tr><td>Do</td><td>Make only the longest overload virtual (if extensibility is required).</td></tr>
+	    <tr><td>Do Not</td><td>Use ref or out modifiers to overload members.</td></tr>
+	    <tr><td>Do</td><td>Allow null to be passed for optional arguments.</td></tr>
+	    <tr><td>Do</td><td>Use member overloading rather than defining members with default arguments.</td></tr>
+	    <tr><td>Avoid</td><td>Implementing interface members explicitly without having a strong reason to do so.</td></tr>
+	    <tr><td>Consider</td><td>Implementing interface members explicitly, if the members are intended to be called only through the interface.</td></tr>
+	    <tr><td>Consider</td><td>Implementing interface members explicitly to simulate variance (change parameters or return type in &ldquo;overridden&rdquo; members).</td></tr>
+	    <tr><td>Consider</td><td>Implementing interface members explicitly to hide a member and add an equivalent member with a better name.</td></tr>
+	    <tr><td>Do Not</td><td>Use explicit members as a security boundary.</td></tr>
+	    <tr><td>Do</td><td>Provide a protected virtual member that offers the same functionality as the explicitly implemented member if the functionality is meant to be specialized by derived classes.</td></tr>
+	    <tr><td>Consider</td><td>Using a property, if the member represents a logical attribute of the type.</td></tr>
+	    <tr><td>Do</td><td>Use a property, rather than a method, if the value of the property is stored in the process memory and the property would just provide access to the value.</td></tr>
+	    <tr><td>Do</td><td>Use a method, rather than a property, when the operation: 1. Is an order of magnitude slower than field access. 2. Is a conversion operation (i.e., ToString()). 3. Returns a different result each time it is called (i.e., DateTime.Now()). 4. Has a significant noticeable side effect. 5. Returns a copy of an internal state. 6. Returns an array.</td></tr>
+	    <tr><td>Do</td><td>Create get-only properties if the caller should not be able to change the value of the property.</td></tr>
+	    <tr><td>Do Not</td><td>Provide set-only properties of properties with the setter having broader accessibility than the getter.</td></tr>
+	    <tr><td>Do</td><td>Provide sensible default values for all properties, ensuring that the defaults do not result in a security hole or terribly inefficient code.</td></tr>
+	    <tr><td>Do</td><td>Allow properties to be set in any order even if this results in a temporarily invalid state of the object.</td></tr>
+	    <tr><td>Do</td><td>Preserve the previous value if a property setter throws an exception.</td></tr>
+	    <tr><td>Avoid</td><td>Throwing exceptions from property getters.</td></tr>
+	    <tr><td>Consider</td><td>Using indexers to provide access to data stored in an internal array.</td></tr>
+	    <tr><td>Consider</td><td>Providing indexers on types representing collections of items.</td></tr>
+	    <tr><td>Avoid</td><td>Indexed properties with more than one parameter.</td></tr>
+	    <tr><td>Avoid</td><td>Indexers with parameter types other than System.Int32, System.Int64, System.String, System.Object, enum, or generic type parameters.</td></tr>
+	    <tr><td>Do</td><td>Use the name Item for indexed properties unless there is an obviously better name (e.g., see the Chars property on System.String).</td></tr>
+	    <tr><td>Do Not</td><td>Provide both an indexer and methods that are semantically equivalent.</td></tr>
+	    <tr><td>Do Not</td><td>Provide more than one family of overloaded indexers in one type.</td></tr>
+	    <tr><td>Do Not</td><td>Use non default indexed properties.</td></tr>
+	    <tr><td>Consider</td><td>Raising change notification events when property values in high-level APIs (usually designer components) are modified.</td></tr>
+	    <tr><td>Consider</td><td>Raising change notification events when the value of a property changes via external forces.</td></tr>
+	    <tr><td>Consider</td><td>Providing simple, ideally default constructors.</td></tr>
+	    <tr><td>Consider</td><td>Using a static factory method instead of a constructor if the semantics of the desired operation do not map directly to the construction of a new instance, or if following theconstructor design guidelines feels unnatural.</td></tr>
+	    <tr><td>Do</td><td>Use constructor parameters as shortcuts for setting main properties.</td></tr>
+	    <tr><td>Do</td><td>Use the same name for constructor parameters and a property, if the constructor parameters are used to simply set the property.</td></tr>
+	    <tr><td>Do</td><td>Minimal work in the constructor.</td></tr>
+	    <tr><td>Do</td><td>Throw exceptions from instance constructors if appropriate.</td></tr>
+	    <tr><td>Do</td><td>Explicitly declare the public default constructor in classes, if such constructor is required.</td></tr>
+	    <tr><td>Avoid</td><td>Explicitly defining default constructors on structs.</td></tr>
+	    <tr><td>Avoid</td><td>Calling virtual members on an object inside its constructor.</td></tr>
+	    <tr><td>Do</td><td>Make static constructors private.</td></tr>
+	    <tr><td>Do Not</td><td>Throw exceptions from static constructors.</td></tr>
+	    <tr><td>Consider</td><td>Initializing static fields inline rather than explicitly using static constructors, as the runtime is able to optimize the performance of types that don't have an explicitly defined static constructor.</td></tr>
+	    <tr><td>Do</td><td>Use the term &ldquo;raise&rdquo; for events rather than &ldquo;fire&rdquo; or &ldquo;trigger&rdquo;.</td></tr>
+	    <tr><td>Do</td><td>Use System.EventHandler&lt;T&gt; instead of manually creating new delegates to be used as event handlers.</td></tr>
+	    <tr><td>Consider</td><td>Using a subclass of EventArgs as the event argument, unless you are absolutely sure the event will never need to carry any data to the event handling method, in which case you can use the EventArgs type directly.</td></tr>
+	    <tr><td>Do</td><td>Use a protected virtual method to raise each event.</td></tr>
+	    <tr><td>Do</td><td>Take a parameter typed as the event argument class to the protected method that raises an event.</td></tr>
+	    <tr><td>Do Not</td><td>Pass null as the sender when raising a non static event.</td></tr>
+	    <tr><td>Do Not</td><td>Pass null as the event data parameter when raising an event (You should use EventArgs.Empty)</td></tr>
+	    <tr><td>Consider</td><td>Raising events that the end user can cancel.</td></tr>
+	    <tr><td>Do</td><td>Use a return type of void for event handlers.</td></tr>
+	    <tr><td>Do</td><td>Use object as the type of the first parameter of the event handler, and call it sender.</td></tr>
+	    <tr><td>Do</td><td>Use System.EventArgs or its subclass as the type of the second parameter of the event handler, and call it e.</td></tr>
+	    <tr><td>Do Not</td><td>Have more than two parameters on event handlers.</td></tr>
+	    <tr><td>Do Not</td><td>Provide instance fields that are public or protected.</td></tr>
+	    <tr><td>Do</td><td>Use constant fields for constants that will never change.</td></tr>
+	    <tr><td>Do</td><td>Use public static readonly fields for predefined object instances.</td></tr>
+	    <tr><td>Do Not</td><td>Assign instances of mutable types to readonly fields.</td></tr>
+	    <tr><td>Avoid</td><td>Defining operator overloads, except in types that should feel like primitive (built-in) types.</td></tr>
+	    <tr><td>Consider</td><td>Defining operator overloads in a type that should feel like a primitive type.</td></tr>
+	    <tr><td>Do</td><td>Define operator overloads in structs that represent numbers (such as System.Decimal).</td></tr>
+	    <tr><td>Do Not</td><td>Be cute when defining operator overloads.</td></tr>
+	    <tr><td>Do Not</td><td>Provide operator overloads unless at least one of the operands is of the type defining the overload.</td></tr>
+	    <tr><td>Do</td><td>Overload operators in a symmetric fashion.</td></tr>
+	    <tr><td>Consider</td><td>Providing methods with friendly names corresponding to each overloaded operator.</td></tr>
+	    <tr><td>Do Not</td><td>Provide a conversion operator if such conversion is not clearly expected by the end users.</td></tr>
+	    <tr><td>Do Not</td><td>Define conversion operators outside of a type's domain.</td></tr>
+	    <tr><td>Do Not</td><td>Provide an implicit conversion operator if the conversion is potentially lossy.</td></tr>
+	    <tr><td>Do Not</td><td>Throw exceptions from implicit casts.</td></tr>
+	    <tr><td>Do</td><td>Throw System.InvalidCastException if a call to a cast operator results in a lossy conversion and the contract of the operator does not allow lossy conversions.</td></tr>
+	    <tr><td>Do</td><td>Use the least derived parameter type that provides the functionality required by the member.</td></tr>
+	    <tr><td>Do Not</td><td>Use reserved parameters.</td></tr>
+	    <tr><td>Do Not</td><td>Have publicly exposed methods that take pointers, arrays of pointers, or multidimensional arrays as parameters.</td></tr>
+	    <tr><td>Do</td><td>Place all out parameters following all of the by-value and ref parameters (excluding parameter arrays), even if it results in an inconsistency in parameter ordering between overloads.</td></tr>
+	    <tr><td>Do</td><td>Be consistent in naming parameters when overriding members or implementing interface members.</td></tr>
+	    <tr><td>Do</td><td>Use enums if otherwise a member would have two or more Boolean parameters.</td></tr>
+	    <tr><td>Do Not</td><td>Use Booleans unless you are absolutely sure there will never be a need for more than two values.</td></tr>
+	    <tr><td>Consider</td><td>Using Booleans for constructor parameters that are truly two state values and are simply used to initialize Boolean properties.</td></tr>
+	    <tr><td>Do</td><td>Validate arguments passed to public, protected, or explicitly implemented members.</td></tr>
+	    <tr><td>Do</td><td>Throw ArgumentNullException if a null argument is passed but the member does not support null arguments.</td></tr>
+	    <tr><td>Do</td><td>Validate enum parameters.</td></tr>
+	    <tr><td>Do Not</td><td>Use Enum.IsDefined for enum range checks.</td></tr>
+	    <tr><td>Do</td><td>Be aware that mutable arguments passed might have changed after they were validated.</td></tr>
+	    <tr><td>Avoid</td><td>Using out or ref parameters.</td></tr>
+	    <tr><td>Do Not</td><td>Pass reference types by reference.</td></tr>
+	    <tr><td>Consider</td><td>Adding the params keyword to array parameters, if you expect the end users to pass arrays with a small number of elements.</td></tr>
+	    <tr><td>Avoid</td><td>Using params arrays if the caller would almost always have the input already in an array.</td></tr>
+	    <tr><td>Do Not</td><td>Use params arrays if the array is modified by the member taking the params array parameter.</td></tr>
+	    <tr><td>Consider</td><td>Using the params keyword in a simple overload, even if a more complex overload could not use it.</td></tr>
+	    <tr><td>Do</td><td>Try to order parameters to make it possible to use the params keyword.</td></tr>
+	    <tr><td>Consider</td><td>Providing special overloads and code paths for calls with a small number of arguments in extremely performance-sensitive APIs.</td></tr>
+	    <tr><td>Do</td><td>Be aware that null could be passed as a params array argument.</td></tr>
+	    <tr><td>Do Not</td><td>Use the varargs methods, otherwise known as the ellipsis.</td></tr>
+	    <tr><td>Do</td><td>Provide an alternative for any member that takes a pointer argument, as pointers are not CLS compliant.</td></tr>
+	    <tr><td>Avoid</td><td>Doing expensive argument checking of pointer arguments.</td></tr>
+	    <tr><td>Do</td><td>Follow common pointer-related conventions when designing members with pointers.</td></tr>
+	</tbody>
+</table>
+</div>   

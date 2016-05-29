@@ -1,0 +1,29 @@
+{
+    "authors": [ "Mike Morano <mmorano@mikeandwan.us>" ],
+    "description": "Data layer bound to Postgres for www.mikeandwan.us",
+    "version": "1.0.0-beta1",
+    "buildOptions": {
+        "debugType": "portable",
+        "warningsAsErrors": true
+    },
+    "dependencies": {
+        "Microsoft.EntityFrameworkCore": "1.0.0-rc2-final",
+        "Maw.Domain": { "target": "project" },
+		"Maw.Data.EntityFramework": { "target": "project" }
+    },
+    "frameworks": {
+        "net451": {
+            "frameworkAssemblies": {
+                "System.Data": ""
+            }
+        },
+        "netstandard1.5": {
+            "imports": [ 
+                "dotnet55", 
+                "portable-dnxcore50+net45+win8+wp8+wpa81",
+                "portable-net45+win8+wp8",
+                "netcoreapp1.0"
+            ]
+	    }
+    }
+}

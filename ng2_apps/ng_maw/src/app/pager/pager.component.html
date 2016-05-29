@@ -1,0 +1,9 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="pagination btn-group">
+            <button class="btn btn-default btn-sm" *ngIf="canScroll" [disabled]="isFirstPageVisible" (click)="scroll(-1)">&laquo;</button>
+            <button class="btn btn-default btn-sm" [class.active]="isPageActive(page - 1)" *ngFor="#page of pageArray | slice: firstPageIndex : firstPageIndex + maxPagesDisplayed" (click)="activatePage(page - 1)">{{page}}</button>
+            <button class="btn btn-default btn-sm" *ngIf="canScroll" [disabled]="isLastPageVisible" (click)="scroll(1)">&raquo;</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+@model IEnumerable<Maw.Domain.Blogs.Post>
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "about | news"; 
+}
+
+@section header {
+    @Html.Partial("_PageHeader", "What's New")
+}
+
+@section sidebar {
+    @Html.Partial("_AboutSidebar", "news")
+}
+
+@foreach(var post in Model) {
+	<h3>@post.Title</h3>
+    @Html.Raw(post.Description)
+}

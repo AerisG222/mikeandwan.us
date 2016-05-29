@@ -1,0 +1,33 @@
+<div>
+	<audio #audio [src]="currentCharAudio" autoplay></audio>
+
+	<div class="row">
+		<div class="col-sm-offset-3 col-sm-3 learning-letter">
+			&nbsp;{{currentChar}}&nbsp;
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-offset-3 col-sm-2">
+			<div class="radio" *ngFor="let speaker of speakers">
+				<label>
+					<input type="radio" name="speaker" [checked]="currentSpeaker == speaker" (change)="currentSpeaker = speaker" />{{speaker}}
+				</label>
+			</div>
+		</div>
+
+		<div class="col-sm-2">
+			<div class="radio" *ngFor="let lesson of lessons">
+				<label>
+					<input type="radio" name="lesson" [checked]="currentLesson == lesson" (change)="currentLesson = lesson" />{{lesson}}
+				</label>
+			</div>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<div class="col-sm-offset-3 col-sm-2">
+			<button type="submit" class="btn btn-default" (click)="toggleRunning()">{{runButtonText}}</button>
+		</div>
+	</div>
+</div>

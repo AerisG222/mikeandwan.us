@@ -1,0 +1,22 @@
+@using MawMvcApp.ViewModels.Admin
+@model DeleteUserModel
+@{ ViewBag.Title = "admin | delete user"; }
+
+@Html.Partial("_PageHeader", "Delete User")
+
+@Html.Partial("_identityResult", new IdentityResultModel("user", Model.Result))
+
+@if(Model.Result == null || !Model.Result.Succeeded) {
+	<p>Are you sure you would like to delete user <strong>@Model.Username</strong>?</p>
+
+	<form asp-controller="admin" asp-action="deleteuser" method="post" class="form-horizontal" autocomplete="off" role="form">
+		<input asp-for="Username" type="hidden" />
+
+	    <div class="form-group">
+	        <div class="col-sm-offset-3 col-sm-2">
+	            <button type="submit" name="delete" class="btn btn-default">Yes</button>
+	            <button type="submit" class="btn btn-default">No</button>
+	        </div>
+	    </div>
+	</form>
+}

@@ -1,0 +1,104 @@
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "reference | http status codes"; 
+}
+
+@section header {   
+    @Html.Partial("_PageHeader", "HTTP Status Codes")
+}
+
+@section sidebar {
+    @Html.Partial("_ReferenceSidebar", new SidebarModel() { Group = "http", Item = "http-status-codes" })
+}
+
+<p>
+  This page provides a list of HTTP status codes
+</p>
+
+<div role="tabpanel">
+	<ul class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active"><a href="#info" aria-controls="info" role="tab" data-toggle="tab">1xx</a></li>
+		<li role="presentation"><a href="#success" aria-controls="success" role="tab" data-toggle="tab">2xx</a></li>
+		<li role="presentation"><a href="#redirection" aria-controls="redirection" role="tab" data-toggle="tab">3xx</a></li>
+		<li role="presentation"><a href="#clienterror" aria-controls="clienterror" role="tab" data-toggle="tab">4xx</a></li>
+		<li role="presentation"><a href="#servererror" aria-controls="servererror" role="tab" data-toggle="tab">5xx</a></li>
+	</ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="info">
+    	<table class="table table-striped table-hover table-condensed">
+    		<tr><th colspan="2">1xx - Informational</th></tr>
+    		<tr><th>Code</th><th>Name</th></tr>
+    		<tr><td>100</td><td>Continue</td></tr>
+    		<tr><td>101</td><td>Switching Protocols</td></tr>
+    	</table>
+    	</div>
+
+        <div role="tabpanel" class="tab-pane fade" id="success">
+    	<table class="table table-striped table-hover table-condensed">
+    		<tr><th colspan="2">2xx - Successful</th></tr>
+    		<tr><th>Code</th><th>Name</th></tr>
+    		<tr><td>200</td><td>OK</td></tr>
+    		<tr><td>201</td><td>Created</td></tr>
+    		<tr><td>202</td><td>Accepted</td></tr>
+    		<tr><td>203</td><td>Non-Authoritative Information</td></tr>
+    		<tr><td>204</td><td>No Content</td></tr>
+    		<tr><td>205</td><td>Reset Content</td></tr>
+    		<tr><td>206</td><td>Partial Content</td></tr>
+    	</table>
+    	</div>
+
+        <div role="tabpanel" class="tab-pane fade" id="redirection">
+    	<table class="table table-striped table-hover table-condensed">
+    		<tr><th colspan="2">3xx - Redirection</th></tr>
+    		<tr><th>Code</th><th>Name</th></tr>
+    		<tr><td>300</td><td>Multiple Choices</td></tr>
+    		<tr><td>301</td><td>Moved Permanently</td></tr>
+    		<tr><td>302</td><td>Found</td></tr>
+    		<tr><td>303</td><td>See Other</td></tr>
+    		<tr><td>304</td><td>Not Modified</td></tr>
+    		<tr><td>305</td><td>Use Proxy</td></tr>
+    		<tr><td>306</td><td>(Unused)</td></tr>
+    		<tr><td>307</td><td>Temporary Redirect</td></tr>
+    	</table>
+    	</div>
+
+        <div role="tabpanel" class="tab-pane fade" id="clienterror">
+    	<table class="table table-striped table-hover table-condensed">
+    		<tr><th colspan="2">4xx - Client Error</th></tr>
+    		<tr><th>Code</th><th>Name</th></tr>
+    		<tr><td>400</td><td>Bad Request</td></tr>
+    		<tr><td>401</td><td>Unauthorized</td></tr>
+    		<tr><td>402</td><td>Payment Required</td></tr>
+    		<tr><td>403</td><td>Forbidden</td></tr>
+    		<tr><td>404</td><td>Not Found</td></tr>
+    		<tr><td>405</td><td>Method Not Allowed</td></tr>
+    		<tr><td>406</td><td>Not Acceptable</td></tr>
+    		<tr><td>407</td><td>Proxy Authentication Required</td></tr>
+    		<tr><td>408</td><td>Request Timeout</td></tr>
+    		<tr><td>409</td><td>Conflict</td></tr>
+    		<tr><td>410</td><td>Gone</td></tr>
+    		<tr><td>411</td><td>Length Required</td></tr>
+    		<tr><td>412</td><td>Precondition Failed</td></tr>
+    		<tr><td>413</td><td>Request Entity Too Large</td></tr>
+    		<tr><td>414</td><td>Request-URI Too Long</td></tr>
+    		<tr><td>415</td><td>Unsupported Media Type</td></tr>
+    		<tr><td>416</td><td>Requested Range Not Satisfiable</td></tr>
+    		<tr><td>417</td><td>Expectation Failed</td></tr>
+    	</table>
+    	</div>
+
+        <div role="tabpanel" class="tab-pane fade" id="servererror">
+    	<table class="table table-striped table-hover table-condensed">
+    		<tr><th colspan="2">5xx - Server Error</th></tr>
+    		<tr><th>Code</th><th>Name</th></tr>
+    		<tr><td>500</td><td>Internal Server Error</td></tr>
+    		<tr><td>501</td><td>Not Implemented</td></tr>
+    		<tr><td>502</td><td>Bad Gateway</td></tr>
+    		<tr><td>503</td><td>Service Unavailable</td></tr>
+    		<tr><td>504</td><td>Gateway Timeout</td></tr>
+    		<tr><td>505</td><td>HTTP Version Not Supported</td></tr>
+    	</table>
+        </div>
+    </div>
+</div>

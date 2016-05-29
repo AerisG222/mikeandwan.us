@@ -1,0 +1,45 @@
+<table class="binclock">
+	<tr>
+		<td [ngClass]="{ bc_on: isOn(h, 8, true), bc_off: isOff(h, 8, true) }"></td>
+		<td [ngClass]="{ bc_on: isOn(h, 8, false), bc_off: isOff(h, 8, false) }"></td>
+		<td width="8"></td>
+		<td [ngClass]="{ bc_on: isOn(m, 8, true), bc_off: isOff(m, 8, true) }"></td>
+		<td [ngClass]="{ bc_on: isOn(m, 8, false), bc_off: isOff(m, 8, false) }"></td>
+		<td width="8"></td>
+		<td [ngClass]="{ bc_on: isOn(s, 8, true), bc_off: isOff(s, 8, true) }"></td>
+		<td [ngClass]="{ bc_on: isOn(s, 8, false), bc_off: isOff(s, 8, false) }"></td>
+	</tr>
+	<tr>
+		<td [ngClass]="{ bc_on: isOn(h, 4, true), bc_off: isOff(h, 4, true) }"></td>
+		<td [ngClass]="{ bc_on: isOn(h, 4, false), bc_off: isOff(h, 4, false) }"></td>
+		<td width="8"></td>
+		<td [ngClass]="{ bc_on: isOn(m, 4, true), bc_off: isOff(m, 4, true) }"></td>
+		<td [ngClass]="{ bc_on: isOn(m, 4, false), bc_off: isOff(m, 4, false) }"></td>
+		<td width="8"></td>
+		<td [ngClass]="{ bc_on: isOn(s, 4, true), bc_off: isOff(s, 4, true) }"></td>
+		<td [ngClass]="{ bc_on: isOn(s, 4, false), bc_off: isOff(s, 4, false) }"></td>
+	</tr>
+	<tr>
+		<td [ngClass]="{ bc_on: isOn(h, 2, true), bc_off: isOff(h, 2, true) }"></td>
+		<td [ngClass]="{ bc_on: isOn(h, 2, false), bc_off: isOff(h, 2, false) }"></td>
+		<td width="8"></td>
+		<td [ngClass]="{ bc_on: isOn(m, 2, true), bc_off: isOff(m, 2, true) }"></td>
+		<td [ngClass]="{ bc_on: isOn(m, 2, false), bc_off: isOff(m, 2, false) }"></td>
+		<td width="8"></td>
+		<td [ngClass]="{ bc_on: isOn(s, 2, true), bc_off: isOff(s, 2, true) }"></td>
+		<td [ngClass]="{ bc_on: isOn(s, 2, false), bc_off: isOff(s, 2, false) }"></td>
+	</tr>
+	<tr>
+		<td [ngClass]="{ bc_on: isOn(h, 1, true), bc_off: isOff(h, 1, true) }"></td>
+		<td [ngClass]="{ bc_on: isOn(h, 1, false), bc_off: isOff(h, 1, false) }"></td>
+		<td width="8"></td>
+		<td [ngClass]="{ bc_on: isOn(m, 1, true), bc_off: isOff(m, 1, true) }"></td>
+		<td [ngClass]="{ bc_on: isOn(m, 1, false), bc_off: isOff(m, 1, false) }"></td>
+		<td width="8"></td>
+		<td [ngClass]="{ bc_on: isOn(s, 1, true), bc_off: isOff(s, 1, true) }"></td>
+		<td [ngClass]="{ bc_on: isOn(s, 1, false), bc_off: isOff(s, 1, false) }"></td>
+	</tr>
+	<tr>
+		<td colspan="8" align="center" ng-bind="currentTime | date:'hh.mm.ss'"></td>
+	</tr>
+</table>

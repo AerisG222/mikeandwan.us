@@ -1,0 +1,10 @@
+.vscode
+
+project.lock.json
+**/bin/*
+**/obj/*
+
+**/.svn/*
+
+**/node_modules/*
+**/typings/*

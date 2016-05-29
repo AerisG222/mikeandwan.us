@@ -1,0 +1,21 @@
+﻿{
+    "Environment": {
+        "Name": "Development",
+        "DbConnectionString": "",
+        "AssetsPath": "/srv/www/website_assets/"
+    },
+    "Email": {
+        "Server": "smtp.gmail.com",
+        "Port": 587,
+        "User": "",
+        "Password": ""
+    },
+    "Google": {
+        "RecaptchaSiteKey": "",
+	    "RecaptchaSecretKey": ""
+    },
+    "ContactUs": {
+        "To": "mmorano@mikeandwan.us",
+        "Subject": "mikeandwan.us: Contact Us"    
+    }
+}

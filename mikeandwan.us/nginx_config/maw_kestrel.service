@@ -1,0 +1,11 @@
+[Unit]
+Description=ASPNet5 MVC6 application for www.mikeandwan.us
+After=syslog.target
+
+[Service]
+User=svc_www_maw
+WorkingDirectory=/srv/www/mikeandwan.us
+ExecStart=/srv/www/start_maw.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,49 @@
+<form class="form-horizontal">
+    <div class="form-group">
+        <label for="size" class="col-sm-3 control-label">File Size</label>
+        <div class="col-sm-2">
+            <input type="text" id="size" class="form-control" #size autofocus />
+        </div>
+        <div class="col-sm-2">
+            <select class="form-control" #sizeScale>
+                <option value="b">B</option>
+                <option value="k">KB</option>
+                <option value="m">MB</option>
+                <option value="g">GB</option>
+            </select>
+        </div>
+        <label class="col-sm-1 control-label">in</label>
+        <div class="col-sm-2">
+            <select class="form-control" #timeScale>
+                <option value="s">Seconds</option>
+                <option value="m">Minutes</option>
+                <option value="h">Hours</option>
+                <option value="d">Days</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <button type="button" (click)="calculate(size.value, sizeScale.value, timeScale.value)" class="btn btn-default">Submit</button>
+        </div>
+    </div>
+</form>
+
+<div *ngIf="results != null" class="table-responsive">
+    <table class="table table-striped table-hover table-condensed">
+        <tr>
+            <th>Connection Name</th>
+            <th>Connection Speed</th>
+            <th>Download Time</th>
+        </tr>
+        <tr *ngFor="#result of results">
+            <td>{{result.name}}</td>
+            <td>{{result.description}}</td>
+            <td>{{result.time | number : '1.4-4'}}</td>
+        </tr>
+    </table>
+</div>
+
+Note: 1 Gbps = 1,000 Mbps = 1,000,000 Kbps = 1,000,000,000 bps
+<br/>
+Note: 1 Mbps = 1,000 Kbps = 1,000,000 bps
+<br/>
+Note: 1 Kbps = 1,000 bps

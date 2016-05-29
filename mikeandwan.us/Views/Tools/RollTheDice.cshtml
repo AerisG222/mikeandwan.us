@@ -1,0 +1,73 @@
+@model MawMvcApp.ViewModels.Tools.RollTheDiceModel
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | roll the dice"; 
+}
+
+@section header {
+    @Html.Partial("_PageHeader", "Roll the Dice")
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "general", Item = "roll-the-dice" })
+}
+
+<p>
+It always seems the folks I hang out with tend to be indecisive about choosing things.  This occurs almost
+all the time when it comes to determining where to go for lunch or dinner.  Typically, many are options are
+given, but no decision is made.
+</p>
+
+<p>
+In an effort to facilitate decisions, this tool allows you to <i>roll the dice</i>.
+</p>
+
+<form asp-controller="tools" asp-action="rollthedice" method="post" class="form-horizontal" autocomplete="off" role="form">
+	<div class="form-group" maw-for="@Model.NumberOfSides">
+		<label asp-for="NumberOfSides" class="col-sm-3 control-label"></label>
+        <div class="col-sm-2">
+			<input asp-for="NumberOfSides" class="form-control" autofocus="" />
+        </div>
+		<div class="col-sm-7">
+			<span asp-validation-for="NumberOfSides" class="help-block"></span>
+		</div>
+    </div>
+	
+    <div class="form-group" maw-for="@Model.NumberOfThrows">
+		<label asp-for="NumberOfThrows" class="col-sm-3 control-label"></label>
+        <div class="col-sm-2">
+			<input asp-for="NumberOfThrows" class="form-control" />
+        </div>
+		<div class="col-sm-7">
+			<span asp-validation-for="NumberOfThrows" class="help-block"></span>
+		</div>
+	</div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-2">
+    	    <button type="submit" class="btn btn-default">Roll</button>
+        </div>
+    </div>
+</form>
+
+@if(Model.Executed) {
+	<div class="row">
+		<div class="col-sm-12">
+			<h2>Winners</h2>
+			
+			<ul>
+			@foreach(int side in Model.WinnerList) {
+				<li>@side</li>
+			}
+			</ul>
+			
+			
+			<h2>Results</h2>
+			<ul>
+			@for(int i = 0; i < Model.ThrowCounts.Length; i++) {
+				<li>@(i + 1): @Model.ThrowCounts[i]</li>
+			}
+			</ul>
+		</div>
+	</div>
+}

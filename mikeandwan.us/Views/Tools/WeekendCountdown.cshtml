@@ -1,0 +1,25 @@
+@{ 
+    Layout = "_LayoutSidebar";
+    ViewBag.Title = "tools | weekend countdown"; 
+    ViewBag.AngularAppRoot = "/js/tools/weekendCountdown/";
+}
+
+@section scripts_head {
+    @Html.Partial("_js_Angular2")
+}
+
+@section scripts_footer {
+    <script>System.import('/js/tools/weekendCountdown/bootstrap.js');</script>
+}
+
+@section header {
+    @Html.Partial("_PageHeader", "Weekend Countdown")
+}
+
+@section sidebar {
+    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "general", Item = "weekend-countdown" })
+}
+
+<section>
+    <countdown>Loading...</countdown>
+</section>

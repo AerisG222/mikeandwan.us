@@ -1,0 +1,14 @@
+﻿@model MawMvcApp.ViewModels.Admin.IdentityResultModel
+@if(Model.Result != null) {
+	if(Model.Result.Succeeded) {
+		<p class="alert alert-success">
+		    The @Model.EntityName was created successfully.
+		</p>
+	}
+	else {
+		<div class="alert alert-danger">
+		    <p>There was an error trying to create the @Model.EntityName:</p>
+		    @Html.Partial("_identityErrors", Model.Result.Errors)
+		</div>
+	}
+}

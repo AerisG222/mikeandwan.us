@@ -1,0 +1,95 @@
+﻿@model SidebarModel
+
+@{
+    var htmlPanelClass = "panel";
+    var htmlGroupClass = "list-group collapse";
+
+    var httpPanelClass = "panel";
+    var httpGroupClass = "list-group collapse";
+
+    var networkingPanelClass = "panel";
+    var networkingGroupClass = "list-group collapse";
+
+    var dotnetPanelClass = "panel";
+    var dotnetGroupClass = "list-group collapse";
+
+    var presentationPanelClass = "panel";
+    var presentationGroupClass = "list-group collapse";
+    
+    switch(Model.Group.ToLower()) {
+        case "html":
+            htmlPanelClass += " panel-default";
+            htmlGroupClass += " in";
+            break;
+        case "http":
+            httpPanelClass += " panel-default";
+            httpGroupClass += " in";
+            break;
+        case "networking":
+            networkingPanelClass += " panel-default";
+            networkingGroupClass += " in";
+            break;
+        case "dotnet":
+            dotnetPanelClass += " panel-default";
+            dotnetGroupClass += " in";
+            break;
+        case "presentation":
+            presentationPanelClass += " panel-default";
+            presentationGroupClass += " in";
+            break;
+    }
+}
+
+<div class="panel-group" id="accordion">
+    <div class="@htmlPanelClass">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#html">HTML</a>
+        </div>
+        <div id="html" class="@htmlGroupClass">
+            <a asp-controller="reference" asp-action="HtmlColors" maw-active="@string.Equals(Model.Item, "html-colors", StringComparison.OrdinalIgnoreCase)">Colors</a>
+            <a asp-controller="reference" asp-action="HtmlDoctypes" maw-active="@string.Equals(Model.Item, "html-doctypes", StringComparison.OrdinalIgnoreCase)">Doctypes</a>
+            <a asp-controller="reference" asp-action="HtmlEntities" maw-active="@string.Equals(Model.Item, "html-entities", StringComparison.OrdinalIgnoreCase)">Entities</a>
+        </div>
+    </div>
+    <div class="@httpPanelClass">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#http">HTTP</a>
+        </div>
+        <div id="http" class="@httpGroupClass">
+            <a asp-controller="reference" asp-action="HttpStatusCodes" maw-active="@string.Equals(Model.Item, "http-status-codes", StringComparison.OrdinalIgnoreCase)">Status Codes</a>
+            <a asp-controller="reference" asp-action="HttpRfcs" maw-active="@string.Equals(Model.Item, "http-rfcs", StringComparison.OrdinalIgnoreCase)">RFCs</a>
+        </div>
+    </div>
+    <div class="@networkingPanelClass">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#networking">Networking</a>
+        </div>
+        <div id="networking" class="@networkingGroupClass">
+            <a asp-controller="reference" asp-action="NetworkingPorts" maw-active="@string.Equals(Model.Item, "networking-ports", StringComparison.OrdinalIgnoreCase)">Common Ports</a>
+        </div>
+    </div>
+    <div class="@dotnetPanelClass">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#dotnet">.Net Design Guidelines</a>
+        </div>
+        <div id="dotnet" class="@dotnetGroupClass">
+            <a asp-controller="reference" asp-action="DotnetGuidelinesFundamentals" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-fundamentals", StringComparison.OrdinalIgnoreCase)">Fundamentals</a>
+            <a asp-controller="reference" asp-action="DotnetGuidelinesNaming" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-naming", StringComparison.OrdinalIgnoreCase)">Naming</a>
+            <a asp-controller="reference" asp-action="DotnetGuidelinesTypeDesign" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-type-design", StringComparison.OrdinalIgnoreCase)">Type Design</a>
+            <a asp-controller="reference" asp-action="DotnetGuidelinesMemberDesign" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-member-design", StringComparison.OrdinalIgnoreCase)">Member Design</a>
+            <a asp-controller="reference" asp-action="DotnetGuidelinesDesignForExtensibility" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-design-for-extensibility", StringComparison.OrdinalIgnoreCase)">Design for Extensibility</a>
+            <a asp-controller="reference" asp-action="DotnetGuidelinesExceptions" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-exceptions", StringComparison.OrdinalIgnoreCase)">Exceptions</a>
+            <a asp-controller="reference" asp-action="DotnetGuidelinesUsageGuidelines" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-usage-guidelines", StringComparison.OrdinalIgnoreCase)">Usage Guidelines</a>
+            <a asp-controller="reference" asp-action="DotnetGuidelinesCommonPatterns" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-common-patterns", StringComparison.OrdinalIgnoreCase)">Common Patterns</a>
+        </div>
+    </div>
+    <div class="@presentationPanelClass">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#presentation">Presentations</a>
+        </div>
+        <div id="presentation" class="@presentationGroupClass">
+            <a asp-controller="reference" asp-action="aspnet5" maw-active="@string.Equals(Model.Item, "aspnet5", StringComparison.OrdinalIgnoreCase)">ASPNET5 / MVC6</a>
+            <a asp-controller="reference" asp-action="angular2" maw-active="@string.Equals(Model.Item, "angular2", StringComparison.OrdinalIgnoreCase)">Angular2</a>
+        </div>
+    </div>
+</div>

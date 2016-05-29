@@ -1,0 +1,10 @@
+﻿<div class="flip-container center-block" (click)="onClick()" [class.flip]="isFlipped" [class.remove]="isRemoved">
+    <div class="flipper">
+        <div class="front">
+            <img src="/img/games/memory/cards/back.jpg" />
+        </div>
+        <div class="back">
+            <img [src]="cardInfo.img" />
+        </div>
+    </div>
+</div>

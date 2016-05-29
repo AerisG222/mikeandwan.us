@@ -1,0 +1,3 @@
+CREATE SCHEMA IF NOT EXISTS photo;
+
+GRANT USAGE ON SCHEMA photo TO website;

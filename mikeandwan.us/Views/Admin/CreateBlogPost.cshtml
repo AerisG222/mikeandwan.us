@@ -1,0 +1,47 @@
+@using MawMvcApp.ViewModels.Admin
+@model BlogPostModel
+@{ ViewBag.Title = "admin | create blog post"; }
+
+@Html.Partial("_PageHeader", "Create Blog Post")
+
+@if(Model.Success) {
+	<p maw-alert-type="Success">The blog post was saved successfully.</p>
+}
+
+@if(!Model.Success) {
+	<form asp-controller="admin" asp-action="createblogpost" method="post" class="form-horizontal" autocomplete="off" role="form">
+		<div class="form-group" maw-for="@Model.Title">
+			<label asp-for="Title" class="col-sm-3 control-label"></label>
+	        <div class="col-sm-6">
+				<input asp-for="Title" class="form-control" autofocus="" />
+				<span asp-validation-for="Title" class="help-block"></span>
+	        </div>
+		</div>
+	    <div class="form-group" maw-for="@Model.PublishDate">
+			<label asp-for="PublishDate" class="col-sm-3 control-label"></label>
+	        <div class="col-sm-6">
+				<input asp-for="PublishDate" class="form-control" />
+				<span asp-validation-for="PublishDate" class="help-block"></span>
+	        </div>
+		</div>
+	    <div class="form-group" maw-for="@Model.Description">
+			<label asp-for="Description" class="col-sm-3 control-label"></label>
+	        <div class="col-sm-9">
+				<textarea asp-for="Description" rows="15" class="form-control"></textarea>
+				<span asp-validation-for="Description" class="help-block"></span>
+	        </div>
+		</div>
+		
+	    <div class="form-group">
+	        <div class="col-sm-offset-3 col-sm-2">
+	            <button type="submit" class="btn btn-default" name="Behavior" value="Save">Save</button>
+				<button type="submit" class="btn btn-default" name="Behavior" value="Preview">Preview</button>
+	        </div>
+	    </div>
+	</form>
+}
+
+@if(Model.Preview) {
+	<h3>@Model.Title</h3>
+    @Html.Raw(Model.Description)
+}

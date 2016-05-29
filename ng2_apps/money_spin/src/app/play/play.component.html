@@ -1,0 +1,9 @@
+<div class="col-sm-2">
+    <playerscore [player]="player1" [currentPlayer]="currentPlayer"></playerscore>
+</div>
+<div class="col-sm-8">
+    <spinner (spinCompleted)="addScore($event)"></spinner>
+</div>
+<div class="col-sm-2">
+    <playerscore [player]="player2" [currentPlayer]="currentPlayer"></playerscore>
+</div>

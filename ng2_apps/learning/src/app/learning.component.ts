@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NgFor } from '@angular/common';
-import { AudioSource } from './audio-source';
+
+import { AudioSource } from './';
 
 @Component({
   moduleId: module.id,

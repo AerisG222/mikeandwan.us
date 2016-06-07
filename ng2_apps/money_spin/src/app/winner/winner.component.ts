@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { StateService } from '../state.service';
-import { Player } from '../player';
+
+import { Player, StateService } from '../';
 
 @Component({
   moduleId: module.id,

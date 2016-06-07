@@ -1,9 +1,10 @@
 import { Component, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { RouteParams } from '@angular/router';
-import { SizeService, VideoDataService, VideoStateService } from '../shared/index';
-import { ICategory, CategoryThumbnailInfo, VideoNavigationService } from '../shared/';
+
 import { PagerComponent } from '../../../../ng_maw/src/app/pager/index';
 import { ThumbnailListComponent, SelectedThumbnail } from '../../../../ng_maw/src/app/thumbnail-list/index';
+
+import { ICategory, CategoryThumbnailInfo, VideoNavigationService, SizeService, VideoDataService, VideoStateService } from '../shared/';
 
 @Component({
     moduleId: module.id,

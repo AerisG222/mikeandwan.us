@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { StateService } from '../state.service';
-import { Character } from '../character';
-import { PlayerSelectComponent } from '../player-select/player-select.component';
+
+import { Character, StateService } from '../';
+import { PlayerSelectComponent } from '../player-select';
 
 @Component({
     moduleId: module.id,

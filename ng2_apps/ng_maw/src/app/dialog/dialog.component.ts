@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 import { NgFor, NgIf, NgClass } from '@angular/common';
-import  { DialogButton } from './index';
+
+import  { DialogButton } from './';
 declare var jQuery:any;
 
 @Component({

@@ -1,7 +1,8 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { NgClass, NgStyle, NgFor, NgIf } from '@angular/common';
-import { ThumbnailInfo, SelectedThumbnail } from './index';
-import { ResponsiveService } from '../shared/index';
+
+import { ThumbnailInfo, SelectedThumbnail } from './';
+import { ResponsiveService } from '../shared/';
 
 @Component({
     moduleId: module.id,

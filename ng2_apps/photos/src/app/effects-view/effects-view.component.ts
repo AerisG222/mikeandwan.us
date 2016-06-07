@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgModel } from '@angular/common';
+
 import { Photo, FilterSettings } from '../shared';
 
 @Component({

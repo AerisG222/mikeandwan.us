@@ -1,5 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
+
 import { LocalStorageService } from '../../../../ng_maw/src/app/shared/index';
+
 import { Config } from './index';
 
 @Injectable()

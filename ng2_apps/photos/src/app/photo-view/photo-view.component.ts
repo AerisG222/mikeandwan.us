@@ -1,9 +1,11 @@
 /// <reference path="../../typings/pixastic/pixastic.d.ts" />
 import { Component, Input, ChangeDetectorRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { NgIf, NgClass, NgStyle } from '@angular/common';
+
+import { ResponsiveService } from '../../../../ng_maw/src/app/shared';
+
 import { PhotoStateService, PhotoNavigationService, IPhoto, ICategory, PhotoListContext, FilterSettings, 
          ContainerBox, IPhotoInfo, PhotoViewTool } from '../shared';
-import { ResponsiveService } from '../../../../ng_maw/src/app/shared';
 import { HelpDialogComponent } from '../help-dialog';
 import { CommentViewComponent } from '../comment-view';
 import { RatingViewComponent } from '../rating-view';

@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { ICardInfo } from '../icard-info';
+
+import { ICardInfo } from '../';
 
 @Component({
   moduleId: module.id,

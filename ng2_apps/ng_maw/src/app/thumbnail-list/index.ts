@@ -1,3 +1,3 @@
 export { ThumbnailListComponent } from './thumbnail-list.component';
-export * from './selected-thumbnail';
-export * from './thumbnail-info';
+export * from './selected-thumbnail.model';
+export * from './thumbnail-info.model';

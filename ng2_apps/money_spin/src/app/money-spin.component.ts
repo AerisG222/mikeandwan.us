@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { Routes, Route, ROUTER_DIRECTIVES } from '@angular/router';
-import { SplashScreenComponent } from './splash-screen/splash-screen.component'
-import { ChoosePlayerComponent } from './choose-player/choose-player.component'
-import { PlayComponent } from './play/play.component'
-import { WinnerComponent } from './winner/winner.component'
+
+import { SplashScreenComponent } from './splash-screen'
+import { ChoosePlayerComponent } from './choose-player'
+import { PlayComponent } from './play'
+import { WinnerComponent } from './winner'
 
 @Component({
     moduleId: module.id,

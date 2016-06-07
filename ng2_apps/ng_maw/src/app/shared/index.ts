@@ -1,4 +1,4 @@
-export * from './breadcrumb';
+export * from './breadcrumb.model';
 export * from './responsive-breakpoint';
 export * from './breadcrumb.service';
 export * from './local-storage.service';

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Routes, Route, RouterOutletMap, ROUTER_PROVIDERS } from '@angular/router';
-import { PlayComponent } from './play/play.component';
-import { ChooseTurtleComponent } from './choose-turtle/choose-turtle.component';
+
+import { PlayComponent } from './play';
+import { ChooseTurtleComponent } from './choose-turtle';
 
 @Routes([
     new Route({ path: '/',     component: ChooseTurtleComponent }),

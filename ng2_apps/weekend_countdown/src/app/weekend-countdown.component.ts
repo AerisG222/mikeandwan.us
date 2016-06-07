@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
-  selector: 'weekend-countdown-app',
-  templateUrl: 'weekend-countdown.component.html',
-  styleUrls: ['weekend-countdown.component.css']
+    moduleId: module.id,
+    selector: 'weekend-countdown-app',
+    templateUrl: 'weekend-countdown.component.html',
+    styleUrls: ['weekend-countdown.component.css']
 })
 export class WeekendCountdownAppComponent {
-  intervalId : number = null;
+    intervalId : number = null;
     value : string = '';
     
     ngOnInit() : void {

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgIf, NgFor } from '@angular/common';
-import { Result } from './result';
+
+import { Result } from './';
 
 @Component({
   moduleId: module.id,

@@ -1,5 +1,7 @@
 import { Component, Input, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+
 import { DialogComponent, DialogButton } from '../../../../ng_maw/src/app/dialog';
+
 import { IPhotoInfo } from '../shared';
 
 @Component({

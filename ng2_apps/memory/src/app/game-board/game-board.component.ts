@@ -1,9 +1,8 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { NgFor, NgClass } from '@angular/common';
+
 import { CardComponent } from '../card/card.component';
-import { ICardInfo } from '../icard-info';
-import { ISelectedCards } from '../iselected-card';
-import { MemoryService } from '../memory.service';
+import { ICardInfo, ISelectedCards, MemoryService } from '../';
 
 @Component({
     moduleId: module.id,

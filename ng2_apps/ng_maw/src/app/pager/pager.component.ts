@@ -1,5 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { NgClass, NgFor, NgIf, SlicePipe } from '@angular/common';
+
 import { ResponsiveService } from '../shared';
 
 // TODO: consider adding a PagedThumbnailList class combining both of these components.

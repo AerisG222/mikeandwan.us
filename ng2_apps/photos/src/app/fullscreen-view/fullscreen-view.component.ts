@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+
 import { PhotoListContext } from '../shared';
 import { CategoryLinkComponent } from '../category-link';
 import { SlideshowButtonComponent } from '../slideshow-button';

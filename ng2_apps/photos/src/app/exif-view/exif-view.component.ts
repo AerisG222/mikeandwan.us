@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { NgFor } from '@angular/common';
+
 import { PhotoDataService, ExifDetail, ExifFormatter, Photo } from '../shared';
 
 @Component({

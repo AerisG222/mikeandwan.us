@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { IPlayer } from './iplayer';
-import { ICardInfo } from './icard-info';
-import { ICharacter } from './icharacter';
+
+import { ICardInfo, ICharacter, IPlayer } from './';
 
 @Injectable()
 export class MemoryService {

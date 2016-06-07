@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Routes, Route, ROUTER_DIRECTIVES } from '@angular/router';
+
 import { HeaderComponent } from './header';
 import { PreferenceDialogComponent } from './preference-dialog';
 import { YearListComponent } from './year-list';

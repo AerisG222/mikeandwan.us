@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Character } from './character';
-import { Player } from './player';
+
+import { Character, Player } from './';
 
 @Injectable()
 export class StateService {

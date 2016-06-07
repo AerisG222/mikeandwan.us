@@ -1,2 +1,2 @@
 export { DialogComponent } from './dialog.component';
-export * from './dialog-button';
+export * from './dialog-button.model';

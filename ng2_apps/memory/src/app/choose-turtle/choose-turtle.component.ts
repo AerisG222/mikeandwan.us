@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ChooseTurtleGridComponent } from '../choose-turtle-grid/choose-turtle-grid.component';
-import { ICharacter } from '../icharacter';
-import { MemoryService } from '../memory.service';
+
+import { ChooseTurtleGridComponent } from '../choose-turtle-grid';
+import { ICharacter, MemoryService } from '../';
 
 @Component({
     moduleId: module.id,

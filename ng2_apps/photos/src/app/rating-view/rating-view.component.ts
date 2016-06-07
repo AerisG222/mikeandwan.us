@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
+
 import { RatingComponent } from '../../../../ng_maw/src/app/rating';
+
 import { IPhoto, PhotoDataService } from '../shared';
 
 @Component({

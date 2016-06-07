@@ -1,11 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { RouterOutlet, Routes, Route } from '@angular/router';
+
 import { HeaderComponent } from './header';
 import { ModeComponent } from './mode';
 import { CategoryListComponent } from './category-list';
 import { PhotoListComponent } from './photo-list';
-import { PhotoStateService, ModeRouteInfo, RouteMode } from './shared';
 import { PreferenceDialogComponent } from './preference-dialog';
+import { PhotoStateService, ModeRouteInfo, RouteMode } from './shared';
 
 @Component({
   moduleId: module.id,

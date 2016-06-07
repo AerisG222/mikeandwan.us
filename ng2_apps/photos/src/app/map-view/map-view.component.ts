@@ -1,5 +1,6 @@
 import { Component, Input, ElementRef, ChangeDetectorRef, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { NgIf } from '@angular/common';
+
 import { Photo, IPhoto, PhotoListContext } from '../shared';
 
 @Component({

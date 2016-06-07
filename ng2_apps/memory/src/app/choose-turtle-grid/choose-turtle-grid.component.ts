@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { NgFor, NgClass } from '@angular/common';
-import { ICharacter } from '../icharacter';
-import { MemoryService } from '../memory.service';
+
+import { ICharacter, MemoryService } from '../';
 
 @Component({
     moduleId: module.id,

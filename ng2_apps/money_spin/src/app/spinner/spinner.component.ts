@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
-import { BoardSector } from '../board-sector';
+
+import { BoardSector } from '../';
 
 @Component({
     moduleId: module.id,

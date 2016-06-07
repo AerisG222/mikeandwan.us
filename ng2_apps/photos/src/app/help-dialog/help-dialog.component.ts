@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgIf } from '@angular/common';
+
 import { DialogComponent } from '../../../../ng_maw/src/app/dialog';
 
 @Component({

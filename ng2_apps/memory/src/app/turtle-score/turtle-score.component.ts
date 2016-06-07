@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { IPlayer } from '../iplayer';
+
+import { IPlayer } from '../';
 
 @Component({
   moduleId: module.id,

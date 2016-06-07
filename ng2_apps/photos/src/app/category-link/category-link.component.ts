@@ -1,7 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { ICategory, PhotoNavigationService, RouteMode, CategoryBreadcrumb } from '../shared';
+
 import { Breadcrumb } from '../../../../ng_maw/src/app/shared';
+
+import { ICategory, PhotoNavigationService, RouteMode, CategoryBreadcrumb } from '../shared';
 
 @Component({
   moduleId: module.id,

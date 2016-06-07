@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { IPlayer } from '../iplayer';
+
+import { IPlayer } from '../';
 
 @Component({
   moduleId: module.id,

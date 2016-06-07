@@ -1,8 +1,9 @@
 import { Component, ViewChild, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { MapComponent } from './map';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/concat';
+
+import { MapComponent } from './map';
 
 @Component({
   moduleId: module.id,

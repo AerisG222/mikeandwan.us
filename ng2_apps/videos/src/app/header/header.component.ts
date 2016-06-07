@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgFor } from '@angular/common';
+
 import { VideoStateService } from '../shared';
 import { BreadcrumbListComponent } from '../../../../ng_maw/src/app/breadcrumb-list';
 

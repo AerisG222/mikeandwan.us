@@ -1,6 +1,6 @@
 import { Component, Output, ElementRef, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
-import { BoundingBox } from '../bounding-box';
-import { MapContext } from '../map-context';
+
+import { BoundingBox, MapContext } from '../';
 
 @Component({
   moduleId: module.id,

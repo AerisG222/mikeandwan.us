@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgFor, NgClass } from '@angular/common';
-import { Character } from '../character';
+
+import { Character } from '../';
 
 @Component({
   moduleId: module.id,

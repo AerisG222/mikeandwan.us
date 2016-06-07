@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { StateService } from '../state.service';
-import { SpinnerComponent } from '../spinner/spinner.component';
-import { PlayerScoreComponent } from '../player-score/player-score.component';
-import { Player } from '../player';
+
+import { Player, StateService } from '../';
+import { SpinnerComponent } from '../spinner';
+import { PlayerScoreComponent } from '../player-score';
 
 @Component({
     moduleId: module.id,

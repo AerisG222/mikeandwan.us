@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { GameBoardComponent } from '../game-board/game-board.component';
-import { WinnerScreenComponent } from '../winner-screen/winner-screen.component';
-import { TieScreenComponent } from '../tie-screen/tie-screen.component';
-import { TurtleScoreComponent } from '../turtle-score/turtle-score.component';
-import { IPlayer } from "../iplayer";
-import { MemoryService } from "../memory.service";
+
+import { GameBoardComponent } from '../game-board';
+import { WinnerScreenComponent } from '../winner-screen';
+import { TieScreenComponent } from '../tie-screen';
+import { TurtleScoreComponent } from '../turtle-score';
+import { IPlayer, MemoryService } from "../";
 
 @Component({
   moduleId: module.id,

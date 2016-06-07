@@ -2,8 +2,10 @@ import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { RouteParams } from '@angular/router';
-import { PhotoStateService, PhotoNavigationService, ModeRouteInfo, RouteMode } from '../shared';
+
 import { Breadcrumb } from '../../../../ng_maw/src/app/shared';
+
+import { PhotoStateService, PhotoNavigationService, ModeRouteInfo, RouteMode } from '../shared';
 
 @Component({
     moduleId: module.id,

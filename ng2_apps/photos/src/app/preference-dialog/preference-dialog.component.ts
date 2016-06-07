@@ -1,7 +1,9 @@
 import { Component, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { NgModel } from '@angular/common';
-import { PhotoStateService } from '../shared';
+
 import { DialogComponent, DialogButton } from '../../../../ng_maw/src/app/dialog';
+
+import { PhotoStateService } from '../shared';
 
 @Component({
     moduleId: module.id,

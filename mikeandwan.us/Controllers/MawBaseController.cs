@@ -9,29 +9,28 @@ using MawMvcApp.ViewModels;
 
 namespace MawMvcApp.Controllers
 {
-    public class MawBaseController 
+    public class MawBaseController<T>
         : Controller
     {
 		protected readonly IAuthorizationService _authzService;
-		protected readonly ILoggerFactory _loggerFactory;
-		protected readonly ILogger _log;
+		protected readonly ILogger<T> _log;
 		
 
-		public MawBaseController(IAuthorizationService authorizationService, ILoggerFactory loggerFactory)
+		public MawBaseController(IAuthorizationService authorizationService, 
+		                         ILogger<T> log)
 		{
 			if(authorizationService == null)
 			{
 				throw new ArgumentNullException(nameof(authorizationService));
 			}
 
-			if(loggerFactory == null)
+			if(log == null)
 			{
-				throw new ArgumentNullException(nameof(loggerFactory));
+				throw new ArgumentNullException(nameof(log));
 			}
 			
 			_authzService = authorizationService;
-			_loggerFactory = loggerFactory;
-			_log = _loggerFactory.CreateLogger(GetType().ToString()); 
+			_log = log; 
 		}
 
 

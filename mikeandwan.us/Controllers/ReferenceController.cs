@@ -8,10 +8,11 @@ namespace MawMvcApp.Controllers
 {
 	[Route("reference")]
     public class ReferenceController 
-        : MawBaseController
+        : MawBaseController<ReferenceController>
     {
-		public ReferenceController(IAuthorizationService authorizationService, ILoggerFactory loggerFactory)
-			: base(authorizationService, loggerFactory)
+		public ReferenceController(IAuthorizationService authorizationService, 
+		                           ILogger<ReferenceController> log)
+			: base(authorizationService, log)
 		{
 
 		}

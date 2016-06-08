@@ -20,7 +20,7 @@ namespace MawMvcApp.Controllers
 {
 	[Route("account")]
     public class AccountController 
-        : MawBaseController
+        : MawBaseController<AccountController>
     {
 		const byte LOGIN_AREA_FORM = 1;
 		
@@ -29,11 +29,18 @@ namespace MawMvcApp.Controllers
 		readonly SignInManager<MawUser> _signInManager;
 		readonly UserManager<MawUser> _userMgr;
 		readonly IEmailService _emailService;
+		readonly ILoginService _loginService;
 
 
-		public AccountController(IAuthorizationService authorizationService, ILoggerFactory loggerFactory, IOptions<ContactConfig> contactOpts, IUserRepository userRepository, 
-			                     SignInManager<MawUser> signInManager, UserManager<MawUser> userManager, IEmailService emailService)
-			: base(authorizationService, loggerFactory)
+		public AccountController(IAuthorizationService authorizationService, 
+		                         ILogger<AccountController> log, 
+								 IOptions<ContactConfig> contactOpts, 
+								 IUserRepository userRepository, 
+			                     SignInManager<MawUser> signInManager, 
+								 UserManager<MawUser> userManager, 
+								 IEmailService emailService,
+								 ILoginService loginService)
+			: base(authorizationService, log)
         {
 			if(userRepository == null)
 			{
@@ -60,11 +67,17 @@ namespace MawMvcApp.Controllers
 				throw new ArgumentNullException(nameof(contactOpts));
 			}
 
+			if(loginService == null)
+			{
+				throw new ArgumentNullException(nameof(loginService));
+			}
+
 			_contactConfig = contactOpts.Value;
             _repo = userRepository;
             _signInManager = signInManager;
 			_userMgr = userManager;
 			_emailService = emailService;
+			_loginService = loginService;
         }
 
 		
@@ -97,8 +110,7 @@ namespace MawMvcApp.Controllers
                 return View(model);
             }
 
-			var ls = new LoginService(_repo, _signInManager, _userMgr, _loggerFactory);
-			var result = await ls.AuthenticateAsync(model.Username, model.Password, LOGIN_AREA_FORM);
+			var result = await _loginService.AuthenticateAsync(model.Username, model.Password, LOGIN_AREA_FORM);
 			
 			_log.LogInformation("Login complete");
 			

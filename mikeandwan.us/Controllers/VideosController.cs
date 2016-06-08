@@ -16,7 +16,7 @@ namespace MawMvcApp.Controllers
 	[Authorize(MawConstants.POLICY_VIEW_VIDEOS)]
     [Route("videos")]
     public class VideosController 
-        : MawBaseController
+        : MawBaseController<VideosController>
     {
         const string MOBILE_THUMB_MIME_TYPE = "image/png";
         const int MOBILE_THUMB_SIZE = 60;
@@ -26,8 +26,11 @@ namespace MawMvcApp.Controllers
         readonly IFileProvider _fileProvider;
 
 
-		public VideosController(IAuthorizationService authorizationService, ILoggerFactory loggerFactory, IVideoRepository videoRepository, IFileProvider fileProvider)
-			: base(authorizationService, loggerFactory)
+		public VideosController(IAuthorizationService authorizationService, 
+                                ILogger<VideosController> log, 
+                                IVideoRepository videoRepository, 
+                                IFileProvider fileProvider)
+			: base(authorizationService, log)
         {
 			if(videoRepository == null)
 			{

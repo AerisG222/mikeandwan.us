@@ -14,13 +14,15 @@ namespace MawMvcApp.Controllers
 {
 	[Route("tools")]
     public class ToolsController 
-        : MawBaseController
+        : MawBaseController<ToolsController>
     {
 		IFileProvider _fileProvider { get; set; }
 
 
-		public ToolsController(IAuthorizationService authorizationService, ILoggerFactory loggerFactory, IHostingEnvironment env)
-			: base(authorizationService, loggerFactory)
+		public ToolsController(IAuthorizationService authorizationService, 
+		                       ILogger<ToolsController> log, 
+							   IHostingEnvironment env)
+			: base(authorizationService, log)
         {
 			if(env == null)
 			{

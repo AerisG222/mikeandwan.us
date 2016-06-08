@@ -11,27 +11,27 @@ using MawMvcApp.ViewModels.Photos;
 
 namespace MawMvcApp.Controllers
 {
-	[Authorize(MawConstants.POLICY_VIEW_PHOTOS)]
-	[Route("api/photos")]
+    [Authorize(MawConstants.POLICY_VIEW_PHOTOS)]
+    [Route("api/photos")]
     public class PhotoApiController 
-        : MawBaseController
+        : MawBaseController<PhotoApiController>
     {
         readonly PhotoService _svc;
 
 
-		bool IsAdmin
-		{
-			get
-			{
+        bool IsAdmin
+        {
+            get
+            {
                 return User.IsInRole(MawConstants.ROLE_ADMIN);
-			}
-		}
+            }
+        }
 
 
 		public PhotoApiController(IAuthorizationService authorizationService, 
-		                          ILoggerFactory loggerFactory, 
-								  IPhotoRepository photoRepository)
-			: base(authorizationService, loggerFactory)
+		                          ILogger<PhotoApiController> log, 
+						          IPhotoRepository photoRepository)
+			: base(authorizationService, log)
         {
 			if(photoRepository == null)
 			{

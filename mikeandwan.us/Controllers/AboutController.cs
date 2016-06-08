@@ -17,7 +17,7 @@ namespace MawMvcApp.Controllers
 {
 	[Route("about")]
     public class AboutController
-        : MawBaseController
+        : MawBaseController<AboutController>
     {
 		readonly ContactConfig _config;
 		readonly ICaptchaService _captchaService;
@@ -25,8 +25,13 @@ namespace MawMvcApp.Controllers
 		readonly IEmailService _emailService;
 
 
-		public AboutController(IAuthorizationService authorizationService, ILoggerFactory loggerFactory, IOptions<ContactConfig> contactOpts, IBlogRepository blogRepository, ICaptchaService captchaService, IEmailService emailService)
-			: base(authorizationService, loggerFactory)
+		public AboutController(IAuthorizationService authorizationService, 
+		                       ILogger<AboutController> log, 
+							   IOptions<ContactConfig> contactOpts, 
+							   IBlogRepository blogRepository, 
+							   ICaptchaService captchaService, 
+							   IEmailService emailService)
+			: base(authorizationService, log)
         {
 			if(contactOpts == null)
 			{

@@ -7,15 +7,18 @@ using Microsoft.Extensions.Logging;
 namespace Maw.Domain.Identity
 {
 	public class LoginService
+		: ILoginService
 	{
 		readonly IUserRepository _repo;
 		readonly SignInManager<MawUser> _signInManager;
 		readonly UserManager<MawUser> _userMgr;
-		readonly ILoggerFactory _loggerFactory;
 		readonly ILogger _log;
 		
 		
-		public LoginService(IUserRepository repo, SignInManager<MawUser> signInManager, UserManager<MawUser> userManager, ILoggerFactory loggerFactory)
+		public LoginService(IUserRepository repo, 
+		                    SignInManager<MawUser> signInManager, 
+							UserManager<MawUser> userManager, 
+							ILogger<LoginService> log)
 		{
 			if(repo == null)
 			{
@@ -32,16 +35,15 @@ namespace Maw.Domain.Identity
 				throw new ArgumentNullException(nameof(userManager));
 			}
 			
-			if(loggerFactory == null)
+			if(log == null)
 			{
-				throw new ArgumentNullException(nameof(loggerFactory));
+				throw new ArgumentNullException(nameof(log));
 			}
 			
 			_repo = repo;
 			_signInManager = signInManager;
 			_userMgr = userManager;
-			_loggerFactory = loggerFactory;
-			_log = loggerFactory.CreateLogger<LoginService>();
+			_log = log;
 		}
 		
 		

@@ -13,45 +13,31 @@ namespace MawMvcApp.Controllers
 {
 	[Route("api/account")]
     public class AccountApiController 
-        : MawBaseController
+        : MawBaseController<AccountApiController>
     {
 		const byte LOGIN_AREA_API = 2;
 		
-        readonly IUserRepository _repo;
-		readonly SignInManager<MawUser> _signInManager;
-		readonly UserManager<MawUser> _userMgr;
+		readonly ILoginService _loginService;
 
 
-		public AccountApiController(IAuthorizationService authorizationService, ILoggerFactory loggerFactory, IUserRepository userRepository, SignInManager<MawUser> signInManager,
-			                        UserManager<MawUser> userManager)
-			: base(authorizationService, loggerFactory)
+		public AccountApiController(IAuthorizationService authorizationService, 
+		                            ILogger<AccountApiController> log, 
+									ILoginService loginService)
+			: base(authorizationService, log)
         {
-			if(userRepository == null)
+			if(loginService == null)
 			{
-				throw new ArgumentNullException(nameof(userRepository));
+				throw new ArgumentNullException(nameof(loginService));
 			}
 
-			if(signInManager == null)
-			{
-				throw new ArgumentNullException(nameof(signInManager));
-			}
-			
-			if(userManager == null)
-			{
-				throw new ArgumentNullException(nameof(userManager));
-			}
-
-            _repo = userRepository;
-            _signInManager = signInManager;
-			_userMgr = userManager;
+			_loginService = loginService;
         }
 
 
         [HttpPost("login")]
         public async Task<bool> Login(LoginModel model)
         {
-			var ls = new LoginService(_repo, _signInManager, _userMgr, _loggerFactory);
-			var result = await ls.AuthenticateAsync(model.Username, model.Password, LOGIN_AREA_API);
+			var result = await _loginService.AuthenticateAsync(model.Username, model.Password, LOGIN_AREA_API);
 						
 			return result == SignInRes.Success;
         }

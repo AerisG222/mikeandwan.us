@@ -77,6 +77,7 @@ namespace MawMvcApp
                 .AddScoped<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
                 .AddScoped<ICaptchaService, GoogleCaptchaService>()
                 .AddScoped<IEmailService, EmailService>()
+                .AddScoped<ILoginService, LoginService>()
                 .AddScoped<IBlogRepository, BlogRepository>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IPhotoRepository, PhotoRepository>()

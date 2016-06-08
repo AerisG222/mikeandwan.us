@@ -27,7 +27,7 @@ namespace MawMvcApp.Controllers
 	[Authorize(MawConstants.POLICY_ADMIN_SITE)]
 	[Route("admin")]
     public class AdminController 
-        : MawBaseController
+        : MawBaseController<AdminController>
     {
         readonly IUserRepository _repo;
 		readonly EmailConfig _emailConfig;
@@ -37,9 +37,15 @@ namespace MawMvcApp.Controllers
 		readonly IEmailService _emailSvc;
 
 
-		public AdminController(IAuthorizationService authorizationService, ILoggerFactory loggerFactory, IOptions<EmailConfig> emailOpts, IUserRepository userRepository,  
-		                       UserManager<MawUser> userManager, RoleManager<MawRole> roleManager, IBlogRepository blogRepository, IEmailService emailService)
-			: base(authorizationService, loggerFactory)
+		public AdminController(IAuthorizationService authorizationService, 
+		                       ILogger<AdminController> log, 
+							   IOptions<EmailConfig> emailOpts, 
+							   IUserRepository userRepository,  
+		                       UserManager<MawUser> userManager, 
+							   RoleManager<MawRole> roleManager, 
+							   IBlogRepository blogRepository, 
+							   IEmailService emailService)
+			: base(authorizationService, log)
         {
 			if(emailOpts == null)
 			{

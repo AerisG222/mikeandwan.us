@@ -18,7 +18,7 @@ namespace MawMvcApp.Controllers
 	[Authorize(MawConstants.POLICY_VIEW_PHOTOS)]
     [Route("photos")]
     public class PhotosController 
-        : MawBaseController
+        : MawBaseController<PhotosController>
     {
 		const int TWENTY_MB = 20 * 1024 * 1024;
 		const string MOBILE_THUMB_MIME_TYPE = "image/jpeg";
@@ -30,8 +30,12 @@ namespace MawMvcApp.Controllers
         readonly IAntiforgery _antiForgery;
         
 
-		public PhotosController(IAuthorizationService authorizationService, ILoggerFactory loggerFactory, IPhotoRepository photoRepository, IFileProvider fileProvider, IAntiforgery antiForgery)
-			: base(authorizationService, loggerFactory)
+		public PhotosController(IAuthorizationService authorizationService, 
+                                ILogger<PhotosController> log, 
+                                IPhotoRepository photoRepository, 
+                                IFileProvider fileProvider, 
+                                IAntiforgery antiForgery)
+			: base(authorizationService, log)
         {
 			if(photoRepository == null)
 			{

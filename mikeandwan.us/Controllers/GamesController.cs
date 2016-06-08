@@ -8,10 +8,11 @@ namespace MawMvcApp.Controllers
 {
 	[Route("games")]
     public class GamesController
-		: MawBaseController
+		: MawBaseController<GamesController>
     {
-		public GamesController(IAuthorizationService authorizationService, ILoggerFactory loggerFactory)
-			: base(authorizationService, loggerFactory)
+		public GamesController(IAuthorizationService authorizationService, 
+		                       ILogger<GamesController> log)
+			: base(authorizationService, log)
 		{
 
 		}

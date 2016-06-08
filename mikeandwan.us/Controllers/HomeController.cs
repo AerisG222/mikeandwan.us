@@ -8,10 +8,11 @@ namespace MawMvcApp.Controllers
 {
     [Route("")]
     public class HomeController 
-        : MawBaseController
+        : MawBaseController<HomeController>
     {
-		public HomeController(IAuthorizationService authorizationService, ILoggerFactory loggerFactory)
-			: base(authorizationService, loggerFactory)
+		public HomeController(IAuthorizationService authorizationService, 
+                              ILogger<HomeController> log)
+			: base(authorizationService, log)
 		{
 
 		}

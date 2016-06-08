@@ -13,7 +13,7 @@ namespace MawMvcApp.Controllers
 	[Authorize(MawConstants.POLICY_VIEW_VIDEOS)]
     [Route("api/videos")]
     public class VideosApiController 
-        : MawBaseController
+        : MawBaseController<VideosApiController>
     {
         readonly VideoService _svc;
 
@@ -27,8 +27,10 @@ namespace MawMvcApp.Controllers
         }
 
 
-		public VideosApiController(IAuthorizationService authorizationService, ILoggerFactory loggerFactory, IVideoRepository videoRepository)
-			: base(authorizationService, loggerFactory)
+		public VideosApiController(IAuthorizationService authorizationService, 
+                                   ILogger<VideosApiController> log, 
+                                   IVideoRepository videoRepository)
+			: base(authorizationService, log)
         {
 			if(videoRepository == null)
 			{

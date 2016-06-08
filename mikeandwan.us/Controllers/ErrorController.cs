@@ -10,10 +10,11 @@ namespace MawMvcApp.Controllers
 {
 	[Route("error")]
 	public class ErrorController 
-        : MawBaseController
+        : MawBaseController<ErrorController>
 	{
-		public ErrorController(IAuthorizationService authorizationService, ILoggerFactory loggerFactory)
-			: base(authorizationService, loggerFactory)
+		public ErrorController(IAuthorizationService authorizationService, 
+		                       ILogger<ErrorController> log)
+			: base(authorizationService, log)
 		{
 			
 		}

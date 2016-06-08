@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router-deprecated';
 
 import { PhotoListContext } from '../shared';
 import { CategoryLinkComponent } from '../category-link';

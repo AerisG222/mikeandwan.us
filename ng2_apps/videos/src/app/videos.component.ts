@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Routes, Route, ROUTER_DIRECTIVES } from '@angular/router';
+import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 
 import { HeaderComponent } from './header';
 import { PreferenceDialogComponent } from './preference-dialog';
@@ -15,10 +15,10 @@ import { VideoStateService } from './shared';
     templateUrl: 'videos.component.html',
     styleUrls: ['videos.component.css']
 })
-@Routes([
-    new Route({ path: '/',                component: YearListComponent }),
-    new Route({ path: '/:year',           component: CategoryListComponent }),
-    new Route({ path: '/:year/:category', component: VideoListComponent })
+@RouteConfig([
+    { path: '/',                name: 'YearList',     component: YearListComponent },
+    { path: '/:year',           name: 'CategoryList', component: CategoryListComponent },
+    { path: '/:year/:category', name: 'VideoList',    component: VideoListComponent }
 ])
 export class VideosAppComponent {
     @ViewChild(PreferenceDialogComponent) preferenceDialog : PreferenceDialogComponent;

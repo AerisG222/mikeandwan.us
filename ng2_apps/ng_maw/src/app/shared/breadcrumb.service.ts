@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router } from '@angular/router-deprecated';
 
 import { Breadcrumb } from './';
 

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router } from '@angular/router-deprecated';
 
 import { Breadcrumb } from '../../../../ng_maw/src/app/shared';
 

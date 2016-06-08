@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { Injectable } from '@angular/core';
-import { Router, Instruction } from '@angular/router';
+import { Router, Instruction } from '@angular/router-deprecated';
 
 import { BreadcrumbService, Breadcrumb } from '../../../../ng_maw/src/app/shared';
 

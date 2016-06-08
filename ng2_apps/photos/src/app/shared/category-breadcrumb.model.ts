@@ -1,4 +1,4 @@
-import { Instruction } from '@angular/router';
+import { Instruction } from '@angular/router-deprecated';
 
 import { Breadcrumb } from '../../../../ng_maw/src/app/shared';
 

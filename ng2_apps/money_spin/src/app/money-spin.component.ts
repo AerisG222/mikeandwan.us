@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Routes, Route, ROUTER_DIRECTIVES } from '@angular/router';
+import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 
 import { SplashScreenComponent } from './splash-screen'
 import { ChoosePlayerComponent } from './choose-player'
@@ -13,11 +13,11 @@ import { WinnerComponent } from './winner'
     templateUrl: 'money-spin.component.html',
     styleUrls: ['money-spin.component.css']
 })
-@Routes([
-    new Route({ path: '/',       component: SplashScreenComponent }),
-    new Route({ path: '/choose', component: ChoosePlayerComponent }),
-    new Route({ path: '/play',   component: PlayComponent }),
-    new Route({ path: '/winner', component: WinnerComponent })
+@RouteConfig([
+    { path: '/',       name: 'SplashScreen', component: SplashScreenComponent },
+    { path: '/choose', name: 'ChoosePlayer', component: ChoosePlayerComponent },
+    { path: '/play',   name: 'Play',         component: PlayComponent },
+    { path: '/winner', name: 'Winner',       component: WinnerComponent }
 ])
 export class MoneySpinAppComponent {
     

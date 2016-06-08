@@ -1,5 +1,5 @@
 import { Component, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
-import { RouteParams } from '@angular/router';
+import { RouteParams } from '@angular/router-deprecated';
 
 import { PagerComponent } from '../../../../ng_maw/src/app/pager/index';
 import { ThumbnailListComponent, SelectedThumbnail } from '../../../../ng_maw/src/app/thumbnail-list/index';

@@ -1,5 +1,5 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { RouteParams } from '@angular/router';
+import { RouteParams } from '@angular/router-deprecated';
 
 import { PagerComponent } from '../../../../ng_maw/src/app/pager';
 import { ThumbnailListComponent } from '../../../../ng_maw/src/app/thumbnail-list';

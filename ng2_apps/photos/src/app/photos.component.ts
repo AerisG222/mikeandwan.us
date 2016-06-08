@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { RouterOutlet, Routes, Route } from '@angular/router';
+import { RouterOutlet, RouteConfig } from '@angular/router-deprecated';
 
 import { HeaderComponent } from './header';
 import { ModeComponent } from './mode';
@@ -15,14 +15,14 @@ import { PhotoStateService, ModeRouteInfo, RouteMode } from './shared';
   templateUrl: 'photos.component.html',
   styleUrls: ['photos.component.css']
 })
-@Routes([
-    new Route({ path: '/',                     component: ModeComponent }),
-    new Route({ path: '/random',               component: PhotoListComponent, data: new ModeRouteInfo(RouteMode.Random) }),
-    new Route({ path: '/year/:year',           component: CategoryListComponent }),
-    new Route({ path: '/year/:year/:category', component: PhotoListComponent, data: new ModeRouteInfo(RouteMode.Category) }),
-    new Route({ path: '/comment/:type/:order', component: PhotoListComponent, data: new ModeRouteInfo(RouteMode.Comment) }),
-    new Route({ path: '/rating/:type/:order',  component: PhotoListComponent, data: new ModeRouteInfo(RouteMode.Rating) }),
-    new Route({ path: '/:mode',                component: ModeComponent })
+@RouteConfig([
+    { path: '/',                     name: 'Mode',         component: ModeComponent },
+    { path: '/random',               name: 'PhotoList',    component: PhotoListComponent, data: new ModeRouteInfo(RouteMode.Random) },
+    { path: '/year/:year',           name: 'CategoryList', component: CategoryListComponent },
+    { path: '/year/:year/:category', name: 'PhotoList',    component: PhotoListComponent, data: new ModeRouteInfo(RouteMode.Category) },
+    { path: '/comment/:type/:order', name: 'PhotoList',    component: PhotoListComponent, data: new ModeRouteInfo(RouteMode.Comment) },
+    { path: '/rating/:type/:order',  name: 'PhotoList',    component: PhotoListComponent, data: new ModeRouteInfo(RouteMode.Rating) },
+    { path: '/:mode',                name: 'Mode',         component: ModeComponent }
 ])
 // TODO: add otherwise route config item
 export class PhotosAppComponent {

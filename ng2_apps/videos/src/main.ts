@@ -1,6 +1,6 @@
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { HTTP_BINDINGS } from '@angular/http';
-import { ROUTER_PROVIDERS } from '@angular/router';
+import { ROUTER_PROVIDERS } from '@angular/router-deprecated';
 import { enableProdMode } from '@angular/core';
 
 import { VideosAppComponent, environment } from './app/';

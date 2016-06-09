@@ -9,11 +9,11 @@ import { PreferenceDialogComponent } from './preference-dialog';
 import { PhotoStateService, ModeRouteInfo, RouteMode } from './shared';
 
 @Component({
-  moduleId: module.id,
-  selector: 'photos-app',
-  directives: [ RouterOutlet, HeaderComponent, PreferenceDialogComponent ],
-  templateUrl: 'photos.component.html',
-  styleUrls: ['photos.component.css']
+    moduleId: module.id,
+    selector: 'photos-app',
+    directives: [RouterOutlet, HeaderComponent, PreferenceDialogComponent],
+    templateUrl: 'photos.component.html',
+    styleUrls: ['photos.component.css']
 })
 @RouteConfig([
     { path: '/',                     name: 'Mode',         component: ModeComponent },
@@ -26,15 +26,15 @@ import { PhotoStateService, ModeRouteInfo, RouteMode } from './shared';
 ])
 // TODO: add otherwise route config item
 export class PhotosAppComponent {
-    @ViewChild(PreferenceDialogComponent) private _prefsDialog : PreferenceDialogComponent;
-    
-    constructor(private _stateService : PhotoStateService) {
+    @ViewChild(PreferenceDialogComponent) private _prefsDialog: PreferenceDialogComponent;
+
+    constructor(private _stateService: PhotoStateService) {
         this._stateService.showPreferencesEventEmitter.subscribe(
-            (val : any) => this.showPreferencesDialog()
+            (val: any) => this.showPreferencesDialog()
         );
     }
-    
-    showPreferencesDialog() : void {
+
+    showPreferencesDialog(): void {
         this._prefsDialog.show();
     }
 }

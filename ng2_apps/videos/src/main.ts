@@ -9,17 +9,17 @@ import { BreadcrumbService, LocalStorageService, ResponsiveService } from '../..
 import { SizeService, VideoDataService, VideoNavigationService, VideoStateService } from "./app/shared";
 
 if (environment.production) {
-  enableProdMode();
+    enableProdMode();
 }
 
 bootstrap(VideosAppComponent, [
-    HTTP_BINDINGS, 
-    ROUTER_PROVIDERS, 
-    LocalStorageService, 
+    HTTP_BINDINGS,
+    ROUTER_PROVIDERS,
+    LocalStorageService,
     BreadcrumbService,
-    ResponsiveService, 
-    SizeService, 
-    VideoDataService, 
+    ResponsiveService,
+    SizeService,
+    VideoDataService,
     VideoNavigationService,
     VideoStateService
 ]);

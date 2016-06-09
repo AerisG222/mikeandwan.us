@@ -5,9 +5,9 @@ import { Photo, PhotoDataService } from './';
 
 @Injectable()
 export abstract class PhotoSource {
-	constructor(protected _dataService : PhotoDataService) {
-		
-	}
-	
-	abstract getPhotos() : Observable<Array<Photo>>;
+    constructor(protected _dataService: PhotoDataService) {
+
+    }
+
+    abstract getPhotos(): Observable<Array<Photo>>;
 }

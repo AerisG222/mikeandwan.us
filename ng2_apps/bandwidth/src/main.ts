@@ -3,7 +3,7 @@ import { enableProdMode } from '@angular/core';
 import { BandwidthAppComponent, environment } from './app/';
 
 if (environment.production) {
-  enableProdMode();
+    enableProdMode();
 }
 
 bootstrap(BandwidthAppComponent);

@@ -1,17 +1,17 @@
 import {
-  beforeEachProviders,
-  it,
-  describe,
-  expect,
-  inject
+    beforeEachProviders,
+    it,
+    describe,
+    expect,
+    inject
 } from '@angular/core/testing';
 import { LocalStorageService } from './local-storage.service';
 
 describe('LocalStorage Service', () => {
-  beforeEachProviders(() => [LocalStorageService]);
+    beforeEachProviders(() => [LocalStorageService]);
 
-  it('should ...',
-      inject([LocalStorageService], (service: LocalStorageService) => {
-    expect(service).toBeTruthy();
-  }));
+    it('should ...',
+        inject([LocalStorageService], (service: LocalStorageService) => {
+            expect(service).toBeTruthy();
+        }));
 });

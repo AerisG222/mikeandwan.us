@@ -9,23 +9,23 @@ import { VideoDataService, VideoNavigationService } from '../shared';
     styleUrls: ['year-list.component.css']
 })
 export class YearListComponent implements OnInit {
-    year : number = -1;
-	  years : Array<number> = [];
-    
-    constructor(private _dataService : VideoDataService, 
-                private _navService : VideoNavigationService) {
+    year: number = -1;
+    years: Array<number> = [];
+
+    constructor(private _dataService: VideoDataService,
+        private _navService: VideoNavigationService) {
 
     }
-    
-    selectItem(year : number) : void {
+
+    selectItem(year: number): void {
         this._navService.gotoCategoryList(year);
     };
-    
-    ngOnInit() : void {
+
+    ngOnInit(): void {
         this._dataService.getYears()
             .subscribe(
-                (data : Array<number>) => this.years = data,
-                (err : any) => console.error(`there was an error: ${err}`)
+            (data: Array<number>) => this.years = data,
+            (err: any) => console.error(`there was an error: ${err}`)
             );
     }
 }

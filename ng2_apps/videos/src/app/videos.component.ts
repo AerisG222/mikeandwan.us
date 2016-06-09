@@ -11,7 +11,7 @@ import { VideoStateService } from './shared';
 @Component({
     moduleId: module.id,
     selector: 'videos-app',
-    directives: [ ROUTER_DIRECTIVES, HeaderComponent, PreferenceDialogComponent ],
+    directives: [ROUTER_DIRECTIVES, HeaderComponent, PreferenceDialogComponent],
     templateUrl: 'videos.component.html',
     styleUrls: ['videos.component.css']
 })
@@ -21,15 +21,15 @@ import { VideoStateService } from './shared';
     { path: '/:year/:category', name: 'VideoList',    component: VideoListComponent }
 ])
 export class VideosAppComponent {
-    @ViewChild(PreferenceDialogComponent) preferenceDialog : PreferenceDialogComponent;
-    
-    constructor(private _stateService : VideoStateService) {
+    @ViewChild(PreferenceDialogComponent) preferenceDialog: PreferenceDialogComponent;
+
+    constructor(private _stateService: VideoStateService) {
         this._stateService.showPreferencesEventEmitter.subscribe(
-            (val : any) => this.showPreferencesDialog()
+            (val: any) => this.showPreferencesDialog()
         );
     }
-    
-    showPreferencesDialog() : void {
+
+    showPreferencesDialog(): void {
         this.preferenceDialog.show();
     }
 }

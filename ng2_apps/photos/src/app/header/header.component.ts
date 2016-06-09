@@ -9,29 +9,29 @@ import { PhotoNavigationService, PhotoStateService, CategoryBreadcrumb } from '.
 @Component({
     moduleId: module.id,
     selector: 'app-header',
-    directives: [ BreadcrumbListComponent, NgIf ],
+    directives: [BreadcrumbListComponent, NgIf],
     templateUrl: 'header.component.html',
     styleUrls: ['header.component.css']
 })
 export class HeaderComponent implements AfterViewInit {
-    @ViewChild(BreadcrumbListComponent) breadcrumbList : BreadcrumbListComponent;
-    downloadUrl : string = null;
+    @ViewChild(BreadcrumbListComponent) breadcrumbList: BreadcrumbListComponent;
+    downloadUrl: string = null;
     showMapButton = false;
     showRegularButton = false;
-        
-    constructor(private _navService : PhotoNavigationService, 
-                private _stateService : PhotoStateService) {
-        
+
+    constructor(private _navService: PhotoNavigationService,
+        private _stateService: PhotoStateService) {
+
     }
-    
-    ngAfterViewInit() : void {
-        this.breadcrumbList.breadcrumbsChangedEventEmitter.subscribe((breadcrumbs : Array<Breadcrumb>) => {
-           this.onBreadcrumbsUpdated(breadcrumbs);
+
+    ngAfterViewInit(): void {
+        this.breadcrumbList.breadcrumbsChangedEventEmitter.subscribe((breadcrumbs: Array<Breadcrumb>) => {
+            this.onBreadcrumbsUpdated(breadcrumbs);
         });
     }
-    
-    toggleMapView() : void {
-        if(this.showMapButton) {
+
+    toggleMapView(): void {
+        if (this.showMapButton) {
             this.showMapButton = false;
             this.showRegularButton = true;
         }
@@ -42,25 +42,25 @@ export class HeaderComponent implements AfterViewInit {
 
         this._stateService.toggleMapsView(!this.showMapButton);
     }
-    
-    clickConfig() : void {
+
+    clickConfig(): void {
         this._stateService.showPreferencesDialog();
     };
-    
-    private onBreadcrumbsUpdated(breadcrumbs : Array<Breadcrumb>) : void {
+
+    private onBreadcrumbsUpdated(breadcrumbs: Array<Breadcrumb>): void {
         this.showMapButton = false;
         this.showRegularButton = false;
         this.downloadUrl = null;
-        
-        if(breadcrumbs != null && breadcrumbs.length > 0) {
+
+        if (breadcrumbs != null && breadcrumbs.length > 0) {
             let dest = breadcrumbs[breadcrumbs.length - 1];
-            
-            if(dest instanceof CategoryBreadcrumb) {
+
+            if (dest instanceof CategoryBreadcrumb) {
                 let cat = (<CategoryBreadcrumb>dest).category;
-                
+
                 this.downloadUrl = `/photos/download-category/${cat.id}`;
-                
-                if(cat.hasGpsData) {
+
+                if (cat.hasGpsData) {
                     this.showMapButton = true;
                 }
             }

@@ -1,6 +1,6 @@
-export enum PhotoViewTool { 
-    Comments, 
-    Ratings, 
+export enum PhotoViewTool {
+    Comments,
+    Ratings,
     Exif,
     Effects
 }

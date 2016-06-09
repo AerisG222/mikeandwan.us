@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
-import { RouteData, RouteParams } from '@angular/router';
+import { RouteData, RouteParams } from '@angular/router-deprecated';
 
-import { ModeRouteInfo, PhotoDataService, PhotoSource, CategoryPhotoSource, CommentPhotoSource, RatingPhotoSource, 
-         RandomPhotoSource, RouteMode } from './';
+import { ModeRouteInfo, PhotoDataService, PhotoSource, CategoryPhotoSource, CommentPhotoSource, RatingPhotoSource,
+    RandomPhotoSource, RouteMode } from './';
 
 @Injectable()
 export class PhotoSourceFactory {
-	constructor(private _dataService : PhotoDataService) {
-        
+    constructor(private _dataService: PhotoDataService) {
+
     }
-    
-	create(routeData : RouteData, routeParams : RouteParams) : PhotoSource {
+
+    create(routeData: RouteData, routeParams: RouteParams): PhotoSource {
         let modeInfo = <ModeRouteInfo>routeData.data;
-        let type : string = null;
-        let order : string = null;
-        
-        switch(modeInfo.mode) {
+        let type: string = null;
+        let order: string = null;
+
+        switch (modeInfo.mode) {
             case RouteMode.Category:
                 let categoryId = parseInt(routeParams.get(ModeRouteInfo.PARAM_CATEGORY), 10);
                 return new CategoryPhotoSource(this._dataService, categoryId);

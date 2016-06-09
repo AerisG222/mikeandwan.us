@@ -8,39 +8,39 @@ import { IPhoto } from '../shared';
 @Component({
     moduleId: module.id,
     selector: 'app-photo-dialog',
-    directives: [ DialogComponent ],
+    directives: [DialogComponent],
     templateUrl: 'photo-dialog.component.html',
     styleUrls: ['photo-dialog.component.css']
 })
 export class PhotoDialogComponent implements AfterViewInit {
-    @ViewChild(DialogComponent) dialog : DialogComponent;
-    @Input() photo : IPhoto = null;
-    maxHeight : string = '480px';
-    maxWidth : string = '640px';
+    @ViewChild(DialogComponent) dialog: DialogComponent;
+    @Input() photo: IPhoto = null;
+    maxHeight: string = '480px';
+    maxWidth: string = '640px';
 
-    constructor(private _responsiveService : ResponsiveService,
-                private _changeDetectionRef : ChangeDetectorRef) {
-        
+    constructor(private _responsiveService: ResponsiveService,
+        private _changeDetectionRef: ChangeDetectorRef) {
+
     }
-    
-    ngAfterViewInit() : void {
+
+    ngAfterViewInit(): void {
         this.dialog.buttons = [
             new DialogButton('Close', 'close')
         ];
-        
+
         this._changeDetectionRef.detectChanges();
     }
-    
+
     setMaxDimensions() {
         this.maxHeight = `${this._responsiveService.getHeight() - 200}px`;
         this.maxWidth = `${this._responsiveService.getWidth() - 200}px`;
     }
-    
-    show() : void {
+
+    show(): void {
         this.dialog.show();
     }
-    
-    hide(evt : any) : void {
+
+    hide(evt: any): void {
         this.dialog.hide();
     }
 }

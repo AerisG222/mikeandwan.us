@@ -1,5 +1,5 @@
 export class BoardSector {
-    constructor(public minDegree : number, public value : number) {
-        
+    constructor(public minDegree: number, public value: number) {
+
     }
 }

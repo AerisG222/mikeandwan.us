@@ -1,17 +1,17 @@
 import {
-  beforeEachProviders,
-  it,
-  describe,
-  expect,
-  inject
+    beforeEachProviders,
+    it,
+    describe,
+    expect,
+    inject
 } from '@angular/core/testing';
 import { SizeService } from './size.service';
 
 describe('Size Service', () => {
-  beforeEachProviders(() => [SizeService]);
+    beforeEachProviders(() => [SizeService]);
 
-  it('should ...',
-      inject([SizeService], (service: SizeService) => {
-    expect(service).toBeTruthy();
-  }));
+    it('should ...',
+        inject([SizeService], (service: SizeService) => {
+            expect(service).toBeTruthy();
+        }));
 });

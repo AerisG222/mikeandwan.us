@@ -6,11 +6,11 @@ import { Player } from '../';
 @Component({
     moduleId: module.id,
     selector: 'app-player-score',
-    directives: [ NgClass ],
+    directives: [NgClass],
     templateUrl: 'player-score.component.html',
     styleUrls: ['player-score.component.css']
 })
 export class PlayerScoreComponent {
-    @Input() player : Player;
-    @Input() currentPlayer : Player;
+    @Input() player: Player;
+    @Input() currentPlayer: Player;
 }

@@ -2,20 +2,20 @@ import { Character } from './';
 
 export class Player {
     private _score = 0;
-    
-    constructor(public character : Character) {
-        
+
+    constructor(public character: Character) {
+
     }
-    
-    get score() : number {
+
+    get score(): number {
         return this._score;
     }
-    
-    resetScore() : void {
+
+    resetScore(): void {
         this._score = 0;
     }
-    
-    addDollarAmount(value : number) : void {
+
+    addDollarAmount(value: number): void {
         this._score += value;
     }
 }

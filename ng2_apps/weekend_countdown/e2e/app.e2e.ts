@@ -1,14 +1,14 @@
 import { WeekendCountdownPage } from './app.po';
 
-describe('weekend-countdown App', function() {
-  let page: WeekendCountdownPage;
+describe('weekend-countdown App', function () {
+    let page: WeekendCountdownPage;
 
-  beforeEach(() => {
-    page = new WeekendCountdownPage();
-  });
+    beforeEach(() => {
+        page = new WeekendCountdownPage();
+    });
 
-  it('should display message saying app works', () => {
-    page.navigateTo();
-    expect(page.getParagraphText()).toEqual('weekend-countdown works!');
-  });
+    it('should display message saying app works', () => {
+        page.navigateTo();
+        expect(page.getParagraphText()).toEqual('weekend-countdown works!');
+    });
 });

@@ -10,25 +10,25 @@ import { PhotoStateService, PhotoNavigationService, ModeRouteInfo, RouteMode } f
 @Component({
     moduleId: module.id,
     selector: 'app-mode',
-    directives: [ NgFor ],
+    directives: [NgFor],
     templateUrl: 'mode.component.html',
     styleUrls: ['mode.component.css']
 })
 export class ModeComponent implements OnInit {
-    private _mode : RouteMode = null;
-	  items : Array<Breadcrumb> = [];
-    
-    constructor(routeParams : RouteParams, 
-                private _stateService : PhotoStateService,
-                private _navService : PhotoNavigationService) {
+    private _mode: RouteMode = null;
+    items: Array<Breadcrumb> = [];
+
+    constructor(routeParams: RouteParams,
+        private _stateService: PhotoStateService,
+        private _navService: PhotoNavigationService) {
         this._mode = this.getMode(routeParams.get('mode'));
-                
+
         // if we make it back to the mode pages, forget the 'last category' we had
         this._stateService.lastCategoryIndex = 0;
     }
-    
-    ngOnInit() : void {
-        switch(this._mode) {
+
+    ngOnInit(): void {
+        switch (this._mode) {
             case null:
                 this.setItems(this._navService.getRootDestinations());
                 break;
@@ -44,16 +44,16 @@ export class ModeComponent implements OnInit {
         }
     }
 
-    selectItem(dest : Breadcrumb) : void {
+    selectItem(dest: Breadcrumb): void {
         this._navService.gotoSpecificMode(dest, this._mode);
     }
-    
-    private setItems(obs : Observable<Array<Breadcrumb>>) {
+
+    private setItems(obs: Observable<Array<Breadcrumb>>) {
         obs.subscribe(items => this.items = items);
-    }   
-            
-    private getMode(mode : string) : RouteMode {
-        switch(mode) {
+    }
+
+    private getMode(mode: string): RouteMode {
+        switch (mode) {
             case null:
                 return null;
             case ModeRouteInfo.PARAM_YEAR:
@@ -63,5 +63,5 @@ export class ModeComponent implements OnInit {
             case ModeRouteInfo.PARAM_RATING:
                 return RouteMode.Rating;
         }
-    }   
+    }
 }

@@ -1,7 +1,7 @@
 import { bootstrap, BrowserDomAdapter } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from '@angular/core';
 import { HTTP_BINDINGS } from '@angular/http';
-import { ROUTER_PROVIDERS } from '@angular/router';
+import { ROUTER_PROVIDERS } from '@angular/router-deprecated';
 import 'rxjs/add/operator/map';
 
 import { LocalStorageService, BreadcrumbService, ResponsiveService } from '../../ng_maw/src/app/shared';
@@ -10,18 +10,18 @@ import { PhotoDataService, PhotoNavigationService, PhotoSourceFactory, PhotoStat
 import { PhotosAppComponent, environment } from './app/';
 
 if (environment.production) {
-  enableProdMode();
+    enableProdMode();
 }
 
-bootstrap(PhotosAppComponent, [ 
-    HTTP_BINDINGS, 
+bootstrap(PhotosAppComponent, [
+    HTTP_BINDINGS,
     ROUTER_PROVIDERS,
     BrowserDomAdapter,
-    LocalStorageService, 
+    LocalStorageService,
     BreadcrumbService,
     ResponsiveService,
     PhotoDataService,
     PhotoNavigationService,
     PhotoStateService,
-    PhotoSourceFactory ]);
+    PhotoSourceFactory]);
 

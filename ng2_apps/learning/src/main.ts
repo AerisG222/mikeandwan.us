@@ -4,7 +4,7 @@ import { enableProdMode } from '@angular/core';
 import { LearningAppComponent, environment } from './app/';
 
 if (environment.production) {
-  enableProdMode();
+    enableProdMode();
 }
 
 bootstrap(LearningAppComponent);

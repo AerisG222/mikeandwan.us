@@ -6,7 +6,7 @@ import { PhotoDataService, ExifDetail, ExifFormatter, Photo } from '../shared';
 @Component({
     moduleId: module.id,
     selector: 'app-exif-view',
-    directives: [ NgFor ],
+    directives: [NgFor],
     templateUrl: 'exif-view.component.html',
     styleUrls: ['exif-view.component.css']
 })
@@ -65,8 +65,8 @@ export class ExifViewComponent {
 
     @Input() set photo(value: Photo) {
         this._photo = value;
-        
-        if(this._photo.exif) {
+
+        if (this._photo.exif) {
             this.exif = this._photo.exif;
         }
         else {
@@ -77,7 +77,7 @@ export class ExifViewComponent {
     get photo(): Photo {
         return this._photo;
     }
-    
+
     constructor(private _dataService: PhotoDataService) {
 
     }
@@ -127,7 +127,7 @@ export class ExifViewComponent {
         }
     }
 
-    formatLongitude(val : number): string {
+    formatLongitude(val: number): string {
         if (val >= 0) {
             return `${val} (East)`;
         }
@@ -136,7 +136,7 @@ export class ExifViewComponent {
         }
     }
 
-    formatAltitude(val : number): string {
+    formatAltitude(val: number): string {
         if (val >= 0) {
             return `${val} m Above Sea Level`;
         }
@@ -148,7 +148,7 @@ export class ExifViewComponent {
     private getExifData(): void {
         this._dataService.getPhotoExifData(this._photo.photo.id)
             .subscribe(exif => {
-                let detail : Array<Array<ExifDetail>> = [];
+                let detail: Array<Array<ExifDetail>> = [];
 
                 for (let i = 0; i < this._map.length; i++) {
                     let fmt = this._map[i];

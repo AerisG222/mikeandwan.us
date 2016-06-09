@@ -6,8 +6,8 @@ import { MemoryAppComponent, environment, MemoryService } from './app/';
 
 
 if (environment.production) {
-  enableProdMode();
+    enableProdMode();
 }
 
-bootstrap(MemoryAppComponent, [ ROUTER_PROVIDERS, MemoryService ]);
+bootstrap(MemoryAppComponent, [ROUTER_PROVIDERS, MemoryService]);
 

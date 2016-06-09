@@ -7,38 +7,37 @@ import { Component } from '@angular/core';
     styleUrls: ['weekend-countdown.component.css']
 })
 export class WeekendCountdownAppComponent {
-    intervalId : number = null;
-    value : string = '';
-    
-    ngOnInit() : void {
+    intervalId: number = null;
+    value: string = '';
+
+    ngOnInit(): void {
         this.updateMessage();
         this.intervalId = setInterval(() => { this.updateMessage(); }, 300);
     }
-    
-    ngOnDestroy() : void {
+
+    ngOnDestroy(): void {
         clearInterval(this.intervalId);
     }
-    
-    isWeekend(currDate : Date) : boolean {
-        let day : number = currDate.getDay();
 
-        if(day === 0 || day === 6) {
+    isWeekend(currDate: Date): boolean {
+        let day: number = currDate.getDay();
+
+        if (day === 0 || day === 6) {
             return true;
         }
-        else if(day === 5) {
-            if(currDate.getHours() >= 17)
-            {
+        else if (day === 5) {
+            if (currDate.getHours() >= 17) {
                 return true;
             }
         }
 
         return false;
     }
-    
-    updateMessage() : void {
-        let theDate : Date = new Date();
 
-        if(this.isWeekend(theDate)) {
+    updateMessage(): void {
+        let theDate: Date = new Date();
+
+        if (this.isWeekend(theDate)) {
             this.value = "Sweet! It's the weekend!";
         }
         else {
@@ -49,22 +48,22 @@ export class WeekendCountdownAppComponent {
             // now determine the difference to our target time for each part
             let dayDelta = 5 - theDate.getDay();
 
-            if(theDate.getHours() < 17) {
+            if (theDate.getHours() < 17) {
                 hourDelta = 17 - theDate.getHours();
             }
-            else if(theDate.getHours() > 17) {
+            else if (theDate.getHours() > 17) {
                 // subtract one day and add the day to our hours
                 dayDelta -= 1;
                 hourDelta = 24 + 17 - theDate.getHours();
             }
 
-            if(theDate.getMinutes() !== 0) {
+            if (theDate.getMinutes() !== 0) {
                 // subtract one from the hours
                 hourDelta -= 1;
                 minDelta = 60 - theDate.getMinutes();
             }
 
-            if(theDate.getSeconds() !== 0) {
+            if (theDate.getSeconds() !== 0) {
                 // subtract one from the minutes
                 minDelta -= 1;
                 secDelta = 60 - theDate.getSeconds();

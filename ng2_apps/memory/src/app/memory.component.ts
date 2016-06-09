@@ -6,15 +6,15 @@ import { ChooseTurtleComponent } from './choose-turtle';
 
 @RouteConfig([
     { path: '/',     name: 'ChooseTurtle', component: ChooseTurtleComponent },
-    { path: '/play', name: 'Play',          component: PlayComponent }
+    { path: '/play', name: 'Play',         component: PlayComponent }
 ])
 @Component({
     moduleId: module.id,
     selector: 'memory-app',
-    directives: [ RouterOutlet ],
+    directives: [RouterOutlet],
     templateUrl: 'memory.component.html',
     styleUrls: ['memory.component.css']
 })
 export class MemoryAppComponent {
-  
+
 }

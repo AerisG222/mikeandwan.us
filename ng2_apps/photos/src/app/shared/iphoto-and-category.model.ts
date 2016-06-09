@@ -1,6 +1,6 @@
 import { ICategory, IPhoto } from './';
 
 export interface IPhotoAndCategory {
-    photo : IPhoto;
-    category : ICategory;
+    photo: IPhoto;
+    category: ICategory;
 }

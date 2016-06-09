@@ -9,15 +9,15 @@ import { IPlayer } from '../';
     styleUrls: ['winner-screen.component.css']
 })
 export class WinnerScreenComponent {
-    @Input() player : IPlayer;
-    @Output() rematch : EventEmitter<any> = new EventEmitter<any>();
-    @Output() newgame : EventEmitter<any> = new EventEmitter<any>();
-    
-    onRematch() : void {
-      this.rematch.next(null);
+    @Input() player: IPlayer;
+    @Output() rematch: EventEmitter<any> = new EventEmitter<any>();
+    @Output() newgame: EventEmitter<any> = new EventEmitter<any>();
+
+    onRematch(): void {
+        this.rematch.next(null);
     }
-    
-    onNewGame() : void {
-      this.newgame.next(null);
+
+    onNewGame(): void {
+        this.newgame.next(null);
     }
 }

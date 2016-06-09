@@ -1,4 +1,4 @@
 export interface IRating {
-    userRating : number;
-    averageRating : number;
+    userRating: number;
+    averageRating: number;
 }

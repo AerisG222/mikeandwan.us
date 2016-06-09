@@ -5,8 +5,8 @@ import { ROUTER_PROVIDERS } from '@angular/router-deprecated';
 import { MoneySpinAppComponent, environment, StateService } from './app/';
 
 if (environment.production) {
-  enableProdMode();
+    enableProdMode();
 }
 
-bootstrap(MoneySpinAppComponent, [ ROUTER_PROVIDERS, StateService ]);
+bootstrap(MoneySpinAppComponent, [ROUTER_PROVIDERS, StateService]);
 

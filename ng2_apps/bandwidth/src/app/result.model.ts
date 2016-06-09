@@ -1,5 +1,5 @@
 export class Result {
-    constructor(public name : string, public description : string, public time : number) { 
-        
+    constructor(public name: string, public description: string, public time: number) {
+
     }
 }

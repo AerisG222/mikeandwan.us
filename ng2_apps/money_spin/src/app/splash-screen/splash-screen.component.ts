@@ -4,18 +4,18 @@ import { Router } from '@angular/router-deprecated';
 import { StateService } from '../';
 
 @Component({
-  moduleId: module.id,
-  selector: 'app-splash-screen',
-  templateUrl: 'splash-screen.component.html',
-  styleUrls: ['splash-screen.component.css']
+    moduleId: module.id,
+    selector: 'app-splash-screen',
+    templateUrl: 'splash-screen.component.html',
+    styleUrls: ['splash-screen.component.css']
 })
 export class SplashScreenComponent implements AfterViewInit {
-    constructor(private _router : Router,
-                private _stateService : StateService) {
+    constructor(private _router: Router,
+                private _stateService: StateService) {
         _stateService.setSplashShown();
     }
-    
-    ngAfterViewInit() : void {
+
+    ngAfterViewInit(): void {
         setTimeout(() => {
             this._router.navigate(['ChoosePlayer']);
         }, 2400);

@@ -11,7 +11,7 @@ import { WinnerComponent } from './winner'
     selector: 'money-spin-app',
     directives: [ ROUTER_DIRECTIVES ],
     templateUrl: 'money-spin.component.html',
-    styleUrls: ['money-spin.component.css']
+    styleUrls: [ 'money-spin.component.css' ]
 })
 @RouteConfig([
     { path: '/',       name: 'SplashScreen', component: SplashScreenComponent },
@@ -20,5 +20,5 @@ import { WinnerComponent } from './winner'
     { path: '/winner', name: 'Winner',       component: WinnerComponent }
 ])
 export class MoneySpinAppComponent {
-    
+
 }

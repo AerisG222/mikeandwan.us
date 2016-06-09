@@ -4,12 +4,12 @@ import { NgClass } from '@angular/common';
 import { IPlayer } from '../';
 
 @Component({
-  moduleId: module.id,
-  selector: 'app-turtle-score',
-  directives: [ NgClass ],
-  templateUrl: 'turtle-score.component.html',
-  styleUrls: ['turtle-score.component.css']
+    moduleId: module.id,
+    selector: 'app-turtle-score',
+    directives: [NgClass],
+    templateUrl: 'turtle-score.component.html',
+    styleUrls: ['turtle-score.component.css']
 })
 export class TurtleScoreComponent {
-    @Input() player : IPlayer;
+    @Input() player: IPlayer;
 }

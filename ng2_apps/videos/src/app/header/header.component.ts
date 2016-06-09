@@ -5,18 +5,18 @@ import { VideoStateService } from '../shared';
 import { BreadcrumbListComponent } from '../../../../ng_maw/src/app/breadcrumb-list';
 
 @Component({
-  moduleId: module.id,
-  selector: 'app-header',
-  directives: [ NgFor, BreadcrumbListComponent ],
-  templateUrl: 'header.component.html',
-  styleUrls: ['header.component.css']
+    moduleId: module.id,
+    selector: 'app-header',
+    directives: [NgFor, BreadcrumbListComponent],
+    templateUrl: 'header.component.html',
+    styleUrls: ['header.component.css']
 })
 export class HeaderComponent {
-    constructor(private _stateService : VideoStateService) {
-        
+    constructor(private _stateService: VideoStateService) {
+
     }
-    
-    clickConfig() : void {
+
+    clickConfig(): void {
         this._stateService.showPreferencesDialog();
     };
 }

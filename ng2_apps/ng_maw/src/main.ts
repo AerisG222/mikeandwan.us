@@ -3,7 +3,7 @@ import { enableProdMode } from '@angular/core';
 import { NgMawAppComponent, environment } from './app/';
 
 if (environment.production) {
-  enableProdMode();
+    enableProdMode();
 }
 
 bootstrap(NgMawAppComponent);

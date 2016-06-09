@@ -1,4 +1,4 @@
 export interface ICardInfo {
-    id : number;
-    img : string;
+    id: number;
+    img: string;
 }

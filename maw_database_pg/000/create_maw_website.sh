@@ -23,12 +23,15 @@ echo 'creating users...';
 run_psql_script "users/svc_www_maw.sql";
 
 echo 'creating schemas...';
+run_psql_script "schemas/aws.sql";
 run_psql_script "schemas/blog.sql";
 run_psql_script "schemas/maw.sql";
 run_psql_script "schemas/photo.sql";
 run_psql_script "schemas/video.sql";
 
 echo 'creating tables...';
+run_psql_script "tables/aws.glacier_vault.sql";
+
 run_psql_script "tables/maw.country.sql";
 run_psql_script "tables/maw.login_activity_type.sql";
 run_psql_script "tables/maw.login_area.sql";
@@ -122,15 +125,15 @@ read MIGRATE;
 if [ "${MIGRATE}" == "y" ]; then
     echo 'enter mysql username:';
     read MYSQL_USER;
-    
+
     echo 'enter mysql password:';
     read -s MYSQL_PASSWORD;
-    
+
     echo 'enter mysql dbname:';
     read MYSQL_DB;
 
     echo '' > "${MIGRATION_SCRIPT}";
-    
+
     echo 'generating seed scripts from mysql...';
     pop_mig_script "migration/maw.country.sql";
     pop_mig_script "migration/maw.login_activity_type.sql";
@@ -151,12 +154,12 @@ if [ "${MIGRATE}" == "y" ]; then
 
     echo 'applying seed scripts to postgres...';
     run_psql_script "${MIGRATION_SCRIPT}";
-    
+
     echo 'would you like to keep the generated seed scripts? [y/N]:';
     read KEEP_SCRIPTS;
 
     echo 'please now apply the updated photo scripts using SizePhotos';
-        
+
     if [ "${KEEP_SCRIPTS}" != "y" ]; then
         rm -f "${MIGRATION_SCRIPT}";
     fi

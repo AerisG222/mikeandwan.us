@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS photo.photo (
     id SERIAL,
     category_id SMALLINT NOT NULL,
     is_private BOOLEAN NOT NULL,
-    
+
     -- scaled images
     xs_height SMALLINT NOT NULL,
     xs_width SMALLINT NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS photo.photo (
     src_height SMALLINT NOT NULL,
     src_width SMALLINT NOT NULL,
     src_path VARCHAR(255) NOT NULL,
-    
+
     -- exif
     bits_per_sample SMALLINT,
     compression_id INTEGER,
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS photo.photo (
     scene_type_id INTEGER,
     sensing_method_id INTEGER,
     sharpness_id INTEGER,
-    
+
     -- nikon
     af_area_mode_id SMALLINT,
     af_point_id SMALLINT,
@@ -88,8 +88,8 @@ CREATE TABLE IF NOT EXISTS photo.photo (
     vibration_reduction_id SMALLINT,
     vignette_control_id SMALLINT,
     vr_mode_id SMALLINT,
-    white_balance_id SMALLINT, 
-    
+    white_balance_id SMALLINT,
+
     -- composite
     aperture NUMERIC(3, 1),
     auto_focus_id SMALLINT,
@@ -100,13 +100,18 @@ CREATE TABLE IF NOT EXISTS photo.photo (
     light_value REAL,
     scale_factor_35_efl REAL,
     shutter_speed VARCHAR(50),
-    
+
     -- processing info
     raw_conversion_mode_id SMALLINT,
     sigmoidal_contrast_adjustment REAL,
     saturation_adjustment REAL,
     compression_quality SMALLINT,
-    
+
+    -- backup info
+    aws_glacier_vault_id SMALLINT,
+    aws_archive_id CHAR(138),
+    aws_treehash CHAR(64),
+
     CONSTRAINT pk_photo_photo PRIMARY KEY (id),
 
     CONSTRAINT fk_photo_photo_category FOREIGN KEY (category_id) REFERENCES photo.category(id),
@@ -134,8 +139,8 @@ CREATE TABLE IF NOT EXISTS photo.photo (
     CONSTRAINT fk_photo_photo_scene_type FOREIGN KEY (scene_type_id) REFERENCES photo.scene_type(id),
     CONSTRAINT fk_photo_photo_sensing_method FOREIGN KEY (sensing_method_id) REFERENCES photo.sensing_method(id),
     CONSTRAINT fk_photo_photo_sharpness FOREIGN KEY (sharpness_id) REFERENCES photo.sharpness(id),
-    
-    -- nikon references    
+
+    -- nikon references
     CONSTRAINT fk_photo_photo_af_area_mode FOREIGN KEY (af_area_mode_id) REFERENCES photo.af_area_mode(id),
     CONSTRAINT fk_photo_photo_af_point FOREIGN KEY (af_point_id) REFERENCES photo.af_point(id),
     CONSTRAINT fk_photo_photo_active_d_lighting FOREIGN KEY (active_d_lighting_id) REFERENCES photo.active_d_lighting(id),
@@ -153,13 +158,16 @@ CREATE TABLE IF NOT EXISTS photo.photo (
     CONSTRAINT fk_photo_photo_vignette_control FOREIGN KEY (vignette_control_id) REFERENCES photo.vignette_control(id),
     CONSTRAINT fk_photo_photo_vr_mode FOREIGN KEY (vr_mode_id) REFERENCES photo.vr_mode(id),
     CONSTRAINT fk_photo_photo_white_balance FOREIGN KEY (white_balance_id) REFERENCES photo.white_balance(id),
-    
+
     -- composite references
     CONSTRAINT fk_photo_photo_auto_focus FOREIGN KEY (auto_focus_id) REFERENCES photo.auto_focus(id),
     CONSTRAINT fk_photo_photo_lens FOREIGN KEY (lens_id) REFERENCES photo.lens(id),
-    
-    -- processing 
-    CONSTRAINT fk_photo_photo_raw_conversion_mode FOREIGN KEY (raw_conversion_mode_id) REFERENCES photo.raw_conversion_mode(id)
+
+    -- processing
+    CONSTRAINT fk_photo_photo_raw_conversion_mode FOREIGN KEY (raw_conversion_mode_id) REFERENCES photo.raw_conversion_mode(id),
+
+    -- backup
+    CONSTRAINT fk_photo_aws_glacier_vault FOREIGN KEY (aws_glacier_vault_id) REFERENCES aws.glacier_vault(id)
 );
 
 DO
@@ -173,7 +181,7 @@ BEGIN
 
         CREATE INDEX ix_photo_photo_category_id_is_private
             ON photo.photo(category_id, is_private);
-      
+
     END IF;
 END
 $$;

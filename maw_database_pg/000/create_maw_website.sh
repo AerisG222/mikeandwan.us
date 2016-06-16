@@ -95,6 +95,7 @@ run_psql_script "tables/video.category.sql";
 run_psql_script "tables/video.video.sql";
 
 echo "seeding...";
+run_psql_script "seed/aws.glacier_vault.sql";
 run_psql_script "seed/photo.auto_focus.sql";
 run_psql_script "seed/photo.compression.sql";
 run_psql_script "seed/photo.contrast.sql";

@@ -1,9 +1,9 @@
 export class BinaryClockPage {
-    navigateTo() {
-        return browser.get('/');
-    }
+  navigateTo() {
+    return browser.get('/');
+  }
 
-    getParagraphText() {
-        return element(by.css('binary-clock-app h1')).getText();
-    }
+  getParagraphText() {
+    return element(by.css('app-root h1')).getText();
+  }
 }

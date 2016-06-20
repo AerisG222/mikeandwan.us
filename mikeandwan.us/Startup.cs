@@ -151,7 +151,7 @@ namespace MawMvcApp
             
             env.EnvironmentName = envOpts.Value.Name;
             
-            if (envOpts.Value.IsDevelopment)
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();

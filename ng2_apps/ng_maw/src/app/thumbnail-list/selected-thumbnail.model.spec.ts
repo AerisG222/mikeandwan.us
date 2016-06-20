@@ -5,7 +5,7 @@ import {
     iit,
     it
 } from '@angular/core/testing';
-import {SelectedThumbnail} from './selected-thumbnail';
+import {SelectedThumbnail} from './selected-thumbnail.model';
 
 describe('SelectedThumbnail', () => {
     /*

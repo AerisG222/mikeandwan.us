@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouteConfig, RouterOutlet, ROUTER_PROVIDERS } from '@angular/router-deprecated';
+import { RouteConfig, RouterOutlet, ROUTER_PROVIDERS } from '@angular/router';
 
 import { PlayComponent } from './play';
 import { ChooseTurtleComponent } from './choose-turtle';

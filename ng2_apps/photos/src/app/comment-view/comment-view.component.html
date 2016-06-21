@@ -10,7 +10,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="#comment of comments">
+                    <tr *ngFor="let comment of comments">
                         <td>{{comment.username}}</td>
                         <td>{{comment.entryDate | date:'longDate'}}</td>
                         <td>{{comment.commentText}}</td>

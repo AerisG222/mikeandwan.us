@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="modal-footer" *ngIf="buttons">
-                <button type="button" class="btn btn-sm btn-default" *ngFor="#button of buttons" (click)="onButtonClick(button)">{{button.text}}</button>
+                <button type="button" class="btn btn-sm btn-default" *ngFor="let button of buttons" (click)="onButtonClick(button)">{{button.text}}</button>
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-sm-5 player red" *ngFor="#char of characters" [ngClass]="{selected : selected === char}">
+    <div class="col-sm-5 player red" *ngFor="let char of characters" [ngClass]="{selected : selected === char}">
         <img [src]="char.imagePath" (click)="onSelect(char)" class="img-rounded" style="width: 200px; height: 200px;" />
     </div>
 </div>

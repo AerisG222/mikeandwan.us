@@ -34,7 +34,7 @@
             <th>Connection Speed</th>
             <th>Download Time</th>
         </tr>
-        <tr *ngFor="#result of results">
+        <tr *ngFor="let result of results">
             <td>{{result.name}}</td>
             <td>{{result.description}}</td>
             <td>{{result.time | number : '1.4-4'}}</td>

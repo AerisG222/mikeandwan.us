@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
     moduleId: module.id,
     selector: 'byte-counter-app',
     templateUrl: 'byte-counter.component.html',
-    styleUrls: ['byte-counter.component.css']
+    styleUrls: [ 'byte-counter.component.css' ]
 })
 export class ByteCounterAppComponent {
     bCount: number = 0;

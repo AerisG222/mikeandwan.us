@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { NgIf, NgFor } from '@angular/common';
 
-import { Result } from './';
+import { Result } from './result.model';
 
 @Component({
     moduleId: module.id,
     selector: 'time-app',
-    directives: [NgIf, NgFor],
+    directives: [ NgIf, NgFor ],
     templateUrl: 'time.component.html',
-    styleUrls: ['time.component.css']
+    styleUrls: [ 'time.component.css' ]
 })
 export class TimeAppComponent {
     results: Result[] = null;

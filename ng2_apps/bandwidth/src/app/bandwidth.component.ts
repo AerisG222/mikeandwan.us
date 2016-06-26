@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 
-import { Result, SizeInfo } from './';
+import { Result } from './result.model';
+import { SizeInfo } from './size-info.model';
 
 @Component({
     moduleId: module.id,
     selector: 'bandwidth-app',
-    directives: [NgIf, NgFor],
+    directives: [ NgIf, NgFor ],
     templateUrl: 'bandwidth.component.html',
-    styleUrls: ['bandwidth.component.css']
+    styleUrls: [ 'bandwidth.component.css' ]
 })
 export class BandwidthAppComponent {
     results: Result[] = null;

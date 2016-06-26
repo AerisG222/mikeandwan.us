@@ -1,15 +1,15 @@
 import { Component, Input, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 import { NgFor, NgIf, NgClass } from '@angular/common';
 
-import { DialogButton } from './';
+import { DialogButton } from './dialog-button.model';
 declare var jQuery: any;
 
 @Component({
     moduleId: module.id,
     selector: 'app-dialog',
-    directives: [NgIf, NgFor, NgClass],
+    directives: [ NgIf, NgFor, NgClass ],
     templateUrl: 'dialog.component.html',
-    styleUrls: ['dialog.component.css']
+    styleUrls: [ 'dialog.component.css' ]
 })
 export class DialogComponent implements AfterViewInit {
     private _modalDiv: HTMLDivElement = null;

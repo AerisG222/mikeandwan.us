@@ -1,6 +1,6 @@
 import { ApplicationRef, Injectable, EventEmitter } from '@angular/core';
 
-import { ResponsiveBreakpoint } from './';
+import { ResponsiveBreakpoint } from './responsive-breakpoint.model';
 
 @Injectable()
 export class ResponsiveService {

@@ -4,9 +4,9 @@ import { NgStyle } from '@angular/common';
 @Component({
     moduleId: module.id,
     selector: 'app-three-dlink',
-    directives: [NgStyle],
+    directives: [ NgStyle ],
     templateUrl: 'three-dlink.component.html',
-    styleUrls: ['three-dlink.component.css']
+    styleUrls: [ 'three-dlink.component.css' ]
 })
 export class ThreeDLinkComponent implements OnInit {
     private _el: HTMLElement = null;

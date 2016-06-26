@@ -5,7 +5,7 @@ import {
     iit,
     it
 } from '@angular/core/testing';
-import {ResponsiveBreakpoint} from './responsive-breakpoint';
+import {ResponsiveBreakpoint} from './responsive-breakpoint.model';
 
 describe('ResponsiveBreakpoint', () => {
     /*

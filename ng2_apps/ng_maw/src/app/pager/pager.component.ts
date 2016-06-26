@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { NgClass, NgFor, NgIf, SlicePipe } from '@angular/common';
 
-import { ResponsiveService } from '../shared';
+import { ResponsiveService } from '../shared/responsive.service';
 
 // TODO: consider adding a PagedThumbnailList class combining both of these components.
 //       this will allow for the consumer to not care about coordinating the 2 together
@@ -11,9 +11,9 @@ import { ResponsiveService } from '../shared';
 @Component({
     moduleId: module.id,
     selector: 'app-pager',
-    directives: [NgClass, NgIf, NgFor],
+    directives: [ NgClass, NgIf, NgFor ],
     templateUrl: 'pager.component.html',
-    styleUrls: ['pager.component.css']
+    styleUrls: [ 'pager.component.css' ]
 })
 export class PagerComponent {
     @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();

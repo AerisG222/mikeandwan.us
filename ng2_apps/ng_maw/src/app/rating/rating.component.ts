@@ -4,9 +4,9 @@ import { NgClass, NgFor, NgIf } from '@angular/common';
 @Component({
     moduleId: module.id,
     selector: 'app-rating',
-    directives: [NgClass, NgIf, NgFor],
+    directives: [ NgClass, NgIf, NgFor ],
     templateUrl: 'rating.component.html',
-    styleUrls: ['rating.component.css']
+    styleUrls: [ 'rating.component.css' ]
 })
 export class RatingComponent implements OnInit {
     private _rating: number = null;

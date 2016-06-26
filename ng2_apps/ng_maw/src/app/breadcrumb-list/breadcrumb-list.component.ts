@@ -1,14 +1,15 @@
 import { Component, EventEmitter } from '@angular/core';
 import { NgFor } from '@angular/common';
 
-import { BreadcrumbService, Breadcrumb } from '../shared';
+import { Breadcrumb } from '../shared/breadcrumb.model';
+import { BreadcrumbService } from '../shared/breadcrumb.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-breadcrumb-list',
-    directives: [NgFor],
+    directives: [ NgFor ],
     templateUrl: 'breadcrumb-list.component.html',
-    styleUrls: ['breadcrumb-list.component.css']
+    styleUrls: [ 'breadcrumb-list.component.css' ]
 })
 export class BreadcrumbListComponent {
     breadcrumbs: Array<Breadcrumb> = [];

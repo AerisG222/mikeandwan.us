@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router-deprecated';
+import { Router } from '@angular/router';
 
-import { Breadcrumb } from './';
+import { Breadcrumb } from './breadcrumb.model';
 
 @Injectable()
 export class BreadcrumbService {

@@ -1,12 +1,13 @@
 import { Component, Output, ElementRef, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
 
-import { BoundingBox, MapContext } from '../';
+import { BoundingBox } from '../bounding-box.model';
+import { MapContext } from '../map-context.model';
 
 @Component({
     moduleId: module.id,
     selector: 'map',
     templateUrl: 'map.component.html',
-    styleUrls: ['map.component.css']
+    styleUrls: [ 'map.component.css' ]
 })
 export class MapComponent implements AfterViewInit {
     isVisible: boolean = false;

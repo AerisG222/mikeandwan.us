@@ -3,14 +3,14 @@ import { NgIf } from '@angular/common';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/concat';
 
-import { MapComponent } from './map';
+import { MapComponent } from './map/map.component';
 
 @Component({
     moduleId: module.id,
     selector: 'googlemaps-app',
-    directives: [NgIf, MapComponent],
+    directives: [ NgIf, MapComponent ],
     templateUrl: 'googlemaps.component.html',
-    styleUrls: ['googlemaps.component.css']
+    styleUrls: [ 'googlemaps.component.css' ]
 })
 export class GooglemapsAppComponent {
     show: boolean = true;

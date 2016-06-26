@@ -4,9 +4,9 @@ import { NgClass } from '@angular/common';
 @Component({
     moduleId: module.id,
     selector: 'binary-clock-app',
-    directives: [NgClass],
+    directives: [ NgClass ],
     templateUrl: 'binary-clock.component.html',
-    styleUrls: ['binary-clock.component.css']
+    styleUrls: [ 'binary-clock.component.css' ]
 })
 export class BinaryClockAppComponent {
     intervalId: number;

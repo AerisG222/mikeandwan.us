@@ -1,10 +1,11 @@
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from '@angular/core';
-import { BinaryClockAppComponent, environment } from './app/';
+
+import { BinaryClockAppComponent } from './app/binary-clock.component';
+import { environment } from './app/environment';
 
 if (environment.production) {
     enableProdMode();
 }
 
-bootstrap(BinaryClockAppComponent);
-
+bootstrap(BinaryClockAppComponent).catch(err => console.error(err));

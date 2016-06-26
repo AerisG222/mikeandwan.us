@@ -1,8 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { LocalStorageService } from '../../../../ng_maw/src/app/shared';
+import { LocalStorageService } from '../../../../ng_maw/src/app/shared/local-storage.service';
 
-import { Config } from './';
+import { Config } from './config.model';
 
 @Injectable()
 export class VideoStateService {

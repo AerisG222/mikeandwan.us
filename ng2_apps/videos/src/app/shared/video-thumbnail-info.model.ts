@@ -1,6 +1,6 @@
 import { ThumbnailInfo } from '../../../../ng_maw/src/app/thumbnail-list/';
 
-import { IVideo } from './';
+import { IVideo } from './ivideo.model';
 
 export class VideoThumbnailInfo extends ThumbnailInfo {
     constructor(imageUrl: string,

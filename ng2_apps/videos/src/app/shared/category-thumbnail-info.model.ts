@@ -1,6 +1,6 @@
-import { ThumbnailInfo } from '../../../../ng_maw/src/app/thumbnail-list/';
+import { ThumbnailInfo } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-info.model';
 
-import { ICategory } from './';
+import { ICategory } from './icategory.model';
 
 export class CategoryThumbnailInfo extends ThumbnailInfo {
     constructor(imageUrl: string,

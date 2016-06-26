@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { VideoDataService, VideoNavigationService } from '../shared';
+import { VideoDataService } from '../shared/video-data.service';
+import { VideoNavigationService } from '../shared/video-navigation.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-year-list',
     templateUrl: 'year-list.component.html',
-    styleUrls: ['year-list.component.css']
+    styleUrls: [ 'year-list.component.css' ]
 })
 export class YearListComponent implements OnInit {
     year: number = -1;

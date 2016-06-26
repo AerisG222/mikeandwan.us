@@ -3,7 +3,8 @@ import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
-import { ICategory, IVideo } from './';
+import { ICategory } from './icategory.model';
+import { IVideo } from './ivideo.model';
 
 @Injectable()
 // TODO: determine if we should cache responses like prior version

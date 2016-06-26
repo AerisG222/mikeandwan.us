@@ -1,18 +1,24 @@
 import { Component, ViewChild, ChangeDetectorRef, AfterViewInit, OnInit } from '@angular/core';
 import { NgIf, NgStyle } from '@angular/common';
-import { RouteParams } from '@angular/router-deprecated';
+import { RouteParams } from '@angular/router';
 
-import { PagerComponent } from '../../../../ng_maw/src/app/pager';
-import { ThumbnailListComponent, SelectedThumbnail } from '../../../../ng_maw/src/app/thumbnail-list';
+import { PagerComponent } from '../../../../ng_maw/src/app/pager/pager.component';
+import { ThumbnailListComponent } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-list.component';
+import { SelectedThumbnail } from '../../../../ng_maw/src/app/thumbnail-list/selected-thumbnail.model';
 
-import { IVideo, IVideoInfo, SizeService, VideoDataService, VideoStateService, VideoThumbnailInfo } from '../shared';
+import { IVideo } from '../shared/ivideo.model';
+import { IVideoInfo } from '../shared/ivideo-info.model';
+import { SizeService } from '../shared/size.service';
+import { VideoDataService } from '../shared/video-data.service';
+import { VideoStateService } from '../shared/video-state.service';
+import { VideoThumbnailInfo } from '../shared/video-thumbnail-info.model';
 
 @Component({
     moduleId: module.id,
     selector: 'app-video-list',
-    directives: [NgIf, NgStyle, PagerComponent, ThumbnailListComponent],
+    directives: [ NgIf, NgStyle, PagerComponent, ThumbnailListComponent ],
     templateUrl: 'video-list.component.html',
-    styleUrls: ['video-list.component.css']
+    styleUrls: [ 'video-list.component.css' ]
 })
 export class VideoListComponent implements OnInit {
     @ViewChild(PagerComponent) pager: PagerComponent;

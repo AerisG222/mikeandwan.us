@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
 import { NgFor } from '@angular/common';
 
-import { VideoStateService } from '../shared';
-import { BreadcrumbListComponent } from '../../../../ng_maw/src/app/breadcrumb-list';
+import { BreadcrumbListComponent } from '../../../../ng_maw/src/app/breadcrumb-list/breadcrumb-list.component';
+
+import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-header',
-    directives: [NgFor, BreadcrumbListComponent],
+    directives: [ NgFor, BreadcrumbListComponent ],
     templateUrl: 'header.component.html',
-    styleUrls: ['header.component.css']
+    styleUrls: [ 'header.component.css' ]
 })
 export class HeaderComponent {
     constructor(private _stateService: VideoStateService) {

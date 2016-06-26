@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Router, Instruction } from '@angular/router-deprecated';
+import { Router, Instruction } from '@angular/router';
 
-import { BreadcrumbService, Breadcrumb } from '../../../../ng_maw/src/app/shared';
+import { BreadcrumbService } from '../../../../ng_maw/src/app/shared/breadcrumb.service';
+import { Breadcrumb } from '../../../../ng_maw/src/app/shared/breadcrumb.model';
 
-import { ICategory } from './';
+import { ICategory } from './icategory.model';
 
 
 @Injectable()

@@ -1,16 +1,17 @@
 import { Component, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { NgModel, FORM_DIRECTIVES } from '@angular/common';
 
-import { DialogComponent, DialogButton } from '../../../../ng_maw/src/app/dialog';
+import { DialogComponent } from '../../../../ng_maw/src/app/dialog/dialog.component';
+import { DialogButton } from '../../../../ng_maw/src/app/dialog/dialog-button.model';
 
-import { VideoStateService } from '../shared';
+import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-preference-dialog',
-    directives: [DialogComponent, NgModel, FORM_DIRECTIVES],
+    directives: [ DialogComponent, NgModel, FORM_DIRECTIVES ],
     templateUrl: 'preference-dialog.component.html',
-    styleUrls: ['preference-dialog.component.css']
+    styleUrls: [ 'preference-dialog.component.css' ]
 })
 export class PreferenceDialogComponent implements AfterViewInit {
     @ViewChild(DialogComponent) dialog: DialogComponent;

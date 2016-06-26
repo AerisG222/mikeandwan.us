@@ -1,12 +1,18 @@
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { HTTP_BINDINGS } from '@angular/http';
-import { ROUTER_PROVIDERS } from '@angular/router-deprecated';
 import { enableProdMode } from '@angular/core';
 
-import { VideosAppComponent, environment } from './app/';
-import { BreadcrumbService, LocalStorageService, ResponsiveService } from '../../ng_maw/src/app/shared';
+import { BreadcrumbService } from '../../ng_maw/src/app/shared/breadcrumb.service';
+import { LocalStorageService } from '../../ng_maw/src/app/shared/local-storage.service';
+import { ResponsiveService } from '../../ng_maw/src/app/shared/responsive.service';
 
-import { SizeService, VideoDataService, VideoNavigationService, VideoStateService } from "./app/shared";
+import { APP_ROUTER_PROVIDERS } from './app/app.routes';
+import { VideosAppComponent } from './app/videos.component';
+import { environment } from './app/environment';
+import { SizeService } from "./app/shared/size.service";
+import { VideoDataService } from './app/shared/video-data.service';
+import { VideoNavigationService } from './app/shared/video-navigation.service';
+import { VideoStateService } from './app/shared/video-state.service';
 
 if (environment.production) {
     enableProdMode();
@@ -14,7 +20,7 @@ if (environment.production) {
 
 bootstrap(VideosAppComponent, [
     HTTP_BINDINGS,
-    ROUTER_PROVIDERS,
+    APP_ROUTER_PROVIDERS,
     LocalStorageService,
     BreadcrumbService,
     ResponsiveService,

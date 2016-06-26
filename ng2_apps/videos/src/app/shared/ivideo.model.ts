@@ -1,4 +1,5 @@
-import { ICategory, IVideoInfo } from './';
+import { ICategory } from './icategory.model';
+import { IVideoInfo } from './ivideo-info.model';
 
 export interface IVideo {
     id: number;

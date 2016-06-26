@@ -1,25 +1,17 @@
 import { Component, ViewChild } from '@angular/core';
-import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 
-import { HeaderComponent } from './header';
-import { PreferenceDialogComponent } from './preference-dialog';
-import { YearListComponent } from './year-list';
-import { CategoryListComponent } from './category-list';
-import { VideoListComponent } from './video-list';
-import { VideoStateService } from './shared';
+import { HeaderComponent } from './header/header.component';
+import { PreferenceDialogComponent } from './preference-dialog/preference-dialog.component';
+import { VideoStateService } from './shared/video-state.service';
 
 @Component({
     moduleId: module.id,
     selector: 'videos-app',
-    directives: [ROUTER_DIRECTIVES, HeaderComponent, PreferenceDialogComponent],
+    directives: [ ROUTER_DIRECTIVES, HeaderComponent, PreferenceDialogComponent ],
     templateUrl: 'videos.component.html',
-    styleUrls: ['videos.component.css']
+    styleUrls: [ 'videos.component.css' ]
 })
-@RouteConfig([
-    { path: '/',                name: 'YearList',     component: YearListComponent },
-    { path: '/:year',           name: 'CategoryList', component: CategoryListComponent },
-    { path: '/:year/:category', name: 'VideoList',    component: VideoListComponent }
-])
 export class VideosAppComponent {
     @ViewChild(PreferenceDialogComponent) preferenceDialog: PreferenceDialogComponent;
 

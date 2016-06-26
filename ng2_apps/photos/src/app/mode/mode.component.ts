@@ -1,18 +1,21 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
 import { NgFor } from '@angular/common';
-import { RouteParams } from '@angular/router-deprecated';
+import { RouteParams } from '@angular/router';
 
-import { Breadcrumb } from '../../../../ng_maw/src/app/shared';
+import { Breadcrumb } from '../../../../ng_maw/src/app/shared/breadcrumb.model';
 
-import { PhotoStateService, PhotoNavigationService, ModeRouteInfo, RouteMode } from '../shared';
+import { PhotoStateService } from '../shared/photo-state.service';
+import { PhotoNavigationService } from '../shared/photo-navigation.service';
+import { ModeRouteInfo } from '../shared/mode-route-info.model';
+import { RouteMode } from '../shared/route-mode.model';
 
 @Component({
     moduleId: module.id,
     selector: 'app-mode',
-    directives: [NgFor],
+    directives: [ NgFor ],
     templateUrl: 'mode.component.html',
-    styleUrls: ['mode.component.css']
+    styleUrls: [ 'mode.component.css' ]
 })
 export class ModeComponent implements OnInit {
     private _mode: RouteMode = null;

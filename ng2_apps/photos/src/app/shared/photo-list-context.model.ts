@@ -1,6 +1,8 @@
 import { EventEmitter } from '@angular/core';
 
-import { Photo, PhotoStateService, RouteMode } from './';
+import { Photo } from './photo.model';
+import { PhotoStateService } from './photo-state.service';
+import { RouteMode } from './route-mode.model'; 
 
 export class PhotoListContext {
     private _lastGpsIndex: number = null;

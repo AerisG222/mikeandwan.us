@@ -1,4 +1,4 @@
-import { IPhotoInfo } from './';
+import { IPhotoInfo } from './iphoto-info.model';
 
 export interface ICategory {
     id: number;

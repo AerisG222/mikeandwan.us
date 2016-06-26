@@ -2,28 +2,46 @@
 import { Component, Input, ChangeDetectorRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { NgIf, NgClass, NgStyle } from '@angular/common';
 
-import { ResponsiveService } from '../../../../ng_maw/src/app/shared';
+import { ResponsiveService } from '../../../../ng_maw/src/app/shared/responsive.service';
 
-import { PhotoStateService, PhotoNavigationService, IPhoto, ICategory, PhotoListContext, FilterSettings,
-    ContainerBox, IPhotoInfo, PhotoViewTool } from '../shared';
-import { HelpDialogComponent } from '../help-dialog';
-import { CommentViewComponent } from '../comment-view';
-import { RatingViewComponent } from '../rating-view';
-import { ExifViewComponent } from '../exif-view';
-import { EffectsViewComponent } from '../effects-view';
-import { FullscreenViewComponent } from '../fullscreen-view';
-import { CategoryLinkComponent } from '../category-link';
-import { SaveDialogComponent } from '../save-dialog';
-import { SlideshowButtonComponent } from '../slideshow-button';
+import { PhotoNavigationService } from '../shared/photo-navigation.service';
+import { PhotoStateService } from '../shared/photo-state.service';
+import { IPhoto } from '../shared/iphoto.model';
+import { ICategory } from '../shared/icategory.model';
+import { PhotoListContext } from '../shared/photo-list-context.model';
+import { FilterSettings } from '../shared/filter-settings.model';
+import { ContainerBox } from '../shared/container-box.model';
+import { IPhotoInfo } from '../shared/iphoto-info.model';
+import { PhotoViewTool } from '../shared/photo-view-tool.model';
+import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
+import { CommentViewComponent } from '../comment-view/comment-view.component';
+import { RatingViewComponent } from '../rating-view/rating-view.component';
+import { ExifViewComponent } from '../exif-view/exif-view.component';
+import { EffectsViewComponent } from '../effects-view/effects-view.component';
+import { FullscreenViewComponent } from '../fullscreen-view/fullscreen-view.component';
+import { CategoryLinkComponent } from '../category-link/category-link.component';
+import { SaveDialogComponent } from '../save-dialog/save-dialog.component';
+import { SlideshowButtonComponent } from '../slideshow-button/slideshow-button.component';
 
 @Component({
     moduleId: module.id,
     selector: 'app-photo-view',
-    directives: [NgIf, NgClass, NgStyle, HelpDialogComponent, CommentViewComponent, RatingViewComponent, ExifViewComponent,
-        EffectsViewComponent, FullscreenViewComponent, CategoryLinkComponent, SaveDialogComponent,
-        SlideshowButtonComponent],
+    directives: [ 
+        NgIf, 
+        NgClass, 
+        NgStyle, 
+        HelpDialogComponent, 
+        CommentViewComponent, 
+        RatingViewComponent, 
+        ExifViewComponent,
+        EffectsViewComponent, 
+        FullscreenViewComponent, 
+        CategoryLinkComponent, 
+        SaveDialogComponent,
+        SlideshowButtonComponent 
+    ],
     templateUrl: 'photo-view.component.html',
-    styleUrls: ['photo-view.component.css']
+    styleUrls: [ 'photo-view.component.css' ]
 })
 export class PhotoViewComponent implements AfterViewInit {
     private _containerBox: ContainerBox = null;

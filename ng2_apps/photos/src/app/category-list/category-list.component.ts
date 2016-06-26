@@ -1,18 +1,18 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { RouteParams } from '@angular/router-deprecated';
+import { RouteParams } from '@angular/router';
 
-import { PagerComponent } from '../../../../ng_maw/src/app/pager';
-import { ThumbnailListComponent } from '../../../../ng_maw/src/app/thumbnail-list';
-import { SelectedThumbnail } from '../../../../ng_maw/src/app/thumbnail-list';
+import { PagerComponent } from '../../../../ng_maw/src/app/pager/pager.component';
+import { ThumbnailListComponent } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-list.component';
+import { SelectedThumbnail } from '../../../../ng_maw/src/app/thumbnail-list/selected-thumbnail.model';
 
 import { Config, ModeRouteInfo, PhotoNavigationService, PhotoStateService, CategoryThumbnailInfo } from '../shared';
 
 @Component({
     moduleId: module.id,
     selector: 'app-category-list',
-    directives: [PagerComponent, ThumbnailListComponent],
+    directives: [ PagerComponent, ThumbnailListComponent ],
     templateUrl: 'category-list.component.html',
-    styleUrls: ['category-list.component.css']
+    styleUrls: [ 'category-list.component.css' ]
 })
 export class CategoryListComponent implements AfterViewInit {
     @ViewChild(PagerComponent) pager: PagerComponent;

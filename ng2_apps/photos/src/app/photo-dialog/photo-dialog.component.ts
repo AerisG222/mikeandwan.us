@@ -1,16 +1,17 @@
 import { Component, Input, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 
-import { DialogComponent, DialogButton } from '../../../../ng_maw/src/app/dialog';
+import { DialogComponent } from '../../../../ng_maw/src/app/dialog/dialog.component';
+import { DialogButton } from '../../../../ng_maw/src/app/dialog/dialog-button.model';
 import { ResponsiveService } from '../../../../ng_maw/src/app/shared';
 
-import { IPhoto } from '../shared';
+import { IPhoto } from '../shared/iphoto.model';
 
 @Component({
     moduleId: module.id,
     selector: 'app-photo-dialog',
-    directives: [DialogComponent],
+    directives: [ DialogComponent ],
     templateUrl: 'photo-dialog.component.html',
-    styleUrls: ['photo-dialog.component.css']
+    styleUrls: [ 'photo-dialog.component.css' ]
 })
 export class PhotoDialogComponent implements AfterViewInit {
     @ViewChild(DialogComponent) dialog: DialogComponent;

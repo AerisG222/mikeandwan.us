@@ -1,7 +1,10 @@
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 
-import { PhotoSource, PhotoDataService, Photo, IPhotoAndCategory } from './';
+import { PhotoSource } from './photo-source.model';
+import { PhotoDataService } from './photo-data.service';
+import { Photo } from './photo.model';
+import { IPhotoAndCategory } from './iphoto-and-category.model';
 
 export class RatingPhotoSource extends PhotoSource {
     constructor(_dataService: PhotoDataService,

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { Photo, PhotoDataService } from './';
+import { Photo } from './photo.model';
+import { PhotoDataService } from './photo-data.service';
 
 @Injectable()
 export abstract class PhotoSource {

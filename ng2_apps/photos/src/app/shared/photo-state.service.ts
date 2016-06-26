@@ -1,8 +1,9 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { LocalStorageService, ResponsiveService } from '../../../../ng_maw/src/app/shared';
+import { LocalStorageService } from '../../../../ng_maw/src/app/shared/local-storage.service';
+import { ResponsiveService } from '../../../../ng_maw/src/app/shared/responsive.service';
 
-import { Config } from './';
+import { Config } from './config.model';
 
 @Injectable()
 export class PhotoStateService {

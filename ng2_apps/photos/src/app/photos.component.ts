@@ -1,30 +1,17 @@
 import { Component, ViewChild } from '@angular/core';
-import { RouterOutlet, RouteConfig } from '@angular/router-deprecated';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 
-import { HeaderComponent } from './header';
-import { ModeComponent } from './mode';
-import { CategoryListComponent } from './category-list';
-import { PhotoListComponent } from './photo-list';
-import { PreferenceDialogComponent } from './preference-dialog';
-import { PhotoStateService, ModeRouteInfo, RouteMode } from './shared';
+import { HeaderComponent } from './header/header.component';
+import { PreferenceDialogComponent } from './preference-dialog/preference-dialog.component';
+import { PhotoStateService } from './shared/photo-state.service';
 
 @Component({
     moduleId: module.id,
     selector: 'photos-app',
-    directives: [RouterOutlet, HeaderComponent, PreferenceDialogComponent],
+    directives: [ ROUTER_DIRECTIVES, HeaderComponent, PreferenceDialogComponent ],
     templateUrl: 'photos.component.html',
-    styleUrls: ['photos.component.css']
+    styleUrls: [ 'photos.component.css' ]
 })
-@RouteConfig([
-    { path: '/',                     name: 'Mode',         component: ModeComponent },
-    { path: '/random',               name: 'PhotoList',    component: PhotoListComponent, data: new ModeRouteInfo(RouteMode.Random) },
-    { path: '/year/:year',           name: 'CategoryList', component: CategoryListComponent },
-    { path: '/year/:year/:category', name: 'PhotoList',    component: PhotoListComponent, data: new ModeRouteInfo(RouteMode.Category) },
-    { path: '/comment/:type/:order', name: 'PhotoList',    component: PhotoListComponent, data: new ModeRouteInfo(RouteMode.Comment) },
-    { path: '/rating/:type/:order',  name: 'PhotoList',    component: PhotoListComponent, data: new ModeRouteInfo(RouteMode.Rating) },
-    { path: '/:mode',                name: 'Mode',         component: ModeComponent }
-])
-// TODO: add otherwise route config item
 export class PhotosAppComponent {
     @ViewChild(PreferenceDialogComponent) private _prefsDialog: PreferenceDialogComponent;
 

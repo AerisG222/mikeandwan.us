@@ -1,11 +1,14 @@
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { Injectable } from '@angular/core';
-import { Router, Instruction } from '@angular/router-deprecated';
+import { Router, Instruction } from '@angular/router';
 
-import { BreadcrumbService, Breadcrumb } from '../../../../ng_maw/src/app/shared';
+import { BreadcrumbService } from '../../../../ng_maw/src/app/shared/breadcrumb.service';
+import { Breadcrumb } from '../../../../ng_maw/src/app/shared/breadcrumb.model';
 
-import { PhotoDataService, CategoryBreadcrumb, RouteMode } from './';
+import { PhotoDataService } from './photo-data.service';
+import { CategoryBreadcrumb } from './category-breadcrumb.model';
+import { RouteMode } from './route-mode.model';
 
 @Injectable()
 export class PhotoNavigationService {

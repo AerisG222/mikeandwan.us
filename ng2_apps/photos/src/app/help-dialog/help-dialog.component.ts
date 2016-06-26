@@ -1,14 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgIf } from '@angular/common';
 
-import { DialogComponent } from '../../../../ng_maw/src/app/dialog';
+import { DialogComponent } from '../../../../ng_maw/src/app/dialog/dialog.component';
 
 @Component({
     moduleId: module.id,
     selector: 'app-help-dialog',
-    directives: [NgIf, DialogComponent],
+    directives: [ NgIf, DialogComponent ],
     templateUrl: 'help-dialog.component.html',
-    styleUrls: ['help-dialog.component.css']
+    styleUrls: [ 'help-dialog.component.css' ]
 })
 export class HelpDialogComponent {
     @ViewChild(DialogComponent) dialog: DialogComponent;

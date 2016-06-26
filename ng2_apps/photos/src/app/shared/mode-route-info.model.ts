@@ -1,4 +1,4 @@
-import { RouteMode } from './';
+import { RouteMode } from './route-mode.model';
 
 export class ModeRouteInfo {
     static get PARAM_YEAR(): string { return 'year'; };

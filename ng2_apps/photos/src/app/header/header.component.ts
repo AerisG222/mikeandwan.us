@@ -1,17 +1,19 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 
-import { BreadcrumbListComponent } from '../../../../ng_maw/src/app/breadcrumb-list';
-import { Breadcrumb } from '../../../../ng_maw/src/app/shared';
+import { BreadcrumbListComponent } from '../../../../ng_maw/src/app/breadcrumb-list/breadcrumb-list.component';
+import { Breadcrumb } from '../../../../ng_maw/src/app/shared/breadcrumb.model';
 
-import { PhotoNavigationService, PhotoStateService, CategoryBreadcrumb } from '../shared';
+import { PhotoNavigationService } from '../shared/photo-navigation.service';
+import { PhotoStateService } from '../shared/photo-state.service';
+import { CategoryBreadcrumb } from '../shared/category-breadcrumb.model';
 
 @Component({
     moduleId: module.id,
     selector: 'app-header',
-    directives: [BreadcrumbListComponent, NgIf],
+    directives: [ BreadcrumbListComponent, NgIf ],
     templateUrl: 'header.component.html',
-    styleUrls: ['header.component.css']
+    styleUrls: [ 'header.component.css' ]
 })
 export class HeaderComponent implements AfterViewInit {
     @ViewChild(BreadcrumbListComponent) breadcrumbList: BreadcrumbListComponent;

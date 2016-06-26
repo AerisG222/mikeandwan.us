@@ -1,15 +1,16 @@
 import { Component, Input, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 
-import { DialogComponent, DialogButton } from '../../../../ng_maw/src/app/dialog';
+import { DialogComponent } from '../../../../ng_maw/src/app/dialog/dialog.component';
+import { DialogButton } from '../../../../ng_maw/src/app/dialog/dialog-button.model';
 
-import { IPhotoInfo } from '../shared';
+import { IPhotoInfo } from '../shared/iphoto-info.model';
 
 @Component({
     moduleId: module.id,
     selector: 'app-save-dialog',
-    directives: [DialogComponent],
+    directives: [ DialogComponent ],
     templateUrl: 'save-dialog.component.html',
-    styleUrls: ['save-dialog.component.css']
+    styleUrls: [ 'save-dialog.component.css' ]
 })
 export class SaveDialogComponent implements AfterViewInit {
     @ViewChild(DialogComponent) dialog: DialogComponent;

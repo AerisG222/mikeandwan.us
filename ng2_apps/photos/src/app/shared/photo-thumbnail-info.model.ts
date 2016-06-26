@@ -1,6 +1,6 @@
-import { ThumbnailInfo } from '../../../../ng_maw/src/app/thumbnail-list';
+import { ThumbnailInfo } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-info.model';
 
-import { Photo } from './';
+import { Photo } from './photo.model';
 
 export class PhotoThumbnailInfo extends ThumbnailInfo {
     constructor(imageUrl: string,

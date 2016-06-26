@@ -1,14 +1,17 @@
 import { Component, Input } from '@angular/core';
 import { NgFor } from '@angular/common';
 
-import { PhotoDataService, ExifDetail, ExifFormatter, Photo } from '../shared';
+import { PhotoDataService } from '../shared/photo-data.service';
+import { ExifDetail } from '../shared/exif-detail.model';
+import { ExifFormatter } from '../shared/exif-formatter.model';
+import { Photo } from '../shared/photo.model';
 
 @Component({
     moduleId: module.id,
     selector: 'app-exif-view',
-    directives: [NgFor],
+    directives: [ NgFor ],
     templateUrl: 'exif-view.component.html',
-    styleUrls: ['exif-view.component.css']
+    styleUrls: [ 'exif-view.component.css' ]
 })
 export class ExifViewComponent {
     private _photo: Photo;

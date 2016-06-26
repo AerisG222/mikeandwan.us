@@ -1,8 +1,8 @@
-import { Instruction } from '@angular/router-deprecated';
+import { Instruction } from '@angular/router';
 
-import { Breadcrumb } from '../../../../ng_maw/src/app/shared';
+import { Breadcrumb } from '../../../../ng_maw/src/app/shared/breadcrumb.model';
 
-import { ICategory } from './';
+import { ICategory } from './icategory.model';
 
 export class CategoryBreadcrumb extends Breadcrumb {
     constructor(title: string,

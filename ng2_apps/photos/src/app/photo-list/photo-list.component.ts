@@ -1,22 +1,33 @@
 import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { RouteData, RouteParams } from '@angular/router-deprecated';
+import { RouteData, RouteParams } from '@angular/router';
 
-import { PagerComponent } from '../../../../ng_maw/src/app/pager';
-import { ThumbnailListComponent, SelectedThumbnail } from '../../../../ng_maw/src/app/thumbnail-list';
+import { PagerComponent } from '../../../../ng_maw/src/app/pager/pager.component';
+import { ThumbnailListComponent } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-list.component';
+import { SelectedThumbnail } from '../../../../ng_maw/src/app/thumbnail-list/selected-thumbnail.model';
 import { ResponsiveService } from '../../../../ng_maw/src/app/shared';
 
-import { Config, ModeRouteInfo, PhotoStateService, PhotoDataService, PhotoThumbnailInfo, PhotoSource, PhotoSourceFactory, PhotoListContext, RouteMode, RandomPhotoListContext, Photo } from '../shared';
-import { PhotoViewComponent } from '../photo-view';
-import { MapViewComponent } from '../map-view';
-import { PhotoDialogComponent } from '../photo-dialog';
+import { Config } from '../shared/config.model';
+import { ModeRouteInfo } from '../shared/mode-route-info.model';
+import { PhotoStateService } from '../shared/photo-state.service';
+import { PhotoDataService } from '../shared/photo-data.service';
+import { PhotoThumbnailInfo } from '../shared/photo-thumbnail-info.model';
+import { PhotoSource } from '../shared/photo-source.model';
+import { PhotoSourceFactory } from '../shared/photo-source-factory.model';
+import { PhotoListContext } from '../shared/photo-list-context.model';
+import { RouteMode } from '../shared/route-mode.model';
+import { RandomPhotoListContext } from '../shared/random-photo-list-context.model';
+import { Photo } from '../shared/photo.model';
+import { PhotoViewComponent } from '../photo-view/photo-view.component';
+import { MapViewComponent } from '../map-view/map-view.component';
+import { PhotoDialogComponent } from '../photo-dialog/photo-dialog.component';
 
 @Component({
     moduleId: module.id,
     selector: 'app-photo-list',
-    directives: [NgIf, PagerComponent, ThumbnailListComponent, PhotoViewComponent, MapViewComponent, PhotoDialogComponent],
+    directives: [ NgIf, PagerComponent, ThumbnailListComponent, PhotoViewComponent, MapViewComponent, PhotoDialogComponent ],
     templateUrl: 'photo-list.component.html',
-    styleUrls: ['photo-list.component.css']
+    styleUrls: [ 'photo-list.component.css' ]
 })
 export class PhotoListComponent implements AfterViewInit, OnDestroy {
     @ViewChild(PagerComponent) pager: PagerComponent;

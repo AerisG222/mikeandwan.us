@@ -1,14 +1,16 @@
 import { Component, Input, ElementRef, ChangeDetectorRef, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 
-import { Photo, IPhoto, PhotoListContext } from '../shared';
+import { Photo } from '../shared/photo.model';
+import { IPhoto } from '../shared/iphoto.model';
+import { PhotoListContext } from '../shared/photo-list-context.model';
 
 @Component({
     moduleId: module.id,
     selector: 'app-map-view',
-    directives: [NgIf],
+    directives: [ NgIf ],
     templateUrl: 'map-view.component.html',
-    styleUrls: ['map-view.component.css']
+    styleUrls: [ 'map-view.component.css' ]
 })
 export class MapViewComponent implements OnInit, AfterViewInit {
     private _markerImage = {

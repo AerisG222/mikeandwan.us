@@ -3,7 +3,12 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 
-import { ICategory, IPhoto, IExifDetail, IRating, IComment, IPhotoAndCategory } from './';
+import { ICategory } from './icategory.model';
+import { IPhoto } from './iphoto.model';
+import { IExifDetail } from './iexif-detail.model';
+import { IRating } from './irating.model';
+import { IComment } from './icomment.model';
+import { IPhotoAndCategory } from './iphoto-and-category.model';
 
 @Injectable()
 export class PhotoDataService {

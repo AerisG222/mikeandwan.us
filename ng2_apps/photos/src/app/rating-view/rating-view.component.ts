@@ -1,15 +1,16 @@
 import { Component, Input } from '@angular/core';
 
-import { RatingComponent } from '../../../../ng_maw/src/app/rating';
+import { RatingComponent } from '../../../../ng_maw/src/app/rating/rating.component';
 
-import { IPhoto, PhotoDataService } from '../shared';
+import { IPhoto } from '../shared/iphoto.model';
+import { PhotoDataService } from '../shared/photo-data.service';
 
-@Component({
+@Component({ 
     moduleId: module.id,
     selector: 'app-rating-view',
-    directives: [RatingComponent],
+    directives: [ RatingComponent ],
     templateUrl: 'rating-view.component.html',
-    styleUrls: ['rating-view.component.css']
+    styleUrls: [ 'rating-view.component.css' ]
 })
 export class RatingViewComponent {
     averageRating = -1;

@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
-import { RouteData, RouteParams } from '@angular/router-deprecated';
+import { RouteData, RouteParams } from '@angular/router';
 
-import { ModeRouteInfo, PhotoDataService, PhotoSource, CategoryPhotoSource, CommentPhotoSource, RatingPhotoSource,
-    RandomPhotoSource, RouteMode } from './';
+import { ModeRouteInfo } from './mode-route-info.model';
+import { PhotoDataService } from './photo-data.service';
+import { PhotoSource } from './photo-source.model';
+import { CategoryPhotoSource } from './category-photo-source.model';
+import { CommentPhotoSource } from './comment-photo-source.model';
+import { RatingPhotoSource } from './rating-photo-source.model';
+import { RandomPhotoSource } from './random-photo-source.model';
+import { RouteMode } from './route-mode.model';
 
 @Injectable()
 export class PhotoSourceFactory {

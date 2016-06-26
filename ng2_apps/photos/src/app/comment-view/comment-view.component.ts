@@ -1,14 +1,16 @@
 import { Component, Input } from '@angular/core';
 import { NgFor } from '@angular/common';
 
-import { PhotoDataService, IComment, IPhoto } from '../shared';
+import { PhotoDataService } from '../shared/photo-data.service';
+import { IComment } from '../shared/icomment.model';
+import { IPhoto } from '../shared/iphoto.model';
 
 @Component({
     moduleId: module.id,
     selector: 'app-comment-view',
-    directives: [NgFor],
+    directives: [ NgFor ],
     templateUrl: 'comment-view.component.html',
-    styleUrls: ['comment-view.component.css']
+    styleUrls: [ 'comment-view.component.css' ]
 })
 export class CommentViewComponent {
     private _photo: IPhoto = null;

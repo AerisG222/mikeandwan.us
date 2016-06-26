@@ -1,13 +1,13 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { Router } from '@angular/router-deprecated';
+import { Router } from '@angular/router';
 
-import { StateService } from '../';
+import { StateService } from '../state.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-splash-screen',
     templateUrl: 'splash-screen.component.html',
-    styleUrls: ['splash-screen.component.css']
+    styleUrls: [ 'splash-screen.component.css' ]
 })
 export class SplashScreenComponent implements AfterViewInit {
     constructor(private _router: Router,

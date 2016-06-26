@@ -1,14 +1,14 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgFor, NgClass } from '@angular/common';
 
-import { Character } from '../';
+import { Character } from '../character.model';
 
 @Component({
     moduleId: module.id,
     selector: 'app-player-select',
-    directives: [NgFor, NgClass],
+    directives: [ NgFor, NgClass ],
     templateUrl: 'player-select.component.html',
-    styleUrls: ['player-select.component.css']
+    styleUrls: [ 'player-select.component.css' ]
 })
 export class PlayerSelectComponent {
     @Input() characters: Array<Character> = [];

@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 
-import { Character, StateService } from '../';
-import { PlayerSelectComponent } from '../player-select';
+import { Character } from '../character.model';
+import { StateService } from '../state.service';
+import { PlayerSelectComponent } from '../player-select/player-select.component';
 
 @Component({
     moduleId: module.id,
     selector: 'app-choose-player',
-    directives: [PlayerSelectComponent],
+    directives: [ PlayerSelectComponent ],
     templateUrl: 'choose-player.component.html',
-    styleUrls: ['choose-player.component.css']
+    styleUrls: [ 'choose-player.component.css' ]
 })
 export class ChoosePlayerComponent {
     player1characters: Array<Character>;

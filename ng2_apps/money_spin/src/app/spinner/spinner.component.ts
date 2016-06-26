@@ -1,12 +1,12 @@
 import { Component, ElementRef, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
 
-import { BoardSector } from '../';
+import { BoardSector } from '../board-sector.model';
 
 @Component({
     moduleId: module.id,
     selector: 'app-spinner',
     templateUrl: 'spinner.component.html',
-    styleUrls: ['spinner.component.css']
+    styleUrls: [ 'spinner.component.css' ]
 })
 export class SpinnerComponent implements OnInit, OnDestroy {
     private static SECTORS = [

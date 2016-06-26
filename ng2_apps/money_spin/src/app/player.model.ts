@@ -1,4 +1,4 @@
-import { Character } from './';
+import { Character } from './character.model';
 
 export class Player {
     private _score = 0;

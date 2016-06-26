@@ -1,3 +1,4 @@
+export * from './app.routes';
 export * from './board-sector.model';
 export * from './character.model';
 export * from './environment';

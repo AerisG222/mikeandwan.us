@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
     moduleId: module.id,
     selector: 'weekend-countdown-app',
     templateUrl: 'weekend-countdown.component.html',
-    styleUrls: ['weekend-countdown.component.css']
+    styleUrls: [ 'weekend-countdown.component.css' ]
 })
 export class WeekendCountdownAppComponent {
     intervalId: number = null;

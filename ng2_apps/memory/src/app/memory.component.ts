@@ -1,19 +1,14 @@
 import { Component } from '@angular/core';
-import { RouteConfig, RouterOutlet, ROUTER_PROVIDERS } from '@angular/router';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 
-import { PlayComponent } from './play';
-import { ChooseTurtleComponent } from './choose-turtle';
+import { MemoryService } from './memory.service';
 
-@RouteConfig([
-    { path: '/',     name: 'ChooseTurtle', component: ChooseTurtleComponent },
-    { path: '/play', name: 'Play',         component: PlayComponent }
-])
 @Component({
     moduleId: module.id,
     selector: 'memory-app',
-    directives: [RouterOutlet],
+    directives: [ ROUTER_DIRECTIVES ],
     templateUrl: 'memory.component.html',
-    styleUrls: ['memory.component.css']
+    styleUrls: [ 'memory.component.css' ]
 })
 export class MemoryAppComponent {
 

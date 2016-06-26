@@ -1,4 +1,4 @@
-import { ICharacter } from './';
+import { ICharacter } from './icharacter.model';
 
 export interface IPlayer {
     character: ICharacter;

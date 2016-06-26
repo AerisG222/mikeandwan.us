@@ -5,3 +5,4 @@ export * from './iplayer.model';
 export * from './iselected-card.model';
 export * from './memory.component';
 export * from './memory.service';
+export * from './app.routes';

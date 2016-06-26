@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { IPlayer } from '../';
+import { IPlayer } from '../iplayer.model';
 
 @Component({
     moduleId: module.id,
     selector: 'app-tie-screen',
     templateUrl: 'tie-screen.component.html',
-    styleUrls: ['tie-screen.component.css']
+    styleUrls: [ 'tie-screen.component.css' ]
 })
 export class TieScreenComponent {
     @Input() player1: IPlayer;

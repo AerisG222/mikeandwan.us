@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 
-import { ChooseTurtleGridComponent } from '../choose-turtle-grid';
-import { ICharacter, MemoryService } from '../';
+import { ChooseTurtleGridComponent } from '../choose-turtle-grid/choose-turtle-grid.component';
+import { ICharacter } from '../icharacter.model';
+import { MemoryService } from '../memory.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-choose-turtle',
-    directives: [ChooseTurtleGridComponent],
+    directives: [ ChooseTurtleGridComponent ],
     templateUrl: 'choose-turtle.component.html',
-    styleUrls: ['choose-turtle.component.css']
+    styleUrls: [ 'choose-turtle.component.css' ]
 })
 export class ChooseTurtleComponent {
     private _character1: ICharacter = null;

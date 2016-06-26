@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { IPlayer } from '../';
+import { IPlayer } from '../iplayer.model';
 
 @Component({
     moduleId: module.id,
     selector: 'app-winner-screen',
     templateUrl: 'winner-screen.component.html',
-    styleUrls: ['winner-screen.component.css']
+    styleUrls: [ 'winner-screen.component.css' ]
 })
 export class WinnerScreenComponent {
     @Input() player: IPlayer;

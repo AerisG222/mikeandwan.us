@@ -2,14 +2,16 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { NgFor, NgClass } from '@angular/common';
 
 import { CardComponent } from '../card/card.component';
-import { ICardInfo, ISelectedCards, MemoryService } from '../';
+import { ICardInfo } from '../icard-info.model';
+import { ISelectedCards } from '../iselected-card.model';
+import { MemoryService } from '../memory.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-game-board',
-    directives: [CardComponent, NgClass, NgFor],
+    directives: [ CardComponent, NgClass, NgFor ],
     templateUrl: 'game-board.component.html',
-    styleUrls: ['game-board.component.css']
+    styleUrls: [ 'game-board.component.css' ]
 })
 export class GameBoardComponent {
     private static CARDS_IN_GAME: number = 20;

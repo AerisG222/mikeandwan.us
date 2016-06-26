@@ -1,14 +1,14 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgClass } from '@angular/common';
 
-import { ICardInfo } from '../';
+import { ICardInfo } from '../icard-info.model';
 
 @Component({
     moduleId: module.id,
     selector: 'app-card',
-    directives: [NgClass],
+    directives: [ NgClass ],
     templateUrl: 'card.component.html',
-    styleUrls: ['card.component.css']
+    styleUrls: [ 'card.component.css' ]
 })
 export class CardComponent {
     private _isFlipped: boolean = false;

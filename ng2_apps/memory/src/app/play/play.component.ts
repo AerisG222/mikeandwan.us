@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 
-import { GameBoardComponent } from '../game-board';
-import { WinnerScreenComponent } from '../winner-screen';
-import { TieScreenComponent } from '../tie-screen';
-import { TurtleScoreComponent } from '../turtle-score';
-import { IPlayer, MemoryService } from "../";
+import { GameBoardComponent } from '../game-board/game-board.component';
+import { WinnerScreenComponent } from '../winner-screen/winner-screen.component';
+import { TieScreenComponent } from '../tie-screen/tie-screen.component';
+import { TurtleScoreComponent } from '../turtle-score/turtle-score.component';
+import { IPlayer } from "../iplayer.model";
+import { MemoryService } from '../memory.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-play',
-    directives: [GameBoardComponent, WinnerScreenComponent, TieScreenComponent, TurtleScoreComponent, NgIf],
+    directives: [ GameBoardComponent, WinnerScreenComponent, TieScreenComponent, TurtleScoreComponent, NgIf ],
     templateUrl: 'play.component.html',
-    styleUrls: ['play.component.css']
+    styleUrls: [ 'play.component.css' ]
 })
 export class PlayComponent implements OnInit {
     private _activePlayer: IPlayer = null;

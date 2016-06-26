@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 
-import { Result } from './';
+import { Result } from './result.model';
 
 @Component({
     moduleId: module.id,
     selector: 'filesize-app',
-    directives: [NgFor, NgIf],
+    directives: [ NgFor, NgIf ],
     templateUrl: 'filesize.component.html',
-    styleUrls: ['filesize.component.css']
+    styleUrls: [ 'filesize.component.css' ]
 })
 export class FilesizeAppComponent {
     results: Result[] = null;

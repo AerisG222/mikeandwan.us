@@ -1,10 +1,11 @@
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from '@angular/core';
-import { FilesizeAppComponent, environment } from './app/';
+
+import { FilesizeAppComponent } from './app/filesize.component';
+import { environment } from './app/environment';
 
 if (environment.production) {
     enableProdMode();
 }
 
-bootstrap(FilesizeAppComponent);
-
+bootstrap(FilesizeAppComponent).catch(err => console.error(err));

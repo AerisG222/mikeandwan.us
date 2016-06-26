@@ -1,14 +1,14 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NgFor } from '@angular/common';
 
-import { AudioSource } from './';
+import { AudioSource } from './audio-source.model';
 
 @Component({
     moduleId: module.id,
     selector: 'learning-app',
-    directives: [NgFor],
+    directives: [ NgFor ],
     templateUrl: 'learning.component.html',
-    styleUrls: ['learning.component.css']
+    styleUrls: [ 'learning.component.css' ]
 })
 export class LearningAppComponent {
     letters: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];

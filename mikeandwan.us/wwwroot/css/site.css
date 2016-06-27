@@ -30,11 +30,6 @@ footer { margin-top: 80px; background: none repeat scroll 0 0 #1c1e22; padding: 
 .copyright { margin-top: 24px; }
 .social a { font-size: 36px; margin: 0 12px; }
 
-.binclock { margin: 16px auto; border-collapse: separate; border-spacing: 4px; width: auto; }
-.binclock td { margin: 4px; }
-.binclock .bc_on, .binclock .bc_off { width: 24px; height: 24px; border: 2px solid #ccc; }
-.binclock .bc_on { background-color: #ccc; }
-
 .map { height: 460px; margin-bottom: 15px; }
 
 /* adblock plus apparently is stripping out font-awesome icons for social sites, add them here with custom names to avoid this */

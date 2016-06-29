@@ -1,6 +1,6 @@
 import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { RouteData, RouteParams } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { PagerComponent } from '../../../../ng_maw/src/app/pager/pager.component';
 import { ThumbnailListComponent } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-list.component';
@@ -24,7 +24,7 @@ import { PhotoDialogComponent } from '../photo-dialog/photo-dialog.component';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-photo-list',
+    selector: 'photo-list',
     directives: [ NgIf, PagerComponent, ThumbnailListComponent, PhotoViewComponent, MapViewComponent, PhotoDialogComponent ],
     templateUrl: 'photo-list.component.html',
     styleUrls: [ 'photo-list.component.css' ]
@@ -40,13 +40,14 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
     context: PhotoListContext;
 
     constructor(private _dataService: PhotoDataService,
-        private _stateService: PhotoStateService,
-        private _responsiveService: ResponsiveService,
-        photoSourceFactory: PhotoSourceFactory,
-        routeParams: RouteParams,
-        routeData: RouteData) {
-        this._modeInfo = <ModeRouteInfo>routeData.data;
-        this._photoSource = photoSourceFactory.create(routeData, routeParams);
+                private _stateService: PhotoStateService,
+                private _responsiveService: ResponsiveService,
+                private _activatedRoute: ActivatedRoute,
+                photoSourceFactory: PhotoSourceFactory) {
+        console.error("TODO: figure out how to get routedata config passed to routes");
+        
+        //this._modeInfo = <ModeRouteInfo>routeData.data;
+        //this._photoSource = photoSourceFactory.create(routeData, routeParams);
         this.showPhotoView = _stateService.config.displayMode === Config.DISPLAY_MODE_INLINE;
     }
 

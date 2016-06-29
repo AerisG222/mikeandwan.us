@@ -40,7 +40,7 @@ export class StateService {
         this.player1 = null;
         this.player2 = null;
         this.currentPlayer = null;
-        this._router.navigate(['ChoosePlayer']);
+        this._router.navigate(['/choose']);
     }
 
     startGame(): void {
@@ -49,14 +49,14 @@ export class StateService {
 
         this.currentPlayer = this.player1;
 
-        this._router.navigate(['Play']);
+        this._router.navigate(['/play']);
     }
 
     evaluateTurn(dollarValue: number): boolean {
         this.currentPlayer.addDollarAmount(dollarValue);
 
         if (this.currentPlayer.score >= this._winningScore) {
-            this._router.navigate(['Winner']);
+            this._router.navigate(['/winner']);
             return true;
         }
 

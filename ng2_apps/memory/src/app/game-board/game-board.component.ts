@@ -8,7 +8,7 @@ import { MemoryService } from '../memory.service';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-game-board',
+    selector: 'game-board',
     directives: [ CardComponent, NgClass, NgFor ],
     templateUrl: 'game-board.component.html',
     styleUrls: [ 'game-board.component.css' ]

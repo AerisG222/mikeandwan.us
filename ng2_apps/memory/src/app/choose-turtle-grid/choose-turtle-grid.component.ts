@@ -6,7 +6,7 @@ import { MemoryService } from '../memory.service';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-choose-turtle-grid',
+    selector: 'choose-turtle-grid',
     directives: [ NgFor, NgClass ],
     templateUrl: 'choose-turtle-grid.component.html',
     styleUrls: [ 'choose-turtle-grid.component.css' ]

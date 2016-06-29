@@ -4,7 +4,7 @@ import { BoardSector } from '../board-sector.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-spinner',
+    selector: 'spinner',
     templateUrl: 'spinner.component.html',
     styleUrls: [ 'spinner.component.css' ]
 })

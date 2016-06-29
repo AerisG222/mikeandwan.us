@@ -5,7 +5,7 @@ import { StateService } from '../state.service';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-winner',
+    selector: 'winner',
     templateUrl: 'winner.component.html',
     styleUrls: [ 'winner.component.css' ]
 })

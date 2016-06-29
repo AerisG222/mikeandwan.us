@@ -25,7 +25,7 @@ import { SlideshowButtonComponent } from '../slideshow-button/slideshow-button.c
 
 @Component({
     moduleId: module.id,
-    selector: 'app-photo-view',
+    selector: 'photo-view',
     directives: [ 
         NgIf, 
         NgClass, 

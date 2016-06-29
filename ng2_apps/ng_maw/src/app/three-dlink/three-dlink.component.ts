@@ -3,7 +3,7 @@ import { NgStyle } from '@angular/common';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-three-dlink',
+    selector: 'three-dlink',
     directives: [ NgStyle ],
     templateUrl: 'three-dlink.component.html',
     styleUrls: [ 'three-dlink.component.css' ]

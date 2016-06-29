@@ -29,7 +29,7 @@ export class BreadcrumbService {
 
         this.notifyBreadcrumbChange();
 
-        return this._router.navigateByInstruction(dest.routerInstruction);
+        return this._router.navigate(dest.linkParamArray);
     }
 
     private notifyBreadcrumbChange(): void {

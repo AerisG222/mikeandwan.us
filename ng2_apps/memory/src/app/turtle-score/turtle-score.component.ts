@@ -5,7 +5,7 @@ import { IPlayer } from '../iplayer.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-turtle-score',
+    selector: 'turtle-score',
     directives: [ NgClass ],
     templateUrl: 'turtle-score.component.html',
     styleUrls: [ 'turtle-score.component.css' ]

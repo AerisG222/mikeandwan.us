@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, Instruction } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { BreadcrumbService } from '../../../../ng_maw/src/app/shared/breadcrumb.service';
 import { Breadcrumb } from '../../../../ng_maw/src/app/shared/breadcrumb.model';
@@ -10,28 +10,20 @@ import { ICategory } from './icategory.model';
 @Injectable()
 export class VideoNavigationService {
     constructor(private _router: Router,
-        private _navService: BreadcrumbService) {
+                private _navService: BreadcrumbService) {
 
     }
 
     gotoYearList(): void {
-        let ins = this._router.generate(['YearList']);
-
-        this.gotoDestination(ins, this.getRootBreadcrumbs());
+        this.gotoDestination([ '/year' ], this.getRootBreadcrumbs());
     }
 
     gotoCategoryList(year: number): void {
-        let ins = this._router.generate(['CategoryList', { year: year }]);
-        let bcs = this.getYearListBreadcrumbs(year);
-
-        this.gotoDestination(ins, bcs);
+        this.gotoDestination([ '/year', year ], this.getYearListBreadcrumbs(year));
     }
 
     gotoVideoList(year: number, category: ICategory): void {
-        let ins = this._router.generate(['VideoList', { year: year, category: category.id }]);
-        let bcs = this.getCategoryListBreadcrumbs(year, category);
-
-        this.gotoDestination(ins, bcs);
+        this.gotoDestination([ '/year', year, category.id ], this.getCategoryListBreadcrumbs(year, category));
     }
 
     private getRootBreadcrumbs(): Array<Breadcrumb> {
@@ -56,15 +48,15 @@ export class VideoNavigationService {
     }
 
     private getYearListBreadcrumb(year: number): Breadcrumb {
-        return new Breadcrumb(year.toString(), this._router.generate(['YearList']));
+        return new Breadcrumb(year.toString(), [ '/year' ]);
     }
 
     private getCategoryListBreadcrumb(year: number, category: ICategory): Breadcrumb {
-        return new Breadcrumb(category.name, this._router.generate(['CategoryList', { year: year }]));
+        return new Breadcrumb(category.name, [ '/year', year ]);
     }
 
-    private gotoDestination(instruction: Instruction, breadcrumbs: Array<Breadcrumb>): void {
-        this._router.navigateByInstruction(instruction).then(
+    private gotoDestination(linkParamArray: Array<any>, breadcrumbs: Array<Breadcrumb>): void {
+        this._router.navigate(linkParamArray).then(
             (data: any) => this._navService.setBreadcrumbs(breadcrumbs)
         );
     }

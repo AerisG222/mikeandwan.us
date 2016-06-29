@@ -7,7 +7,7 @@ import { IPhotoInfo } from '../shared/iphoto-info.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-save-dialog',
+    selector: 'save-dialog',
     directives: [ DialogComponent ],
     templateUrl: 'save-dialog.component.html',
     styleUrls: [ 'save-dialog.component.css' ]

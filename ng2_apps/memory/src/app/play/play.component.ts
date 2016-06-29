@@ -10,7 +10,7 @@ import { MemoryService } from '../memory.service';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-play',
+    selector: 'play',
     directives: [ GameBoardComponent, WinnerScreenComponent, TieScreenComponent, TurtleScoreComponent, NgIf ],
     templateUrl: 'play.component.html',
     styleUrls: [ 'play.component.css' ]

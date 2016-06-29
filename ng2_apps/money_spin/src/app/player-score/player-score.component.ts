@@ -5,7 +5,7 @@ import { Player } from '../player.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-player-score',
+    selector: 'player-score',
     directives: [ NgClass ],
     templateUrl: 'player-score.component.html',
     styleUrls: [ 'player-score.component.css' ]

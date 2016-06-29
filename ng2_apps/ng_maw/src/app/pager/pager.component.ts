@@ -10,7 +10,7 @@ import { ResponsiveService } from '../shared/responsive.service';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-pager',
+    selector: 'pager',
     directives: [ NgClass, NgIf, NgFor ],
     templateUrl: 'pager.component.html',
     styleUrls: [ 'pager.component.css' ]

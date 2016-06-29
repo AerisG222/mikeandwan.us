@@ -5,7 +5,7 @@ import { Character } from '../character.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-player-select',
+    selector: 'player-select',
     directives: [ NgFor, NgClass ],
     templateUrl: 'player-select.component.html',
     styleUrls: [ 'player-select.component.css' ]

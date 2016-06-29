@@ -10,7 +10,7 @@ import { CategoryBreadcrumb } from '../shared/category-breadcrumb.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-category-link',
+    selector: 'category-link',
     templateUrl: 'category-link.component.html',
     styleUrls: [ 'category-link.component.css' ]
 })
@@ -23,13 +23,13 @@ export class CategoryLinkComponent {
     }
 
     gotoYear(cat: ICategory): void {
-        let b = new Breadcrumb(cat.year.toString(), this._router.generate(['CategoryList', { year: cat.year }]));
+        let b = new Breadcrumb(cat.year.toString(), [ '/year', cat.year ]);
 
         this._navService.gotoSpecificMode(b, RouteMode.Category);
     }
 
     gotoCategory(cat: ICategory): void {
-        let b = new CategoryBreadcrumb(cat.name, this._router.generate(['CategoryPhotoList', { year: cat.year, category: cat.id }]), cat);
+        let b = new CategoryBreadcrumb(cat.name, [ '/year', cat.year, cat.id ], cat);
 
         this._navService.gotoCategoryPhotoList(b);
     }

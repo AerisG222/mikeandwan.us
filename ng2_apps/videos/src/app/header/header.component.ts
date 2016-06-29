@@ -7,7 +7,7 @@ import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-header',
+    selector: 'header',
     directives: [ NgFor, BreadcrumbListComponent ],
     templateUrl: 'header.component.html',
     styleUrls: [ 'header.component.css' ]

@@ -6,7 +6,7 @@ import { PlayerSelectComponent } from '../player-select/player-select.component'
 
 @Component({
     moduleId: module.id,
-    selector: 'app-choose-player',
+    selector: 'choose-player',
     directives: [ PlayerSelectComponent ],
     templateUrl: 'choose-player.component.html',
     styleUrls: [ 'choose-player.component.css' ]

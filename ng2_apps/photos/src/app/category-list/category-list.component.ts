@@ -1,5 +1,5 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { RouteParams } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { PagerComponent } from '../../../../ng_maw/src/app/pager/pager.component';
 import { ThumbnailListComponent } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-list.component';
@@ -9,7 +9,7 @@ import { Config, ModeRouteInfo, PhotoNavigationService, PhotoStateService, Categ
 
 @Component({
     moduleId: module.id,
-    selector: 'app-category-list',
+    selector: 'category-list',
     directives: [ PagerComponent, ThumbnailListComponent ],
     templateUrl: 'category-list.component.html',
     styleUrls: [ 'category-list.component.css' ]
@@ -19,44 +19,48 @@ export class CategoryListComponent implements AfterViewInit {
     @ViewChild(ThumbnailListComponent) thumbnailList: ThumbnailListComponent;
     private _year: number = null;
 
-    constructor(routeParams: RouteParams,
-        private _stateService: PhotoStateService,
-        private _navService: PhotoNavigationService) {
-        this._year = parseInt(routeParams.get(ModeRouteInfo.PARAM_YEAR), 10);
+    constructor(private _stateService: PhotoStateService,
+                private _navService: PhotoNavigationService,
+                private _activatedRoute: ActivatedRoute) {
+        
     }
 
     ngAfterViewInit() {
-        this.thumbnailList.setRowCountPerPage(this._stateService.config.rowsPerPage);
+        this._activatedRoute.params.subscribe(params => {
+            this._year = parseInt(params[ModeRouteInfo.PARAM_YEAR], 10);
 
-        this.thumbnailList.itemsPerPageUpdated.subscribe((x: any) => {
-            this.updatePager();
-        });
+            this.thumbnailList.setRowCountPerPage(this._stateService.config.rowsPerPage);
 
-        this._stateService.configUpdatedEventEmitter.subscribe((config: Config) => {
-            this.onConfigChange(config);
-        });
-
-        this._navService.getCategoryDestinations(this._year)
-            .subscribe(destinations => {
-                let d = destinations.map(x => new CategoryThumbnailInfo(x.category.teaserPhotoInfo.path,
-                    x.category.teaserPhotoInfo.height,
-                    x.category.teaserPhotoInfo.width,
-                    x,
-                    x.category.name,
-                    x.category.hasGpsData ? 'fa-map-marker' : null));
-
-                this.thumbnailList.setItemList(d);
-                this.pager.setPageCount(this.pager.calcPageCount(d.length, this.thumbnailList.itemsPerPage));
-
-                let lastIndex = this._stateService.lastCategoryIndex;
-
-                if (lastIndex > 0) {
-                    let page = Math.floor(lastIndex / this.thumbnailList.itemsPerPage);
-
-                    this.thumbnailList.setPageDisplayedIndex(page);
-                    this.pager.setActivePage(page);
-                }
+            this.thumbnailList.itemsPerPageUpdated.subscribe((x: any) => {
+                this.updatePager();
             });
+
+            this._stateService.configUpdatedEventEmitter.subscribe((config: Config) => {
+                this.onConfigChange(config);
+            });
+
+            this._navService.getCategoryDestinations(this._year)
+                .subscribe(destinations => {
+                    let d = destinations.map(x => new CategoryThumbnailInfo(x.category.teaserPhotoInfo.path,
+                        x.category.teaserPhotoInfo.height,
+                        x.category.teaserPhotoInfo.width,
+                        x,
+                        x.category.name,
+                        x.category.hasGpsData ? 'fa-map-marker' : null));
+
+                    this.thumbnailList.setItemList(d);
+                    this.pager.setPageCount(this.pager.calcPageCount(d.length, this.thumbnailList.itemsPerPage));
+
+                    let lastIndex = this._stateService.lastCategoryIndex;
+
+                    if (lastIndex > 0) {
+                        let page = Math.floor(lastIndex / this.thumbnailList.itemsPerPage);
+
+                        this.thumbnailList.setPageDisplayedIndex(page);
+                        this.pager.setActivePage(page);
+                    }
+                });
+        });
     }
 
     onChangePage(pageIndex: number) {

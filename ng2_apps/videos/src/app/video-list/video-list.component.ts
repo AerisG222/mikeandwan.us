@@ -1,6 +1,6 @@
 import { Component, ViewChild, ChangeDetectorRef, AfterViewInit, OnInit } from '@angular/core';
 import { NgIf, NgStyle } from '@angular/common';
-import { RouteParams } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { PagerComponent } from '../../../../ng_maw/src/app/pager/pager.component';
 import { ThumbnailListComponent } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-list.component';
@@ -15,12 +15,12 @@ import { VideoThumbnailInfo } from '../shared/video-thumbnail-info.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-video-list',
+    selector: 'video-list',
     directives: [ NgIf, NgStyle, PagerComponent, ThumbnailListComponent ],
     templateUrl: 'video-list.component.html',
     styleUrls: [ 'video-list.component.css' ]
 })
-export class VideoListComponent implements OnInit {
+export class VideoListComponent implements OnInit, AfterViewInit {
     @ViewChild(PagerComponent) pager: PagerComponent;
     @ViewChild(ThumbnailListComponent) thumbnailList: ThumbnailListComponent;
     categoryId: number = null;
@@ -33,9 +33,8 @@ export class VideoListComponent implements OnInit {
         private _videoDataService: VideoDataService,
         private _videoStateService: VideoStateService,
         private _changeDetectionRef: ChangeDetectorRef,
-        params: RouteParams) {
-        this.year = parseInt(params.get('year'), 10);
-        this.categoryId = parseInt(params.get('category'), 10);
+        private _activatedRoute: ActivatedRoute) {
+        
     }
 
     ngOnInit(): void {
@@ -45,19 +44,24 @@ export class VideoListComponent implements OnInit {
     }
 
     ngAfterViewInit(): void {
-        this.thumbnailList.setRowCountPerPage(2);
+        this._activatedRoute.params.subscribe(params => {
+            this.year = parseInt(params['year'], 10);
+            this.categoryId = parseInt(params['category'], 10);
 
-        this.thumbnailList.itemsPerPageUpdated.subscribe((x: any) => {
-            this.updatePager();
+            this.thumbnailList.setRowCountPerPage(2);
+
+            this.thumbnailList.itemsPerPageUpdated.subscribe((x: any) => {
+                this.updatePager();
+            });
+
+            this._changeDetectionRef.detectChanges();
+
+            this._videoDataService.getVideosForCategory(this.categoryId)
+                .subscribe(
+                    (data: Array<IVideo>) => this.setVideos(data),
+                    (err: any) => console.error("there was an error: " + err)
+                );
         });
-
-        this._changeDetectionRef.detectChanges();
-
-        this._videoDataService.getVideosForCategory(this.categoryId)
-            .subscribe(
-            (data: Array<IVideo>) => this.setVideos(data),
-            (err: any) => console.error("there was an error: " + err)
-            );
     }
 
     onChangePage(pageIndex: number): void {

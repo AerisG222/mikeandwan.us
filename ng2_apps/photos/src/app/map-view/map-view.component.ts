@@ -7,7 +7,7 @@ import { PhotoListContext } from '../shared/photo-list-context.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-map-view',
+    selector: 'map-view',
     directives: [ NgIf ],
     templateUrl: 'map-view.component.html',
     styleUrls: [ 'map-view.component.css' ]

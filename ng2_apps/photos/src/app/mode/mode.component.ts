@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
 import { NgFor } from '@angular/common';
-import { RouteParams } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { Breadcrumb } from '../../../../ng_maw/src/app/shared/breadcrumb.model';
 
@@ -12,7 +12,7 @@ import { RouteMode } from '../shared/route-mode.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-mode',
+    selector: 'mode',
     directives: [ NgFor ],
     templateUrl: 'mode.component.html',
     styleUrls: [ 'mode.component.css' ]
@@ -21,30 +21,32 @@ export class ModeComponent implements OnInit {
     private _mode: RouteMode = null;
     items: Array<Breadcrumb> = [];
 
-    constructor(routeParams: RouteParams,
-        private _stateService: PhotoStateService,
-        private _navService: PhotoNavigationService) {
-        this._mode = this.getMode(routeParams.get('mode'));
-
+    constructor(private _stateService: PhotoStateService,
+                private _navService: PhotoNavigationService,
+                private _activatedRoute: ActivatedRoute) {
         // if we make it back to the mode pages, forget the 'last category' we had
         this._stateService.lastCategoryIndex = 0;
     }
 
     ngOnInit(): void {
-        switch (this._mode) {
-            case null:
-                this.setItems(this._navService.getRootDestinations());
-                break;
-            case RouteMode.Category:
-                this.setItems(this._navService.getYearDestinations());
-                break;
-            case RouteMode.Comment:
-                this.setItems(this._navService.getCommentDestinations());
-                break;
-            case RouteMode.Rating:
-                this.setItems(this._navService.getRatingDestinations());
-                break;
-        }
+        this._activatedRoute.params.subscribe(params => {
+            this._mode = this.getMode(params['mode']);
+
+            switch (this._mode) {
+                case null:
+                    this.setItems(this._navService.getRootDestinations());
+                    break;
+                case RouteMode.Category:
+                    this.setItems(this._navService.getYearDestinations());
+                    break;
+                case RouteMode.Comment:
+                    this.setItems(this._navService.getCommentDestinations());
+                    break;
+                case RouteMode.Rating:
+                    this.setItems(this._navService.getRatingDestinations());
+                    break;
+            }
+        });
     }
 
     selectItem(dest: Breadcrumb): void {

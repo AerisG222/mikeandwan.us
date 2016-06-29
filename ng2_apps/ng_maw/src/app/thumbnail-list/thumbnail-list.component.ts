@@ -6,7 +6,7 @@ import { ResponsiveService } from '../shared/';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-thumbnail-list',
+    selector: 'thumbnail-list',
     directives: [NgClass, NgStyle, NgIf, NgFor],
     templateUrl: 'thumbnail-list.component.html',
     styleUrls: ['thumbnail-list.component.css']

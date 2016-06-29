@@ -5,7 +5,7 @@ import { ICardInfo } from '../icard-info.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-card',
+    selector: 'card',
     directives: [ NgClass ],
     templateUrl: 'card.component.html',
     styleUrls: [ 'card.component.css' ]

@@ -8,12 +8,12 @@
 </div>
 <div class="row vertical-align">
     <div class="col-sm-5">
-        <playerselect [characters]="player1characters" (characterSelected)="player1Selected($event)"></playerselect>
+        <player-select [characters]="player1characters" (characterSelected)="player1Selected($event)"></player-select>
     </div>
     <div class="col-sm-2 center-block">
         <button type="button" class="btn btn-primary" [disabled]="!isReadyToPlay" (click)="play()">Play!</button>
     </div>
     <div class="col-sm-5">
-        <playerselect [characters]="player2characters" (characterSelected)="player2Selected($event)"></playerselect>
+        <player-select [characters]="player2characters" (characterSelected)="player2Selected($event)"></player-select>
     </div>
 </div>

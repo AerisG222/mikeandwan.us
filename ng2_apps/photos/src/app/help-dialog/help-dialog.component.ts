@@ -5,7 +5,7 @@ import { DialogComponent } from '../../../../ng_maw/src/app/dialog/dialog.compon
 
 @Component({
     moduleId: module.id,
-    selector: 'app-help-dialog',
+    selector: 'help-dialog',
     directives: [ NgIf, DialogComponent ],
     templateUrl: 'help-dialog.component.html',
     styleUrls: [ 'help-dialog.component.css' ]

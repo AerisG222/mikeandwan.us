@@ -8,7 +8,7 @@ import { PhotoStateService } from '../shared/photo-state.service';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-preference-dialog',
+    selector: 'preference-dialog',
     directives: [ DialogComponent, NgModel ],
     templateUrl: 'preference-dialog.component.html',
     styleUrls: [ 'preference-dialog.component.css' ]

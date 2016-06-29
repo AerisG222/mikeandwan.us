@@ -8,7 +8,7 @@ import { IPhoto } from '../shared/iphoto.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-photo-dialog',
+    selector: 'photo-dialog',
     directives: [ DialogComponent ],
     templateUrl: 'photo-dialog.component.html',
     styleUrls: [ 'photo-dialog.component.css' ]

@@ -6,7 +6,7 @@ import { FilterSettings } from '../shared/filter-settings.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-effects-view',
+    selector: 'effects-view',
     directives: [ NgModel ],
     templateUrl: 'effects-view.component.html',
     styleUrls: [ 'effects-view.component.css' ]

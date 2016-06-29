@@ -3,7 +3,7 @@ import { NgClass, NgFor, NgIf } from '@angular/common';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-rating',
+    selector: 'rating',
     directives: [ NgClass, NgIf, NgFor ],
     templateUrl: 'rating.component.html',
     styleUrls: [ 'rating.component.css' ]

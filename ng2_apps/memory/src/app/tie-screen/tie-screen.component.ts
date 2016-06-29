@@ -4,7 +4,7 @@ import { IPlayer } from '../iplayer.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-tie-screen',
+    selector: 'tie-screen',
     templateUrl: 'tie-screen.component.html',
     styleUrls: [ 'tie-screen.component.css' ]
 })

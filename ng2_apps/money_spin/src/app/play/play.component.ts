@@ -8,7 +8,7 @@ import { PlayerScoreComponent } from '../player-score/player-score.component';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-play',
+    selector: 'play',
     directives: [ NgIf, SpinnerComponent, PlayerScoreComponent ],
     templateUrl: 'play.component.html',
     styleUrls: [ 'play.component.css' ]

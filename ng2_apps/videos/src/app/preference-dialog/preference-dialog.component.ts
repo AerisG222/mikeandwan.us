@@ -8,7 +8,7 @@ import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-preference-dialog',
+    selector: 'preference-dialog',
     directives: [ DialogComponent, NgModel, FORM_DIRECTIVES ],
     templateUrl: 'preference-dialog.component.html',
     styleUrls: [ 'preference-dialog.component.css' ]

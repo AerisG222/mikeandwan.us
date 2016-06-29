@@ -4,7 +4,7 @@ import { PhotoListContext } from '../shared/photo-list-context.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-slideshow-button',
+    selector: 'slideshow-button',
     templateUrl: 'slideshow-button.component.html',
     styleUrls: [ 'slideshow-button.component.css' ]
 })

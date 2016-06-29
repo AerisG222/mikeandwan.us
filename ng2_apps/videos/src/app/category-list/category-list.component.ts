@@ -1,5 +1,5 @@
 import { Component, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
-import { RouteParams } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { PagerComponent } from '../../../../ng_maw/src/app/pager/pager.component';
 import { ThumbnailListComponent } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-list.component';
@@ -14,7 +14,7 @@ import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-category-list',
+    selector: 'category-list',
     templateUrl: 'category-list.component.html',
     styleUrls: [ 'category-list.component.css' ]
 })
@@ -29,24 +29,28 @@ export class CategoryListComponent implements AfterViewInit {
                 private _stateService: VideoStateService,
                 private _navService: VideoNavigationService,
                 private _changeDetectionRef: ChangeDetectorRef,
-                params: RouteParams) {
-        this.year = parseInt(params.get('year'), 10);
+                private _activatedRoute: ActivatedRoute) {
+        
     }
 
     ngAfterViewInit(): void {
-        this.thumbnailList.setRowCountPerPage(2);
+        this._activatedRoute.params.subscribe(params => {
+            this.year = parseInt(params['year'], 10);
 
-        this.thumbnailList.itemsPerPageUpdated.subscribe((x: any) => {
-            this.updatePager();
+            this.thumbnailList.setRowCountPerPage(2);
+
+            this.thumbnailList.itemsPerPageUpdated.subscribe((x: any) => {
+                this.updatePager();
+            });
+
+            this._dataService.getCategoriesForYear(this.year)
+                .subscribe(
+                    (data: Array<ICategory>) => this.setCategories(data),
+                    (err: any) => console.error(`there was an error: ${err}`)
+                );
+
+            this._changeDetectionRef.detectChanges();
         });
-
-        this._dataService.getCategoriesForYear(this.year)
-            .subscribe(
-            (data: Array<ICategory>) => this.setCategories(data),
-            (err: any) => console.error(`there was an error: ${err}`)
-            );
-
-        this._changeDetectionRef.detectChanges();
     }
 
     setCategories(categories: Array<ICategory>): void {

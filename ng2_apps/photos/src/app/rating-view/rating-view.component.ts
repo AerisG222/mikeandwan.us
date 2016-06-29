@@ -7,7 +7,7 @@ import { PhotoDataService } from '../shared/photo-data.service';
 
 @Component({ 
     moduleId: module.id,
-    selector: 'app-rating-view',
+    selector: 'rating-view',
     directives: [ RatingComponent ],
     templateUrl: 'rating-view.component.html',
     styleUrls: [ 'rating-view.component.css' ]

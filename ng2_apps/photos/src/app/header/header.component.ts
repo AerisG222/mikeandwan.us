@@ -10,7 +10,7 @@ import { CategoryBreadcrumb } from '../shared/category-breadcrumb.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-header',
+    selector: 'header',
     directives: [ BreadcrumbListComponent, NgIf ],
     templateUrl: 'header.component.html',
     styleUrls: [ 'header.component.css' ]

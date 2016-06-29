@@ -8,7 +8,7 @@ import { Photo } from '../shared/photo.model';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-exif-view',
+    selector: 'exif-view',
     directives: [ NgFor ],
     templateUrl: 'exif-view.component.html',
     styleUrls: [ 'exif-view.component.css' ]

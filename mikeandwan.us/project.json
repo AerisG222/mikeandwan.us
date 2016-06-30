@@ -11,24 +11,33 @@
         "warningsAsErrors": true
     },
     "dependencies": {
-        "Microsoft.AspNetCore.Diagnostics": "1.0.0-rc2-final",
-        "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.0.0-rc2-final",
-        "Microsoft.AspNetCore.Hosting": "1.0.0-rc2-final",
-        "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0-rc2-final",
-        "Microsoft.AspNetCore.Hosting.Server.Abstractions": "1.0.0-rc2-final",
-        "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
-        "Microsoft.AspNetCore.Server.Kestrel": "1.0.0-rc2-final",
-        "Microsoft.AspNetCore.StaticFiles": "1.0.0-rc2-final",
-        "Microsoft.Extensions.Configuration.CommandLine": "1.0.0-rc2-final",
-        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc2-final",
-        "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0-rc2-final",
-        "Microsoft.Extensions.Logging.Console": "1.0.0-rc2-final",
-        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0-rc2-final",
-        "Maw.Data": { "target": "project" },
-        "Maw.Data.EntityFramework": { "target": "project" },
-        "Maw.Domain": { "target": "project" },
-        "Maw.TagHelpers": { "target": "project" },
-        "NMagickWand": "0.4.1"
+        "Microsoft.AspNetCore.CookiePolicy": "1.0.0",
+        "Microsoft.AspNetCore.Diagnostics": "1.0.0",
+        "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.0.0",
+        "Microsoft.AspNetCore.Hosting": "1.0.0",
+        "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
+        "Microsoft.AspNetCore.Hosting.Server.Abstractions": "1.0.0",
+        "Microsoft.AspNetCore.Mvc": "1.0.0",
+        "Microsoft.AspNetCore.Server.Kestrel": "1.0.0",
+        "Microsoft.AspNetCore.StaticFiles": "1.0.0",
+        "Microsoft.Extensions.Configuration.CommandLine": "1.0.0",
+        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0",
+        "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
+        "Microsoft.Extensions.Logging.Console": "1.0.0",
+        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
+        "Maw.Data": {
+            "target": "project"
+        },
+        "Maw.Data.EntityFramework": {
+            "target": "project"
+        },
+        "Maw.Domain": {
+            "target": "project"
+        },
+        "Maw.TagHelpers": {
+            "target": "project"
+        },
+        "NMagickWand": "0.5.0"
     },
     "frameworks": {
         "net451": {
@@ -41,15 +50,14 @@
         "netcoreapp1.0": {
             "dependencies": {
                 "Microsoft.NETCore.App": {
-                    "version": "1.0.0-rc2-3002702",
+                    "version": "1.0.0",
                     "type": "platform"
                 },
-                "System.IO.Compression": "4.1.0-rc2-24027"
+                "System.IO.Compression": "4.1.0"
             },
             "imports": [
-                "dnxcore50",
-                "portable-net45+win8+wp8+wpa81",
-                "portable-net45+win8+wp8"
+                "dotnet55",
+                "portable-dnxcore50+net45+win8+wp8+wpa81"
             ]
         }
     },
@@ -67,10 +75,7 @@
     "copyToOutput": {
         "include": [ "project.json" ]
     },
-    "tools": { 
-        "Microsoft.Extensions.SecretManager.Tools": {
-            "version": "1.0.0-*",
-            "imports": "portable-net45+wp80+win8+wpa81+dnxcore50"
-        }
+    "tools": {
+        "Microsoft.Extensions.SecretManager.Tools": "1.0.0-preview2-final"
     }
 }

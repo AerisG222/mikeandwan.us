@@ -3,7 +3,9 @@ using Maw.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -42,7 +44,7 @@ namespace MawMvcApp
     // TODO: research viewcomponents
     public class Startup
     {
-        IConfiguration _config;
+        readonly IConfiguration _config;
 
 
         public Startup(IHostingEnvironment hostingEnvironment)
@@ -53,12 +55,12 @@ namespace MawMvcApp
                 .AddUserSecrets();
 
             MagickWandEnvironment.Genesis();
-            
+
             _config = builder.Build();
         }
 
-        
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+
+        public void ConfigureServices(IServiceCollection services)
         {
             // http://docs.asp.net/en/latest/fundamentals/configuration.html#options-config-objects
             services
@@ -66,13 +68,13 @@ namespace MawMvcApp
                 .Configure<EmailConfig>(_config.GetSection("Email"))
                 .Configure<GoogleCaptchaConfig>(_config.GetSection("Google"))
                 .Configure<ContactConfig>(_config.GetSection("ContactUs"));
-                
+
             services
                 .AddDbContext<BlogContext>(options => options.UseNpgsql(_config["Environment:DbConnectionString"]))
                 .AddDbContext<IdentityContext>(options => options.UseNpgsql(_config["Environment:DbConnectionString"]))
                 .AddDbContext<PhotoContext>(options => options.UseNpgsql(_config["Environment:DbConnectionString"]))
                 .AddDbContext<VideoContext>(options => options.UseNpgsql(_config["Environment:DbConnectionString"]));
-                
+
             services
                 .AddScoped<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
                 .AddScoped<ICaptchaService, GoogleCaptchaService>()
@@ -84,16 +86,9 @@ namespace MawMvcApp
                 .AddScoped<IVideoRepository, VideoRepository>()
                 .AddScoped<IUserStore<MawUser>, MawUserStore>()
                 .AddScoped<IRoleStore<MawRole>, MawRoleStore>();
-            
-            // because nginx is terminating the ssl connection, we must check the environment to determine if we should use 
-            // secure cookies or not, but let's default to the request before we override for prod
-            var secureCookieOption = CookieSecureOption.SameAsRequest;
-            
-            if(string.Equals("production", _config["Environment:Name"], StringComparison.OrdinalIgnoreCase))
-            {
-                secureCookieOption = CookieSecureOption.Always;
-            }
-            
+
+            services.AddLogging();
+
             services.AddIdentity<MawUser, MawRole>(opts =>
                 {
                     // relax the pwd requirements to match previous settings
@@ -105,9 +100,8 @@ namespace MawMvcApp
                     opts.Password.RequireNonAlphanumeric = false;
                     opts.Password.RequireUppercase = false;
                     opts.Password.RequiredLength = 4;
-                    
+
                     opts.Cookies.ApplicationCookie.CookieName = "maw_auth";
-                    opts.Cookies.ApplicationCookie.CookieSecure = secureCookieOption;
                     opts.Cookies.ApplicationCookie.LoginPath = "/account/login";
                     opts.Cookies.ApplicationCookie.LogoutPath = "/account/logout";
                     opts.Cookies.ApplicationCookie.AccessDeniedPath = "/account/access-denied";
@@ -115,42 +109,23 @@ namespace MawMvcApp
                 })
                 .AddDefaultTokenProviders();
 
-            // TODO: enable secure flag on antiforgery cookies
-            //services.ConfigureAntiforgery(options =>
-            //    {
-            //        options.RequireSsl = true;
-            //    });
-                
             services.AddAuthorization(opts =>
                 {
                     opts.AddPolicy(MawConstants.POLICY_VIEW_PHOTOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());
                     opts.AddPolicy(MawConstants.POLICY_VIEW_VIDEOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());
                     opts.AddPolicy(MawConstants.POLICY_ADMIN_SITE, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_ADMIN).Build());
                 });
-            
-            var mvc = services.AddMvc()
-                .AddJsonOptions(opts =>
-                    {
-                        opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    });
-            
-            /*
-            if(string.Equals("production", _config["Environment:Name"], StringComparison.OrdinalIgnoreCase))
-            {
-                mvc.AddPrecompiledRazorViews(GetType().Assembly);
-            }
-            */
-            
-            return services.BuildServiceProvider();
+
+            services.AddMvc();
         }
 
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IOptions<EnvironmentConfig> envOpts, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
-            
+
             env.EnvironmentName = envOpts.Value.Name;
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -160,6 +135,12 @@ namespace MawMvcApp
             {
                 app.UseExceptionHandler("/error/");
             }
+
+            app.UseCookiePolicy(new CookiePolicyOptions
+                {
+                    HttpOnly = HttpOnlyPolicy.Always,
+                    Secure = CookieSecurePolicy.SameAsRequest
+                });
 
             app.UseIdentity();
             app.UseStaticFiles();

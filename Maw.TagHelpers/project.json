@@ -10,20 +10,20 @@
         }
     },
     "dependencies": {
-        "Microsoft.AspNetCore.Mvc.TagHelpers": "1.0.0-rc2-final"
+        "Microsoft.AspNetCore.Mvc.TagHelpers": "1.0.0"
     },
     "frameworks": {
-         "net451": { 
-             "frameworkAssemblies": {
-                 "System.Collections": "",
-                 "System.Runtime": ""
+        "net451": {
+            "frameworkAssemblies": {
+                "System.Collections": "",
+                "System.Runtime": ""
             }
-         },
-         "netstandard1.5": {
-            "imports": [ 
-                "dotnet55", 
-                "portable-dnxcore50+net45+win8+wp8+wpa81" 
+        },
+        "netstandard1.6": {
+            "imports": [
+                "dotnet55",
+                "portable-dnxcore50+net45+win8+wp8+wpa81"
             ]
-	    }
+        }
     }
 }

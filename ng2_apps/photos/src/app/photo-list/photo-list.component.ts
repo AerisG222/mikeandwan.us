@@ -44,11 +44,13 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
                 private _responsiveService: ResponsiveService,
                 private _activatedRoute: ActivatedRoute,
                 photoSourceFactory: PhotoSourceFactory) {
-        console.error("TODO: figure out how to get routedata config passed to routes");
-        
-        //this._modeInfo = <ModeRouteInfo>routeData.data;
-        //this._photoSource = photoSourceFactory.create(routeData, routeParams);
-        this.showPhotoView = _stateService.config.displayMode === Config.DISPLAY_MODE_INLINE;
+        this._activatedRoute.params.subscribe(params => {
+            this._activatedRoute.data.subscribe(data => {
+                this._modeInfo = <ModeRouteInfo>data;
+                this._photoSource = photoSourceFactory.create(data, params);
+                this.showPhotoView = _stateService.config.displayMode === Config.DISPLAY_MODE_INLINE;
+            });
+        });
     }
 
     ngAfterViewInit() {

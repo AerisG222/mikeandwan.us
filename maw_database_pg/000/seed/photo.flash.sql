@@ -14,7 +14,7 @@ BEGIN
         INSERT INTO photo.flash (id, name) VALUES (15, 'On, Return detected');
         INSERT INTO photo.flash (id, name) VALUES (16, 'Off, Did not fire');
         INSERT INTO photo.flash (id, name) VALUES (20, 'Off, Did not fire, Return not detected');
-        INSERT INTO photo.flash (id, name) VALUES (23, 'Auto, Did not fire');
+        INSERT INTO photo.flash (id, name) VALUES (24, 'Auto, Did not fire');
         INSERT INTO photo.flash (id, name) VALUES (25, 'Auto, Fired');
         INSERT INTO photo.flash (id, name) VALUES (29, 'Auto, Fired, Return not detected');
         INSERT INTO photo.flash (id, name) VALUES (31, 'Auto, Fired, Return detected');

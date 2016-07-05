@@ -1,4 +1,4 @@
-import { bootstrap, BrowserDomAdapter } from '@angular/platform-browser-dynamic';
+import { bootstrap } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from '@angular/core';
 import { HTTP_BINDINGS } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -22,7 +22,6 @@ if (environment.production) {
 bootstrap(PhotosAppComponent, [
     HTTP_BINDINGS,
     APP_ROUTER_PROVIDERS,
-    BrowserDomAdapter,
     LocalStorageService,
     BreadcrumbService,
     ResponsiveService,

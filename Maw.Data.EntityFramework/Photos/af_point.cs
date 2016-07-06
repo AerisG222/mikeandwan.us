@@ -15,7 +15,7 @@ namespace Maw.Data.EntityFramework.Photos
 
         public short id { get; set; }
         [Required]
-        [MaxLength(20)]
+        [MaxLength(30)]
         public string name { get; set; }
 
         [InverseProperty("af_point")]

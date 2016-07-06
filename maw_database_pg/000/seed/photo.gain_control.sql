@@ -9,6 +9,7 @@ BEGIN
         INSERT INTO photo.gain_control (id, name) VALUES (2, 'High gain up');
         INSERT INTO photo.gain_control (id, name) VALUES (3, 'Low gain down');
         INSERT INTO photo.gain_control (id, name) VALUES (4, 'High gain down');
+        INSERT INTO photo.gain_control (id, name) VALUES (256, 'Unknown');
 
     END IF;
 

@@ -30,7 +30,8 @@ BEGIN
         INSERT INTO photo.flash (id, name) VALUES (88, 'Auto, Did not fire, Red-eye reduction');
         INSERT INTO photo.flash (id, name) VALUES (89, 'Auto, Fired, Red-eye reduction');
         INSERT INTO photo.flash (id, name) VALUES (93, 'Auto, Fired, Red-eye reduction, Return not detected');
-        INSERT INTO photo.flash (id, name) VALUES (95, 'Auto, Fired, Red-eye reduction, Return detected');    
+        INSERT INTO photo.flash (id, name) VALUES (95, 'Auto, Fired, Red-eye reduction, Return detected');
+        INSERT INTO photo.flash (id, name) VALUES (12338, 'Unknown');
 
     END IF;
 

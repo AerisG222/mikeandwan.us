@@ -102,7 +102,8 @@ namespace MawMvcApp.Controllers
 
 			var result = await _repo.GetUsersToManageAsync();
 
-			var model = result.Select(x => new ManageUserModel {
+			var model = result.Select(x => new ManageUserModel 
+			{
 				Username = x.Username,
 				FirstName = x.FirstName,
 				LastName = x.LastName,
@@ -139,7 +140,8 @@ namespace MawMvcApp.Controllers
 
 			if(ModelState.IsValid)
 			{
-				var user = new MawUser() {
+				var user = new MawUser 
+				{
 					Username = model.Username,
 					FirstName = model.FirstName,
 					LastName = model.LastName,
@@ -247,7 +249,8 @@ namespace MawMvcApp.Controllers
 			
 			if(ModelState.IsValid)
 			{
-				var role = new MawRole {
+				var role = new MawRole 
+				{
 					Name = model.Name,
 					Description = model.Description
 				};
@@ -315,7 +318,8 @@ namespace MawMvcApp.Controllers
 			
             var user = await _userMgr.FindByNameAsync(id);
 
-			var model = new EditProfileModel {
+			var model = new EditProfileModel 
+			{
 				Username = user.Username,
 				FirstName = user.FirstName,
 				LastName = user.LastName,

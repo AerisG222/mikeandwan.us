@@ -47,7 +47,11 @@ namespace MawMvcApp.Controllers
         {
 			ViewBag.NavigationZone = NavigationZone.Tools;
 			
-			var model = new RollTheDiceModel() { NumberOfThrows = 10, NumberOfSides = 6 };
+			var model = new RollTheDiceModel 
+			{ 
+				NumberOfThrows = 10, 
+				NumberOfSides = 6 
+			};
 				
             return View(model);
         }
@@ -231,7 +235,11 @@ namespace MawMvcApp.Controllers
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
 			
-            var model = new DateDiff () { StartDate = DateTime.Now.AddYears(-1), EndDate = DateTime.Now };
+            var model = new DateDiff 
+			{ 
+				StartDate = DateTime.Now.AddYears(-1), 
+				EndDate = DateTime.Now 
+			};
 
 			return View(model);
 		}

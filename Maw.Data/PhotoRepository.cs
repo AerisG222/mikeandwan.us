@@ -282,7 +282,11 @@ namespace Maw.Data
         {
             var cat = await _ctx.Category
 				.Where(x => x.Id == categoryId && (allowPrivate || !x.IsPrivate))
-				.Select(x => new { Category = x, HasGps = x.Photo.Any(i => i.GpsLatitude != null) })
+				.Select(x => new 
+                { 
+                    Category = x, 
+                    HasGps = x.Photo.Any(i => i.GpsLatitude != null) 
+                })
 				.SingleAsync();
 
 			return BuildPhotoCategory(cat.Category, cat.HasGps);
@@ -729,7 +733,8 @@ namespace Maw.Data
         
 		D.Photo BuildPhoto(Photo x)
         {
-            return new D.Photo {
+            return new D.Photo 
+            {
                 Id = x.Id,
                 CategoryId = x.CategoryId,
                 Latitude = x.GpsLatitude,

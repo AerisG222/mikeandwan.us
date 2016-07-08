@@ -434,7 +434,11 @@ namespace Maw.Data.Identity
 
             var user = _ctx.User.Single(x => x.Username == username.ToLower());
             var role = _ctx.Role.Single(x => x.Name == roleName.ToLower());
-            var userRole = new UserRole { UserId = user.Id, RoleId = role.Id };
+            var userRole = new UserRole 
+			{ 
+				UserId = user.Id, 
+				RoleId = role.Id 
+			};
             
             role.UserRole.Add(userRole);
 
@@ -464,7 +468,11 @@ namespace Maw.Data.Identity
 
             var user = await _ctx.User.SingleAsync(x => x.Username == username.ToLower());
             var role = await _ctx.Role.SingleAsync(x => x.Name == roleName.ToLower());
-            var userRole = new UserRole { UserId = user.Id, RoleId = role.Id };
+            var userRole = new UserRole 
+			{ 
+				UserId = user.Id, 
+				RoleId = role.Id 
+			};
             
             role.UserRole.Remove(userRole);
 

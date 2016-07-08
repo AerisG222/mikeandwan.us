@@ -54,7 +54,11 @@ namespace Maw.Data
 		{
 			var vids = await _ctx.Video
                 .Where(x => x.CategoryId == categoryId && (allowPrivate || !x.IsPrivate))
-                .Join(_ctx.Category, vid => vid.CategoryId, cat => cat.Id, (vid, cat) => new { Video = vid, Category = cat })
+                .Join(_ctx.Category, vid => vid.CategoryId, cat => cat.Id, (vid, cat) => new 
+                { 
+                    Video = vid, 
+                    Category = cat 
+                })
 				.ToListAsync();
 
 			return vids.Select(x => BuildVideo(x.Video, x.Category))
@@ -66,7 +70,11 @@ namespace Maw.Data
 		{
 			var video = await _ctx.Video
                 .Where(x => x.Id == id && (allowPrivate || !x.IsPrivate))
-                .Join(_ctx.Category, vid => vid.CategoryId, cat => cat.Id, (vid, cat) => new { Video = vid, Category = cat })
+                .Join(_ctx.Category, vid => vid.CategoryId, cat => cat.Id, (vid, cat) => new 
+                { 
+                    Video = vid, 
+                    Category = cat 
+                })
 				.SingleAsync();
 
 			return BuildVideo(video.Video, video.Category);
@@ -85,7 +93,8 @@ namespace Maw.Data
 
         D.Category BuildVideoCategory(Category x)
         {
-            return new D.Category {
+            return new D.Category 
+            {
                 Id = x.Id,
                 Name = x.Name,
                 Year = x.Year,
@@ -101,7 +110,8 @@ namespace Maw.Data
 
         D.Video BuildVideo(Video x, Category y)
         {
-            return new D.Video {
+            return new D.Video 
+            {
                 Id = x.Id,
 				ThumbnailVideo = new D.VideoInfo
                 {

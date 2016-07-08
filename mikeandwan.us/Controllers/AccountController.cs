@@ -248,7 +248,8 @@ namespace MawMvcApp.Controllers
 
 			var user = await _userMgr.FindByNameAsync(User.Identity.Name);
 
-			var model = new ProfileModel {
+			var model = new ProfileModel 
+			{
 				Username = user.Username,
 				FirstName = user.FirstName,
 				LastName = user.LastName,
@@ -370,7 +371,8 @@ namespace MawMvcApp.Controllers
 		{
 			var states = await _repo.GetStatesAsync();
 				
-			return states.Select(x => new SelectListItem() {
+			return states.Select(x => new SelectListItem 
+			{
                 Value = x.Code, 
                 Text = x.Name
             });
@@ -381,7 +383,8 @@ namespace MawMvcApp.Controllers
 		{
 			var countries = await _repo.GetCountriesAsync();
 				
-			return countries.Select(x => new SelectListItem() {
+			return countries.Select(x => new SelectListItem 
+			{
                 Value = x.Code, 
                 Text = x.Name
             });

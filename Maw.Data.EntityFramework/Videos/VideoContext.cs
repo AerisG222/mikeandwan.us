@@ -1,6 +1,6 @@
+﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-
 
 namespace Maw.Data.EntityFramework.Videos
 {
@@ -11,42 +11,37 @@ namespace Maw.Data.EntityFramework.Videos
         {
             
         }
-        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<category>(entity =>
+            modelBuilder.Entity<Category>(entity =>
             {
-                entity.HasIndex(e => new { e.year, e.is_private }).HasName("ix_video_category_year_is_private");
+                entity.HasIndex(e => new { e.Year, e.IsPrivate })
+                    .HasName("ix_video_category_year_is_private");
 
-                entity.Property(e => e.id)
-                    .HasDefaultValueSql("nextval('video.category_id_seq'::regclass)")
-                    .ValueGeneratedOnAdd();
-
-                entity.Property(e => e.name).HasColumnType("varchar");
-
-                entity.Property(e => e.teaser_image_path).HasColumnType("varchar");
+                entity.Property(e => e.Id).HasDefaultValueSql("nextval('video.category_id_seq'::regclass)");
             });
 
-            modelBuilder.Entity<video>(entity =>
+            modelBuilder.Entity<Video>(entity =>
             {
-                entity.HasIndex(e => new { e.category_id, e.is_private }).HasName("ix_video_video_category_id_is_private");
+                entity.HasIndex(e => new { e.CategoryId, e.IsPrivate })
+                    .HasName("ix_video_video_category_id_is_private");
 
-                entity.Property(e => e.id)
-                    .HasDefaultValueSql("nextval('video.video_id_seq'::regclass)")
-                    .ValueGeneratedOnAdd();
-
-                entity.Property(e => e.full_path).HasColumnType("varchar");
-
-                entity.Property(e => e.raw_path).HasColumnType("varchar");
-
-                entity.Property(e => e.scaled_path).HasColumnType("varchar");
-
-                entity.Property(e => e.thumb_path).HasColumnType("varchar");
+                entity.Property(e => e.Id).HasDefaultValueSql("nextval('video.video_id_seq'::regclass)");
             });
+
+            modelBuilder.HasSequence("post_id_seq", "blog");
+
+            modelBuilder.HasSequence("login_history_id_seq", "maw");
+
+            modelBuilder.HasSequence("role_id_seq", "maw");
+
+            modelBuilder.HasSequence("user_id_seq", "maw");
+
+            modelBuilder.HasSequence("comment_id_seq", "photo");
         }
 
-        public virtual DbSet<category> category { get; set; }
-        public virtual DbSet<video> video { get; set; }
+        public virtual DbSet<Category> Category { get; set; }
+        public virtual DbSet<Video> Video { get; set; }
     }
 }

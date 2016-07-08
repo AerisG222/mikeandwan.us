@@ -10,13 +10,13 @@ CONN="Server=localhost;Port=5432;Database=maw_website;User Id=${PG_USER};Passwor
 PROV='Npgsql.EntityFrameworkCore.PostgreSQL'
 
 #-- blog
-dotnet ef dbcontext scaffold "$CONN" "$PROV" --dataAnnotations --context BlogContext --outputDir Blogs --schema blog
+dotnet ef dbcontext scaffold "$CONN" "$PROV" -f --data-annotations --context BlogContext --output-dir Blogs --schema blog
 
 #-- identity
-dotnet ef dbcontext scaffold "$CONN" "$PROV" --dataAnnotations --context IdentityContext --outputDir Identity --schema maw
+dotnet ef dbcontext scaffold "$CONN" "$PROV" -f --data-annotations --context IdentityContext --output-dir Identity --schema maw
 
 #-- photo
-dotnet ef dbcontext scaffold "$CONN" "$PROV" --dataAnnotations --context PhotoContext --outputDir Photos --schema photo --table maw.user
+dotnet ef dbcontext scaffold "$CONN" "$PROV" -f --data-annotations --context PhotoContext --output-dir Photos --schema photo --table maw.user
 
 #-- video
-dotnet ef dbcontext scaffold "$CONN" "$PROV" --dataAnnotations --context VideoContext --outputDir Videos --schema video
+dotnet ef dbcontext scaffold "$CONN" "$PROV" -f --data-annotations --context VideoContext --output-dir Videos --schema video

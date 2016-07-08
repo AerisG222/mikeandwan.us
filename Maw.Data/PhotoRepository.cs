@@ -6,13 +6,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Maw.Data.EntityFramework.Photos;
-using Maw.Domain.Photos;
+using D = Maw.Domain.Photos;
 
 
 namespace Maw.Data
 {
 	public class PhotoRepository
-        : IPhotoRepository
+        : D.IPhotoRepository
 	{
         const int MAX_RESULTS = 600;
 
@@ -37,50 +37,53 @@ namespace Maw.Data
         }
 
 
-        public async Task<PhotoAndCategory> GetRandomPhotoAsync(bool allowPrivate)
+        public async Task<D.PhotoAndCategory> GetRandomPhotoAsync(bool allowPrivate)
         {
             var rand = new Random();
-			var count = await _ctx.photo.CountAsync();
+			var count = await _ctx.Photo.CountAsync();
 			var skip = (int)(rand.NextDouble() * count);
 
             // originally tried to incorporate all data in this sql call, but that took almost 10s to complete, by
             // separating the category pull, we are less than 15ms in sql!
-			var photo = await _ctx.photo.OrderBy(x => x.id)
+			var photo = await _ctx.Photo.OrderBy(x => x.Id)
                 .Skip(skip)
                 .Take(1)
 				.SingleAsync();
 
-            return new PhotoAndCategory {
+            return new D.PhotoAndCategory 
+            {
                 Photo = BuildPhoto(photo),
-                Category = await GetCategoryAsync(photo.category_id, allowPrivate)
+                Category = await GetCategoryAsync(photo.CategoryId, allowPrivate)
 			};
         }
 
 
 		public async Task<List<short>> GetYearsAsync()
         {
-			return await _ctx.category
-                .Select(x => x.year)
+			return await _ctx.Category
+                .Select(x => x.Year)
                 .Distinct()
                 .OrderByDescending(x => x)
 				.ToListAsync();
         }
 
 
-        public Task<List<Category>> GetCategoriesForYearAsync(short year, bool allowPrivate)
+        public Task<List<D.Category>> GetCategoriesForYearAsync(short year, bool allowPrivate)
 		{
-            return _ctx.category
-                .Where(x => x.year == year && (allowPrivate || !x.is_private))
-                .OrderBy(x => x.id)
-                .Select(x => new Category {
-                    Id = x.id,
-                    Name = x.name,
-                    Year = x.year,
-					HasGpsData = x.photo.Any(i => i.gps_latitude != null),
-                    TeaserPhotoInfo = new PhotoInfo { 
-                        Path = x.teaser_photo_path, 
-						Width = (short)x.teaser_photo_width,
-						Height = (short)x.teaser_photo_height
+            return _ctx.Category
+                .Where(x => x.Year == year && (allowPrivate || !x.IsPrivate))
+                .OrderBy(x => x.Id)
+                .Select(x => new D.Category 
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Year = x.Year,
+					HasGpsData = x.Photo.Any(i => i.GpsLatitude != null),
+                    TeaserPhotoInfo = new D.PhotoInfo 
+                    { 
+                        Path = x.TeaserPhotoPath, 
+						Width = (short)x.TeaserPhotoWidth,
+						Height = (short)x.TeaserPhotoHeight
                     }
                 })
 				.ToListAsync();
@@ -89,38 +92,41 @@ namespace Maw.Data
 
         public async Task<short> GetCategoryCountAsync(bool allowPrivate)
         {
-            var count = await _ctx.category
-                .Where(x => allowPrivate || !x.is_private)
+            var count = await _ctx.Category
+                .Where(x => allowPrivate || !x.IsPrivate)
                 .CountAsync();
 
 			return Convert.ToInt16(count);
         }
 
 
-        public Task<List<Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate)
+        public Task<List<D.Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate)
         {
-            return _ctx.category
-                .Where(x => x.id > sinceId && (allowPrivate || !x.is_private))
-                .OrderBy(x => x.id)
-                .Select(x => new Category {
-                    Id = x.id,
-                    Name = x.name,
-                    Year = x.year,
-					HasGpsData = x.photo.Any(i => i.gps_latitude != null),
-                    TeaserPhotoInfo = new PhotoInfo { 
-                        Path = x.teaser_photo_path, 
-						Width = (short)x.teaser_photo_width,
-						Height = (short)x.teaser_photo_height }
+            return _ctx.Category
+                .Where(x => x.Id > sinceId && (allowPrivate || !x.IsPrivate))
+                .OrderBy(x => x.Id)
+                .Select(x => new D.Category 
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Year = x.Year,
+					HasGpsData = x.Photo.Any(i => i.GpsLatitude != null),
+                    TeaserPhotoInfo = new D.PhotoInfo 
+                    { 
+                        Path = x.TeaserPhotoPath, 
+						Width = (short)x.TeaserPhotoWidth,
+						Height = (short)x.TeaserPhotoHeight 
+                    }
                 })
                 .ToListAsync();
         }
 
 
-		public async Task<List<Photo>> GetPhotosForCategoryAsync(short categoryId, bool allowPrivate)
+		public async Task<List<D.Photo>> GetPhotosForCategoryAsync(short categoryId, bool allowPrivate)
 		{
-			var photos = await _ctx.photo
-                .Where(x => x.category_id == categoryId && (allowPrivate || !x.is_private))
-                .OrderBy(x => x.lg_path)
+			var photos = await _ctx.Photo
+                .Where(x => x.CategoryId == categoryId && (allowPrivate || !x.IsPrivate))
+                .OrderBy(x => x.LgPath)
 				.ToListAsync();
 
 			return photos
@@ -129,15 +135,16 @@ namespace Maw.Data
 		}
 
 
-		public async Task<List<Photo>> GetPhotosByCommentDateAsync(bool newestFirst, bool allowPrivate)
+		public async Task<List<D.Photo>> GetPhotosByCommentDateAsync(bool newestFirst, bool allowPrivate)
         {
-			var query = _ctx.comment
-				.Where(x => allowPrivate || !x.photo.is_private)
-				.GroupBy(x => x.photo)
-				.Select(x => new {
+			var query = _ctx.Comment
+				.Where(x => allowPrivate || !x.Photo.IsPrivate)
+				.GroupBy(x => x.Photo)
+				.Select(x => new 
+                {
 					Photo = x.Key, 
-					FirstPostDate = x.Min(d => d.entry_date),
-					LastPostDate = x.Max(d => d.entry_date)
+					FirstPostDate = x.Min(d => d.EntryDate),
+					LastPostDate = x.Max(d => d.EntryDate)
 				});
 
 			if(newestFirst)
@@ -158,18 +165,19 @@ namespace Maw.Data
         }
 
 
-		public async Task<List<Photo>> GetPhotosByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate)
+		public async Task<List<D.Photo>> GetPhotosByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate)
         {
-			var query = _ctx.comment
-				.Include(c => c.user)
-				.Where(x => x.user.username == username)
-				.GroupBy(x => x.photo)
-				.Select(g => new {
+			var query = _ctx.Comment
+				.Include(c => c.User)
+				.Where(x => x.User.Username == username)
+				.GroupBy(x => x.Photo)
+				.Select(g => new 
+                {
 					Photo = g.Key, 
-					FirstPostDate = g.Min(x => x.entry_date), 
-					LastPostDate = g.Max(x => x.entry_date)
+					FirstPostDate = g.Min(x => x.EntryDate), 
+					LastPostDate = g.Max(x => x.EntryDate)
 				})
-				.Where(x => allowPrivate || !x.Photo.is_private);
+				.Where(x => allowPrivate || !x.Photo.IsPrivate);
 
             if(greatestFirst)
             {
@@ -189,15 +197,16 @@ namespace Maw.Data
         }
 
 
-		public async Task<List<Photo>> GetPhotosByCommentCountAsync(bool greatestFirst, bool allowPrivate)
+		public async Task<List<D.Photo>> GetPhotosByCommentCountAsync(bool greatestFirst, bool allowPrivate)
         {
-			var query = _ctx.comment
-				.GroupBy(x => x.photo)
-				.Select(g => new {
+			var query = _ctx.Comment
+				.GroupBy(x => x.Photo)
+				.Select(g => new 
+                {
 					Photo = g.Key, 
 					CommentCount = g.Count()
 				})
-				.Where(x => allowPrivate || !x.Photo.is_private);
+				.Where(x => allowPrivate || !x.Photo.IsPrivate);
 
             if(greatestFirst)
             {
@@ -217,15 +226,16 @@ namespace Maw.Data
         }
 		
 		
-		public async Task<List<Photo>> GetPhotosByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
+		public async Task<List<D.Photo>> GetPhotosByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
 		{
-            var query = _ctx.rating
-                .GroupBy(x => x.photo)
-                .Select(g => new {
+            var query = _ctx.Rating
+                .GroupBy(x => x.Photo)
+                .Select(g => new 
+                {
                     Photo = g.Key, 
-                    AverageRating = g.Average(x => x.score)
+                    AverageRating = g.Average(x => x.Score)
                 })
-                .Where(x => allowPrivate || !x.Photo.is_private);
+                .Where(x => allowPrivate || !x.Photo.IsPrivate);
 
             if(highestFirst) 
             {
@@ -245,216 +255,219 @@ namespace Maw.Data
         }
 		
 		
-		public async Task<List<Photo>> GetPhotosByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
+		public async Task<List<D.Photo>> GetPhotosByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
 		{
-			var query = _ctx.rating
-				.Where(x => x.user.username == username && (allowPrivate || !x.photo.is_private));
+			var query = _ctx.Rating
+				.Where(x => x.User.Username == username && (allowPrivate || !x.Photo.IsPrivate));
 
             if(highestFirst)
             {
-				query.OrderByDescending(x => x.score);
+				query.OrderByDescending(x => x.Score);
             }
             else
             {
-				query.OrderBy(x => x.score);
+				query.OrderBy(x => x.Score);
             }
 
 			var photos = await query.ToListAsync();
 
 			return photos
-				.Select(x => BuildPhoto(x.photo))
+				.Select(x => BuildPhoto(x.Photo))
 				.Take(MAX_RESULTS)
 				.ToList();
 		}
 
 
-		public async Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
+		public async Task<D.Category> GetCategoryAsync(short categoryId, bool allowPrivate)
         {
-            var cat = await _ctx.category
-				.Where(x => x.id == categoryId && (allowPrivate || !x.is_private))
-				.Select(x => new { Category = x, HasGps = x.photo.Any(i => i.gps_latitude != null) })
+            var cat = await _ctx.Category
+				.Where(x => x.Id == categoryId && (allowPrivate || !x.IsPrivate))
+				.Select(x => new { Category = x, HasGps = x.Photo.Any(i => i.GpsLatitude != null) })
 				.SingleAsync();
 
 			return BuildPhotoCategory(cat.Category, cat.HasGps);
         }
 
 
-		public async Task<Photo> GetPhotoAsync(int photoId, bool allowPrivate)
+		public async Task<D.Photo> GetPhotoAsync(int photoId, bool allowPrivate)
 		{
-			var photo = await _ctx.photo
-				.SingleAsync(x => x.id == photoId && (allowPrivate || !x.is_private));
+			var photo = await _ctx.Photo
+				.SingleAsync(x => x.Id == photoId && (allowPrivate || !x.IsPrivate));
 
 			return BuildPhoto(photo);
 		}
 
 
-		public Task<Detail> GetDetailForPhotoAsync(int photoId, bool allowPrivate)
+		public Task<D.Detail> GetDetailForPhotoAsync(int photoId, bool allowPrivate)
 		{
-            return _ctx.photo
-                .Include(x => x.active_d_lighting)
-                .Include(x => x.af_area_mode)
-                .Include(x => x.af_point)
-                .Include(x => x.auto_focus)
-                .Include(x => x.colorspace)
-                .Include(x => x.compression)
-                .Include(x => x.contrast)
-                .Include(x => x.exposure_mode)
-                .Include(x => x.exposure_program)
-                .Include(x => x.flash)
-                .Include(x => x.flash_color_filter)
-                .Include(x => x.flash_mode)
-                .Include(x => x.flash_setting)
-                .Include(x => x.flash_type)
-                .Include(x => x.focus_mode)
-                .Include(x => x.gain_control)
-                .Include(x => x.gps_altitude_ref)
-                .Include(x => x.gps_direction_ref)
-                .Include(x => x.gps_latitude_ref)
-                .Include(x => x.gps_longitude_ref)
-                .Include(x => x.gps_measure_mode)
-                .Include(x => x.gps_status)
-                .Include(x => x.high_iso_noise_reduction)
-                .Include(x => x.hue_adjustment)
-                .Include(x => x.lens)
-                .Include(x => x.light_source)
-                .Include(x => x.make)
-                .Include(x => x.metering_mode)
-                .Include(x => x.model)
-                .Include(x => x.noise_reduction)
-                .Include(x => x.orientation)
-                .Include(x => x.picture_control_name)
-                .Include(x => x.saturation)
-                .Include(x => x.scene_capture_type)
-                .Include(x => x.scene_type)
-                .Include(x => x.sensing_method)
-                .Include(x => x.sharpness)
-                .Include(x => x.vibration_reduction)
-                .Include(x => x.vignette_control)
-                .Include(x => x.vr_mode)
-                .Include(x => x.white_balance)
-                .Where(x => x.id == photoId && (allowPrivate || !x.is_private))
-                .Select(x => new Detail {
+            return _ctx.Photo
+                .Include(x => x.ActiveDLighting)
+                .Include(x => x.AfAreaMode)
+                .Include(x => x.AfPoint)
+                .Include(x => x.AutoFocus)
+                .Include(x => x.Colorspace)
+                .Include(x => x.Compression)
+                .Include(x => x.Contrast)
+                .Include(x => x.ExposureMode)
+                .Include(x => x.ExposureProgram)
+                .Include(x => x.Flash)
+                .Include(x => x.FlashColorFilter)
+                .Include(x => x.FlashMode)
+                .Include(x => x.FlashSetting)
+                .Include(x => x.FlashType)
+                .Include(x => x.FocusMode)
+                .Include(x => x.GainControl)
+                .Include(x => x.GpsAltitudeRef)
+                .Include(x => x.GpsDirectionRef)
+                .Include(x => x.GpsLatitudeRef)
+                .Include(x => x.GpsLongitudeRef)
+                .Include(x => x.GpsMeasureMode)
+                .Include(x => x.GpsStatus)
+                .Include(x => x.HighIsoNoiseReduction)
+                .Include(x => x.HueAdjustment)
+                .Include(x => x.Lens)
+                .Include(x => x.LightSource)
+                .Include(x => x.Make)
+                .Include(x => x.MeteringMode)
+                .Include(x => x.Model)
+                .Include(x => x.NoiseReduction)
+                .Include(x => x.Orientation)
+                .Include(x => x.PictureControlName)
+                .Include(x => x.Saturation)
+                .Include(x => x.SceneCaptureType)
+                .Include(x => x.SceneType)
+                .Include(x => x.SensingMethod)
+                .Include(x => x.Sharpness)
+                .Include(x => x.VibrationReduction)
+                .Include(x => x.VignetteControl)
+                .Include(x => x.VrMode)
+                .Include(x => x.WhiteBalance)
+                .Where(x => x.Id == photoId && (allowPrivate || !x.IsPrivate))
+                .Select(x => new D.Detail 
+                {
                     // exif
-                    BitsPerSample = (ushort?)x.bits_per_sample,
-                    Compression = x.compression.name, //?
-                    Contrast = x.contrast.name, //?
-                    CreateDate = x.create_date,
-                    DigitalZoomRatio = x.digital_zoom_ratio,
-                    ExposureCompensation = x.exposure_compensation,
-                    ExposureMode = x.exposure_mode.name, //?
-                    ExposureProgram = x.exposure_program.name, //?
-                    ExposureTime = x.exposure_time,
-                    FNumber = (double?)x.f_number,
-                    Flash = x.flash.name, //?
-                    FocalLength = x.focal_length,
-                    FocalLengthIn35mmFormat = x.focal_length_in_35_mm_format,
-                    GainControl = x.gain_control.name, //?
-                    GpsAltitude = x.gps_altitude,
-                    GpsAltitudeRef = x.gps_altitude_ref.name, //?
-                    GpsDateStamp = x.gps_date_time_stamp,
-                    GpsDirection = x.gps_direction,
-                    GpsDirectionRef = x.gps_direction_ref.name, //?
-                    GpsLatitude = x.gps_latitude,
-                    GpsLatitudeRef = x.gps_latitude_ref.name, //?
-                    GpsLongitude = x.gps_longitude,
-                    GpsLongitudeRef = x.gps_longitude_ref.name, //?
-                    GpsMeasureMode = x.gps_measure_mode.name, //?
-                    GpsSatellites = x.gps_satellites,
-                    GpsStatus = x.gps_status.name, //?
-                    GpsVersionId = x.gps_version_id,
-                    Iso = x.iso,
-                    LightSource = x.light_source.name, //?
-                    Make = x.make.name, //?
-                    MeteringMode = x.metering_mode.name, //?
-                    Model = x.model.name, //?
-                    Orientation = x.orientation.name, //?
-                    Saturation = x.saturation.name, //?
-                    SceneCaptureType = x.scene_capture_type.name, //?
-                    SceneType = x.scene_type.name, //?
-                    SensingMethod = x.sensing_method.name, //?
-                    Sharpness = x.sharpness.name, //?
+                    BitsPerSample = (ushort?)x.BitsPerSample,
+                    Compression = x.Compression.Name, //?
+                    Contrast = x.Contrast.Name, //?
+                    CreateDate = x.CreateDate,
+                    DigitalZoomRatio = x.DigitalZoomRatio,
+                    ExposureCompensation = x.ExposureCompensation,
+                    ExposureMode = x.ExposureMode.Name, //?
+                    ExposureProgram = x.ExposureProgram.Name, //?
+                    ExposureTime = x.ExposureTime,
+                    FNumber = (double?)x.FNumber,
+                    Flash = x.Flash.Name, //?
+                    FocalLength = x.FocalLength,
+                    FocalLengthIn35mmFormat = x.FocalLengthIn35MmFormat,
+                    GainControl = x.GainControl.Name, //?
+                    GpsAltitude = x.GpsAltitude,
+                    GpsAltitudeRef = x.GpsAltitudeRef.Name, //?
+                    GpsDateStamp = x.GpsDateTimeStamp,
+                    GpsDirection = x.GpsDirection,
+                    GpsDirectionRef = x.GpsDirectionRef.Name, //?
+                    GpsLatitude = x.GpsLatitude,
+                    GpsLatitudeRef = x.GpsLatitudeRef.Name, //?
+                    GpsLongitude = x.GpsLongitude,
+                    GpsLongitudeRef = x.GpsLongitudeRef.Name, //?
+                    GpsMeasureMode = x.GpsMeasureMode.Name, //?
+                    GpsSatellites = x.GpsSatellites,
+                    GpsStatus = x.GpsStatus.Name, //?
+                    GpsVersionId = x.GpsVersionId,
+                    Iso = x.Iso,
+                    LightSource = x.LightSource.Name, //?
+                    Make = x.Make.Name, //?
+                    MeteringMode = x.MeteringMode.Name, //?
+                    Model = x.Model.Name, //?
+                    Orientation = x.Orientation.Name, //?
+                    Saturation = x.Saturation.Name, //?
+                    SceneCaptureType = x.SceneCaptureType.Name, //?
+                    SceneType = x.SceneType.Name, //?
+                    SensingMethod = x.SensingMethod.Name, //?
+                    Sharpness = x.Sharpness.Name, //?
                     // nikon
-                    AutoFocusAreaMode = x.af_area_mode.name, //?
-                    AutoFocusPoint = x.af_point.name, //?
-                    ActiveDLighting = x.active_d_lighting.name, //?
-                    Colorspace = x.colorspace.name, //?
-                    ExposureDifference = x.exposure_difference,
-                    FlashColorFilter = x.flash_color_filter.name, //?
-                    FlashCompensation = x.flash_compensation,
-                    FlashControlMode = x.flash_control_mode,
-                    FlashExposureCompensation = x.flash_exposure_compensation,
-                    FlashFocalLength = x.flash_focal_length,
-                    FlashMode = x.flash_mode.name, //?
-                    FlashSetting = x.flash_setting.name, //?
-                    FlashType = x.flash_type.name, //?
-                    FocusDistance = x.focus_distance,
-                    FocusMode = x.focus_mode.name, //?
-                    FocusPosition = x.focus_position,
-                    HighIsoNoiseReduction = x.high_iso_noise_reduction.name, //?
-                    HueAdjustment = x.hue_adjustment.name, //?
-                    NoiseReduction = x.noise_reduction.name, //?
-                    PictureControlName = x.picture_control_name.name, //?
-                    PrimaryAFPoint = x.primary_af_point,
-                    VRMode = x.vr_mode.name, //?
-                    VibrationReduction = x.vibration_reduction.name, //?
-                    VignetteControl = x.vignette_control.name, //?
-                    WhiteBalance = x.white_balance.name, //?
+                    AutoFocusAreaMode = x.AfAreaMode.Name, //?
+                    AutoFocusPoint = x.AfPoint.Name, //?
+                    ActiveDLighting = x.ActiveDLighting.Name, //?
+                    Colorspace = x.Colorspace.Name, //?
+                    ExposureDifference = x.ExposureDifference,
+                    FlashColorFilter = x.FlashColorFilter.Name, //?
+                    FlashCompensation = x.FlashCompensation,
+                    FlashControlMode = x.FlashControlMode,
+                    FlashExposureCompensation = x.FlashExposureCompensation,
+                    FlashFocalLength = x.FlashFocalLength,
+                    FlashMode = x.FlashMode.Name, //?
+                    FlashSetting = x.FlashSetting.Name, //?
+                    FlashType = x.FlashType.Name, //?
+                    FocusDistance = x.FocusDistance,
+                    FocusMode = x.FocusMode.Name, //?
+                    FocusPosition = x.FocusPosition,
+                    HighIsoNoiseReduction = x.HighIsoNoiseReduction.Name, //?
+                    HueAdjustment = x.HueAdjustment.Name, //?
+                    NoiseReduction = x.NoiseReduction.Name, //?
+                    PictureControlName = x.PictureControlName.Name, //?
+                    PrimaryAFPoint = x.PrimaryAfPoint,
+                    VRMode = x.VrMode.Name, //?
+                    VibrationReduction = x.VibrationReduction.Name, //?
+                    VignetteControl = x.VignetteControl.Name, //?
+                    WhiteBalance = x.WhiteBalance.Name, //?
                     // composite
-                    Aperture = (double?)x.aperture,
-                    AutoFocus = x.auto_focus.name, //?
-                    DepthOfField = x.depth_of_field,
-                    FieldOfView = x.field_of_view,
-                    HyperfocalDistance = x.hyperfocal_distance,
-                    LensId = x.lens.name, //?
-                    LightValue = x.light_value,
-                    ScaleFactor35Efl = x.scale_factor_35_efl,
-                    ShutterSpeed = x.shutter_speed,
+                    Aperture = (double?)x.Aperture,
+                    AutoFocus = x.AutoFocus.Name, //?
+                    DepthOfField = x.DepthOfField,
+                    FieldOfView = x.FieldOfView,
+                    HyperfocalDistance = x.HyperfocalDistance,
+                    LensId = x.Lens.Name, //?
+                    LightValue = x.LightValue,
+                    ScaleFactor35Efl = x.ScaleFactor35Efl,
+                    ShutterSpeed = x.ShutterSpeed,
                     // processing info
-                    RawConversionMode = x.raw_conversion_mode.name, //?
-                    SigmoidalContrastAdjustment = x.sigmoidal_contrast_adjustment,
-                    SaturationAdjustment = x.saturation_adjustment,
-                    CompressionQuality = x.compression_quality
+                    RawConversionMode = x.RawConversionMode.Name, //?
+                    SigmoidalContrastAdjustment = x.SigmoidalContrastAdjustment,
+                    SaturationAdjustment = x.SaturationAdjustment,
+                    CompressionQuality = x.CompressionQuality
                 })
                 .SingleAsync();
 		}
 
 
-		public Task<List<GpsData>> GetGpsDataForCategoryAsync(short categoryId, bool allowPrivate)
+		public Task<List<D.GpsData>> GetGpsDataForCategoryAsync(short categoryId, bool allowPrivate)
 		{
-            return _ctx.photo
-                .Where(x => x.category_id == categoryId && x.gps_latitude != null && (allowPrivate || !x.is_private))
-                .OrderBy(x => x.id)
-                .Select(x => new GpsData { 
-                    PhotoId = x.id,
-                    LongitudeDegrees = (float)x.gps_longitude,
-                    LatitudeDegrees = (float)x.gps_latitude
+            return _ctx.Photo
+                .Where(x => x.CategoryId == categoryId && x.GpsLatitude != null && (allowPrivate || !x.IsPrivate))
+                .OrderBy(x => x.Id)
+                .Select(x => new D.GpsData 
+                { 
+                    PhotoId = x.Id,
+                    LongitudeDegrees = (float)x.GpsLongitude,
+                    LatitudeDegrees = (float)x.GpsLatitude
                 })
 				.ToListAsync();
 		}
 
 
-		public Task<List<Comment>> GetCommentsForPhotoAsync(int photoId)
+		public Task<List<D.Comment>> GetCommentsForPhotoAsync(int photoId)
 		{
-            return _ctx.comment
-                .Include(c => c.user)
-                .Where(x => x.photo_id == photoId)
-                .OrderBy(x => x.entry_date)
-                .Select(x => new Comment {
-                    CommentText = x.message,
-                    EntryDate = x.entry_date,
-                    Username = x.user.username
+            return _ctx.Comment
+                .Include(c => c.User)
+                .Where(x => x.PhotoId == photoId)
+                .OrderBy(x => x.EntryDate)
+                .Select(x => new D.Comment 
+                {
+                    CommentText = x.Message,
+                    EntryDate = x.EntryDate,
+                    Username = x.User.Username
                 })
 				.ToListAsync();
 		}
 
 
-		public async Task<Rating> GetRatingsAsync(int photoId, string username)
+		public async Task<D.Rating> GetRatingsAsync(int photoId, string username)
 		{
-            var rating = new Rating();
+            var rating = new D.Rating();
 
 			var userId = await GetUserId(username);
-            var avg = await _ctx.rating.Where(x => x.photo_id == photoId).AverageAsync(x => (float?)x.score);
-            var usr = await _ctx.rating.Where(x => x.photo_id == photoId && x.user_id == userId).MaxAsync(x => (byte?)x.score);
+            var avg = await _ctx.Rating.Where(x => x.PhotoId == photoId).AverageAsync(x => (float?)x.Score);
+            var usr = await _ctx.Rating.Where(x => x.PhotoId == photoId && x.UserId == userId).MaxAsync(x => (byte?)x.Score);
 
             if(avg != null)
             {
@@ -471,14 +484,15 @@ namespace Maw.Data
             try{
                 var userId = await GetUserId(username);
                     
-                var ic = new comment {
-                    user_id = userId,
-    				photo_id = photoId,
-                    message = comment,
-                    entry_date = DateTime.Now
+                var ic = new Comment 
+                {
+                    UserId = userId,
+    				PhotoId = photoId,
+                    Message = comment,
+                    EntryDate = DateTime.Now
                 };
     
-                _ctx.comment.Add(ic);
+                _ctx.Comment.Add(ic);
     
                 return await _ctx.SaveChangesAsync();
             }
@@ -493,42 +507,43 @@ namespace Maw.Data
 		public async Task<float?> SavePhotoRatingAsync(int photoId, string username, byte rating)
         {
             var userId = await GetUserId(username);
-            var ir = await _ctx.rating.SingleOrDefaultAsync(x => x.photo_id == photoId && x.user_id == userId);
+            var ir = await _ctx.Rating.SingleOrDefaultAsync(x => x.PhotoId == photoId && x.UserId == userId);
 
             if(ir == null)
             {
-                ir = new rating {
-					photo_id = photoId,
-                    user_id = userId,
-					score = rating
+                ir = new Rating 
+                {
+					PhotoId = photoId,
+                    UserId = userId,
+					Score = rating
                 };
 
-                _ctx.rating.Add(ir);
+                _ctx.Rating.Add(ir);
                 await _ctx.SaveChangesAsync();
             }
-            else if(ir.score != rating)
+            else if(ir.Score != rating)
             {
-                ir.score = rating;
+                ir.Score = rating;
 
                 await _ctx.SaveChangesAsync();
             }
 
-            return (float?) await _ctx.rating.Where(x => x.photo_id == photoId).AverageAsync(y => y.score);
+            return (float?) await _ctx.Rating.Where(x => x.PhotoId == photoId).AverageAsync(y => y.Score);
         }
 		
 		
 		public async Task<float?> RemovePhotoRatingAsync(int photoId, string username)
 		{
             var userId = await GetUserId(username);
-            var rating = await _ctx.rating.SingleAsync(x => x.photo_id == photoId && x.user_id == userId);
+            var rating = await _ctx.Rating.SingleAsync(x => x.PhotoId == photoId && x.UserId == userId);
 
-            _ctx.rating.Remove(rating);
+            _ctx.Rating.Remove(rating);
 
             await _ctx.SaveChangesAsync();
 
-            var avg = await _ctx.rating
-                .Where(x => x.photo_id == photoId)
-                .AverageAsync(y => (float?)y.score);
+            var avg = await _ctx.Rating
+                .Where(x => x.PhotoId == photoId)
+                .AverageAsync(y => (float?)y.Score);
             
             return avg ?? 0;
 		}
@@ -536,16 +551,17 @@ namespace Maw.Data
 
         // TODO: for the following methods, we fake out the hasGps value on Category to false as we currently do not
         //       use this when returning photos like this.  consider correcting this in the future
-        public async Task<List<PhotoAndCategory>> GetPhotosAndCategoriesByCommentDateAsync(bool newestFirst, bool allowPrivate)
+        public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByCommentDateAsync(bool newestFirst, bool allowPrivate)
         {
-			var query = _ctx.comment
-				.Where(x => allowPrivate || !x.photo.is_private)
-				.GroupBy(x => x.photo)
-				.Select(x => new {
+			var query = _ctx.Comment
+				.Where(x => allowPrivate || !x.Photo.IsPrivate)
+				.GroupBy(x => x.Photo)
+				.Select(x => new 
+                {
 					Photo = x.Key,
-                    Category = x.Key.category,
-					FirstPostDate = x.Min(d => d.entry_date),
-					LastPostDate = x.Max(d => d.entry_date)
+                    Category = x.Key.Category,
+					FirstPostDate = x.Min(d => d.EntryDate),
+					LastPostDate = x.Max(d => d.EntryDate)
 				});
 
 			if(newestFirst)
@@ -560,7 +576,8 @@ namespace Maw.Data
 			var photos = await query.ToListAsync();
 
 			return photos
-				.Select(x => new PhotoAndCategory {
+				.Select(x => new D.PhotoAndCategory 
+                {
                     Photo = BuildPhoto(x.Photo),
                     Category = BuildPhotoCategory(x.Category, false)
                 })
@@ -569,19 +586,20 @@ namespace Maw.Data
         }
 
 
-		public async Task<List<PhotoAndCategory>> GetPhotosAndCategoriesByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate)
+		public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate)
         {
-			var query = _ctx.comment
-				.Include(c => c.user)
-				.Where(x => x.user.username == username)
-				.GroupBy(x => x.photo)
-				.Select(g => new {
+			var query = _ctx.Comment
+				.Include(c => c.User)
+				.Where(x => x.User.Username == username)
+				.GroupBy(x => x.Photo)
+				.Select(g => new 
+                {
 					Photo = g.Key,
-                    Category = g.Key.category,
-					FirstPostDate = g.Min(x => x.entry_date), 
-					LastPostDate = g.Max(x => x.entry_date)
+                    Category = g.Key.Category,
+					FirstPostDate = g.Min(x => x.EntryDate), 
+					LastPostDate = g.Max(x => x.EntryDate)
 				})
-				.Where(x => allowPrivate || !x.Photo.is_private);
+				.Where(x => allowPrivate || !x.Photo.IsPrivate);
 
             if(greatestFirst)
             {
@@ -595,7 +613,8 @@ namespace Maw.Data
 			var photos = await query.ToListAsync();
 
 			return photos
-				.Select(x => new PhotoAndCategory {
+				.Select(x => new D.PhotoAndCategory 
+                {
                     Photo = BuildPhoto(x.Photo),
                     Category = BuildPhotoCategory(x.Category, false)
                 })
@@ -604,16 +623,17 @@ namespace Maw.Data
         }
 
 
-		public async Task<List<PhotoAndCategory>> GetPhotosAndCategoriesByCommentCountAsync(bool greatestFirst, bool allowPrivate)
+		public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByCommentCountAsync(bool greatestFirst, bool allowPrivate)
         {
-			var query = _ctx.comment
-				.GroupBy(x => x.photo)
-				.Select(g => new {
+			var query = _ctx.Comment
+				.GroupBy(x => x.Photo)
+				.Select(g => new 
+                {
 					Photo = g.Key, 
-                    Category = g.Key.category,
+                    Category = g.Key.Category,
 					CommentCount = g.Count()
 				})
-				.Where(x => allowPrivate || !x.Photo.is_private);
+				.Where(x => allowPrivate || !x.Photo.IsPrivate);
 
             if(greatestFirst)
             {
@@ -627,7 +647,8 @@ namespace Maw.Data
 			var photos = await query.ToListAsync();
 
 			return photos
-				.Select(x => new PhotoAndCategory {
+				.Select(x => new D.PhotoAndCategory 
+                {
                     Photo = BuildPhoto(x.Photo),
                     Category = BuildPhotoCategory(x.Category, false)
                 })
@@ -636,16 +657,17 @@ namespace Maw.Data
         }
 		
 		
-		public async Task<List<PhotoAndCategory>> GetPhotosAndCategoriesByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
+		public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
 		{
-            var query = _ctx.rating
-                .GroupBy(x => x.photo)
-                .Select(g => new {
+            var query = _ctx.Rating
+                .GroupBy(x => x.Photo)
+                .Select(g => new 
+                {
                     Photo = g.Key, 
-                    Category = g.Key.category,
-                    AverageRating = g.Average(x => x.score)
+                    Category = g.Key.Category,
+                    AverageRating = g.Average(x => x.Score)
                 })
-                .Where(x => allowPrivate || !x.Photo.is_private);
+                .Where(x => allowPrivate || !x.Photo.IsPrivate);
 
             if(highestFirst) 
             {
@@ -659,7 +681,8 @@ namespace Maw.Data
 			var photos = await query.ToListAsync();
 
 			return photos
-				.Select(x => new PhotoAndCategory {
+				.Select(x => new D.PhotoAndCategory 
+                {
                     Photo = BuildPhoto(x.Photo),
                     Category = BuildPhotoCategory(x.Category, false)
                 })
@@ -668,26 +691,27 @@ namespace Maw.Data
         }
 		
 		
-		public async Task<List<PhotoAndCategory>> GetPhotosAndCategoriesByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
+		public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
 		{
-			var query = _ctx.rating
-				.Where(x => x.user.username == username && (allowPrivate || !x.photo.is_private));
+			var query = _ctx.Rating
+				.Where(x => x.User.Username == username && (allowPrivate || !x.Photo.IsPrivate));
 
             if(highestFirst)
             {
-				query.OrderByDescending(x => x.score);
+				query.OrderByDescending(x => x.Score);
             }
             else
             {
-				query.OrderBy(x => x.score);
+				query.OrderBy(x => x.Score);
             }
 
 			var photos = await query.ToListAsync();
 
 			return photos
-				.Select(x => new PhotoAndCategory {
-                    Photo = BuildPhoto(x.photo),
-                    Category = BuildPhotoCategory(x.photo.category, false)
+				.Select(x => new D.PhotoAndCategory 
+                {
+                    Photo = BuildPhoto(x.Photo),
+                    Category = BuildPhotoCategory(x.Photo.Category, false)
                 })
 				.Take(MAX_RESULTS)
 				.ToList();
@@ -696,59 +720,65 @@ namespace Maw.Data
         
         async Task<short> GetUserId(string username)
         {
-            return await _ctx.user
-                .Where(u => u.username == username)
-                .Select(x => x.id)
+            return await _ctx.User
+                .Where(u => u.Username == username)
+                .Select(x => x.Id)
                 .SingleAsync();
         }
         
         
-		Photo BuildPhoto(photo x)
+		D.Photo BuildPhoto(Photo x)
         {
-            return new Photo {
-                Id = x.id,
-                CategoryId = x.category_id,
-                Latitude = x.gps_latitude,
-                Longitude = x.gps_longitude,
-                XsInfo = new PhotoInfo {
-                    Height = x.xs_height,
-                    Width = x.xs_width,
-                    Path = x.xs_path
+            return new D.Photo {
+                Id = x.Id,
+                CategoryId = x.CategoryId,
+                Latitude = x.GpsLatitude,
+                Longitude = x.GpsLongitude,
+                XsInfo = new D.PhotoInfo 
+                {
+                    Height = x.XsHeight,
+                    Width = x.XsWidth,
+                    Path = x.XsPath
                 },
-                SmInfo = new PhotoInfo {
-                    Height = x.sm_height,
-                    Width = x.sm_width,
-                    Path = x.sm_path
+                SmInfo = new D.PhotoInfo 
+                {
+                    Height = x.SmHeight,
+                    Width = x.SmWidth,
+                    Path = x.SmPath
                 },
-                MdInfo = new PhotoInfo {
-                    Height = x.md_height,
-                    Width = x.md_width,
-                    Path = x.md_path
+                MdInfo = new D.PhotoInfo 
+                {
+                    Height = x.MdHeight,
+                    Width = x.MdWidth,
+                    Path = x.MdPath
                 },
-                LgInfo = new PhotoInfo {
-                    Height = x.lg_height,
-                    Width = x.lg_width,
-                    Path = x.lg_path
+                LgInfo = new D.PhotoInfo 
+                {
+                    Height = x.LgHeight,
+                    Width = x.LgWidth,
+                    Path = x.LgPath
                 },
-                PrtInfo = new PhotoInfo {
-                    Height = x.prt_height,
-                    Width = x.prt_width,
-                    Path = x.prt_path
+                PrtInfo = new D.PhotoInfo 
+                {
+                    Height = x.PrtHeight,
+                    Width = x.PrtWidth,
+                    Path = x.PrtPath
                 }
             };
         }
 
 
-        Category BuildPhotoCategory(category cat, bool hasGps)
+        D.Category BuildPhotoCategory(Category cat, bool hasGps)
 		{
-            return new Category
-            { 	Id = cat.id,
-                Year = cat.year,
-                Name = cat.name,
-                TeaserPhotoInfo = new PhotoInfo 
-				{	Height = (short)cat.teaser_photo_height,
-					Width = (short)cat.teaser_photo_width,
-                    Path = cat.teaser_photo_path
+            return new D.Category
+            { 	Id = cat.Id,
+                Year = cat.Year,
+                Name = cat.Name,
+                TeaserPhotoInfo = new D.PhotoInfo 
+				{	
+                    Height = (short)cat.TeaserPhotoHeight,
+					Width = (short)cat.TeaserPhotoWidth,
+                    Path = cat.TeaserPhotoPath
 				},
                 HasGpsData = hasGps
 			};

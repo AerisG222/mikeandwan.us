@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Maw.Domain.Blogs;
+using D = Maw.Domain.Blogs;
 using Maw.Data.EntityFramework.Blogs;
 
 
 namespace Maw.Data
 {
 	public class BlogRepository
-		: IBlogRepository
+		: D.IBlogRepository
 	{
 		readonly BlogContext _ctx;
 
@@ -26,35 +26,36 @@ namespace Maw.Data
 		}
 
 
-		public Task<List<Blog>> GetBlogsAsync()
+		public Task<List<D.Blog>> GetBlogsAsync()
 		{
-			return _ctx.blog
-				.Select(x => new Blog {
-					Id = x.id,
-					Title = x.title,
-					Copyright = x.copyright,
-					Description = x.description,
-					LastPostDate = x.post.Select(p => p.publish_date).Max(d => d)
+			return _ctx.Blog
+				.Select(x => new D.Blog 
+				{
+					Id = x.Id,
+					Title = x.Title,
+					Copyright = x.Copyright,
+					Description = x.Description,
+					LastPostDate = x.Post.Select(p => p.PublishDate).Max(d => d)
 				})
 				.ToListAsync();
 		}
 
 
-		public Task<List<Post>> GetAllPostsAsync(short blogId)
+		public Task<List<D.Post>> GetAllPostsAsync(short blogId)
 		{
-			return _ctx.post
-				.Where(x => x.blog_id == blogId)
+			return _ctx.Post
+				.Where(x => x.BlogId == blogId)
 				.Select(x => BuildPost(x))
 				.OrderByDescending(x => x.PublishDate)
 				.ToListAsync();
 		}
 
 
-		public async Task<IEnumerable<Post>> GetLatestPostsAsync(short blogId, short postCount)
+		public async Task<IEnumerable<D.Post>> GetLatestPostsAsync(short blogId, short postCount)
 		{
-			var posts = await _ctx.post
-				.Where(x => x.blog_id == blogId)
-				.OrderByDescending(x => x.publish_date)
+			var posts = await _ctx.Post
+				.Where(x => x.BlogId == blogId)
+				.OrderByDescending(x => x.PublishDate)
 				.Take(postCount)
 				.ToListAsync();
 				
@@ -62,40 +63,41 @@ namespace Maw.Data
 		}
 
 
-		public Task<Post> GetPostAsync(short id)
+		public Task<D.Post> GetPostAsync(short id)
 		{
-			return _ctx.post
-				.Where(x => x.id == id)
+			return _ctx.Post
+				.Where(x => x.Id == id)
 				.Select(x => BuildPost(x))
 				.SingleAsync();
 		}
 
 
-		public async Task AddPostAsync(Post post)
+		public async Task AddPostAsync(D.Post post)
 		{
-			var p = new post()
+			var p = new Post
 			{
-				blog_id = post.BlogId,
-				title = post.Title,
-				description = post.Description,
-				publish_date = post.PublishDate
+				BlogId = post.BlogId,
+				Title = post.Title,
+				Description = post.Description,
+				PublishDate = post.PublishDate
 			};
 			
-			_ctx.post
+			_ctx.Post
 				.Add(p);
 			
 			await _ctx.SaveChangesAsync();
 		}
 		
 		
-		Post BuildPost(post post)
+		D.Post BuildPost(Post post)
 		{
-			return new Post {
-				Id = post.id,
-				BlogId = post.blog_id,
-				Description = post.description,
-				PublishDate = post.publish_date,
-				Title = post.title
+			return new D.Post 
+			{
+				Id = post.Id,
+				BlogId = post.BlogId,
+				Description = post.Description,
+				PublishDate = post.PublishDate,
+				Title = post.Title
 			};
 		}
 	}

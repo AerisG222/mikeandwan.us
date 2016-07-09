@@ -38,11 +38,13 @@ select concat('insert into photo.photo (
     '''', REPLACE(orig_path, '/orig/', '/lg/'), ''', ',
     orig_height, ', ',
     orig_width, ', ',
-    CONCAT('''', COALESCE(raw_path, REPLACE(orig_path, '/orig/', '/src/')), ''''), ', ',
+    CONCAT('''', COALESCE(REPLACE(raw_path, '/raw/', '/src/'), REPLACE(orig_path, '/orig/', '/src/')), ''''), ', ',
     orig_height, ', ',
     orig_width, ', ',
     '''', REPLACE(orig_path, '/orig/', '/prt/'), '''',
     ');')
 from photo;
+
+select 'update photo.photo set src_path = REPLACE(src_path, ''/srv/www/website_assets/photos/'', ''/images/'') where src_path like ''/srv/www%'';';
 
 select concat('alter sequence photo.photo_id_seq restart with ', max(id) + 1, ';') from photo;

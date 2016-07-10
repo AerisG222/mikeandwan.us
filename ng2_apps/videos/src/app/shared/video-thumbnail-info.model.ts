@@ -1,4 +1,4 @@
-import { ThumbnailInfo } from '../../../../ng_maw/src/app/thumbnail-list/';
+import { ThumbnailInfo } from '../../ng_maw/thumbnail-list/';
 
 import { IVideo } from './ivideo.model';
 

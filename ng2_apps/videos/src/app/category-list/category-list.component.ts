@@ -1,9 +1,9 @@
 import { Component, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { PagerComponent } from '../../../../ng_maw/src/app/pager/pager.component';
-import { ThumbnailListComponent } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-list.component';
-import { SelectedThumbnail } from '../../../../ng_maw/src/app/thumbnail-list/selected-thumbnail.model';
+import { PagerComponent } from '../../ng_maw/pager/pager.component';
+import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
+import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
 
 import { ICategory } from '../shared/icategory.model';
 import { CategoryThumbnailInfo } from '../shared/category-thumbnail-info.model';
@@ -15,6 +15,7 @@ import { VideoStateService } from '../shared/video-state.service';
 @Component({
     moduleId: module.id,
     selector: 'category-list',
+    directives: [ PagerComponent, ThumbnailListComponent ],
     templateUrl: 'category-list.component.html',
     styleUrls: [ 'category-list.component.css' ]
 })

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { BreadcrumbService } from '../../../../ng_maw/src/app/shared/breadcrumb.service';
-import { Breadcrumb } from '../../../../ng_maw/src/app/shared/breadcrumb.model';
+import { BreadcrumbService } from '../../ng_maw/shared/breadcrumb.service';
+import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
 
 import { ICategory } from './icategory.model';
 
@@ -15,15 +15,15 @@ export class VideoNavigationService {
     }
 
     gotoYearList(): void {
-        this.gotoDestination([ '/year' ], this.getRootBreadcrumbs());
+        this.gotoDestination([ '/videos' ], this.getRootBreadcrumbs());
     }
 
     gotoCategoryList(year: number): void {
-        this.gotoDestination([ '/year', year ], this.getYearListBreadcrumbs(year));
+        this.gotoDestination([ '/videos', year ], this.getYearListBreadcrumbs(year));
     }
 
     gotoVideoList(year: number, category: ICategory): void {
-        this.gotoDestination([ '/year', year, category.id ], this.getCategoryListBreadcrumbs(year, category));
+        this.gotoDestination([ '/videos', year, category.id ], this.getCategoryListBreadcrumbs(year, category));
     }
 
     private getRootBreadcrumbs(): Array<Breadcrumb> {
@@ -48,11 +48,11 @@ export class VideoNavigationService {
     }
 
     private getYearListBreadcrumb(year: number): Breadcrumb {
-        return new Breadcrumb(year.toString(), [ '/year' ]);
+        return new Breadcrumb(year.toString(), [ '/videos' ]);
     }
 
     private getCategoryListBreadcrumb(year: number, category: ICategory): Breadcrumb {
-        return new Breadcrumb(category.name, [ '/year', year ]);
+        return new Breadcrumb(category.name, [ '/videos', year ]);
     }
 
     private gotoDestination(linkParamArray: Array<any>, breadcrumbs: Array<Breadcrumb>): void {

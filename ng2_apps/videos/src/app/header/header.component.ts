@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgFor } from '@angular/common';
 
-import { BreadcrumbListComponent } from '../../../../ng_maw/src/app/breadcrumb-list/breadcrumb-list.component';
+import { BreadcrumbListComponent } from '../../ng_maw/breadcrumb-list/breadcrumb-list.component';
 
 import { VideoStateService } from '../shared/video-state.service';
 

@@ -2,9 +2,9 @@ import { bootstrap } from '@angular/platform-browser-dynamic';
 import { HTTP_BINDINGS } from '@angular/http';
 import { enableProdMode } from '@angular/core';
 
-import { BreadcrumbService } from '../../ng_maw/src/app/shared/breadcrumb.service';
-import { LocalStorageService } from '../../ng_maw/src/app/shared/local-storage.service';
-import { ResponsiveService } from '../../ng_maw/src/app/shared/responsive.service';
+import { BreadcrumbService } from './ng_maw/shared/breadcrumb.service';
+import { LocalStorageService } from './ng_maw/shared/local-storage.service';
+import { ResponsiveService } from './ng_maw/shared/responsive.service';
 
 import { APP_ROUTER_PROVIDERS } from './app/app.routes';
 import { VideosAppComponent } from './app/videos.component';

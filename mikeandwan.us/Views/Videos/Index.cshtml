@@ -1,21 +1,26 @@
 @{
     Layout = "_SinglePageAppLayout";
     ViewBag.Title = "videos"; 
-    ViewBag.AngularAppRoot = "/js/videos/";
 }
 
 @section custom_head {
-    <base href="/videos/" />
-}
-
-@section scripts_head {
-    @Html.Partial("_js_Angular2")
+    <base href="." />
 }
 
 @section scripts_footer {
+    <script src="/js/videos/vendor/es6-shim/es6-shim.js"></script>
+    <script src="/js/videos/vendor/reflect-metadata/Reflect.js"></script>
+    <script src="/js/videos/vendor/systemjs/dist/system.src.js"></script>
+    <script src="/js/videos/vendor/zone.js/dist/zone.js"></script>
     <script>
-        System.import('/js/videos/bootstrap');
+        SystemJS.config({
+            baseURL: '/js/videos'
+        });
+
+        System.import('system-config.js').then(function () {
+            System.import('main');
+        }).catch(console.error.bind(console));
     </script>
 }
 
-<videoapp>Loading...</videoapp>
+<videos-app>Loading...</videos-app>

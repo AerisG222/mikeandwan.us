@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Maw.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -141,6 +142,15 @@ namespace MawMvcApp
                     HttpOnly = HttpOnlyPolicy.Always,
                     Secure = CookieSecurePolicy.SameAsRequest
                 });
+
+            if(env.IsDevelopment())
+            {
+                app.UseStaticFiles(new StaticFileOptions()
+                {
+                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"../ng2_apps/videos/dist")),
+                    RequestPath = new PathString("/js/videos")
+                });
+            }
 
             app.UseIdentity();
             app.UseStaticFiles();

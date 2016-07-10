@@ -2,9 +2,9 @@ import { Component, ViewChild, ChangeDetectorRef, AfterViewInit, OnInit } from '
 import { NgIf, NgStyle } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
-import { PagerComponent } from '../../../../ng_maw/src/app/pager/pager.component';
-import { ThumbnailListComponent } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-list.component';
-import { SelectedThumbnail } from '../../../../ng_maw/src/app/thumbnail-list/selected-thumbnail.model';
+import { PagerComponent } from '../../ng_maw/pager/pager.component';
+import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
+import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
 
 import { IVideo } from '../shared/ivideo.model';
 import { IVideoInfo } from '../shared/ivideo-info.model';

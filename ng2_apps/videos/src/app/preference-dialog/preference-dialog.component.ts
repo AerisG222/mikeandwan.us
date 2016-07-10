@@ -1,8 +1,8 @@
 import { Component, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { NgModel, FORM_DIRECTIVES } from '@angular/common';
 
-import { DialogComponent } from '../../../../ng_maw/src/app/dialog/dialog.component';
-import { DialogButton } from '../../../../ng_maw/src/app/dialog/dialog-button.model';
+import { DialogComponent } from '../../ng_maw/dialog/dialog.component';
+import { DialogButton } from '../../ng_maw/dialog/dialog-button.model';
 
 import { VideoStateService } from '../shared/video-state.service';
 

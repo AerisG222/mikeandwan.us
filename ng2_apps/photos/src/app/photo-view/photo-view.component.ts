@@ -1,6 +1,7 @@
-/// <reference path="../../../pixastic/pixastic.d.ts" />
 import { Component, Input, ChangeDetectorRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { NgIf, NgClass, NgStyle } from '@angular/common';
+
+import { Pixastic } from '../../pixastic/pixastic';
 
 import { ResponsiveService } from '../../../../ng_maw/src/app/shared/responsive.service';
 

@@ -1,6 +1,6 @@
-interface PixasticStatic {
+export interface PixasticStatic {
 	process(img : HTMLElement, operation : string, options : any) : any;
 	revert(img : HTMLElement) : any;
 }
 
-declare var Pixastic: PixasticStatic;
+export var Pixastic: PixasticStatic;

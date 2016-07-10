@@ -7,7 +7,7 @@ import { LocalStorageService } from './ng_maw/shared/local-storage.service';
 import { ResponsiveService } from './ng_maw/shared/responsive.service';
 
 import { APP_ROUTER_PROVIDERS } from './app/app.routes';
-import { VideosAppComponent } from './app/videos.component';
+import { VideosAppComponent } from './app/app.component';
 import { environment } from './app/environment';
 import { SizeService } from "./app/shared/size.service";
 import { VideoDataService } from './app/shared/video-data.service';

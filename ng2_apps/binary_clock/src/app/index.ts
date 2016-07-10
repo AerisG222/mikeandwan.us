@@ -1,2 +1,2 @@
 export * from './environment';
-export * from './binary-clock.component';
+export * from './app.component';

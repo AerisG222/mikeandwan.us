@@ -1,2 +1,2 @@
 export * from './environment';
-export * from './weekend-countdown.component';
+export * from './app.component';

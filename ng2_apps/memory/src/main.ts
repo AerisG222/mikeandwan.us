@@ -3,7 +3,7 @@ import { enableProdMode } from '@angular/core';
 
 import { APP_ROUTER_PROVIDERS } from './app/app.routes';
 import { MemoryService } from './app/memory.service';
-import { MemoryAppComponent } from './app/memory.component';
+import { MemoryAppComponent } from './app/app.component';
 import { environment } from './app/environment';
 
 if (environment.production) {

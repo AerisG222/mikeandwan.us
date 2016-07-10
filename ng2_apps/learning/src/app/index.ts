@@ -1,3 +1,3 @@
 export * from './environment';
-export * from './learning.component';
+export * from './app.component';
 export * from './audio-source.model';

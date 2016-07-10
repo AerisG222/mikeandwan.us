@@ -3,7 +3,7 @@ import { NgIf, NgClass, NgStyle } from '@angular/common';
 
 import { Pixastic } from '../../pixastic/pixastic';
 
-import { ResponsiveService } from '../../../../ng_maw/src/app/shared/responsive.service';
+import { ResponsiveService } from '../../ng_maw/shared/responsive.service';
 
 import { PhotoNavigationService } from '../shared/photo-navigation.service';
 import { PhotoStateService } from '../shared/photo-state.service';
@@ -210,10 +210,10 @@ export class PhotoViewComponent implements AfterViewInit {
         }
 
         if (this._responsiveService.getBreakpoint() === ResponsiveService.BP_LG) {
-            return this.photo.fullerInfo.path;
+            return this.photo.mdInfo.path;
         }
         else {
-            return this.photo.fullsizeInfo.path;
+            return this.photo.smInfo.path;
         }
     }
 

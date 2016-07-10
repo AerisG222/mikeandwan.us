@@ -1,0 +1,1 @@
+export { Pixastic } from './pixastic';

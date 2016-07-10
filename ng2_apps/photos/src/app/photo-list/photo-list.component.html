@@ -1,7 +1,7 @@
 <div class="row" style="margin-left: 0; margin-right: 0">
-    <map class="col-xs-12" *ngIf="showMapView" [context]="context"></map>
-    <photo class="col-xs-12" *ngIf="showPhotoView && context?.current" [context]="context"></photo>
+    <map-view class="col-xs-12" *ngIf="showMapView" [context]="context"></map-view>
+    <photo-view class="col-xs-12" *ngIf="showPhotoView && context?.current" [context]="context"></photo-view>
 </div>
 <pager (pageSelected)="onChangePage($event)"></pager>
-<thumblist (selected)="onThumbnailSelected($event)"></thumblist>
-<photodialog [photo]="context?.current?.photo"></photodialog>
+<thumbnail-list (selected)="onThumbnailSelected($event)"></thumbnail-list>
+<photo-dialog [photo]="context?.current?.photo"></photo-dialog>

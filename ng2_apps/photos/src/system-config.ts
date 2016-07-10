@@ -30,6 +30,15 @@ const barrels: string[] = [
   // Thirdparty barrels.
   'rxjs',
 
+  'pixastic',
+
+  'ng_maw/breadcrumb-list',
+  'ng_maw/dialog',
+  'ng_maw/pager',
+  'ng_maw/rating',
+  'ng_maw/shared',
+  'ng_maw/thumbnail-list',
+  
   // App specific barrels.
   'app',
   'app/shared',

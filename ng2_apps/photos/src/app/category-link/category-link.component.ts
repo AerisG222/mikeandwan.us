@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Breadcrumb } from '../../../../ng_maw/src/app/shared/breadcrumb.model';
+import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
 
 import { ICategory } from '../shared/icategory.model';
 import { PhotoNavigationService } from '../shared/photo-navigation.service';

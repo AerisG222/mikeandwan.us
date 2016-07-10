@@ -3,9 +3,9 @@ import { enableProdMode } from '@angular/core';
 import { HTTP_BINDINGS } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import { LocalStorageService } from '../../ng_maw/src/app/shared/local-storage.service';
-import { BreadcrumbService } from '../../ng_maw/src/app/shared/breadcrumb.service';
-import { ResponsiveService } from '../../ng_maw/src/app/shared/responsive.service';
+import { LocalStorageService } from './ng_maw/shared/local-storage.service';
+import { BreadcrumbService } from './ng_maw/shared/breadcrumb.service';
+import { ResponsiveService } from './ng_maw/shared/responsive.service';
 
 import { APP_ROUTER_PROVIDERS } from './app/app.routes';
 import { PhotosAppComponent } from './app/photos.component';

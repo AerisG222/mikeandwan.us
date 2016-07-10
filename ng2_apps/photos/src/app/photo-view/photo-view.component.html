@@ -2,7 +2,7 @@
     <div class="col-xs-12">
         <div *ngIf="!context.isCategoryMode" class="row">
             <div class="col-xs-12">
-                <categorylink [category]="category"></categorylink>
+                <category-link [category]="category"></category-link>
             </div>
         </div>
     	<div class="row main-image" [ngClass]="{hide_main_image_border: category}">
@@ -28,27 +28,27 @@
             </div>
             <div class="text-center col-sm-4">
                 <div class="btn-group">
-            		<button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.fullsizeInfo)"><i class="fa fa-image thumb-size"></i></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.fullerInfo)"><i class="fa fa-image full-size"></i></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.originalInfo)"><i class="fa fa-image"></i></button>
+            		<button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.smInfo)"><i class="fa fa-image thumb-size"></i></button>
+            		<button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.mdInfo)"><i class="fa fa-image full-size"></i></button>
+            		<button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.lgInfo)"><i class="fa fa-image"></i></button>
                 </div>
             </div>
             <div class="right col-sm-4">
                 <div class="btn-group pull-right">
-                    <slideshowbutton [context]="context"></slideshowbutton>
+                    <slideshow-button [context]="context"></slideshow-button>
                 </div>
             </div>
     	</div>
 
         <div class="row">
-        	<div class="col-sm-12 hidden-xs photo-info" *ngIf="showComments"><comments [photo]="photo"></comments></div>
-        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" *ngIf="showRatings"><rating [photo]="photo"></rating></div>
-        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info exif" *ngIf="showExif"><exif [photo]="context?.current"></exif></div>
-            <div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" *ngIf="showEffects"><effects [photo]="context?.current" (update)="onFiltersUpdated($event)"></effects></div>
-            <div class="col-sm-offset-2 col-sm-8 photo-info" *ngIf="showFullscreen"><fullscreen [context]="context"></fullscreen></div>
+        	<div class="col-sm-12 hidden-xs photo-info" *ngIf="showComments"><comment-view [photo]="photo"></comment-view></div>
+        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" *ngIf="showRatings"><rating-view [photo]="photo"></rating-view></div>
+        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info exif" *ngIf="showExif"><exif-view [photo]="context?.current"></exif-view></div>
+            <div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" *ngIf="showEffects"><effects-view [photo]="context?.current" (update)="onFiltersUpdated($event)"></effects-view></div>
+            <div class="col-sm-offset-2 col-sm-8 photo-info" *ngIf="showFullscreen"><fullscreen-view [context]="context"></fullscreen-view></div>
         </div>
     </div>
 </div>
 
-<help></help>
-<savedialog></savedialog>
+<help-dialog></help-dialog>
+<save-dialog></save-dialog>

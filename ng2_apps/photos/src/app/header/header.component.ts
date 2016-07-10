@@ -1,8 +1,8 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 
-import { BreadcrumbListComponent } from '../../../../ng_maw/src/app/breadcrumb-list/breadcrumb-list.component';
-import { Breadcrumb } from '../../../../ng_maw/src/app/shared/breadcrumb.model';
+import { BreadcrumbListComponent } from '../../ng_maw/breadcrumb-list/breadcrumb-list.component';
+import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
 
 import { PhotoNavigationService } from '../shared/photo-navigation.service';
 import { PhotoStateService } from '../shared/photo-state.service';

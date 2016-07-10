@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgIf } from '@angular/common';
 
-import { DialogComponent } from '../../../../ng_maw/src/app/dialog/dialog.component';
+import { DialogComponent } from '../../ng_maw/dialog/dialog.component';
 
 @Component({
     moduleId: module.id,

@@ -5,20 +5,26 @@
 }
 
 @section custom_head {
-    <base href="/photos/" />
-}
-
-@section scripts_head {
-    @Html.Partial("_js_Angular2")
+    <base href="." />
 }
 
 @section scripts_footer {
     @Html.Partial("_js_Mousetrap")
 	@Html.Partial("_js_GoogleMaps")
     @Html.Partial("_js_Pixastic")
+    <script src="/js/videos/vendor/es6-shim/es6-shim.js"></script>
+    <script src="/js/videos/vendor/reflect-metadata/Reflect.js"></script>
+    <script src="/js/videos/vendor/systemjs/dist/system.src.js"></script>
+    <script src="/js/videos/vendor/zone.js/dist/zone.js"></script>
     <script>
-        System.import('/js/photos/bootstrap');
+        SystemJS.config({
+            baseURL: '/js/photos'
+        });
+
+        System.import('system-config.js').then(function () {
+            System.import('main');
+        }).catch(console.error.bind(console));
     </script>
 }
 
-<photoapp>Loading...</photoapp>
+<photos-app>Loading...</photos-app>

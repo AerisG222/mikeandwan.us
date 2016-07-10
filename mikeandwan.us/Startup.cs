@@ -143,8 +143,15 @@ namespace MawMvcApp
                     Secure = CookieSecurePolicy.SameAsRequest
                 });
 
+            // TODO: add a build step for production so these urls are published into wwwroot
             if(env.IsDevelopment())
             {
+                app.UseStaticFiles(new StaticFileOptions()
+                {
+                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"../ng2_apps/photos/dist")),
+                    RequestPath = new PathString("/js/photos")
+                });
+
                 app.UseStaticFiles(new StaticFileOptions()
                 {
                     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"../ng2_apps/videos/dist")),

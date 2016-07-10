@@ -1,12 +1,12 @@
 <div class="fullscreen">
-    <img [src]="context.current.photo.originalInfo.path" />
+    <img [src]="context.current.photo.lgInfo.path" />
     <div>
         <div [hidden]="context.isCategoryMode" class="pull-left">
-            <categorylink [category]="context.current.category"></categorylink>
+            <category-link [category]="context.current.category"></category-link>
         </div>
         <div class="pull-right">
             <button type="button" class="btn btn-default btn-xs" (click)="context.movePrevious()"><i class="fa fa-arrow-left"></i></button>
-            <slideshowbutton [context]="context"></slideshowbutton>
+            <slideshow-button [context]="context"></slideshow-button>
             <button type="button" class="btn btn-default btn-xs" (click)="context.moveNext()"><i class="fa fa-arrow-right"></i></button>
         </div>
     </div>

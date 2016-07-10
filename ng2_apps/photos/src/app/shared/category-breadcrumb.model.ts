@@ -1,4 +1,4 @@
-import { Breadcrumb } from '../../../../ng_maw/src/app/shared/breadcrumb.model';
+import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
 
 import { ICategory } from './icategory.model';
 

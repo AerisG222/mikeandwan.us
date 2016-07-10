@@ -2,10 +2,10 @@ import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
-import { PagerComponent } from '../../../../ng_maw/src/app/pager/pager.component';
-import { ThumbnailListComponent } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-list.component';
-import { SelectedThumbnail } from '../../../../ng_maw/src/app/thumbnail-list/selected-thumbnail.model';
-import { ResponsiveService } from '../../../../ng_maw/src/app/shared';
+import { PagerComponent } from '../../ng_maw/pager/pager.component';
+import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
+import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
+import { ResponsiveService } from '../../ng_maw/shared';
 
 import { Config } from '../shared/config.model';
 import { ModeRouteInfo } from '../shared/mode-route-info.model';
@@ -93,9 +93,9 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
                     this.context = new RandomPhotoListContext(photos, this._modeInfo.mode, this._stateService, this._photoSource);
 
                     (<RandomPhotoListContext>this.context).photoAddedEventEmitter.subscribe((photo: Photo) => {
-                        let thumb = new PhotoThumbnailInfo(photo.photo.thumbnailInfo.path,
-                            photo.photo.thumbnailInfo.height,
-                            photo.photo.thumbnailInfo.width,
+                        let thumb = new PhotoThumbnailInfo(photo.photo.xsInfo.path,
+                            photo.photo.xsInfo.height,
+                            photo.photo.xsInfo.width,
                             photo);
                         this.thumbnailList.addItem(thumb);
                         this.updatePager();
@@ -107,9 +107,9 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
 
                 this.context.photoUpdated.subscribe((idx: number) => this.onPhotoUpdated(idx));
 
-                let thumbs = photos.map(x => new PhotoThumbnailInfo(x.photo.thumbnailInfo.path,
-                    x.photo.thumbnailInfo.height,
-                    x.photo.thumbnailInfo.width,
+                let thumbs = photos.map(x => new PhotoThumbnailInfo(x.photo.xsInfo.path,
+                    x.photo.xsInfo.height,
+                    x.photo.xsInfo.width,
                     x));
 
                 this.thumbnailList.setItemList(thumbs);

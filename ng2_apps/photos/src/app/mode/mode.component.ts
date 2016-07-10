@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
-import { Breadcrumb } from '../../../../ng_maw/src/app/shared/breadcrumb.model';
+import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
 
 import { PhotoStateService } from '../shared/photo-state.service';
 import { PhotoNavigationService } from '../shared/photo-navigation.service';
@@ -33,6 +33,7 @@ export class ModeComponent implements OnInit {
             this._mode = this.getMode(params['mode']);
 
             switch (this._mode) {
+                case undefined:
                 case null:
                     this.setItems(this._navService.getRootDestinations());
                     break;

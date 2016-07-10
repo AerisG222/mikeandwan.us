@@ -1,4 +1,4 @@
-import { ThumbnailInfo } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-info.model';
+import { ThumbnailInfo } from '../../ng_maw/thumbnail-list/thumbnail-info.model';
 
 import { CategoryBreadcrumb } from './category-breadcrumb.model';
 

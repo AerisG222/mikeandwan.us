@@ -1,9 +1,9 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { PagerComponent } from '../../../../ng_maw/src/app/pager/pager.component';
-import { ThumbnailListComponent } from '../../../../ng_maw/src/app/thumbnail-list/thumbnail-list.component';
-import { SelectedThumbnail } from '../../../../ng_maw/src/app/thumbnail-list/selected-thumbnail.model';
+import { PagerComponent } from '../../ng_maw/pager/pager.component';
+import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
+import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
 
 import { Config, ModeRouteInfo, PhotoNavigationService, PhotoStateService, CategoryThumbnailInfo } from '../shared';
 

@@ -5,8 +5,9 @@ export interface IPhoto {
     categoryId: number;
     latitude: number;
     longitude: number;
-    thumbnailInfo: IPhotoInfo;
-    fullsizeInfo: IPhotoInfo;
-    fullerInfo: IPhotoInfo;
-    originalInfo: IPhotoInfo;
+    xsInfo: IPhotoInfo;
+    smInfo: IPhotoInfo;
+    mdInfo: IPhotoInfo;
+    lgInfo: IPhotoInfo;
+    prtInfo: IPhotoInfo;
 }

@@ -1,8 +1,8 @@
 import { Component, Input, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 
-import { DialogComponent } from '../../../../ng_maw/src/app/dialog/dialog.component';
-import { DialogButton } from '../../../../ng_maw/src/app/dialog/dialog-button.model';
-import { ResponsiveService } from '../../../../ng_maw/src/app/shared';
+import { DialogComponent } from '../../ng_maw/dialog/dialog.component';
+import { DialogButton } from '../../ng_maw/dialog/dialog-button.model';
+import { ResponsiveService } from '../../ng_maw/shared';
 
 import { IPhoto } from '../shared/iphoto.model';
 

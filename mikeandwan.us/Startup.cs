@@ -145,13 +145,13 @@ namespace MawMvcApp
             {
                 app.UseStaticFiles(new StaticFileOptions()
                 {
-                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"../ng2_apps/photos/dist")),
+                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"../client_apps/photos/dist")),
                     RequestPath = new PathString("/js/photos")
                 });
 
                 app.UseStaticFiles(new StaticFileOptions()
                 {
-                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"../ng2_apps/videos/dist")),
+                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"../client_apps/videos/dist")),
                     RequestPath = new PathString("/js/videos")
                 });
             }

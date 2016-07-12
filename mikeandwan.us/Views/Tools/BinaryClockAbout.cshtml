@@ -21,6 +21,8 @@
     <script src="/js/binary_clock/vendor/systemjs/dist/system.src.js"></script>
     <script src="/js/binary_clock/vendor/zone.js/dist/zone.js"></script>
     <script>
+        var notick = true;
+        
         SystemJS.config({
             baseURL: '/js/binary_clock'
         });
@@ -41,7 +43,7 @@ Let's start by taking a look at a single moment in time, using the
 example below:
 </p>
 
-<binary-clock-app [notick]="true">Loading...</binary-clock-app>
+<binary-clock-app>Loading...</binary-clock-app>
 
 <p>
 The first thing to notice when reading the clock, is that it is broken 

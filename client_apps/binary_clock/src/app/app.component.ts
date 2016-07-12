@@ -1,5 +1,7 @@
-import { Component, Input, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { NgClass } from '@angular/common';
+
+declare var notick: boolean;
 
 @Component({
     moduleId: module.id,
@@ -8,15 +10,19 @@ import { NgClass } from '@angular/common';
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })
-export class BinaryClockAppComponent implements AfterViewInit, OnDestroy {
+export class BinaryClockAppComponent implements OnDestroy {
     intervalId: number;
     currentTime: Date;
     h: number;
     m: number;
     s: number;
-    @Input() notick = false;
+    notick = false;
 
-    ngAfterViewInit(): void {
+    constructor() {
+        if (typeof(notick) !== 'undefined') {
+            this.notick = notick;
+        }
+
         if (this.notick) {
             this.updateDisplay(new Date(2016, 6, 26, 12, 56, 39));
         } else {

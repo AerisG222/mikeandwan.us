@@ -6,9 +6,9 @@ import { VideoListComponent } from './video-list/video-list.component';
 
 // TODO: add otherwise route config item
 export const routes: RouterConfig = [
-    { path: 'videos',                     component: YearListComponent },
-    { path: 'videos/:year',           component: CategoryListComponent },
-    { path: 'videos/:year/:category', component: VideoListComponent }
+    { path: '',                     component: YearListComponent },
+    { path: ':year',           component: CategoryListComponent },
+    { path: ':year/:category', component: VideoListComponent }
 ];
 
 export const APP_ROUTER_PROVIDERS = [

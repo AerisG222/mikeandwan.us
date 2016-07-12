@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -114,6 +115,11 @@ namespace MawMvcApp
                     opts.AddPolicy(MawConstants.POLICY_ADMIN_SITE, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_ADMIN).Build());
                 });
 
+            services.AddRouting(routeOptions =>
+            {
+                routeOptions.AppendTrailingSlash = true;
+            });
+
             services.AddMvc();
         }
 
@@ -143,22 +149,41 @@ namespace MawMvcApp
             // TODO: add a build step for production so these urls are published into wwwroot
             if(env.IsDevelopment())
             {
-                app.UseStaticFiles(new StaticFileOptions()
-                {
-                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"../client_apps/photos/dist")),
-                    RequestPath = new PathString("/js/photos")
-                });
-
-                app.UseStaticFiles(new StaticFileOptions()
-                {
-                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"../client_apps/videos/dist")),
-                    RequestPath = new PathString("/js/videos")
-                });
+                AddDevPathMappings(app);
             }
 
             app.UseIdentity();
             app.UseStaticFiles();
             app.UseMvc();
+        }
+
+
+        void AddDevPathMappings(IApplicationBuilder app)
+        {
+            AddDevPathMapping(app, "../client_apps/bandwidth/dist",         "/js/bandwidth");
+            AddDevPathMapping(app, "../client_apps/binary_clock/dist",      "/js/binary_clock");
+            AddDevPathMapping(app, "../client_apps/byte_counter/dist",      "/js/byte_counter");
+            AddDevPathMapping(app, "../client_apps/filesize/dist",          "/js/filesize");
+            AddDevPathMapping(app, "../client_apps/googlemaps/dist",        "/js/googlemaps");
+            AddDevPathMapping(app, "../client_apps/learning/dist",          "/js/learning");
+            AddDevPathMapping(app, "../client_apps/memory/dist",            "/js/memory");
+            AddDevPathMapping(app, "../client_apps/money_spin/dist",        "/js/money_spin");
+            AddDevPathMapping(app, "../client_apps/photos/dist",            "/js/photos");
+            AddDevPathMapping(app, "../client_apps/time/dist",              "/js/time");
+            AddDevPathMapping(app, "../client_apps/videos/dist",            "/js/videos");
+            AddDevPathMapping(app, "../client_apps/webgl_cube/dist",        "/js/webgl_cube");
+            AddDevPathMapping(app, "../client_apps/webgl_text/dist",        "/js/webgl_text");
+            AddDevPathMapping(app, "../client_apps/weekend_countdown/dist", "/js/weekend_countdown");
+        }
+
+
+        void AddDevPathMapping(IApplicationBuilder app, string localRelativePath, string urlPath)
+        {
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), localRelativePath)),
+                RequestPath = new PathString(urlPath)
+            });
         }
     }
 }

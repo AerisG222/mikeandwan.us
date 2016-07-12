@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { NgClass, NgFor, NgIf, SlicePipe } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 
 import { ResponsiveService } from '../shared/responsive.service';
 
@@ -54,14 +54,11 @@ export class PagerComponent {
     handleResize(newsize: string) {
         if (newsize === ResponsiveService.BP_LG) {
             this.maxPagesDisplayed = 30;
-        }
-        else if (newsize === ResponsiveService.BP_MD) {
+        } else if (newsize === ResponsiveService.BP_MD) {
             this.maxPagesDisplayed = 22;
-        }
-        else if (newsize === ResponsiveService.BP_SM) {
+        } else if (newsize === ResponsiveService.BP_SM) {
             this.maxPagesDisplayed = 16;
-        }
-        else {
+        } else {
             this.maxPagesDisplayed = 6;
         }
     }
@@ -74,8 +71,7 @@ export class PagerComponent {
                 while (this.pageArray.length > this.pageCount) {
                     this.pageArray.pop();
                 }
-            }
-            else {
+            } else {
                 while (this.pageArray.length < this.pageCount) {
                     this.pageArray.push(this.pageArray.length + 1);
                 }

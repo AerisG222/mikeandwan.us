@@ -5,6 +5,7 @@
     "selenium-webdriver": "registry:dt/selenium-webdriver#2.44.0+20160317120654"
   },
   "ambientDependencies": {
-    "es6-shim": "registry:dt/es6-shim#0.31.2+20160317120654"
+    "es6-shim": "registry:dt/es6-shim#0.31.2+20160317120654",
+    "three": "github:DefinitelyTyped/DefinitelyTyped/threejs/three.d.ts#b99577c66564b69f9ba44758e19eb4e603b264c4"
   }
 }

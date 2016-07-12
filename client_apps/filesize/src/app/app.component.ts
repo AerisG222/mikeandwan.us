@@ -20,9 +20,9 @@ export class FilesizeAppComponent {
         { label: 'GB', bytesInUnit: 1024 * 1024 * 1024 }];
 
     calculate(size: number, sizeScale: string): void {
-        let sizeInBytes: number = 0;
+        let sizeInBytes = 0;
         let results: Result[] = [];
-        let i: number = 0;
+        let i = 0;
 
         for (i = 0; i < this.sizes.length; i++) {
             if (this.sizes[i].label.toLowerCase() === sizeScale) {

@@ -17,7 +17,7 @@ export class PreferenceDialogComponent implements AfterViewInit {
     @ViewChild(DialogComponent) dialog: DialogComponent;
     preferLarge: boolean = false;
     form: any = null;
-    title: string = "Prefs";
+    title: string = 'Prefs';
 
     constructor(private _stateService: VideoStateService,
         private _changeDetectionRef: ChangeDetectorRef) {

@@ -1,4 +1,4 @@
-/// <reference path="../../typings/browser.d.ts" />
+/// <reference path="./typings/browser.d.ts" />
 
 jQuery(function() {
 	let demo = new TextDemo();
@@ -82,19 +82,22 @@ class TextDemo {
 	}
 
     prepareText() {
-        var loader = new THREE.FontLoader();
+        let loader = new THREE.FontLoader();
 
-        loader.load( '/js/libs/fonts/open_sans_bold.typeface.js', response => {
+        loader.load('/js/libs/fonts/open_sans_bold.typeface.js', response => {
             // text
             let textGeometry = new THREE.TextGeometry('WebGL', {
                 font: response,
                 size: 60,
                 curveSegments: 48,
                 height: 24,
-                weight: 'bold',
-                style: 'normal',
-                bevelEnabled: false
+				bevelEnabled: false,
+				bevelThickness: 0,
+				bevelSize: 0
             });
+
+			//textGeometry.weight = 'bold';
+			//textGeometry.style = 'normal';
 
             let textMaterial = new THREE.MeshPhongMaterial({
                 color: 0x006051,

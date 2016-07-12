@@ -1,15 +1,26 @@
 @{ 
     Layout = "_LayoutSidebar";
     ViewBag.Title = "tools | networking | file size"; 
-    ViewBag.AngularAppRoot = "/js/tools/filesize/";
 }
 
-@section scripts_head {
-    @Html.Partial("_js_Angular2")
+@section custom_head {
+    <base href="." />
 }
 
 @section scripts_footer {
-    <script>System.import('/js/tools/filesize/bootstrap.js');</script>
+    <script src="/js/bandwidth/vendor/es6-shim/es6-shim.js"></script>
+    <script src="/js/bandwidth/vendor/reflect-metadata/Reflect.js"></script>
+    <script src="/js/bandwidth/vendor/systemjs/dist/system.src.js"></script>
+    <script src="/js/bandwidth/vendor/zone.js/dist/zone.js"></script>
+    <script>
+        SystemJS.config({
+            baseURL: '/js/filesize'
+        });
+
+        System.import('system-config.js').then(function () {
+            System.import('main');
+        }).catch(console.error.bind(console));
+    </script>
 }
  
 @section header {  
@@ -27,7 +38,7 @@
 <br />
 
 <section>
-    <filesize>Loading...</filesize>
+    <filesize-app>Loading...</filesize-app>
 
     <br />
 

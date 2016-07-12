@@ -9,7 +9,7 @@ import { ResponsiveService } from './ng_maw/shared/responsive.service';
 import { APP_ROUTER_PROVIDERS } from './app/app.routes';
 import { VideosAppComponent } from './app/app.component';
 import { environment } from './app/environment';
-import { SizeService } from "./app/shared/size.service";
+import { SizeService } from './app/shared/size.service';
 import { VideoDataService } from './app/shared/video-data.service';
 import { VideoNavigationService } from './app/shared/video-navigation.service';
 import { VideoStateService } from './app/shared/video-state.service';

@@ -72,11 +72,9 @@ export class StateService {
     private updateCurrentPlayer(): void {
         if (this.currentPlayer == null) {
             this.currentPlayer = this.player1;
-        }
-        else if (this.currentPlayer === this.player1) {
+        } else if (this.currentPlayer === this.player1) {
             this.currentPlayer = this.player2;
-        }
-        else {
+        } else {
             this.currentPlayer = this.player1;
         }
     }

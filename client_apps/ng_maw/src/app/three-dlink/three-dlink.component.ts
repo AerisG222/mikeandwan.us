@@ -48,82 +48,95 @@ export class ThreeDLinkComponent implements OnInit {
     }
 
     prepareScene(): void {
-        let threeGeometry = new THREE.TextGeometry('3', {
-            font: 'open sans',
-            size: 24,
-            curveSegments: 24,
-            height: 8,
-            weight: 'bold',
-            style: 'normal',
-            bevelEnabled: false
+        let loader = new THREE.FontLoader();
+
+        loader.load('/js/libs/fonts/open_sans_bold.typeface.js', response => {
+            let threeGeometry = new THREE.TextGeometry('3', {
+                font: response,
+                size: 60,
+                curveSegments: 48,
+                height: 24,
+                bevelEnabled: false,
+                bevelThickness: 0,
+                bevelSize: 0
+            });
+
+            // threeGeometry.weight: 'bold',
+            // threeGeometry.style: 'normal',
+
+            let dashGeometry = new THREE.TextGeometry('-', {
+                font: response,
+                size: 60,
+                curveSegments: 48,
+                height: 24,
+                bevelEnabled: false,
+                bevelThickness: 0,
+                bevelSize: 0
+            });
+
+            // dashGeometry.weight: 'bold',
+            // dashGeometry.style: 'normal',
+
+            let dGeometry = new THREE.TextGeometry('D', {
+                font: response,
+                size: 60,
+                curveSegments: 48,
+                height: 24,
+                bevelEnabled: false,
+                bevelThickness: 0,
+                bevelSize: 0
+            });
+
+            // dGeometry.weight: 'bold',
+            // dGeometry.style: 'normal',
+
+            let material = new THREE.MeshPhongMaterial({
+                color: 0xcccccc,
+                specular: 0xffffff,
+                shininess: 40,
+                shading:
+                THREE.FlatShading
+            });
+
+            let threeText = new THREE.Mesh(threeGeometry, material);
+            let dashText = new THREE.Mesh(dashGeometry, material);
+            let dText = new THREE.Mesh(dGeometry, material);
+
+            // position the characters so the middle is at the origin
+            threeText.position.set(-12, -12, -4);
+            dashText.position.set(-12, -9, -2);
+            dText.position.set(-12, -12, -4);
+
+            this.threeFrame = new THREE.Object3D();
+            this.dashFrame = new THREE.Object3D();
+            this.dFrame = new THREE.Object3D();
+
+            this.threeFrame.add(threeText);
+            this.dashFrame.add(dashText);
+            this.dFrame.add(dText);
+
+            this.threeFrame.position.set(-16, 0, -4);
+            this.dashFrame.position.set(8, 0, -2);
+            this.dFrame.position.set(20, 0, -4);
+
+            this.directionalLight1 = new THREE.DirectionalLight(0xcccccc, 0.4);
+            this.directionalLight1.position.set(8, 10, 18);
+
+            this.directionalLight2 = new THREE.DirectionalLight(0xcccccc, 0.4);
+            this.directionalLight2.position.set(-16, 16, 30);
+
+            this.threeUnitVector = new THREE.Vector3(1, 0, 0);
+            this.dashUnitVector = new THREE.Vector3(1, 0, 0);
+            this.dUnitVector = new THREE.Vector3(0, 1, 0);
+
+            this.scene.add(this.directionalLight1);
+            this.scene.add(this.directionalLight2);
+            this.scene.add(this.threeFrame);
+            this.scene.add(this.dashFrame);
+            this.scene.add(this.dFrame);
+
+            this.camera.position.z = 28;
         });
-
-        let dashGeometry = new THREE.TextGeometry('-', {
-            font: 'open sans',
-            size: 24,
-            curveSegments: 24,
-            height: 4,
-            weight: 'bold',
-            style: 'normal',
-            bevelEnabled: false
-        });
-
-        let dGeometry = new THREE.TextGeometry('D', {
-            font: 'open sans',
-            size: 24,
-            curveSegments: 24,
-            height: 8,
-            weight: 'bold',
-            style: 'normal',
-            bevelEnabled: false
-        });
-
-        let material = new THREE.MeshPhongMaterial({
-            color: 0xcccccc,
-            specular: 0xffffff,
-            shininess: 40,
-            shading:
-            THREE.FlatShading
-        });
-
-        let threeText = new THREE.Mesh(threeGeometry, material);
-        let dashText = new THREE.Mesh(dashGeometry, material);
-        let dText = new THREE.Mesh(dGeometry, material);
-
-        // position the characters so the middle is at the origin
-        threeText.position.set(-12, -12, -4);
-        dashText.position.set(-12, -9, -2);
-        dText.position.set(-12, -12, -4);
-
-        this.threeFrame = new THREE.Object3D();
-        this.dashFrame = new THREE.Object3D();
-        this.dFrame = new THREE.Object3D();
-
-        this.threeFrame.add(threeText);
-        this.dashFrame.add(dashText);
-        this.dFrame.add(dText);
-
-        this.threeFrame.position.set(-16, 0, -4);
-        this.dashFrame.position.set(8, 0, -2);
-        this.dFrame.position.set(20, 0, -4);
-
-        this.directionalLight1 = new THREE.DirectionalLight(0xcccccc, 0.4);
-        this.directionalLight1.position.set(8, 10, 18);
-
-        this.directionalLight2 = new THREE.DirectionalLight(0xcccccc, 0.4);
-        this.directionalLight2.position.set(-16, 16, 30);
-
-        this.threeUnitVector = new THREE.Vector3(1, 0, 0);
-        this.dashUnitVector = new THREE.Vector3(1, 0, 0);
-        this.dUnitVector = new THREE.Vector3(0, 1, 0);
-
-        this.scene.add(this.directionalLight1);
-        this.scene.add(this.directionalLight2);
-        this.scene.add(this.threeFrame);
-        this.scene.add(this.dashFrame);
-        this.scene.add(this.dFrame);
-
-        this.camera.position.z = 28;
     }
 
     render(): void {

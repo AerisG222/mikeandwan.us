@@ -12,7 +12,7 @@ import { PhotoListContext } from '../shared/photo-list-context.model';
     templateUrl: 'map-view.component.html',
     styleUrls: [ 'map-view.component.css' ]
 })
-export class MapViewComponent implements OnInit, AfterViewInit {
+export class MapViewComponent implements OnInit, OnDestroy, AfterViewInit {
     private _markerImage = {
         url: '/css/photo_app/map_marker.png',
         size: new google.maps.Size(11, 11),
@@ -118,7 +118,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     }
 
     private generatePhotoHtmlForMap(photo: IPhoto): string {
-        return `<img src="${photo.thumbnailInfo.path}" class="img-thumbnail" />`;
+        return `<img src="${photo.xsInfo.path}" class="img-thumbnail" />`;
     }
 
     private createMapMarker(photo: Photo): google.maps.Marker {

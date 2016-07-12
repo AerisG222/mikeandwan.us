@@ -5,6 +5,7 @@
     "selenium-webdriver": "registry:dt/selenium-webdriver#2.44.0+20160317120654"
   },
   "ambientDependencies": {
-    "es6-shim": "registry:dt/es6-shim#0.31.2+20160317120654"
+    "es6-shim": "registry:dt/es6-shim#0.31.2+20160317120654",
+    "google.maps": "github:DefinitelyTyped/DefinitelyTyped/googlemaps/google.maps.d.ts#454545bd324b2d6354d6ff9091e27c0cf4cf6bff"
   }
 }

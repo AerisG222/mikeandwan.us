@@ -1,19 +1,30 @@
 @{ 
     Layout = "_LayoutSidebar";
     ViewBag.Title = "tools | networking | bandwidth"; 
-    ViewBag.AngularAppRoot = "/js/tools/bandwidth/";
+}
+
+@section custom_head {
+    <base href="." />
 }
 
 @section header {
     @Html.Partial("_PageHeader", "Bandwidth Calculator")
 }
 
-@section scripts_head {
-    @Html.Partial("_js_Angular2")
-}
-
 @section scripts_footer {
-    <script>System.import('/js/tools/bandwidth/bootstrap.js');</script>
+    <script src="/js/bandwidth/vendor/es6-shim/es6-shim.js"></script>
+    <script src="/js/bandwidth/vendor/reflect-metadata/Reflect.js"></script>
+    <script src="/js/bandwidth/vendor/systemjs/dist/system.src.js"></script>
+    <script src="/js/bandwidth/vendor/zone.js/dist/zone.js"></script>
+    <script>
+        SystemJS.config({
+            baseURL: '/js/bandwidth'
+        });
+
+        System.import('system-config.js').then(function () {
+            System.import('main');
+        }).catch(console.error.bind(console));
+    </script>
 }
 
 @section sidebar {
@@ -27,5 +38,5 @@
 </p>
 
 <section>
-    <bandwidth>Loading...</bandwidth>
+    <bandwidth-app>Loading...</bandwidth-app>
 </section>

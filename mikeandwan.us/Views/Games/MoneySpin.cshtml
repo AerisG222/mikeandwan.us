@@ -1,14 +1,9 @@
 @{ 
     ViewBag.Title = "games | money-spin";
-    ViewBag.AngularAppRoot = "/js/games/money_spin/"; 
 }
 
 @section custom_head {
-    <base href="/games/money-spin/" />
-}
-
-@section scripts_head {
-    @Html.Partial("_js_Angular2")
+    <base href="." />
 }
 
 @section stylesheets {
@@ -18,9 +13,21 @@
 
 @section scripts_footer {
     @Html.Partial("_js_Threejs")
-    <script>System.import('/js/games/money_spin/bootstrap');</script>
+    <script src="/js/money_spin/vendor/es6-shim/es6-shim.js"></script>
+    <script src="/js/money_spin/vendor/reflect-metadata/Reflect.js"></script>
+    <script src="/js/money_spin/vendor/systemjs/dist/system.src.js"></script>
+    <script src="/js/money_spin/vendor/zone.js/dist/zone.js"></script>
+    <script>
+        SystemJS.config({
+            baseURL: '/js/money_spin'
+        });
+
+        System.import('system-config.js').then(function () {
+            System.import('main');
+        }).catch(console.error.bind(console));
+    </script>
 }
 
 <h2>Money Spin</h2>
 
-<moneyspin>Loading...</moneyspin>
+<money-spin-app>Loading...</money-spin-app>

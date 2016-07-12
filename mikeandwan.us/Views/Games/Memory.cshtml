@@ -1,14 +1,9 @@
 ﻿@{ 
     ViewBag.Title = "games | memory";
-    ViewBag.AngularAppRoot = "/js/games/memory/";
 }
 
 @section custom_head {
-    <base href="/games/memory/" />
-}
-
-@section scripts_head {
-    @Html.Partial("_js_Angular2")
+    <base href="." />
 }
 
 @section stylesheets {
@@ -17,9 +12,21 @@
 }
 
 @section scripts_footer {
-    <script>System.import('/js/games/memory/bootstrap');</script>
+    <script src="/js/memory/vendor/es6-shim/es6-shim.js"></script>
+    <script src="/js/memory/vendor/reflect-metadata/Reflect.js"></script>
+    <script src="/js/memory/vendor/systemjs/dist/system.src.js"></script>
+    <script src="/js/memory/vendor/zone.js/dist/zone.js"></script>
+    <script>
+        SystemJS.config({
+            baseURL: '/js/memory'
+        });
+
+        System.import('system-config.js').then(function () {
+            System.import('main');
+        }).catch(console.error.bind(console));
+    </script>
 }
 
 <h2>Memory</h2>
 
-<memory>Loading...</memory>
+<memory-app>Loading...</memory-app>

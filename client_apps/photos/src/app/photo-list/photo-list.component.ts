@@ -58,8 +58,7 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
             if (this._responsiveService._currBp === ResponsiveService.BP_XS) {
                 this.showMapView = false;
                 this.showPhotoView = false;
-            }
-            else {
+            } else {
                 if (!this.showMapView) {
                     // if we are resizing from xs, restore the photo view based on their preferences
                     this.showPhotoView = this._stateService.config.displayMode === Config.DISPLAY_MODE_INLINE;
@@ -100,8 +99,7 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
                         this.thumbnailList.addItem(thumb);
                         this.updatePager();
                     });
-                }
-                else {
+                } else {
                     this.context = new PhotoListContext(photos, this._modeInfo.mode, this._stateService);
                 }
 

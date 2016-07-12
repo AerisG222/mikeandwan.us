@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { NgIf } from '@angular/common';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/concat';
@@ -40,8 +40,7 @@ export class GooglemapsAppComponent {
             if (status !== google.maps.GeocoderStatus.OK) {
                 this.hideMaps();
                 alert(`There was an error geocoding the address: ${address}].  Reported error code = ${status}`);
-            }
-            else {
+            } else {
                 this.showMaps(results[0].geometry.location);
             }
         });

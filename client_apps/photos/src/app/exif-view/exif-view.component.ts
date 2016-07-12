@@ -16,53 +16,53 @@ import { Photo } from '../shared/photo.model';
 export class ExifViewComponent {
     private _photo: Photo;
     private _map: Array<ExifFormatter> = [
-        new ExifFormatter("AF Point", "afPoint", null),
-        new ExifFormatter("Aperture", "aperture", null),
-        new ExifFormatter("Contrast", "contrast", null),
-        new ExifFormatter("Depth Of Field", "depthOfField", null),
-        new ExifFormatter("Digital Zoom Ratio", "digitalZoomRatio", null),
-        new ExifFormatter("Exposure Compensation", "exposureCompensation", null),
-        new ExifFormatter("Exposure Difference", "exposureDifference", null),
-        new ExifFormatter("Exposure Mode", "exposureMode", null),
-        new ExifFormatter("Exposure Time", "exposureTime", this.inverseTime),
-        new ExifFormatter("F Number", "fNumber", null),
-        new ExifFormatter("Flash", "flash", null),
-        new ExifFormatter("Flash Exposure Compensation", "flashExposureCompensation", null),
-        new ExifFormatter("Flash Mode", "flashMode", null),
-        new ExifFormatter("Flash Setting", "flashSetting", null),
-        new ExifFormatter("Flash Type", "flashType", null),
-        new ExifFormatter("Focal Length", "focalLength", this.focalLengthOneDecimal),
-        new ExifFormatter("Focal Length in 35mm Format", "focalLengthIn35mmFormat", this.focalLengthNoDecimals),
-        new ExifFormatter("Focus Distance", "focusDistance", this.distance),
-        new ExifFormatter("Focus Mode", "focusMode", null),
-        new ExifFormatter("Focus Position", "focusPosition", null),
-        new ExifFormatter("Gain Control", "gainControl", null),
-        new ExifFormatter("Hue Adjustment", "hueAdjustment", null),
-        new ExifFormatter("Hyperfocal Distance", "hyperFocalDistance", this.distance),
-        new ExifFormatter("ISO", "iso", null),
-        new ExifFormatter("Lens ID", "lensId", null),
-        new ExifFormatter("Light Source", "lightSource", null),
-        new ExifFormatter("Make", "make", null),
-        new ExifFormatter("Metering Mode", "meteringMode", null),
-        new ExifFormatter("Model", "model", null),
-        new ExifFormatter("Noise Reduction", "noiseReduction", null),
-        new ExifFormatter("Orientation", "orientation", null),
-        new ExifFormatter("Saturation", "saturation", null),
-        new ExifFormatter("Scale Factor 35 EFL", "scaleFactor35Efl", this.oneDecimal),
-        new ExifFormatter("Scene Capture Type", "sceneCaptureType", null),
-        new ExifFormatter("Scene Type", "sceneType", null),
-        new ExifFormatter("Sensing Method", "sensingMethod", null),
-        new ExifFormatter("Sharpness", "sharpness", null),
-        new ExifFormatter("Shutter Speed", "shutterSpeed", this.inverseTime),
-        new ExifFormatter("White Balance", "whiteBalance", null),
-        new ExifFormatter("Shot Taken Date", "shotTakenDate", null),
-        new ExifFormatter("Exposure Program", "exposureProgram", null),
-        new ExifFormatter("GPS Version ID", "gpsVersionId", null),
-        new ExifFormatter("GPS Latitude", "gpsLatitude", this.formatLatitude),
-        new ExifFormatter("GPS Longitude", "gpsLongitude", this.formatLongitude),
-        new ExifFormatter("GPS Altitude", "gpsAltitude", this.formatAltitude),
-        new ExifFormatter("GPS Time Stamp", "gpsTime", null),
-        new ExifFormatter("GPS Satellites", "gpsSatellites", null)];
+        new ExifFormatter('AF Point', 'afPoint', null),
+        new ExifFormatter('Aperture', 'aperture', null),
+        new ExifFormatter('Contrast', 'contrast', null),
+        new ExifFormatter('Depth Of Field', 'depthOfField', null),
+        new ExifFormatter('Digital Zoom Ratio', 'digitalZoomRatio', null),
+        new ExifFormatter('Exposure Compensation', 'exposureCompensation', null),
+        new ExifFormatter('Exposure Difference', 'exposureDifference', null),
+        new ExifFormatter('Exposure Mode', 'exposureMode', null),
+        new ExifFormatter('Exposure Time', 'exposureTime', this.inverseTime),
+        new ExifFormatter('F Number', 'fNumber', null),
+        new ExifFormatter('Flash', 'flash', null),
+        new ExifFormatter('Flash Exposure Compensation', 'flashExposureCompensation', null),
+        new ExifFormatter('Flash Mode', 'flashMode', null),
+        new ExifFormatter('Flash Setting', 'flashSetting', null),
+        new ExifFormatter('Flash Type', 'flashType', null),
+        new ExifFormatter('Focal Length', 'focalLength', this.focalLengthOneDecimal),
+        new ExifFormatter('Focal Length in 35mm Format', 'focalLengthIn35mmFormat', this.focalLengthNoDecimals),
+        new ExifFormatter('Focus Distance', 'focusDistance', this.distance),
+        new ExifFormatter('Focus Mode', 'focusMode', null),
+        new ExifFormatter('Focus Position', 'focusPosition', null),
+        new ExifFormatter('Gain Control', 'gainControl', null),
+        new ExifFormatter('Hue Adjustment', 'hueAdjustment', null),
+        new ExifFormatter('Hyperfocal Distance', 'hyperFocalDistance', this.distance),
+        new ExifFormatter('ISO', 'iso', null),
+        new ExifFormatter('Lens ID', 'lensId', null),
+        new ExifFormatter('Light Source', 'lightSource', null),
+        new ExifFormatter('Make', 'make', null),
+        new ExifFormatter('Metering Mode', 'meteringMode', null),
+        new ExifFormatter('Model', 'model', null),
+        new ExifFormatter('Noise Reduction', 'noiseReduction', null),
+        new ExifFormatter('Orientation', 'orientation', null),
+        new ExifFormatter('Saturation', 'saturation', null),
+        new ExifFormatter('Scale Factor 35 EFL', 'scaleFactor35Efl', this.oneDecimal),
+        new ExifFormatter('Scene Capture Type', 'sceneCaptureType', null),
+        new ExifFormatter('Scene Type', 'sceneType', null),
+        new ExifFormatter('Sensing Method', 'sensingMethod', null),
+        new ExifFormatter('Sharpness', 'sharpness', null),
+        new ExifFormatter('Shutter Speed', 'shutterSpeed', this.inverseTime),
+        new ExifFormatter('White Balance', 'whiteBalance', null),
+        new ExifFormatter('Shot Taken Date', 'shotTakenDate', null),
+        new ExifFormatter('Exposure Program', 'exposureProgram', null),
+        new ExifFormatter('GPS Version ID', 'gpsVersionId', null),
+        new ExifFormatter('GPS Latitude', 'gpsLatitude', this.formatLatitude),
+        new ExifFormatter('GPS Longitude', 'gpsLongitude', this.formatLongitude),
+        new ExifFormatter('GPS Altitude', 'gpsAltitude', this.formatAltitude),
+        new ExifFormatter('GPS Time Stamp', 'gpsTime', null),
+        new ExifFormatter('GPS Satellites', 'gpsSatellites', null)];
 
     exif: Array<Array<ExifDetail>> = [];
 
@@ -71,8 +71,7 @@ export class ExifViewComponent {
 
         if (this._photo.exif) {
             this.exif = this._photo.exif;
-        }
-        else {
+        } else {
             this.getExifData();
         }
     }
@@ -124,8 +123,7 @@ export class ExifViewComponent {
     formatLatitude(val: number): string {
         if (val >= 0) {
             return `${val} (North)`;
-        }
-        else {
+        } else {
             return `${val} (South)`;
         }
     }
@@ -133,8 +131,7 @@ export class ExifViewComponent {
     formatLongitude(val: number): string {
         if (val >= 0) {
             return `${val} (East)`;
-        }
-        else {
+        } else {
             return `${val} (West)`;
         }
     }
@@ -142,8 +139,7 @@ export class ExifViewComponent {
     formatAltitude(val: number): string {
         if (val >= 0) {
             return `${val} m Above Sea Level`;
-        }
-        else {
+        } else {
             return `${val} m Below Sea Level`;
         }
     }

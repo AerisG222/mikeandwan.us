@@ -20,10 +20,10 @@ export class PhotoNavigationService {
 
     getRootDestinations(): Observable<Array<Breadcrumb>> {
         let result = [
-            new Breadcrumb('By Year', [ '/photos/year' ]),
-            new Breadcrumb('By Comment', [ '/photos/comment' ]),
-            new Breadcrumb('By Rating', [ '/photos/rating' ]),
-            new Breadcrumb('Random', [ '/photos/random' ])
+            new Breadcrumb('By Year', [ '/year' ]),
+            new Breadcrumb('By Comment', [ '/comment' ]),
+            new Breadcrumb('By Rating', [ '/rating' ]),
+            new Breadcrumb('Random', [ '/random' ])
         ];
 
         return this.getArrayObservable(result);
@@ -31,12 +31,12 @@ export class PhotoNavigationService {
 
     getCommentDestinations(): Observable<Array<Breadcrumb>> {
         let result = [
-            new Breadcrumb('Newest', [ '/photos/comment', 'age', 'newest' ]),
-            new Breadcrumb('Oldest', [ '/photos/comment', 'age', 'oldest' ]),
-            new Breadcrumb('Your Newest', [ '/photos/comment', 'your', 'newest' ]),
-            new Breadcrumb('Your Oldest', [ '/photos/comment', 'your', 'oldest' ]),
-            new Breadcrumb('Most Commented', [ '/photos/comment', 'qty', 'most' ]),
-            new Breadcrumb('Least Commented', [ '/photos/comment', 'qty', 'least' ])
+            new Breadcrumb('Newest', [ '/comment', 'age', 'newest' ]),
+            new Breadcrumb('Oldest', [ '/comment', 'age', 'oldest' ]),
+            new Breadcrumb('Your Newest', [ '/comment', 'your', 'newest' ]),
+            new Breadcrumb('Your Oldest', [ '/comment', 'your', 'oldest' ]),
+            new Breadcrumb('Most Commented', [ '/comment', 'qty', 'most' ]),
+            new Breadcrumb('Least Commented', [ '/comment', 'qty', 'least' ])
         ];
 
         return this.getArrayObservable(result);
@@ -44,8 +44,8 @@ export class PhotoNavigationService {
 
     getRatingDestinations(): Observable<Array<Breadcrumb>> {
         let result = [
-            new Breadcrumb('Average Rating', [ '/photos/rating', 'avg', 'newest' ]),
-            new Breadcrumb('Your Rating', [ '/photos/rating', 'your', 'newest' ])
+            new Breadcrumb('Average Rating', [ '/rating', 'avg', 'newest' ]),
+            new Breadcrumb('Your Rating', [ '/rating', 'your', 'newest' ])
             // TODO:
             //   - age : most recent / oldest
             //   - qty : most rated / least rated
@@ -59,7 +59,7 @@ export class PhotoNavigationService {
             this._dataService
                 .getYears()
                 .subscribe(result => {
-                    let d = result.map(x => new Breadcrumb(x.toString(), [ '/photos/year', x ]));
+                    let d = result.map(x => new Breadcrumb(x.toString(), [ '/year', x ]));
                     observer.next(d);
                     observer.complete();
                 });
@@ -71,7 +71,7 @@ export class PhotoNavigationService {
             this._dataService
                 .getCategoriesForYear(year)
                 .subscribe(result => {
-                    let d = result.map(x => new CategoryBreadcrumb(x.name, [ '/photos/year', x.year, x.id ], x));
+                    let d = result.map(x => new CategoryBreadcrumb(x.name, [ '/year', x.year, x.id ], x));
                     observer.next(d);
                     observer.complete();
                 });
@@ -101,18 +101,15 @@ export class PhotoNavigationService {
 
         if (mode == null) {
             crumbs.push(this.getPrimaryModeBreadcrumb(dest.title));
-        }
-        else if (mode === RouteMode.Category) {
+        } else if (mode === RouteMode.Category) {
             crumbs.push(this.getPrimaryModeBreadcrumb('By Year'));
-            crumbs.push(new Breadcrumb(dest.title, [ '/photos/year' ]));
-        }
-        else if (mode === RouteMode.Comment) {
+            crumbs.push(new Breadcrumb(dest.title, [ '/year' ]));
+        } else if (mode === RouteMode.Comment) {
             crumbs.push(this.getPrimaryModeBreadcrumb('By Comment'));
-            crumbs.push(new Breadcrumb(dest.title, [ '/photos/comment' ]));
-        }
-        else if (mode === RouteMode.Rating) {
+            crumbs.push(new Breadcrumb(dest.title, [ '/comment' ]));
+        } else if (mode === RouteMode.Rating) {
             crumbs.push(this.getPrimaryModeBreadcrumb('By Rating'));
-            crumbs.push(new Breadcrumb(dest.title, [ '/photos/rating' ]));
+            crumbs.push(new Breadcrumb(dest.title, [ '/rating' ]));
         }
 
         return crumbs;
@@ -123,13 +120,13 @@ export class PhotoNavigationService {
         let catListBreadcrumb = new Breadcrumb(cb.category.year.toString(), null);
         let crumbs = this.getModeBreadcrumbs(catListBreadcrumb, RouteMode.Category);
 
-        crumbs.push(new CategoryBreadcrumb(cb.category.name, [ '/photos/year', cb.category.year ], cb.category));
+        crumbs.push(new CategoryBreadcrumb(cb.category.name, [ '/year', cb.category.year ], cb.category));
 
         return crumbs;
     }
 
     private getPrimaryModeBreadcrumb(title: string) {
-        return new Breadcrumb(title, [ '/photos' ]);
+        return new Breadcrumb(title, [ '/' ]);
     }
 
     private gotoDestination(linkParamArray: Array<any>, breadcrumbs: Array<Breadcrumb>): void {

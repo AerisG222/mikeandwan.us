@@ -10,10 +10,6 @@ export class MemoryService {
     private _player1: IPlayer = null;
     private _player2: IPlayer = null;
 
-    constructor(private _router: Router) {
-        this.initPlayers();
-    }
-
     private _cards: Array<ICardInfo> = [
         { id: 1,  img: '/img/games/memory/cards/card1.jpg' },
         { id: 2,  img: '/img/games/memory/cards/card2.jpg' },
@@ -34,6 +30,10 @@ export class MemoryService {
         { name: 'Donatello',     color: 'purple', img: '/img/games/memory/players/donatello.jpg' },
         { name: 'Raphael',       color: 'red',    img: '/img/games/memory/players/raphael.jpg' }
     ];
+
+    constructor(private _router: Router) {
+        this.initPlayers();
+    }
 
     get allCards(): Array<ICardInfo> {
         return this._cards.slice(0); // clone
@@ -63,7 +63,7 @@ export class MemoryService {
         this.player1.score = 0;
         this.player2.score = 0;
 
-        this._router.navigateByUrl("/play");
+        this._router.navigateByUrl('/play');
         /*
         if(!this._router.isRouteActive(this._router.generate([ 'Play']))) {
             this._router.navigate([ 'Play' ]);

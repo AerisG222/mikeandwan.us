@@ -60,8 +60,7 @@ export class GameBoardComponent {
         if (this._selectedCards.card1.cardInfo.id === this._selectedCards.card2.cardInfo.id) {
             this.removeCards();
             this.match.next(this._matchedCards.length === GameBoardComponent.CARDS_IN_GAME);
-        }
-        else {
+        } else {
             this.unFlipCards();
             this.nonmatch.next(null);
         }
@@ -80,8 +79,7 @@ export class GameBoardComponent {
         if (this._selectedCards.card1 == null) {
             this._selectedCards.card1 = card;
             this.ignoreSelect = false;
-        }
-        else {
+        } else {
             this._selectedCards.card2 = card;
             this.evaluateTurn();
         }

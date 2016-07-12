@@ -1,9 +1,9 @@
 import { provideRouter, RouterConfig } from '@angular/router';
 
-import { SplashScreenComponent } from './splash-screen/splash-screen.component'
-import { ChoosePlayerComponent } from './choose-player/choose-player.component'
-import { PlayComponent } from './play/play.component'
-import { WinnerComponent } from './winner/winner.component'
+import { SplashScreenComponent } from './splash-screen/splash-screen.component';
+import { ChoosePlayerComponent } from './choose-player/choose-player.component';
+import { PlayComponent } from './play/play.component';
+import { WinnerComponent } from './winner/winner.component';
 
 export const routes: RouterConfig = [
     { path: '',       component: SplashScreenComponent },

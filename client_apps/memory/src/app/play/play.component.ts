@@ -5,7 +5,7 @@ import { GameBoardComponent } from '../game-board/game-board.component';
 import { WinnerScreenComponent } from '../winner-screen/winner-screen.component';
 import { TieScreenComponent } from '../tie-screen/tie-screen.component';
 import { TurtleScoreComponent } from '../turtle-score/turtle-score.component';
-import { IPlayer } from "../iplayer.model";
+import { IPlayer } from '../iplayer.model';
 import { MemoryService } from '../memory.service';
 
 @Component({
@@ -35,8 +35,7 @@ export class PlayComponent implements OnInit {
     toggleTurn(): void {
         if (this._activePlayer === this.player1) {
             this._activePlayer = this.player2;
-        }
-        else {
+        } else {
             this._activePlayer = this.player1;
         }
 
@@ -46,17 +45,15 @@ export class PlayComponent implements OnInit {
 
     endGame(): void {
         this.isGameOver = true;
-        let playerNumber: number = 1;
+        let playerNumber = 1;
 
         if (this.player1.score === this.player2.score) {
             this.isTie = true;
             return;
-        }
-        else if (this.player1.score > this.player2.score) {
+        } else if (this.player1.score > this.player2.score) {
             // force the winner to be the current player
             this._activePlayer = this.player1;
-        }
-        else {
+        } else {
             this._activePlayer = this.player2;
             playerNumber = 2;
         }
@@ -74,8 +71,7 @@ export class PlayComponent implements OnInit {
             };
 
             this.winningPlayer = tmp;
-        }
-        else {
+        } else {
             this.winningPlayer = this._activePlayer;
         }
     }

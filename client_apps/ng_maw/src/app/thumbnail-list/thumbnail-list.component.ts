@@ -7,9 +7,9 @@ import { ResponsiveService } from '../shared/';
 @Component({
     moduleId: module.id,
     selector: 'thumbnail-list',
-    directives: [NgClass, NgStyle, NgIf, NgFor],
+    directives: [ NgClass, NgStyle, NgIf, NgFor ],
     templateUrl: 'thumbnail-list.component.html',
-    styleUrls: ['thumbnail-list.component.css']
+    styleUrls: [ 'thumbnail-list.component.css' ]
 })
 export class ThumbnailListComponent {
     rowsPerPage: number = 3;
@@ -108,8 +108,7 @@ export class ThumbnailListComponent {
 
         if (this._responsiveService._currBp === ResponsiveService.BP_LG) {
             this.itemsPerRow = 6;
-        }
-        else {
+        } else {
             this.itemsPerRow = 4;
         }
 

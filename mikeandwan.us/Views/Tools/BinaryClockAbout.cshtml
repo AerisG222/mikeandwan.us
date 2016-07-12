@@ -11,6 +11,26 @@
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "binaryclock", Item = "binary-clock-about" })
 }
 
+@section custom_head {
+    <base href="." />
+}
+
+@section scripts_footer {
+    <script src="/js/binary_clock/vendor/es6-shim/es6-shim.js"></script>
+    <script src="/js/binary_clock/vendor/reflect-metadata/Reflect.js"></script>
+    <script src="/js/binary_clock/vendor/systemjs/dist/system.src.js"></script>
+    <script src="/js/binary_clock/vendor/zone.js/dist/zone.js"></script>
+    <script>
+        SystemJS.config({
+            baseURL: '/js/binary_clock'
+        });
+
+        System.import('system-config.js').then(function () {
+            System.import('main');
+        }).catch(console.error.bind(console));
+    </script>
+}
+
 <p>
 The binary clock is actually very easy to read once you have someone
 explain it.  That is what I will hopefully do on this page.
@@ -21,57 +41,7 @@ Let's start by taking a look at a single moment in time, using the
 example below:
 </p>
 
-<center>
-<table class="binclock" cellspacing="2">
-<tr>
-  <td class="bc_off"></td>	  
-  <td class="bc_off"></td>
-  <td width="8"></td>
-  <td class="bc_off"></td>	  
-  <td class="bc_off"></td>
-  <td width="8"></td>
-  <td class="bc_off"></td>	  
-  <td class="bc_on"></td>
-</tr>
-<tr>
-  <td class="bc_off"></td>	  
-  <td class="bc_off"></td>
-  <td width="8"></td>
-  <td class="bc_on"></td>	  
-  <td class="bc_on"></td>
-  <td width="8"></td>
-  <td class="bc_off"></td>	  
-  <td class="bc_off"></td>
-</tr>
-<tr>
-  <td class="bc_off"></td>	  
-  <td class="bc_on"></td>
-  <td width="8"></td>
-  <td class="bc_off"></td>	  
-  <td class="bc_on"></td>
-  <td width="8"></td>
-  <td class="bc_on"></td>	  
-  <td class="bc_off"></td>
-</tr>
-<tr>
-  <td class="bc_on"></td>	  
-  <td class="bc_off"></td>
-  <td width="8"></td>
-  <td class="bc_on"></td>	  
-  <td class="bc_off"></td>
-  <td width="8"></td>
-  <td class="bc_on"></td>	  
-  <td class="bc_on"></td>
-</tr>
-<tr>
- <td colspan="2" align="center"><strong>H</strong></td>
- <td width="8"></td>
-  <td colspan="2" align="center"><strong>M</strong></td>
- <td width="8"></td>
- <td colspan="2" align="center"><strong>S</strong></td>
-</tr>
-</table>
-</center>
+<binary-clock-app [notick]="true">Loading...</binary-clock-app>
 
 <p>
 The first thing to notice when reading the clock, is that it is broken 

@@ -22,7 +22,7 @@ export class CategoryListComponent implements AfterViewInit {
     constructor(private _stateService: PhotoStateService,
                 private _navService: PhotoNavigationService,
                 private _activatedRoute: ActivatedRoute) {
-        
+
     }
 
     ngAfterViewInit() {

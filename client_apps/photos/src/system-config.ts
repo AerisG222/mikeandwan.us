@@ -38,7 +38,7 @@ const barrels: string[] = [
   'ng_maw/rating',
   'ng_maw/shared',
   'ng_maw/thumbnail-list',
-  
+
   // App specific barrels.
   'app',
   'app/shared',

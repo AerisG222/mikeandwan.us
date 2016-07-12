@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit } from '@angular/core';
+import { Component, Input, AfterViewInit, OnDestroy } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 @Component({
@@ -8,7 +8,7 @@ import { NgClass } from '@angular/common';
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })
-export class BinaryClockAppComponent implements AfterViewInit {
+export class BinaryClockAppComponent implements AfterViewInit, OnDestroy {
     intervalId: number;
     currentTime: Date;
     h: number;
@@ -17,10 +17,9 @@ export class BinaryClockAppComponent implements AfterViewInit {
     @Input() notick = false;
 
     ngAfterViewInit(): void {
-        if(this.notick) {
+        if (this.notick) {
             this.updateDisplay(new Date(2016, 6, 26, 12, 56, 39));
-        }
-        else {
+        } else {
             this.tick();
             this.intervalId = setInterval(() => {
                 this.tick();
@@ -50,7 +49,7 @@ export class BinaryClockAppComponent implements AfterViewInit {
         this.updateDisplay(new Date());
     }
 
-    updateDisplay(theDate : Date) : void {
+    updateDisplay(theDate: Date): void {
         if (theDate.getSeconds() !== this.s) {
             this.currentTime = theDate;
             this.h = theDate.getHours();

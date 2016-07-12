@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectorRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, Input, ChangeDetectorRef, ViewChild, AfterViewInit, OnDestroy, OnChanges } from '@angular/core';
 import { NgIf, NgClass, NgStyle } from '@angular/common';
 
 import { Pixastic } from '../../pixastic/pixastic';
@@ -27,24 +27,24 @@ import { SlideshowButtonComponent } from '../slideshow-button/slideshow-button.c
 @Component({
     moduleId: module.id,
     selector: 'photo-view',
-    directives: [ 
-        NgIf, 
-        NgClass, 
-        NgStyle, 
-        HelpDialogComponent, 
-        CommentViewComponent, 
-        RatingViewComponent, 
+    directives: [
+        NgIf,
+        NgClass,
+        NgStyle,
+        HelpDialogComponent,
+        CommentViewComponent,
+        RatingViewComponent,
         ExifViewComponent,
-        EffectsViewComponent, 
-        FullscreenViewComponent, 
-        CategoryLinkComponent, 
+        EffectsViewComponent,
+        FullscreenViewComponent,
+        CategoryLinkComponent,
         SaveDialogComponent,
-        SlideshowButtonComponent 
+        SlideshowButtonComponent
     ],
     templateUrl: 'photo-view.component.html',
     styleUrls: [ 'photo-view.component.css' ]
 })
-export class PhotoViewComponent implements AfterViewInit {
+export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     private _containerBox: ContainerBox = null;
     showHistogramButton = true;
     showComments = false;
@@ -65,8 +65,7 @@ export class PhotoViewComponent implements AfterViewInit {
     get photo(): IPhoto {
         try {
             return this.context.current.photo;
-        }
-        catch (ex) {
+        } catch (ex) {
             return null;
         }
     }
@@ -74,8 +73,7 @@ export class PhotoViewComponent implements AfterViewInit {
     get category(): ICategory {
         try {
             return this.context.current.category;
-        }
-        catch (ex) {
+        } catch (ex) {
             return null;
         }
     }
@@ -152,8 +150,7 @@ export class PhotoViewComponent implements AfterViewInit {
 
         if (this.showHistogram) {
             this.renderHistogram();
-        }
-        else {
+        } else {
             this.hideHistogram();
         }
     }
@@ -166,8 +163,7 @@ export class PhotoViewComponent implements AfterViewInit {
         if (this.showFullscreen) {
             body.style.overflow = 'hidden';
             window.scrollTo(0, 0);
-        }
-        else {
+        } else {
             body.style.overflow = '';
         }
     }
@@ -181,11 +177,9 @@ export class PhotoViewComponent implements AfterViewInit {
 
         if (idx < 0) {
             this.context.current.rotationClassIndex = this.rotationClassArray.length - 1;
-        }
-        else if (idx > this.rotationClassArray.length - 1) {
+        } else if (idx > this.rotationClassArray.length - 1) {
             this.context.current.rotationClassIndex = 0;
-        }
-        else {
+        } else {
             this.context.current.rotationClassIndex = idx;
         }
 
@@ -211,8 +205,7 @@ export class PhotoViewComponent implements AfterViewInit {
 
         if (this._responsiveService.getBreakpoint() === ResponsiveService.BP_LG) {
             return this.photo.mdInfo.path;
-        }
-        else {
+        } else {
             return this.photo.smInfo.path;
         }
     }

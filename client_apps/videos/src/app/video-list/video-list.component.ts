@@ -34,7 +34,7 @@ export class VideoListComponent implements OnInit, AfterViewInit {
         private _videoStateService: VideoStateService,
         private _changeDetectionRef: ChangeDetectorRef,
         private _activatedRoute: ActivatedRoute) {
-        
+
     }
 
     ngOnInit(): void {
@@ -59,7 +59,7 @@ export class VideoListComponent implements OnInit, AfterViewInit {
             this._videoDataService.getVideosForCategory(this.categoryId)
                 .subscribe(
                     (data: Array<IVideo>) => this.setVideos(data),
-                    (err: any) => console.error("there was an error: " + err)
+                    (err: any) => console.error('there was an error: ' + err)
                 );
         });
     }
@@ -94,8 +94,7 @@ export class VideoListComponent implements OnInit, AfterViewInit {
     updateVideo(): void {
         if (this._videoStateService.config.preferFullSize) {
             this.displayedVideo = this.currentVideo.fullsizeVideo;
-        }
-        else {
+        } else {
             this.displayedVideo = this.currentVideo.scaledVideo;
         }
 

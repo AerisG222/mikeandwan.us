@@ -1,7 +1,6 @@
 @{ 
     Layout = "_SinglePageAppLayout";
     ViewBag.Title = "photos";
-    ViewBag.AngularAppRoot = "/js/photos/";
 }
 
 @section custom_head {
@@ -12,10 +11,10 @@
     @Html.Partial("_js_Mousetrap")
 	@Html.Partial("_js_GoogleMaps")
     @Html.Partial("_js_Pixastic")
-    <script src="/js/videos/vendor/es6-shim/es6-shim.js"></script>
-    <script src="/js/videos/vendor/reflect-metadata/Reflect.js"></script>
-    <script src="/js/videos/vendor/systemjs/dist/system.src.js"></script>
-    <script src="/js/videos/vendor/zone.js/dist/zone.js"></script>
+    <script src="/js/photos/vendor/es6-shim/es6-shim.js"></script>
+    <script src="/js/photos/vendor/reflect-metadata/Reflect.js"></script>
+    <script src="/js/photos/vendor/systemjs/dist/system.src.js"></script>
+    <script src="/js/photos/vendor/zone.js/dist/zone.js"></script>
     <script>
         SystemJS.config({
             baseURL: '/js/photos'

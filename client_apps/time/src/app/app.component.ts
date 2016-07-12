@@ -20,9 +20,9 @@ export class TimeAppComponent {
         { label: 'years',   timeInSeconds: 60 * 60 * 24 * 365.242 }];
 
     calculate(time: number, timeScale: string): void {
-        let timeInSeconds: number = 0;
+        let timeInSeconds = 0;
         let results: Result[] = [];
-        let i: number = 0;
+        let i = 0;
 
         for (i = 0; i < this.sizes.length; i++) {
             if (timeScale.toLowerCase() === this.sizes[i].label) {

@@ -1,21 +1,31 @@
 @{ 
     Layout = "_LayoutSidebar";
     ViewBag.Title = "tools | byte counter"; 
-    ViewBag.AngularAppRoot = "/js/tools/byteCounter/";
 }
 
-@section scripts_head {
-    @Html.Partial("_js_Angular2")
+@section custom_head {
+    <base href="." />
 }
 
 @section scripts_footer {
-    <script>System.import('/js/tools/byteCounter/bootstrap.js');</script>
+    <script src="/js/byte_counter/vendor/es6-shim/es6-shim.js"></script>
+    <script src="/js/byte_counter/vendor/reflect-metadata/Reflect.js"></script>
+    <script src="/js/byte_counter/vendor/systemjs/dist/system.src.js"></script>
+    <script src="/js/byte_counter/vendor/zone.js/dist/zone.js"></script>
+    <script>
+        SystemJS.config({
+            baseURL: '/js/byte_counter'
+        });
+
+        System.import('system-config.js').then(function () {
+            System.import('main');
+        }).catch(console.error.bind(console));
+    </script>
 }
 
 @section header {   
     @Html.Partial("_PageHeader", "Byte Counter")
 }
-
 
 @section sidebar {
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "byte-counter" })
@@ -28,5 +38,5 @@
 </p>
 
 <section>
-    <bytecounter>Loading...</bytecounter>
+    <byte-counter-app>Loading...</byte-counter-app>
 </section>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
     moduleId: module.id,
@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })
-export class WeekendCountdownAppComponent {
+export class WeekendCountdownAppComponent implements OnInit, OnDestroy {
     intervalId: number = null;
     value: string = '';
 
@@ -24,8 +24,7 @@ export class WeekendCountdownAppComponent {
 
         if (day === 0 || day === 6) {
             return true;
-        }
-        else if (day === 5) {
+        } else if (day === 5) {
             if (currDate.getHours() >= 17) {
                 return true;
             }
@@ -38,9 +37,8 @@ export class WeekendCountdownAppComponent {
         let theDate: Date = new Date();
 
         if (this.isWeekend(theDate)) {
-            this.value = "Sweet! It's the weekend!";
-        }
-        else {
+            this.value = 'Sweet! It\'s the weekend!';
+        } else {
             let secDelta = 0;
             let minDelta = 0;
             let hourDelta = 0;
@@ -50,8 +48,7 @@ export class WeekendCountdownAppComponent {
 
             if (theDate.getHours() < 17) {
                 hourDelta = 17 - theDate.getHours();
-            }
-            else if (theDate.getHours() > 17) {
+            } else if (theDate.getHours() >= 17) {
                 // subtract one day and add the day to our hours
                 dayDelta -= 1;
                 hourDelta = 24 + 17 - theDate.getHours();

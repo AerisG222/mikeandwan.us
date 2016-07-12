@@ -15,15 +15,15 @@ export class VideoNavigationService {
     }
 
     gotoYearList(): void {
-        this.gotoDestination([ '/videos' ], this.getRootBreadcrumbs());
+        this.gotoDestination([ '/' ], this.getRootBreadcrumbs());
     }
 
     gotoCategoryList(year: number): void {
-        this.gotoDestination([ '/videos', year ], this.getYearListBreadcrumbs(year));
+        this.gotoDestination([ '/', year ], this.getYearListBreadcrumbs(year));
     }
 
     gotoVideoList(year: number, category: ICategory): void {
-        this.gotoDestination([ '/videos', year, category.id ], this.getCategoryListBreadcrumbs(year, category));
+        this.gotoDestination([ '/', year, category.id ], this.getCategoryListBreadcrumbs(year, category));
     }
 
     private getRootBreadcrumbs(): Array<Breadcrumb> {
@@ -48,11 +48,11 @@ export class VideoNavigationService {
     }
 
     private getYearListBreadcrumb(year: number): Breadcrumb {
-        return new Breadcrumb(year.toString(), [ '/videos' ]);
+        return new Breadcrumb(year.toString(), [ '/' ]);
     }
 
     private getCategoryListBreadcrumb(year: number, category: ICategory): Breadcrumb {
-        return new Breadcrumb(category.name, [ '/videos', year ]);
+        return new Breadcrumb(category.name, [ '/', year ]);
     }
 
     private gotoDestination(linkParamArray: Array<any>, breadcrumbs: Array<Breadcrumb>): void {

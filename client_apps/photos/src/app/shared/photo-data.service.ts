@@ -114,7 +114,8 @@ export class PhotoDataService {
 
     addCommentForPhoto(photoId: number, comment: string): Observable<any> {
         return this._http
-            .post('/api/photos/addCommentForPhoto', JSON.stringify({ photoId: photoId, comment: comment }), { headers: this.getPostHeaders() })
+            .post('/api/photos/addCommentForPhoto',
+                  JSON.stringify({ photoId: photoId, comment: comment }), { headers: this.getPostHeaders() })
             .map((res: Response) => res.json());
     }
 

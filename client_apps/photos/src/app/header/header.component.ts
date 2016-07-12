@@ -36,8 +36,7 @@ export class HeaderComponent implements AfterViewInit {
         if (this.showMapButton) {
             this.showMapButton = false;
             this.showRegularButton = true;
-        }
-        else {
+        } else {
             this.showMapButton = true;
             this.showRegularButton = false;
         }

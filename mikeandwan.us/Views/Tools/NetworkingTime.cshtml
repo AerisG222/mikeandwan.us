@@ -1,15 +1,26 @@
 @{ 
     Layout = "_LayoutSidebar";
     ViewBag.Title = "tools | networking | time"; 
-    ViewBag.AngularAppRoot = "/js/tools/time/";
 }
 
-@section scripts_head {
-    @Html.Partial("_js_Angular2")
+@section custom_head {
+    <base href="." />
 }
 
 @section scripts_footer {
-    <script>System.import('/js/tools/time/bootstrap.js');</script>
+    <script src="/js/time/vendor/es6-shim/es6-shim.js"></script>
+    <script src="/js/time/vendor/reflect-metadata/Reflect.js"></script>
+    <script src="/js/time/vendor/systemjs/dist/system.src.js"></script>
+    <script src="/js/time/vendor/zone.js/dist/zone.js"></script>
+    <script>
+        SystemJS.config({
+            baseURL: '/js/time'
+        });
+
+        System.import('system-config.js').then(function () {
+            System.import('main');
+        }).catch(console.error.bind(console));
+    </script>
 }
 
 @section header {   
@@ -23,7 +34,7 @@
 <p>
     This page provides a calculator to view equivalent time measures.
 </p>
-    
+
 <section>
-    <time>Loading...</time>
+    <time-app>Loading...</time-app>
 </section>

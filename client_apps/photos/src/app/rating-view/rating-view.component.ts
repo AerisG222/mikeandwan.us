@@ -5,7 +5,7 @@ import { RatingComponent } from '../../ng_maw/rating/rating.component';
 import { IPhoto } from '../shared/iphoto.model';
 import { PhotoDataService } from '../shared/photo-data.service';
 
-@Component({ 
+@Component({
     moduleId: module.id,
     selector: 'rating-view',
     directives: [ RatingComponent ],

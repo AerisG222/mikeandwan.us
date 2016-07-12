@@ -1,15 +1,26 @@
 @{ 
     Layout = "_LayoutSidebar";
     ViewBag.Title = "tools | weekend countdown"; 
-    ViewBag.AngularAppRoot = "/js/tools/weekendCountdown/";
 }
 
-@section scripts_head {
-    @Html.Partial("_js_Angular2")
+@section custom_head {
+    <base href="." />
 }
 
 @section scripts_footer {
-    <script>System.import('/js/tools/weekendCountdown/bootstrap.js');</script>
+    <script src="/js/weekend_countdown/vendor/es6-shim/es6-shim.js"></script>
+    <script src="/js/weekend_countdown/vendor/reflect-metadata/Reflect.js"></script>
+    <script src="/js/weekend_countdown/vendor/systemjs/dist/system.src.js"></script>
+    <script src="/js/weekend_countdown/vendor/zone.js/dist/zone.js"></script>
+    <script>
+        SystemJS.config({
+            baseURL: '/js/weekend_countdown'
+        });
+
+        System.import('system-config.js').then(function () {
+            System.import('main');
+        }).catch(console.error.bind(console));
+    </script>
 }
 
 @section header {
@@ -21,5 +32,5 @@
 }
 
 <section>
-    <countdown>Loading...</countdown>
+    <weekend-countdown-app>Loading...</weekend-countdown-app>
 </section>

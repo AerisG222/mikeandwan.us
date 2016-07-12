@@ -11,7 +11,10 @@ import { AudioSource } from './audio-source.model';
     styleUrls: [ 'app.component.css' ]
 })
 export class LearningAppComponent {
-    letters: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    letters: string[] = [
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    ];
     numbers: string[] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
     speakers: string[] = ['Mommy', 'Daddy', 'No Sound'];
     lessons: string[] = ['Letters', 'Numbers', 'Random'];
@@ -30,8 +33,7 @@ export class LearningAppComponent {
         if (this.doRun) {
             this.run();  // immediately start first character
             this.intervalId = setInterval(() => this.run(), 3000);  // schedule additional letters
-        }
-        else {
+        } else {
             clearInterval(this.intervalId);
         }
 
@@ -41,7 +43,7 @@ export class LearningAppComponent {
     run(): void {
         this.currentChar = this.getNextChar();
 
-        if (this.currentSpeaker !== "No Sound") {
+        if (this.currentSpeaker !== 'No Sound') {
             let srcs = this.getCurrentAudioSources();
 
             // originally tried to use the source elements under the audio, but could not get this to
@@ -50,8 +52,7 @@ export class LearningAppComponent {
             // http://stackoverflow.com/questions/5235145/changing-source-on-html5-video-tag
             if (Modernizr.audio && Modernizr.audio.ogg) {
                 this.currentCharAudio = srcs.ogg;
-            }
-            else {
+            } else {
                 this.currentCharAudio = srcs.mp3;
             }
 
@@ -72,11 +73,9 @@ export class LearningAppComponent {
     getNextChar(): string {
         if (this.currentLesson === 'Letters') {
             return this.getNextInArray(this.currentChar, this.letters);
-        }
-        else if (this.currentLesson === 'Numbers') {
+        } else if (this.currentLesson === 'Numbers') {
             return this.getNextInArray(this.currentChar, this.numbers);
-        }
-        else {
+        } else {
             let arr = this.letters.concat(this.numbers);
             return arr[Math.floor(Math.random() * arr.length)];
         }

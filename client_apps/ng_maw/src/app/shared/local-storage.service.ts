@@ -11,8 +11,7 @@ export class LocalStorageService {
 
         try {
             return JSON.parse(val);
-        }
-        catch (x) {
+        } catch (x) {
             return defaultValue;
         }
     }

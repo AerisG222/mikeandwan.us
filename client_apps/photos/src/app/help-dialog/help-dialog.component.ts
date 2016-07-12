@@ -17,8 +17,7 @@ export class HelpDialogComponent {
     toggle(): void {
         if (this.dialog.isVisible) {
             this.dialog.hide();
-        }
-        else {
+        } else {
             this.dialog.show();
         }
     }

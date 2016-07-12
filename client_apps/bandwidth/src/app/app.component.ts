@@ -32,49 +32,51 @@ export class BandwidthAppComponent {
         new SizeInfo('Modem',         '14.4 Kbps',       14400)];
 
     calculate(size: number, sizeScale: string, timeScale: string): void {
-        let timeInSeconds: number = 0;
-        let sizeInBytes: number = 0;
+        let timeInSeconds = 0;
+        let sizeInBytes = 0;
         let calcResults: Result[] = [];
 
         // determine the divisor based on the time interval
         switch (timeScale) {
-            case "m":
+            case 'm':
                 timeInSeconds = 60;
                 break;
-            case "h":
+            case 'h':
                 timeInSeconds = 60 * 60;
                 break;
-            case "s":
+            case 's':
                 timeInSeconds = 1;
                 break;
-            case "d":
+            case 'd':
                 timeInSeconds = 60 * 60 * 24;
                 break;
             default:
-                throw "Invalid time interval specified!";
+                throw 'Invalid time interval specified!';
         }
 
         // now determine the full size of the file, in bits, based
         // on the file size scale
         switch (sizeScale) {
-            case "b":
+            case 'b':
                 sizeInBytes = size * 8;
                 break;
-            case "k":
+            case 'k':
                 sizeInBytes = size * 1024 * 8;
                 break;
-            case "m":
+            case 'm':
                 sizeInBytes = size * 1024 * 1024 * 8;
                 break;
-            case "g":
+            case 'g':
                 sizeInBytes = size * 1024 * 1024 * 1024 * 8;
                 break;
             default:
-                throw "Invalid file size scale specified!";
+                throw 'Invalid file size scale specified!';
         }
 
         for (let i = 0; i < this.sizeArray.length; i++) {
-            calcResults.push(new Result(this.sizeArray[i].name, this.sizeArray[i].speed, (sizeInBytes / this.sizeArray[i].bps) / timeInSeconds));
+            calcResults.push(new Result(this.sizeArray[i].name,
+                                        this.sizeArray[i].speed,
+                                        (sizeInBytes / this.sizeArray[i].bps) / timeInSeconds));
         }
 
         this.results = calcResults;

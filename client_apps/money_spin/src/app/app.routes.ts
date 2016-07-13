@@ -9,7 +9,8 @@ export const routes: RouterConfig = [
     { path: '',       component: SplashScreenComponent },
     { path: 'choose', component: ChoosePlayerComponent },
     { path: 'play',   component: PlayComponent },
-    { path: 'winner', component: WinnerComponent }
+    { path: 'winner', component: WinnerComponent },
+    { path: '**',     redirectTo: '/' },
 ];
 
 export const APP_ROUTER_PROVIDERS = [

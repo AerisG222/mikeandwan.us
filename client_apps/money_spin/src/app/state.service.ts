@@ -6,7 +6,7 @@ import { Player } from './player.model';
 
 @Injectable()
 export class StateService {
-    private _winningScore = 100;
+    private _winningScore = 25;
     private _splashShown = false;
     player1Characters = [
         new Character('C3P0',  '/img/games/money_spin/p1c3p0.png'),

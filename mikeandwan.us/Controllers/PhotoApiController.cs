@@ -28,29 +28,29 @@ namespace MawMvcApp.Controllers
         }
 
 
-		public PhotoApiController(IAuthorizationService authorizationService, 
-		                          ILogger<PhotoApiController> log, 
-						          IPhotoRepository photoRepository)
-			: base(authorizationService, log)
+        public PhotoApiController(IAuthorizationService authorizationService, 
+                                  ILogger<PhotoApiController> log, 
+                                  IPhotoRepository photoRepository)
+            : base(authorizationService, log)
         {
-			if(photoRepository == null)
-			{
-				throw new ArgumentNullException(nameof(photoRepository));
-			}
+            if(photoRepository == null)
+            {
+                throw new ArgumentNullException(nameof(photoRepository));
+            }
 
             _svc = new PhotoService(photoRepository);
         }
 
 
-		[HttpGet("getPhotoYears")]
-		public async Task<IEnumerable<short>> GetPhotoYears()
-		{
+        [HttpGet("getPhotoYears")]
+        public async Task<IEnumerable<short>> GetPhotoYears()
+        {
             return await _svc.GetYearsAsync();
-		}
-		
-		
-		[HttpGet("getCategory/{categoryId:int}")]
-		public async Task<Category> GetCategory(short categoryId)
+        }
+            
+            
+        [HttpGet("getCategory/{categoryId:int}")]
+        public async Task<Category> GetCategory(short categoryId)
         {
             return await _svc.GetCategoryAsync(categoryId, IsAdmin);
         }
@@ -77,143 +77,143 @@ namespace MawMvcApp.Controllers
         }
 
 
-		[HttpGet("getCategoriesForYear/{year:int}")]
-		public async Task<IEnumerable<Category>> GetCategoriesForYear(short year)
-		{
+        [HttpGet("getCategoriesForYear/{year:int}")]
+        public async Task<IEnumerable<Category>> GetCategoriesForYear(short year)
+        {
             return await _svc.GetCategoriesForYearAsync(year, IsAdmin);
-		}
-		
+        }
+        
 
-		[HttpGet("getPhotosByCategory/{categoryId:int}")]
-		public async Task<IEnumerable<Photo>> GetPhotosByCategory(short categoryId)
-		{
+        [HttpGet("getPhotosByCategory/{categoryId:int}")]
+        public async Task<IEnumerable<Photo>> GetPhotosByCategory(short categoryId)
+        {
             return await _svc.GetPhotosForCategoryAsync(categoryId, IsAdmin);
-		}
+        }
 
 
-		[HttpGet("getPhotosByCommentDate/{newestFirst:alpha}")]
-		public async Task<IEnumerable<Photo>> GetPhotosByCommentDate(bool newestFirst)
-		{
+        [HttpGet("getPhotosByCommentDate/{newestFirst:alpha}")]
+        public async Task<IEnumerable<Photo>> GetPhotosByCommentDate(bool newestFirst)
+        {
             return await _svc.GetPhotosByCommentDateAsync(newestFirst, IsAdmin);
-		}
-		
-		
-		[HttpGet("getPhotosByUserCommentDate/{newestFirst:alpha}")]
-		public async Task<IEnumerable<Photo>> GetPhotosByUserCommentDate(bool newestFirst)
-		{
+        }
+        
+        
+        [HttpGet("getPhotosByUserCommentDate/{newestFirst:alpha}")]
+        public async Task<IEnumerable<Photo>> GetPhotosByUserCommentDate(bool newestFirst)
+        {
             return await _svc.GetPhotosByUserCommentDateAsync(User.Identity.Name, newestFirst, IsAdmin);
-		}
-		
-		
-		[HttpGet("getPhotosByCommentCount/{greatestFirst:alpha}")]
-		public async Task<IEnumerable<Photo>> GetPhotosByCommentCount(bool greatestFirst)
-		{
+        }
+        
+        
+        [HttpGet("getPhotosByCommentCount/{greatestFirst:alpha}")]
+        public async Task<IEnumerable<Photo>> GetPhotosByCommentCount(bool greatestFirst)
+        {
             return await _svc.GetPhotosByCommentCountAsync(greatestFirst, IsAdmin);
-		}
-		
-		
-		[HttpGet("getPhotosByAverageRating/{highestFirst:alpha}")]
-		public async Task<IEnumerable<Photo>> GetPhotosByAverageRating(bool highestFirst)
-		{
+        }
+        
+        
+        [HttpGet("getPhotosByAverageRating/{highestFirst:alpha}")]
+        public async Task<IEnumerable<Photo>> GetPhotosByAverageRating(bool highestFirst)
+        {
             return await _svc.GetPhotosByAverageUserRatingAsync(highestFirst, IsAdmin);
-		}
-		
-		
-		[HttpGet("getPhotosByUserRating/{highestFirst:alpha}")]
-		public async Task<IEnumerable<Photo>> GetPhotosByUserRating(bool highestFirst)
-		{
+        }
+        
+        
+        [HttpGet("getPhotosByUserRating/{highestFirst:alpha}")]
+        public async Task<IEnumerable<Photo>> GetPhotosByUserRating(bool highestFirst)
+        {
             return await _svc.GetPhotosByUserRatingAsync(User.Identity.Name, highestFirst, IsAdmin);
-		}
+        }
 
 
-		[HttpGet("getPhotoExifData/{photoId:int}")]
-		public async Task<Detail> GetPhotoExifData(int photoId)
-		{
-			return await _svc.GetDetailForPhotoAsync(photoId, IsAdmin);
-		}
+        [HttpGet("getPhotoExifData/{photoId:int}")]
+        public async Task<Detail> GetPhotoExifData(int photoId)
+        {
+            return await _svc.GetDetailForPhotoAsync(photoId, IsAdmin);
+        }
 
 
-		[HttpGet("getCommentsForPhoto/{photoId:int}")]
-		public async Task<IEnumerable<Comment>> GetCommentsForPhoto(int photoId)
-		{
-			return await _svc.GetCommentsForPhotoAsync(photoId);
-		}
+        [HttpGet("getCommentsForPhoto/{photoId:int}")]
+        public async Task<IEnumerable<Comment>> GetCommentsForPhoto(int photoId)
+        {
+            return await _svc.GetCommentsForPhotoAsync(photoId);
+        }
 
 
-		[HttpGet("getRatingForPhoto/{id:int}")]
-		public async Task<Rating> GetRatingForPhoto(int id)
-		{
+        [HttpGet("getRatingForPhoto/{id:int}")]
+        public async Task<Rating> GetRatingForPhoto(int id)
+        {
             return await _svc.GetRatingsAsync(id, User.Identity.Name);
-		}
+        }
 
 
-		[HttpGet("getGpsDataForCategory/{id:int}")]
-		public async Task<IEnumerable<GpsData>> GetGpsDataForCategory(short id)
-		{
+        [HttpGet("getGpsDataForCategory/{id:int}")]
+        public async Task<IEnumerable<GpsData>> GetGpsDataForCategory(short id)
+        {
             return await _svc.GetGpsDataForCategoryAsync(id, IsAdmin);
-		}
+        }
 
 
-		[HttpPost("ratePhoto")]
-		public async Task<float?> RatePhoto([FromBody]UserPhotoRating userRating)
-		{
-			if(userRating.Rating < 1)
-			{
-				return await _svc.RemovePhotoRatingAsync(userRating.PhotoId, User.Identity.Name);
-			}
+        [HttpPost("ratePhoto")]
+        public async Task<float?> RatePhoto([FromBody]UserPhotoRating userRating)
+        {
+            if(userRating.Rating < 1)
+            {
+                return await _svc.RemovePhotoRatingAsync(userRating.PhotoId, User.Identity.Name);
+            }
 
-			if(userRating.Rating <= 5)
-			{
-				return await _svc.SavePhotoRatingAsync(userRating.PhotoId, User.Identity.Name, userRating.Rating);
-			}
-			else
-			{
-				throw new ArgumentOutOfRangeException(nameof(userRating), "rating must be an integer between 1 and 5");
-			}			
-		}
-		
-		
-		[HttpPost("addCommentForPhoto")]
-		public async Task<bool> AddCommentForPhoto([FromBody]CommentViewModel comment)
-		{
-			int result = await _svc.InsertPhotoCommentAsync(comment.PhotoId, User.Identity.Name, comment.Comment);
-			
-			return result > 0;
-		}
-		
-		
-		[HttpGet("getPhotosAndCategoriesByCommentDate/{newestFirst:alpha}")]
-		public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentDate(bool newestFirst)
-		{
+            if(userRating.Rating <= 5)
+            {
+                return await _svc.SavePhotoRatingAsync(userRating.PhotoId, User.Identity.Name, userRating.Rating);
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(userRating), "rating must be an integer between 1 and 5");
+            }			
+        }
+        
+        
+        [HttpPost("addCommentForPhoto")]
+        public async Task<bool> AddCommentForPhoto([FromBody]CommentViewModel comment)
+        {
+            int result = await _svc.InsertPhotoCommentAsync(comment.PhotoId, User.Identity.Name, comment.Comment);
+            
+            return result > 0;
+        }
+        
+        
+        [HttpGet("getPhotosAndCategoriesByCommentDate/{newestFirst:alpha}")]
+        public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentDate(bool newestFirst)
+        {
             return await _svc.GetPhotosAndCategoriesByCommentDateAsync(newestFirst, IsAdmin);
-		}
-		
-		
-		[HttpGet("getPhotosAndCategoriesByUserCommentDate/{newestFirst:alpha}")]
-		public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserCommentDate(bool newestFirst)
-		{
+        }
+        
+        
+        [HttpGet("getPhotosAndCategoriesByUserCommentDate/{newestFirst:alpha}")]
+        public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserCommentDate(bool newestFirst)
+        {
             return await _svc.GetPhotosAndCategoriesByUserCommentDateAsync(User.Identity.Name, newestFirst, IsAdmin);
-		}
-		
-		
-		[HttpGet("getPhotosAndCategoriesByCommentCount/{greatestFirst:alpha}")]
-		public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentCount(bool greatestFirst)
-		{
+        }
+        
+        
+        [HttpGet("getPhotosAndCategoriesByCommentCount/{greatestFirst:alpha}")]
+        public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentCount(bool greatestFirst)
+        {
             return await _svc.GetPhotosAndCategoriesByCommentCountAsync(greatestFirst, IsAdmin);
-		}
-		
-		
-		[HttpGet("getPhotosAndCategoriesByAverageRating/{highestFirst:alpha}")]
-		public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByAverageRating(bool highestFirst)
-		{
+        }
+        
+        
+        [HttpGet("getPhotosAndCategoriesByAverageRating/{highestFirst:alpha}")]
+        public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByAverageRating(bool highestFirst)
+        {
             return await _svc.GetPhotosAndCategoriesByAverageUserRatingAsync(highestFirst, IsAdmin);
-		}
-		
-		
-		[HttpGet("getPhotosAndCategoriesByUserRating/{highestFirst:alpha}")]
-		public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserRating(bool highestFirst)
-		{
+        }
+        
+        
+        [HttpGet("getPhotosAndCategoriesByUserRating/{highestFirst:alpha}")]
+        public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserRating(bool highestFirst)
+        {
             return await _svc.GetPhotosAndCategoriesByUserRatingAsync(User.Identity.Name, highestFirst, IsAdmin);
-		}
-	}
+        }
+    }
 }

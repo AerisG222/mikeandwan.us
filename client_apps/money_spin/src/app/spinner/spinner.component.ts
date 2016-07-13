@@ -125,7 +125,7 @@ export class SpinnerComponent implements OnInit, OnDestroy {
 
                 if (this._arrowSpeed <= 0) {
                     this._arrowSpeed = 0;
-                    let deg = this.radianToDegree(this._arrow.rotation.z);
+                    let deg = THREE.Math.radToDeg(this._arrow.rotation.z);
                     this.spinCompleted.next(this.getScore(deg));
                 }
             }
@@ -146,15 +146,5 @@ export class SpinnerComponent implements OnInit, OnDestroy {
         }
 
         throw new Error('Unexpected result from spin!');
-    }
-
-    private radianToDegree(radian: number): number {
-        // 180deg < x < 360deg:  these come back as negatives, so correct that here so the resulting
-        // degrees are 0 through 360  (remember Math.PI = 1radian = 180deg)
-        if (radian < 0) {
-            radian = Math.PI + (Math.PI + radian);
-        }
-
-        return radian * 180.0 / Math.PI;
     }
 }

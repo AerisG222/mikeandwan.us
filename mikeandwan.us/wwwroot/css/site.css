@@ -1,5 +1,6 @@
 ﻿/* html { overflow-y: scroll; } force scroll bar html5bp style */
-body { font-family:'Open Sans',sans-serif; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; }
+pre, code { font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace; }
 
 /* https://github.com/twbs/bootstrap/issues/14040 */
 body { padding-right: 0 !important; }
@@ -15,10 +16,10 @@ body { padding-right: 0 !important; }
 .banner > .navbar { background: rgba(0, 0, 0, 0.6); }
 
 .banner > .navbar-default .navbar-nav > li > a:hover,
-.banner > .navbar-default .navbar-nav > li > a:focus,  
-.banner > .navbar-default .dropdown-menu, 
+.banner > .navbar-default .navbar-nav > li > a:focus,
+.banner > .navbar-default .dropdown-menu,
 .banner > .navbar-default .dropdown.open > .dropdown-toggle,
-.dropdown-menu > li > a:hover, 
+.dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus { background: rgba(0, 0, 0, 0.4); }
 
 .dropdown-menu > li > span { padding: 3px 20px; }
@@ -80,7 +81,7 @@ footer { margin-top: 80px; background: none repeat scroll 0 0 #1c1e22; padding: 
 .maw-app a.prev, .maw-app a.next { position: absolute; top: 0; height: 100%; width: 50%; cursor: pointer; font-size: 36px; opacity: 0; }
 .maw-app a.prev i, .maw-app a.next i { padding-top: 55%; }
 .maw-app a.prev:hover, .maw-app a.next:hover { text-decoration: none; opacity: 0.6; }
-.maw-app a.next { right: 0; text-align: right; }  
+.maw-app a.next { right: 0; text-align: right; }
 .maw-app a.prev { left: 0; text-align: left; }
 
 .maw-app .photo-info { margin-top: 8px; }
@@ -109,7 +110,7 @@ footer { margin-top: 80px; background: none repeat scroll 0 0 #1c1e22; padding: 
 .vcenter { display: inline-block; vertical-align: middle;  }
 
 /* sm (and larger) */
-@media (min-width: 768px) { 
+@media (min-width: 768px) {
     .banner { background-image: url('/img/banner_sm.jpg'); height: 300px; margin-bottom: 30px; }
     .maw-app .main-image div { border-radius: 4px 4px 0 0; }
     .maw-app .thumbnail { margin-bottom: 0; }
@@ -117,7 +118,7 @@ footer { margin-top: 80px; background: none repeat scroll 0 0 #1c1e22; padding: 
 }
 
 /* md (and larger) */
-@media (min-width: 992px) { 
+@media (min-width: 992px) {
     .maw-app .badge { right: 42px; }
 }
 

@@ -137,6 +137,11 @@ export class SpinnerComponent implements OnInit, OnDestroy {
     }
 
     private getScore(deg: number): number {
+        if(deg < 0)
+        {
+            deg = 360 + deg;
+        }
+
         for (let i = 0; i < SpinnerComponent.SECTORS.length; i++) {
             let score = SpinnerComponent.SECTORS[i];
 

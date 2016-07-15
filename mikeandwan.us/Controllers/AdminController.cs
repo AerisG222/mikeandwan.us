@@ -265,7 +265,7 @@ namespace MawMvcApp.Controllers
 		}
 		
 		
-		[HttpGet("delete-role")]
+		[HttpGet("delete-role/{id}")]
 		public ActionResult DeleteRole(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
@@ -282,7 +282,7 @@ namespace MawMvcApp.Controllers
 		}
 		
 		
-		[HttpPost("delete-role")]
+		[HttpPost("delete-role/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteRole(DeleteRoleModel model, IFormCollection collection)
 		{
@@ -294,6 +294,8 @@ namespace MawMvcApp.Controllers
 				{
 					var r = await _roleMgr.FindByNameAsync(model.Role);
 					model.Result = await _roleMgr.DeleteAsync(r);
+
+					return RedirectToAction("ManageRoles");
 				}
 			}
 			else
@@ -305,7 +307,7 @@ namespace MawMvcApp.Controllers
 		}
 		
 		
-		[HttpGet("edit-profile")]
+		[HttpGet("edit-profile/{id}")]
 		public async Task<ActionResult> EditProfile(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
@@ -336,7 +338,7 @@ namespace MawMvcApp.Controllers
 		}
 		
 		
-		[HttpPost("edit-profile")]
+		[HttpPost("edit-profile/{id}")]
         [ValidateAntiForgeryToken]
 		public async Task<ActionResult> EditProfile(EditProfileModel model)
 		{
@@ -361,7 +363,7 @@ namespace MawMvcApp.Controllers
 		}
 		
 		
-		[HttpGet("manage-roles-for-user")]
+		[HttpGet("manage-roles-for-user/{id}")]
 		public async Task<ActionResult> ManageRolesForUser(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
@@ -383,7 +385,7 @@ namespace MawMvcApp.Controllers
 		}
 		
 		
-		[HttpPost("manage-roles-for-user")]
+		[HttpPost("manage-roles-for-user/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ManageRolesForUser(IFormCollection collection)
 		{
@@ -448,7 +450,7 @@ namespace MawMvcApp.Controllers
 		}
 		
 		
-		[HttpGet("edit-role-members")]
+		[HttpGet("edit-role-members/{id}")]
 		public async Task<ActionResult> EditRoleMembers(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
@@ -469,7 +471,7 @@ namespace MawMvcApp.Controllers
 		}
 		
 		
-		[HttpPost("edit-role-members")]
+		[HttpPost("edit-role-members/{id}")]
         [ValidateAntiForgeryToken]
 		public async Task<ActionResult> EditRoleMembers(EditRoleMembersModel model)
 		{

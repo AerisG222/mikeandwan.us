@@ -71,11 +71,13 @@ namespace Maw.Data.Identity
 				throw new ArgumentException("Username cannot be null or empty", nameof(username));
 			}
 
+			username = username.ToLower();
+
 			var user = await _ctx.User
                 .Include(u => u.State)
                 .Include(u => u.Country)
 				.Include(u => u.UserRole).ThenInclude(ur => ur.Role)
-                .Where(x => x.Username == username.ToLower())
+                .Where(x => x.Username == username)
                 .SingleOrDefaultAsync();
 
 			return BuildMawUser(user);
@@ -102,11 +104,13 @@ namespace Maw.Data.Identity
 				throw new ArgumentException("email must not be null or empty", nameof(email));
 			}
 
+			email = email.ToLower();
+
 			var user = await _ctx.User
 				.Include(u => u.State)
                 .Include(u => u.Country)
 				.Include(u => u.UserRole).ThenInclude(ur => ur.Role)
-				.Where(x => x.Email == email.ToLower())
+				.Where(x => x.Email == email)
 				.SingleOrDefaultAsync();
 
 			return BuildMawUser(user);
@@ -120,9 +124,11 @@ namespace Maw.Data.Identity
 				throw new ArgumentException("username must not be null or empty", nameof(username));
 			}
 
+			username = username.ToLower();
+
             var roles = await _ctx.User
                 .Include(u => u.UserRole).ThenInclude(r => r.Role)
-                .Where(x => x.Username == username.ToLower())
+                .Where(x => x.Username == username)
                 .Select(x => x.UserRole)
                 .SingleOrDefaultAsync();
 
@@ -139,7 +145,9 @@ namespace Maw.Data.Identity
 				throw new ArgumentNullException(nameof(user));
 			}
 
-			var u = await _ctx.User.SingleAsync(x => x.Username == user.Username.ToLower());
+			var username = user.Username.ToLower();
+
+			var u = await _ctx.User.SingleAsync(x => x.Username == username);
 
 			u.HashedPassword = user.HashedPassword;
 			u.Salt = null;
@@ -167,7 +175,9 @@ namespace Maw.Data.Identity
 				throw new ArgumentNullException(nameof(updatedUser));
 			}
 
-            var user = await _ctx.User.SingleOrDefaultAsync(x => x.Username == updatedUser.Username.ToLower());
+			var username = updatedUser.Username.ToLower();
+
+            var user = await _ctx.User.SingleOrDefaultAsync(x => x.Username == username);
 
 			if(user == null)
 			{
@@ -321,7 +331,9 @@ namespace Maw.Data.Identity
 				throw new ArgumentException("username must not be null or empty", nameof(username));
 			}
 
-            var user = await _ctx.User.SingleAsync(x => x.Username == username.ToLower());
+			username = username.ToLower();
+
+            var user = await _ctx.User.SingleAsync(x => x.Username == username);
             var roles = user.UserRole.ToList();
 
             foreach(var role in roles)
@@ -350,11 +362,13 @@ namespace Maw.Data.Identity
 				throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
 			}
 
+			roleName = roleName.ToLower();
+
             var users = await _ctx.UserRole
                 .Include(ur => ur.Role)
                 .Include(ur => ur.User).ThenInclude(u => u.Country)
 				.Include(ur => ur.User).ThenInclude(u => u.State)
-                .Where(ur => ur.Role.Name == roleName.ToLower())
+                .Where(ur => ur.Role.Name == roleName)
                 .Select(ur => ur.User)
                 .ToListAsync();
 
@@ -398,7 +412,9 @@ namespace Maw.Data.Identity
 				throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
 			}
 
-            var role = await _ctx.Role.SingleAsync(x => x.Name == roleName.ToLower());
+			roleName = roleName.ToLower();
+
+            var role = await _ctx.Role.SingleAsync(x => x.Name == roleName);
             var users = role.UserRole.ToList();
 
             foreach(var user in users)
@@ -432,8 +448,11 @@ namespace Maw.Data.Identity
 				throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
 			}
 
-            var user = _ctx.User.Single(x => x.Username == username.ToLower());
-            var role = _ctx.Role.Single(x => x.Name == roleName.ToLower());
+			username = username.ToLower();
+			roleName = roleName.ToLower();
+
+            var user = _ctx.User.Single(x => x.Username == username);
+            var role = _ctx.Role.Single(x => x.Name == roleName);
             var userRole = new UserRole 
 			{ 
 				UserId = user.Id, 
@@ -466,8 +485,11 @@ namespace Maw.Data.Identity
 				throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
 			}
 
-            var user = await _ctx.User.SingleAsync(x => x.Username == username.ToLower());
-            var role = await _ctx.Role.SingleAsync(x => x.Name == roleName.ToLower());
+			username = username.ToLower();
+			roleName = roleName.ToLower();
+
+            var user = await _ctx.User.SingleAsync(x => x.Username == username);
+            var role = await _ctx.Role.SingleAsync(x => x.Name == roleName);
             var userRole = new UserRole 
 			{ 
 				UserId = user.Id, 
@@ -496,7 +518,9 @@ namespace Maw.Data.Identity
 				throw new ArgumentException("username must not be null or empty", nameof(username));
 			}
 
-			var user = await _ctx.User.SingleAsync(x => x.Username == username.ToLower());
+			username = username.ToLower();
+
+			var user = await _ctx.User.SingleAsync(x => x.Username == username);
 
 			user.SecurityStamp = securityStamp;
 
@@ -519,8 +543,9 @@ namespace Maw.Data.Identity
 				throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
 			}
 
-			var result = await _ctx.Role
-				.SingleOrDefaultAsync(x => x.Name == roleName.ToLower());
+			roleName = roleName.ToLower();
+
+			var result = await _ctx.Role.SingleOrDefaultAsync(x => x.Name == roleName);
 
 			if(result == null)
 			{

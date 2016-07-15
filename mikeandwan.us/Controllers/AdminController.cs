@@ -199,7 +199,7 @@ namespace MawMvcApp.Controllers
 		}
 		
 		
-		[HttpPost("delete-user")]
+		[HttpPost("delete-user/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteUser(DeleteUserModel model, IFormCollection collection)
 		{
@@ -214,6 +214,7 @@ namespace MawMvcApp.Controllers
 					try
 					{
 						model.Result = await _userMgr.DeleteAsync(user);
+						return RedirectToAction("ManageUsers");
 					}
 					catch(Exception ex)
 					{

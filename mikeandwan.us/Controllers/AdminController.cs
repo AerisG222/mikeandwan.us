@@ -543,7 +543,7 @@ namespace MawMvcApp.Controllers
 		
 		[HttpPost("create-blog-post")]
         [ValidateAntiForgeryToken]
-		public ActionResult CreateBlogPost(BlogPostModel model)
+		public async Task<ActionResult> CreateBlogPost(BlogPostModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 			
@@ -564,7 +564,7 @@ namespace MawMvcApp.Controllers
 						PublishDate = model.PublishDate
 					};
 					
-					svc.AddPostAsync(post);
+					await svc.AddPostAsync(post);
 					
 					model.Success = true;
 				}

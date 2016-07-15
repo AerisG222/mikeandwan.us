@@ -20,7 +20,7 @@ export class PreferenceDialogComponent implements AfterViewInit {
     title: string = 'Prefs';
 
     constructor(private _stateService: VideoStateService,
-        private _changeDetectionRef: ChangeDetectorRef) {
+                private _changeDetectionRef: ChangeDetectorRef) {
         this.preferLarge = this._stateService.config.preferFullSize;
         this.form = { preferLarge: this.preferLarge };
     }

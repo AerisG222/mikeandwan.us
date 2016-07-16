@@ -156,9 +156,7 @@ namespace Maw.Data.Identity
 
 			try
 			{
-				var result = (await _ctx.SaveChangesAsync()) == 1;
-
-				return result;
+				return await _ctx.SaveChangesAsync() == 1;
 			}
 			catch(DbUpdateException ex)
 			{
@@ -186,28 +184,38 @@ namespace Maw.Data.Identity
 
             user.FirstName = updatedUser.FirstName;
             user.LastName = updatedUser.LastName;
-            user.Email = updatedUser.Email.ToLower();
+            user.Email = updatedUser.Email?.ToLower();
             user.Website = updatedUser.Website;
             user.DateOfBirth = updatedUser.DateOfBirth;
             user.CompanyName = updatedUser.Company;
             user.Position = updatedUser.Position;
-            user.WorkEmail = updatedUser.WorkEmail.ToLower();
+            user.WorkEmail = updatedUser.WorkEmail?.ToLower();
             user.Address1 = updatedUser.Address1;
             user.Address2 = updatedUser.Address2;
             user.City = updatedUser.City;
-			user.StateId = (await _ctx.State.SingleOrDefaultAsync(x => x.Code == updatedUser.State.ToUpper()))?.Id;
             user.PostalCode = updatedUser.PostalCode;
-			user.CountryId = (await _ctx.Country.SingleOrDefaultAsync(x => x.Code == updatedUser.Country.ToUpper()))?.Id;
-            user.HomePhone = updatedUser.HomePhone;
+	        user.HomePhone = updatedUser.HomePhone;
             user.MobilePhone = updatedUser.MobilePhone;
             user.WorkPhone = updatedUser.WorkPhone;
 			user.HashedPassword = updatedUser.HashedPassword;
 			user.SecurityStamp = updatedUser.SecurityStamp;
 			user.Salt = updatedUser.Salt;
 
+			if(!string.IsNullOrWhiteSpace(updatedUser.State))
+			{
+				user.StateId = (await _ctx.State.SingleOrDefaultAsync(x => x.Code == updatedUser.State.ToUpper()))?.Id;
+			}
+
+			if(!string.IsNullOrWhiteSpace(updatedUser.Country))
+			{
+				user.CountryId = (await _ctx.Country.SingleOrDefaultAsync(x => x.Code == updatedUser.Country.ToUpper()))?.Id;
+			}
+
 			try
 			{
-                return await _ctx.SaveChangesAsync() == 1;
+                await _ctx.SaveChangesAsync();
+
+				return true;
 			}
 			catch(DbUpdateException ex)
 			{
@@ -302,7 +310,7 @@ namespace Maw.Data.Identity
 				HashedPassword = user.HashedPassword,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Email = user.Email.ToLower(),
+                Email = user.Email?.ToLower(),
 				SecurityStamp = user.SecurityStamp
             };
 

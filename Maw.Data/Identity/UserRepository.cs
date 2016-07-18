@@ -372,13 +372,17 @@ namespace Maw.Data.Identity
 
 			roleName = roleName.ToLower();
 
-            var users = await _ctx.UserRole
-                .Include(ur => ur.Role)
-                .Include(ur => ur.User).ThenInclude(u => u.Country)
-				.Include(ur => ur.User).ThenInclude(u => u.State)
-                .Where(ur => ur.Role.Name == roleName)
-                .Select(ur => ur.User)
-                .ToListAsync();
+			var usersInRole = await _ctx.UserRole
+					.Where(ur => ur.Role.Name == roleName)
+					.Select(ur => ur.UserId)
+					.ToListAsync();
+
+			var users = await _ctx.User
+				.Include(u => u.Country)
+				.Include(u => u.State)
+				.Include(u => u.UserRole).ThenInclude(ur => ur.Role)
+				.Where(u => usersInRole.Contains(u.Id))
+				.ToListAsync();
 
 			return users.Select(x => BuildMawUser(x))
                 .OrderBy(x => x.Username)
@@ -498,11 +502,7 @@ namespace Maw.Data.Identity
 
             var user = await _ctx.User.SingleAsync(x => x.Username == username);
             var role = await _ctx.Role.SingleAsync(x => x.Name == roleName);
-            var userRole = new UserRole 
-			{ 
-				UserId = user.Id, 
-				RoleId = role.Id 
-			};
+			var userRole = await _ctx.UserRole.SingleAsync(x => x.UserId == user.Id && x.RoleId == role.Id);
             
             role.UserRole.Remove(userRole);
 

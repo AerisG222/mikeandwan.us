@@ -668,17 +668,6 @@ namespace Maw.Data.Identity
 		void LogEntityFrameworkError(string method, DbUpdateException ex)
 		{
 			_log.LogError(string.Format("Error calling {0}: {1}", method, ex.Message));
-
-            /*
-			foreach(var dbErr in ex.Entries)
-			{
-				foreach(var err in dbErr.ValidationErrors)
-				{
-					_log.LogError(string.Format("Error with property [{0}]: {1}", err.PropertyName, err.ErrorMessage));
-				}
-			}
-            */
 		}
     }
 }
-

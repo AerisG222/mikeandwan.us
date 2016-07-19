@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { NgFor } from '@angular/common';
 
 import { PhotoDataService } from '../shared/photo-data.service';
@@ -14,6 +14,7 @@ import { IPhoto } from '../shared/iphoto.model';
 })
 export class CommentViewComponent {
     private _photo: IPhoto = null;
+    newComment = '';
     comments: Array<IComment> = [];
 
     constructor(private _dataService: PhotoDataService) {
@@ -39,12 +40,15 @@ export class CommentViewComponent {
         return this.comments.length > 0;
     }
 
-    addComment(comment: string): void {
+    addComment(): void {
         let photo = this._photo;
 
         if (photo !== null) {
-            this._dataService.addCommentForPhoto(photo.id, comment)
-                .subscribe((x: any) => this.getComments());
+            this._dataService.addCommentForPhoto(photo.id, this.newComment)
+                .subscribe((x: any) => {
+                    this.getComments();
+                    this.newComment = '';
+                });
         }
     }
 }

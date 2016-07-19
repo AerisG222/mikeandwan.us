@@ -23,14 +23,14 @@
         <div class="col-sm-12">
             <div class="form-group">
             	<label for="addCommentTextarea">Add a comment</label>
-          	    <textarea class="form-control" id="addCommentTextarea" #newComment required></textarea>
+          	    <textarea class="form-control" id="addCommentTextarea" [(ngModel)]="newComment" required></textarea>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-12">
             <div class="form-group">
-                <button type="button" class="btn btn-default btn-sm" (click)="addComment(newComment.value)">Submit</button>
+                <button type="button" class="btn btn-default btn-sm" (click)="addComment()">Submit</button>
             </div>
         </div>
     </div>

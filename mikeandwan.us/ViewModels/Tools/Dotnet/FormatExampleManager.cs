@@ -79,7 +79,6 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 			group.FormatExampleList.Add(new FormatExample("FFFFFFF", date.ToString("FFFFFFF")));
 			group.FormatExampleList.Add(new FormatExample("t -or- %t", date.ToString("%t")));
 			group.FormatExampleList.Add(new FormatExample("tt", date.ToString("tt")));
-			//group.FormatExampleList.Add(new FormatExample("K", "date.ToString("K")));  // TODO: add support for this when it works
 			group.FormatExampleList.Add(new FormatExample("z -or- %z", date.ToString("%z")));
 			group.FormatExampleList.Add(new FormatExample("zz", date.ToString("zz")));
 			group.FormatExampleList.Add(new FormatExample("zzz", date.ToString("zzz")));

@@ -21,7 +21,6 @@ using MawMvcApp.ViewModels.Navigation;
 
 namespace MawMvcApp.Controllers
 {
-	// TODO: fixup routes to not use querystrings
 	[Authorize(MawConstants.POLICY_ADMIN_SITE)]
 	[Route("admin")]
     public class AdminController 

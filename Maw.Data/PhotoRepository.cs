@@ -301,9 +301,9 @@ namespace Maw.Data
 		}
 
 
-		public Task<D.Detail> GetDetailForPhotoAsync(int photoId, bool allowPrivate)
+		public async Task<D.Detail> GetDetailForPhotoAsync(int photoId, bool allowPrivate)
 		{
-            return _ctx.Photo
+            var photo = await _ctx.Photo
                 .Include(x => x.ActiveDLighting)
                 .Include(x => x.AfAreaMode)
                 .Include(x => x.AfPoint)
@@ -346,90 +346,91 @@ namespace Maw.Data
                 .Include(x => x.VrMode)
                 .Include(x => x.WhiteBalance)
                 .Where(x => x.Id == photoId && (allowPrivate || !x.IsPrivate))
-                .Select(x => new D.Detail 
-                {
-                    // exif
-                    BitsPerSample = (ushort?)x.BitsPerSample,
-                    Compression = x.Compression.Name, //?
-                    Contrast = x.Contrast.Name, //?
-                    CreateDate = x.CreateDate,
-                    DigitalZoomRatio = x.DigitalZoomRatio,
-                    ExposureCompensation = x.ExposureCompensation,
-                    ExposureMode = x.ExposureMode.Name, //?
-                    ExposureProgram = x.ExposureProgram.Name, //?
-                    ExposureTime = x.ExposureTime,
-                    FNumber = (double?)x.FNumber,
-                    Flash = x.Flash.Name, //?
-                    FocalLength = x.FocalLength,
-                    FocalLengthIn35mmFormat = x.FocalLengthIn35MmFormat,
-                    GainControl = x.GainControl.Name, //?
-                    GpsAltitude = x.GpsAltitude,
-                    GpsAltitudeRef = x.GpsAltitudeRef.Name, //?
-                    GpsDateStamp = x.GpsDateTimeStamp,
-                    GpsDirection = x.GpsDirection,
-                    GpsDirectionRef = x.GpsDirectionRef.Name, //?
-                    GpsLatitude = x.GpsLatitude,
-                    GpsLatitudeRef = x.GpsLatitudeRef.Name, //?
-                    GpsLongitude = x.GpsLongitude,
-                    GpsLongitudeRef = x.GpsLongitudeRef.Name, //?
-                    GpsMeasureMode = x.GpsMeasureMode.Name, //?
-                    GpsSatellites = x.GpsSatellites,
-                    GpsStatus = x.GpsStatus.Name, //?
-                    GpsVersionId = x.GpsVersionId,
-                    Iso = x.Iso,
-                    LightSource = x.LightSource.Name, //?
-                    Make = x.Make.Name, //?
-                    MeteringMode = x.MeteringMode.Name, //?
-                    Model = x.Model.Name, //?
-                    Orientation = x.Orientation.Name, //?
-                    Saturation = x.Saturation.Name, //?
-                    SceneCaptureType = x.SceneCaptureType.Name, //?
-                    SceneType = x.SceneType.Name, //?
-                    SensingMethod = x.SensingMethod.Name, //?
-                    Sharpness = x.Sharpness.Name, //?
-                    // nikon
-                    AutoFocusAreaMode = x.AfAreaMode.Name, //?
-                    AutoFocusPoint = x.AfPoint.Name, //?
-                    ActiveDLighting = x.ActiveDLighting.Name, //?
-                    Colorspace = x.Colorspace.Name, //?
-                    ExposureDifference = x.ExposureDifference,
-                    FlashColorFilter = x.FlashColorFilter.Name, //?
-                    FlashCompensation = x.FlashCompensation,
-                    FlashControlMode = x.FlashControlMode,
-                    FlashExposureCompensation = x.FlashExposureCompensation,
-                    FlashFocalLength = x.FlashFocalLength,
-                    FlashMode = x.FlashMode.Name, //?
-                    FlashSetting = x.FlashSetting.Name, //?
-                    FlashType = x.FlashType.Name, //?
-                    FocusDistance = x.FocusDistance,
-                    FocusMode = x.FocusMode.Name, //?
-                    FocusPosition = x.FocusPosition,
-                    HighIsoNoiseReduction = x.HighIsoNoiseReduction.Name, //?
-                    HueAdjustment = x.HueAdjustment.Name, //?
-                    NoiseReduction = x.NoiseReduction.Name, //?
-                    PictureControlName = x.PictureControlName.Name, //?
-                    PrimaryAFPoint = x.PrimaryAfPoint,
-                    VRMode = x.VrMode.Name, //?
-                    VibrationReduction = x.VibrationReduction.Name, //?
-                    VignetteControl = x.VignetteControl.Name, //?
-                    WhiteBalance = x.WhiteBalance.Name, //?
-                    // composite
-                    Aperture = (double?)x.Aperture,
-                    AutoFocus = x.AutoFocus.Name, //?
-                    DepthOfField = x.DepthOfField,
-                    FieldOfView = x.FieldOfView,
-                    HyperfocalDistance = x.HyperfocalDistance,
-                    LensId = x.Lens.Name, //?
-                    LightValue = x.LightValue,
-                    ScaleFactor35Efl = x.ScaleFactor35Efl,
-                    ShutterSpeed = x.ShutterSpeed,
-                    // processing info
-                    RawConversionMode = x.RawConversionMode.Name, //?
-                    SigmoidalContrastAdjustment = x.SigmoidalContrastAdjustment,
-                    SaturationAdjustment = x.SaturationAdjustment,
-                    CompressionQuality = x.CompressionQuality
-                })
                 .SingleAsync();
+
+            return new D.Detail 
+            {
+                // exif
+                BitsPerSample = (ushort?)photo.BitsPerSample,
+                Compression = photo.Compression?.Name,
+                Contrast = photo.Contrast?.Name,
+                CreateDate = photo.CreateDate,
+                DigitalZoomRatio = photo.DigitalZoomRatio,
+                ExposureCompensation = photo.ExposureCompensation,
+                ExposureMode = photo.ExposureMode?.Name,
+                ExposureProgram = photo.ExposureProgram?.Name,
+                ExposureTime = photo.ExposureTime,
+                FNumber = (double?)photo.FNumber,
+                Flash = photo.Flash?.Name,
+                FocalLength = photo.FocalLength,
+                FocalLengthIn35mmFormat = photo.FocalLengthIn35MmFormat,
+                GainControl = photo.GainControl?.Name,
+                GpsAltitude = photo.GpsAltitude,
+                GpsAltitudeRef = photo.GpsAltitudeRef?.Name,
+                GpsDateStamp = photo.GpsDateTimeStamp,
+                GpsDirection = photo.GpsDirection,
+                GpsDirectionRef = photo.GpsDirectionRef?.Name,
+                GpsLatitude = photo.GpsLatitude,
+                GpsLatitudeRef = photo.GpsLatitudeRef?.Name,
+                GpsLongitude = photo.GpsLongitude,
+                GpsLongitudeRef = photo.GpsLongitudeRef?.Name,
+                GpsMeasureMode = photo.GpsMeasureMode?.Name,
+                GpsSatellites = photo.GpsSatellites,
+                GpsStatus = photo.GpsStatus?.Name,
+                GpsVersionId = photo.GpsVersionId,
+                Iso = photo.Iso,
+                LightSource = photo.LightSource?.Name,
+                Make = photo.Make?.Name,
+                MeteringMode = photo.MeteringMode?.Name,
+                Model = photo.Model?.Name,
+                Orientation = photo.Orientation?.Name,
+                Saturation = photo.Saturation?.Name,
+                SceneCaptureType = photo.SceneCaptureType?.Name,
+                SceneType = photo.SceneType?.Name,
+                SensingMethod = photo.SensingMethod?.Name,
+                Sharpness = photo.Sharpness?.Name,
+                // nikon
+                AutoFocusAreaMode = photo.AfAreaMode?.Name,
+                AutoFocusPoint = photo.AfPoint?.Name,
+                ActiveDLighting = photo.ActiveDLighting?.Name,
+                Colorspace = photo.Colorspace?.Name,
+                ExposureDifference = photo.ExposureDifference,
+                FlashColorFilter = photo.FlashColorFilter?.Name,
+                FlashCompensation = photo.FlashCompensation,
+                FlashControlMode = photo.FlashControlMode,
+                FlashExposureCompensation = photo.FlashExposureCompensation,
+                FlashFocalLength = photo.FlashFocalLength,
+                FlashMode = photo.FlashMode?.Name,
+                FlashSetting = photo.FlashSetting?.Name,
+                FlashType = photo.FlashType?.Name,
+                FocusDistance = photo.FocusDistance,
+                FocusMode = photo.FocusMode?.Name,
+                FocusPosition = photo.FocusPosition,
+                HighIsoNoiseReduction = photo.HighIsoNoiseReduction?.Name,
+                HueAdjustment = photo.HueAdjustment?.Name,
+                NoiseReduction = photo.NoiseReduction?.Name,
+                PictureControlName = photo.PictureControlName?.Name,
+                PrimaryAFPoint = photo.PrimaryAfPoint,
+                VRMode = photo.VrMode?.Name,
+                VibrationReduction = photo.VibrationReduction?.Name,
+                VignetteControl = photo.VignetteControl?.Name,
+                WhiteBalance = photo.WhiteBalance?.Name,
+                // composite
+                Aperture = (double?)photo.Aperture,
+                AutoFocus = photo.AutoFocus?.Name,
+                DepthOfField = photo.DepthOfField,
+                FieldOfView = photo.FieldOfView,
+                HyperfocalDistance = photo.HyperfocalDistance,
+                LensId = photo.Lens?.Name,
+                LightValue = photo.LightValue,
+                ScaleFactor35Efl = photo.ScaleFactor35Efl,
+                ShutterSpeed = photo.ShutterSpeed,
+                // processing info
+                RawConversionMode = photo.RawConversionMode?.Name,
+                SigmoidalContrastAdjustment = photo.SigmoidalContrastAdjustment,
+                SaturationAdjustment = photo.SaturationAdjustment,
+                CompressionQuality = photo.CompressionQuality
+            };
 		}
 
 

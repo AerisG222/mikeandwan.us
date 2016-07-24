@@ -1,6 +1,7 @@
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { HTTP_BINDINGS } from '@angular/http';
 import { enableProdMode } from '@angular/core';
+import { disableDeprecatedForms, provideForms } from '@angular/forms';
 
 import { BreadcrumbService } from './ng_maw/shared/breadcrumb.service';
 import { LocalStorageService } from './ng_maw/shared/local-storage.service';
@@ -21,6 +22,8 @@ if (environment.production) {
 bootstrap(VideosAppComponent, [
     HTTP_BINDINGS,
     APP_ROUTER_PROVIDERS,
+    disableDeprecatedForms(),
+    provideForms(),
     LocalStorageService,
     BreadcrumbService,
     ResponsiveService,

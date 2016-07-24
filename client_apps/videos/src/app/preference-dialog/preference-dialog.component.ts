@@ -1,5 +1,4 @@
 import { Component, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
-import { NgModel, FORM_DIRECTIVES } from '@angular/common';
 
 import { DialogComponent } from '../../ng_maw/dialog/dialog.component';
 import { DialogButton } from '../../ng_maw/dialog/dialog-button.model';
@@ -9,20 +8,20 @@ import { VideoStateService } from '../shared/video-state.service';
 @Component({
     moduleId: module.id,
     selector: 'preference-dialog',
-    directives: [ DialogComponent, NgModel, FORM_DIRECTIVES ],
+    directives: [ DialogComponent ],
     templateUrl: 'preference-dialog.component.html',
     styleUrls: [ 'preference-dialog.component.css' ]
 })
 export class PreferenceDialogComponent implements AfterViewInit {
     @ViewChild(DialogComponent) dialog: DialogComponent;
-    preferLarge: boolean = false;
-    form: any = null;
-    title: string = 'Prefs';
+    orig = { preferLarge: false };
+    form = { preferLarge: false };
+    title = 'Prefs';
 
     constructor(private _stateService: VideoStateService,
                 private _changeDetectionRef: ChangeDetectorRef) {
-        this.preferLarge = this._stateService.config.preferFullSize;
-        this.form = { preferLarge: this.preferLarge };
+        this.orig.preferLarge = this._stateService.config.preferFullSize;
+        this.form.preferLarge = this._stateService.config.preferFullSize;
     }
 
     ngAfterViewInit(): void {
@@ -55,8 +54,8 @@ export class PreferenceDialogComponent implements AfterViewInit {
     }
 
     save() {
-        if (this.preferLarge !== this.form.preferLarge) {
-            this.preferLarge = this.form.preferLarge;
+        if (this.orig.preferLarge !== this.form.preferLarge) {
+            this.orig.preferLarge = this.form.preferLarge;
             this._stateService.config.preferFullSize = this.form.preferLarge;
             this._stateService.saveConfig();
         }
@@ -66,6 +65,6 @@ export class PreferenceDialogComponent implements AfterViewInit {
 
     cancel() {
         this.dialog.hide();
-        this.form.preferLarge = this.preferLarge;
+        this.form.preferLarge = this.orig.preferLarge;
     }
 }

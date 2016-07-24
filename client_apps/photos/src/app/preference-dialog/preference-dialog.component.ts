@@ -1,5 +1,4 @@
 import { Component, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { NgModel } from '@angular/common';
 
 import { DialogComponent } from '../../ng_maw/dialog/dialog.component';
 import { DialogButton } from '../../ng_maw/dialog/dialog-button.model';
@@ -9,15 +8,17 @@ import { PhotoStateService } from '../shared/photo-state.service';
 @Component({
     moduleId: module.id,
     selector: 'preference-dialog',
-    directives: [ DialogComponent, NgModel ],
+    directives: [ DialogComponent ],
     templateUrl: 'preference-dialog.component.html',
     styleUrls: [ 'preference-dialog.component.css' ]
 })
 export class PreferenceDialogComponent implements AfterViewInit {
     @ViewChild(DialogComponent) dialog: DialogComponent;
-    editDisplayMode: string = null;
-    editRowCount: string = null;
-    editSlideshowInterval: string = null;
+    form = {
+        displayMode: null,
+        rowCount: null,
+        slideshowInterval: null
+    };
 
     constructor(private _stateService: PhotoStateService,
         private _changeDetectionRef: ChangeDetectorRef) {
@@ -50,18 +51,18 @@ export class PreferenceDialogComponent implements AfterViewInit {
     }
 
     save(): void {
-        this._stateService.config.displayMode = parseInt(this.editDisplayMode, 10);
-        this._stateService.config.slideshowIntervalSeconds = parseInt(this.editSlideshowInterval, 10);
-        this._stateService.config.rowsPerPage = parseInt(this.editRowCount, 10);
+        this._stateService.config.displayMode = parseInt(this.form.displayMode, 10);
+        this._stateService.config.slideshowIntervalSeconds = parseInt(this.form.slideshowInterval, 10);
+        this._stateService.config.rowsPerPage = parseInt(this.form.rowCount, 10);
         this._stateService.saveConfig();
 
         this.cancel();  // leverage this function to perform our cleanup       
     }
 
     updateFormValues(): void {
-        this.editDisplayMode = this._stateService.config.displayMode.toString();
-        this.editRowCount = this._stateService.config.rowsPerPage.toString();
-        this.editSlideshowInterval = this._stateService.config.slideshowIntervalSeconds.toString();
+        this.form.displayMode = this._stateService.config.displayMode.toString();
+        this.form.rowCount = this._stateService.config.rowsPerPage.toString();
+        this.form.slideshowInterval = this._stateService.config.slideshowIntervalSeconds.toString();
     }
 
     cancel(): void {

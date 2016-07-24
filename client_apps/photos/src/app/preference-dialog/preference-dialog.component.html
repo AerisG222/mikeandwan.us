@@ -3,7 +3,7 @@
         <div class="form-group">
             <label for="prefsDisplayMode" class="col-sm-6 control-label">Photo Display Mode</label>
             <div class="col-sm-6">
-                <select id="prefsDisplayMode" class="form-control" [(ngModel)]="editDisplayMode">
+                <select id="prefsDisplayMode" class="form-control" [(ngModel)]="form.displayMode" name="displayMode">
                     <option value="1">Inline View</option>
                     <option value="2">Popup (optimized for small screens)</option>
                 </select>
@@ -12,7 +12,7 @@
         <div class="form-group">
             <label for="prefsThumbrowcount" class="col-sm-6 control-label">Thumbnail Rows Per Page</label>
             <div class="col-sm-3">
-                <select id="prefsThumbrowcount" class="form-control" [(ngModel)]="editRowCount">
+                <select id="prefsThumbrowcount" class="form-control" [(ngModel)]="form.rowCount" name="rowCount">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -24,7 +24,7 @@
         <div class="form-group">
             <label for="prefsSlideshowInterval" class="col-sm-6 control-label">Slideshow Interval</label>
             <div class="col-sm-3">
-                <select id="prefsSlideshowInterval" class="form-control" [(ngModel)]="editSlideshowInterval">
+                <select id="prefsSlideshowInterval" class="form-control" [(ngModel)]="form.slideshowInterval" name="slideshowInterval">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>

@@ -1,12 +1,10 @@
 {
-    "ambientDevDependencies": {
-        "angular-protractor": "registry:dt/angular-protractor#1.5.0+20160425143459",
-        "jasmine": "registry:dt/jasmine#2.2.0+20160412134438",
-        "selenium-webdriver": "registry:dt/selenium-webdriver#2.44.0+20160317120654"
-    },
-    "ambientDependencies": {
-        "es6-shim": "registry:dt/es6-shim#0.31.2+20160317120654",
-        "modernizr": "github:DefinitelyTyped/DefinitelyTyped/modernizr/modernizr.d.ts#4de74cb527395c13ba20b438c3a7a419ad931f1c",
-        "three": "github:DefinitelyTyped/DefinitelyTyped/threejs/three.d.ts#e69daec7f79c0c25c4653f866e5cadb5bb7a01ca"
-    }
+  "globalDevDependencies": {
+    "angular-protractor": "registry:dt/angular-protractor#1.5.0+20160425143459",
+    "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
+    "selenium-webdriver": "registry:dt/selenium-webdriver#2.44.0+20160317120654"
+  },
+  "globalDependencies": {
+    "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504"
+  }
 }

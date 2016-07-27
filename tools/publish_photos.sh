@@ -8,7 +8,7 @@ DEBUG=y
 SSH_REMOTE_HOST=tifa
 SSH_USERNAME=mmorano
 PATH_SIZE_PHOTOS="~mmorano/git/SizePhotos/src/SizePhotos"
-PATH_GLACIER_BACKUP="~/mmorano/git/GlacierBackup/src/GlacierBackup"
+PATH_GLACIER_BACKUP="~mmorano/git/GlacierBackup/src/GlacierBackup"
 PATH_ASSET_ROOT="/srv/www/website_assets"
 PATH_IMAGE_SOURCE=
 CAT_NAME=
@@ -33,7 +33,10 @@ get_value() {
 }
 
 if [ "${PATH_IMAGE_SOURCE}" = "" ]; then
-    PATH_IMAGE_SOURCE=$(get_value 'Path to assets: ' 'n')
+    PATH_IMAGE_SOURCE=$(get_value 'Path to photos: ' 'n')
+
+    # cleanup trailing slash if needed
+    PATH_IMAGE_SOURCE="${PATH_IMAGE_SOURCE%/}"
 fi
 
 if [ "${CAT_NAME}" = "" ]; then
@@ -61,6 +64,13 @@ PATH_LOCAL_SQL_FILE="${ASSET_ROOT}/${SQL_FILE}"
 GLACIER_SQL_FILE="${SQL_FILE}.glacier.sql"
 PATH_LOCAL_GLACIER_SQL_FILE="${ASSET_ROOT}/${GLACIER_SQL_FILE}"
 
+if [ -d "${DEST_IMAGES_CATEGORY_ROOT}" ]; then
+    echo 'This directory already exists in the destination.'
+    echo 'If you are trying to add images to a previously published directory, you must do this manually.'
+    echo 'Otherwise, please give the directory a unique name and then try again.'
+    exit
+fi
+
 if [ "${DEBUG}" = "y" ]; then
     echo ''
     echo 'VARIABLES: '
@@ -68,6 +78,7 @@ if [ "${DEBUG}" = "y" ]; then
     echo "            SSH_REMOTE_HOST: ${SSH_REMOTE_HOST}"
     echo "               SSH_USERNAME: ${SSH_USERNAME}"
     echo "           PATH_SIZE_PHOTOS: ${PATH_SIZE_PHOTOS}"
+    echo "        PATH_GLACIER_BACKUP: ${PATH_GLACIER_BACKUP}"
     echo "          PATH_IMAGE_SOURCE: ${PATH_IMAGE_SOURCE}"
     echo "            PATH_ASSET_ROOT: ${PATH_ASSET_ROOT}"
     echo "                   CAT_NAME: ${CAT_NAME}"
@@ -88,7 +99,30 @@ if [ "${DEBUG}" = "y" ]; then
     echo 'If this does not look right, hit Ctl-C to cancel'
     echo '################################################'
     echo ''
+
+    read -r -p "Continue? [y/n]: " CONTINUE
+
+    if [ ! "${CONTINUE}" = "y" ]; then
+        echo 'exiting...'
+        exit
+    fi
 fi
+
+if [ -d "${PATH_IMAGE_SOURCE}/src" ]; then
+    # move previously processed source files back to main photo directory
+    mv "${PATH_IMAGE_SOURCE}"/src/* "${PATH_IMAGE_SOURCE}"
+
+    # remove generated directories
+    rm -rf "${PATH_IMAGE_SOURCE}/xs"
+    rm -rf "${PATH_IMAGE_SOURCE}/sm"
+    rm -rf "${PATH_IMAGE_SOURCE}/md"
+    rm -rf "${PATH_IMAGE_SOURCE}/lg"
+    rm -rf "${PATH_IMAGE_SOURCE}/src"
+    rm -rf "${PATH_IMAGE_SOURCE}/prt"
+fi
+
+echo 'processing photos...'
+dotnet run -p "${PATH_SIZE_PHOTOS}" SizePhotos -i -c "${CAT_NAME}" -o "${PATH_LOCAL_SQL_FILE}" -p "${PATH_IMAGE_SOURCE}" -w "images" -y ${YEAR} ${PRIVATE_FLAG}
 
 # after processing the first time, we typically want to manually review all the photos to make sure
 # we keep the good ones and toss the bad / dupes /etc.  This check allows the user to bail if this
@@ -100,13 +134,12 @@ if [ ! "${DEPLOY}" = "y" ]; then
     exit
 fi
 
-echo 'processing photos...'
-dotnet run -p "${PATH_SIZE_PHOTOS}" SizePhotos -i -c "${CAT_NAME}" -o "${PATH_LOCAL_SQL_FILE}" -p "${PATH_IMAGE_SOURCE}" -w "${PATH_IMAGE_SOURCE}" -y ${YEAR} ${PRIVATE_FLAG}
-
 
 #################################################
 ## LOCAL PROCESSING
 #################################################
+mkdir "${DEST_IMAGES_YEAR_ROOT}"
+
 echo 'moving photos for local site...'
 mv "${PATH_IMAGE_SOURCE}" "${DEST_IMAGES_YEAR_ROOT}"
 
@@ -124,30 +157,30 @@ psql -d maw_website -f "${PATH_LOCAL_GLACIER_SQL_FILE}"
 ## REMOTE PROCESSING
 #################################################
 echo 'copying files to remote...'
-scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/xs" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${ASSET_ROOT}/xs"
-scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/sm" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${ASSET_ROOT}/sm"
-scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/md" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${ASSET_ROOT}/md"
-scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/lg" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${ASSET_ROOT}/lg"
-scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/prt" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${ASSET_ROOT}/prt"
+scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/xs" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/xs"
+scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/sm" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/sm"
+scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/md" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/md"
+scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/lg" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/lg"
+scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/prt" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/prt"
 scp -r -c blowfish "${PATH_LOCAL_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
 scp -r -c blowfish "${PATH_LOCAL_GLACIER_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
 
-echo 'deploying...'
-ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" <<HERE
-    sudo mkdir "${DEST_IMAGES_YEAR_ROOT}"
-    sudo mv "~mmorano/${ASSET_ROOT}" "${DEST_IMAGES_YEAR_ROOT}"
-    sudo chown -R root:root "${DEST_IMAGES_CATEGORY_ROOT}"
-    sudo chmod -R go-w "${DEST_IMAGES_CATEGORY_ROOT}"
-    sudo restorecon -R "${DEST_IMAGES_CATEGORY_ROOT}"
+echo 'deploying (please provide remote password when prompted)...'
+ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
+    echo \"These commands will be run on: \$( uname -n )\"
+    
+    sudo mkdir '${DEST_IMAGES_YEAR_ROOT}'
+    sudo mv '${CATEGORY_DIRECTORY_NAME}' '${DEST_IMAGES_YEAR_ROOT}'
+    sudo chown -R root:root '${DEST_IMAGES_CATEGORY_ROOT}'
+    sudo chmod -R go-w '${DEST_IMAGES_CATEGORY_ROOT}'
+    sudo restorecon -R '${DEST_IMAGES_CATEGORY_ROOT}'
 
-    psql -d maw_website -f ${SQL_FILE}
-    psql -d maw_website -f ${GLACIER_SQL_FILE}
+    psql -d maw_website -f '${SQL_FILE}'
+    psql -d maw_website -f '${GLACIER_SQL_FILE}'
 
-    rm ${SQL_FILE}
-    rm ${GLACIER_SQL_FILE}
-
-HERE
-
+    rm '${SQL_FILE}'
+    rm '${GLACIER_SQL_FILE}'
+"
 
 #################################################
 ## FINAL CLEANUP

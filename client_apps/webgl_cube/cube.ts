@@ -56,7 +56,7 @@ class CubeDemo {
         this.scene.add(axisHelper);
 
         // cube
-        let texture = THREE.ImageUtils.loadTexture('/images/2013/alyssas_first_snowman/thumbnails/DSC_9960.jpg');
+        let texture = THREE.ImageUtils.loadTexture('/images/2013/alyssas_first_snowman/xs/DSC_9960.jpg');
         let geometry = new THREE.BoxGeometry(50, 50, 50);
         let material = new THREE.MeshPhongMaterial({ color: 0xffffff, map: texture });
         this.cube = new THREE.Mesh(geometry, material);

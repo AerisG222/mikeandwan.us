@@ -6,7 +6,7 @@ declare var jQuery: any;
 
 @Component({
     moduleId: module.id,
-    selector: 'dialog',
+    selector: 'maw-dialog',
     directives: [ NgIf, NgFor, NgClass ],
     templateUrl: 'dialog.component.html',
     styleUrls: [ 'dialog.component.css' ]

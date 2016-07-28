@@ -31,4 +31,4 @@ bootstrap(VideosAppComponent, [
     VideoDataService,
     VideoNavigationService,
     VideoStateService
-]);
+]).catch(err => console.error(err));

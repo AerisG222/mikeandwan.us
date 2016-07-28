@@ -31,5 +31,5 @@ bootstrap(PhotosAppComponent, [
     PhotoDataService,
     PhotoNavigationService,
     PhotoStateService,
-    PhotoSourceFactory])
-.catch(err => console.error(err));
+    PhotoSourceFactory
+]).catch(err => console.error(err));

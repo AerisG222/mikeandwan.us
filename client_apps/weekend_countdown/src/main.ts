@@ -8,4 +8,4 @@ if (environment.production) {
     enableProdMode();
 }
 
-bootstrap(WeekendCountdownAppComponent);
+bootstrap(WeekendCountdownAppComponent).catch(err => console.error(err));

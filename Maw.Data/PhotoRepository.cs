@@ -8,6 +8,10 @@ using Maw.Data.EntityFramework.Photos;
 using D = Maw.Domain.Photos;
 
 
+// TODO: try with an updated EF to see if we can run some of the commented out queries fully in the db.
+//       as of 1.0.0, these queries fail
+//
+// TODO: upgrade android app to use photoandcategories variants, then kill the legacy methods
 namespace Maw.Data
 {
 	public class PhotoRepository
@@ -257,6 +261,7 @@ namespace Maw.Data
 		public async Task<List<D.Photo>> GetPhotosByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
 		{
 			var query = _ctx.Rating
+                .Include(x => x.Photo)
 				.Where(x => x.User.Username == username && (allowPrivate || !x.Photo.IsPrivate));
 
             if(highestFirst)
@@ -553,11 +558,14 @@ namespace Maw.Data
 		}
         
 
+/*
         // TODO: for the following methods, we fake out the hasGps value on Category to false as we currently do not
         //       use this when returning photos like this.  consider correcting this in the future
         public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByCommentDateAsync(bool newestFirst, bool allowPrivate)
         {
 			var query = _ctx.Comment
+                .Include(x => x.Photo)
+                .ThenInclude(x => x.Category)
 				.Where(x => allowPrivate || !x.Photo.IsPrivate)
 				.GroupBy(x => x.Photo)
 				.Select(x => new 
@@ -588,8 +596,87 @@ namespace Maw.Data
 				.Take(MAX_RESULTS)
 				.ToList();
         }
+*/
 
 
+        public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByCommentDateAsync(bool newestFirst, bool allowPrivate)
+        {
+			var query = await _ctx.Comment
+                .Include(x => x.Photo)
+                .ThenInclude(x => x.Category)
+                .Where(x => allowPrivate || !x.Photo.IsPrivate)
+				.GroupBy(x => x.Photo)
+                .ToListAsync();
+
+            var groups = query
+				.Select(g => new 
+                {
+					Photo = g.Key,
+                    Category = g.Key.Category,
+					FirstPostDate = g.Min(x => x.EntryDate), 
+					LastPostDate = g.Max(x => x.EntryDate)
+				});
+
+            if(newestFirst)
+            {
+				groups = groups.OrderByDescending(x => x.LastPostDate);
+            }
+            else
+            {
+				groups = groups.OrderBy(x => x.FirstPostDate);
+            }
+
+			return groups
+				.Select(x => new D.PhotoAndCategory 
+                {
+                    Photo = BuildPhoto(x.Photo),
+                    Category = BuildPhotoCategory(x.Category, false)
+                })
+				.Take(MAX_RESULTS)
+				.ToList();
+        }
+
+
+        public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByUserCommentDateAsync(string username, bool newestFirst, bool allowPrivate)
+        {
+			var query = await _ctx.Comment
+                .Include(x => x.Photo)
+                .ThenInclude(x => x.Category)
+				.Where(x => x.User.Username == username)
+                .Where(x => allowPrivate || !x.Photo.IsPrivate)
+				.GroupBy(x => x.Photo)
+                .ToListAsync();
+
+            var groups = query
+				.Select(g => new 
+                {
+					Photo = g.Key,
+                    Category = g.Key.Category,
+					FirstPostDate = g.Min(x => x.EntryDate), 
+					LastPostDate = g.Max(x => x.EntryDate)
+				});
+
+            if(newestFirst)
+            {
+				groups = groups.OrderByDescending(x => x.LastPostDate);
+            }
+            else
+            {
+				groups = groups.OrderBy(x => x.FirstPostDate);
+            }
+
+			return groups
+				.Select(x => new D.PhotoAndCategory 
+                {
+                    Photo = BuildPhoto(x.Photo),
+                    Category = BuildPhotoCategory(x.Category, false)
+                })
+				.Take(MAX_RESULTS)
+				.ToList();
+        }
+
+        
+/*        
 		public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate)
         {
 			var query = _ctx.Comment
@@ -625,8 +712,47 @@ namespace Maw.Data
 				.Take(MAX_RESULTS)
 				.ToList();
         }
+*/
 
 
+        public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByCommentCountAsync(bool greatestFirst, bool allowPrivate)
+        {
+			var query = await _ctx.Comment
+                .Include(x => x.Photo)
+                .ThenInclude(x => x.Category)
+                .Where(x => allowPrivate || !x.Photo.IsPrivate)
+				.GroupBy(x => x.Photo)
+                .ToListAsync();
+
+            var groups = query
+				.Select(g => new 
+                {
+					Photo = g.Key,
+                    Category = g.Key.Category,
+					CommentCount = g.Count()
+				});
+
+            if(greatestFirst)
+            {
+				groups = groups.OrderByDescending(x => x.CommentCount);
+            }
+            else
+            {
+				groups = groups.OrderBy(x => x.CommentCount);
+            }
+
+			return groups
+				.Select(x => new D.PhotoAndCategory 
+                {
+                    Photo = BuildPhoto(x.Photo),
+                    Category = BuildPhotoCategory(x.Category, false)
+                })
+				.Take(MAX_RESULTS)
+				.ToList();
+        }
+
+
+/*
 		public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByCommentCountAsync(bool greatestFirst, bool allowPrivate)
         {
 			var query = _ctx.Comment
@@ -659,8 +785,45 @@ namespace Maw.Data
 				.Take(MAX_RESULTS)
 				.ToList();
         }
+*/		
 		
-		
+        public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
+        {
+			var query = await _ctx.Rating
+                .Include(x => x.Photo)
+                .ThenInclude(x => x.Category)
+                .Where(x => allowPrivate || !x.Photo.IsPrivate)
+				.GroupBy(x => x.Photo)
+                .ToListAsync();
+
+            var groups = query
+				.Select(g => new 
+                {
+					Photo = g.Key,
+                    Category = g.Key.Category,
+					AverageRating = g.Average(x => x.Score)
+				});
+
+            if(highestFirst)
+            {
+				groups = groups.OrderByDescending(x => x.AverageRating);
+            }
+            else
+            {
+				groups = groups.OrderBy(x => x.AverageRating);
+            }
+
+			return groups
+				.Select(x => new D.PhotoAndCategory 
+                {
+                    Photo = BuildPhoto(x.Photo),
+                    Category = BuildPhotoCategory(x.Category, false)
+                })
+				.Take(MAX_RESULTS)
+				.ToList();
+        }
+
+/*
 		public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
 		{
             var query = _ctx.Rating
@@ -693,11 +856,13 @@ namespace Maw.Data
                 .Take(MAX_RESULTS)
                 .ToList();
         }
-		
+*/		
 		
 		public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
 		{
 			var query = _ctx.Rating
+                .Include(x => x.Photo)
+                .ThenInclude(x => x.Category)
 				.Where(x => x.User.Username == username && (allowPrivate || !x.Photo.IsPrivate));
 
             if(highestFirst)

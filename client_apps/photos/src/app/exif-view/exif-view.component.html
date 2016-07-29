@@ -1,8 +1,20 @@
-<table class="table table-striped table-hover table-condensed">
-	<tr *ngFor="let info of exif">
-		<th>{{info[0].name}}</th>
-		<td>{{info[0].value}}</td>
-		<th>{{info[1].name}}</th>
-		<td>{{info[1].value}}</td>
-	</tr>
-</table>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#exif" data-toggle="tab">Exif</a></li>
+    <li><a href="#maker" data-toggle="tab">Maker</a></li>
+    <li><a href="#composite" data-toggle="tab">Composite</a></li>
+    <li><a href="#processing" data-toggle="tab">Processing Info</a></li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane active" id="exif">
+        <exif-table [data]="exifInfo?.exifList"></exif-table>
+    </div>
+    <div class="tab-pane" id="maker">
+        <exif-table [data]="exifInfo?.makerList"></exif-table>
+    </div>
+    <div class="tab-pane" id="composite">
+        <exif-table [data]="exifInfo?.compositeList"></exif-table>
+    </div>
+    <div class="tab-pane" id="processing">
+        <exif-table [data]="exifInfo?.processingList"></exif-table>
+    </div>
+</div>

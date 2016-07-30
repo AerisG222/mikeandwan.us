@@ -115,11 +115,6 @@ namespace MawMvcApp
                     opts.AddPolicy(MawConstants.POLICY_ADMIN_SITE, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_ADMIN).Build());
                 });
 
-            services.AddRouting(routeOptions =>
-            {
-                routeOptions.AppendTrailingSlash = true;
-            });
-
             services.AddMvc();
         }
 

@@ -2,7 +2,7 @@ import { EventEmitter } from '@angular/core';
 
 import { Photo } from './photo.model';
 import { PhotoStateService } from './photo-state.service';
-import { RouteMode } from './route-mode.model'; 
+import { RouteMode } from './route-mode.model';
 
 export class PhotoListContext {
     private _lastGpsIndex: number = null;
@@ -13,8 +13,8 @@ export class PhotoListContext {
     photoUpdated: EventEmitter<number> = new EventEmitter<number>();
 
     constructor(public photos: Array<Photo>,
-        private _routeMode: RouteMode,
-        private _stateService: PhotoStateService) {
+                private _routeMode: RouteMode,
+                private _stateService: PhotoStateService) {
         if (photos == null) {
             throw new RangeError('photos cannot be null');
         }

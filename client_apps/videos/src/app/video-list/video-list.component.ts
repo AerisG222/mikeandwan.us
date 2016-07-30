@@ -30,10 +30,10 @@ export class VideoListComponent implements OnInit, AfterViewInit {
     videoList: Array<IVideo> = [];
 
     constructor(private _sizeService: SizeService,
-        private _videoDataService: VideoDataService,
-        private _videoStateService: VideoStateService,
-        private _changeDetectionRef: ChangeDetectorRef,
-        private _activatedRoute: ActivatedRoute) {
+                private _videoDataService: VideoDataService,
+                private _videoStateService: VideoStateService,
+                private _changeDetectionRef: ChangeDetectorRef,
+                private _activatedRoute: ActivatedRoute) {
 
     }
 

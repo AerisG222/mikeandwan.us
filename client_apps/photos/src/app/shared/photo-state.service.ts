@@ -15,7 +15,7 @@ export class PhotoStateService {
     lastCategoryIndex: number;
 
     constructor(private _storageService: LocalStorageService,
-        private _responsiveService: ResponsiveService) {
+                private _responsiveService: ResponsiveService) {
         this.config = <Config>_storageService.get(PhotoStateService.KEY_CONFIG, new Config());
         this.lastCategoryIndex = 0;
     }

@@ -13,8 +13,8 @@ import { RouteMode } from './route-mode.model';
 @Injectable()
 export class PhotoNavigationService {
     constructor(private _router: Router,
-        private _navService: BreadcrumbService,
-        private _dataService: PhotoDataService) {
+                private _navService: BreadcrumbService,
+                private _dataService: PhotoDataService) {
 
     }
 

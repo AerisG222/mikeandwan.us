@@ -8,8 +8,8 @@ import { IPhotoAndCategory } from './iphoto-and-category.model';
 
 export class RatingPhotoSource extends PhotoSource {
     constructor(_dataService: PhotoDataService,
-        private _type: string,
-        private _order: string) {
+                private _type: string,
+                private _order: string) {
         super(_dataService);
     }
 

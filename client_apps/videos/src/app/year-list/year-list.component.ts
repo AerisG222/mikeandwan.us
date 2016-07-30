@@ -14,7 +14,7 @@ export class YearListComponent implements OnInit {
     years: Array<number> = [];
 
     constructor(private _dataService: VideoDataService,
-        private _navService: VideoNavigationService) {
+                private _navService: VideoNavigationService) {
 
     }
 

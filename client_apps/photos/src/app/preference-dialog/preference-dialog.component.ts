@@ -21,7 +21,7 @@ export class PreferenceDialogComponent implements AfterViewInit {
     };
 
     constructor(private _stateService: PhotoStateService,
-        private _changeDetectionRef: ChangeDetectorRef) {
+                private _changeDetectionRef: ChangeDetectorRef) {
         this.updateFormValues();
     }
 
@@ -56,7 +56,7 @@ export class PreferenceDialogComponent implements AfterViewInit {
         this._stateService.config.rowsPerPage = parseInt(this.form.rowCount, 10);
         this._stateService.saveConfig();
 
-        this.cancel();  // leverage this function to perform our cleanup       
+        this.cancel();  // leverage this function to perform our cleanup
     }
 
     updateFormValues(): void {

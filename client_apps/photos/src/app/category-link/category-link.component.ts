@@ -18,7 +18,7 @@ export class CategoryLinkComponent {
     @Input() category: ICategory;
 
     constructor(private _router: Router,
-        private _navService: PhotoNavigationService) {
+                private _navService: PhotoNavigationService) {
 
     }
 

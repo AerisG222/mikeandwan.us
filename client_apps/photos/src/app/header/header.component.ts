@@ -22,7 +22,7 @@ export class HeaderComponent implements AfterViewInit {
     showRegularButton = false;
 
     constructor(private _navService: PhotoNavigationService,
-        private _stateService: PhotoStateService) {
+                private _stateService: PhotoStateService) {
 
     }
 

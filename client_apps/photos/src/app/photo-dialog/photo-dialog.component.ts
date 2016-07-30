@@ -20,7 +20,7 @@ export class PhotoDialogComponent implements AfterViewInit {
     maxWidth: string = '640px';
 
     constructor(private _responsiveService: ResponsiveService,
-        private _changeDetectionRef: ChangeDetectorRef) {
+                private _changeDetectionRef: ChangeDetectorRef) {
 
     }
 

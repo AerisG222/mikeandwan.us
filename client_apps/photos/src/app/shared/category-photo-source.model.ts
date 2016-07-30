@@ -10,7 +10,7 @@ import { IPhoto } from './iphoto.model';
 
 export class CategoryPhotoSource extends PhotoSource {
     constructor(_dataService: PhotoDataService,
-        private _categoryId: number) {
+                private _categoryId: number) {
         super(_dataService);
     }
 

@@ -79,9 +79,9 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     constructor(private _changeDetectionRef: ChangeDetectorRef,
-        private _stateService: PhotoStateService,
-        private _navService: PhotoNavigationService,
-        private _responsiveService: ResponsiveService) {
+                private _stateService: PhotoStateService,
+                private _navService: PhotoNavigationService,
+                private _responsiveService: ResponsiveService) {
         Mousetrap.bind('right', () => this.runAndCheck(() => this.context.moveNext()));
         Mousetrap.bind('left', () => this.runAndCheck(() => this.context.movePrevious()));
         Mousetrap.bind('f', () => this.runAndCheck(() => this.toggleFullscreen()));
@@ -219,7 +219,7 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     onFiltersUpdated(filters: FilterSettings): void {
         let img = <HTMLElement>document.querySelector('div.main-image img, div.main-image canvas');
 
-        // img will be null when in popup mode        
+        // img will be null when in popup mode
         if (img != null) {
             let styl = filters.styleValue;
 

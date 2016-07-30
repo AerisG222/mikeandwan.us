@@ -10,9 +10,9 @@ export class RandomPhotoListContext extends PhotoListContext {
     photoAddedEventEmitter = new EventEmitter<Photo>();
 
     constructor(photos: Array<Photo>,
-        routeMode: RouteMode,
-        stateService: PhotoStateService,
-        private _photoSource: RandomPhotoSource) {
+                routeMode: RouteMode,
+                stateService: PhotoStateService,
+                private _photoSource: RandomPhotoSource) {
         super(photos, routeMode, stateService);
     }
 

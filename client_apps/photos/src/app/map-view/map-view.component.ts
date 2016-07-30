@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, ChangeDetectorRef, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, Input, ElementRef, ChangeDetectorRef, OnDestroy, AfterViewInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 
 import { Photo } from '../shared/photo.model';
@@ -12,7 +12,7 @@ import { PhotoListContext } from '../shared/photo-list-context.model';
     templateUrl: 'map-view.component.html',
     styleUrls: [ 'map-view.component.css' ]
 })
-export class MapViewComponent implements OnInit, OnDestroy, AfterViewInit {
+export class MapViewComponent implements OnDestroy, AfterViewInit {
     private _markerImage = {
         url: '/css/photo_app/map_marker.png',
         size: new google.maps.Size(11, 11),
@@ -28,19 +28,14 @@ export class MapViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() context: PhotoListContext;
 
     constructor(private _changeDetectionRef: ChangeDetectorRef,
-        private _elRef: ElementRef) {
+                private _elRef: ElementRef) {
 
     }
 
     ngAfterViewInit(): void {
-        let el = this._elRef.nativeElement;
+        this._mapDiv = this._elRef.nativeElement.getElementsByClassName('map')[0];
+        this._mapButtonsDiv = this._elRef.nativeElement.getElementsByClassName('mapButtons')[0];
 
-        this._mapDiv = el.getElementsByClassName('map')[0];
-        this._mapButtonsDiv = el.getElementsByClassName('mapButtons')[0];
-    }
-
-
-    ngOnInit(): void {
         this.context.photoUpdated.subscribe(() => {
             this.onPhotoUpdated();
         });

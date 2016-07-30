@@ -1,8 +1,6 @@
 import { Component, Input, ChangeDetectorRef, ViewChild, AfterViewInit, OnDestroy, OnChanges } from '@angular/core';
 import { NgIf, NgClass, NgStyle } from '@angular/common';
 
-import { Pixastic } from '../../pixastic/pixastic';
-
 import { ResponsiveService } from '../../ng_maw/shared/responsive.service';
 
 import { PhotoNavigationService } from '../shared/photo-navigation.service';

@@ -5,6 +5,7 @@ import { APP_ROUTER_PROVIDERS } from './app/app.routes';
 import { MoneySpinAppComponent } from './app/app.component';
 import { environment } from './app/environment';
 import { StateService } from './app/state.service';
+import { CanPlayGuard } from './app/play/can-play-guard';
 
 if (environment.production) {
     enableProdMode();
@@ -12,6 +13,7 @@ if (environment.production) {
 
 bootstrap(MoneySpinAppComponent, [
     APP_ROUTER_PROVIDERS,
-    StateService
+    StateService,
+    CanPlayGuard
 ])
 .catch(err => console.error(err));

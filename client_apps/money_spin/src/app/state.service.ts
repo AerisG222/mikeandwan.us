@@ -43,6 +43,13 @@ export class StateService {
         this._router.navigate(['/choose']);
     }
 
+    isReadyToPlay(): boolean {
+        return this.player1 != null &&
+               this.player1.character != null &&
+               this.player2 != null &&
+               this.player2.character != null;
+    }
+
     startGame(): void {
         this.player1.resetScore();
         this.player2.resetScore();

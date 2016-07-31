@@ -6,7 +6,6 @@ import { PhotoListComponent } from './photo-list/photo-list.component';
 import { ModeRouteInfo } from './shared/mode-route-info.model';
 import { RouteMode } from './shared/route-mode.model';
 
-// TODO: add otherwise route config item
 export const routes: RouterConfig = [
     { path: '',                     component: ModeComponent },
     { path: 'random',               component: PhotoListComponent,   data: new ModeRouteInfo(RouteMode.Random) },

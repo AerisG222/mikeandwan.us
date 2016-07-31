@@ -4,6 +4,7 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { PreferenceDialogComponent } from './preference-dialog/preference-dialog.component';
 import { PhotoStateService } from './shared/photo-state.service';
+import { PhotoNavigationService } from './shared/photo-navigation.service';
 
 @Component({
     moduleId: module.id,
@@ -15,7 +16,8 @@ import { PhotoStateService } from './shared/photo-state.service';
 export class PhotosAppComponent {
     @ViewChild(PreferenceDialogComponent) private _prefsDialog: PreferenceDialogComponent;
 
-    constructor(private _stateService: PhotoStateService) {
+    constructor(private _stateService: PhotoStateService,
+                private _navService: PhotoNavigationService) {
         this._stateService.showPreferencesEventEmitter.subscribe(
             (val: any) => this.showPreferencesDialog()
         );

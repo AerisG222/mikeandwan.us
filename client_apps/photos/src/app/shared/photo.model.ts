@@ -1,6 +1,5 @@
 import { IPhoto } from './iphoto.model';
 import { ICategory } from './icategory.model';
-import { ExifDetail } from './exif-detail.model';
 import { FilterSettings } from './filter-settings.model';
 import { PhotoExifInfo } from './photo-exif-info.model';
 

@@ -106,8 +106,7 @@ export class PhotoListContext {
         if (!this.isSlideshowPlaying) {
             this.tickSlideshow();
             this._intervalId = setInterval(() => this.tickSlideshow(), this._stateService.config.slideshowIntervalSeconds * 1000);
-        }
-        else {
+        } else {
             this.terminateSlideshow();
         }
     }
@@ -126,8 +125,7 @@ export class PhotoListContext {
     private tickSlideshow(): void {
         if (this.hasNext) {
             this.moveNext();
-        }
-        else {
+        } else {
             this.terminateSlideshow();
         }
     }

@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 import { BreadcrumbService } from '../../ng_maw/shared/breadcrumb.service';
 import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
@@ -12,10 +12,80 @@ import { RouteMode } from './route-mode.model';
 
 @Injectable()
 export class PhotoNavigationService {
+    private _isInitialized = false;
+
     constructor(private _router: Router,
                 private _navService: BreadcrumbService,
                 private _dataService: PhotoDataService) {
+        this._router.events.subscribe(evt => {
+            if (evt instanceof NavigationEnd) {
+                this.onRouterEvent(<NavigationEnd>evt);
+            }
+        });
+    }
 
+    onRouterEvent(navEnd: NavigationEnd): void {
+        if (!this._isInitialized) {
+            let snapshot = this._router.routerState.snapshot;
+            let parts = snapshot.url.toLowerCase().split('/').filter(el => el.length !== 0);
+            let crumbs = [];
+
+            if (parts.length > 0) {
+                switch (parts[0]) {
+                    case 'year':
+                        crumbs.push(new Breadcrumb('By Year', [ '/' ]));
+
+                        if (parts.length > 1) {
+                            crumbs.push(new Breadcrumb(parts[1], [ '/year' ]));
+                        }
+
+                        if (parts.length > 2) {
+                            this.getCategoryDestinations(parseInt(parts[1], 10)).subscribe(x => {
+                                let matches = x.filter(y => y.category.id === parseInt(parts[2], 10));
+
+                                if (matches.length === 1) {
+                                    crumbs.push(new Breadcrumb(matches[0].title, [ '/year/' + parts[1] ]));
+                                    this._navService.setBreadcrumbs(crumbs);
+                                }
+                            });
+                        }
+
+                        break;
+                    case 'comment':
+                        crumbs.push(new Breadcrumb('By Comment', [ '/' ]));
+
+                        if (parts.length > 2) {
+                            this.getCommentDestinations().subscribe(x => {
+                                let match = x.filter(y => y.linkParamArray[1] === parts[1] &&
+                                                          y.linkParamArray[2] === parts[2])[0];
+
+                                crumbs.push(new Breadcrumb(match.title, [ '/comment' ]));
+                            });
+                        }
+
+                        break;
+                    case 'rating':
+                        crumbs.push(new Breadcrumb('By Rating', [ '/' ]));
+
+                        if (parts.length > 2) {
+                            this.getRatingDestinations().subscribe(x => {
+                                let match = x.filter(y => y.linkParamArray[1] === parts[1] &&
+                                                          y.linkParamArray[2] === parts[2])[0];
+
+                                crumbs.push(new Breadcrumb(match.title, [ '/rating' ]));
+                            });
+                        }
+
+                        break;
+                    case 'random':
+                        crumbs.push(new Breadcrumb('Random', [ '/' ]));
+                        break;
+                }
+            }
+
+            this._navService.setBreadcrumbs(crumbs);
+            this._isInitialized = true;
+        }
     }
 
     getRootDestinations(): Observable<Array<Breadcrumb>> {

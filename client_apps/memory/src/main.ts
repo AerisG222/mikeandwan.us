@@ -5,6 +5,7 @@ import { APP_ROUTER_PROVIDERS } from './app/app.routes';
 import { MemoryService } from './app/memory.service';
 import { MemoryAppComponent } from './app/app.component';
 import { environment } from './app/environment';
+import { CanPlayGuard } from './app/play/can-play-guard';
 
 if (environment.production) {
     enableProdMode();
@@ -12,6 +13,7 @@ if (environment.production) {
 
 bootstrap(MemoryAppComponent, [
     APP_ROUTER_PROVIDERS,
-    MemoryService
+    MemoryService,
+    CanPlayGuard
 ])
 .catch(err => console.error(err));

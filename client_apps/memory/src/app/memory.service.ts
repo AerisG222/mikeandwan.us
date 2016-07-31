@@ -64,16 +64,18 @@ export class MemoryService {
         this.player2.score = 0;
 
         this._router.navigateByUrl('/play');
-        /*
-        if(!this._router.isRouteActive(this._router.generate([ 'Play']))) {
-            this._router.navigate([ 'Play' ]);
-        }
-        */
+    }
+
+    isReadyToPlay(): boolean {
+        return this.player1 != null &&
+               this.player1.character != null &&
+               this.player2 != null &&
+               this.player2.character != null;
     }
 
     resetGame(): void {
         this.initPlayers();
-        this._router.navigate(['ChooseTurtle']);
+        this._router.navigateByUrl('/');
     }
 
     initPlayers(): void {

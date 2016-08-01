@@ -10,6 +10,7 @@ import { IVideo } from '../shared/ivideo.model';
 import { IVideoInfo } from '../shared/ivideo-info.model';
 import { SizeService } from '../shared/size.service';
 import { VideoDataService } from '../shared/video-data.service';
+import { VideoNavigationService } from '../shared/video-navigation.service';
 import { VideoStateService } from '../shared/video-state.service';
 import { VideoThumbnailInfo } from '../shared/video-thumbnail-info.model';
 
@@ -32,6 +33,7 @@ export class VideoListComponent implements OnInit, AfterViewInit {
     constructor(private _sizeService: SizeService,
                 private _videoDataService: VideoDataService,
                 private _videoStateService: VideoStateService,
+                private _videoNavigationService: VideoNavigationService,
                 private _changeDetectionRef: ChangeDetectorRef,
                 private _activatedRoute: ActivatedRoute) {
 
@@ -55,6 +57,12 @@ export class VideoListComponent implements OnInit, AfterViewInit {
             });
 
             this._changeDetectionRef.detectChanges();
+
+            // for some reason this component is not raising the event bound in the
+            // constructor, and am thinking it might be due to our use of activated route.
+            // as such, try to call this manually to see if the header updates the navigation
+            // state when starting from video list page
+            this._videoNavigationService.onRouterEvent(null);
 
             this._videoDataService.getVideosForCategory(this.categoryId)
                 .subscribe(

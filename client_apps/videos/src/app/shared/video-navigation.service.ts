@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
+import { VideoDataService } from './video-data.service';
 import { BreadcrumbService } from '../../ng_maw/shared/breadcrumb.service';
 import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
 
@@ -9,9 +10,42 @@ import { ICategory } from './icategory.model';
 
 @Injectable()
 export class VideoNavigationService {
-    constructor(private _router: Router,
-                private _navService: BreadcrumbService) {
+    private _isInitialized = false;
 
+    constructor(private _router: Router,
+                private _dataService: VideoDataService,
+                private _navService: BreadcrumbService) {
+        this._router.events.subscribe(evt => {
+            if (evt instanceof NavigationEnd) {
+                this.onRouterEvent(<NavigationEnd>evt);
+            }
+        });
+    }
+
+    onRouterEvent(navEnd: NavigationEnd): void {
+        if (!this._isInitialized) {
+            let snapshot = this._router.routerState.snapshot;
+            let parts = snapshot.url.toLowerCase().split('/').filter(el => el.length !== 0);
+            let crumbs = [];
+
+            if (parts.length > 0) {
+                crumbs.push(new Breadcrumb(parts[0], [ '/' ]));
+
+                if (parts.length > 1) {
+                    this._dataService.getCategoriesForYear(parseInt(parts[0], 10)).subscribe(x => {
+                        let matches = x.filter(y => y.id === parseInt(parts[1], 10));
+
+                        if (matches.length === 1) {
+                            crumbs.push(new Breadcrumb(matches[0].name, [ '/' + parts[0] ]));
+                            this._navService.setBreadcrumbs(crumbs);
+                        }
+                    });
+                }
+            }
+
+            this._navService.setBreadcrumbs(crumbs);
+            this._isInitialized = true;
+        }
     }
 
     gotoYearList(): void {

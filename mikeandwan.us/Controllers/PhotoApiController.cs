@@ -147,13 +147,6 @@ namespace MawMvcApp.Controllers
         }
 
 
-        [HttpGet("getGpsDataForCategory/{id:int}")]
-        public async Task<IEnumerable<GpsData>> GetGpsDataForCategory(short id)
-        {
-            return await _svc.GetGpsDataForCategoryAsync(id, IsAdmin);
-        }
-
-
         [HttpPost("ratePhoto")]
         public async Task<float?> RatePhoto([FromBody]UserPhotoRating userRating)
         {

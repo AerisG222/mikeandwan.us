@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -57,33 +58,43 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<List<Photo>> GetPhotosByCommentDateAsync(bool newestFirst, bool allowPrivate)
+		public async Task<List<Photo>> GetPhotosByCommentDateAsync(bool newestFirst, bool allowPrivate)
         {
-            return _repo.GetPhotosByCommentDateAsync(newestFirst, allowPrivate);
+            var list = await _repo.GetPhotosAndCategoriesByCommentDateAsync(newestFirst, allowPrivate);
+
+            return list.Select(x => x.Photo).ToList();
         }
 
 
-		public Task<List<Photo>> GetPhotosByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate)
+		public async Task<List<Photo>> GetPhotosByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate)
         {
-            return _repo.GetPhotosByUserCommentDateAsync(username, greatestFirst, allowPrivate);
+            var list = await _repo.GetPhotosAndCategoriesByUserCommentDateAsync(username, greatestFirst, allowPrivate);
+
+            return list.Select(x => x.Photo).ToList();
         }
 
 
-		public Task<List<Photo>> GetPhotosByCommentCountAsync(bool greatestFirst, bool allowPrivate)
+		public async Task<List<Photo>> GetPhotosByCommentCountAsync(bool greatestFirst, bool allowPrivate)
         {
-            return _repo.GetPhotosByCommentCountAsync(greatestFirst, allowPrivate);
+            var list = await _repo.GetPhotosAndCategoriesByCommentCountAsync(greatestFirst, allowPrivate);
+
+            return list.Select(x => x.Photo).ToList();
         }
 
 
-		public Task<List<Photo>> GetPhotosByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
+		public async Task<List<Photo>> GetPhotosByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
         {
-            return _repo.GetPhotosByAverageUserRatingAsync(highestFirst, allowPrivate);
+            var list = await _repo.GetPhotosAndCategoriesByAverageUserRatingAsync(highestFirst, allowPrivate);
+
+            return list.Select(x => x.Photo).ToList();
         }
 
 
-		public Task<List<Photo>> GetPhotosByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
+		public async Task<List<Photo>> GetPhotosByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
         {
-            return _repo.GetPhotosByUserRatingAsync(username, highestFirst, allowPrivate);
+            var list = await _repo.GetPhotosAndCategoriesByUserRatingAsync(username, highestFirst, allowPrivate);
+
+            return list.Select(x => x.Photo).ToList();
         }
 
 
@@ -102,12 +113,6 @@ namespace Maw.Domain.Photos
 		public Task<Detail> GetDetailForPhotoAsync(int photoId, bool allowPrivate)
         {
             return _repo.GetDetailForPhotoAsync(photoId, allowPrivate);
-        }
-
-
-		public Task<List<GpsData>> GetGpsDataForCategoryAsync(short categoryId, bool allowPrivate)
-        {
-            return _repo.GetGpsDataForCategoryAsync(categoryId, allowPrivate);
         }
 
 

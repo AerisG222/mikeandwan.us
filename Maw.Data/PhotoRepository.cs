@@ -10,8 +10,6 @@ using D = Maw.Domain.Photos;
 
 // TODO: try with an updated EF to see if we can run some of the commented out queries fully in the db.
 //       as of 1.0.0, these queries fail
-//
-// TODO: upgrade android app to use photoandcategories variants, then kill the legacy methods
 namespace Maw.Data
 {
 	public class PhotoRepository
@@ -134,150 +132,6 @@ namespace Maw.Data
 
 			return photos
 				.Select(x => BuildPhoto(x))
-				.ToList();
-		}
-
-
-		public async Task<List<D.Photo>> GetPhotosByCommentDateAsync(bool newestFirst, bool allowPrivate)
-        {
-			var query = _ctx.Comment
-				.Where(x => allowPrivate || !x.Photo.IsPrivate)
-				.GroupBy(x => x.Photo)
-				.Select(x => new 
-                {
-					Photo = x.Key, 
-					FirstPostDate = x.Min(d => d.EntryDate),
-					LastPostDate = x.Max(d => d.EntryDate)
-				});
-
-			if(newestFirst)
-			{
-				query.OrderByDescending(x => x.LastPostDate);
-			}
-			else
-			{
-				query.OrderByDescending(x => x.FirstPostDate);
-			}
-
-			var photos = await query.ToListAsync();
-
-			return photos
-				.Select(x => BuildPhoto(x.Photo))
-				.Take(MAX_RESULTS)
-				.ToList();
-        }
-
-
-		public async Task<List<D.Photo>> GetPhotosByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate)
-        {
-			var query = _ctx.Comment
-				.Include(c => c.User)
-				.Where(x => x.User.Username == username)
-				.GroupBy(x => x.Photo)
-				.Select(g => new 
-                {
-					Photo = g.Key, 
-					FirstPostDate = g.Min(x => x.EntryDate), 
-					LastPostDate = g.Max(x => x.EntryDate)
-				})
-				.Where(x => allowPrivate || !x.Photo.IsPrivate);
-
-            if(greatestFirst)
-            {
-				query.OrderByDescending(x => x.LastPostDate);
-            }
-            else
-            {
-				query.OrderBy(x => x.FirstPostDate);
-            }
-
-			var photos = await query.ToListAsync();
-
-			return photos
-				.Select(x => BuildPhoto(x.Photo))
-				.Take(MAX_RESULTS)
-				.ToList();
-        }
-
-
-		public async Task<List<D.Photo>> GetPhotosByCommentCountAsync(bool greatestFirst, bool allowPrivate)
-        {
-			var query = _ctx.Comment
-				.GroupBy(x => x.Photo)
-				.Select(g => new 
-                {
-					Photo = g.Key, 
-					CommentCount = g.Count()
-				})
-				.Where(x => allowPrivate || !x.Photo.IsPrivate);
-
-            if(greatestFirst)
-            {
-				query.OrderByDescending(x => x.CommentCount);
-            }
-            else
-            {
-				query.OrderBy(x => x.CommentCount);
-            }
-
-			var photos = await query.ToListAsync();
-
-			return photos
-				.Select(x => BuildPhoto(x.Photo))
-				.Take(MAX_RESULTS)
-				.ToList();
-        }
-		
-		
-		public async Task<List<D.Photo>> GetPhotosByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
-		{
-            var query = _ctx.Rating
-                .GroupBy(x => x.Photo)
-                .Select(g => new 
-                {
-                    Photo = g.Key, 
-                    AverageRating = g.Average(x => x.Score)
-                })
-                .Where(x => allowPrivate || !x.Photo.IsPrivate);
-
-            if(highestFirst) 
-            {
-                query.OrderByDescending(x => x.AverageRating);
-            }
-            else
-            {
-                query.OrderBy(x => x.AverageRating);
-            }
-
-			var photos = await query.ToListAsync();
-
-			return photos
-				.Select(x => BuildPhoto(x.Photo))
-                .Take(MAX_RESULTS)
-                .ToList();
-        }
-		
-		
-		public async Task<List<D.Photo>> GetPhotosByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
-		{
-			var query = _ctx.Rating
-                .Include(x => x.Photo)
-				.Where(x => x.User.Username == username && (allowPrivate || !x.Photo.IsPrivate));
-
-            if(highestFirst)
-            {
-				query.OrderByDescending(x => x.Score);
-            }
-            else
-            {
-				query.OrderBy(x => x.Score);
-            }
-
-			var photos = await query.ToListAsync();
-
-			return photos
-				.Select(x => BuildPhoto(x.Photo))
-				.Take(MAX_RESULTS)
 				.ToList();
 		}
 
@@ -436,21 +290,6 @@ namespace Maw.Data
                 SaturationAdjustment = photo.SaturationAdjustment,
                 CompressionQuality = photo.CompressionQuality
             };
-		}
-
-
-		public Task<List<D.GpsData>> GetGpsDataForCategoryAsync(short categoryId, bool allowPrivate)
-		{
-            return _ctx.Photo
-                .Where(x => x.CategoryId == categoryId && x.GpsLatitude != null && (allowPrivate || !x.IsPrivate))
-                .OrderBy(x => x.Id)
-                .Select(x => new D.GpsData 
-                { 
-                    PhotoId = x.Id,
-                    LongitudeDegrees = (float)x.GpsLongitude,
-                    LatitudeDegrees = (float)x.GpsLatitude
-                })
-				.ToListAsync();
 		}
 
 

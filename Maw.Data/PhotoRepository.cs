@@ -902,8 +902,8 @@ namespace Maw.Data
             {
                 Id = x.Id,
                 CategoryId = x.CategoryId,
-                Latitude = x.GpsLatitude,
-                Longitude = x.GpsLongitude,
+                Latitude = string.Equals(x.GpsLatitudeRefId, "N", StringComparison.OrdinalIgnoreCase) ? x.GpsLatitude : -1.0f * x.GpsLatitude,
+                Longitude = string.Equals(x.GpsLongitudeRefId, "E", StringComparison.OrdinalIgnoreCase) ? x.GpsLongitude : -1.0f * x.GpsLongitude,
                 XsInfo = new D.PhotoInfo 
                 {
                     Height = x.XsHeight,

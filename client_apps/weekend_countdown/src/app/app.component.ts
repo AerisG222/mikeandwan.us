@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
-    moduleId: module.id,
-    selector: 'weekend-countdown-app',
+    selector: 'app-root',
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })
-export class WeekendCountdownAppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy {
     intervalId: number = null;
     value: string = '';
 

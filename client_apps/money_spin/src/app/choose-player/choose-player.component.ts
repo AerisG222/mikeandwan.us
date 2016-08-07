@@ -5,7 +5,6 @@ import { StateService } from '../state.service';
 import { PlayerSelectComponent } from '../player-select/player-select.component';
 
 @Component({
-    moduleId: module.id,
     selector: 'choose-player',
     directives: [ PlayerSelectComponent ],
     templateUrl: 'choose-player.component.html',

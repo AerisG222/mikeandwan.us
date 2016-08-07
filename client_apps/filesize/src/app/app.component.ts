@@ -4,13 +4,12 @@ import { NgFor, NgIf } from '@angular/common';
 import { Result } from './result.model';
 
 @Component({
-    moduleId: module.id,
-    selector: 'filesize-app',
+    selector: 'app-root',
     directives: [ NgFor, NgIf ],
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })
-export class FilesizeAppComponent {
+export class AppComponent {
     results: Result[] = null;
 
     sizes = [

@@ -7,13 +7,12 @@ import { PhotoStateService } from './shared/photo-state.service';
 import { PhotoNavigationService } from './shared/photo-navigation.service';
 
 @Component({
-    moduleId: module.id,
-    selector: 'photos-app',
+    selector: 'app-root',
     directives: [ ROUTER_DIRECTIVES, HeaderComponent, PreferenceDialogComponent ],
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })
-export class PhotosAppComponent {
+export class AppComponent {
     @ViewChild(PreferenceDialogComponent) private _prefsDialog: PreferenceDialogComponent;
 
     constructor(private _stateService: PhotoStateService,

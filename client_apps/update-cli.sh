@@ -3,13 +3,13 @@ apps=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learni
 update_ngcli_global() {
     sudo npm uninstall -g angular-cli
     sudo npm cache clean
-    sudo npm install -g angular-cli@latest
+    sudo npm install -g angular-cli@webpack
 }
 
 update_ngcli() {
     cd "${1}"
-    rm -rf node_modules dist tmp
-    npm install --save-dev angular-cli@latest
+    rm -rf node_modules dist tmp typings
+    npm install --save-dev angular-cli@webpack
     cd ..
 }
 

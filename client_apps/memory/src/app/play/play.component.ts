@@ -9,7 +9,6 @@ import { IPlayer } from '../iplayer.model';
 import { MemoryService } from '../memory.service';
 
 @Component({
-    moduleId: module.id,
     selector: 'play',
     directives: [ GameBoardComponent, WinnerScreenComponent, TieScreenComponent, TurtleScoreComponent, NgIf ],
     templateUrl: 'play.component.html',

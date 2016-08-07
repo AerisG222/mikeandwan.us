@@ -12,21 +12,11 @@
 }
 
 @section scripts_footer {
-    <script src="/js/memory/vendor/es6-shim/es6-shim.js"></script>
-    <script src="/js/memory/vendor/reflect-metadata/Reflect.js"></script>
-    <script src="/js/memory/vendor/systemjs/dist/system.src.js"></script>
-    <script src="/js/memory/vendor/zone.js/dist/zone.js"></script>
-    <script>
-        SystemJS.config({
-            baseURL: '/js/memory'
-        });
-
-        System.import('system-config.js').then(function () {
-            System.import('main');
-        }).catch(console.error.bind(console));
-    </script>
+    <script type="text/javascript" src="/js/memory/inline.js"></script>
+    <script type="text/javascript" src="/js/memory/polyfills.bundle.js"></script>
+    <script type="text/javascript" src="/js/memory/main.bundle.js"></script>
 }
 
 <h2>Memory</h2>
 
-<memory-app>Loading...</memory-app>
+<app-root>Loading...</app-root>

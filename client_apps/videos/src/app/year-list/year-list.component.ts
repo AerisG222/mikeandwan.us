@@ -4,7 +4,6 @@ import { VideoDataService } from '../shared/video-data.service';
 import { VideoNavigationService } from '../shared/video-navigation.service';
 
 @Component({
-    moduleId: module.id,
     selector: 'year-list',
     templateUrl: 'year-list.component.html',
     styleUrls: [ 'year-list.component.css' ]

@@ -4,7 +4,6 @@ import { NgFor, NgClass } from '@angular/common';
 import { Character } from '../character.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'player-select',
     directives: [ NgFor, NgClass ],
     templateUrl: 'player-select.component.html',

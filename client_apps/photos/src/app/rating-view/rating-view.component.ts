@@ -6,7 +6,6 @@ import { IPhoto } from '../shared/iphoto.model';
 import { PhotoDataService } from '../shared/photo-data.service';
 
 @Component({
-    moduleId: module.id,
     selector: 'rating-view',
     directives: [ RatingComponent ],
     templateUrl: 'rating-view.component.html',

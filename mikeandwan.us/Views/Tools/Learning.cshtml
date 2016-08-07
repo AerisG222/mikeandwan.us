@@ -4,7 +4,7 @@
 }
 
 @section custom_head {
-    <base href="." />
+    <base href="/" />
 }
 
 @section stylesheets {
@@ -12,19 +12,9 @@
 }
 
 @section scripts_footer {
-    <script src="/js/learning/vendor/es6-shim/es6-shim.js"></script>
-    <script src="/js/learning/vendor/reflect-metadata/Reflect.js"></script>
-    <script src="/js/learning/vendor/systemjs/dist/system.src.js"></script>
-    <script src="/js/learning/vendor/zone.js/dist/zone.js"></script>
-    <script>
-        SystemJS.config({
-            baseURL: '/js/learning'
-        });
-
-        System.import('system-config.js').then(function () {
-            System.import('main');
-        }).catch(console.error.bind(console));
-    </script>
+    <script type="text/javascript" src="/js/learning/inline.js"></script>
+    <script type="text/javascript" src="/js/learning/polyfills.bundle.js"></script>
+    <script type="text/javascript" src="/js/learning/main.bundle.js"></script>
 }
 
 @section header {
@@ -43,5 +33,5 @@
 </p>
 
 <section class="learning_char">
-    <learning-app>Loading...</learning-app>
+    <app-root>Loading...</app-root>
 </section>

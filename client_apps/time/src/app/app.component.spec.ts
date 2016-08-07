@@ -1,24 +1,20 @@
-import {
-    beforeEachProviders,
-    describe,
-    expect,
-    it,
-    inject
-} from '@angular/core/testing';
-import { TimeAppComponent } from '../app/app.component';
+/* tslint:disable:no-unused-variable */
 
-beforeEachProviders(() => [TimeAppComponent]);
+import { addProviders, async, inject } from '@angular/core/testing';
+import { AppComponent } from './app.component';
 
 describe('App: Time', () => {
-    it('should create the app',
-        inject([TimeAppComponent], (app: TimeAppComponent) => {
-            expect(app).toBeTruthy();
-        }));
+  beforeEach(() => {
+    addProviders([AppComponent]);
+  });
 
-    /*
-      it('should have as title \'time works!\'',
-          inject([TimeAppComponent], (app: TimeAppComponent) => {
-        expect(app.title).toEqual('time works!');
-      }));
-    */
+  it('should create the app',
+    inject([AppComponent], (app: AppComponent) => {
+      expect(app).toBeTruthy();
+    }));
+
+  it('should have as title \'app works!\'',
+    inject([AppComponent], (app: AppComponent) => {
+      expect(app.title).toEqual('app works!');
+    }));
 });

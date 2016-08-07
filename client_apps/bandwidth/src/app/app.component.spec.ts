@@ -1,24 +1,20 @@
-import {
-  beforeEachProviders,
-  describe,
-  expect,
-  it,
-  inject
-} from '@angular/core/testing';
-import { BandwidthAppComponent } from '../app/app.component';
+/* tslint:disable:no-unused-variable */
 
-beforeEachProviders(() => [BandwidthAppComponent]);
+import { addProviders, async, inject } from '@angular/core/testing';
+import { AppComponent } from './app.component';
 
 describe('App: Bandwidth', () => {
-  it('should create the app',
-      inject([BandwidthAppComponent], (app: BandwidthAppComponent) => {
-    expect(app).toBeTruthy();
-  }));
+  beforeEach(() => {
+    addProviders([AppComponent]);
+  });
 
-/*
-  it('should have as title \'bandwidth works!\'',
-      inject([BandwidthAppComponent], (app: BandwidthAppComponent) => {
-    expect(app.title).toEqual('bandwidth works!');
-  }));
-*/
+  it('should create the app',
+    inject([AppComponent], (app: AppComponent) => {
+      expect(app).toBeTruthy();
+    }));
+
+  it('should have as title \'app works!\'',
+    inject([AppComponent], (app: AppComponent) => {
+      expect(app.title).toEqual('app works!');
+    }));
 });

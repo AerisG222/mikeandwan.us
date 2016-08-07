@@ -10,7 +10,6 @@ import { PhotoExifInfo } from '../shared/photo-exif-info.model';
 import { ExifTableComponent } from '../exif-table/exif-table.component';
 
 @Component({
-    moduleId: module.id,
     selector: 'exif-view',
     directives: [ NgFor, ExifTableComponent ],
     templateUrl: 'exif-view.component.html',

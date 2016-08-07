@@ -1,4 +1,4 @@
-export * from './environment';
+export * from './environments/environment';
 export * from './icard-info.model';
 export * from './icharacter.model';
 export * from './iplayer.model';

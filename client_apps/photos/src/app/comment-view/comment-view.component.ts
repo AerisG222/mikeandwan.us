@@ -6,7 +6,6 @@ import { IComment } from '../shared/icomment.model';
 import { IPhoto } from '../shared/iphoto.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'comment-view',
     directives: [ NgFor ],
     templateUrl: 'comment-view.component.html',

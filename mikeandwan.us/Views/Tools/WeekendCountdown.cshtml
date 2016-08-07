@@ -4,23 +4,13 @@
 }
 
 @section custom_head {
-    <base href="." />
+    <base href="/" />
 }
 
 @section scripts_footer {
-    <script src="/js/weekend_countdown/vendor/es6-shim/es6-shim.js"></script>
-    <script src="/js/weekend_countdown/vendor/reflect-metadata/Reflect.js"></script>
-    <script src="/js/weekend_countdown/vendor/systemjs/dist/system.src.js"></script>
-    <script src="/js/weekend_countdown/vendor/zone.js/dist/zone.js"></script>
-    <script>
-        SystemJS.config({
-            baseURL: '/js/weekend_countdown'
-        });
-
-        System.import('system-config.js').then(function () {
-            System.import('main');
-        }).catch(console.error.bind(console));
-    </script>
+    <script type="text/javascript" src="/js/weekend_countdown/inline.js"></script>
+    <script type="text/javascript" src="/js/weekend_countdown/polyfills.bundle.js"></script>
+    <script type="text/javascript" src="/js/weekend_countdown/main.bundle.js"></script>
 }
 
 @section header {
@@ -32,5 +22,5 @@
 }
 
 <section>
-    <weekend-countdown-app>Loading...</weekend-countdown-app>
+    <app-root>Loading...</app-root>
 </section>

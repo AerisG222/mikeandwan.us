@@ -4,7 +4,6 @@ import { NgClass } from '@angular/common';
 import { ICardInfo } from '../icard-info.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'card',
     directives: [ NgClass ],
     templateUrl: 'card.component.html',

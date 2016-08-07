@@ -9,7 +9,6 @@ import { ResponsiveService } from '../shared/responsive.service';
 //       as it will probably always be used together.
 
 @Component({
-    moduleId: module.id,
     selector: 'pager',
     directives: [ NgClass, NgIf, NgFor ],
     templateUrl: 'pager.component.html',

@@ -4,23 +4,13 @@
 }
 
 @section custom_head {
-    <base href="." />
+    <base href="/" />
 }
 
 @section scripts_footer {
-    <script src="/js/time/vendor/es6-shim/es6-shim.js"></script>
-    <script src="/js/time/vendor/reflect-metadata/Reflect.js"></script>
-    <script src="/js/time/vendor/systemjs/dist/system.src.js"></script>
-    <script src="/js/time/vendor/zone.js/dist/zone.js"></script>
-    <script>
-        SystemJS.config({
-            baseURL: '/js/time'
-        });
-
-        System.import('system-config.js').then(function () {
-            System.import('main');
-        }).catch(console.error.bind(console));
-    </script>
+    <script type="text/javascript" src="/js/time/inline.js"></script>
+    <script type="text/javascript" src="/js/time/polyfills.bundle.js"></script>
+    <script type="text/javascript" src="/js/time/main.bundle.js"></script>
 }
 
 @section header {   
@@ -36,5 +26,5 @@
 </p>
 
 <section>
-    <time-app>Loading...</time-app>
+    <app-root>Loading...</app-root>
 </section>

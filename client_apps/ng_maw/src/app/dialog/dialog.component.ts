@@ -5,7 +5,6 @@ import { DialogButton } from './dialog-button.model';
 declare var jQuery: any;
 
 @Component({
-    moduleId: module.id,
     selector: 'maw-dialog',
     directives: [ NgIf, NgFor, NgClass ],
     templateUrl: 'dialog.component.html',

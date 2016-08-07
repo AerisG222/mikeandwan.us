@@ -11,19 +11,9 @@
     @Html.Partial("_js_Mousetrap")
 	@Html.Partial("_js_GoogleMaps")
     @Html.Partial("_js_Pixastic")
-    <script src="/js/photos/vendor/es6-shim/es6-shim.js"></script>
-    <script src="/js/photos/vendor/reflect-metadata/Reflect.js"></script>
-    <script src="/js/photos/vendor/systemjs/dist/system.src.js"></script>
-    <script src="/js/photos/vendor/zone.js/dist/zone.js"></script>
-    <script>
-        SystemJS.config({
-            baseURL: '/js/photos'
-        });
-
-        System.import('system-config.js').then(function () {
-            System.import('main');
-        }).catch(console.error.bind(console));
-    </script>
+    <script type="text/javascript" src="/js/photos/inline.js"></script>
+    <script type="text/javascript" src="/js/photos/polyfills.bundle.js"></script>
+    <script type="text/javascript" src="/js/photos/main.bundle.js"></script>
 }
 
-<photos-app>Loading...</photos-app>
+<app-root>Loading...</app-root>

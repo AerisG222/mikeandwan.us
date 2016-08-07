@@ -9,7 +9,6 @@ import { PhotoStateService } from '../shared/photo-state.service';
 import { CategoryBreadcrumb } from '../shared/category-breadcrumb.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'header',
     directives: [ BreadcrumbListComponent, NgIf ],
     templateUrl: 'header.component.html',

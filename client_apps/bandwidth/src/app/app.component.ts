@@ -5,13 +5,12 @@ import { Result } from './result.model';
 import { SizeInfo } from './size-info.model';
 
 @Component({
-    moduleId: module.id,
-    selector: 'bandwidth-app',
+    selector: 'app-root',
     directives: [ NgIf, NgFor ],
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })
-export class BandwidthAppComponent {
+export class AppComponent {
     results: Result[] = null;
     sizeArray = [
         new SizeInfo('OC192',         '9,400 Mbps', 9400000000),

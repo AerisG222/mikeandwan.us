@@ -6,7 +6,6 @@ import { DialogButton } from '../../ng_maw/dialog/dialog-button.model';
 import { PhotoStateService } from '../shared/photo-state.service';
 
 @Component({
-    moduleId: module.id,
     selector: 'preference-dialog',
     directives: [ DialogComponent ],
     templateUrl: 'preference-dialog.component.html',

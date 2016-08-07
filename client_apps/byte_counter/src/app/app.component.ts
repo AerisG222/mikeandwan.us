@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-    moduleId: module.id,
-    selector: 'byte-counter-app',
+    selector: 'app-root',
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })
-export class ByteCounterAppComponent {
+export class AppComponent {
     bCount: number = 0;
     kbCount: number = 0;
     mbCount: number = 0;

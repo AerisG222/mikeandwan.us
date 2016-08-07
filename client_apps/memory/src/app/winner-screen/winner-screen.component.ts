@@ -3,7 +3,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IPlayer } from '../iplayer.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'winner-screen',
     templateUrl: 'winner-screen.component.html',
     styleUrls: [ 'winner-screen.component.css' ]

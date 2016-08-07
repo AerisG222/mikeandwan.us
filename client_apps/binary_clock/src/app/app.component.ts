@@ -4,13 +4,12 @@ import { NgClass } from '@angular/common';
 declare var notick: boolean;
 
 @Component({
-    moduleId: module.id,
-    selector: 'binary-clock-app',
+    selector: 'app-root',
     directives: [ NgClass ],
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })
-export class BinaryClockAppComponent implements OnDestroy {
+export class AppComponent implements OnDestroy {
     intervalId: number;
     currentTime: Date;
     h: number;

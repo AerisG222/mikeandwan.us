@@ -5,7 +5,6 @@ import { ICharacter } from '../icharacter.model';
 import { MemoryService } from '../memory.service';
 
 @Component({
-    moduleId: module.id,
     selector: 'choose-turtle-grid',
     directives: [ NgFor, NgClass ],
     templateUrl: 'choose-turtle-grid.component.html',

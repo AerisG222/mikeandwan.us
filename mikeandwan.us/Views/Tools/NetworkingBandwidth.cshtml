@@ -4,7 +4,7 @@
 }
 
 @section custom_head {
-    <base href="." />
+    <base href="/" />
 }
 
 @section header {
@@ -12,19 +12,9 @@
 }
 
 @section scripts_footer {
-    <script src="/js/bandwidth/vendor/es6-shim/es6-shim.js"></script>
-    <script src="/js/bandwidth/vendor/reflect-metadata/Reflect.js"></script>
-    <script src="/js/bandwidth/vendor/systemjs/dist/system.src.js"></script>
-    <script src="/js/bandwidth/vendor/zone.js/dist/zone.js"></script>
-    <script>
-        SystemJS.config({
-            baseURL: '/js/bandwidth'
-        });
-
-        System.import('system-config.js').then(function () {
-            System.import('main');
-        }).catch(console.error.bind(console));
-    </script>
+    <script type="text/javascript" src="/js/bandwidth/inline.js"></script>
+    <script type="text/javascript" src="/js/bandwidth/polyfills.bundle.js"></script>
+    <script type="text/javascript" src="/js/bandwidth/main.bundle.js"></script>
 }
 
 @section sidebar {
@@ -38,5 +28,5 @@
 </p>
 
 <section>
-    <bandwidth-app>Loading...</bandwidth-app>
+    <app-root>Loading...</app-root>
 </section>

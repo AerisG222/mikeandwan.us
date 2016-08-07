@@ -4,7 +4,6 @@ import { Player } from '../player.model';
 import { StateService } from '../state.service';
 
 @Component({
-    moduleId: module.id,
     selector: 'winner',
     templateUrl: 'winner.component.html',
     styleUrls: [ 'winner.component.css' ]

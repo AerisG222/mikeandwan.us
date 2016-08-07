@@ -5,7 +5,6 @@ import { Breadcrumb } from '../shared/breadcrumb.model';
 import { BreadcrumbService } from '../shared/breadcrumb.service';
 
 @Component({
-    moduleId: module.id,
     selector: 'breadcrumb-list',
     directives: [ NgFor ],
     templateUrl: 'breadcrumb-list.component.html',

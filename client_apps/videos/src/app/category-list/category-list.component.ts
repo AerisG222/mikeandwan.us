@@ -13,7 +13,6 @@ import { VideoDataService } from '../shared/video-data.service';
 import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
-    moduleId: module.id,
     selector: 'category-list',
     directives: [ PagerComponent, ThumbnailListComponent ],
     templateUrl: 'category-list.component.html',

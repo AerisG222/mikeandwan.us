@@ -7,7 +7,6 @@ import { ISelectedCards } from '../iselected-card.model';
 import { MemoryService } from '../memory.service';
 
 @Component({
-    moduleId: module.id,
     selector: 'game-board',
     directives: [ CardComponent, NgClass, NgFor ],
     templateUrl: 'game-board.component.html',

@@ -6,7 +6,6 @@ import { DialogButton } from '../../ng_maw/dialog/dialog-button.model';
 import { IPhotoInfo } from '../shared/iphoto-info.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'save-dialog',
     directives: [ DialogComponent ],
     templateUrl: 'save-dialog.component.html',

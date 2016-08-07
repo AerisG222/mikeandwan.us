@@ -1,11 +1,10 @@
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from '@angular/core';
 
-import { LearningAppComponent } from './app/app.component';
-import { environment } from './app/environment';
+import { AppComponent, environment } from './app/';
 
 if (environment.production) {
     enableProdMode();
 }
 
-bootstrap(LearningAppComponent).catch(err => console.error(err));
+bootstrap(AppComponent).catch(err => console.error(err));

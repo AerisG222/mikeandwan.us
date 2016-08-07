@@ -6,13 +6,12 @@ import { PreferenceDialogComponent } from './preference-dialog/preference-dialog
 import { VideoStateService } from './shared/video-state.service';
 
 @Component({
-    moduleId: module.id,
-    selector: 'videos-app',
+    selector: 'app-root',
     directives: [ ROUTER_DIRECTIVES, HeaderComponent, PreferenceDialogComponent ],
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })
-export class VideosAppComponent {
+export class AppComponent {
     @ViewChild(PreferenceDialogComponent) preferenceDialog: PreferenceDialogComponent;
 
     constructor(private _stateService: VideoStateService) {

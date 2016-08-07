@@ -23,7 +23,6 @@ import { SaveDialogComponent } from '../save-dialog/save-dialog.component';
 import { SlideshowButtonComponent } from '../slideshow-button/slideshow-button.component';
 
 @Component({
-    moduleId: module.id,
     selector: 'photo-view',
     directives: [
         NgIf,

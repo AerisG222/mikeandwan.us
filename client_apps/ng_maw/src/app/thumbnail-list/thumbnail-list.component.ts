@@ -5,7 +5,6 @@ import { ThumbnailInfo, SelectedThumbnail } from './';
 import { ResponsiveService } from '../shared/';
 
 @Component({
-    moduleId: module.id,
     selector: 'thumbnail-list',
     directives: [ NgClass, NgStyle, NgIf, NgFor ],
     templateUrl: 'thumbnail-list.component.html',

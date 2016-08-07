@@ -6,7 +6,6 @@ import { IPhoto } from '../shared/iphoto.model';
 import { PhotoListContext } from '../shared/photo-list-context.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'map-view',
     directives: [ NgIf ],
     templateUrl: 'map-view.component.html',

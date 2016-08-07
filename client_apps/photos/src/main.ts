@@ -9,8 +9,7 @@ import { BreadcrumbService } from './ng_maw/shared/breadcrumb.service';
 import { ResponsiveService } from './ng_maw/shared/responsive.service';
 
 import { APP_ROUTER_PROVIDERS } from './app/app.routes';
-import { PhotosAppComponent } from './app/app.component';
-import { environment } from './app/environment';
+import { AppComponent, environment } from './app/';
 import { PhotoDataService } from './app/shared/photo-data.service';
 import { PhotoNavigationService } from './app/shared/photo-navigation.service';
 import { PhotoSourceFactory } from './app/shared/photo-source-factory.model';
@@ -20,7 +19,7 @@ if (environment.production) {
     enableProdMode();
 }
 
-bootstrap(PhotosAppComponent, [
+bootstrap(AppComponent, [
     HTTP_BINDINGS,
     APP_ROUTER_PROVIDERS,
     disableDeprecatedForms(),

@@ -4,13 +4,12 @@ import { NgIf, NgFor } from '@angular/common';
 import { Result } from './result.model';
 
 @Component({
-    moduleId: module.id,
-    selector: 'time-app',
+    selector: 'app-root',
     directives: [ NgIf, NgFor ],
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })
-export class TimeAppComponent {
+export class AppComponent {
     results: Result[] = null;
     sizes = [
         { label: 'seconds', timeInSeconds: 1 },

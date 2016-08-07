@@ -4,25 +4,14 @@
 }
 
 @section custom_head {
-    <base href="." />
+    <base href="/" />
 }
 
 @section scripts_footer {
     @Html.Partial("_js_GoogleMaps")
-    <script src="/js/googlemaps/vendor/es6-shim/es6-shim.js"></script>
-    <script src="/js/googlemaps/vendor/reflect-metadata/Reflect.js"></script>
-    <script src="/js/googlemaps/vendor/systemjs/dist/system.src.js"></script>
-    <script src="/js/googlemaps/vendor/zone.js/dist/zone.js"></script>
-    <script>
-        SystemJS.config({
-            baseURL: '/js/googlemaps'
-        });
-        
-        System.import('system-config.js').then(function () {
-            System.import('main');
-        }).catch(console.error.bind(console));
-    </script>
-    
+    <script type="text/javascript" src="/js/googlemaps/inline.js"></script>
+    <script type="text/javascript" src="/js/googlemaps/polyfills.bundle.js"></script>
+    <script type="text/javascript" src="/js/googlemaps/main.bundle.js"></script>
 }
 
 @section header {
@@ -39,5 +28,5 @@
         and have the panning move together.
     </p>
     
-    <googlemaps-app>Loading...</googlemaps-app>
+    <app-root>Loading...</app-root>
 </section>

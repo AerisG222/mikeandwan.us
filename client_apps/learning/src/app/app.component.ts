@@ -4,13 +4,12 @@ import { NgFor } from '@angular/common';
 import { AudioSource } from './audio-source.model';
 
 @Component({
-    moduleId: module.id,
-    selector: 'learning-app',
+    selector: 'app-root',
     directives: [ NgFor ],
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })
-export class LearningAppComponent {
+export class AppComponent {
     letters: string[] = [
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'

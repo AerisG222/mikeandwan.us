@@ -3,15 +3,14 @@ import { enableProdMode } from '@angular/core';
 
 import { APP_ROUTER_PROVIDERS } from './app/app.routes';
 import { MemoryService } from './app/memory.service';
-import { MemoryAppComponent } from './app/app.component';
-import { environment } from './app/environment';
+import { AppComponent, environment } from './app/';
 import { CanPlayGuard } from './app/play/can-play-guard';
 
 if (environment.production) {
     enableProdMode();
 }
 
-bootstrap(MemoryAppComponent, [
+bootstrap(AppComponent, [
     APP_ROUTER_PROVIDERS,
     MemoryService,
     CanPlayGuard

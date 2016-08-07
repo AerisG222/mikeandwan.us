@@ -11,7 +11,6 @@ import { ModeRouteInfo } from '../shared/mode-route-info.model';
 import { RouteMode } from '../shared/route-mode.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'mode',
     directives: [ NgFor ],
     templateUrl: 'mode.component.html',

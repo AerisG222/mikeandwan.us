@@ -15,7 +15,6 @@ import { VideoStateService } from '../shared/video-state.service';
 import { VideoThumbnailInfo } from '../shared/video-thumbnail-info.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'video-list',
     directives: [ NgIf, NgStyle, PagerComponent, ThumbnailListComponent ],
     templateUrl: 'video-list.component.html',

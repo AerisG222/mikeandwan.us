@@ -4,7 +4,6 @@ import { NgClass } from '@angular/common';
 import { IPlayer } from '../iplayer.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'turtle-score',
     directives: [ NgClass ],
     templateUrl: 'turtle-score.component.html',

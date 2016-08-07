@@ -8,8 +8,7 @@ import { LocalStorageService } from './ng_maw/shared/local-storage.service';
 import { ResponsiveService } from './ng_maw/shared/responsive.service';
 
 import { APP_ROUTER_PROVIDERS } from './app/app.routes';
-import { VideosAppComponent } from './app/app.component';
-import { environment } from './app/environment';
+import { AppComponent, environment } from './app/';
 import { SizeService } from './app/shared/size.service';
 import { VideoDataService } from './app/shared/video-data.service';
 import { VideoNavigationService } from './app/shared/video-navigation.service';
@@ -19,7 +18,7 @@ if (environment.production) {
     enableProdMode();
 }
 
-bootstrap(VideosAppComponent, [
+bootstrap(AppComponent, [
     HTTP_BINDINGS,
     APP_ROUTER_PROVIDERS,
     disableDeprecatedForms(),

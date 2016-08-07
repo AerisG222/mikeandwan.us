@@ -3,7 +3,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IPlayer } from '../iplayer.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'tie-screen',
     templateUrl: 'tie-screen.component.html',
     styleUrls: [ 'tie-screen.component.css' ]

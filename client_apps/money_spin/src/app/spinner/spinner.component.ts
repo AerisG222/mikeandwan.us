@@ -3,7 +3,6 @@ import { Component, ElementRef, EventEmitter, Output, OnInit, OnDestroy } from '
 import { BoardSector } from '../board-sector.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'spinner',
     templateUrl: 'spinner.component.html',
     styleUrls: [ 'spinner.component.css' ]

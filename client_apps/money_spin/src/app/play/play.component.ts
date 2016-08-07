@@ -7,7 +7,6 @@ import { SpinnerComponent } from '../spinner/spinner.component';
 import { PlayerScoreComponent } from '../player-score/player-score.component';
 
 @Component({
-    moduleId: module.id,
     selector: 'play',
     directives: [ NgIf, SpinnerComponent, PlayerScoreComponent ],
     templateUrl: 'play.component.html',

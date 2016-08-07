@@ -2,7 +2,6 @@ import { Component, Input, ElementRef, OnInit } from '@angular/core';
 import { NgStyle } from '@angular/common';
 
 @Component({
-    moduleId: module.id,
     selector: 'three-dlink',
     directives: [ NgStyle ],
     templateUrl: 'three-dlink.component.html',

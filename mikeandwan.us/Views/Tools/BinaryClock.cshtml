@@ -5,23 +5,13 @@
 }
 
 @section custom_head {
-    <base href="." />
+    <base href="/" />
 }
 
 @section scripts_footer {
-    <script src="/js/binary_clock/vendor/es6-shim/es6-shim.js"></script>
-    <script src="/js/binary_clock/vendor/reflect-metadata/Reflect.js"></script>
-    <script src="/js/binary_clock/vendor/systemjs/dist/system.src.js"></script>
-    <script src="/js/binary_clock/vendor/zone.js/dist/zone.js"></script>
-    <script>
-        SystemJS.config({
-            baseURL: '/js/binary_clock'
-        });
-
-        System.import('system-config.js').then(function () {
-            System.import('main');
-        }).catch(console.error.bind(console));
-    </script>
+    <script type="text/javascript" src="/js/binary_clock/inline.js"></script>
+    <script type="text/javascript" src="/js/binary_clock/polyfills.bundle.js"></script>
+    <script type="text/javascript" src="/js/binary_clock/main.bundle.js"></script>
 }
 
 @section header {
@@ -33,7 +23,7 @@
 }
 
 <section>
-    <binary-clock-app>Loading...</binary-clock-app>
+    <app-root>Loading...</app-root>
 
     <p>
         If you are unfamiliar with this, take a look at the <a href="/tools/binary-clock-about">binary clock primer</a>.

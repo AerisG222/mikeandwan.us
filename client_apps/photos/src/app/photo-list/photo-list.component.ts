@@ -23,7 +23,6 @@ import { MapViewComponent } from '../map-view/map-view.component';
 import { PhotoDialogComponent } from '../photo-dialog/photo-dialog.component';
 
 @Component({
-    moduleId: module.id,
     selector: 'photo-list',
     directives: [ NgIf, PagerComponent, ThumbnailListComponent, PhotoViewComponent, MapViewComponent, PhotoDialogComponent ],
     templateUrl: 'photo-list.component.html',

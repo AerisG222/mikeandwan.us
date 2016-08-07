@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 
 @Component({
-    moduleId: module.id,
     selector: 'rating',
     directives: [ NgClass, NgIf, NgFor ],
     templateUrl: 'rating.component.html',

@@ -1,24 +1,20 @@
-import {
-    beforeEachProviders,
-    describe,
-    expect,
-    it,
-    inject
-} from '@angular/core/testing';
-import { ByteCounterAppComponent } from '../app/app.component';
+/* tslint:disable:no-unused-variable */
 
-beforeEachProviders(() => [ByteCounterAppComponent]);
+import { addProviders, async, inject } from '@angular/core/testing';
+import { AppComponent } from './app.component';
 
 describe('App: ByteCounter', () => {
-    it('should create the app',
-        inject([ByteCounterAppComponent], (app: ByteCounterAppComponent) => {
-            expect(app).toBeTruthy();
-        }));
+  beforeEach(() => {
+    addProviders([AppComponent]);
+  });
 
-    /*
-      it('should have as title \'byte-counter works!\'',
-          inject([ByteCounterAppComponent], (app: ByteCounterAppComponent) => {
-        expect(app.title).toEqual('byte-counter works!');
-      }));
-    */
+  it('should create the app',
+    inject([AppComponent], (app: AppComponent) => {
+      expect(app).toBeTruthy();
+    }));
+
+  it('should have as title \'app works!\'',
+    inject([AppComponent], (app: AppComponent) => {
+      expect(app.title).toEqual('app works!');
+    }));
 });

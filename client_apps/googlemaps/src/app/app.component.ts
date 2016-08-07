@@ -6,13 +6,12 @@ import 'rxjs/add/operator/concat';
 import { MapComponent } from './map/map.component';
 
 @Component({
-    moduleId: module.id,
-    selector: 'googlemaps-app',
+    selector: 'app-root',
     directives: [ NgIf, MapComponent ],
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })
-export class GooglemapsAppComponent {
+export class AppComponent {
     show: boolean = true;
     geocoder: google.maps.Geocoder = new google.maps.Geocoder();
 

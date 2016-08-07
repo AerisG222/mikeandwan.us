@@ -4,7 +4,6 @@ import { BoundingBox } from '../bounding-box.model';
 import { MapContext } from '../map-context.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'map',
     templateUrl: 'map.component.html',
     styleUrls: [ 'map.component.css' ]

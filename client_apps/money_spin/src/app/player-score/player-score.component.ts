@@ -4,7 +4,6 @@ import { NgClass } from '@angular/common';
 import { Player } from '../player.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'player-score',
     directives: [ NgClass ],
     templateUrl: 'player-score.component.html',

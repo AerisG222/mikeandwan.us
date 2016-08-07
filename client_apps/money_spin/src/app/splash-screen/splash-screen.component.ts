@@ -3,7 +3,6 @@ import { Component, AfterViewInit } from '@angular/core';
 import { StateService } from '../state.service';
 
 @Component({
-    moduleId: module.id,
     selector: 'splash-screen',
     templateUrl: 'splash-screen.component.html',
     styleUrls: [ 'splash-screen.component.css' ]

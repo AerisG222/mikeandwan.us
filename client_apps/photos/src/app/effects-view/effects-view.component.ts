@@ -5,7 +5,6 @@ import { Photo } from '../shared/photo.model';
 import { FilterSettings } from '../shared/filter-settings.model';
 
 @Component({
-    moduleId: module.id,
     selector: 'effects-view',
     directives: [ NgModel ],
     templateUrl: 'effects-view.component.html',

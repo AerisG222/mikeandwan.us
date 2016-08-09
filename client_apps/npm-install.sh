@@ -3,7 +3,6 @@ apps=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learni
 update() {
     cd "${1}"
     npm install
-    typings install
     cd ..
 }
 

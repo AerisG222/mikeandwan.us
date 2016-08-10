@@ -2,11 +2,9 @@ import { Component } from '@angular/core';
 
 import { Character } from '../character.model';
 import { StateService } from '../state.service';
-import { PlayerSelectComponent } from '../player-select/player-select.component';
 
 @Component({
     selector: 'choose-player',
-    directives: [ PlayerSelectComponent ],
     templateUrl: 'choose-player.component.html',
     styleUrls: [ 'choose-player.component.css' ]
 })

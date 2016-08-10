@@ -1,5 +1,4 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { NgFor } from '@angular/common';
 
 import { PhotoDataService } from '../shared/photo-data.service';
 import { IComment } from '../shared/icomment.model';
@@ -7,7 +6,6 @@ import { IPhoto } from '../shared/iphoto.model';
 
 @Component({
     selector: 'comment-view',
-    directives: [ NgFor ],
     templateUrl: 'comment-view.component.html',
     styleUrls: [ 'comment-view.component.css' ]
 })

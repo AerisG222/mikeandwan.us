@@ -1,5 +1,4 @@
 import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
-import { NgIf } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
 import { PagerComponent } from '../../ng_maw/pager/pager.component';
@@ -18,13 +17,10 @@ import { PhotoListContext } from '../shared/photo-list-context.model';
 import { RouteMode } from '../shared/route-mode.model';
 import { RandomPhotoListContext } from '../shared/random-photo-list-context.model';
 import { Photo } from '../shared/photo.model';
-import { PhotoViewComponent } from '../photo-view/photo-view.component';
-import { MapViewComponent } from '../map-view/map-view.component';
 import { PhotoDialogComponent } from '../photo-dialog/photo-dialog.component';
 
 @Component({
     selector: 'photo-list',
-    directives: [ NgIf, PagerComponent, ThumbnailListComponent, PhotoViewComponent, MapViewComponent, PhotoDialogComponent ],
     templateUrl: 'photo-list.component.html',
     styleUrls: [ 'photo-list.component.css' ]
 })

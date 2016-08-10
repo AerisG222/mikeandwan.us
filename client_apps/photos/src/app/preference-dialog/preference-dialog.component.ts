@@ -7,7 +7,6 @@ import { PhotoStateService } from '../shared/photo-state.service';
 
 @Component({
     selector: 'preference-dialog',
-    directives: [ DialogComponent ],
     templateUrl: 'preference-dialog.component.html',
     styleUrls: [ 'preference-dialog.component.css' ]
 })

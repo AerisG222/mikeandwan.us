@@ -1,12 +1,10 @@
 import { Component, Input, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
-import { NgFor, NgIf, NgClass } from '@angular/common';
 
 import { DialogButton } from './dialog-button.model';
 declare var jQuery: any;
 
 @Component({
     selector: 'maw-dialog',
-    directives: [ NgIf, NgFor, NgClass ],
     templateUrl: 'dialog.component.html',
     styleUrls: [ 'dialog.component.css' ]
 })

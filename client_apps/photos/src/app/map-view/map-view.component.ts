@@ -1,5 +1,4 @@
 import { Component, Input, ElementRef, ChangeDetectorRef, OnDestroy, AfterViewInit } from '@angular/core';
-import { NgIf } from '@angular/common';
 
 import { Photo } from '../shared/photo.model';
 import { IPhoto } from '../shared/iphoto.model';
@@ -7,7 +6,6 @@ import { PhotoListContext } from '../shared/photo-list-context.model';
 
 @Component({
     selector: 'map-view',
-    directives: [ NgIf ],
     templateUrl: 'map-view.component.html',
     styleUrls: [ 'map-view.component.css' ]
 })

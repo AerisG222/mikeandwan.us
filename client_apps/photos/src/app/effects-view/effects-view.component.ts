@@ -1,12 +1,10 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { NgModel } from '@angular/common';
 
 import { Photo } from '../shared/photo.model';
 import { FilterSettings } from '../shared/filter-settings.model';
 
 @Component({
     selector: 'effects-view',
-    directives: [ NgModel ],
     templateUrl: 'effects-view.component.html',
     styleUrls: [ 'effects-view.component.css' ]
 })

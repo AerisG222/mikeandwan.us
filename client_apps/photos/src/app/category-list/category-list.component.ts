@@ -9,7 +9,6 @@ import { Config, ModeRouteInfo, PhotoNavigationService, PhotoStateService, Categ
 
 @Component({
     selector: 'category-list',
-    directives: [ PagerComponent, ThumbnailListComponent ],
     templateUrl: 'category-list.component.html',
     styleUrls: [ 'category-list.component.css' ]
 })

@@ -7,7 +7,6 @@ import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
     selector: 'preference-dialog',
-    directives: [ DialogComponent ],
     templateUrl: 'preference-dialog.component.html',
     styleUrls: [ 'preference-dialog.component.css' ]
 })
@@ -59,7 +58,7 @@ export class PreferenceDialogComponent implements AfterViewInit {
             this._stateService.saveConfig();
         }
 
-        this.cancel();  // leverage this function to perform our cleanup       
+        this.cancel();  // leverage this function to perform our cleanup
     }
 
     cancel() {

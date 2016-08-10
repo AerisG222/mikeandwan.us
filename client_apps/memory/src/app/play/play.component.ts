@@ -1,16 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NgIf } from '@angular/common';
 
-import { GameBoardComponent } from '../game-board/game-board.component';
-import { WinnerScreenComponent } from '../winner-screen/winner-screen.component';
-import { TieScreenComponent } from '../tie-screen/tie-screen.component';
-import { TurtleScoreComponent } from '../turtle-score/turtle-score.component';
 import { IPlayer } from '../iplayer.model';
 import { MemoryService } from '../memory.service';
 
 @Component({
     selector: 'play',
-    directives: [ GameBoardComponent, WinnerScreenComponent, TieScreenComponent, TurtleScoreComponent, NgIf ],
     templateUrl: 'play.component.html',
     styleUrls: [ 'play.component.css' ]
 })

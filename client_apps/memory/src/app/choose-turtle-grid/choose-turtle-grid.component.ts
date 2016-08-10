@@ -1,12 +1,10 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { NgFor, NgClass } from '@angular/common';
 
 import { ICharacter } from '../icharacter.model';
 import { MemoryService } from '../memory.service';
 
 @Component({
     selector: 'choose-turtle-grid',
-    directives: [ NgFor, NgClass ],
     templateUrl: 'choose-turtle-grid.component.html',
     styleUrls: [ 'choose-turtle-grid.component.css' ]
 })

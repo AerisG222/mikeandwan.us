@@ -1,11 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
-import { NgClass } from '@angular/common';
 
 declare var notick: boolean;
 
 @Component({
     selector: 'app-root',
-    directives: [ NgClass ],
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })

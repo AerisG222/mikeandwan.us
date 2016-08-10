@@ -1,5 +1,4 @@
 import { Component, Input, ChangeDetectorRef, ViewChild, AfterViewInit, OnDestroy, OnChanges } from '@angular/core';
-import { NgIf, NgClass, NgStyle } from '@angular/common';
 
 import { ResponsiveService } from '../../ng_maw/shared/responsive.service';
 
@@ -13,31 +12,10 @@ import { ContainerBox } from '../shared/container-box.model';
 import { IPhotoInfo } from '../shared/iphoto-info.model';
 import { PhotoViewTool } from '../shared/photo-view-tool.model';
 import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
-import { CommentViewComponent } from '../comment-view/comment-view.component';
-import { RatingViewComponent } from '../rating-view/rating-view.component';
-import { ExifViewComponent } from '../exif-view/exif-view.component';
-import { EffectsViewComponent } from '../effects-view/effects-view.component';
-import { FullscreenViewComponent } from '../fullscreen-view/fullscreen-view.component';
-import { CategoryLinkComponent } from '../category-link/category-link.component';
 import { SaveDialogComponent } from '../save-dialog/save-dialog.component';
-import { SlideshowButtonComponent } from '../slideshow-button/slideshow-button.component';
 
 @Component({
     selector: 'photo-view',
-    directives: [
-        NgIf,
-        NgClass,
-        NgStyle,
-        HelpDialogComponent,
-        CommentViewComponent,
-        RatingViewComponent,
-        ExifViewComponent,
-        EffectsViewComponent,
-        FullscreenViewComponent,
-        CategoryLinkComponent,
-        SaveDialogComponent,
-        SlideshowButtonComponent
-    ],
     templateUrl: 'photo-view.component.html',
     styleUrls: [ 'photo-view.component.css' ]
 })

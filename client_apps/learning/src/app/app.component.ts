@@ -1,11 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { NgFor } from '@angular/common';
 
 import { AudioSource } from './audio-source.model';
 
 @Component({
     selector: 'app-root',
-    directives: [ NgFor ],
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })

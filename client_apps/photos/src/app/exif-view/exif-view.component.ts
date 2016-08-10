@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { NgFor } from '@angular/common';
 
 import { ExifCategory } from './exif-category.model';
 import { PhotoDataService } from '../shared/photo-data.service';
@@ -7,11 +6,9 @@ import { ExifDetail } from './exif-detail.model';
 import { ExifFormatter } from './exif-formatter.model';
 import { Photo } from '../shared/photo.model';
 import { PhotoExifInfo } from '../shared/photo-exif-info.model';
-import { ExifTableComponent } from '../exif-table/exif-table.component';
 
 @Component({
     selector: 'exif-view',
-    directives: [ NgFor, ExifTableComponent ],
     templateUrl: 'exif-view.component.html',
     styleUrls: [ 'exif-view.component.css' ]
 })

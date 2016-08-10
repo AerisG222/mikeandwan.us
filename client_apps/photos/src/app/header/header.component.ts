@@ -1,5 +1,4 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { NgIf } from '@angular/common';
 
 import { BreadcrumbListComponent } from '../../ng_maw/breadcrumb-list/breadcrumb-list.component';
 import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
@@ -10,7 +9,6 @@ import { CategoryBreadcrumb } from '../shared/category-breadcrumb.model';
 
 @Component({
     selector: 'header',
-    directives: [ BreadcrumbListComponent, NgIf ],
     templateUrl: 'header.component.html',
     styleUrls: [ 'header.component.css' ]
 })

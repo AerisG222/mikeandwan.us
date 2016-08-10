@@ -1,9 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { NgClass, NgFor, NgIf } from '@angular/common';
 
 @Component({
     selector: 'rating',
-    directives: [ NgClass, NgIf, NgFor ],
     templateUrl: 'rating.component.html',
     styleUrls: [ 'rating.component.css' ]
 })
@@ -54,12 +52,12 @@ export class RatingComponent implements OnInit {
         }
     }
 
-    // so why do we have 2 different arrays?  well, it is all because of the mouse events.  
-    // when using the ngrepeat with an array that spit out the icons, this worked great to 
-    // update the display of the icons, but angular was then updating the model/html everytime, 
-    // which caused the mouseenter event to fire many times on mouseover (i believe due to the 
-    // fact the array bound to the repeater was updated everytime). to address this, we have 
-    // the icon array which will change its values, but the repeater will be tied to a fixed 
+    // so why do we have 2 different arrays?  well, it is all because of the mouse events.
+    // when using the ngrepeat with an array that spit out the icons, this worked great to
+    // update the display of the icons, but angular was then updating the model/html everytime,
+    // which caused the mouseenter event to fire many times on mouseover (i believe due to the
+    // fact the array bound to the repeater was updated everytime). to address this, we have
+    // the icon array which will change its values, but the repeater will be tied to a fixed
     // array that won't update other than when displaying the first time.
     updateDisplay(): void {
         for (let i = 0; i < this.ratingRange.length; i++) {

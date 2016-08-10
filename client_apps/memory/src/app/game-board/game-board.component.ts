@@ -1,5 +1,4 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { NgFor, NgClass } from '@angular/common';
 
 import { CardComponent } from '../card/card.component';
 import { ICardInfo } from '../icard-info.model';
@@ -8,7 +7,6 @@ import { MemoryService } from '../memory.service';
 
 @Component({
     selector: 'game-board',
-    directives: [ CardComponent, NgClass, NgFor ],
     templateUrl: 'game-board.component.html',
     styleUrls: [ 'game-board.component.css' ]
 })

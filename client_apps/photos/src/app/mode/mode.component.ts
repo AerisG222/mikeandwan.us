@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
-import { NgFor } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
 import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
@@ -12,7 +11,6 @@ import { RouteMode } from '../shared/route-mode.model';
 
 @Component({
     selector: 'mode',
-    directives: [ NgFor ],
     templateUrl: 'mode.component.html',
     styleUrls: [ 'mode.component.css' ]
 })

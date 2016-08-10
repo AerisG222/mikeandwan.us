@@ -1,13 +1,11 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { NgIf } from '@angular/common';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/concat';
 
-import { MapComponent } from './map/map.component';
+import { MapComponent }  from './map/map.component';
 
 @Component({
     selector: 'app-root',
-    directives: [ NgIf, MapComponent ],
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })

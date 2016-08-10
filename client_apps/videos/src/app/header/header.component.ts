@@ -1,13 +1,9 @@
 import { Component } from '@angular/core';
-import { NgFor } from '@angular/common';
-
-import { BreadcrumbListComponent } from '../../ng_maw/breadcrumb-list/breadcrumb-list.component';
 
 import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
     selector: 'header',
-    directives: [ NgFor, BreadcrumbListComponent ],
     templateUrl: 'header.component.html',
     styleUrls: [ 'header.component.css' ]
 })

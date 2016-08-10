@@ -14,7 +14,6 @@ import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
     selector: 'category-list',
-    directives: [ PagerComponent, ThumbnailListComponent ],
     templateUrl: 'category-list.component.html',
     styleUrls: [ 'category-list.component.css' ]
 })
@@ -30,7 +29,7 @@ export class CategoryListComponent implements AfterViewInit {
                 private _navService: VideoNavigationService,
                 private _changeDetectionRef: ChangeDetectorRef,
                 private _activatedRoute: ActivatedRoute) {
-        
+
     }
 
     ngAfterViewInit(): void {

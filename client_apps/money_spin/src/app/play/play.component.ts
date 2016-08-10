@@ -1,14 +1,10 @@
 import { Component } from '@angular/core';
-import { NgIf } from '@angular/common';
 
 import { Player } from '../player.model';
 import { StateService } from '../state.service';
-import { SpinnerComponent } from '../spinner/spinner.component';
-import { PlayerScoreComponent } from '../player-score/player-score.component';
 
 @Component({
     selector: 'play',
-    directives: [ NgIf, SpinnerComponent, PlayerScoreComponent ],
     templateUrl: 'play.component.html',
     styleUrls: [ 'play.component.css' ]
 })

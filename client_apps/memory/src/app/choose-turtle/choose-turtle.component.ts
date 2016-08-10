@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 
-import { ChooseTurtleGridComponent } from '../choose-turtle-grid/choose-turtle-grid.component';
 import { ICharacter } from '../icharacter.model';
 import { MemoryService } from '../memory.service';
 
 @Component({
     selector: 'choose-turtle',
-    directives: [ ChooseTurtleGridComponent ],
     templateUrl: 'choose-turtle.component.html',
     styleUrls: [ 'choose-turtle.component.css' ]
 })

@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
 
 import { Result } from './result.model';
 
 @Component({
     selector: 'app-root',
-    directives: [ NgFor, NgIf ],
     templateUrl: 'app.component.html',
     styleUrls: [ 'app.component.css' ]
 })

@@ -1,5 +1,4 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { NgClass, NgFor, NgIf } from '@angular/common';
 
 import { ResponsiveService } from '../shared/responsive.service';
 
@@ -10,7 +9,6 @@ import { ResponsiveService } from '../shared/responsive.service';
 
 @Component({
     selector: 'pager',
-    directives: [ NgClass, NgIf, NgFor ],
     templateUrl: 'pager.component.html',
     styleUrls: [ 'pager.component.css' ]
 })

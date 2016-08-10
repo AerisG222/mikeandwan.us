@@ -1,12 +1,10 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { NgClass, NgStyle, NgFor, NgIf } from '@angular/common';
 
 import { ThumbnailInfo, SelectedThumbnail } from './';
 import { ResponsiveService } from '../shared/';
 
 @Component({
     selector: 'thumbnail-list',
-    directives: [ NgClass, NgStyle, NgIf, NgFor ],
     templateUrl: 'thumbnail-list.component.html',
     styleUrls: [ 'thumbnail-list.component.css' ]
 })

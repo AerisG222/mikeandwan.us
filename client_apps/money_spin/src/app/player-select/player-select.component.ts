@@ -1,11 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { NgFor, NgClass } from '@angular/common';
 
 import { Character } from '../character.model';
 
 @Component({
     selector: 'player-select',
-    directives: [ NgFor, NgClass ],
     templateUrl: 'player-select.component.html',
     styleUrls: [ 'player-select.component.css' ]
 })

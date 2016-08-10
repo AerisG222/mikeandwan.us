@@ -1,11 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { NgClass } from '@angular/common';
 
 import { IPlayer } from '../iplayer.model';
 
 @Component({
     selector: 'turtle-score',
-    directives: [ NgClass ],
     templateUrl: 'turtle-score.component.html',
     styleUrls: [ 'turtle-score.component.css' ]
 })

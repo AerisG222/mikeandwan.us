@@ -1,5 +1,4 @@
 import { Component, ViewChild, ChangeDetectorRef, AfterViewInit, OnInit } from '@angular/core';
-import { NgIf, NgStyle } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
 import { PagerComponent } from '../../ng_maw/pager/pager.component';
@@ -16,7 +15,6 @@ import { VideoThumbnailInfo } from '../shared/video-thumbnail-info.model';
 
 @Component({
     selector: 'video-list',
-    directives: [ NgIf, NgStyle, PagerComponent, ThumbnailListComponent ],
     templateUrl: 'video-list.component.html',
     styleUrls: [ 'video-list.component.css' ]
 })

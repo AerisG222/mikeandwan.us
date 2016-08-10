@@ -4,6 +4,10 @@ import { FormsModule }   from '@angular/forms';
 import { HttpModule }     from '@angular/http';
 import { RouterModule }  from '@angular/router';
 
+import { BreadcrumbListComponent } from '../ng_maw/breadcrumb-list/breadcrumb-list.component';
+import { DialogComponent } from '../ng_maw/dialog/dialog.component';
+import { PagerComponent } from '../ng_maw/pager/pager.component';
+import { ThumbnailListComponent } from '../ng_maw/thumbnail-list/thumbnail-list.component';
 import { BreadcrumbService } from '../ng_maw/shared/breadcrumb.service';
 import { LocalStorageService } from '../ng_maw/shared/local-storage.service';
 import { ResponsiveService } from '../ng_maw/shared/responsive.service';
@@ -33,6 +37,10 @@ import { VideoStateService } from './shared/video-state.service';
     ],
     declarations: [
         AppComponent,
+        BreadcrumbListComponent,
+        DialogComponent,
+        PagerComponent,
+        ThumbnailListComponent,
         CategoryListComponent,
         HeaderComponent,
         PreferenceDialogComponent,

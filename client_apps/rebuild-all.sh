@@ -1,4 +1,4 @@
-apps=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learning" "memory" "money_spin" "ng_maw" "photos" "time" "videos" "weekend_countdown" )
+apps=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learning" "memory" "money_spin" "photos" "time" "videos" "weekend_countdown" )
 webgls=( "webgl_cube" "webgl_text" )
 
 build() {

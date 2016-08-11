@@ -3,11 +3,10 @@ using System.IO;
 using Maw.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.CookiePolicy;
+//using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -86,6 +85,12 @@ namespace MawMvcApp
                 .AddScoped<IUserStore<MawUser>, MawUserStore>()
                 .AddScoped<IRoleStore<MawRole>, MawRoleStore>();
 
+            services.AddAntiforgery(options => 
+                {
+                    options.HeaderName = "X-XSRF-TOKEN";
+                    options.CookieName = "XSRF-TOKEN";
+                });
+
             services.AddLogging();
 
             services.AddIdentity<MawUser, MawRole>(opts =>
@@ -135,11 +140,13 @@ namespace MawMvcApp
                 app.UseExceptionHandler("/error/");
             }
 
+            /* TODO: see if we need to force any cookie settings
             app.UseCookiePolicy(new CookiePolicyOptions
                 {
                     HttpOnly = HttpOnlyPolicy.Always,
                     Secure = CookieSecurePolicy.SameAsRequest
                 });
+            */
 
             // TODO: add a build step for production so these urls are published into wwwroot
             if(env.IsDevelopment())

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Videos;
+//using MawMvcApp.Filters;
 using MawMvcApp.ViewModels.Navigation;
 using MawMvcApp.ViewModels;
 using NMagickWand;
@@ -48,6 +49,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("{*extra}")]
+        //[TypeFilter(typeof(ApiAntiforgeryActionFilter))]
         public ActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.Videos;

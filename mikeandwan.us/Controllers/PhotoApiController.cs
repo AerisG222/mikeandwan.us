@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Maw.Domain.Photos;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.Photos;
-
+//using MawMvcApp.Filters;
 
 namespace MawMvcApp.Controllers
 {
@@ -148,6 +148,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpPost("ratePhoto")]
+        //[TypeFilter(typeof(ApiAntiforgeryValidationActionFilter))]
         public async Task<float?> RatePhoto([FromBody]UserPhotoRating userRating)
         {
             if(userRating.Rating < 1)
@@ -167,6 +168,7 @@ namespace MawMvcApp.Controllers
         
         
         [HttpPost("addCommentForPhoto")]
+        //[TypeFilter(typeof(ApiAntiforgeryValidationActionFilter))]
         public async Task<bool> AddCommentForPhoto([FromBody]CommentViewModel comment)
         {
             int result = await _svc.InsertPhotoCommentAsync(comment.PhotoId, User.Identity.Name, comment.Comment);

@@ -9,6 +9,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using NMagickWand;
 using Maw.Domain.Photos;
+//using MawMvcApp.Filters;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.Navigation;
 
@@ -59,6 +60,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("{*extra}")]
+        //[TypeFilter(typeof(ApiAntiforgeryActionFilter))]
         public ActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.Photos;

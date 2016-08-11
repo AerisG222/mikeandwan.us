@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 namespace MawMvcApp.Filters
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class ApiAntiforgeryActionFilter 
+    public class ApiAntiforgeryActionFilter
         : ActionFilterAttribute
     {
         readonly IAntiforgery _antiforgery;
@@ -39,11 +39,11 @@ namespace MawMvcApp.Filters
                 throw new ArgumentNullException(nameof(next));
             }
 
+            // angular will translate xsrf-token cookie to x-xsrf-token header on subsequent calls
             var tokens = _antiforgery.GetAndStoreTokens(context.HttpContext);
-            context.HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() 
-                { 
-                    HttpOnly = false, 
-                    Path = context.HttpContext.Request.Path 
+            context.HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions()
+                {
+                    HttpOnly = false
                 });
 
             if (context.Result == null)

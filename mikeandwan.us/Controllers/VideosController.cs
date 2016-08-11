@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Videos;
-//using MawMvcApp.Filters;
+using MawMvcApp.Filters;
 using MawMvcApp.ViewModels.Navigation;
 using MawMvcApp.ViewModels;
 using NMagickWand;
@@ -16,7 +16,7 @@ namespace MawMvcApp.Controllers
 {
 	[Authorize(MawConstants.POLICY_VIEW_VIDEOS)]
     [Route("videos")]
-    public class VideosController 
+    public class VideosController
         : MawBaseController<VideosController>
     {
         const string MOBILE_THUMB_MIME_TYPE = "image/png";
@@ -27,9 +27,9 @@ namespace MawMvcApp.Controllers
         readonly IFileProvider _fileProvider;
 
 
-		public VideosController(IAuthorizationService authorizationService, 
-                                ILogger<VideosController> log, 
-                                IVideoRepository videoRepository, 
+		public VideosController(IAuthorizationService authorizationService,
+                                ILogger<VideosController> log,
+                                IVideoRepository videoRepository,
                                 IFileProvider fileProvider)
 			: base(authorizationService, log)
         {
@@ -49,11 +49,11 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("{*extra}")]
-        //[TypeFilter(typeof(ApiAntiforgeryActionFilter))]
+        [TypeFilter(typeof(ApiAntiforgeryActionFilter))]
         public ActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.Videos;
-			
+
             return View();
         }
 
@@ -86,7 +86,7 @@ namespace MawMvcApp.Controllers
                 {
                     var leftPos = (mw.ImageWidth / 2) - (MOBILE_THUMB_SIZE / 2);
                     var topPos = (mw.ImageHeight / 2) - (MOBILE_THUMB_SIZE / 2);
-                
+
                     var ms = new MemoryStream();
 
                     mw.CropImage(MOBILE_THUMB_SIZE, MOBILE_THUMB_SIZE, (int)leftPos, (int)topPos);

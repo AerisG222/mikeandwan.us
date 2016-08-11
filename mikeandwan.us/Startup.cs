@@ -85,11 +85,7 @@ namespace MawMvcApp
                 .AddScoped<IUserStore<MawUser>, MawUserStore>()
                 .AddScoped<IRoleStore<MawRole>, MawRoleStore>();
 
-            services.AddAntiforgery(options => 
-                {
-                    options.HeaderName = "X-XSRF-TOKEN";
-                    options.CookieName = "XSRF-TOKEN";
-                });
+            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
 
             services.AddLogging();
 
@@ -140,7 +136,7 @@ namespace MawMvcApp
                 app.UseExceptionHandler("/error/");
             }
 
-            /* TODO: see if we need to force any cookie settings
+            /* TODO: see if we need to force any cookie settings (if so, HttpOnly will interfere with custom XSRF API filters)
             app.UseCookiePolicy(new CookiePolicyOptions
                 {
                     HttpOnly = HttpOnlyPolicy.Always,

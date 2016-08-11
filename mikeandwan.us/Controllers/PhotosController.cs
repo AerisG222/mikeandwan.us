@@ -9,7 +9,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using NMagickWand;
 using Maw.Domain.Photos;
-//using MawMvcApp.Filters;
+using MawMvcApp.Filters;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.Navigation;
 
@@ -18,7 +18,7 @@ namespace MawMvcApp.Controllers
 {
 	[Authorize(MawConstants.POLICY_VIEW_PHOTOS)]
     [Route("photos")]
-    public class PhotosController 
+    public class PhotosController
         : MawBaseController<PhotosController>
     {
 		const int TWENTY_MB = 20 * 1024 * 1024;
@@ -29,12 +29,12 @@ namespace MawMvcApp.Controllers
         readonly PhotoService _svc;
         readonly IFileProvider _fileProvider;
         readonly IAntiforgery _antiForgery;
-        
 
-		public PhotosController(IAuthorizationService authorizationService, 
-                                ILogger<PhotosController> log, 
-                                IPhotoRepository photoRepository, 
-                                IFileProvider fileProvider, 
+
+		public PhotosController(IAuthorizationService authorizationService,
+                                ILogger<PhotosController> log,
+                                IPhotoRepository photoRepository,
+                                IFileProvider fileProvider,
                                 IAntiforgery antiForgery)
 			: base(authorizationService, log)
         {
@@ -52,7 +52,7 @@ namespace MawMvcApp.Controllers
             {
                 throw new ArgumentNullException(nameof(antiForgery));
             }
-            
+
 			_svc = new PhotoService(photoRepository);
 			_fileProvider = fileProvider;
             _antiForgery = antiForgery;
@@ -60,15 +60,11 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("{*extra}")]
-        //[TypeFilter(typeof(ApiAntiforgeryActionFilter))]
+        [TypeFilter(typeof(ApiAntiforgeryActionFilter))]
         public ActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.Photos;
 
-            // TODO: add in csrf checks
-            //var xsrf = new AngularXSRF(Context, _antiForgery);
-            //xsrf.GenerateTokens();
-                        
             return View();
         }
 
@@ -86,7 +82,7 @@ namespace MawMvcApp.Controllers
                 {
                     var leftPos = (mw.ImageWidth / 2) - (MOBILE_THUMB_SIZE / 2);
                     var topPos = (mw.ImageHeight / 2) - (MOBILE_THUMB_SIZE / 2);
-                
+
                     var ms = new MemoryStream();
 
                     mw.CropImage(MOBILE_THUMB_SIZE, MOBILE_THUMB_SIZE, (int)leftPos, (int)topPos);

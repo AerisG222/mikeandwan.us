@@ -157,13 +157,9 @@ psql -d maw_website -f "${PATH_LOCAL_GLACIER_SQL_FILE}"
 ## REMOTE PROCESSING
 #################################################
 echo 'copying files to remote...'
-scp -r "${DEST_IMAGES_CATEGORY_ROOT}/xs" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/xs"
-scp -r "${DEST_IMAGES_CATEGORY_ROOT}/sm" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/sm"
-scp -r "${DEST_IMAGES_CATEGORY_ROOT}/md" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/md"
-scp -r "${DEST_IMAGES_CATEGORY_ROOT}/lg" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/lg"
-scp -r "${DEST_IMAGES_CATEGORY_ROOT}/prt" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/prt"
-scp -r "${PATH_LOCAL_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
-scp -r "${PATH_LOCAL_GLACIER_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
+rsync -avh --exclude "*/src*" "${DEST_IMAGES_CATEGORY_ROOT}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/
+scp "${PATH_LOCAL_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
+scp "${PATH_LOCAL_GLACIER_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
 
 echo 'deploying (please provide remote password when prompted)...'
 ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "

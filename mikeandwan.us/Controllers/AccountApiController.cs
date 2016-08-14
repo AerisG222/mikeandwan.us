@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Identity;
+using MawMvcApp.Filters;
 using MawMvcApp.ViewModels.Account;
 using SignInRes = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -40,5 +41,12 @@ namespace MawMvcApp.Controllers
 						
 			return result == SignInRes.Success;
         }
+
+
+		[HttpGet("get-xsrf-token")]
+		[TypeFilter(typeof(ApiAntiforgeryActionFilter))]
+		public ActionResult GetXsrfToken() {
+			return Ok();
+		}
     }
 }

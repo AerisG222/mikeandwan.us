@@ -12,7 +12,6 @@ body { padding-right: 0 !important; }
 .navbar-brand { font-family: Tangerine; font-size: 40px; }
 .navbar-right { margin-right: 0 }
 .banner { background-image: url('/img/banner_xs.jpg'); background-repeat: no-repeat; background-position: top; background-attachment: fixed; height: 120px; margin-bottom: 10px; border-bottom: 1px solid rgba(0, 0, 0, 0.6); }
-
 .banner > .navbar { background: rgba(0, 0, 0, 0.6); }
 
 .banner > .navbar-default .navbar-nav > li > a:hover,
@@ -37,95 +36,23 @@ footer { margin-top: 80px; background: none repeat scroll 0 0 #1c1e22; padding: 
 .fa-ln:before { content: ""; }
 .fa-tw:before { content: ""; }
 
-/* photo / movie apps */
 .maw-app a { cursor: pointer; }
-.maw-app header { border-bottom: 1px solid; padding-bottom: 2px; }
-.maw-app header .header { margin-right: -15px; }
-.maw-app header .h4 { vertical-align: bottom; margin-right: 4px; line-height: 30px; }
-.maw-app .pagination, .maw-app .select-list { margin: 8px 0; }
-.maw-app .select-list { padding: 0; }
-.maw-app .select-list li { float: left; list-style: none; margin-bottom: 8px; margin-left: 0; margin-right: 8px; }
 
-.maw-app .active .thumbnail, .maw-app .thumbnail:hover { border-color: #52575C; }
-.maw-app .active .thumbnail img, .maw-app .thumbnail:hover img { opacity: 1.0; filter: alpha(opacity=100); transition: all 0.2s ease-in-out 0s; }
-.maw-app .thumbnail { width: 164px; height: 122px; line-height: 116px; margin-bottom: 4px; padding: 0; cursor: pointer; text-align: center; }
-
-/* https://css-tricks.com/centering-in-the-unknown/ */
-.maw-app .thumbnail:before { content: ''; display: inline-block; height: 100%; vertical-align: middle; margin-left: -.15em; }
-
-.maw-app .thumbnail:hover + a { text-decoration: underline; }
-.maw-app .thumbnail img { display: inline-block; vertical-align: middle; max-height: 120px; max-width: 160px; opacity: 0.6; filter: alpha(opacity=60); }
-.maw-app .thumbnail-list-row > div  { margin-top: 6px; margin-bottom: 6px; }
-.maw-app .thumbnail.ng-enter, .maw-app .thumbnail.ng-leave, .maw-app .thumbnail.ng-move { -webkit-transition: 0.2s linear all; -moz-transition: 0.2s linear all; -o-transition: 0.2s linear all; transition: 0.2s linear all; }
-.maw-app .thumbnail.ng-enter, .maw-app .thumbnail.ng-move { position: absolute; opacity: 0; overflow: hidden; }
-.maw-app .thumbnail.ng-move.ng-move-active, .maw-app .thumbnail.ng-enter.ng-enter-active { position: relative; opacity: 100; }
-.maw-app .thumbnail.ng-leave { position: relative; opacity: 100; overflow: hidden; }
-.maw-app .thumbnail.ng-leave.ng-leave-active { position: absolute; left: -1000px; opacity: 0; }
-.maw-app .thumbnail.ng-enter-stagger, .maw-app .thumbnail.ng-leave-stagger { -moz-transition-delay: 0.02s; -webkit-transition-delay: 0.02s; -o-transition-delay: 0.02s; transition-delay: 0.02s; -moz-transition-duration: 0; -webkit-transition-duration: 0; -o-transition-duration: 0; transition-duration: 0; }
-.maw-app video { margin-top: 12px; }
-
-.maw-app .main-image { margin-top: 8px; }
-.maw-app .main-image div { border: 1px solid #0c0d0e; border-radius: 4px; background-color: #1c1e22; height: 482px; line-height: 476px; }
-.maw-app .map { height: 480px; width: 97%; border-radius: 4px; }
-.maw-app .main-image img, .maw-app .main-image canvas { display: inline-block; vertical-align: middle; }
-.maw-app .toolbar > div { /* padding-top: 1px; */ padding-bottom: 1px; border-color: #0c0d0e; border-style: solid; }
-.maw-app .toolbar .left { border-width: 0 0 1px 1px; border-radius: 0 0 0 4px; padding-left: 1px; }
-.maw-app .toolbar .text-center { border-width: 0 0 1px 0; }
-.maw-app .toolbar .right { padding-right: 1px; border-width: 0 1px 1px 0; border-radius: 0 0 4px 0; padding-top: 1px; } /* not sure why the top pad is required, but doesn't align w/o it in ff */
-.maw-app .toolbar .thumb-size { font-size: 6px; padding: 0 4px; }
-.maw-app .toolbar .full-size { font-size: 9px; padding: 0 1px; }
-.maw-app .toolbar .btn.active { background-image: linear-gradient(#020202, #101112 40%, #191B1D); background-repeat: no-repeat; }
-
-.maw-app a.prev, .maw-app a.next { position: absolute; top: 0; height: 100%; width: 50%; cursor: pointer; font-size: 36px; opacity: 0; }
-.maw-app a.prev i, .maw-app a.next i { padding-top: 55%; }
-.maw-app a.prev:hover, .maw-app a.next:hover { text-decoration: none; opacity: 0.6; }
-.maw-app a.next { right: 0; text-align: right; }
-.maw-app a.prev { left: 0; text-align: left; }
-
-.maw-app .photo-info { margin-top: 8px; }
-.maw-app .badge { display: none; position: absolute; border-radius: 4px 0; }
-
-.maw-app .rating i.editable { cursor: pointer; }
-.maw-app .rating span { margin-left: 8px; }
-
-.maw-app .exif table { font-size: 12px; }
-
-.maw-app .rotate_90 { -ms-transform: rotate(90deg); -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg); }
-.maw-app .rotate_180 { -ms-transform: rotate(180deg); -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); -o-transform: rotate(180deg); transform: rotate(180deg); }
-.maw-app .rotate_270 { -ms-transform: rotate(270deg); -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -o-transform: rotate(270deg); transform: rotate(270deg); }
-
-.maw-app .main-image .map div { border: 0; border-radius: 0; height: auto; line-height: normal; background-color: transparent; }
-.maw-app .main-image .map img { max-width: none; }
-.maw-app .main-image .map .img-thumbnail { padding: 2px; }
-.maw-app .main-image .mapButtons { margin-top: 10px; margin-right: 8px; }
-.maw-app .main-image .mapButtons span { padding: 1px 6px; margin-left: 4px; margin-bottom: 3px; cursor: pointer; text-align: center; color: #fffaf0; background-color: #595959; border: 1px solid #000; }
-.maw-app .main-image .mapButtons span:hover { background-color: #1c1e22; }
-
-.maw-app .fullscreen { position: fixed; top: 0; left: 0; height: 100%; width: 100%; background-color: #000; display: table-cell; z-index: 1200; }  /* static nav in bootstrap has zindex of 1000, make sure this is greater */
-.maw-app .fullscreen img { display: block; margin:auto; max-width:100%; max-height:100%; }
-.maw-app .fullscreen > div { position: fixed; top: 0; background-color: transparent; width: 100%; opacity: 0.8; filter: alpha(opacity=80); }
-
-.vcenter { display: inline-block; vertical-align: middle;  }
+.vcenter { display: inline-block; vertical-align: middle; }
 
 /* sm (and larger) */
 @media (min-width: 768px) {
     .banner { background-image: url('/img/banner_sm.jpg'); height: 300px; margin-bottom: 30px; }
-    .maw-app .main-image div { border-radius: 4px 4px 0 0; }
-    .maw-app .thumbnail { margin-bottom: 0; }
-    .maw-app .badge { display: inline-block; top: 103px; right: 12px; }
 }
 
 /* md (and larger) */
 @media (min-width: 992px) {
-    .maw-app .badge { right: 42px; }
+
 }
 
 /* lg */
 @media (min-width: 1200px) {
     .banner { background-image: url('/img/banner_lg.jpg'); height: 340px; margin-bottom: 40px; }
-    .maw-app .main-image div { height: 770px; line-height: 764px; }
-    .maw-app .map { height: 768px; }
-    .maw-app .badge { right: 18px; }
 }
 
 /* hp image breakpoint - xl */

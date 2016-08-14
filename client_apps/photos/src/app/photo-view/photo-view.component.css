@@ -1,0 +1,33 @@
+.main-image { margin-top: 8px; }
+.main-image div { border: 1px solid #0c0d0e; border-radius: 4px; background-color: #1c1e22; height: 482px; line-height: 476px; }
+.main-image img, .main-image canvas { display: inline-block; vertical-align: middle; }
+
+a.prev, a.next { position: absolute; top: 0; height: 100%; width: 50%; cursor: pointer; font-size: 36px; opacity: 0; }
+a.prev i, a.next i { padding-top: 55%; }
+a.prev:hover, a.next:hover { text-decoration: none; opacity: 0.6; }
+a.next { right: 0; text-align: right; }
+a.prev { left: 0; text-align: left; }
+
+.rotate_90 { -ms-transform: rotate(90deg); -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg); }
+.rotate_180 { -ms-transform: rotate(180deg); -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); -o-transform: rotate(180deg); transform: rotate(180deg); }
+.rotate_270 { -ms-transform: rotate(270deg); -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -o-transform: rotate(270deg); transform: rotate(270deg); }
+
+.toolbar > div { /* padding-top: 1px; */ padding-bottom: 1px; border-color: #0c0d0e; border-style: solid; }
+.toolbar .left { border-width: 0 0 1px 1px; border-radius: 0 0 0 4px; padding-left: 1px; }
+.toolbar .text-center { border-width: 0 0 1px 0; }
+.toolbar .right { padding-right: 1px; border-width: 0 1px 1px 0; border-radius: 0 0 4px 0; padding-top: 1px; } /* not sure why the top pad is required, but doesn't align w/o it in ff */
+.toolbar .thumb-size { font-size: 6px; padding: 0 4px; }
+.toolbar .full-size { font-size: 9px; padding: 0 1px; }
+.toolbar .btn.active { background-image: linear-gradient(#020202, #101112 40%, #191B1D); background-repeat: no-repeat; }
+
+.photo-info { margin-top: 8px; }
+
+/* sm (and larger) */
+@media (min-width: 768px) {
+    .main-image div { border-radius: 4px 4px 0 0; }
+}
+
+/* lg */
+@media (min-width: 1200px) {
+    .main-image div { height: 770px; line-height: 764px; }
+}

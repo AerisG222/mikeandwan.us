@@ -1,0 +1,9 @@
+.scoreboard_player img { filter: grayscale(75%); }
+.scoreboard_player.active img { filter: grayscale(0%); }
+.scoreboard_score, .scoreboard_player { border-bottom: 4px solid #ccc; padding-top: 8px; }
+.scoreboard_score { padding-bottom: 8px; }
+.scoreboard_player { padding-bottom: 9px; }
+.scoreboard_score.red.active, .scoreboard_player.red.active { border-bottom-color: #c00; }
+.scoreboard_score.blue.active, .scoreboard_player.blue.active { border-bottom-color: #00c; }
+.scoreboard_score.purple.active, .scoreboard_player.purple.active { border-bottom-color: #c0c; }
+.scoreboard_score.orange.active, .scoreboard_player.orange.active { border-bottom-color: #cc7200; }

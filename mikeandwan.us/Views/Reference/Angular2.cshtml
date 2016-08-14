@@ -1,5 +1,5 @@
-﻿@{ 
-    ViewBag.Title = "Angular2 Overview"; 
+﻿@{
+    ViewBag.Title = "Angular2 Overview";
     Layout = "_LayoutMinimal";
 }
 
@@ -9,18 +9,20 @@
 
 <div class="reveal">
     <div class="slides">
-        
+
         <section>
             <h1>Angular2</h1>
             <h2>Overview and Walkthrough</p>
-            
+
             <h3 style="margin-top: 64px">December 16, 2015</h3>
+
+            <p>Disclaimer: this content is stale, and will not be updated.</p>
         </section>
-        
+
         <section>
             <h3>It's (still) an awesome time to be a Web Developer!</h3>
         </section>
-        
+
         <section>
             <h2>Topics</h2>
             <ul>
@@ -42,7 +44,7 @@
                 <li class="fragment">Q/A</li>
             </ul>
         </section>
-        
+
         <section>
             <h2>Angular2 Goals</h2>
             <ul>
@@ -54,7 +56,7 @@
                 <li>Improved error messaging</li>
             </ul>
         </section>
-        
+
         <section>
             <h2>Fundamental Changes</h2>
             <ul>
@@ -69,7 +71,7 @@
                 <li>Updated Router</li>
             </ul>
         </section>
-        
+
         <section>
             <h2>Getting Started</h2>
             <ul>
@@ -82,11 +84,11 @@
                 <li>Have fun!</li>
             </ul>
         </section>
-        
+
         <section>
             <section>
                 <h2>Host Page</h2>
-                
+
                 <ul>
                     <li>Specify base location</li>
                     <li>Include and configure System.js</li>
@@ -95,7 +97,7 @@
                     <li>Use System.js to load app</li>
                 </ul>
             </section>
-            
+
             <section>
                 <pre><code>
 &lt;head&gt;
@@ -120,7 +122,7 @@
                 </code></pre>
             </section>
         </section>
-        
+
         <section>
             <section>
                 <h2>Templates</h2>
@@ -132,28 +134,28 @@
             </section>
             <section>
                 <h3>Content Display</h3>
-                
+
                 <pre><code>
 &lt;span&gt;{{name}}&lt;/span&gt;
                 </code></pre>
             </section>
             <section>
                 <h3>Pipes</h3>
-                
+
                 <pre><code>
 &lt;span&gt;{{aum | aumFormat}}&lt;/span&gt;
                 </code></pre>
             </section>
             <section>
                 <h3>Property Binding</h3>
-                
+
                 <pre><code>
 &lt;el [prop]="expression" /&gt;
                 </code></pre>
             </section>
             <section>
                 <h3>Event Binding</h3>
-                
+
                 <pre><code>
 &lt;el (click)="onClick()" /&gt;
 
@@ -162,14 +164,14 @@
             </section>
             <section>
                 <h3>Two Way Binding</h3>
-                
+
                 <pre><code>
 &lt;input type="text" [(ngModel)]="myVal" /&gt;
                 </code></pre>
             </section>
             <section>
                 <h3>Local Variables</h3>
-                
+
                 <pre><code>
 &lt;input #cmp type="text" /&gt;
 
@@ -178,7 +180,7 @@
             </section>
             <section>
                 <h3>Repeater</h3>
-                
+
                 <pre><code>
 &lt;div *ngFor="#item of items">
     {{item.name}}
@@ -186,10 +188,10 @@
                 </code></pre>
             </section>
         </section>
-        
+
         <section>
             <h2>Bootstrap</h2>
-            
+
             <pre><code>
 import { bootstrap } from 'angular2/platform/browser';
 import { provide } from 'angular2/core';
@@ -197,61 +199,61 @@ import { ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy } from 'angula
 import { MyApp } from './components/MyApp';
 import { MyService } from './services/MyService';
 
-bootstrap(MyApp, [ 
-    MyService, 
+bootstrap(MyApp, [
+    MyService,
     ROUTER_PROVIDERS,
     provide(LocationStrategy, {useClass: HashLocationStrategy})
 ])
 .catch(err => console.error(err));
             </pre></code>
         </section>
-        
+
         <section>
             <h2>Services</h2>
-            
+
             <pre><code>
 import { Injectable, EventEmitter } from 'angular2/core';
 
 @@Injectable()
 export class MyService {
     myEventEmitter = new EventEmitter&lt;any&gt;();
-    
+
     constructor(private _otherService : OtherService) { }
-        
+
     doSomething(val : string) : void {
         this.myEventEmitter.next(val);
     }
 }
             </code></pre>
         </section>
-        
+
         <section>
             <h2>Components</h2>
-            
+
             <pre><code>
 import { Component, Input, Output, EventEmitter } from 'angular2/core';
 import { NgIf } from 'angular2/common';
 import { MyDataService } from '../services/MyDataService';
 
 @@Component({
-    selector: 'myApp',	
+    selector: 'myApp',
     directives: [ NgIf ],
     templateUrl: '/js/myApp/components/MyApp.html'
 })
 export class MyApp {
     private _val : string;
     @@Output() myEventEmitter = new EventEmitter&lt;any&gt;();
-    
+
     @@Input() set myValue(value : string) {
         this._val = value;
     }
-    
+
     get myValue() : string {
         return this._val;
     }
-    
+
     constructor(private _dataService : MyDataService) {
-        
+
     }
     ...
 }
@@ -273,14 +275,14 @@ export class MyApp {
                 <li>Server side support? (<a href="https://channel9.msdn.com/Events/ASPNET-Events/ASPNET-Fall-Sessions/ASPNET--Spa">Channel 9 Talk</a>)</li>
             </ul>
         </section>
-        
+
         <section>
             <h2>Release Schedule</h2>
             <ul>
                 <li>Beta 0 released <strong>*yesterday*</strong></li>
             </ul>
         </section>
-        
+
         <section>
             <h2>Resources</h2>
             <ul>
@@ -297,9 +299,9 @@ export class MyApp {
                 <li><a href="http://reactivex.io/">ReactiveX</a></li>
                 <li><a href="https://nodejs.org/en/">Node.js</a></li>
                 <li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
-            </ul>    
+            </ul>
         </section>
-        
+
         <section>
             <h2>Questions?</h2>
             <h2>Answers?</h2>
@@ -318,12 +320,12 @@ export class MyApp {
             progress: true,
             history: true,
             center: true,
-    
+
             transition: 'slide', // none/fade/slide/convex/concave/zoom
-    
+
             parallaxBackgroundImage: '/img/presentation/slide_bg.jpg',
             parallaxBackgroundSize: '4284px 2844px'
         });
     });
 </script>
-        
+

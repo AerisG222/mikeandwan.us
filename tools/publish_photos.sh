@@ -157,18 +157,18 @@ psql -d maw_website -f "${PATH_LOCAL_GLACIER_SQL_FILE}"
 ## REMOTE PROCESSING
 #################################################
 echo 'copying files to remote...'
-scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/xs" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/xs"
-scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/sm" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/sm"
-scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/md" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/md"
-scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/lg" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/lg"
-scp -r -c blowfish "${DEST_IMAGES_CATEGORY_ROOT}/prt" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/prt"
-scp -r -c blowfish "${PATH_LOCAL_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
-scp -r -c blowfish "${PATH_LOCAL_GLACIER_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
+scp -r "${DEST_IMAGES_CATEGORY_ROOT}/xs" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/xs"
+scp -r "${DEST_IMAGES_CATEGORY_ROOT}/sm" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/sm"
+scp -r "${DEST_IMAGES_CATEGORY_ROOT}/md" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/md"
+scp -r "${DEST_IMAGES_CATEGORY_ROOT}/lg" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/lg"
+scp -r "${DEST_IMAGES_CATEGORY_ROOT}/prt" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/"${CATEGORY_DIRECTORY_NAME}/prt"
+scp -r "${PATH_LOCAL_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
+scp -r "${PATH_LOCAL_GLACIER_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
 
 echo 'deploying (please provide remote password when prompted)...'
 ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
     echo \"These commands will be run on: \$( uname -n )\"
-    
+
     sudo mkdir '${DEST_IMAGES_YEAR_ROOT}'
     sudo mv '${CATEGORY_DIRECTORY_NAME}' '${DEST_IMAGES_YEAR_ROOT}'
     sudo chown -R root:root '${DEST_IMAGES_CATEGORY_ROOT}'

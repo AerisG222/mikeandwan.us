@@ -10,6 +10,7 @@ import { MapComponent }  from './map/map.component';
     styleUrls: [ 'app.component.css' ]
 })
 export class AppComponent {
+    addressToMap = '';
     show: boolean = true;
     geocoder: google.maps.Geocoder = new google.maps.Geocoder();
 
@@ -32,11 +33,17 @@ export class AppComponent {
         this._changeDetectionRef.detectChanges();
     }
 
-    showAddress(address: string): void {
-        this.geocoder.geocode({ address: address }, (results, status) => {
+    showSampleAddress(evt: Event, address: string): void {
+        evt.preventDefault();
+        this.addressToMap = address;
+        this.showAddress();
+    }
+
+    showAddress(): void {
+        this.geocoder.geocode({ address: this.addressToMap }, (results, status) => {
             if (status !== google.maps.GeocoderStatus.OK) {
                 this.hideMaps();
-                alert(`There was an error geocoding the address: ${address}].  Reported error code = ${status}`);
+                alert(`There was an error geocoding the address: ${this.addressToMap}].  Reported error code = ${status}`);
             } else {
                 this.showMaps(results[0].geometry.location);
             }

@@ -33,7 +33,6 @@ using MawMvcApp.ViewModels.About;
 namespace MawMvcApp
 {
     // TODO: review/fix bootstrap accordian panels (right sidebar), animation is too fast on FF - ok on chrome
-    // TODO: research using razor engine for html based emails
     // TODO: nlog?
     // TODO: add 3D demos and eventually picture app
     // TODO: add D3 interface for showing charts on photos/videos apps

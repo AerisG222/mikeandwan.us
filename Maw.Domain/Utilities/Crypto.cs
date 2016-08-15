@@ -10,31 +10,26 @@ namespace Maw.Domain.Utilities
         const string _passwordChars = "~!@#$%^&*{}[];<>/?\\abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         
 
-        public string Hash(string value)
+        public byte[] Hash(string value)
         {
             var sha256 = SHA256.Create();
             var input = Encoding.UTF8.GetBytes(value);
             var output = sha256.ComputeHash(input);
 
-            return Convert.ToBase64String(output);
+            return output;
         }
 
         
-        public string GenerateRandom(int size)
+        public byte[] GenerateRandom(int size)
 		{
 			var randomBytes = new byte[size];
-	        var rand = RandomNumberGenerator.Create();
+	        
+            using(var rand = RandomNumberGenerator.Create())
+            {
+                rand.GetBytes(randomBytes);
+            }
 	
-	        rand.GetBytes(randomBytes);
-	
-	        StringBuilder builder = new StringBuilder(size);
-	
-	        foreach(byte b in randomBytes)
-	        {
-	            builder.AppendFormat("{0:X}", b);
-	        }
-	
-	        return builder.ToString().Substring(0, size);
+            return randomBytes;
 		}
 
 

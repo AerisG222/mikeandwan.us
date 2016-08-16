@@ -66,14 +66,13 @@
             "System.GC.Server": true
         }
     },
-    "scripts": {
-        "postrestore": [ "npm install" ]
-    },
     "publishOptions": {
-        "include": [ "wwwroot", "Views" ]
-    },
-    "copyToOutput": {
-        "include": [ "project.json" ]
+        "include": [ 
+            "wwwroot", 
+            "Views",
+            "project.json",
+            "config.json" 
+        ]
     },
     "tools": {
         "Microsoft.Extensions.SecretManager.Tools": "1.0.0-preview2-final"

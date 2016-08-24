@@ -129,6 +129,7 @@ namespace MawMvcApp
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                AddDevPathMappings(app);
             }
             else
             {
@@ -142,12 +143,6 @@ namespace MawMvcApp
                     Secure = CookieSecurePolicy.SameAsRequest
                 });
             */
-
-            // TODO: add a build step for production so these urls are published into wwwroot
-            if(env.IsDevelopment())
-            {
-                AddDevPathMappings(app);
-            }
 
             app.UseIdentity();
             app.UseStaticFiles();

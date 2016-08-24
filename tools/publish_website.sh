@@ -112,7 +112,7 @@ echo '***************************************'
 echo '** STEP 1: build client applications **'
 echo '***************************************'
 cd $"{SRCDIR}/client_apps"
-./rebuild-all.sh
+./rebuild-all.sh y
 cd $"{WD}"
 
 echo ''

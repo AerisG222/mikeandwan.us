@@ -1,4 +1,4 @@
-apps=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learning" "memory" "money_spin" "ng_maw" "photos" "time" "videos" "weekend_countdown" )
+NG_APPS=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learning" "memory" "money_spin" "ng_maw" "photos" "time" "videos" "weekend_countdown" )
 
 update_ngcli_global() {
     sudo npm uninstall -g angular-cli
@@ -21,32 +21,32 @@ run_init() {
 
 # 1: update global tooling
 echo 'Update global ng cli? [y/n]'
-read globalupdate
+read GLOBAL_UPDATE
 
-if [ "${globalupdate}" == "y" ]; then
+if [ "${GLOBAL_UPDATE}" == "y" ]; then
     update_ngcli_global
 fi
 
 # 2: update all project tooling
 echo 'Update local project cli? [y/n]'
-read localupdate
+read LOCAL_UPDATE
 
-if [ "${localupdate}" == "y" ]; then
-    for i in "${apps[@]}"
+if [ "${LOCAL_UPDATE}" == "y" ]; then
+    for I in "${NG_APPS[@]}"
     do
-        echo "updating tooling for ${i}..."
-        update_ngcli "${i}"
+        echo "updating tooling for ${I}..."
+        update_ngcli "${I}"
     done
 fi
 
 # 3: now go through each one and run ng init
 echo 'Execute ng init per project? [y/n]'
-read nginit
+read NG_INIT
 
-if [ "${nginit}" == "y" ]; then
-    for i in "${apps[@]}"
+if [ "${NG_INIT}" == "y" ]; then
+    for I in "${NG_APPS[@]}"
     do
-        echo "executing ng init for project ${i}"
-        run_init "${i}"
+        echo "executing ng init for project ${I}"
+        run_init "${I}"
     done
 fi

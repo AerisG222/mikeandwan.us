@@ -1,5 +1,5 @@
-apps=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learning" "memory" "money_spin" "photos" "time" "videos" "weekend_countdown" )
-webgls=( "webgl_cube" "webgl_text" )
+NG_APPS=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learning" "memory" "money_spin" "photos" "time" "videos" "weekend_countdown" )
+TS_APPS=( "photo_stats" "webgl_cube" "webgl_text" )
 
 DOWORK=$1
 
@@ -21,15 +21,15 @@ if [ "${DOWORK}" == '' ]; then
 fi
 
 if [ "${DOWORK}" == "y" ]; then
-    for i in "${apps[@]}"
+    for I in "${NG_APPS[@]}"
     do
-        echo "building ${i}..."
-        build "${i}"
+        echo "building ${I}..."
+        build "${I}"
     done
 
-    for i in "${webgls[@]}"
+    for i in "${TS_APPS[@]}"
     do
-        echo "building ${i}..."
-        buildgl "${i}"
+        echo "building ${I}..."
+        buildgl "${I}"
     done
 fi

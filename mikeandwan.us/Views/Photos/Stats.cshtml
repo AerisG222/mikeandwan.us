@@ -1,0 +1,22 @@
+@{
+    Layout = "_SinglePageAppLayout";
+    ViewBag.Title = "photos | stats";
+}
+
+@section custom_head {
+    <base href="/" />
+}
+
+@section scripts_footer {
+    @Html.Partial("_js_d3")
+    <script type="text/javascript" src="/js/photo_stats/stats.js"></script>
+}
+
+<div class="container">
+    <article class="row">
+        <div class="col-sm-12">
+            <h1>Interactive Photo Statistics</h1>
+            <div id="stats"></div>
+        </div>
+    </article>
+</div>

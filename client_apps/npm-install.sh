@@ -1,4 +1,4 @@
-apps=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learning" "memory" "money_spin" "ng_maw" "photos" "time" "videos" "weekend_countdown" )
+NG_APPS=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learning" "memory" "money_spin" "ng_maw" "photos" "time" "videos" "weekend_countdown" )
 
 update() {
     cd "${1}"
@@ -7,10 +7,10 @@ update() {
 }
 
 echo 'Install dependencies for all projects? [y/n]'
-read dowork
+read DOWORK
 
-if [ "${dowork}" == "y" ]; then
-    for i in "${apps[@]}"
+if [ "${DOWORK}" == "y" ]; then
+    for i in "${NG_APPS[@]}"
     do
         echo "updating libs for ${i}..."
         update "${i}"

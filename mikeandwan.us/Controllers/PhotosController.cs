@@ -69,6 +69,15 @@ namespace MawMvcApp.Controllers
         }
 
 
+        [HttpGet("stats")]
+        public ActionResult Stats()
+        {
+            ViewBag.NavigationZone = NavigationZone.Photos;
+
+            return View();
+        }
+
+
         [HttpGet("GetMobileThumbnail/{id:int}")]
         public async Task<ActionResult> GetMobileThumbnail(short id)
 		{

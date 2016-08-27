@@ -26,21 +26,21 @@ let svg = d3.select("#stats").append("svg")
     .attr("width", width)
     .attr("height", height)
     .attr("class", "center-block")
-  .append("g")
+    .append("g")
     .attr("transform", "translate(" + width / 2 + "," + (height / 2) + ")");
 
 let statChildren = function(d) {
-  return d.categoryStats;
+    return d.categoryStats;
 }
 
 let getNodeName = function(d) {
-  let name = d.data.name;
+    let name = d.data.name;
 
-  if(d.data.year) {
-    name = d.data.year.toString();
-  }
+    if(d.data.year) {
+        name = d.data.year.toString();
+    }
 
-  return name;
+    return name;
 }
 
 let getCategoryCount = function(d) {
@@ -67,35 +67,45 @@ let getNodeTitle = function(d) {
 }
 
 d3.json("/api/photos/getStats", function(error, root) {
-  if (error) throw error;
+    if (error) throw error;
 
-  root = { name: 'All Photos', categoryStats: root };
+    root = { name: 'All Photos', categoryStats: root };
+    root = d3.hierarchy(root, statChildren);
 
-  root = d3.hierarchy(root, statChildren);
-  root.sum(function(d) { return d.photoCount; });
-  svg.selectAll("path")
-      .data(partition(root).descendants())
-    .enter().append("path")
-      .attr("d", arc)
-      .style("fill", function(d) { return color(getNodeName(d.children ? d : d.parent)); })
-      .on("click", click)
-    .append("title")
-      .text(function(d) {
-          return getNodeTitle(d);
-      });
+    root.sum(function(d) {
+        return d.photoCount;
+    });
+
+    svg.selectAll("path")
+        .data(partition(root).descendants())
+        .enter().append("path")
+            .attr("d", arc)
+            .style("fill", function(d) { return color(getNodeName(d.children ? d : d.parent)); })
+            .on("click", click)
+        .append("title")
+            .text(function(d) {
+                return getNodeTitle(d);
+            });
 });
 
 function click(d) {
-  svg.transition()
-      .duration(750)
-      .tween("scale", function() {
-        var xd = d3.interpolate(x.domain(), [d.x0, d.x1]),
-            yd = d3.interpolate(y.domain(), [d.y0, 1]),
-            yr = d3.interpolate(y.range(), [d.y0 ? 20 : 0, radius]);
-        return function(t) { x.domain(xd(t)); y.domain(yd(t)).range(yr(t)); };
-      })
-    .selectAll("path")
-      .attrTween("d", function(d) { return function() { return arc(d); }; });
+    svg.transition()
+        .duration(750)
+        .tween("scale", function() {
+            let xd = d3.interpolate(x.domain(), [d.x0, d.x1]);
+            let yd = d3.interpolate(y.domain(), [d.y0, 1]);
+            let yr = d3.interpolate(y.range(), [d.y0 ? 20 : 0, radius]);
+
+            return function(t) {
+                x.domain(xd(t));
+                y.domain(yd(t)).range(yr(t));
+            };
+        })
+        .selectAll("path")
+        .attrTween("d", function(d) {
+            return function() { return arc(d); };
+        });
 }
 
-d3.select(self.frameElement).style("height", height + "px");
+d3.select(self.frameElement)
+    .style("height", height + "px");

@@ -725,6 +725,23 @@ namespace Maw.Data
 				.ToList();
 		}
         
+
+        public async Task<List<D.CategoryPhotoCount>> GetStats(bool allowPrivate)
+        {
+            return await _ctx.Category
+                .Where(x => allowPrivate || !x.IsPrivate)
+                .Select(x => new D.CategoryPhotoCount
+                    {
+                        Year = x.Year,
+                        CategoryId = x.Id,
+                        CategoryName = x.Name,
+                        PhotoCount = _ctx.Photo.Count(p => p.CategoryId == x.Id)
+                    })
+                .OrderBy(x => x.Year)
+                .ThenBy(x => x.CategoryName)
+                .ToListAsync();
+        }
+
         
         async Task<short> GetUserId(string username)
         {

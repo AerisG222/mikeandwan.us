@@ -7,7 +7,9 @@ using Microsoft.Extensions.Logging;
 using Maw.Domain.Photos;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.Photos;
+using MawMvcApp.ViewModels.Photos.Stats;
 using MawMvcApp.Filters;
+
 
 namespace MawMvcApp.Controllers
 {
@@ -209,6 +211,40 @@ namespace MawMvcApp.Controllers
         public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserRating(bool highestFirst)
         {
             return await _svc.GetPhotosAndCategoriesByUserRatingAsync(User.Identity.Name, highestFirst, IsAdmin);
+        }
+
+
+        [HttpGet("getStats")]
+        public async Task<IEnumerable<YearStats>> GetStats()
+        {
+            short year = 0;
+            YearStats currYearStat = null;
+            var yearStats = new List<YearStats>();
+            var stats = await _svc.GetStats(IsAdmin);
+            
+            foreach(var stat in stats)
+            {
+                if(year != stat.Year)
+                {
+                    year = stat.Year;
+
+                    currYearStat = new YearStats 
+                    { 
+                        Year = year 
+                    };
+
+                    yearStats.Add(currYearStat);
+                }
+
+                currYearStat.CategoryStats.Add(new CategoryStats
+                    {
+                        Id = stat.CategoryId,
+                        Name = stat.CategoryName,
+                        PhotoCount = stat.PhotoCount
+                    });
+            }
+
+            return yearStats;
         }
     }
 }

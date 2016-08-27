@@ -173,6 +173,12 @@ namespace Maw.Domain.Photos
         {
             return _repo.GetPhotosAndCategoriesByUserRatingAsync(username, highestFirst, allowPrivate);
         }
+
+
+        public Task<List<CategoryPhotoCount>> GetStats(bool allowPrivate)
+        {
+            return _repo.GetStats(allowPrivate);
+        }
     }
 }
 

@@ -26,5 +26,7 @@ namespace Maw.Domain.Photos
         Task<List<PhotoAndCategory>> GetPhotosAndCategoriesByCommentCountAsync(bool greatestFirst, bool allowPrivate);
         Task<List<PhotoAndCategory>> GetPhotosAndCategoriesByAverageUserRatingAsync(bool highestFirst, bool allowPrivate);
         Task<List<PhotoAndCategory>> GetPhotosAndCategoriesByUserRatingAsync(string username, bool highestFirst, bool allowPrivate);
+
+        Task<List<CategoryPhotoCount>> GetStats(bool allowPrivate);
     }
 }

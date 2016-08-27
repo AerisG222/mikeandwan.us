@@ -43,9 +43,32 @@ let getNodeName = function(d) {
   return name;
 }
 
+let getCategoryCount = function(d) {
+    if(d.children) {
+        return d.children.length;
+    }
+
+    return 0;
+}
+
+let getNodeTitle = function(d) {
+    let titleParts: Array<string> = [];
+    let cats = getCategoryCount(d);
+
+    titleParts.push(getNodeName(d));
+
+    if(cats > 0) {
+        titleParts.push(`Categories: ${formatNumber(cats)}`);
+    }
+
+    titleParts.push(`Photos: ${formatNumber(d.value)}`);
+
+    return titleParts.join('\n');
+}
+
 d3.json("/api/photos/getStats", function(error, root) {
   if (error) throw error;
-  
+
   root = { name: 'All Photos', categoryStats: root };
 
   root = d3.hierarchy(root, statChildren);
@@ -58,7 +81,7 @@ d3.json("/api/photos/getStats", function(error, root) {
       .on("click", click)
     .append("title")
       .text(function(d) {
-          return getNodeName(d) + "\n" + formatNumber(d.value); 
+          return getNodeTitle(d);
       });
 });
 

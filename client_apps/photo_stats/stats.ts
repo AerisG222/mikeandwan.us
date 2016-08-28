@@ -133,7 +133,7 @@ function updateBreadcrumbs(nodeArray): void {
         .attr('y', b.h / 2)
         .attr('dy', '0.35em')
         .attr('text-anchor', 'middle')
-        .text(function(d) {
+        .html(function(d) {
             return getNodeName(d);
         });
 
@@ -148,7 +148,7 @@ function updateCategoryCount(count: number): void {
     let display = `Categories: ${getCountDisplay(count)}`;
 
     d3.select('#categoryCount')
-        .text(display);
+        .html(display);
 }
 
 function updatePhotoCount(count: number): void {
@@ -162,7 +162,7 @@ function updatePhotoCount(count: number): void {
     }
 
     d3.select('#photoCount')
-        .text(display);
+        .html(display);
 }
 
 function getCountDisplay(count: number): string {
@@ -248,7 +248,7 @@ d3.json('/api/photos/getStats', function(error, root) {
             .on('click', click)
             .on('mouseover', mouseover)
         .append('title')
-            .text(function(d) {
+            .html(function(d) {
                 return getNodeTitle(d);
             });
 });

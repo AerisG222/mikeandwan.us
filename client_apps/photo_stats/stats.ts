@@ -1,4 +1,4 @@
-import * as d3 from 'd3';
+//import * as d3 from 'd3';
 
 // shamelessly stolen from:
 //    http://bl.ocks.org/maybelinot/5552606564ef37b5de7e47ed2b7dc099
@@ -114,14 +114,12 @@ function breadcrumbPoints(d, i: number): string {
 }
 
 function updateBreadcrumbs(nodeArray): void {
-    // Data join; key function combines name and depth (= position in sequence).
     let g = d3.select('#trail')
         .selectAll('g')
         .data(nodeArray, function(d) {
-            return d.depth;
+            return `${getNodeName(d)}`;
         });
 
-    // Add breadcrumb and label for entering nodes.
     let entering = g.enter().append('svg:g');
 
     entering.append('svg:polygon')
@@ -139,12 +137,10 @@ function updateBreadcrumbs(nodeArray): void {
             return getNodeName(d);
         });
 
-    // Set position for entering and updating nodes.
-    g.attr('transform', function(d, i: number) {
-        return 'translate(' + i * (b.w + b.s) + ', 0)';
+    entering.attr('transform', function(d, i: number) {
+        return 'translate(' + d.depth * (b.w + b.s) + ', 0)';
     });
 
-    // Remove exiting nodes.
     g.exit().remove();
 }
 
@@ -184,12 +180,8 @@ function mouseover(d): void {
     updateCategoryCount(getCategoryCount(d));
     updatePhotoCount(d.value);
 
-    // Fade all the segments.
     d3.selectAll('path')
-        .style('opacity', 0.3);
-
-    // Then highlight only those that are an ancestor of the current segment.
-    svg.selectAll('path')
+        .style('opacity', 0.3)
         .filter(function(node) {
             return (sequenceArray.indexOf(node) >= 0);
         })
@@ -197,6 +189,7 @@ function mouseover(d): void {
 }
 
 function mouseleave(d): void {
+    updateBreadcrumbs([]);
     updateCategoryCount(0);
     updatePhotoCount(0);
 

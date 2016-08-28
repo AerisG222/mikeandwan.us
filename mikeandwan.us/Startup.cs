@@ -34,10 +34,6 @@ namespace MawMvcApp
 {
     // TODO: review/fix bootstrap accordian panels (right sidebar), animation is too fast on FF - ok on chrome
     // TODO: nlog?
-    // TODO: add 3D demos and eventually picture app
-    // TODO: add D3 interface for showing charts on photos/videos apps
-    // TODO: create tests for angular apps and .net code
-    // TODO: signalr - chat/games
     // TODO: research viewcomponents
     public class Startup
     {

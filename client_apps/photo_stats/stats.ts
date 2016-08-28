@@ -4,14 +4,15 @@
 //    http://jsfiddle.net/Hq4ef/
 let width = 960;
 let height = 700;
+let totalCount = 0;
 let radius = (Math.min(width, height) / 2) - 10;
-let totalSize = 0;
 let formatNumber = d3.format(',d');
+let formatPercent = d3.format('.2%');
 let svg = null;
 
 // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
 let b = {
-    w: 200, h: 30, s: 3, t: 10
+    w: 240, h: 30, s: 3, t: 10
 };
 
 let x = d3.scaleLinear().range([0, 2 * Math.PI]);
@@ -50,7 +51,7 @@ function getCategoryCount(d): number {
             }
         }
         else {
-            count = d.children.length; 
+            count = d.children.length;
         }
     }
 
@@ -67,7 +68,7 @@ function getNodeTitle(d): string {
         titleParts.push(`Categories: ${formatNumber(cats)}`);
     }
 
-    titleParts.push(`Photos: ${formatNumber(d.value)}`);
+    titleParts.push(`Photos: ${formatNumber(d.value)} (${formatPercent(d.value / totalCount)})`);
 
     return titleParts.join('\n');
 }
@@ -97,7 +98,7 @@ function initBreadcrumbTrail(): void {
 }
 
 function breadcrumbPoints(d, i): string {
-    var points: Array<string> = [];
+    let points: Array<string> = [];
     points.push('0,0');
     points.push(b.w + ',0');
     points.push(b.w + b.t + ',' + (b.h / 2));
@@ -111,22 +112,21 @@ function breadcrumbPoints(d, i): string {
     return points.join(' ');
 }
 
-// Update the breadcrumb trail to show the current sequence and percentage.
 function updateBreadcrumbs(nodeArray): void {
     // Data join; key function combines name and depth (= position in sequence).
-    var g = d3.select('#trail')
+    let g = d3.select('#trail')
         .selectAll('g')
-        .data(nodeArray, function(d) { 
-            return d.depth; 
+        .data(nodeArray, function(d) {
+            return d.depth;
         });
 
     // Add breadcrumb and label for entering nodes.
-    var entering = g.enter().append('svg:g');
+    let entering = g.enter().append('svg:g');
 
     entering.append('svg:polygon')
         .attr('points', breadcrumbPoints)
-        .style('fill', function(d) { 
-            return colors(getNodeName(d)); 
+        .style('fill', function(d) {
+            return colors(getNodeName(d));
         });
 
     entering.append('svg:text')
@@ -134,8 +134,8 @@ function updateBreadcrumbs(nodeArray): void {
         .attr('y', b.h / 2)
         .attr('dy', '0.35em')
         .attr('text-anchor', 'middle')
-        .text(function(d) { 
-            return getNodeName(d); 
+        .text(function(d) {
+            return getNodeName(d);
         });
 
     // Set position for entering and updating nodes.
@@ -145,35 +145,37 @@ function updateBreadcrumbs(nodeArray): void {
 
     // Remove exiting nodes.
     g.exit().remove();
-
-    // Make the breadcrumb trail visible, if it's hidden.
-    //d3.select('#trail')
-    //    .style('visibility', '');
 }
 
 function updateCategoryCount(count): void {
-    updateCount('#categoryCount', 'Categories', count);
-}
+    let display = `Categories: ${getCountDisplay(count)}`;
 
-function updatePhotoCount(count): void {
-    updateCount('#photoCount', 'Photos', count);
-}
-
-function updateCount(selector, prefix, count): void {
-    let display = `${prefix}: `;
-
-    if(count > 0) {
-        display += formatNumber(count);
-    }
-    else {
-        display += 'n/a';
-    }
-
-    d3.select(selector)
+    d3.select('#categoryCount')
         .text(display);
 }
 
-// Fade all but the current sequence, and show it in the breadcrumb trail.
+function updatePhotoCount(count): void {
+    let display = 'Photos: ';
+
+    if(count === 0) {
+        display += 'n/a';
+    }
+    else {
+        display += `${getCountDisplay(count)} (${formatPercent(count / totalCount)})`;
+    }
+
+    d3.select('#photoCount')
+        .text(display);
+}
+
+function getCountDisplay(count): string {
+    if(count > 0) {
+        return formatNumber(count);
+    }
+
+    return 'n/a';
+}
+
 function mouseover(d): void {
     let sequenceArray = d.ancestors().reverse();
     updateBreadcrumbs(sequenceArray);
@@ -193,26 +195,12 @@ function mouseover(d): void {
         .style('opacity', 1);
 }
 
-// Restore everything to full opacity when moving off the visualization.
 function mouseleave(d): void {
-    // Hide the breadcrumb trail
-    //d3.select('#trail')
-    //    .style('visibility', 'hidden');
-
     updateCategoryCount(0);
     updatePhotoCount(0);
 
-    // Deactivate all segments during transition.
-    //d3.selectAll('path').on('mouseover', null);
-
-    // Transition each segment to full opacity and then reactivate it.
     d3.selectAll('path')
-        .transition()
-        .duration(1000)
-        .style('opacity', 1)
-        .each('end', function() {
-            d3.select(this).on('mouseover', mouseover);
-        });
+        .style('opacity', 1);
 }
 
 function click(d): void {
@@ -239,6 +227,8 @@ function click(d): void {
 }
 
 initBreadcrumbTrail();
+updateCategoryCount(0);
+updatePhotoCount(0);
 initSunburst();
 
 d3.json('/api/photos/getStats', function(error, root) {
@@ -253,7 +243,7 @@ d3.json('/api/photos/getStats', function(error, root) {
 
     let data = partition(root).descendants();
 
-    totalSize = root.value;
+    totalCount = root.value;
 
     svg.selectAll('path')
         .data(data)

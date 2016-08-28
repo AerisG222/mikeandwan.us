@@ -45,6 +45,14 @@ export class HeaderComponent implements AfterViewInit {
         this._stateService.showPreferencesDialog();
     };
 
+    clickStats(): void {
+        window.open('/photos/stats', '_blank');
+    }
+
+    clickAndroid(): void {
+        window.open('https://play.google.com/store/apps/details?id=us.mikeandwan.pictures', '_blank');
+    }
+
     private onBreadcrumbsUpdated(breadcrumbs: Array<Breadcrumb>): void {
         this.showMapButton = false;
         this.showRegularButton = false;

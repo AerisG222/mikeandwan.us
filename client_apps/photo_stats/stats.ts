@@ -1,4 +1,5 @@
-/// <reference path="./typings/index.d.ts" />
+import * as d3 from 'd3';
+
 // shamelessly stolen from:
 //    http://bl.ocks.org/maybelinot/5552606564ef37b5de7e47ed2b7dc099
 //    http://jsfiddle.net/Hq4ef/
@@ -97,7 +98,7 @@ function initBreadcrumbTrail(): void {
             .attr('id', 'trail');
 }
 
-function breadcrumbPoints(d, i): string {
+function breadcrumbPoints(d, i: number): string {
     let points: Array<string> = [];
     points.push('0,0');
     points.push(b.w + ',0');
@@ -139,7 +140,7 @@ function updateBreadcrumbs(nodeArray): void {
         });
 
     // Set position for entering and updating nodes.
-    g.attr('transform', function(d, i) {
+    g.attr('transform', function(d, i: number) {
         return 'translate(' + i * (b.w + b.s) + ', 0)';
     });
 
@@ -147,14 +148,14 @@ function updateBreadcrumbs(nodeArray): void {
     g.exit().remove();
 }
 
-function updateCategoryCount(count): void {
+function updateCategoryCount(count: number): void {
     let display = `Categories: ${getCountDisplay(count)}`;
 
     d3.select('#categoryCount')
         .text(display);
 }
 
-function updatePhotoCount(count): void {
+function updatePhotoCount(count: number): void {
     let display = 'Photos: ';
 
     if(count === 0) {
@@ -168,7 +169,7 @@ function updatePhotoCount(count): void {
         .text(display);
 }
 
-function getCountDisplay(count): string {
+function getCountDisplay(count: number): string {
     if(count > 0) {
         return formatNumber(count);
     }

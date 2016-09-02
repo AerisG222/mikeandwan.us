@@ -1,13 +1,15 @@
 {
   "project": {
-    "version": "1.0.0-beta.11-webpack",
+    "version": "1.0.0-beta.11-webpack.8",
     "name": "time"
   },
   "apps": [
     {
       "main": "src/main.ts",
       "tsconfig": "src/tsconfig.json",
-      "mobile": false
+      "mobile": false,
+      "root": "src",
+      "prefix": "app"
     }
   ],
   "addons": [],
@@ -23,8 +25,6 @@
     }
   },
   "defaults": {
-    "prefix": "app",
-    "sourceDir": "src",
     "styleExt": "css",
     "prefixInterfaces": false,
     "lazyRoutePrefix": "+"

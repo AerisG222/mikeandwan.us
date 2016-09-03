@@ -1,3 +1,5 @@
+import { browser, element, by } from 'protractor/globals';
+
 export class BinaryClockPage {
   navigateTo() {
     return browser.get('/');

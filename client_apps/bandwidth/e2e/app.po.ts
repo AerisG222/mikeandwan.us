@@ -1,3 +1,5 @@
+import { browser, element, by } from 'protractor/globals';
+
 export class BandwidthPage {
   navigateTo() {
     return browser.get('/');

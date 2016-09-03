@@ -1,6 +1,6 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "tools | reading binary clock"; 
+    ViewBag.Title = "tools | reading binary clock";
 }
 
 @section header {
@@ -20,7 +20,7 @@
         var notick = true;
     </script>
     <script type="text/javascript" src="/js/binary_clock/inline.js"></script>
-    <script type="text/javascript" src="/js/binary_clock/polyfills.bundle.js"></script>
+    <script type="text/javascript" src="/js/binary_clock/styles.bundle.js"></script>
     <script type="text/javascript" src="/js/binary_clock/main.bundle.js"></script>
 }
 
@@ -37,17 +37,17 @@ example below:
 <app-root>Loading...</app-root>
 
 <p>
-The first thing to notice when reading the clock, is that it is broken 
+The first thing to notice when reading the clock, is that it is broken
 up into three components: <em>hours</em>, <em>minutes</em>, and <em>seconds</em>.
-Each of these components are represented by the 3 columns, as indicated 
-above.  As you probably already expected, hours are represented in 
+Each of these components are represented by the 3 columns, as indicated
+above.  As you probably already expected, hours are represented in
 24h time.
 </p>
 
 <p>
-Now that you know about what each of these columns represents, lets look 
+Now that you know about what each of these columns represents, lets look
 at how to read what the columns are telling us.  Luckily once you know how
-to read one column, you can read all three.  With that said, one 
+to read one column, you can read all three.  With that said, one
 time component is made up of two closely packed columns.  The column on
 the left represents the tens digit, and the column on the right represents
 the ones digit.
@@ -58,7 +58,7 @@ In order to determine the numeric value of one of these individual columns
 (the tens or ones digit), you need to do a bit of simple math.  Starting
 with the last row for the column, this represents 2^0.  The
 cell immediately above is 2^1, and above that is 2^2,
-and the topmost cell is 2^3.  So now you just count all of the 
+and the topmost cell is 2^3.  So now you just count all of the
 illuminated cells in that column to arrive at the number for the tens
 and ones digits.
 </p>

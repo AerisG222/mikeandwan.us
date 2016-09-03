@@ -1,6 +1,6 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "tools | google maps"; 
+    ViewBag.Title = "tools | google maps";
 }
 
 @section custom_head {
@@ -10,23 +10,23 @@
 @section scripts_footer {
     @Html.Partial("_js_GoogleMaps")
     <script type="text/javascript" src="/js/googlemaps/inline.js"></script>
-    <script type="text/javascript" src="/js/googlemaps/polyfills.bundle.js"></script>
+    <script type="text/javascript" src="/js/googlemaps/styles.bundle.js"></script>
     <script type="text/javascript" src="/js/googlemaps/main.bundle.js"></script>
 }
 
 @section header {
     @Html.Partial("_PageHeader", "Google Maps")
 }
- 
+
 @section sidebar {
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "general", Item = "google-maps" })
 }
-    
+
 <section>
     <p>
         The maps below are "linked" together so that you can look at the same area at different zoom levels
         and have the panning move together.
     </p>
-    
+
     <app-root>Loading...</app-root>
 </section>

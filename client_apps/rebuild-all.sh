@@ -27,7 +27,7 @@ if [ "${DOWORK}" == "y" ]; then
         build "${I}"
     done
 
-    for i in "${TS_APPS[@]}"
+    for I in "${TS_APPS[@]}"
     do
         echo "building ${I}..."
         buildgl "${I}"

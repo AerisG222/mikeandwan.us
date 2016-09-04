@@ -1,8 +1,9 @@
-[![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/AerisG222/mikeandwan.us/blob/master/LICENSE.md)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AerisG222/mikeandwan.us/blob/master/LICENSE.md)
+[![Travis](https://img.shields.io/travis/AerisG222/mikeandwan.us.svg?maxAge=2592000)](https://travis-ci.org/AerisG222/mikeandwan.us)
+[![Coverity Scan](https://img.shields.io/coverity/scan/10078.svg)](https://scan.coverity.com/projects/aerisg222-mikeandwan.us)
 
-
-#mikeandwan.us
-mikeandwan.us is my personal website.  This has taken many forms over the years, which 
+# mikeandwan.us
+mikeandwan.us is my personal website.  This has taken many forms over the years, which
 first appeared at this domain in 2003.  This site serves a number of purposes:
 
   - Share photos and videos with my family and friends
@@ -26,7 +27,7 @@ things are updated, but am looking forward to a little break once this release i
 
 ## Motivation
 
-I hope that this code will offer someone either a starting point for their own site. 
+I hope that this code will offer someone either a starting point for their own site.
 However, I suspect this might serve a better example of what not to do =D.  If you find
 this useful, or run across ideas for improvement, I would appreciate hearing from you via
 the Issues section of github - thanks!

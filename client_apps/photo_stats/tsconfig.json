@@ -17,6 +17,6 @@
   },
   "files": [
     "stats.ts",
-    "node_modules/@types/d3/index.d.ts"
+    "node_modules/@types/jquery/index.d.ts"
   ]
 }

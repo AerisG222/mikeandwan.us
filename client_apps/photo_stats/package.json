@@ -4,6 +4,6 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@types/d3": "0.0.33"
+    "@types/jquery": "^1.10.31"
   }
 }

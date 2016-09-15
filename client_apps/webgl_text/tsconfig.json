@@ -17,7 +17,6 @@
   },
 
   "files": [
-    "text.ts",
-    "typings/browser.d.ts"
+    "text.ts"
   ]
 }

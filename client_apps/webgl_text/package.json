@@ -1,10 +1,11 @@
 {
-  "name": "photo_stats",
+  "name": "webgl_cube",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
   "devDependencies": {
     "@types/jquery": "^1.10.31",
-    "@types/d3": "^3.5.35"
+    "@types/stats": "^0.16.29",
+    "@types/three": "0.0.21"
   }
 }

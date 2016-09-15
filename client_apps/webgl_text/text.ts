@@ -1,5 +1,3 @@
-/// <reference path="./typings/browser.d.ts" />
-
 jQuery(function() {
 	let demo = new TextDemo();
 	demo.run();

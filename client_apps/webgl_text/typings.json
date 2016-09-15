@@ -1,7 +1,0 @@
-{
-  "ambientDependencies": {
-    "jquery": "github:DefinitelyTyped/DefinitelyTyped/jquery/jquery.d.ts#6e54cb627506cf64d6effba1fe49b5a091ac4297",
-    "stats": "github:DefinitelyTyped/DefinitelyTyped/stats/stats.d.ts#e843172c97072bed859b2f3027c158f5b8846bd7",
-    "three": "github:DefinitelyTyped/DefinitelyTyped/threejs/three.d.ts#b99577c66564b69f9ba44758e19eb4e603b264c4"
-  }
-}

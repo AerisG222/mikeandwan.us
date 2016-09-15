@@ -29,7 +29,7 @@ export class AppComponent {
 
         if (this.doRun) {
             this.run();  // immediately start first character
-            this.intervalId = setInterval(() => this.run(), 3000);  // schedule additional letters
+            this.intervalId = setInterval(() => this.run(), <any>3000);  // schedule additional letters
         } else {
             clearInterval(this.intervalId);
         }

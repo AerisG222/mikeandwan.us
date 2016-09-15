@@ -11,7 +11,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.updateMessage();
-        this.intervalId = setInterval(() => { this.updateMessage(); }, 300);
+        this.intervalId = setInterval(() => { this.updateMessage(); }, <any>300);
     }
 
     ngOnDestroy(): void {

@@ -24,9 +24,7 @@ export class AppComponent implements OnDestroy {
             this.updateDisplay(new Date(2016, 6, 26, 12, 56, 39));
         } else {
             this.tick();
-            this.intervalId = setInterval(() => {
-                this.tick();
-            }, 300);
+            this.intervalId = setInterval(() => this.tick(), <any>300);
         }
     }
 

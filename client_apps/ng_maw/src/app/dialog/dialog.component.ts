@@ -50,6 +50,6 @@ export class DialogComponent implements AfterViewInit {
     }
 
     onButtonClick(btn: DialogButton): void {
-        this.buttonClick.next(btn);
+        this.buttonClick.next(btn.cmd);
     }
 }

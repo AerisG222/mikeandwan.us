@@ -5,5 +5,8 @@
   "private": true,
   "dependencies": {
     "@types/jquery": "^1.10.31"
+  },
+  "devDependencies": {
+    "@types/d3": "^3.5.35"
   }
 }

@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@types/jasmine": "^2.2.30",
+    "@types/three": "0.0.21",
     "angular-cli": "1.0.0-beta.14",
     "codelyzer": "~0.0.26",
     "jasmine-core": "2.4.1",

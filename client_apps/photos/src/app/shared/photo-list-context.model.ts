@@ -105,7 +105,7 @@ export class PhotoListContext {
     toggleSlideshow(): void {
         if (!this.isSlideshowPlaying) {
             this.tickSlideshow();
-            this._intervalId = setInterval(() => this.tickSlideshow(), this._stateService.config.slideshowIntervalSeconds * 1000);
+            this._intervalId = setInterval(() => this.tickSlideshow(), <any>(this._stateService.config.slideshowIntervalSeconds * 1000));
         } else {
             this.terminateSlideshow();
         }

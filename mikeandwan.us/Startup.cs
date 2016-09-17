@@ -45,7 +45,7 @@ namespace MawMvcApp
             var builder = new ConfigurationBuilder()
                 .SetBasePath(hostingEnvironment.ContentRootPath)
                 .AddJsonFile("config.json")
-                .AddUserSecrets();
+                .AddEnvironmentVariables("MAW_");
 
             MagickWandEnvironment.Genesis();
 
@@ -115,11 +115,9 @@ namespace MawMvcApp
         }
 
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IOptions<EnvironmentConfig> envOpts, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
-
-            env.EnvironmentName = envOpts.Value.Name;
 
             if (env.IsDevelopment())
             {

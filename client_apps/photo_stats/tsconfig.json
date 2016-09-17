@@ -16,7 +16,6 @@
     "inlineSources": true
   },
   "files": [
-    "stats.ts",
-    "node_modules/@types/jquery/index.d.ts"
+    "stats.ts"
   ]
 }

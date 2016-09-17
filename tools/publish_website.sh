@@ -5,12 +5,13 @@ SRCDIR=/home/mmorano/git/mikeandwan.us
 DEBUG=n
 WD=$( pwd )
 
-TSCLIENTAPPS=(
+TSAPPS=(
+    "photo_stats"
     "webgl_cube"
     "webgl_text"
 )
 
-NGCLIENTAPPS=( 
+NGAPPS=( 
     "bandwidth"
     "binary_clock"
     "byte_counter"
@@ -25,7 +26,7 @@ NGCLIENTAPPS=(
     "weekend_countdown"
 )
 
-copy_client_app() {
+copy_app() {
     local APP=$1
 
     # https://silentorbit.com/notes/2013/08/rsync-by-extension/
@@ -82,7 +83,7 @@ update_script_refs() {
     done
 }
 
-ensure_client_dir() {
+ensure_dir() {
     local APP=$1
 
     if [ ! -d "${SRCDIR}/dist/wwwroot/js/${APP}" ]; then
@@ -90,19 +91,19 @@ ensure_client_dir() {
     fi
 }
 
-publish_client_apps() {
+publish_apps() {
     # non-angular apps won't have the hash in their filename
-    for APP in ${TSCLIENTAPPS[@]}; do
-        ensure_client_dir "${APP}"
-        copy_client_app "${APP}"
+    for APP in ${TSAPPS[@]}; do
+        ensure_dir "${APP}"
+        copy_app "${APP}"
         uglify_app "${APP}"
         update_script_refs "${APP}"
     done
 
     # angular cli will bake in a hash to the production filenames
-    for APP in ${NGCLIENTAPPS[@]}; do
-        ensure_client_dir "${APP}"
-        copy_client_app "${APP}"
+    for APP in ${NGAPPS[@]}; do
+        ensure_dir "${APP}"
+        copy_app "${APP}"
         update_script_refs "${APP}"
     done
 }
@@ -111,9 +112,9 @@ publish_client_apps() {
 echo '***************************************'
 echo '** STEP 1: build client applications **'
 echo '***************************************'
-cd $"{SRCDIR}/client_apps"
-./rebuild-all.sh y
-cd $"{WD}"
+cd "${SRCDIR}/client_apps"
+./rebuild-all.sh y y
+cd "${WD}"
 
 echo ''
 echo '**************************************'
@@ -133,7 +134,7 @@ cp -PR "${SRCDIR}/mikeandwan.us/wwwroot" "${SRCDIR}/dist"
 cp "${SRCDIR}/mikeandwan.us/project.json" "${SRCDIR}/dist"
 cp "${SRCDIR}/mikeandwan.us/config.json" "${SRCDIR}/dist"
 
-publish_client_apps
+publish_apps
 
 echo ''
 echo '**************************************************************'

@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NLog.Extensions.Logging;
 using NMagickWand;
 using Maw.Data.EntityFramework.Blogs;
 using Maw.Data.EntityFramework.Identity;
@@ -33,7 +34,6 @@ using MawMvcApp.ViewModels.About;
 namespace MawMvcApp
 {
     // TODO: review/fix bootstrap accordian panels (right sidebar), animation is too fast on FF - ok on chrome
-    // TODO: nlog?
     // TODO: research viewcomponents
     public class Startup
     {
@@ -117,16 +117,20 @@ namespace MawMvcApp
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole();
-
             if (env.IsDevelopment())
             {
+                loggerFactory.AddConsole();
+
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+
                 AddDevPathMappings(app);
             }
             else
             {
+                loggerFactory.AddNLog();
+                env.ConfigureNLog("nlog.config");
+
                 app.UseExceptionHandler("/error/");
             }
 
@@ -166,7 +170,7 @@ namespace MawMvcApp
 
         void AddDevPathMapping(IApplicationBuilder app, string localRelativePath, string urlPath)
         {
-            app.UseStaticFiles(new StaticFileOptions()
+            app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), localRelativePath)),
                 RequestPath = new PathString(urlPath)

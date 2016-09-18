@@ -24,6 +24,8 @@
         "Microsoft.Extensions.Configuration.Json": "1.0.0",
         "Microsoft.Extensions.Logging.Console": "1.0.0",
         "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
+        "NLog.Extensions.Logging": "1.0.0-rtm-alpha4",
+        "NMagickWand": "0.5.0",
         "Maw.Data": {
             "target": "project"
         },
@@ -35,8 +37,7 @@
         },
         "Maw.TagHelpers": {
             "target": "project"
-        },
-        "NMagickWand": "0.5.0"
+        }
     },
     "frameworks": {
         "net451": {
@@ -69,8 +70,8 @@
         "include": [ 
             "wwwroot", 
             "Views",
-            "project.json",
-            "config.json" 
+            "config.json",
+            "nlog.config"
         ]
     }
 }

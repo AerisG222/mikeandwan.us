@@ -1,6 +1,7 @@
 # script to prepare the production build
 SSH_REMOTE_HOST=tifa
 SSH_USERNAME=mmorano
+MEDIADIR=/srv/www/website_assets
 SRCDIR=/home/mmorano/git/mikeandwan.us
 DEBUG=n
 WD=$( pwd )
@@ -108,6 +109,28 @@ publish_apps() {
     done
 }
 
+link_media() {
+    local LINKROOT=$1
+
+    if [ ! -L "${LINKROOT}/images" ]; then
+        ln -s "${MEDIADIR}/images_new" "${LINKROOT}/images"
+    fi
+    if [ ! -L "${LINKROOT}/movies" ]; then
+        ln -s "${MEDIADIR}/movies" "${LINKROOT}/movies"
+    fi
+}
+
+unlink_media() {
+    local LINKROOT=$1
+
+    if [ -L "${LINKROOT}/images" ]; then
+        rm "${LINKROOT}/images"
+    fi
+    if [ -L "${LINKROOT}/movies" ]; then
+        rm "${LINKROOT}/movies"
+    fi
+}
+
 
 echo '***************************************'
 echo '** STEP 1: build client applications **'
@@ -124,23 +147,26 @@ if [ -d "${SRCDIR}/dist" ]; then
     rm -rf "${SRCDIR}/dist"
 fi
 
+# remove dev links, otherwise these are copied during publish
+unlink_media "${SRCDIR}/mikeandwan.us/wwwroot"
+
 cd "${SRCDIR}/mikeandwan.us"
 dotnet publish -f netcoreapp1.0 -o "${SRCDIR}/dist" -c Release
-cd $"{WD}"
-
-# hmm, the included assets are not included, so manually copy these for now
-cp -PR "${SRCDIR}/mikeandwan.us/Views" "${SRCDIR}/dist"
-cp -PR "${SRCDIR}/mikeandwan.us/wwwroot" "${SRCDIR}/dist"
-cp "${SRCDIR}/mikeandwan.us/project.json" "${SRCDIR}/dist"
-cp "${SRCDIR}/mikeandwan.us/config.json" "${SRCDIR}/dist"
 
 publish_apps
+
+# add the media links for testing
+link_media "${SRCDIR}/dist/wwwroot"
 
 echo ''
 echo '**************************************************************'
 echo '** STEP 3: go to localhost:5000 to test - hit CTL-C to quit **'
 echo '**************************************************************'
-( dotnet "${SRCDIR}/dist/mikeandwan.us.dll" ) 
+cd "${SRCDIR}/dist"
+( dotnet "mikeandwan.us.dll" ) 
+
+# cleanup
+unlink_media "${SRCDIR}/dist/wwwroot"
 
 echo ''
 echo '********************'

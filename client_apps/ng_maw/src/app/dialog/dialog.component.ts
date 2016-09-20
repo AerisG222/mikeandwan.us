@@ -13,7 +13,7 @@ export class DialogComponent implements AfterViewInit {
     isVisible: boolean = false;
     @Input() title: string = null;
     buttons: Array<DialogButton> = [];
-    @Output() buttonClick: EventEmitter<string> = new EventEmitter<string>();
+    @Output() buttonClick: EventEmitter<DialogButton> = new EventEmitter<DialogButton>();
     @Output() cancel: EventEmitter<any> = new EventEmitter<any>();
     @Input() sizeClass: string;
 
@@ -50,6 +50,6 @@ export class DialogComponent implements AfterViewInit {
     }
 
     onButtonClick(btn: DialogButton): void {
-        this.buttonClick.next(btn.cmd);
+        this.buttonClick.next(btn);
     }
 }

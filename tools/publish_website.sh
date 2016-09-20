@@ -192,7 +192,7 @@ if [ "${dodeploy}" == "y" ]; then
         sudo systemctl stop supervisord.service
         sudo systemctl stop nginx.service
 
-        killall dotnet
+        sudo killall dotnet
         
         if [ -d /srv/www/mikeandwan.us ]; then
             if [ -d /srv/www/mikeandwan.us_old ]; then

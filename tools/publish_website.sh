@@ -176,7 +176,7 @@ echo 'Would you like to deploy to production? [y/n]'
 read dodeploy
 
 if [ "${dodeploy}" == "y" ]; then
-    rsync -avh "${SRDDIR}/dist" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/
+    rsync -avh "${SRCDIR}/dist" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/
 
     ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
         echo \"These commands will be run on: \$( uname -n )\"
@@ -189,13 +189,12 @@ if [ "${dodeploy}" == "y" ]; then
 
         sudo restorecon -R /srv/www/_staging
         
-        sudo ln -s /srv/www/website_assets/photos/ /srv/www/_staging/images
-        sudo ln -s /srv/www/website_assets/flash/ /srv/www/_staging/swf
-        sudo ln -s /srv/www/website_assets/videos /srv/www/_staging/videos
-
+        sudo systemctl stop supervisord.service
         sudo systemctl stop nginx.service
         sudo systemctl stop mikeandwan.us.service
 
+        killall dotnet
+        
         if [ -d /srv/www/mikeandwan.us ]; then
             if [ -d /srv/www/mikeandwan.us_old ]; then
                 sudo rm -rf /srv/www/mikeandwan.us_old
@@ -204,11 +203,11 @@ if [ "${dodeploy}" == "y" ]; then
             sudo mv /srv/www/mikeandwan.us /srv/www/mikeandwan.us_old
         fi
 
-        sudo mv /srv/www/mikeandwan.us /srv/www/mikeandwan.us_old
         sudo mv /srv/www/_staging /srv/www/mikeandwan.us
 
         sudo systemctl start mikeandwan.us.service
         sudo systemctl start nginx.service
+        sudo systemctl start supervisord.service
     "
 fi
 

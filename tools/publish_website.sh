@@ -191,7 +191,6 @@ if [ "${dodeploy}" == "y" ]; then
         
         sudo systemctl stop supervisord.service
         sudo systemctl stop nginx.service
-        sudo systemctl stop mikeandwan.us.service
 
         killall dotnet
         
@@ -205,7 +204,6 @@ if [ "${dodeploy}" == "y" ]; then
 
         sudo mv /srv/www/_staging /srv/www/mikeandwan.us
 
-        sudo systemctl start mikeandwan.us.service
         sudo systemctl start nginx.service
         sudo systemctl start supervisord.service
     "

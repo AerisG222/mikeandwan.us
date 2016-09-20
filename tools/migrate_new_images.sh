@@ -4,7 +4,7 @@
 SSH_REMOTE_HOST=tifa
 SSH_USERNAME=mmorano
 PATH_IMAGE_ROOT="/srv/www/website_assets/images_new"
-DEST_IMAGE_ROOT="/srv/www/images"
+DEST_IMAGE_ROOT="/srv/www/website_assets/images"
 
 echo '***************************************************'
 echo '** DELETE LIVE ASSETS BEFORE RUNNING THIS SCRIPT **'

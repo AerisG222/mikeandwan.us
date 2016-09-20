@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 //using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -134,6 +135,11 @@ namespace MawMvcApp
 
                 app.UseExceptionHandler("/error/");
             }
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.All
+            });
 
             /* TODO: see if we need to force any cookie settings (if so, HttpOnly will interfere with custom XSRF API filters)
             app.UseCookiePolicy(new CookiePolicyOptions

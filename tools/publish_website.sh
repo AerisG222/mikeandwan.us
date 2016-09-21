@@ -187,12 +187,11 @@ if [ "${dodeploy}" == "y" ]; then
 
         sudo mv dist /srv/www/_staging
 
+        sudo chown -R root:root /srv/www/_staging
         sudo restorecon -R /srv/www/_staging
         
-        sudo systemctl stop supervisord.service
         sudo systemctl stop nginx.service
-
-        sudo killall dotnet
+        sudo supervisorctl stop mikeandwan.us
         
         if [ -d /srv/www/mikeandwan.us ]; then
             if [ -d /srv/www/mikeandwan.us_old ]; then
@@ -204,8 +203,8 @@ if [ "${dodeploy}" == "y" ]; then
 
         sudo mv /srv/www/_staging /srv/www/mikeandwan.us
 
+        sudo supervisorctl start mikeandwan.us
         sudo systemctl start nginx.service
-        sudo systemctl start supervisord.service
     "
 fi
 

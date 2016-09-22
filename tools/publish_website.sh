@@ -135,9 +135,13 @@ unlink_media() {
 echo '***************************************'
 echo '** STEP 1: build client applications **'
 echo '***************************************'
-cd "${SRCDIR}/client_apps"
-./rebuild-all.sh y y
-cd "${WD}"
+DOBUILDCLIENT=n
+read -e -r -p "Build Client Apps? [y/N]" DOBUILDCLIENT
+if [ "${DOBUILDCLIENT}" = "y" ]; then
+    cd "${SRCDIR}/client_apps"
+    ./rebuild-all.sh y y
+    cd "${WD}"
+fi
 
 echo ''
 echo '**************************************'

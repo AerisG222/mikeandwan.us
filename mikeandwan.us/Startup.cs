@@ -3,7 +3,6 @@ using System.IO;
 using Maw.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
-//using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -137,17 +136,19 @@ namespace MawMvcApp
             }
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.All
-            });
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                });
 
-            /* TODO: see if we need to force any cookie settings (if so, HttpOnly will interfere with custom XSRF API filters)
+            // note: using the forwarded middleware allowed the auth ticket to be marked secure.  however, the antiforgery
+            //       only seems to be set when the antiforgery option is configured with RequireSsl = true.  The policy
+            //       below ensures that all cookies are forced to match the request
+            //       [HttpOnly will interfere with custom XSRF API filters]
             app.UseCookiePolicy(new CookiePolicyOptions
                 {
-                    HttpOnly = HttpOnlyPolicy.Always,
+                    //HttpOnly = HttpOnlyPolicy.Always,
                     Secure = CookieSecurePolicy.SameAsRequest
                 });
-            */
 
             app.UseIdentity();
             app.UseStaticFiles();

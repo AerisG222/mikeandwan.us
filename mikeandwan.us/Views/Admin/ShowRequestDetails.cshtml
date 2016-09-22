@@ -51,6 +51,16 @@
     </tr>
 </table>
 
+<h2>Headers</h2>
+<table class="table table-condensed table-hover">
+    @foreach(var header in Model.Request.Headers) {
+        <tr>
+            <th>@header.Key</th>
+            <td>@header.Value</td>
+        </tr>
+    }
+</table>
+
 <h2>Cookies</h2>
 <table class="table table-condensed table-hover">
     <tr>

@@ -1,0 +1,66 @@
+@model Microsoft.AspNetCore.Http.HttpContext
+@{ ViewBag.Title = "admin | request details"; }
+
+@Html.Partial("_PageHeader", "Request Details")
+
+<h2>Basic</h2>
+<table class="table table-condensed table-hover">
+    <tr>
+        <th>Content Length</th>
+        <td>@Model.Request.ContentLength</td>
+    </tr>
+    <tr>
+        <th>Content Type</th>
+        <td>@Model.Request.ContentType</td>
+    </tr>
+    <tr>
+        <th>Protocol</th>
+        <td>@Model.Request.Protocol</td>
+    </tr>
+    <tr>
+        <th>Scheme</th>
+        <td>@Model.Request.Scheme</td>
+    </tr>
+    <tr>
+        <th>Is Https</th>
+        <td>@Model.Request.IsHttps</td>
+    </tr>
+    <tr>
+        <th>Method</th>
+        <td>@Model.Request.Method</td>
+    </tr>
+    <tr>
+        <th>PathBase</th>
+        <td>@Model.Request.PathBase</td>
+    </tr>
+    <tr>
+        <th>Path</th>
+        <td>@Model.Request.Path</td>
+    </tr>
+    <tr>
+        <th>QueryString</th>
+        <td>@Model.Request.QueryString</td>
+    </tr>
+    <tr>
+        <th>RemoteIP</th>
+        <td>@Model.Connection.RemoteIpAddress</td>
+    </tr>
+    <tr>
+        <th>RemotePort</th>
+        <td>@Model.Connection.RemotePort</td>
+    </tr>
+</table>
+
+<h2>Cookies</h2>
+<table class="table table-condensed table-hover">
+    <tr>
+        <th>Name</th>
+        <th>Value</th>
+    </tr>
+    @foreach (var cookie in Model.Request.Cookies) {
+        <tr>
+            <th>@cookie.Key</th>
+            <td>@cookie.Value</td>
+        </tr>
+    }
+</table>

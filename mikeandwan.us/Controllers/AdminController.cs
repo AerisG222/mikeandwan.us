@@ -578,5 +578,14 @@ namespace MawMvcApp.Controllers
 			
 			return View(model);
 		}
+
+
+		[HttpGet("show-request-details")]
+		public ActionResult ShowRequestDetails()
+		{
+			ViewBag.NavigationZone = NavigationZone.Administration;
+			
+			return View(HttpContext);
+		}
     }
 }

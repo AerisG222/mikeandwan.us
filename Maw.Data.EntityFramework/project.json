@@ -10,19 +10,19 @@
         //"emitEntryPoint": true
     },
     "dependencies": {
-        "Microsoft.EntityFrameworkCore": "1.0.1",
         /*
+        "Microsoft.EntityFrameworkCore": "1.0.1",
         "Microsoft.EntityFrameworkCore.Design": {
             "type": "build",
             "version": "1.0.0-preview2-final"
         },
-        */
         "Microsoft.EntityFrameworkCore.Relational": "1.0.1",
         "Microsoft.EntityFrameworkCore.Relational.Design": "1.0.1",
+        */
         "Microsoft.Extensions.DependencyInjection": "1.0.0",
         "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
-        "Npgsql.EntityFrameworkCore.PostgreSQL": "1.0.1",
-        "Npgsql.EntityFrameworkCore.PostgreSQL.Design": "1.0.1"
+        "Npgsql.EntityFrameworkCore.PostgreSQL": "1.0.2",
+        "Npgsql.EntityFrameworkCore.PostgreSQL.Design": "1.0.2"
     },
     "frameworks": {
         "net451": {},

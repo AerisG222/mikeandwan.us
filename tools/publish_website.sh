@@ -31,7 +31,7 @@ copy_app() {
     local APP=$1
 
     # https://silentorbit.com/notes/2013/08/rsync-by-extension/
-    rsync -avh --include '*/' --include '*.js' --exclude '*' "${SRCDIR}/client_apps/${APP}/dist/" "${SRCDIR}/dist/wwwroot/js/${APP}"
+    rsync -ah --include '*/' --include '*.js' --exclude '*' "${SRCDIR}/client_apps/${APP}/dist/" "${SRCDIR}/dist/wwwroot/js/${APP}"
 }
 
 uglify_app() {
@@ -180,7 +180,7 @@ echo 'Would you like to deploy to production? [y/n]'
 read dodeploy
 
 if [ "${dodeploy}" == "y" ]; then
-    rsync -avh "${SRCDIR}/dist" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/
+    rsync -ah "${SRCDIR}/dist" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/
 
     ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
         echo \"These commands will be run on: \$( uname -n )\"

@@ -15,7 +15,7 @@ ASSET_ROOT=`basename "${PATH_IMAGE_ROOT}"`
 
 cd "$PATH_IMAGE_ROOT"
 
-rsync -avh --exclude "*/src*" "${PATH_IMAGE_ROOT}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/
+rsync -ah --exclude "*/src*" "${PATH_IMAGE_ROOT}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/
 
 echo 'deploying (please provide remote password when prompted)...'
 ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "

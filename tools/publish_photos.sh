@@ -7,13 +7,14 @@
 DEBUG=y
 SSH_REMOTE_HOST=tifa
 SSH_USERNAME=mmorano
-PATH_SIZE_PHOTOS="~mmorano/git/SizePhotos/src/SizePhotos"
-PATH_GLACIER_BACKUP="~mmorano/git/GlacierBackup/src/GlacierBackup"
+PATH_SIZE_PHOTOS="/home/mmorano/git/SizePhotos/src/SizePhotos"
+PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup"
 PATH_ASSET_ROOT="/srv/www/website_assets"
 PATH_IMAGE_SOURCE=
 CAT_NAME=
 YEAR=
 PRIVATE_FLAG=
+PREVIEW_MODE=
 
 get_value() {
     local prompt=$1
@@ -37,6 +38,29 @@ if [ "${PATH_IMAGE_SOURCE}" = "" ]; then
 
     # cleanup trailing slash if needed
     PATH_IMAGE_SOURCE="${PATH_IMAGE_SOURCE%/}"
+fi
+
+PREVIEWMODE=$(get_value 'Would you like to preview the photos first [y/n]?' 'n')
+
+if [ "${PREVIEWMODE}" = 'y' ]; then
+    if [ -d "${PATH_IMAGE_SOURCE}/review" ]; then
+        rm -rf "${PATH_IMAGE_SOURCE}/review"
+    fi
+
+    dotnet run -p "${PATH_SIZE_PHOTOS}" SizePhotos -f -p "${PATH_IMAGE_SOURCE}"
+
+    echo ''
+    echo '****'
+    echo '  Now review the images, and delete the ones you do not want.'
+    echo '  After you are done with your review, hit <enter> to proceed.'
+    echo '****'
+    echo ''
+    
+    read -rsp $'Press enter to continue, or CTL-C to exit...\n'
+fi
+
+if [ -d "${PATH_IMAGE_SOURCE}/review" ]; then
+    rm -rf "${PATH_IMAGE_SOURCE}/review"
 fi
 
 if [ "${CAT_NAME}" = "" ]; then
@@ -65,9 +89,13 @@ GLACIER_SQL_FILE="${SQL_FILE}.glacier.sql"
 PATH_LOCAL_GLACIER_SQL_FILE="${ASSET_ROOT}/${GLACIER_SQL_FILE}"
 
 if [ -d "${DEST_IMAGES_CATEGORY_ROOT}" ]; then
-    echo 'This directory already exists in the destination.'
-    echo 'If you are trying to add images to a previously published directory, you must do this manually.'
-    echo 'Otherwise, please give the directory a unique name and then try again.'
+    echo ''
+    echo '****'
+    echo '  This directory already exists in the destination.'
+    echo '  If you are trying to add images to a previously published directory, you must do this manually.'
+    echo '  Otherwise, please give the directory a unique name and then try again.'
+    echo '****'
+    
     exit
 fi
 
@@ -103,7 +131,9 @@ if [ "${DEBUG}" = "y" ]; then
     read -r -p "Continue? [y/n]: " CONTINUE
 
     if [ ! "${CONTINUE}" = "y" ]; then
-        echo 'exiting...'
+        echo ''
+        echo 'Exiting...'
+
         exit
     fi
 fi
@@ -121,7 +151,8 @@ if [ -d "${PATH_IMAGE_SOURCE}/src" ]; then
     rm -rf "${PATH_IMAGE_SOURCE}/prt"
 fi
 
-echo 'processing photos...'
+echo '* processing photos...'
+
 dotnet run -p "${PATH_SIZE_PHOTOS}" SizePhotos -i -c "${CAT_NAME}" -o "${PATH_LOCAL_SQL_FILE}" -p "${PATH_IMAGE_SOURCE}" -w "images" -y ${YEAR} ${PRIVATE_FLAG}
 
 # after processing the first time, we typically want to manually review all the photos to make sure
@@ -130,7 +161,11 @@ dotnet run -p "${PATH_SIZE_PHOTOS}" SizePhotos -i -c "${CAT_NAME}" -o "${PATH_LO
 read -r -p "Deploy assets now? [y/n]: " DEPLOY
 
 if [ ! "${DEPLOY}" = "y" ]; then
-    echo 'exiting w/o deploying...'
+    echo ''
+    echo '****'
+    echo '  Exiting w/o deploying...'
+    echo '****'
+
     exit
 fi
 
@@ -140,28 +175,27 @@ fi
 #################################################
 mkdir "${DEST_IMAGES_YEAR_ROOT}"
 
-echo 'moving photos for local site...'
+echo '* moving photos for local site...'
 mv "${PATH_IMAGE_SOURCE}" "${DEST_IMAGES_YEAR_ROOT}"
 
-echo 'applying sql to local database...'
+echo '* applying sql to local database...'
 psql -d maw_website -f "${PATH_LOCAL_SQL_FILE}"
 
-echo 'backing up photos to AWS Glacier...'
+echo '* backing up photos to AWS Glacier...'
 dotnet run -p "${PATH_GLACIER_BACKUP}" GlacierBackup glacier_backup us-east-1 photos assets "${DEST_IMAGES_CATEGORY_ROOT}" "${DEST_IMAGES_ROOT}/" photosql "${PATH_LOCAL_GLACIER_SQL_FILE}"
 
-echo 'applying glacier sql file to local database...'
+echo '* applying glacier sql file to local database...'
 psql -d maw_website -f "${PATH_LOCAL_GLACIER_SQL_FILE}"
-
 
 #################################################
 ## REMOTE PROCESSING
 #################################################
-echo 'copying files to remote...'
-rsync -avh --exclude "*/src*" "${DEST_IMAGES_CATEGORY_ROOT}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/
+echo '* copying files to remote...'
+rsync -ah --exclude "*/src*" "${DEST_IMAGES_CATEGORY_ROOT}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/
 scp "${PATH_LOCAL_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
 scp "${PATH_LOCAL_GLACIER_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
 
-echo 'deploying (please provide remote password when prompted)...'
+echo '* deploying (please provide remote password when prompted)...'
 ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
     echo \"These commands will be run on: \$( uname -n )\"
 
@@ -181,5 +215,13 @@ ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
 #################################################
 ## FINAL CLEANUP
 #################################################
-rm "${PATH_LOCAL_SQL_FILE}"
-rm "${PATH_LOCAL_GLACIER_SQL_FILE}"
+read -r -p "Delete SQL Files? [y/n]: " CONTINUE
+if [ "${CONTINUE}" = "y" ]; then
+    rm "${PATH_LOCAL_SQL_FILE}"
+    rm "${PATH_LOCAL_GLACIER_SQL_FILE}"
+fi
+
+echo ''
+echo '****'
+echo '  Completed. Good bye.'
+echo '****'

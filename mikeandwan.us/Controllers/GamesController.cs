@@ -10,9 +10,8 @@ namespace MawMvcApp.Controllers
     public class GamesController
 		: MawBaseController<GamesController>
     {
-		public GamesController(IAuthorizationService authorizationService, 
-		                       ILogger<GamesController> log)
-			: base(authorizationService, log)
+		public GamesController(ILogger<GamesController> log)
+			: base(log)
 		{
 
 		}

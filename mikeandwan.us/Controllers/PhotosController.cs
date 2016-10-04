@@ -31,12 +31,11 @@ namespace MawMvcApp.Controllers
         readonly IAntiforgery _antiForgery;
 
 
-		public PhotosController(IAuthorizationService authorizationService,
-                                ILogger<PhotosController> log,
+		public PhotosController(ILogger<PhotosController> log,
                                 IPhotoRepository photoRepository,
                                 IFileProvider fileProvider,
                                 IAntiforgery antiForgery)
-			: base(authorizationService, log)
+			: base(log)
         {
 			if(photoRepository == null)
 			{

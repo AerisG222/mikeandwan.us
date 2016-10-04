@@ -10,9 +10,8 @@ namespace MawMvcApp.Controllers
     public class WebglController 
 		: MawBaseController<WebglController>
     {
-		public WebglController(IAuthorizationService authorizationService, 
-                               ILogger<WebglController> log)
-			: base(authorizationService, log)
+		public WebglController(ILogger<WebglController> log)
+			: base(log)
 		{
 
 		}

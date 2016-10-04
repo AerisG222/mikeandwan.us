@@ -30,10 +30,9 @@ namespace MawMvcApp.Controllers
         }
 
 
-        public PhotoApiController(IAuthorizationService authorizationService,
-                                  ILogger<PhotoApiController> log,
+        public PhotoApiController(ILogger<PhotoApiController> log,
                                   IPhotoRepository photoRepository)
-            : base(authorizationService, log)
+            : base(log)
         {
             if(photoRepository == null)
             {

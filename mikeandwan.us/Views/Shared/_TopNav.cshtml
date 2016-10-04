@@ -1,4 +1,6 @@
-﻿<nav class="navbar navbar-default navbar-static-top">
+﻿@using MawMvcApp.ViewComponents
+
+<nav class="navbar navbar-default navbar-static-top">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-head">
@@ -8,8 +10,8 @@
             <a class="navbar-brand" href="/">mikeandwan.us</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse-head">
-            @Html.Partial("_PrimaryNavPartial", (MawMvcApp.ViewModels.Navigation.NavigationZone) ViewBag.NavigationZone)
-            @Html.Partial("_AccountStatus", (MawMvcApp.ViewModels.Navigation.NavigationZone) ViewBag.NavigationZone)
+            @await Component.InvokeAsync(nameof(PrimaryNav), new { activeZone = ViewBag.NavigationZone })
+            @await Component.InvokeAsync(nameof(AccountStatus), new { activeZone = ViewBag.NavigationZone })
         </div>
     </div>
 </nav>

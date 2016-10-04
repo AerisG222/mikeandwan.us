@@ -25,13 +25,12 @@ namespace MawMvcApp.Controllers
 		readonly IEmailService _emailService;
 
 
-		public AboutController(IAuthorizationService authorizationService, 
-		                       ILogger<AboutController> log, 
+		public AboutController(ILogger<AboutController> log, 
 							   IOptions<ContactConfig> contactOpts, 
 							   IBlogRepository blogRepository, 
 							   ICaptchaService captchaService, 
 							   IEmailService emailService)
-			: base(authorizationService, log)
+			: base(log)
         {
 			if(contactOpts == null)
 			{

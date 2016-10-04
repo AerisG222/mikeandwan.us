@@ -27,11 +27,10 @@ namespace MawMvcApp.Controllers
         readonly IFileProvider _fileProvider;
 
 
-		public VideosController(IAuthorizationService authorizationService,
-                                ILogger<VideosController> log,
+		public VideosController(ILogger<VideosController> log,
                                 IVideoRepository videoRepository,
                                 IFileProvider fileProvider)
-			: base(authorizationService, log)
+			: base(log)
         {
 			if(videoRepository == null)
 			{

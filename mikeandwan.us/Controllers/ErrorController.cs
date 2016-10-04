@@ -11,9 +11,8 @@ namespace MawMvcApp.Controllers
 	public class ErrorController
         : MawBaseController<ErrorController>
 	{
-		public ErrorController(IAuthorizationService authorizationService,
-		                       ILogger<ErrorController> log)
-			: base(authorizationService, log)
+		public ErrorController(ILogger<ErrorController> log)
+			: base(log)
 		{
 
 		}

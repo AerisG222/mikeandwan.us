@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using MawMvcApp.ViewModels;
 
 
 namespace MawMvcApp.Controllers
@@ -12,33 +9,17 @@ namespace MawMvcApp.Controllers
     public class MawBaseController<T>
         : Controller
     {
-		protected readonly IAuthorizationService _authzService;
 		protected readonly ILogger<T> _log;
 		
 
-		public MawBaseController(IAuthorizationService authorizationService, 
-		                         ILogger<T> log)
+		public MawBaseController(ILogger<T> log)
 		{
-			if(authorizationService == null)
-			{
-				throw new ArgumentNullException(nameof(authorizationService));
-			}
-
 			if(log == null)
 			{
 				throw new ArgumentNullException(nameof(log));
 			}
 			
-			_authzService = authorizationService;
 			_log = log; 
-		}
-
-
-		public async override void OnActionExecuted(ActionExecutedContext context)
-		{
-			ViewBag.AuthzPhoto = await _authzService.AuthorizeAsync(User, null, MawConstants.POLICY_VIEW_PHOTOS);
-			ViewBag.AuthzVideo = await _authzService.AuthorizeAsync(User, null, MawConstants.POLICY_VIEW_VIDEOS);
-			ViewBag.AuthzAdmin = await _authzService.AuthorizeAsync(User, null, MawConstants.POLICY_ADMIN_SITE);
 		}
 		
 		

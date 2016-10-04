@@ -27,10 +27,9 @@ namespace MawMvcApp.Controllers
         }
 
 
-		public VideosApiController(IAuthorizationService authorizationService, 
-                                   ILogger<VideosApiController> log, 
+		public VideosApiController(ILogger<VideosApiController> log, 
                                    IVideoRepository videoRepository)
-			: base(authorizationService, log)
+			: base(log)
         {
 			if(videoRepository == null)
 			{

@@ -19,10 +19,9 @@ namespace MawMvcApp.Controllers
 		IFileProvider _fileProvider { get; set; }
 
 
-		public ToolsController(IAuthorizationService authorizationService, 
-		                       ILogger<ToolsController> log, 
+		public ToolsController(ILogger<ToolsController> log, 
 							   IHostingEnvironment env)
-			: base(authorizationService, log)
+			: base(log)
         {
 			if(env == null)
 			{

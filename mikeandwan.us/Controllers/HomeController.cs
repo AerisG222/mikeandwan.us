@@ -10,9 +10,8 @@ namespace MawMvcApp.Controllers
     public class HomeController 
         : MawBaseController<HomeController>
     {
-		public HomeController(IAuthorizationService authorizationService, 
-                              ILogger<HomeController> log)
-			: base(authorizationService, log)
+		public HomeController(ILogger<HomeController> log)
+			: base(log)
 		{
 
 		}

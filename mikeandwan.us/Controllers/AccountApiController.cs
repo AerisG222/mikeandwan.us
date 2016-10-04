@@ -20,10 +20,9 @@ namespace MawMvcApp.Controllers
 		readonly ILoginService _loginService;
 
 
-		public AccountApiController(IAuthorizationService authorizationService, 
-		                            ILogger<AccountApiController> log, 
+		public AccountApiController(ILogger<AccountApiController> log, 
 									ILoginService loginService)
-			: base(authorizationService, log)
+			: base(log)
         {
 			if(loginService == null)
 			{

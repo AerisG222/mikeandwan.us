@@ -32,15 +32,14 @@ namespace MawMvcApp.Controllers
 		readonly ILoginService _loginService;
 
 
-		public AccountController(IAuthorizationService authorizationService, 
-		                         ILogger<AccountController> log, 
+		public AccountController(ILogger<AccountController> log, 
 								 IOptions<ContactConfig> contactOpts, 
 								 IUserRepository userRepository, 
 			                     SignInManager<MawUser> signInManager, 
 								 UserManager<MawUser> userManager, 
 								 IEmailService emailService,
 								 ILoginService loginService)
-			: base(authorizationService, log)
+			: base(log)
         {
 			if(userRepository == null)
 			{

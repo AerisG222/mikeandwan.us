@@ -34,15 +34,14 @@ namespace MawMvcApp.Controllers
 		readonly IEmailService _emailSvc;
 
 
-		public AdminController(IAuthorizationService authorizationService, 
-		                       ILogger<AdminController> log, 
+		public AdminController(ILogger<AdminController> log, 
 							   IOptions<EmailConfig> emailOpts, 
 							   IUserRepository userRepository,  
 		                       UserManager<MawUser> userManager, 
 							   RoleManager<MawRole> roleManager, 
 							   IBlogRepository blogRepository, 
 							   IEmailService emailService)
-			: base(authorizationService, log)
+			: base(log)
         {
 			if(emailOpts == null)
 			{

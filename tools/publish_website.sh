@@ -2,7 +2,8 @@
 SSH_REMOTE_HOST=tifa
 SSH_USERNAME=mmorano
 MEDIADIR=/srv/www/website_assets
-SRCDIR=/home/mmorano/git/mikeandwan.us
+SRCDIR=/home/mmorano/git/mikeandwan.us/src
+DISTDIR=/home/mmorano/git/mikeandwan.us/dist
 DEBUG=n
 WD=$( pwd )
 
@@ -31,15 +32,15 @@ copy_app() {
     local APP=$1
 
     # https://silentorbit.com/notes/2013/08/rsync-by-extension/
-    rsync -ah --include '*/' --include '*.js' --exclude '*' "${SRCDIR}/client_apps/${APP}/dist/" "${SRCDIR}/dist/wwwroot/js/${APP}"
+    rsync -ah --include '*/' --include '*.js' --exclude '*' "${SRCDIR}/client_apps/${APP}/dist/" "${DISTDIR}/wwwroot/js/${APP}"
 }
 
 uglify_app() {
     local APP=$1
 
-    echo "${SRCDIR}/dist/wwwroot/js/${APP}"
+    echo "${DISTDIR}/wwwroot/js/${APP}"
 
-    for JS in $( find "${SRCDIR}/dist/wwwroot/js/${APP}" -name '*.js' ); do
+    for JS in $( find "${DISTDIR}/wwwroot/js/${APP}" -name '*.js' ); do
         local DIRNAME=$( dirname "$JS" )
         local FILENAME=$( basename "$JS" )
         local EXTENSION="${FILENAME##*.}"
@@ -56,7 +57,7 @@ uglify_app() {
 update_script_refs() {
     local APP=$1
 
-    for JS in $( find "${SRCDIR}/dist/wwwroot/js/${APP}" -name '*.js' ); do
+    for JS in $( find "${DISTDIR}/wwwroot/js/${APP}" -name '*.js' ); do
         local NEWFILENAME=$( basename "$JS" )
         local EXTENSION="${NEWFILENAME##*.}"
         local ORIGFILENAME="${NEWFILENAME%%.*}"
@@ -80,15 +81,15 @@ update_script_refs() {
             echo ''
         fi
 
-        find "${SRCDIR}/dist" -type f -name "*.cshtml" -exec sed -i "s#${ORIGURL}#${NEWURL}#g" {} +
+        find "${DISTDIR}" -type f -name "*.cshtml" -exec sed -i "s#${ORIGURL}#${NEWURL}#g" {} +
     done
 }
 
 ensure_dir() {
     local APP=$1
 
-    if [ ! -d "${SRCDIR}/dist/wwwroot/js/${APP}" ]; then
-        mkdir "${SRCDIR}/dist/wwwroot/js/${APP}"
+    if [ ! -d "${DISTDIR}/wwwroot/js/${APP}" ]; then
+        mkdir "${DISTDIR}/wwwroot/js/${APP}"
     fi
 }
 
@@ -147,30 +148,30 @@ echo ''
 echo '**************************************'
 echo '** STEP 2: prepare production build **'
 echo '**************************************'
-if [ -d "${SRCDIR}/dist" ]; then
-    rm -rf "${SRCDIR}/dist"
+if [ -d "${DISTDIR}" ]; then
+    rm -rf "${DISTDIR}"
 fi
 
 # remove dev links, otherwise these are copied during publish
 unlink_media "${SRCDIR}/mikeandwan.us/wwwroot"
 
 cd "${SRCDIR}/mikeandwan.us"
-dotnet publish -f netcoreapp1.0 -o "${SRCDIR}/dist" -c Release
+dotnet publish -f netcoreapp1.0 -o "${DISTDIR}" -c Release
 
 publish_apps
 
 # add the media links for testing
-link_media "${SRCDIR}/dist/wwwroot"
+link_media "${DISTDIR}/wwwroot"
 
 echo ''
 echo '**************************************************************'
 echo '** STEP 3: go to localhost:5000 to test - hit CTL-C to quit **'
 echo '**************************************************************'
-cd "${SRCDIR}/dist"
-( dotnet "mikeandwan.us.dll" ) 
+cd "${DISTDIR}"
+( ASPNETCORE_ENVIRONMENT=production dotnet "mikeandwan.us.dll" ) 
 
 # cleanup
-unlink_media "${SRCDIR}/dist/wwwroot"
+unlink_media "${DISTDIR}/wwwroot"
 
 echo ''
 echo '********************'
@@ -180,7 +181,7 @@ echo 'Would you like to deploy to production? [y/n]'
 read dodeploy
 
 if [ "${dodeploy}" == "y" ]; then
-    rsync -ah "${SRCDIR}/dist" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/
+    rsync -ah "${DISTDIR}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/
 
     ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
         echo \"These commands will be run on: \$( uname -n )\"

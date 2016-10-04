@@ -52,5 +52,5 @@ install:
   - dotnet restore
 script:
   # Run tests
-  - cd mikeandwan.us
+  - cd src/mikeandwan.us
   - dotnet build -c $CONFIGURATION -f $FRAMEWORK

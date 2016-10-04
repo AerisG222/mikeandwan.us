@@ -33,8 +33,6 @@ using MawMvcApp.ViewModels.About;
 
 namespace MawMvcApp
 {
-    // TODO: review/fix bootstrap accordian panels (right sidebar), animation is too fast on FF - ok on chrome
-    // TODO: research viewcomponents
     // TODO: googlemaps add async defer back and handle callback when it loads
     public class Startup
     {

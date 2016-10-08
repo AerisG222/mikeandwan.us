@@ -47,7 +47,7 @@ if [ "${PREVIEWMODE}" = 'y' ]; then
         rm -rf "${PATH_IMAGE_SOURCE}/review"
     fi
 
-    dotnet run -p "${PATH_SIZE_PHOTOS}" -f -p "${PATH_IMAGE_SOURCE}"
+    dotnet run -p "${PATH_SIZE_PHOTOS}" SizePhotos -f -p "${PATH_IMAGE_SOURCE}"
 
     echo ''
     echo '****'
@@ -153,7 +153,7 @@ fi
 
 echo '* processing photos...'
 
-dotnet run -p "${PATH_SIZE_PHOTOS}" -i -c "${CAT_NAME}" -o "${PATH_LOCAL_SQL_FILE}" -p "${PATH_IMAGE_SOURCE}" -w "images" -y ${YEAR} ${PRIVATE_FLAG}
+dotnet run -p "${PATH_SIZE_PHOTOS}" SizePhotos -i -c "${CAT_NAME}" -o "${PATH_LOCAL_SQL_FILE}" -p "${PATH_IMAGE_SOURCE}" -w "images" -y ${YEAR} ${PRIVATE_FLAG}
 
 # after processing the first time, we typically want to manually review all the photos to make sure
 # we keep the good ones and toss the bad / dupes /etc.  This check allows the user to bail if this

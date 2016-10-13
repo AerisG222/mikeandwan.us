@@ -136,8 +136,7 @@ export class SpinnerComponent implements OnInit, OnDestroy {
     }
 
     private getScore(deg: number): number {
-        if(deg < 0)
-        {
+        if (deg < 0) {
             deg = 360 + deg;
         }
 

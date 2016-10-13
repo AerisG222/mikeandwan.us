@@ -15,7 +15,7 @@ export class CanPlayGuard implements CanActivate {
         }
 
         this._router.navigateByUrl('/');
-        
+
         return false;
     }
 }

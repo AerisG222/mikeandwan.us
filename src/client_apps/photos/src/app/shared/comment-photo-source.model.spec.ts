@@ -1,17 +1,11 @@
-import {
-    describe,
-    ddescribe,
-    expect,
-    iit,
-    it
-} from '@angular/core/testing';
+/* tslint:disable:no-unused-variable */
+
+import { TestBed, async, inject } from '@angular/core/testing';
 import {CommentPhotoSource} from './comment-photo-source.model';
 
 describe('CommentPhotoSource', () => {
-    /*
-    it('should create an instance', () => {
-      expect(new CommentPhotoSource()).toBeTruthy();
-    });
-    */
-    expect(true).toBeTruthy();
+  it('should create an instance', () => {
+    let component = new CommentPhotoSource(null, null, null);
+    expect(component).toBeTruthy();
+  });
 });

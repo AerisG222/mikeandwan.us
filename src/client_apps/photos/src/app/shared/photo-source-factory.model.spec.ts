@@ -1,17 +1,16 @@
-import {
-    describe,
-    ddescribe,
-    expect,
-    iit,
-    it
-} from '@angular/core/testing';
+/* tslint:disable:no-unused-variable */
+
+import { TestBed, async, inject } from '@angular/core/testing';
 import {PhotoSourceFactory} from './photo-source-factory.model';
 
 describe('PhotoSourceFactory', () => {
-    /*
-    it('should create an instance', () => {
-      expect(new PhotoSourceFactory()).toBeTruthy();
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [PhotoSourceFactory]
     });
-    */
-    expect(true).toBeTruthy();
+  });
+
+  it('should ...', inject([PhotoSourceFactory], (service: PhotoSourceFactory) => {
+    expect(service).toBeTruthy();
+  }));
 });

@@ -39,6 +39,8 @@ import { PhotoSourceFactory } from './shared/photo-source-factory.model';
 import { PhotoStateService } from './shared/photo-state.service';
 import { PhotoNavigationService } from './shared/photo-navigation.service';
 
+// TODO: the odd constants for data below are to satisfy an AOT requirement - is there a better way?
+//  SEE: https://github.com/angular/angular/issues/10789
 @NgModule({
     imports: [
         BrowserModule,
@@ -46,11 +48,11 @@ import { PhotoNavigationService } from './shared/photo-navigation.service';
         HttpModule,
         RouterModule.forRoot([
             { path: '',                     component: ModeComponent },
-            { path: 'random',               component: PhotoListComponent,   data: new ModeRouteInfo(RouteMode.Random) },
+            { path: 'random',               component: PhotoListComponent,   data: ModeRouteInfo.RANDOM },
             { path: 'year/:year',           component: CategoryListComponent },
-            { path: 'year/:year/:category', component: PhotoListComponent,   data: new ModeRouteInfo(RouteMode.Category) },
-            { path: 'comment/:type/:order', component: PhotoListComponent,   data: new ModeRouteInfo(RouteMode.Comment) },
-            { path: 'rating/:type/:order',  component: PhotoListComponent,   data: new ModeRouteInfo(RouteMode.Rating) },
+            { path: 'year/:year/:category', component: PhotoListComponent,   data: ModeRouteInfo.CATEGORY },
+            { path: 'comment/:type/:order', component: PhotoListComponent,   data: ModeRouteInfo.COMMENT },
+            { path: 'rating/:type/:order',  component: PhotoListComponent,   data: ModeRouteInfo.RATING },
             { path: ':mode',                component: ModeComponent },
             { path: '**',                   redirectTo: '/' }
         ])

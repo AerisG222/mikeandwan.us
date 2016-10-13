@@ -1,11 +1,11 @@
 /* tslint:disable:no-unused-variable */
 
-import { addProviders, async, inject } from '@angular/core/testing';
+import { TestBed, async } from '@angular/core/testing';
 import {CanPlayGuard} from './can-play-guard';
-/*
-describe('CanPlayGuard', () => {
+
+describe('Component: CanPlayGuard', () => {
   it('should create an instance', () => {
-    expect(new CanPlayGuard()).toBeTruthy();
+    let component = new CanPlayGuard(null, null);
+    expect(component).toBeTruthy();
   });
 });
-*/

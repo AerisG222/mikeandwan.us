@@ -1,17 +1,16 @@
-import {
-    describe,
-    ddescribe,
-    expect,
-    iit,
-    it
-} from '@angular/core/testing';
+/* tslint:disable:no-unused-variable */
+
+import { TestBed, async, inject } from '@angular/core/testing';
 import {RandomPhotoSource} from './random-photo-source.model';
 
 describe('RandomPhotoSource', () => {
-    /*
-    it('should create an instance', () => {
-      expect(new RandomPhotoSource()).toBeTruthy();
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [RandomPhotoSource]
     });
-    */
-    expect(true).toBeTruthy();
+  });
+
+  it('should ...', inject([RandomPhotoSource], (service: RandomPhotoSource) => {
+    expect(service).toBeTruthy();
+  }));
 });

@@ -1,17 +1,16 @@
-import {
-    beforeEachProviders,
-    it,
-    describe,
-    expect,
-    inject
-} from '@angular/core/testing';
+/* tslint:disable:no-unused-variable */
+
+import { TestBed, async, inject } from '@angular/core/testing';
 import { VideoDataService } from './video-data.service';
 
 describe('VideoData Service', () => {
-    beforeEachProviders(() => [VideoDataService]);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [VideoDataService]
+    });
+  });
 
-    it('should ...',
-        inject([VideoDataService], (service: VideoDataService) => {
-            expect(service).toBeTruthy();
-        }));
+  it('should ...', inject([VideoDataService], (service: VideoDataService) => {
+    expect(service).toBeTruthy();
+  }));
 });

@@ -1,17 +1,11 @@
-import {
-    describe,
-    ddescribe,
-    expect,
-    iit,
-    it
-} from '@angular/core/testing';
+/* tslint:disable:no-unused-variable */
+
+import { TestBed, async, inject } from '@angular/core/testing';
 import {RatingPhotoSource} from './rating-photo-source.model';
 
 describe('RatingPhotoSource', () => {
-    /*
-    it('should create an instance', () => {
-      expect(new RatingPhotoSource()).toBeTruthy();
-    });
-    */
-    expect(true).toBeTruthy();
+  it('should create an instance', () => {
+    let component = new RatingPhotoSource(null, null, null);
+    expect(component).toBeTruthy();
+  });
 });

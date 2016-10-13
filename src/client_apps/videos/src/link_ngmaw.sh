@@ -3,3 +3,5 @@
 
 rm -rf ./ng_maw
 cp -R ../../ng_maw/src/app/ ./ng_maw
+rm -rf ./ng_maw/rating
+rm -rf ./ng_maw/three-dlink

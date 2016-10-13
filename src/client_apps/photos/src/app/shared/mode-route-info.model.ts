@@ -8,6 +8,11 @@ export class ModeRouteInfo {
     static get PARAM_ORDER(): string { return 'order'; };
     static get PARAM_CATEGORY(): string { return 'category'; };
 
+    static RANDOM = new ModeRouteInfo(RouteMode.Random);
+    static CATEGORY = new ModeRouteInfo(RouteMode.Category);
+    static COMMENT = new ModeRouteInfo(RouteMode.Comment);
+    static RATING = new ModeRouteInfo(RouteMode.Rating);
+
     constructor(public mode: RouteMode) {
 
     }

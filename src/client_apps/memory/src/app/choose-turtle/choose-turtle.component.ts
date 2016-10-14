@@ -4,7 +4,7 @@ import { ICharacter } from '../icharacter.model';
 import { MemoryService } from '../memory.service';
 
 @Component({
-    selector: 'choose-turtle',
+    selector: 'app-choose-turtle',
     templateUrl: 'choose-turtle.component.html',
     styleUrls: [ 'choose-turtle.component.css' ]
 })

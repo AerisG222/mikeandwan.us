@@ -6,15 +6,15 @@
 </ul>
 <div class="tab-content">
     <div class="tab-pane active" id="exif">
-        <exif-table [data]="exifInfo?.exifList"></exif-table>
+        <app-exif-table [data]="exifInfo?.exifList"></app-exif-table>
     </div>
     <div class="tab-pane" id="maker">
-        <exif-table [data]="exifInfo?.makerList"></exif-table>
+        <app-exif-table [data]="exifInfo?.makerList"></app-exif-table>
     </div>
     <div class="tab-pane" id="composite">
-        <exif-table [data]="exifInfo?.compositeList"></exif-table>
+        <app-exif-table [data]="exifInfo?.compositeList"></app-exif-table>
     </div>
     <div class="tab-pane" id="processing">
-        <exif-table [data]="exifInfo?.processingList"></exif-table>
+        <app-exif-table [data]="exifInfo?.processingList"></app-exif-table>
     </div>
 </div>

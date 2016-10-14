@@ -4,7 +4,7 @@ import { ThumbnailInfo, SelectedThumbnail } from './';
 import { ResponsiveService } from '../shared/';
 
 @Component({
-    selector: 'thumbnail-list',
+    selector: 'maw-thumbnail-list',
     templateUrl: 'thumbnail-list.component.html',
     styleUrls: [ 'thumbnail-list.component.css' ]
 })

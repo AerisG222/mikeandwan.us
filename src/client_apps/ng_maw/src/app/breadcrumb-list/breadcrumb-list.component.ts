@@ -4,7 +4,7 @@ import { Breadcrumb } from '../shared/breadcrumb.model';
 import { BreadcrumbService } from '../shared/breadcrumb.service';
 
 @Component({
-    selector: 'breadcrumb-list',
+    selector: 'maw-breadcrumb-list',
     templateUrl: 'breadcrumb-list.component.html',
     styleUrls: [ 'breadcrumb-list.component.css' ]
 })

@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'rating',
+    selector: 'maw-rating',
     templateUrl: 'rating.component.html',
     styleUrls: [ 'rating.component.css' ]
 })

@@ -8,7 +8,7 @@ import { ResponsiveService } from '../shared/responsive.service';
 //       as it will probably always be used together.
 
 @Component({
-    selector: 'pager',
+    selector: 'maw-pager',
     templateUrl: 'pager.component.html',
     styleUrls: [ 'pager.component.css' ]
 })

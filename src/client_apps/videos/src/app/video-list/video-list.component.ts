@@ -14,7 +14,7 @@ import { VideoStateService } from '../shared/video-state.service';
 import { VideoThumbnailInfo } from '../shared/video-thumbnail-info.model';
 
 @Component({
-    selector: 'video-list',
+    selector: 'app-video-list',
     templateUrl: 'video-list.component.html',
     styleUrls: [ 'video-list.component.css' ]
 })

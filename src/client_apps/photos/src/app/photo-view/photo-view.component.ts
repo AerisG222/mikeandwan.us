@@ -15,7 +15,7 @@ import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 import { SaveDialogComponent } from '../save-dialog/save-dialog.component';
 
 @Component({
-    selector: 'photo-view',
+    selector: 'app-photo-view',
     templateUrl: 'photo-view.component.html',
     styleUrls: [ 'photo-view.component.css' ]
 })

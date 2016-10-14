@@ -20,7 +20,7 @@ import { Photo } from '../shared/photo.model';
 import { PhotoDialogComponent } from '../photo-dialog/photo-dialog.component';
 
 @Component({
-    selector: 'photo-list',
+    selector: 'app-photo-list',
     templateUrl: 'photo-list.component.html',
     styleUrls: [ 'photo-list.component.css' ]
 })

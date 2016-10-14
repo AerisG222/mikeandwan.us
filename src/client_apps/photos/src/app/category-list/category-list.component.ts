@@ -8,7 +8,7 @@ import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnai
 import { Config, ModeRouteInfo, PhotoNavigationService, PhotoStateService, CategoryThumbnailInfo } from '../shared';
 
 @Component({
-    selector: 'category-list',
+    selector: 'app-category-list',
     templateUrl: 'category-list.component.html',
     styleUrls: [ 'category-list.component.css' ]
 })

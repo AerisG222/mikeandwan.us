@@ -1,7 +1,7 @@
 import { Component, Input, ElementRef, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'three-dlink',
+    selector: 'maw-three-dlink',
     templateUrl: 'three-dlink.component.html',
     styleUrls: [ 'three-dlink.component.css' ]
 })

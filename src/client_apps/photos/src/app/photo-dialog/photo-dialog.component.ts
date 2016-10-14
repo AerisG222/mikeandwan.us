@@ -7,7 +7,7 @@ import { ResponsiveService } from '../../ng_maw/shared';
 import { IPhoto } from '../shared/iphoto.model';
 
 @Component({
-    selector: 'photo-dialog',
+    selector: 'app-photo-dialog',
     templateUrl: 'photo-dialog.component.html',
     styleUrls: [ 'photo-dialog.component.css' ]
 })

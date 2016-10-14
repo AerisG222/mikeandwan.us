@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Player } from '../player.model';
 
 @Component({
-    selector: 'player-score',
+    selector: 'app-player-score',
     templateUrl: 'player-score.component.html',
     styleUrls: [ 'player-score.component.css' ]
 })

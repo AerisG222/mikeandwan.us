@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { ExifDetail } from '../exif-view/exif-detail.model';
 
 @Component({
-    selector: 'exif-table',
+    selector: 'app-exif-table',
     templateUrl: 'exif-table.component.html',
     styleUrls: [ 'exif-table.component.css' ]
 })

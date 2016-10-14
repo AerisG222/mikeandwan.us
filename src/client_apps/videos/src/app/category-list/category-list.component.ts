@@ -13,7 +13,7 @@ import { VideoDataService } from '../shared/video-data.service';
 import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
-    selector: 'category-list',
+    selector: 'app-category-list',
     templateUrl: 'category-list.component.html',
     styleUrls: [ 'category-list.component.css' ]
 })

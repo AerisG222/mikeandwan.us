@@ -10,7 +10,7 @@ import { ModeRouteInfo } from '../shared/mode-route-info.model';
 import { RouteMode } from '../shared/route-mode.model';
 
 @Component({
-    selector: 'mode',
+    selector: 'app-mode',
     templateUrl: 'mode.component.html',
     styleUrls: [ 'mode.component.css' ]
 })

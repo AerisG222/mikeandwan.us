@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ICardInfo } from '../icard-info.model';
 
 @Component({
-    selector: 'card',
+    selector: 'app-card',
     templateUrl: 'card.component.html',
     styleUrls: [ 'card.component.css' ]
 })

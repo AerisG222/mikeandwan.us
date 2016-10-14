@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Character } from '../character.model';
 
 @Component({
-    selector: 'player-select',
+    selector: 'app-player-select',
     templateUrl: 'player-select.component.html',
     styleUrls: [ 'player-select.component.css' ]
 })

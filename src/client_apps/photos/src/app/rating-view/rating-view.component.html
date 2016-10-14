@@ -4,7 +4,7 @@
         	<label>Your Rating:</label>
         </div>
         <div class="col-sm-9">
-            <rating [maxRating]="5" [rating]="userRating" [editable]="true" (rate)="onRatePhoto($event)"></rating>
+            <maw-rating [maxRating]="5" [rating]="userRating" [editable]="true" (rate)="onRatePhoto($event)"></maw-rating>
         </div>
     </div>
     <div class="row">
@@ -12,7 +12,7 @@
         	<label>Average Rating:</label>
         </div>
         <div class="col-sm-9">
-            <rating [maxRating]="5" [rating]="averageRating"></rating>
+            <maw-rating [maxRating]="5" [rating]="averageRating"></maw-rating>
         </div>
     </div>
 </div>

@@ -12,5 +12,5 @@
     <button type="submit" (click)="showAddress()" class="btn btn-default">Submit</button>
 </div>
 
-<map #map1 (updated)="map2.syncMap($event)"></map>
-<map #map2 (updated)="map1.syncMap($event)"></map>
+<app-map #map1 (updated)="map2.syncMap($event)"></app-map>
+<app-map #map2 (updated)="map1.syncMap($event)"></app-map>

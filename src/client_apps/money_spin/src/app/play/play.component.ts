@@ -4,7 +4,7 @@ import { Player } from '../player.model';
 import { StateService } from '../state.service';
 
 @Component({
-    selector: 'play',
+    selector: 'app-play',
     templateUrl: 'play.component.html',
     styleUrls: [ 'play.component.css' ]
 })

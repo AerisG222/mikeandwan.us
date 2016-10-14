@@ -8,7 +8,7 @@ import { PhotoStateService } from '../shared/photo-state.service';
 import { CategoryBreadcrumb } from '../shared/category-breadcrumb.model';
 
 @Component({
-    selector: 'header',
+    selector: 'app-header',
     templateUrl: 'header.component.html',
     styleUrls: [ 'header.component.css' ]
 })

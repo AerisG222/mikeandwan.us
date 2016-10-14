@@ -4,7 +4,7 @@ import { Character } from '../character.model';
 import { StateService } from '../state.service';
 
 @Component({
-    selector: 'choose-player',
+    selector: 'app-choose-player',
     templateUrl: 'choose-player.component.html',
     styleUrls: [ 'choose-player.component.css' ]
 })

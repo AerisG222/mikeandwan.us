@@ -4,7 +4,7 @@ import { IPlayer } from '../iplayer.model';
 import { MemoryService } from '../memory.service';
 
 @Component({
-    selector: 'play',
+    selector: 'app-play',
     templateUrl: 'play.component.html',
     styleUrls: [ 'play.component.css' ]
 })

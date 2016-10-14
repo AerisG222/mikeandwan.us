@@ -6,7 +6,7 @@ import { ISelectedCards } from '../iselected-card.model';
 import { MemoryService } from '../memory.service';
 
 @Component({
-    selector: 'game-board',
+    selector: 'app-game-board',
     templateUrl: 'game-board.component.html',
     styleUrls: [ 'game-board.component.css' ]
 })

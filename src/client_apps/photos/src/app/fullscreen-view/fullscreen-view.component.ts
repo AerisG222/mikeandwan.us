@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { PhotoListContext } from '../shared/photo-list-context.model';
 
 @Component({
-    selector: 'fullscreen-view',
+    selector: 'app-fullscreen-view',
     templateUrl: 'fullscreen-view.component.html',
     styleUrls: [ 'fullscreen-view.component.css' ]
 })

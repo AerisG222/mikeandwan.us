@@ -5,7 +5,7 @@ import { IComment } from '../shared/icomment.model';
 import { IPhoto } from '../shared/iphoto.model';
 
 @Component({
-    selector: 'comment-view',
+    selector: 'app-comment-view',
     templateUrl: 'comment-view.component.html',
     styleUrls: [ 'comment-view.component.css' ]
 })

@@ -2,11 +2,11 @@
     <img [src]="context.current.photo.lgInfo.path" />
     <div>
         <div [hidden]="context.isCategoryMode" class="pull-left">
-            <category-link [category]="context.current.category"></category-link>
+            <app-category-link [category]="context.current.category"></app-category-link>
         </div>
         <div class="pull-right">
             <button type="button" class="btn btn-default btn-xs" (click)="context.movePrevious()"><i class="fa fa-arrow-left"></i></button>
-            <slideshow-button [context]="context"></slideshow-button>
+            <app-slideshow-button [context]="context"></app-slideshow-button>
             <button type="button" class="btn btn-default btn-xs" (click)="context.moveNext()"><i class="fa fa-arrow-right"></i></button>
         </div>
     </div>

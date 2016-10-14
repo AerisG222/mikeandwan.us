@@ -9,7 +9,7 @@ import { RouteMode } from '../shared/route-mode.model';
 import { CategoryBreadcrumb } from '../shared/category-breadcrumb.model';
 
 @Component({
-    selector: 'category-link',
+    selector: 'app-category-link',
     templateUrl: 'category-link.component.html',
     styleUrls: [ 'category-link.component.css' ]
 })

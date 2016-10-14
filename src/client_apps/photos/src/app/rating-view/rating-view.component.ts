@@ -4,7 +4,7 @@ import { IPhoto } from '../shared/iphoto.model';
 import { PhotoDataService } from '../shared/photo-data.service';
 
 @Component({
-    selector: 'rating-view',
+    selector: 'app-rating-view',
     templateUrl: 'rating-view.component.html',
     styleUrls: [ 'rating-view.component.css' ]
 })

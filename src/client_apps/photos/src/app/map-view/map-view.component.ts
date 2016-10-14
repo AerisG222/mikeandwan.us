@@ -5,7 +5,7 @@ import { IPhoto } from '../shared/iphoto.model';
 import { PhotoListContext } from '../shared/photo-list-context.model';
 
 @Component({
-    selector: 'map-view',
+    selector: 'app-map-view',
     templateUrl: 'map-view.component.html',
     styleUrls: [ 'map-view.component.css' ]
 })

@@ -4,7 +4,7 @@ import { Photo } from '../shared/photo.model';
 import { FilterSettings } from '../shared/filter-settings.model';
 
 @Component({
-    selector: 'effects-view',
+    selector: 'app-effects-view',
     templateUrl: 'effects-view.component.html',
     styleUrls: [ 'effects-view.component.css' ]
 })

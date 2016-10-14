@@ -1,9 +1,9 @@
 <div class="col-sm-2">
-    <player-score [player]="player1" [currentPlayer]="currentPlayer"></player-score>
+    <app-player-score [player]="player1" [currentPlayer]="currentPlayer"></app-player-score>
 </div>
 <div class="col-sm-8">
-    <spinner (spinCompleted)="addScore($event)"></spinner>
+    <app-spinner (spinCompleted)="addScore($event)"></app-spinner>
 </div>
 <div class="col-sm-2">
-    <player-score [player]="player2" [currentPlayer]="currentPlayer"></player-score>
+    <app-player-score [player]="player2" [currentPlayer]="currentPlayer"></app-player-score>
 </div>

@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { DialogComponent } from '../../ng_maw/dialog/dialog.component';
 
 @Component({
-    selector: 'help-dialog',
+    selector: 'app-help-dialog',
     templateUrl: 'help-dialog.component.html',
     styleUrls: [ 'help-dialog.component.css' ]
 })

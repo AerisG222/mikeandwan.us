@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
-    selector: 'header',
+    selector: 'app-header',
     templateUrl: 'header.component.html',
     styleUrls: [ 'header.component.css' ]
 })

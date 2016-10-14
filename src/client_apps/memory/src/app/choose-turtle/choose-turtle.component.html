@@ -9,13 +9,13 @@
 	</div>
 	<div class="row vertical-align">
 	    <div class="col-sm-5">
-	        <choose-turtle-grid (selected)="setCharacter1($event)"></choose-turtle-grid>
+	        <app-choose-turtle-grid (selected)="setCharacter1($event)"></app-choose-turtle-grid>
 	    </div>
 	    <div class="col-sm-2 text-center">
 	        <button type="button" class="btn btn-primary" [disabled]="!readyToPlay" (click)="play()">Play!</button>
 	    </div>
         <div class="col-sm-5">
-            <choose-turtle-grid (selected)="setCharacter2($event)"></choose-turtle-grid>
+            <app-choose-turtle-grid (selected)="setCharacter2($event)"></app-choose-turtle-grid>
         </div>
 	</div>
 </div>

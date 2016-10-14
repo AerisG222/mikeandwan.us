@@ -2,7 +2,7 @@
     <div class="col-xs-12">
         <div *ngIf="!context.isCategoryMode" class="row">
             <div class="col-xs-12">
-                <category-link [category]="category"></category-link>
+                <app-category-link [category]="category"></app-category-link>
             </div>
         </div>
     	<div class="row main-image" [ngClass]="{hide_main_image_border: category}">
@@ -36,20 +36,20 @@
             </div>
             <div class="right col-sm-4">
                 <div class="btn-group pull-right">
-                    <slideshow-button [context]="context" title="start/stop slideshow"></slideshow-button>
+                    <app-slideshow-button [context]="context" title="start/stop slideshow"></app-slideshow-button>
                 </div>
             </div>
     	</div>
 
         <div class="row">
-        	<div class="col-sm-12 hidden-xs photo-info" *ngIf="showComments"><comment-view [photo]="photo"></comment-view></div>
-        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" *ngIf="showRatings"><rating-view [photo]="photo"></rating-view></div>
-        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info exif" *ngIf="showExif"><exif-view [photo]="context?.current"></exif-view></div>
-            <div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" *ngIf="showEffects"><effects-view [photo]="context?.current" (update)="onFiltersUpdated($event)"></effects-view></div>
-            <div class="col-sm-offset-2 col-sm-8 photo-info" *ngIf="showFullscreen"><fullscreen-view [context]="context"></fullscreen-view></div>
+        	<div class="col-sm-12 hidden-xs photo-info" *ngIf="showComments"><app-comment-view [photo]="photo"></app-comment-view></div>
+        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" *ngIf="showRatings"><app-rating-view [photo]="photo"></app-rating-view></div>
+        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info exif" *ngIf="showExif"><app-exif-view [photo]="context?.current"></app-exif-view></div>
+            <div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" *ngIf="showEffects"><app-effects-view [photo]="context?.current" (update)="onFiltersUpdated($event)"></app-effects-view></div>
+            <div class="col-sm-offset-2 col-sm-8 photo-info" *ngIf="showFullscreen"><app-fullscreen-view [context]="context"></app-fullscreen-view></div>
         </div>
     </div>
 </div>
 
-<help-dialog></help-dialog>
-<save-dialog></save-dialog>
+<app-help-dialog></app-help-dialog>
+<app-save-dialog></app-save-dialog>

@@ -6,7 +6,7 @@ import { DialogButton } from '../../ng_maw/dialog/dialog-button.model';
 import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
-    selector: 'preference-dialog',
+    selector: 'app-preference-dialog',
     templateUrl: 'preference-dialog.component.html',
     styleUrls: [ 'preference-dialog.component.css' ]
 })

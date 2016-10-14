@@ -36,8 +36,6 @@ footer { margin-top: 80px; background: none repeat scroll 0 0 #1c1e22; padding: 
 .fa-ln:before { content: ""; }
 .fa-tw:before { content: ""; }
 
-.maw-app a { cursor: pointer; }
-
 .vcenter { display: inline-block; vertical-align: middle; }
 
 /* sm (and larger) */

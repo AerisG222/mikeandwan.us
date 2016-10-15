@@ -8,7 +8,7 @@ build() {
     cd "${1}"
 
     if [ "${PROD}" == 'y' ]; then
-        ng build -prod --environment prod
+        ng build --prod --aot --environment prod
     else
         ng build && ng lint
     fi

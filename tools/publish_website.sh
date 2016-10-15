@@ -93,7 +93,7 @@ ensure_dir() {
     fi
 }
 
-publish_apps() {
+publish_client_apps() {
     # non-angular apps won't have the hash in their filename
     for APP in ${TSAPPS[@]}; do
         ensure_dir "${APP}"
@@ -144,6 +144,22 @@ if [ "${DOBUILDCLIENT}" = "y" ]; then
     cd "${WD}"
 fi
 
+# temporary work around until angular cli starts adding a hash to the inline.js file
+echo '***********************************'
+echo '** STEP 1a: add sha to inline.js **'
+echo '***********************************'
+if [ "${DOBUILDCLIENT}" = "y" ]; then
+    for APP in ${NGAPPS[@]}; do
+        SRCJS="${SRCDIR}/client_apps/${APP}/dist/inline.js"
+
+        if [ -e "${SRCJS}" ]; then
+            SHA1=$( sha1sum "${SRCJS}" | awk '{print $1}' )
+
+            mv "${SRCJS}" "${SRCDIR}/client_apps/${APP}/dist/inline.${SHA1}.js"
+        fi
+    done
+fi
+
 echo ''
 echo '**************************************'
 echo '** STEP 2: prepare production build **'
@@ -158,7 +174,7 @@ unlink_media "${SRCDIR}/mikeandwan.us/wwwroot"
 cd "${SRCDIR}/mikeandwan.us"
 dotnet publish -f netcoreapp1.0 -o "${DISTDIR}" -c Release
 
-publish_apps
+publish_client_apps
 
 # add the media links for testing
 link_media "${DISTDIR}/wwwroot"

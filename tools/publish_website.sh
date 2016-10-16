@@ -114,7 +114,7 @@ link_media() {
     local LINKROOT=$1
 
     if [ ! -L "${LINKROOT}/images" ]; then
-        ln -s "${MEDIADIR}/images_new" "${LINKROOT}/images"
+        ln -s "${MEDIADIR}/images" "${LINKROOT}/images"
     fi
     if [ ! -L "${LINKROOT}/movies" ]; then
         ln -s "${MEDIADIR}/movies" "${LINKROOT}/movies"

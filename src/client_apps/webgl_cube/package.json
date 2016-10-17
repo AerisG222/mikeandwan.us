@@ -5,7 +5,7 @@
   "private": true,
   "devDependencies": {
     "@types/jquery": "^1.10.31",
-    "@types/stats": "^0.16.29",
-    "@types/three": "0.0.21"
+    "@types/stats": "^0.16.30",
+    "@types/three": "0.0.24"
   }
 }

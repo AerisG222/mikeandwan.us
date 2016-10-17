@@ -15,6 +15,7 @@ class TextDemo {
     font: THREE.Font;
 	rotationAngle: number;
     animate = false;
+	loaderCount = 0;
 
 	run() {
 		this.prepareScene();
@@ -61,16 +62,21 @@ class TextDemo {
 		this.scene.add(this.spotLight);
 
 		// floor
-		let floorPlane = new THREE.PlaneGeometry(1000, 1000);
-		let floorTexture = THREE.ImageUtils.loadTexture('/img/webgl/floor_texture.jpg');
-		floorTexture.wrapS = THREE.RepeatWrapping;
-		floorTexture.wrapT = THREE.RepeatWrapping;
-		floorTexture.repeat.set(24, 24);
-		let floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture, side: THREE.DoubleSide });
-		let floor = new THREE.Mesh(floorPlane, floorMaterial);
-		floor.position.y = -30;
-		floor.rotation.x = (Math.PI / 2) - 0.2;
-		this.scene.add(floor);
+		let textureLoader = new THREE.TextureLoader();
+		textureLoader.load('/img/photos3d/floor.jpg', texture => {
+			let floorPlane = new THREE.PlaneGeometry(1000, 1000);
+			texture.wrapS = THREE.RepeatWrapping;
+			texture.wrapT = THREE.RepeatWrapping;
+			texture.repeat.set(24, 24);
+			let floorMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+			let floor = new THREE.Mesh(floorPlane, floorMaterial);
+			floor.position.y = -30;
+			floor.rotation.x = (Math.PI / 2) - 0.2;
+			this.scene.add(floor);
+
+			this.loaderCount++;
+			this.render();
+		});
 
 		// setup initial rotation
 		this.rotationAngle = 0.015;
@@ -82,8 +88,7 @@ class TextDemo {
     prepareText() {
         let loader = new THREE.FontLoader();
 
-        loader.load('/js/libs/fonts/open_sans_bold.typeface.js', response => {
-            // text
+        loader.load('/js/libs/fonts/open_sans_bold.json', response => {
             let textGeometry = new THREE.TextGeometry('WebGL', {
                 font: response,
                 size: 60,
@@ -93,9 +98,6 @@ class TextDemo {
 				bevelThickness: 0,
 				bevelSize: 0
             });
-
-			//textGeometry.weight = 'bold';
-			//textGeometry.style = 'normal';
 
             let textMaterial = new THREE.MeshPhongMaterial({
                 color: 0x006051,
@@ -116,11 +118,18 @@ class TextDemo {
             this.scene.add(this.textPivot);
 
             this.animate = true;
+
+			this.loaderCount++;
+			this.render();
         });
     }
 
 	render() {
 		requestAnimationFrame(() => this.render());
+
+		if(this.loaderCount < 2) {
+			return;
+		}
 
         if(this.animate) {
             if (this.textPivot.rotation.y >= Math.PI / 3) {

@@ -10,6 +10,7 @@ class CubeDemo {
     cube: THREE.Mesh;
     ambientLight: THREE.AmbientLight;
     stats: Stats;
+    loadCounter = 0;
 
     run() {
         this.prepareScene();
@@ -54,27 +55,43 @@ class CubeDemo {
         this.scene.add(axisHelper);
 
         // cube
-        let texture = THREE.ImageUtils.loadTexture('/images/2013/alyssas_first_snowman/xs/DSC_9960.jpg');
-        let geometry = new THREE.BoxGeometry(50, 50, 50);
-        let material = new THREE.MeshPhongMaterial({ color: 0xffffff, map: texture });
-        this.cube = new THREE.Mesh(geometry, material);
-        this.cube.position.set(0, 70, 180);
-        this.scene.add(this.cube);
+        let textureLoader = new THREE.TextureLoader();
+        textureLoader.load('/images/2013/alyssas_first_snowman/xs/DSC_9960.jpg', texture => {
+            let geometry = new THREE.BoxGeometry(50, 50, 50);
+            let material = new THREE.MeshPhongMaterial({ color: 0xffffff, map: texture });
+            this.cube = new THREE.Mesh(geometry, material);
+            this.cube.position.set(0, 70, 180);
+            this.scene.add(this.cube);
+
+            this.loadCounter++;
+
+            this.render();
+        });
 
         // floor
-        let floorPlane = new THREE.PlaneGeometry(1000, 1000);
-        let floorTexture = THREE.ImageUtils.loadTexture('/img/photos3d/floor.jpg');
-        floorTexture.wrapS = THREE.RepeatWrapping;
-        floorTexture.wrapT = THREE.RepeatWrapping;
-        floorTexture.repeat.set(9, 9);
-        let floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture, side: THREE.DoubleSide }); //
-        let floor = new THREE.Mesh(floorPlane, floorMaterial);
-        floor.position.y = -30;
-        floor.rotation.x = (Math.PI / 2) - .3;
-        this.scene.add(floor);
+        textureLoader.load('/img/photos3d/floor.jpg', texture => {
+            let floorPlane = new THREE.PlaneGeometry(1000, 1000);
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(9, 9);
+            let floorMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide }); //
+            let floor = new THREE.Mesh(floorPlane, floorMaterial);
+            floor.position.y = -30;
+            floor.rotation.x = (Math.PI / 2) - .3;
+            this.scene.add(floor);
+
+            this.loadCounter++;
+
+            this.render();
+        });
     }
 
     render() {
+        if(this.loadCounter < 2)
+        {
+            return;
+        }
+
         requestAnimationFrame(() => this.render());
 
         this.cube.rotation.x += 0.01;

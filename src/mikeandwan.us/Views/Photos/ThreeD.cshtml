@@ -1,0 +1,17 @@
+@{
+    ViewBag.Title = "photos 3d"; 
+    Layout = "_LayoutMinimal";
+}
+
+@section custom_head {
+    @Html.Partial("_css_Bootstrap")
+    @Html.Partial("_css_site")
+    <style>
+        body { margin: 0; padding: 0; }
+        canvas { width: 99%; height: 99% }
+    </style>
+}
+
+@Html.Partial("_js_Jquery")
+@Html.Partial("_js_Threejs")
+<script src="/js/photos3d/photos3d.js"></script>

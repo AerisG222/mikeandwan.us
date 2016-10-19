@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Photos;
+using Maw.Domain.Photos.ThreeD;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.Photos;
 using MawMvcApp.ViewModels.Photos.Stats;
@@ -244,6 +245,20 @@ namespace MawMvcApp.Controllers
             }
 
             return yearStats;
+        }
+
+
+        [HttpGet("getAllCategories3D")]
+        public async Task<IEnumerable<Category3D>> GetAllCategories3D()
+        {
+            return await _svc.GetAllCategories3D();
+        }
+
+
+        [HttpGet("getPhotos3D/{categoryId:int}")]
+        public async Task<IEnumerable<Photo3D>> GetPhotos3D(int categoryId)
+        {
+            return await _svc.GetPhotos3D(categoryId);
         }
     }
 }

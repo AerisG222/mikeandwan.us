@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Maw.Domain.Photos.ThreeD;
 
 
 namespace Maw.Domain.Photos
@@ -28,5 +29,8 @@ namespace Maw.Domain.Photos
         Task<List<PhotoAndCategory>> GetPhotosAndCategoriesByUserRatingAsync(string username, bool highestFirst, bool allowPrivate);
 
         Task<List<CategoryPhotoCount>> GetStats(bool allowPrivate);
+
+        Task<List<Category3D>> GetAllCategories3D();
+        Task<List<Photo3D>> GetPhotos3D(int categoryId);
     }
 }

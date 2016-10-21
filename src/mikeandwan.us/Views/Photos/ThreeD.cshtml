@@ -12,6 +12,15 @@
     </style>
 }
 
-@Html.Partial("_js_Jquery")
+@Html.Partial("_js_Systemjs")
 @Html.Partial("_js_Threejs")
-<script src="/js/photos3d/photos3d.js"></script>
+@Html.Partial("_js_Mousetrap")
+
+<script>
+    System.config({
+        baseURL: "/js/photos3d",
+        defaultJSExtensions: true
+    });
+
+    System.import('app');
+</script>

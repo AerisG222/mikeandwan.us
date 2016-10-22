@@ -5,11 +5,13 @@ export class Photos3D {
     camera: THREE.PerspectiveCamera;
     renderer: THREE.Renderer;
     ambientLight: THREE.AmbientLight;
-    cube: THREE.Mesh;
     dataService = new DataService();
     isPaused = false;
 
     run() {
+        // ensure scrollbars do not appear
+        document.getElementsByTagName('body')[0].style.overflow = "hidden";
+
         this.prepareScene();
         this.loadCategories();
         this.render();
@@ -21,19 +23,20 @@ export class Photos3D {
     }
 
     private loadCategories() {
-        this.dataService.getCategories().then(categories => {
-            for(let i = 0; i < categories.length; i++) {
-                let cat = categories[i];
-                console.log(cat.id);
-            }
-        });
+        this.dataService
+            .getCategories()
+            .then(categories => {
+                for(let i = 0; i < categories.length; i++) {
+                    let cat = categories[i];
+                }
+            });
     }
 
     private prepareScene() {
         this.scene = new THREE.Scene();
 
         // fog
-        this.scene.fog = new THREE.Fog(0x9999ff, 400, 1000);
+        //this.scene.fog = new THREE.Fog(0x9999ff, 400, 1000);
 
         // renderer
         this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -42,7 +45,7 @@ export class Photos3D {
 
         // camera
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.camera.position.set(0, 150, 400);
+        this.camera.position.set(0, 100, 600);
         this.camera.lookAt(this.scene.position);
 
         // ambient light
@@ -55,27 +58,31 @@ export class Photos3D {
         directionalLight.castShadow = true;
         this.scene.add(directionalLight);
 
-        // cube
+        // water
         let textureLoader = new THREE.TextureLoader();
-        textureLoader.load('/images/2013/alyssas_first_snowman/xs/DSC_9960.jpg', texture => {
-            let geometry = new THREE.BoxGeometry(50, 50, 50);
-            let material = new THREE.MeshPhongMaterial({ color: 0xffffff, map: texture });
-            this.cube = new THREE.Mesh(geometry, material);
-            this.cube.position.set(0, 70, 180);
-            this.scene.add(this.cube);
+        textureLoader.load('/img/photos3d/md/water.jpg', texture => {
+            let waterPlane = new THREE.PlaneGeometry(2000, 621);
+            let waterMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+            let water = new THREE.Mesh(waterPlane, waterMaterial);
+            water.scale.y = -1;
+            water.position.y = -60;
+            water.rotation.x = (Math.PI / 2) + .1;
+            this.scene.add(water);
+
+            this.render();
         });
 
-        // floor
-        textureLoader.load('/img/photos3d/floor.jpg', texture => {
-            let floorPlane = new THREE.PlaneGeometry(1000, 1000);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(9, 9);
-            let floorMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide }); //
-            let floor = new THREE.Mesh(floorPlane, floorMaterial);
-            floor.position.y = -30;
-            floor.rotation.x = (Math.PI / 2) - .3;
-            this.scene.add(floor);
+        // trees
+        textureLoader.load('/img/photos3d/md/trees.jpg', texture => {
+            let treePlane = new THREE.PlaneGeometry(2000, 506);
+            let treeMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+            let trees = new THREE.Mesh(treePlane, treeMaterial);
+            //trees.scale.y = -1;
+            trees.position.z = -280;
+            trees.position.y = 220;
+            this.scene.add(trees);
+
+            this.render();
         });
 
         this.render();
@@ -86,12 +93,9 @@ export class Photos3D {
             return;
         }
 
-        requestAnimationFrame(() => this.render());
+        //requestAnimationFrame(() => this.render());
 
-        if(this.cube != null) {
-            this.cube.rotateX(.01);
-            this.cube.rotateY(.01);
-        }
+        // animate
 
         this.renderer.render(this.scene, this.camera);
     }

@@ -1,17 +1,25 @@
 import { DataService } from './data-service';
+import { Background } from './background';
 
 export class Photos3D {
-    scene: THREE.Scene;
     camera: THREE.PerspectiveCamera;
-    renderer: THREE.Renderer;
+    renderer: THREE.WebGLRenderer;
     ambientLight: THREE.AmbientLight;
+    background: Background;
+    height: number;
+    width: number;
+    sizeCode: string;
+
     dataService = new DataService();
+    scene = new THREE.Scene();
     isPaused = false;
 
     run() {
         // ensure scrollbars do not appear
         document.getElementsByTagName('body')[0].style.overflow = "hidden";
+        window.addEventListener("resize", () => this.onResize(), false);
 
+        this.onResize();
         this.prepareScene();
         this.loadCategories();
         this.render();
@@ -20,6 +28,24 @@ export class Photos3D {
     togglePause() {
         this.isPaused = !this.isPaused;
         this.render();
+    }
+
+    private onResize() {
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+
+        if(this.width < 2200) {
+            this.sizeCode = 'md';
+        }
+        else {
+            this.sizeCode = 'lg';
+        }
+
+        // adjust view
+        if(this.renderer != null) {
+            this.renderer.setSize(this.width, this.height);
+            this.camera.aspect = this.width / this.height;
+        }
     }
 
     private loadCategories() {
@@ -33,20 +59,19 @@ export class Photos3D {
     }
 
     private prepareScene() {
-        this.scene = new THREE.Scene();
-
-        // fog
-        //this.scene.fog = new THREE.Fog(0x9999ff, 400, 1000);
-
         // renderer
         this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setSize(this.width, this.height);
         document.body.appendChild(this.renderer.domElement);
 
         // camera
-        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.camera.position.set(0, 100, 600);
-        this.camera.lookAt(this.scene.position);
+        this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
+        this.camera.position.set(0, 50, 440);
+        this.camera.lookAt(new THREE.Vector3(0, 50, 0));
+
+        // background
+        this.background = new Background(this.scene, this.sizeCode);
+        this.background.init();
 
         // ambient light
         this.ambientLight = new THREE.AmbientLight(0x404040);
@@ -58,33 +83,6 @@ export class Photos3D {
         directionalLight.castShadow = true;
         this.scene.add(directionalLight);
 
-        // water
-        let textureLoader = new THREE.TextureLoader();
-        textureLoader.load('/img/photos3d/md/water.jpg', texture => {
-            let waterPlane = new THREE.PlaneGeometry(2000, 621);
-            let waterMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
-            let water = new THREE.Mesh(waterPlane, waterMaterial);
-            water.scale.y = -1;
-            water.position.y = -60;
-            water.rotation.x = (Math.PI / 2) + .1;
-            this.scene.add(water);
-
-            this.render();
-        });
-
-        // trees
-        textureLoader.load('/img/photos3d/md/trees.jpg', texture => {
-            let treePlane = new THREE.PlaneGeometry(2000, 506);
-            let treeMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
-            let trees = new THREE.Mesh(treePlane, treeMaterial);
-            //trees.scale.y = -1;
-            trees.position.z = -280;
-            trees.position.y = 220;
-            this.scene.add(trees);
-
-            this.render();
-        });
-
         this.render();
     }
 
@@ -93,7 +91,7 @@ export class Photos3D {
             return;
         }
 
-        //requestAnimationFrame(() => this.render());
+        requestAnimationFrame(() => this.render());
 
         // animate
 

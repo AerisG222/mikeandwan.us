@@ -60,6 +60,9 @@ but will try to get this well organized below to make it easy to follow.
         AllowTcpForwarding no
         ```
     - `rm /etc/ssh/ssh_host *`
+    - configure ssh keys to avoid having to log in with pwds
+        - https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
+        - https://help.github.com/articles/generating-an-ssh-key/
 13. Install tool to limit brute force attacks
     - [Reference Guide](http://www.cyberciti.biz/faq/rhel-linux-block-ssh-dictionary-brute-force-attacks/)
     - `dnf install denyhosts` 

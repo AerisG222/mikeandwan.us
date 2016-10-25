@@ -65,8 +65,8 @@ export class Photos3D {
         document.body.appendChild(this.renderer.domElement);
 
         // camera
-        this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
-        this.camera.position.set(0, 50, 440);
+        this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1600);
+        this.camera.position.set(0, 50, 800);
         this.camera.lookAt(new THREE.Vector3(0, 50, 0));
 
         // background

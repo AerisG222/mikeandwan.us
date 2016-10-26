@@ -9,6 +9,7 @@ export class Background {
     private scene: THREE.Scene;
     private size: string;
     private waterMesh: THREE.Mesh;
+    private waterUniform: any = null;
     private treeMesh: THREE.Mesh;
     private textureLoader = new TextureLoader();
 
@@ -51,6 +52,12 @@ export class Background {
 
         this.size = size;
         this.updateTextures(this.loadTextures());
+    }
+
+    render(clockDelta: number) {
+        if(this.waterUniform != null) {
+            this.waterUniform.time.value += clockDelta;
+        }
     }
 
     private loadTextures() {
@@ -103,19 +110,19 @@ export class Background {
         noiseTexture.wrapS = THREE.MirroredRepeatWrapping;
         noiseTexture.repeat.set(2, 1);
 
-        let waterUniform = {
+        this.waterUniform = {
             baseTexture: 	{ type: "t", value: waterTexture },
-            baseSpeed: 		{ type: "f", value: 1.15 },
+            baseSpeed: 		{ type: "f", value: 0.007 },
             noiseTexture: 	{ type: "t", value: noiseTexture },
-            noiseScale:		{ type: "f", value: 0.2 },
+            noiseScale:		{ type: "f", value: 0.1 },
             alpha: 			{ type: "f", value: 0.8 },
             time: 			{ type: "f", value: 1.0 }
         };
 
         let waterMaterial = new THREE.ShaderMaterial({
-            uniforms: waterUniform,
-            vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
-            fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+            uniforms: this.waterUniform,
+            vertexShader:   document.getElementById( 'waterVertexShader'   ).textContent,
+            fragmentShader: document.getElementById( 'waterFragmentShader' ).textContent
         });
 
         waterMaterial.side = THREE.DoubleSide;

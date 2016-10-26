@@ -10,6 +10,7 @@ export class Photos3D {
     width: number;
     sizeCode: string;
 
+    clock = new THREE.Clock();
     dataService = new DataService();
     scene = new THREE.Scene();
     isPaused = false;
@@ -22,12 +23,12 @@ export class Photos3D {
         this.onResize();
         this.prepareScene();
         this.loadCategories();
-        this.render();
+        this.animate();
     }
 
     togglePause() {
         this.isPaused = !this.isPaused;
-        this.render();
+        this.animate();
     }
 
     private onResize() {
@@ -83,18 +84,24 @@ export class Photos3D {
         directionalLight.castShadow = true;
         this.scene.add(directionalLight);
 
-        this.render();
+        this.animate();
     }
 
-    private render() {
+    private animate() {
         if(this.isPaused) {
             return;
         }
 
-        requestAnimationFrame(() => this.render());
+        requestAnimationFrame(() => this.animate());
 
-        // animate
+        this.render();
 
         this.renderer.render(this.scene, this.camera);
+    }
+
+    private render() {
+        let delta = this.clock.getDelta();
+
+        this.background.render(delta);
     }
 }

@@ -17,7 +17,7 @@
 @Html.Partial("_js_Mousetrap")
 
 @* http://stemkoski.github.io/Three.js/Shader-Animate.html *@
-<script id="vertexShader" type="x-shader/x-vertex">
+<script id="waterVertexShader" type="x-shader/x-vertex">
 varying vec2 vUv;
 void main() 
 { 
@@ -26,7 +26,7 @@ void main()
 }
 </script>
 
-<script id="fragmentShader" type="x-shader/x-vertex"> 
+<script id="waterFragmentShader" type="x-shader/x-vertex"> 
 uniform sampler2D baseTexture;
 uniform float baseSpeed;
 uniform sampler2D noiseTexture;

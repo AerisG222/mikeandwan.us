@@ -7,7 +7,7 @@
         "warningsAsErrors": true
     },
     "dependencies": {
-        "Microsoft.EntityFrameworkCore": "1.0.1",
+        "Microsoft.EntityFrameworkCore": "1.1.0-preview1-*",
         "Maw.Domain": {
             "target": "project"
         },

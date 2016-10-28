@@ -10,21 +10,26 @@
         "warningsAsErrors": true
     },
     "dependencies": {
-        "Microsoft.AspNetCore.CookiePolicy": "1.0.0",
-        "Microsoft.AspNetCore.Diagnostics": "1.0.0",
-        "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.0.0",
-        "Microsoft.AspNetCore.Hosting": "1.0.0",
-        "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
-        "Microsoft.AspNetCore.Hosting.Server.Abstractions": "1.0.0",
-        "Microsoft.AspNetCore.HttpOverrides": "1.0.0",
-        "Microsoft.AspNetCore.Mvc": "1.0.1",
-        "Microsoft.AspNetCore.Server.Kestrel": "1.0.1",
-        "Microsoft.AspNetCore.StaticFiles": "1.0.0",
-        "Microsoft.Extensions.Configuration.CommandLine": "1.0.0",
-        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0",
-        "Microsoft.Extensions.Configuration.Json": "1.0.0",
-        "Microsoft.Extensions.Logging.Console": "1.0.0",
-        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
+        "Microsoft.AspNetCore.CookiePolicy": "1.1.0-preview1-*",
+        "Microsoft.AspNetCore.Diagnostics": "1.1.0-preview1-*",
+        "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.1.0-preview1-*",
+        "Microsoft.AspNetCore.Hosting": "1.1.0-preview1-*",
+        "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.0-preview1-*",
+        "Microsoft.AspNetCore.Hosting.Server.Abstractions": "1.1.0-preview1-*",
+        "Microsoft.AspNetCore.HttpOverrides": "1.1.0-preview1-*",
+        "Microsoft.AspNetCore.Mvc": "1.1.0-preview1-*",
+        "Microsoft.AspNetCore.Mvc.Razor.Precompilation.Design": {
+            "type": "build",
+            "version": "1.0.0-*",
+            "target": "package"
+        },
+        "Microsoft.AspNetCore.Server.Kestrel": "1.1.0-preview1-*",
+        "Microsoft.AspNetCore.StaticFiles": "1.1.0-preview1-*",
+        "Microsoft.Extensions.Configuration.CommandLine": "1.1.0-preview1-*",
+        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0-preview1-*",
+        "Microsoft.Extensions.Configuration.Json": "1.1.0-preview1-*",
+        "Microsoft.Extensions.Logging.Console": "1.1.0-preview1-*",
+        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0-preview1-*",
         "NLog.Extensions.Logging": "1.0.0-rtm-alpha4",
         "NMagickWand": "0.5.0",
         "Maw.Data": {
@@ -43,18 +48,17 @@
     "frameworks": {
         "net451": {
             "frameworkAssemblies": {
-                //"Microsoft.NETCore.Platforms": "1.0.1-rc2-24027",
                 "System.IO.Compression": "",
                 "System.IO.Compression.FileSystem": ""
             }
         },
-        "netcoreapp1.0": {
+        "netcoreapp1.1": {
             "dependencies": {
                 "Microsoft.NETCore.App": {
-                    "version": "1.0.1",
+                    "version": "1.1.0-preview1-*",
                     "type": "platform"
                 },
-                "System.IO.Compression": "4.1.0"
+                "System.IO.Compression": "4.3.0-preview1-*"
             },
             "imports": [
                 "dotnet55",
@@ -70,9 +74,12 @@
     "publishOptions": {
         "include": [ 
             "wwwroot", 
-            "Views",
             "config.json",
             "nlog.config"
         ]
+    },
+    "tools": {
+        "Microsoft.AspNetCore.Mvc.Razor.Precompilation.Tools": "1.0.0-*",
+        "Microsoft.DotNet.Watcher.Tools": "1.0.0-*"
     }
 }

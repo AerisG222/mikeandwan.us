@@ -1,4 +1,5 @@
 ﻿@model SidebarModel
+@inject MawMvcApp.ViewModels.FrameworkIdentifier FrameworkIdentifier
 
 @{
     var generalPanelClass = "panel";
@@ -89,9 +90,11 @@
             <a asp-controller="tools" asp-action="Paths" maw-active="@string.Equals(Model.Item, "paths", StringComparison.OrdinalIgnoreCase)">Paths</a>
             <a asp-controller="tools" asp-action="RandomBytes" maw-active="@string.Equals(Model.Item, "random-bytes", StringComparison.OrdinalIgnoreCase)">Random Bytes</a>
             <a asp-controller="tools" asp-action="UrlEncode" maw-active="@string.Equals(Model.Item, "url-encode", StringComparison.OrdinalIgnoreCase)">URL Encode / Decode</a>
-            <a asp-controller="tools" asp-action="XmlValidate" maw-active="@string.Equals(Model.Item, "xml-validate", StringComparison.OrdinalIgnoreCase)">XML Validator</a>
-            <a asp-controller="tools" asp-action="XsdValidate" maw-active="@string.Equals(Model.Item, "xsd-validate", StringComparison.OrdinalIgnoreCase)">XSD Validator</a>
-            <a asp-controller="tools" asp-action="XslTransform" maw-active="@string.Equals(Model.Item, "xsl-transform", StringComparison.OrdinalIgnoreCase)">XSL Transform</a>
+            @if (FrameworkIdentifier.IsFullFramework) {
+                <a asp-controller="tools" asp-action="XmlValidate" maw-active="@string.Equals(Model.Item, "xml-validate", StringComparison.OrdinalIgnoreCase)">XML Validator</a>
+                <a asp-controller="tools" asp-action="XsdValidate" maw-active="@string.Equals(Model.Item, "xsd-validate", StringComparison.OrdinalIgnoreCase)">XSD Validator</a>
+                <a asp-controller="tools" asp-action="XslTransform" maw-active="@string.Equals(Model.Item, "xsl-transform", StringComparison.OrdinalIgnoreCase)">XSL Transform</a>
+            }
         </div>
     </div>
     <div class="@learningPanelClass">

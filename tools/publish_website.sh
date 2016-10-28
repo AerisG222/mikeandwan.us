@@ -172,7 +172,8 @@ fi
 unlink_media "${SRCDIR}/mikeandwan.us/wwwroot"
 
 cd "${SRCDIR}/mikeandwan.us"
-dotnet publish -f netcoreapp1.0 -o "${DISTDIR}" -c Release
+dotnet publish -f netcoreapp1.1 -o "${DISTDIR}" -c Release
+dotnet razor-precompile -f netcoreapp1.1 -o "${DISTDIR}" -c Release
 
 publish_client_apps
 

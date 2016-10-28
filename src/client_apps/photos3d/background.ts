@@ -1,11 +1,11 @@
 import { TextureLoader } from './texture-loader';
-import { ITextureInfo } from './itexture-info';
 
 export class Background {
     private static readonly TEXTURE_WATER = 'water.jpg';
     private static readonly TEXTURE_TREES = 'trees.jpg';
     private static readonly TEXTURE_NOISE = 'noise.png';
 
+    private horizontalRepeat = 2;
     private scene: THREE.Scene;
     private size: string;
     private waterMesh: THREE.Mesh;
@@ -28,20 +28,7 @@ export class Background {
 
     init() {
         var texturePromise = this.loadTextures();
-
-        let waterPlane = new THREE.PlaneGeometry(6000, 1242);
-        this.waterMesh = new THREE.Mesh(waterPlane);
-        this.waterMesh.scale.y = -1;
-        this.waterMesh.position.y = -60;
-        this.waterMesh.rotation.x = (Math.PI / 2) + .1;
-        this.scene.add(this.waterMesh);
         
-        let treePlane = new THREE.PlaneGeometry(6000, 1012);
-        this.treeMesh = new THREE.Mesh(treePlane);
-        this.treeMesh.position.z = -280;
-        this.treeMesh.position.y = 500;
-        this.scene.add(this.treeMesh);
-
         this.updateTextures(texturePromise);
     }
     
@@ -68,23 +55,21 @@ export class Background {
         ]);
     }
 
-    private updateTextures(texturePromises: Array<Promise<ITextureInfo>>)
+    private updateTextures(texturePromises: Array<Promise<THREE.Texture>>)
     {
         Promise.all(texturePromises).then(textures => {
             let waterTexture: THREE.Texture = null;
             let noiseTexture: THREE.Texture = null;
 
-            for(let i = 0; i < textures.length; i++) {
-                let ti = textures[i];
-
-                if(ti.url.indexOf(Background.TEXTURE_NOISE) > 0) {
-                    noiseTexture = ti.texture;
+            for(let texture of textures) {
+                if(texture.name.indexOf(Background.TEXTURE_NOISE) > 0) {
+                    noiseTexture = texture;
                 }
-                else if(ti.url.indexOf(Background.TEXTURE_TREES) > 0) {
-                    this.updateTrees(ti.texture);
+                else if(texture.name.indexOf(Background.TEXTURE_TREES) > 0) {
+                    this.updateTrees(texture);
                 }
-                else if(ti.url.indexOf(Background.TEXTURE_WATER) > 0) {
-                    waterTexture = ti.texture;
+                else if(texture.name.indexOf(Background.TEXTURE_WATER) > 0) {
+                    waterTexture = texture;
                 }
             }
 
@@ -95,24 +80,44 @@ export class Background {
     }
 
     private updateTrees(texture: THREE.Texture) {
-        texture.wrapT = THREE.MirroredRepeatWrapping;
+        if(this.treeMesh != null) {
+            this.scene.remove(this.treeMesh);
+        }
+
+        let treeGeometry = new THREE.PlaneGeometry(texture.image.width * this.horizontalRepeat, texture.image.height);
+        this.treeMesh = new THREE.Mesh(treeGeometry);
+        this.treeMesh.position.y = texture.image.height / 2;
+
+        texture.repeat.set(this.horizontalRepeat, 1);
         texture.wrapS = THREE.MirroredRepeatWrapping;
-        texture.repeat.set(2, 1);
+
         this.treeMesh.material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+
+        this.scene.add(this.treeMesh);
     }
 
     private updateWater(waterTexture: THREE.Texture, noiseTexture: THREE.Texture) {
+        if(this.waterMesh != null) {
+            this.scene.remove(this.waterMesh);
+        }
+
+        let waterGeometry = new THREE.PlaneGeometry(waterTexture.image.width * this.horizontalRepeat, waterTexture.image.height);
+        this.waterMesh = new THREE.Mesh(waterGeometry);
+        this.waterMesh.scale.y = -1;
+        this.waterMesh.rotation.x = (Math.PI / 2);
+        this.waterMesh.position.z = waterTexture.image.height / 2;
+
+        waterTexture.repeat.set(this.horizontalRepeat, 1);
         waterTexture.wrapT = THREE.MirroredRepeatWrapping;
         waterTexture.wrapS = THREE.MirroredRepeatWrapping;
-        waterTexture.repeat.set(2, 1);
-
+        
+        noiseTexture.repeat.set(2, 1);
         noiseTexture.wrapT = THREE.MirroredRepeatWrapping;
         noiseTexture.wrapS = THREE.MirroredRepeatWrapping;
-        noiseTexture.repeat.set(2, 1);
 
         this.waterUniform = {
             baseTexture: 	{ type: "t", value: waterTexture },
-            baseSpeed: 		{ type: "f", value: 0.007 },
+            baseSpeed: 		{ type: "f", value: 0.005 },
             noiseTexture: 	{ type: "t", value: noiseTexture },
             noiseScale:		{ type: "f", value: 0.1 },
             alpha: 			{ type: "f", value: 0.8 },
@@ -126,7 +131,9 @@ export class Background {
         });
 
         waterMaterial.side = THREE.DoubleSide;
-
+        
         this.waterMesh.material = waterMaterial;
+
+        this.scene.add(this.waterMesh);
     }
 }

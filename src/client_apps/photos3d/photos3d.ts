@@ -66,9 +66,9 @@ export class Photos3D {
         document.body.appendChild(this.renderer.domElement);
 
         // camera
-        this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1600);
-        this.camera.position.set(0, 50, 800);
-        this.camera.lookAt(new THREE.Vector3(0, 50, 0));
+        this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 2000);
+        this.camera.position.set(0, 200, 1000);
+        this.camera.lookAt(new THREE.Vector3(0, 200, 0));
 
         // background
         this.background = new Background(this.scene, this.sizeCode);
@@ -83,6 +83,8 @@ export class Photos3D {
         directionalLight.position.set(-1, 1, 1);
         directionalLight.castShadow = true;
         this.scene.add(directionalLight);
+
+        this.scene.add(new THREE.AxisHelper(500));
 
         this.animate();
     }

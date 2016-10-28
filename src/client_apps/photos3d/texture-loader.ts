@@ -1,13 +1,12 @@
-import { ITextureInfo } from './itexture-info';
-
 export class TextureLoader {
     private loader = new THREE.TextureLoader();
 
-    loadTexture(url: string): Promise<ITextureInfo> {
+    loadTexture(url: string): Promise<THREE.Texture> {
         return new Promise((resolve, reject) => {
             this.loader.load(url, 
                 texture => {
-                    resolve({ url: url, texture: texture });
+                    texture.name = url;
+                    resolve(texture);
                 },
                 progress => { 
                     console.log(`downloading ${url}: ${progress.loaded}`);
@@ -19,8 +18,8 @@ export class TextureLoader {
         });
     }
 
-    loadTextures(urls: Array<string>): Array<Promise<ITextureInfo>> {
-        let list: Array<Promise<ITextureInfo>> = [];
+    loadTextures(urls: Array<string>): Array<Promise<THREE.Texture>> {
+        let list: Array<Promise<THREE.Texture>> = [];
 
         for(var i = 0; i < urls.length; i++) {
             list.push(this.loadTexture(urls[i]));

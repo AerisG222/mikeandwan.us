@@ -2,18 +2,19 @@ import { DataService } from './data-service';
 import { Background } from './background';
 
 export class Photos3D {
-    camera: THREE.PerspectiveCamera;
-    renderer: THREE.WebGLRenderer;
-    ambientLight: THREE.AmbientLight;
-    background: Background;
-    height: number;
-    width: number;
-    sizeCode: string;
+    private camera: THREE.PerspectiveCamera;
+    private renderer: THREE.WebGLRenderer;
+    private ambientLight: THREE.AmbientLight;
+    private directionalLight: THREE.DirectionalLight;
+    private background: Background;
+    private height: number;
+    private width: number;
+    private sizeCode: string;
 
-    clock = new THREE.Clock();
-    dataService = new DataService();
-    scene = new THREE.Scene();
-    isPaused = false;
+    private clock = new THREE.Clock();
+    private dataService = new DataService();
+    private scene = new THREE.Scene();
+    private isPaused = false;
 
     run() {
         // ensure scrollbars do not appear
@@ -70,19 +71,23 @@ export class Photos3D {
         this.camera.position.set(0, 200, 1000);
         this.camera.lookAt(new THREE.Vector3(0, 200, 0));
 
-        // background
-        this.background = new Background(this.scene, this.sizeCode);
-        this.background.init();
-
         // ambient light
         this.ambientLight = new THREE.AmbientLight(0x404040);
         this.scene.add(this.ambientLight);
 
         // directional light
-        let directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
-        directionalLight.position.set(-1, 1, 1);
-        directionalLight.castShadow = true;
-        this.scene.add(directionalLight);
+        this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
+        this.directionalLight.position.set(-1, 1, 1);
+        this.directionalLight.castShadow = true;
+        this.scene.add(this.directionalLight);
+
+        // background
+        this.background = new Background(this.renderer, 
+                                         this.scene, 
+                                         this.camera,
+                                         this.directionalLight,
+                                         this.sizeCode);
+        this.background.init();
 
         this.scene.add(new THREE.AxisHelper(500));
 

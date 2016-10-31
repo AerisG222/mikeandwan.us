@@ -2,28 +2,35 @@ import { TextureLoader } from './texture-loader';
 
 export class Background {
     private static readonly TEXTURE_WATER = 'water.jpg';
-    private static readonly TEXTURE_TREES = 'trees.jpg';
+    private static readonly TEXTURE_TREES = 'trees_blur20.jpg';
     private static readonly TEXTURE_NOISE = 'noise.png';
 
     private horizontalRepeat = 2;
-    private scene: THREE.Scene;
-    private size: string;
     private waterMesh: THREE.Mesh;
     private waterUniform: any = null;
     private treeMesh: THREE.Mesh;
     private textureLoader = new TextureLoader();
 
-    constructor(scene: THREE.Scene, size: string) {
+    constructor(private renderer: THREE.Renderer, 
+                private scene: THREE.Scene,
+                private camera: THREE.Camera, 
+                private directionalLight: THREE.DirectionalLight,
+                private size: string) {
+        if(renderer == null) {
+            throw new Error('renderer should not be null');
+        }
+
         if(scene == null) {
             throw new Error('scene should not be null');
         }
 
+        if(camera == null) {
+            throw new Error('camera should not be null');
+        }
+        
         if(size == null) {
             throw new Error('size should not be null');
         }
-
-        this.scene = scene;
-        this.size = size;
     }
 
     init() {

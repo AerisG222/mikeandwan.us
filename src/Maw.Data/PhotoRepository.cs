@@ -140,19 +140,20 @@ namespace Maw.Data
 		}
 
 
-		public async Task<D.Category> GetCategoryAsync(short categoryId, bool allowPrivate)
+        // TODO: revert to true async processing once the following is fixed:
+        //       https://github.com/aspnet/EntityFramework/issues/6534
+		public Task<D.Category> GetCategoryAsync(short categoryId, bool allowPrivate)
         {
-            var cat = await _ctx.Category
+            var cat = _ctx.Category
 				.Where(x => x.Id == categoryId && (allowPrivate || !x.IsPrivate))
 				.Select(x => new 
                 { 
                     Category = x, 
                     HasGps = x.Photo.Any(i => i.GpsLatitude != null) 
                 })
-				.SingleAsync()
-                .ConfigureAwait(false);
+				.Single();
 
-			return BuildPhotoCategory(cat.Category, cat.HasGps);
+			return Task.FromResult(BuildPhotoCategory(cat.Category, cat.HasGps));
         }
 
 

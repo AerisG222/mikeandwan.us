@@ -60,7 +60,7 @@ namespace Maw.Domain.Photos
 
 		public async Task<List<Photo>> GetPhotosByCommentDateAsync(bool newestFirst, bool allowPrivate)
         {
-            var list = await _repo.GetPhotosAndCategoriesByCommentDateAsync(newestFirst, allowPrivate);
+            var list = await _repo.GetPhotosAndCategoriesByCommentDateAsync(newestFirst, allowPrivate).ConfigureAwait(false);
 
             return list.Select(x => x.Photo).ToList();
         }
@@ -68,7 +68,7 @@ namespace Maw.Domain.Photos
 
 		public async Task<List<Photo>> GetPhotosByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate)
         {
-            var list = await _repo.GetPhotosAndCategoriesByUserCommentDateAsync(username, greatestFirst, allowPrivate);
+            var list = await _repo.GetPhotosAndCategoriesByUserCommentDateAsync(username, greatestFirst, allowPrivate).ConfigureAwait(false);
 
             return list.Select(x => x.Photo).ToList();
         }
@@ -76,7 +76,7 @@ namespace Maw.Domain.Photos
 
 		public async Task<List<Photo>> GetPhotosByCommentCountAsync(bool greatestFirst, bool allowPrivate)
         {
-            var list = await _repo.GetPhotosAndCategoriesByCommentCountAsync(greatestFirst, allowPrivate);
+            var list = await _repo.GetPhotosAndCategoriesByCommentCountAsync(greatestFirst, allowPrivate).ConfigureAwait(false);
 
             return list.Select(x => x.Photo).ToList();
         }
@@ -84,7 +84,7 @@ namespace Maw.Domain.Photos
 
 		public async Task<List<Photo>> GetPhotosByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
         {
-            var list = await _repo.GetPhotosAndCategoriesByAverageUserRatingAsync(highestFirst, allowPrivate);
+            var list = await _repo.GetPhotosAndCategoriesByAverageUserRatingAsync(highestFirst, allowPrivate).ConfigureAwait(false);
 
             return list.Select(x => x.Photo).ToList();
         }
@@ -92,7 +92,7 @@ namespace Maw.Domain.Photos
 
 		public async Task<List<Photo>> GetPhotosByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
         {
-            var list = await _repo.GetPhotosAndCategoriesByUserRatingAsync(username, highestFirst, allowPrivate);
+            var list = await _repo.GetPhotosAndCategoriesByUserRatingAsync(username, highestFirst, allowPrivate).ConfigureAwait(false);
 
             return list.Select(x => x.Photo).ToList();
         }

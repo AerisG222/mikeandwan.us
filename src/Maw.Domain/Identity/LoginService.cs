@@ -51,10 +51,10 @@ namespace Maw.Domain.Identity
 		{
 			try
 			{
-	            var result = await _signInManager.PasswordSignInAsync(username, password, isPersistent: false, lockoutOnFailure: false);
+	            var result = await _signInManager.PasswordSignInAsync(username, password, isPersistent: false, lockoutOnFailure: false).ConfigureAwait(false);
 				var activityType = result == SignInResult.Success ? (short)1 : (short)2;
 
-				await _repo.AddLoginHistoryAsync(username, activityType, loginArea);
+				await _repo.AddLoginHistoryAsync(username, activityType, loginArea).ConfigureAwait(false);
 
 				if(result == SignInResult.Success)
 	            {

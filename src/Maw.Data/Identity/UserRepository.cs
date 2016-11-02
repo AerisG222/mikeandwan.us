@@ -78,7 +78,8 @@ namespace Maw.Data.Identity
                 .Include(u => u.Country)
 				.Include(u => u.UserRole).ThenInclude(ur => ur.Role)
                 .Where(x => x.Username == username)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync()
+				.ConfigureAwait(false);
 
 			return BuildMawUser(user);
         }
@@ -91,7 +92,8 @@ namespace Maw.Data.Identity
                 .Include(u => u.Country)
 				.Include(u => u.UserRole).ThenInclude(ur => ur.Role)
                 .Where(x => x.Id == id)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync()
+				.ConfigureAwait(false);
 
 			return BuildMawUser(user);
         }
@@ -111,7 +113,8 @@ namespace Maw.Data.Identity
                 .Include(u => u.Country)
 				.Include(u => u.UserRole).ThenInclude(ur => ur.Role)
 				.Where(x => x.Email == email)
-				.SingleOrDefaultAsync();
+				.SingleOrDefaultAsync()
+				.ConfigureAwait(false);
 
 			return BuildMawUser(user);
 		}
@@ -130,7 +133,8 @@ namespace Maw.Data.Identity
                 .Include(u => u.UserRole).ThenInclude(r => r.Role)
                 .Where(x => x.Username == username)
                 .Select(x => x.UserRole)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync()
+				.ConfigureAwait(false);
 
             return roles.Select(x => x.Role.Name)
                 .OrderBy(x => x)
@@ -147,7 +151,7 @@ namespace Maw.Data.Identity
 
 			var username = user.Username.ToLower();
 
-			var u = await _ctx.User.SingleAsync(x => x.Username == username);
+			var u = await _ctx.User.SingleAsync(x => x.Username == username).ConfigureAwait(false);
 
 			u.HashedPassword = user.HashedPassword;
 			u.Salt = null;
@@ -156,7 +160,7 @@ namespace Maw.Data.Identity
 
 			try
 			{
-				return await _ctx.SaveChangesAsync() == 1;
+				return await _ctx.SaveChangesAsync().ConfigureAwait(false) == 1;
 			}
 			catch(DbUpdateException ex)
 			{
@@ -175,7 +179,7 @@ namespace Maw.Data.Identity
 
 			var username = updatedUser.Username.ToLower();
 
-            var user = await _ctx.User.SingleOrDefaultAsync(x => x.Username == username);
+            var user = await _ctx.User.SingleOrDefaultAsync(x => x.Username == username).ConfigureAwait(false);
 
 			if(user == null)
 			{
@@ -203,17 +207,17 @@ namespace Maw.Data.Identity
 
 			if(!string.IsNullOrWhiteSpace(updatedUser.State))
 			{
-				user.StateId = (await _ctx.State.SingleOrDefaultAsync(x => x.Code == updatedUser.State.ToUpper()))?.Id;
+				user.StateId = (await _ctx.State.SingleOrDefaultAsync(x => x.Code == updatedUser.State.ToUpper()).ConfigureAwait(false))?.Id;
 			}
 
 			if(!string.IsNullOrWhiteSpace(updatedUser.Country))
 			{
-				user.CountryId = (await _ctx.Country.SingleOrDefaultAsync(x => x.Code == updatedUser.Country.ToUpper()))?.Id;
+				user.CountryId = (await _ctx.Country.SingleOrDefaultAsync(x => x.Code == updatedUser.Country.ToUpper()).ConfigureAwait(false))?.Id;
 			}
 
 			try
 			{
-                await _ctx.SaveChangesAsync();
+                await _ctx.SaveChangesAsync().ConfigureAwait(false);
 
 				return true;
 			}
@@ -247,7 +251,7 @@ namespace Maw.Data.Identity
 
 			try
 			{
-                await _ctx.SaveChangesAsync();
+                await _ctx.SaveChangesAsync().ConfigureAwait(false);
 
 				return true;
 			}
@@ -318,7 +322,7 @@ namespace Maw.Data.Identity
 
 			try
 			{
-				var result = await _ctx.SaveChangesAsync();
+				var result = await _ctx.SaveChangesAsync().ConfigureAwait(false);
 
 				user.Id = u.Id;
 
@@ -341,7 +345,7 @@ namespace Maw.Data.Identity
 
 			username = username.ToLower();
 
-            var user = await _ctx.User.SingleAsync(x => x.Username == username);
+            var user = await _ctx.User.SingleAsync(x => x.Username == username).ConfigureAwait(false);
             var roles = user.UserRole.ToList();
 
             foreach(var role in roles)
@@ -353,7 +357,7 @@ namespace Maw.Data.Identity
 
 			try
 			{
-                return await _ctx.SaveChangesAsync();
+                return await _ctx.SaveChangesAsync().ConfigureAwait(false);
 			}
 			catch(DbUpdateException ex)
 			{
@@ -375,14 +379,16 @@ namespace Maw.Data.Identity
 			var usersInRole = await _ctx.UserRole
 					.Where(ur => ur.Role.Name == roleName)
 					.Select(ur => ur.UserId)
-					.ToListAsync();
+					.ToListAsync()
+					.ConfigureAwait(false);
 
 			var users = await _ctx.User
 				.Include(u => u.Country)
 				.Include(u => u.State)
 				.Include(u => u.UserRole).ThenInclude(ur => ur.Role)
 				.Where(u => usersInRole.Contains(u.Id))
-				.ToListAsync();
+				.ToListAsync()
+				.ConfigureAwait(false);
 
 			return users.Select(x => BuildMawUser(x))
                 .OrderBy(x => x.Username)
@@ -407,7 +413,7 @@ namespace Maw.Data.Identity
 
 			try
 			{
-            	return await _ctx.SaveChangesAsync() == 1;
+            	return await _ctx.SaveChangesAsync().ConfigureAwait(false) == 1;
 			}
 			catch(DbUpdateException ex)
 			{
@@ -426,7 +432,7 @@ namespace Maw.Data.Identity
 
 			roleName = roleName.ToLower();
 
-            var role = await _ctx.Role.SingleAsync(x => x.Name == roleName);
+            var role = await _ctx.Role.SingleAsync(x => x.Name == roleName).ConfigureAwait(false);
             var users = role.UserRole.ToList();
 
             foreach(var user in users)
@@ -438,7 +444,7 @@ namespace Maw.Data.Identity
 
 			try
 			{
-                return await _ctx.SaveChangesAsync() == 1;
+                return await _ctx.SaveChangesAsync().ConfigureAwait(false) == 1;
 			}
 			catch(DbUpdateException ex)
 			{
@@ -475,7 +481,7 @@ namespace Maw.Data.Identity
 
 			try
 			{
-                return await _ctx.SaveChangesAsync() == 1;
+                return await _ctx.SaveChangesAsync().ConfigureAwait(false) == 1;
 			}
 			catch(DbUpdateException ex)
 			{
@@ -500,15 +506,15 @@ namespace Maw.Data.Identity
 			username = username.ToLower();
 			roleName = roleName.ToLower();
 
-            var user = await _ctx.User.SingleAsync(x => x.Username == username);
-            var role = await _ctx.Role.SingleAsync(x => x.Name == roleName);
-			var userRole = await _ctx.UserRole.SingleAsync(x => x.UserId == user.Id && x.RoleId == role.Id);
+            var user = await _ctx.User.SingleAsync(x => x.Username == username).ConfigureAwait(false);
+            var role = await _ctx.Role.SingleAsync(x => x.Name == roleName).ConfigureAwait(false);
+			var userRole = await _ctx.UserRole.SingleAsync(x => x.UserId == user.Id && x.RoleId == role.Id).ConfigureAwait(false);
             
             role.UserRole.Remove(userRole);
 
 			try
 			{
-                return await _ctx.SaveChangesAsync() == 1;
+                return await _ctx.SaveChangesAsync().ConfigureAwait(false) == 1;
 			}
 			catch(DbUpdateException ex)
 			{
@@ -528,13 +534,13 @@ namespace Maw.Data.Identity
 
 			username = username.ToLower();
 
-			var user = await _ctx.User.SingleAsync(x => x.Username == username);
+			var user = await _ctx.User.SingleAsync(x => x.Username == username).ConfigureAwait(false);
 
 			user.SecurityStamp = securityStamp;
 
 			try
 			{
-				return await _ctx.SaveChangesAsync() == 1;
+				return await _ctx.SaveChangesAsync().ConfigureAwait(false) == 1;
 			}
 			catch(DbUpdateException ex)
 			{
@@ -553,7 +559,7 @@ namespace Maw.Data.Identity
 
 			roleName = roleName.ToLower();
 
-			var result = await _ctx.Role.SingleOrDefaultAsync(x => x.Name == roleName);
+			var result = await _ctx.Role.SingleOrDefaultAsync(x => x.Name == roleName).ConfigureAwait(false);
 
 			if(result == null)
 			{
@@ -572,7 +578,8 @@ namespace Maw.Data.Identity
 		public async Task<D.MawRole> GetRoleAsync(short id)
 		{
 			var result = await _ctx.Role
-				.SingleOrDefaultAsync(x => x.Id == id);
+				.SingleOrDefaultAsync(x => x.Id == id)
+				.ConfigureAwait(false);
 
 			if(result == null)
 			{

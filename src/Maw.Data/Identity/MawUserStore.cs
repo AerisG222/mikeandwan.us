@@ -102,7 +102,7 @@ namespace Maw.Data.Identity
 				throw new ArgumentNullException(nameof(user));
 			}
 
-			var result = await _repo.AddUserAsync(user);
+			var result = await _repo.AddUserAsync(user).ConfigureAwait(false);
             
 			if(result == 1)
 			{
@@ -124,7 +124,7 @@ namespace Maw.Data.Identity
 				throw new ArgumentNullException(nameof(user));
 			}
 
-			var success = await _repo.UpdateUserAsync(user);
+			var success = await _repo.UpdateUserAsync(user).ConfigureAwait(false);
 
 			if(success)
 			{
@@ -141,7 +141,7 @@ namespace Maw.Data.Identity
         {
 			cancellationToken.ThrowIfCancellationRequested();
 
-			if(1 == await _repo.RemoveUserAsync(user.Username))
+			if(1 == await _repo.RemoveUserAsync(user.Username).ConfigureAwait(false))
 			{
 				return IdentityResult.Success;
 			}
@@ -162,7 +162,7 @@ namespace Maw.Data.Identity
 
             if(short.TryParse(userId, out id))
             {
-                var user = await _repo.GetUserAsync(id);
+                var user = await _repo.GetUserAsync(id).ConfigureAwait(false);
 
                 if(user == null)
                 {
@@ -182,7 +182,7 @@ namespace Maw.Data.Identity
 
 			_log.LogInformation("attempting to find by NAME: " + normalizedUserName);
 
-            var user = await _repo.GetUserAsync(normalizedUserName);
+            var user = await _repo.GetUserAsync(normalizedUserName).ConfigureAwait(false);
 
             return user;
         }
@@ -249,7 +249,7 @@ namespace Maw.Data.Identity
 				throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
 			}
 
-			await _repo.AddUserToRoleAsync(user.Username, roleName);
+			await _repo.AddUserToRoleAsync(user.Username, roleName).ConfigureAwait(false);
 		}
 
 
@@ -269,7 +269,7 @@ namespace Maw.Data.Identity
 
 			_log.LogInformation("removing " + user.Username + " from role " + roleName);
 
-			await _repo.RemoveUserFromRoleAsync(user.Username, roleName);
+			await _repo.RemoveUserFromRoleAsync(user.Username, roleName).ConfigureAwait(false);
 		}
 
 
@@ -311,7 +311,7 @@ namespace Maw.Data.Identity
 
 			_log.LogInformation("is user in role: " + user.Username + " : " + roleName);
 
-			var roles = await GetRolesAsync(user, cancellationToken);
+			var roles = await GetRolesAsync(user, cancellationToken).ConfigureAwait(false);
 			var role = roles.SingleOrDefault(x => string.Equals(x, roleName, StringComparison.OrdinalIgnoreCase));
 
 			return role != null;
@@ -329,7 +329,7 @@ namespace Maw.Data.Identity
 
 			_log.LogInformation("getting users in role: " + roleName);
 
-			return await _repo.GetUsersInRoleAsync(roleName);
+			return await _repo.GetUsersInRoleAsync(roleName).ConfigureAwait(false);
 		}
 		#endregion
 
@@ -365,7 +365,7 @@ namespace Maw.Data.Identity
 
 			user.Email = email;
 
-			await _repo.UpdateUserAsync(user);
+			await _repo.UpdateUserAsync(user).ConfigureAwait(false);
 		}
 
 
@@ -396,7 +396,7 @@ namespace Maw.Data.Identity
 		{
 			_log.LogInformation("find email: " + normalizedEmail);
 
-			return await _repo.GetUserByEmailAsync(normalizedEmail);
+			return await _repo.GetUserByEmailAsync(normalizedEmail).ConfigureAwait(false);
 		}
 
 

@@ -1,7 +1,8 @@
 ﻿.player { margin-bottom: 12px; }
+.player.disabled:hover, .player.disabled:hover img { cursor: default; border-style: none; }
 .player.not_selected img { filter: grayscale(75%); -webkit-filter: grayscale(75%); -ms-filter: grayscale(75%); -moz-filter: grayscale(75%); -o-filter: grayscale(75%); }
 .player:hover { cursor: pointer; }
-.player:hover img, .player.selected img { border-width: 4px; border-style: solid; filter: grayscale(0%); -webkit-filter: grayscale(0%); -ms-filter: grayscale(0%); -moz-filter: grayscale(0%); -o-filter: grayscale(0%); }
+.player:hover img, .player.selected img, .player.disabled.selected img { border-width: 4px; border-style: solid; filter: grayscale(0%); -webkit-filter: grayscale(0%); -ms-filter: grayscale(0%); -moz-filter: grayscale(0%); -o-filter: grayscale(0%); }
 .player.red:hover, .player.selected.red, .red.active { color: #c00; }
 .player.blue:hover, .player.selected.blue, .blue.active { color: #00c; }
 .player.purple:hover, .player.selected.purple, .purple.active { color: #c0c; }

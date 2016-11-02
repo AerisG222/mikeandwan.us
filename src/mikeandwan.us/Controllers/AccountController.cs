@@ -81,9 +81,10 @@ namespace MawMvcApp.Controllers
 
 		
 		[HttpGet("login")]
-		public ActionResult Login()
+		public ActionResult Login(string returnUrl = null)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
+			ViewBag.ReturnUrl = returnUrl;
 
             if (User.Identity.IsAuthenticated)
             {
@@ -96,10 +97,11 @@ namespace MawMvcApp.Controllers
 		
 		[HttpPost("login")]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Login(LoginModel model, string returnUrl)
+		public async Task<ActionResult> Login(LoginModel model, string returnUrl = null)
         {
 			ViewBag.NavigationZone = NavigationZone.Account;
-
+			ViewBag.ReturnUrl = returnUrl;
+			
 			model.WasAttempted = true;
 
             if(!ModelState.IsValid)

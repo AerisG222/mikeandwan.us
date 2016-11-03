@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectorRef, ViewChild, AfterViewInit, OnDestroy, OnChanges } from '@angular/core';
+import { Component, Input, ViewChild, AfterViewInit, OnDestroy, OnChanges, NgZone } from '@angular/core';
 
 import { ResponsiveService } from '../../ng_maw/shared/responsive.service';
 
@@ -53,22 +53,22 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
         }
     }
 
-    constructor(private _changeDetectionRef: ChangeDetectorRef,
+    constructor(private _zone : NgZone,
                 private _stateService: PhotoStateService,
                 private _navService: PhotoNavigationService,
                 private _responsiveService: ResponsiveService) {
-        Mousetrap.bind('right', () => this.runAndCheck(() => this.context.moveNext()));
-        Mousetrap.bind('left', () => this.runAndCheck(() => this.context.movePrevious()));
-        Mousetrap.bind('f', () => this.runAndCheck(() => this.toggleFullscreen()));
-        Mousetrap.bind('s', () => this.runAndCheck(() => this.context.toggleSlideshow()));
-        Mousetrap.bind('a', () => this.runAndCheck(() => this.rotate(-1)));
-        Mousetrap.bind('d', () => this.runAndCheck(() => this.rotate(1)));
-        Mousetrap.bind('x', () => this.runAndCheck(() => this.toggleExif()));
-        Mousetrap.bind('c', () => this.runAndCheck(() => this.toggleComments()));
-        Mousetrap.bind('r', () => this.runAndCheck(() => this.toggleRatings()));
-        Mousetrap.bind('h', () => this.runAndCheck(() => this.toggleHistogram()));
-        Mousetrap.bind('e', () => this.runAndCheck(() => this.toggleEffects()));
-        Mousetrap.bind('?', () => this.runAndCheck(() => this.toggleHelp()));
+        Mousetrap.bind('right', () => this._zone.run(() => this.context.moveNext()));
+        Mousetrap.bind('left', () => this._zone.run(() => this.context.movePrevious()));
+        Mousetrap.bind('f', () => this._zone.run(() => this.toggleFullscreen()));
+        Mousetrap.bind('s', () => this._zone.run(() => this.context.toggleSlideshow()));
+        Mousetrap.bind('a', () => this._zone.run(() => this.rotate(-1)));
+        Mousetrap.bind('d', () => this._zone.run(() => this.rotate(1)));
+        Mousetrap.bind('x', () => this._zone.run(() => this.toggleExif()));
+        Mousetrap.bind('c', () => this._zone.run(() => this.toggleComments()));
+        Mousetrap.bind('r', () => this._zone.run(() => this.toggleRatings()));
+        Mousetrap.bind('h', () => this._zone.run(() => this.toggleHistogram()));
+        Mousetrap.bind('e', () => this._zone.run(() => this.toggleEffects()));
+        Mousetrap.bind('?', () => this._zone.run(() => this.toggleHelp()));
     }
 
     ngOnChanges(): void {
@@ -209,11 +209,6 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
         if (canvas != null) {
             Pixastic.revert(canvas);
         }
-    }
-
-    private runAndCheck(func: Function) {
-        func();
-        this._changeDetectionRef.detectChanges();
     }
 
     private getHistogramCanvas(): HTMLCanvasElement {

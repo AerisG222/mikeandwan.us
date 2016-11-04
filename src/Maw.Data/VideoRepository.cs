@@ -42,7 +42,8 @@ namespace Maw.Data
 			var cats = await _ctx.Category
                 .Where(x => x.Year == year && (allowPrivate || !x.IsPrivate))
                 .OrderBy(x => x.Id)
-				.ToListAsync();
+				.ToListAsync()
+                .ConfigureAwait(false);
 
 			return cats
                 .Select(x => BuildVideoCategory(x))
@@ -59,7 +60,8 @@ namespace Maw.Data
                     Video = vid, 
                     Category = cat 
                 })
-				.ToListAsync();
+				.ToListAsync()
+                .ConfigureAwait(false);
 
 			return vids.Select(x => BuildVideo(x.Video, x.Category))
 				.ToList();
@@ -75,7 +77,8 @@ namespace Maw.Data
                     Video = vid, 
                     Category = cat 
                 })
-				.SingleAsync();
+				.SingleAsync()
+                .ConfigureAwait(false);
 
 			return BuildVideo(video.Video, video.Category);
 		}
@@ -85,7 +88,8 @@ namespace Maw.Data
 		{
 			var cat = await _ctx.Category
                 .Where(x => x.Id == categoryId && (allowPrivate || !x.IsPrivate))
-				.SingleAsync();
+				.SingleAsync()
+                .ConfigureAwait(false);
 
 			return BuildVideoCategory(cat);
 		}

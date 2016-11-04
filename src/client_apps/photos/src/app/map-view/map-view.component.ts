@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, ChangeDetectorRef, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, Input, ElementRef, NgZone, OnDestroy, AfterViewInit } from '@angular/core';
 
 import { Photo } from '../shared/photo.model';
 import { IPhoto } from '../shared/iphoto.model';
@@ -24,7 +24,7 @@ export class MapViewComponent implements OnDestroy, AfterViewInit {
     private _openInfoWindow: google.maps.InfoWindow = null;
     @Input() context: PhotoListContext;
 
-    constructor(private _changeDetectionRef: ChangeDetectorRef,
+    constructor(private _zone: NgZone,
                 private _elRef: ElementRef) {
 
     }
@@ -41,8 +41,8 @@ export class MapViewComponent implements OnDestroy, AfterViewInit {
         this.initMap();
         this.addPhotosToMap();
 
-        Mousetrap.bind('right', () => this.runAndCheck(() => this.context.moveGpsNext()));
-        Mousetrap.bind('left', () => this.runAndCheck(() => this.context.moveGpsPrevious()));
+        Mousetrap.bind('right', () => this._zone.run(() => this.context.moveGpsNext()));
+        Mousetrap.bind('left', () => this._zone.run(() => this.context.moveGpsPrevious()));
     }
 
     ngOnDestroy(): void {
@@ -123,14 +123,11 @@ export class MapViewComponent implements OnDestroy, AfterViewInit {
         });
 
         google.maps.event.addListener(marker, 'click', (suppressEvent: boolean) => {
-            this.onMapMarkerClicked(marker, infoWindow, photo, suppressEvent);
+            this._zone.run(() => {
+                this.onMapMarkerClicked(marker, infoWindow, photo, suppressEvent);
+            });
         });
 
         return marker;
-    }
-
-    private runAndCheck(func: Function) {
-        func();
-        this._changeDetectionRef.detectChanges();
     }
 }

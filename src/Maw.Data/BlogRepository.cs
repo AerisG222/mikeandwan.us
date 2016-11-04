@@ -57,7 +57,8 @@ namespace Maw.Data
 				.Where(x => x.BlogId == blogId)
 				.OrderByDescending(x => x.PublishDate)
 				.Take(postCount)
-				.ToListAsync();
+				.ToListAsync()
+				.ConfigureAwait(false);
 				
 			return posts.Select(x => BuildPost(x));
 		}
@@ -85,7 +86,7 @@ namespace Maw.Data
 			_ctx.Post
 				.Add(p);
 			
-			await _ctx.SaveChangesAsync();
+			await _ctx.SaveChangesAsync().ConfigureAwait(false);
 		}
 		
 		

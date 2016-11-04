@@ -1,10 +1,13 @@
-#if NET451
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text;
 using System.Xml;
+
+#if NET451
 using System.Xml.Xsl;
+#endif
+
 using Maw.Domain.Utilities;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -57,6 +60,7 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 		
 		public void ExecuteTransform()
 		{
+#if NET451
 			AttemptedTransform = true;
 			
 	        if(string.IsNullOrEmpty(XmlSource))
@@ -151,7 +155,7 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 					tr.Close();
 				}
 			}
+#endif
 		}
 	}
 }
-#endif

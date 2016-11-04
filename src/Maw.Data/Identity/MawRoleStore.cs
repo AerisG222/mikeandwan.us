@@ -42,7 +42,7 @@ namespace Maw.Data.Identity
 				throw new ArgumentNullException(nameof(role));
 			}
 
-			var result = await _repo.CreateRoleAsync(role.Name, role.Description);
+			var result = await _repo.CreateRoleAsync(role.Name, role.Description).ConfigureAwait(false);
             
 			return result ? IdentityResult.Success : IdentityResult.Failed();
         }
@@ -61,7 +61,7 @@ namespace Maw.Data.Identity
 				throw new ArgumentNullException(nameof(role));
 			}
 
-			var result = await _repo.RemoveRoleAsync(role.Name);
+			var result = await _repo.RemoveRoleAsync(role.Name).ConfigureAwait(false);
 
 			return result ? IdentityResult.Success : IdentityResult.Failed();
         }

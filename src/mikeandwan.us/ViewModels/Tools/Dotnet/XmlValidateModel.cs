@@ -1,10 +1,13 @@
-#if NET451
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text;
 using System.Xml;
+
+#if NET451
 using System.Xml.Schema;
+#endif
+
 using Maw.Domain.Utilities;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -55,6 +58,7 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 		
 		public void ValidateXml()
 		{
+#if NET451
 			ValidationAttempted = true;
 			Stream xmlStream = null;
 			Stream xsdStream = null;			
@@ -81,9 +85,11 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 					xmlStream.Close();
 				}
 			}
+#endif
 		}
 		
-		
+
+#if NET451		
 		private void ValidateXml(Stream xmlStream, Stream xsdStream)
 	    {
 			XmlReader reader = null;
@@ -153,6 +159,6 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 	        Errors.Append(string.Concat("[", CurrErr, "] Position: ", e.Exception.LinePosition, "\n"));
 	        Errors.Append(string.Concat("[", CurrErr, "] Message: ", e.Exception.Message, "\n\n"));
 	    }
+#endif
 	}
 }
-#endif

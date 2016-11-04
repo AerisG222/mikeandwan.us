@@ -59,8 +59,8 @@ namespace Maw.Domain.Captcha
 			using(var client = new HttpClient())
 			using(var content = new FormUrlEncodedContent(parameters))
 			{
-				var response = await client.PostAsync(URL, content);
-				var val = await response.Content.ReadAsStringAsync();
+				var response = await client.PostAsync(URL, content).ConfigureAwait(false);
+				var val = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 				var jobject = JObject.Parse(val);
 				var result = (bool)jobject["success"];
 

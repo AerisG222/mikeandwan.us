@@ -43,7 +43,7 @@ namespace Maw.Data
         public async Task<D.PhotoAndCategory> GetRandomPhotoAsync(bool allowPrivate)
         {
             var rand = new Random();
-			var count = await _ctx.Photo.CountAsync();
+			var count = await _ctx.Photo.CountAsync().ConfigureAwait(false);
 			var skip = (int)(rand.NextDouble() * count);
 
             // originally tried to incorporate all data in this sql call, but that took almost 10s to complete, by
@@ -51,12 +51,13 @@ namespace Maw.Data
 			var photo = await _ctx.Photo.OrderBy(x => x.Id)
                 .Skip(skip)
                 .Take(1)
-				.SingleAsync();
+				.SingleAsync()
+                .ConfigureAwait(false);
 
             return new D.PhotoAndCategory 
             {
                 Photo = BuildPhoto(photo),
-                Category = await GetCategoryAsync(photo.CategoryId, allowPrivate)
+                Category = await GetCategoryAsync(photo.CategoryId, allowPrivate).ConfigureAwait(false)
 			};
         }
 
@@ -67,7 +68,8 @@ namespace Maw.Data
                 .Select(x => x.Year)
                 .Distinct()
                 .OrderByDescending(x => x)
-				.ToListAsync();
+				.ToListAsync()
+                .ConfigureAwait(false);
         }
 
 
@@ -97,7 +99,8 @@ namespace Maw.Data
         {
             var count = await _ctx.Category
                 .Where(x => allowPrivate || !x.IsPrivate)
-                .CountAsync();
+                .CountAsync()
+                .ConfigureAwait(false);
 
 			return Convert.ToInt16(count);
         }
@@ -130,7 +133,8 @@ namespace Maw.Data
 			var photos = await _ctx.Photo
                 .Where(x => x.CategoryId == categoryId && (allowPrivate || !x.IsPrivate))
                 .OrderBy(x => x.LgPath)
-				.ToListAsync();
+				.ToListAsync()
+                .ConfigureAwait(false);
 
 			return photos
 				.Select(x => BuildPhoto(x))
@@ -138,25 +142,28 @@ namespace Maw.Data
 		}
 
 
-		public async Task<D.Category> GetCategoryAsync(short categoryId, bool allowPrivate)
+        // TODO: revert to true async processing once the following is fixed:
+        //       https://github.com/aspnet/EntityFramework/issues/6534
+		public Task<D.Category> GetCategoryAsync(short categoryId, bool allowPrivate)
         {
-            var cat = await _ctx.Category
+            var cat = _ctx.Category
 				.Where(x => x.Id == categoryId && (allowPrivate || !x.IsPrivate))
 				.Select(x => new 
                 { 
                     Category = x, 
                     HasGps = x.Photo.Any(i => i.GpsLatitude != null) 
                 })
-				.SingleAsync();
+				.Single();
 
-			return BuildPhotoCategory(cat.Category, cat.HasGps);
+			return Task.FromResult(BuildPhotoCategory(cat.Category, cat.HasGps));
         }
 
 
 		public async Task<D.Photo> GetPhotoAsync(int photoId, bool allowPrivate)
 		{
 			var photo = await _ctx.Photo
-				.SingleAsync(x => x.Id == photoId && (allowPrivate || !x.IsPrivate));
+				.SingleAsync(x => x.Id == photoId && (allowPrivate || !x.IsPrivate))
+                .ConfigureAwait(false);
 
 			return BuildPhoto(photo);
 		}
@@ -207,7 +214,8 @@ namespace Maw.Data
                 .Include(x => x.VrMode)
                 .Include(x => x.WhiteBalance)
                 .Where(x => x.Id == photoId && (allowPrivate || !x.IsPrivate))
-                .SingleAsync();
+                .SingleAsync()
+                .ConfigureAwait(false);
 
             return new D.Detail 
             {
@@ -315,9 +323,9 @@ namespace Maw.Data
 		{
             var rating = new D.Rating();
 
-			var userId = await GetUserId(username);
-            var avg = await _ctx.Rating.Where(x => x.PhotoId == photoId).AverageAsync(x => (float?)x.Score);
-            var usr = await _ctx.Rating.Where(x => x.PhotoId == photoId && x.UserId == userId).MaxAsync(x => (byte?)x.Score);
+			var userId = await GetUserId(username).ConfigureAwait(false);
+            var avg = await _ctx.Rating.Where(x => x.PhotoId == photoId).AverageAsync(x => (float?)x.Score).ConfigureAwait(false);
+            var usr = await _ctx.Rating.Where(x => x.PhotoId == photoId && x.UserId == userId).MaxAsync(x => (byte?)x.Score).ConfigureAwait(false);
 
             if(avg != null)
             {
@@ -332,7 +340,7 @@ namespace Maw.Data
 		public async Task<int> InsertPhotoCommentAsync(int photoId, string username, string comment)
         {
             try{
-                var userId = await GetUserId(username);
+                var userId = await GetUserId(username).ConfigureAwait(false);
                     
                 var ic = new Comment 
                 {
@@ -344,7 +352,7 @@ namespace Maw.Data
     
                 _ctx.Comment.Add(ic);
     
-                return await _ctx.SaveChangesAsync();
+                return await _ctx.SaveChangesAsync().ConfigureAwait(false);
             }
             catch(DbUpdateException ex)
             {
@@ -356,8 +364,8 @@ namespace Maw.Data
 
 		public async Task<float?> SavePhotoRatingAsync(int photoId, string username, byte rating)
         {
-            var userId = await GetUserId(username);
-            var ir = await _ctx.Rating.SingleOrDefaultAsync(x => x.PhotoId == photoId && x.UserId == userId);
+            var userId = await GetUserId(username).ConfigureAwait(false);
+            var ir = await _ctx.Rating.SingleOrDefaultAsync(x => x.PhotoId == photoId && x.UserId == userId).ConfigureAwait(false);
 
             if(ir == null)
             {
@@ -369,31 +377,32 @@ namespace Maw.Data
                 };
 
                 _ctx.Rating.Add(ir);
-                await _ctx.SaveChangesAsync();
+                await _ctx.SaveChangesAsync().ConfigureAwait(false);
             }
             else if(ir.Score != rating)
             {
                 ir.Score = rating;
 
-                await _ctx.SaveChangesAsync();
+                await _ctx.SaveChangesAsync().ConfigureAwait(false);
             }
 
-            return (float?) await _ctx.Rating.Where(x => x.PhotoId == photoId).AverageAsync(y => y.Score);
+            return (float?) await _ctx.Rating.Where(x => x.PhotoId == photoId).AverageAsync(y => y.Score).ConfigureAwait(false);
         }
 		
 		
 		public async Task<float?> RemovePhotoRatingAsync(int photoId, string username)
 		{
-            var userId = await GetUserId(username);
-            var rating = await _ctx.Rating.SingleAsync(x => x.PhotoId == photoId && x.UserId == userId);
+            var userId = await GetUserId(username).ConfigureAwait(false);
+            var rating = await _ctx.Rating.SingleAsync(x => x.PhotoId == photoId && x.UserId == userId).ConfigureAwait(false);
 
             _ctx.Rating.Remove(rating);
 
-            await _ctx.SaveChangesAsync();
+            await _ctx.SaveChangesAsync().ConfigureAwait(false);
 
             var avg = await _ctx.Rating
                 .Where(x => x.PhotoId == photoId)
-                .AverageAsync(y => (float?)y.Score);
+                .AverageAsync(y => (float?)y.Score)
+                .ConfigureAwait(false);
             
             return avg ?? 0;
 		}
@@ -447,7 +456,8 @@ namespace Maw.Data
                 .ThenInclude(x => x.Category)
                 .Where(x => allowPrivate || !x.Photo.IsPrivate)
 				.GroupBy(x => x.Photo)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             var groups = query
 				.Select(g => new 
@@ -486,7 +496,8 @@ namespace Maw.Data
 				.Where(x => x.User.Username == username)
                 .Where(x => allowPrivate || !x.Photo.IsPrivate)
 				.GroupBy(x => x.Photo)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             var groups = query
 				.Select(g => new 
@@ -563,7 +574,8 @@ namespace Maw.Data
                 .ThenInclude(x => x.Category)
                 .Where(x => allowPrivate || !x.Photo.IsPrivate)
 				.GroupBy(x => x.Photo)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             var groups = query
 				.Select(g => new 
@@ -635,7 +647,8 @@ namespace Maw.Data
                 .ThenInclude(x => x.Category)
                 .Where(x => allowPrivate || !x.Photo.IsPrivate)
 				.GroupBy(x => x.Photo)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             var groups = query
 				.Select(g => new 
@@ -715,7 +728,7 @@ namespace Maw.Data
 				query.OrderBy(x => x.Score);
             }
 
-			var photos = await query.ToListAsync();
+			var photos = await query.ToListAsync().ConfigureAwait(false);
 
 			return photos
 				.Select(x => new D.PhotoAndCategory 
@@ -741,7 +754,8 @@ namespace Maw.Data
                     })
                 .OrderBy(x => x.Year)
                 .ThenBy(x => x.CategoryName)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         
@@ -788,7 +802,8 @@ namespace Maw.Data
             return await _ctx.User
                 .Where(u => u.Username == username)
                 .Select(x => x.Id)
-                .SingleAsync();
+                .SingleAsync()
+                .ConfigureAwait(false);
         }
         
         

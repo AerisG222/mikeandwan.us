@@ -54,6 +54,8 @@ namespace MawMvcApp
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<FrameworkIdentifier>();
+
             // http://docs.asp.net/en/latest/fundamentals/configuration.html#options-config-objects
             services
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))

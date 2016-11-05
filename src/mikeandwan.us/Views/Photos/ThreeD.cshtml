@@ -12,7 +12,6 @@
     </style>
 }
 
-@Html.Partial("_js_Systemjs")
 @Html.Partial("_js_Threejs")
 @Html.Partial("_js_Mousetrap")
 
@@ -46,12 +45,4 @@ void main()
 	gl_FragColor = baseColor;
 }  
 </script>
-
-<script>
-    System.config({
-        baseURL: "/js/photos3d",
-        defaultJSExtensions: true
-    });
-
-    System.import('app');
-</script>
+<script src="/js/photos3d/bundle.js"></script>

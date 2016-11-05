@@ -1,12 +1,17 @@
 import { DataService } from './data-service';
 import { Background } from './background';
+import { CategoryListView } from './category-list-view';
+import { Nav } from './nav';
 
 export class Photos3D {
     private camera: THREE.PerspectiveCamera;
     private renderer: THREE.WebGLRenderer;
     private ambientLight: THREE.AmbientLight;
     private directionalLight: THREE.DirectionalLight;
+    private axisHelper: THREE.AxisHelper;
     private background: Background;
+    private nav: Nav;
+    private categoryListView: CategoryListView;
     private height: number;
     private width: number;
     private sizeCode: string;
@@ -23,13 +28,32 @@ export class Photos3D {
 
         this.onResize();
         this.prepareScene();
-        this.loadCategories();
         this.animate();
     }
 
     togglePause() {
         this.isPaused = !this.isPaused;
         this.animate();
+    }
+
+    toggleBackground() { 
+        if(this.background.isShown) {
+            this.background.hide();
+        }
+        else {
+            this.background.show();
+        }
+    }
+
+    toggleAxisHelper() {
+        if(this.axisHelper == null) {
+            this.axisHelper = new THREE.AxisHelper(500);
+            this.scene.add(this.axisHelper);
+        }
+        else {
+            this.scene.remove(this.axisHelper);
+            this.axisHelper = null;
+        }
     }
 
     private onResize() {
@@ -48,16 +72,6 @@ export class Photos3D {
             this.renderer.setSize(this.width, this.height);
             this.camera.aspect = this.width / this.height;
         }
-    }
-
-    private loadCategories() {
-        this.dataService
-            .getCategories()
-            .then(categories => {
-                for(let i = 0; i < categories.length; i++) {
-                    let cat = categories[i];
-                }
-            });
     }
 
     private prepareScene() {
@@ -89,8 +103,17 @@ export class Photos3D {
                                          this.sizeCode);
         this.background.init();
 
-        this.scene.add(new THREE.AxisHelper(500));
+        this.categoryListView = new CategoryListView(this.scene,
+                                                     this.width,
+                                                     this.height,
+                                                     this.dataService);
+        this.categoryListView.init();
 
+        this.toggleAxisHelper();
+        
+        this.nav = new Nav();
+        this.nav.init();
+        
         this.animate();
     }
 

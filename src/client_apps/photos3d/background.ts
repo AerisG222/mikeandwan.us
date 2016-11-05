@@ -11,6 +11,8 @@ export class Background {
     private treeMesh: THREE.Mesh;
     private textureLoader = new TextureLoader();
 
+    isShown = true;
+
     constructor(private renderer: THREE.Renderer, 
                 private scene: THREE.Scene,
                 private camera: THREE.Camera, 
@@ -48,8 +50,40 @@ export class Background {
         this.updateTextures(this.loadTextures());
     }
 
+    show() { 
+        if(this.isShown) {
+            return;
+        }
+
+        if(this.treeMesh != null) {
+            this.scene.add(this.treeMesh);
+        }
+
+        if(this.waterMesh != null) {
+            this.scene.add(this.waterMesh);
+        }
+
+        this.isShown = true;
+    }
+
+    hide() {
+        if(!this.isShown) {
+            return;
+        }
+
+        if(this.treeMesh != null) {
+            this.scene.remove(this.treeMesh);
+        }
+
+        if(this.waterMesh != null) {
+            this.scene.remove(this.waterMesh);
+        }
+
+        this.isShown = false;
+    }
+
     render(clockDelta: number) {
-        if(this.waterUniform != null) {
+        if(this.isShown && this.waterUniform != null) {
             this.waterUniform.time.value += clockDelta;
         }
     }

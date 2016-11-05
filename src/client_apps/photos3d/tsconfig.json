@@ -4,6 +4,12 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "outDir": "dist",
-        "sourceMap":  false
-    }
+        "sourceMap":  true,
+        "typeRoots": [
+            "node_modules/@types"
+        ]
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }

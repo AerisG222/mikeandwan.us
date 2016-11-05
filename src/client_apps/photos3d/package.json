@@ -7,6 +7,12 @@
     "@types/jquery": "^2.0.33",
     "@types/mousetrap": "^1.5.32",
     "@types/stats": "^0.16.30",
-    "@types/three": "0.0.24"
+    "@types/three": "0.0.24",
+    "awesome-typescript-loader": "^2.2.4",
+    "typescript": "^2.0.7",
+    "webpack": "^2.1.0-beta.25"
+  },
+  "dependencies": {
+    "linqts": "^1.6.0"
   }
 }

@@ -27,10 +27,12 @@ but will try to get this well organized below to make it easy to follow.
 9. Optimize networking - edit /etc/sysctl.conf
     - followed document at [nixCraft Guide](http://www.cyberciti.biz/tips/linux-unix-bsd-nginx-webserver-security.html)
 10. Update firewall to allow http/https
-    - `firewall-cmd --zone=FedoraServer --list-allow`
-    - `firewall-cmd --permanent --zone=FedoraServer --add-service=https`
-    - `firewall-cmd --permanent --zone=FedoraServer --add-service=http`
-    - `systemctl restart firewalld.service`
+    ```
+    firewall-cmd --zone=FedoraServer --list-allow
+    firewall-cmd --permanent --zone=FedoraServer --add-service=https
+    firewall-cmd --permanent --zone=FedoraServer --add-service=http
+    systemctl restart firewalld.service
+    ```
 11. Install tool to update DNS entries if ISP IP changes
     - `dnf install ddclient`
     - update /etc/ddclient.conf
@@ -47,8 +49,11 @@ but will try to get this well organized below to make it easy to follow.
         password=YOUR_PASSWORD                          \
         www,@,aeris
         ```
-    - `systemctl start ddclient.service`
-    - `systemctl enable ddclient.service`
+    - start and enable ddclient
+        ```
+        systemctl start ddclient.service
+        systemctl enable ddclient.service
+        ```
 12. Harden sshd
     - edit /etc/ssh/sshd_config and set the following:
         ```
@@ -70,52 +75,93 @@ but will try to get this well organized below to make it easy to follow.
         ```
         sshd: 192.168.1.12
         ```
-    - `systemctl start denyhosts.service`
-    - `systemctl enable denyhosts.service`
+    - Start and enable denyhosts
+        ```
+        systemctl start denyhosts.service
+        systemctl enable denyhosts.service
+        ``` 
 14. Add service account
     - `useradd -m -r svc_www_maw`
-15. Install remaining dependencies
+15. Update group associations
+    - `vigr`
+        - add svc_www_maw as a member of nginx
+        - add nginx as a member of svc_www_maw
+16. Install remaining dependencies
     - `sudo dnf install imagemagick-devel`
 
 
 ## PostgreSQL
 
 - Adapted from this [guide](https://fedoraproject.org/wiki/PostgreSQL)
-    1. `sudo dnf install postgresql postgresql-server`
-    2. `sudo postgresql-setup --initdb --unit postgresql`
-    3. `sudo systemctl start postgresql.service`
-    4. `sudo systemctl enable postgresql.service`
+    ```
+    sudo dnf install postgresql postgresql-server
+    sudo postgresql-setup --initdb --unit postgresql
+    sudo systemctl start postgresql.service
+    sudo systemctl enable postgresql.service
+    ```
 
 
 ## .NET Core
 
 - Adapted from this [guide](https://www.microsoft.com/net)
-    1. `sudo dnf install libunwind libicu`
-    2. `curl -sSL -o dotnet.tar.gz https://go.microsoft.com/fwlink/?LinkID=827531`
-    3. `sudo mkdir -p /opt/dotnet && sudo tar zxf dotnet.tar.gz -C /opt/dotnet`
-    4. `sudo ln -s /opt/dotnet/dotnet /usr/local/bin`
+    ```
+    sudo dnf install libunwind libicu
+    curl -sSL -o dotnet.tar.gz https://go.microsoft.com/fwlink/?LinkID=827531
+    sudo mkdir -p /opt/dotnet && sudo tar zxf dotnet.tar.gz -C /opt/dotnet
+    sudo ln -s /opt/dotnet/dotnet /usr/local/bin
+    ```
 
 
 ## Nginx
 
 1. `sudo dnf install nginx`
-2. Update SELinux to connect to Kestrel
+2. Update SELinux to connect to Kestrel (if using tcp for kestrel)
     - `setsebool -P httpd_can_network_connect 1`
-3. Configure Nginx to start at boot
-    - `sudo systemctl start nginx.service`
-    - `sudo systemctl enable nginx.service`
+3. Start and enable Nginx to start at boot
+    ```
+    sudo systemctl start nginx.service
+    sudo systemctl enable nginx.service
+    ```
 
 
 ## Supervisord
 
 This application will ensure that the backend application server (Kestrel / your website)
-runs at system startup.  Also, if the process dies, this will restart the process.
+runs at system startup.  Also, if the process dies, this will restart the process.  Depending
+on whether you want Nginx to connect to kestrel via TCP or Unix sockets will drive some of the
+decisions below, which are called out separately below.
 
 1. `sudo dnf install supervisord`
-2. Create config file [/etc/supervisord/mikeandwan.us.ini](supervisord/mikeandwan.us.ini)
-3. Configure Nginx to start at boot
-    - `sudo systemctl start supervisord.service`
-    - `sudo systemctl enable supervisord.service`
+2. Configure your webapp / Kestrel
+    - For TCP Sockets: 
+        - Create config file [/etc/supervisord/mikeandwan.us.ini](supervisord/tcp_mikeandwan.us.ini)
+    - For Unix Sockets:
+        - `mkdir /var/kestrel`
+        - `chown svc_www_maw:svc_www_maw /var/kestrel`
+        - `chmod ug+rwx /var/kestrel`
+        - Create config file [/etc/supervisord/mikeandwan.us.ini](supervisord/unix_mikeandwan.us.ini)
+            - notice that the ASPNETCORE_URLS environment variable is set to define the location of the unix sockets
+            - the command now points to the script below, which will ensure the unix socket is cleaned up before starting
+            - also, umask is set to 002, which allows the owner and group to read, write, and execute the socket file when created.
+              This is needed because we are using 2 different users for the nginx process (nginx), and the kestrel service (svc_www_maw).
+              This is why we needed to update nginx to be a member of svc_www_maw in earlier instructions.
+        - Create startup script [/home/svc_www_maw/start_mikeandwan.us.sh](svc_www_maw/start_mikeandwan.us.sh)
+3. Start and enable supervisord to start at boot
+    ```
+    sudo systemctl start supervisord.service
+    sudo systemctl enable supervisord.service
+    ```
+4. Update SELinux for unix sockets
+    - The process will fail when trying to use unix sockets due to SELinux preventing the connection from nginx to the kestrel unix socket.
+      To fix this, do the following:
+        - `audit2allow -i /var/log/audit/audit.log`
+        - Review the output, you should see something in regards to needing to allow `file_sock`
+        - Add a new SELinux policy to allow nginx to connect to kestrel
+            ```
+            audit2allow -i /var/log/audit/audit.log -M kestrel
+            mv kestrel* /usr/share/selinux/targeted/
+            semodule -i /usr/share/selinux/targeted/kestrel.pp
+            ```
 
 
 ## Website
@@ -131,14 +177,17 @@ runs at system startup.  Also, if the process dies, this will restart the proces
     - `openssl dhparam -out mikeandwan.us.dhparam.pem 2048`
 2. Create [/etc/nginx/maw_ssl.conf](nginx/maw_ssl.conf)
 3. Create /etc/nginx/sites-available and copy in [mikeandwan.us.conf](nginx/mikeandwan.us.conf)
+    - Comment/Uncomment the proxy_pass line based on whether you are using TCP or Unix Sockets to communicate with Kestrel
 4. Update [/etc/nginx/mime.types](nginx/mime.types)
 5. Add this site to nginx
     - `ln -s /etc/nginx/sites-available/mikeandwan.us.conf /etc/nginx/conf.d/mikeandwan.us.conf`
 6. Deploy site to server by using tools/publish_website.sh
 7. Now update selinux to allow nginx to access the wwwroot directory (labels might not have been copied)
-    - `restorecon -Rv /srv/www/mikeandwan.us/wwwroot/`
-    - `restorecon -Rv /etc/nginx/certs`
-    - `restorecon -Rv /etc/nginx/sites-available`
+    ```
+    restorecon -Rv /srv/www/mikeandwan.us/wwwroot/
+    restorecon -Rv /etc/nginx/certs
+    restorecon -Rv /etc/nginx/sites-available
+    ```
 8. Deploy assets to server, then update SELinux labels
     - `restorecon -Rv /srv/www/website_assets/`
 

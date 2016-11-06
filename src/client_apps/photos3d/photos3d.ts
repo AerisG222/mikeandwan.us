@@ -106,7 +106,9 @@ export class Photos3D {
         this.categoryListView = new CategoryListView(this.scene,
                                                      this.width,
                                                      this.height,
-                                                     this.dataService);
+                                                     this.dataService,
+                                                     500,
+                                                     2000);
         this.categoryListView.init();
 
         this.toggleAxisHelper();

@@ -10,7 +10,7 @@ export class CategoryObject3D extends THREE.Object3D {
     }
 
     init() {
-        let geometry = new THREE.BoxGeometry(64, 64, 1);
+        let geometry = new THREE.BoxGeometry(32, 32, 1);
         let material = new THREE.MeshLambertMaterial({
             color: this.color
         });

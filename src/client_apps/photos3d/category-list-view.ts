@@ -10,7 +10,9 @@ export class CategoryListView {
     constructor(private scene: THREE.Scene,
                 private width: number,
                 private height: number,
-                private dataService: DataService) {
+                private dataService: DataService,
+                private zDisplayed: number,
+                private zSeparation: number) {
 
     }
 
@@ -30,30 +32,57 @@ export class CategoryListView {
         this.dataService
             .getCategories()
             .then(categories => {
-                let list = new List(categories);
-                let years = list.GroupBy(cat => cat.year, cat => cat);
-                
-                for (var year in years) {
-                    if (years.hasOwnProperty(year)) {
-                        this.prepareCategoriesForYear(parseInt(year), years[year]);
-                    }
-                }
-
-                /*
-                for(let i = 0; i < years.length; i++) {
-                    
-                    let category = categories[i];
-                    let year = this.getYear(category.year);
-                    let categoryObject = this.createCategoryObject(category);
-                    
-                    this.scene.add(categoryObject);
-                }
-                */
+                this.prepareAllCategories(categories);
             });
     }
 
-    private prepareCategoriesForYear(year: number, categories: Array<ICategory>) {
-        console.log(year);
+    private generateColor(): number {
+        let r = Math.floor(Math.random() * 255);
+        let g = Math.floor(Math.random() * 255);
+        let b = Math.floor(Math.random() * 255);
+
+        return parseInt(`${r.toString(16)}${g.toString(16)}${b.toString(16)}`, 16); 
+    }
+
+    private prepareAllCategories(categories: Array<ICategory>) {
+        let list = new List(categories);
+        let years = list.GroupBy(cat => cat.year, cat => cat);
+        let iyears: Array<IYear> = [];
+
+        for (let year in years) {
+            if (years.hasOwnProperty(year)) {
+                let iyear = <IYear> {
+                    categories: years[year],
+                    categoryObjects: [],
+                    color: this.generateColor()
+                };
+                
+                iyears.push(iyear);
+            }
+        }
+
+        let iyearList = new List(iyears);
+        iyears = iyearList
+            .OrderBy(key => key.year)
+            .Reverse()
+            .ToArray();
+
+        for (let i = 0; i < iyears.length; i++) {
+            let theYear = iyears[i];
+            theYear.index = i;
+            this.prepareCategoriesForYear(theYear);
+        }
+    }
+
+    private prepareCategoriesForYear(year: IYear) {
+        let z = this.zDisplayed - (this.zSeparation * year.index);
+
+        for(let i = 0; i < year.categories.length; i++) {
+            let category = year.categories[i];
+            let categoryObject = this.createCategoryObject(category, z, year.color);
+            
+            this.scene.add(categoryObject);
+        }
     }
 
     private removeCategories() {
@@ -61,19 +90,17 @@ export class CategoryListView {
             for(let i = 0; i < this.years.length; i++) {
                 let year = this.years[i];
 
-                for(let j = 0; j < year.categories.length; j++) {
-                    this.scene.remove(year.categories[j]);
+                for(let j = 0; j < year.categoryObjects.length; j++) {
+                    this.scene.remove(year.categoryObjects[j]);
                 }
             }
         }
     }
 
-    private createCategoryObject(category: ICategory): CategoryObject3D {
+    private createCategoryObject(category: ICategory, z: number, color: number): CategoryObject3D {
         let x = Math.random() * this.width - (this.width * 0.5);
         let y = Math.random() * this.height;
-        let z = Math.random() * 200;
         let endPos = new THREE.Vector3(x, y, z);
-        let color = Math.floor(Math.random() * 0xffffff);
 
         let cat = new CategoryObject3D(category, endPos, color);
         cat.position.x = x;
@@ -83,21 +110,5 @@ export class CategoryListView {
         cat.init();
 
         return cat;
-    }
-    
-    private getYear(year: number): IYear {
-        let list = this.years.filter(iyear => { iyear.year == year });
-
-        if(list.length === 1) {
-            return list[0];
-        }
-        else if(list.length === 0) {
-            let y = <IYear> { year: year, categories: [] };
-            this.years.push(y);
-
-            return y;
-        }
-
-        throw new Error('More than one entry found for the same year!');
     }
 }

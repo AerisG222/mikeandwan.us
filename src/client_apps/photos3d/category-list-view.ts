@@ -41,7 +41,7 @@ export class CategoryListView {
         let g = Math.floor(Math.random() * 255);
         let b = Math.floor(Math.random() * 255);
 
-        return parseInt(`${r.toString(16)}${g.toString(16)}${b.toString(16)}`, 16); 
+        return parseInt(`${r.toString(16)}${g.toString(16)}${b.toString(16)}`, 16);
     }
 
     private prepareAllCategories(categories: Array<ICategory>) {

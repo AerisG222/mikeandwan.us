@@ -10,13 +10,17 @@ export class CategoryObject3D extends THREE.Object3D {
 
     constructor(private category: ICategory,
                 private endPosition: THREE.Vector3,
-                public color: number) {
+                private color: number) {
         super();
     }
 
     init() {
         CategoryObject3D.loader.load(this.category.teaserImage.path, texture => {
             this.createObject(texture);
+
+            this.position.x = this.endPosition.x;
+            this.position.y = this.endPosition.y;
+            this.position.z = this.endPosition.z;
         });
     }
 

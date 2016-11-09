@@ -1,5 +1,4 @@
 import { ICategory } from './icategory';
-import { List } from 'linqts/linq'
 
 export class CategoryObject3D extends THREE.Object3D {
     private static EDGE_LENGTH = 24;
@@ -57,16 +56,15 @@ export class CategoryObject3D extends THREE.Object3D {
 
     // https://github.com/mrdoob/three.js/issues/2065
     private mapUvs(geometry: THREE.Geometry) {
-        let list = new List(geometry.vertices);
-        let maxX = list.Select(x => x.x).Max();
-        let minX = list.Select(x => x.x).Min();
-        let maxY = list.Select(x => x.y).Max();
-        let minY = list.Select(x => x.y).Min();
+        geometry.computeBoundingBox();
+        let minX = geometry.boundingBox.min.x;
+        let minY = geometry.boundingBox.min.y;
+        let maxX = geometry.boundingBox.max.x;
+        let maxY = geometry.boundingBox.max.y;
         let deltaX = maxX - minX;
         let deltaY = maxY - minY;
 
         let faceCount = geometry.faces.length;
-        let faceUvs;
         let uvA = new THREE.Vector2(0, 0);
         let uvB = new THREE.Vector2(0, 0);
         let uvC = new THREE.Vector2(0, 0);

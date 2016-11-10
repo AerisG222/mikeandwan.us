@@ -1,6 +1,8 @@
 import { ICategory } from './icategory';
 
 export class CategoryObject3D extends THREE.Object3D {
+    private static BACKGROUND_DEPTH = 0.1;
+    private static IMAGE_DEPTH = 0.3;
     private static EDGE_LENGTH = 24;
     private static BORDER_WIDTH = 2;
     private static loader = new THREE.TextureLoader();
@@ -40,7 +42,7 @@ export class CategoryObject3D extends THREE.Object3D {
 
     private createBackground() {
         let len = CategoryObject3D.EDGE_LENGTH;
-        let geometry = this.createExtrudeGeometry(CategoryObject3D.EDGE_LENGTH, 2);
+        let geometry = this.createExtrudeGeometry(CategoryObject3D.EDGE_LENGTH, CategoryObject3D.BACKGROUND_DEPTH);
         let material = new THREE.MeshLambertMaterial({ color: this.color, side: THREE.DoubleSide });
         
         this.backgroundMesh = new THREE.Mesh(geometry, material);
@@ -48,7 +50,7 @@ export class CategoryObject3D extends THREE.Object3D {
 
     private createImage(texture: THREE.Texture) {
         let len = CategoryObject3D.EDGE_LENGTH - CategoryObject3D.BORDER_WIDTH;
-        let geometry = this.createExtrudeGeometry(len, 6);
+        let geometry = this.createExtrudeGeometry(len, CategoryObject3D.IMAGE_DEPTH);
 
         this.mapUvs(geometry);
 
@@ -57,7 +59,7 @@ export class CategoryObject3D extends THREE.Object3D {
         this.imageMesh = new THREE.Mesh(geometry, material);
 
         this.imageMesh.position.y = CategoryObject3D.BORDER_WIDTH / 2;
-        this.imageMesh.position.z = -3;
+        this.imageMesh.position.z = (CategoryObject3D.IMAGE_DEPTH - CategoryObject3D.BACKGROUND_DEPTH) / 2;
     }
 
     // https://github.com/mrdoob/three.js/issues/2065

@@ -71,6 +71,7 @@ export class Photos3D {
         if(this.renderer != null) {
             this.renderer.setSize(this.width, this.height);
             this.camera.aspect = this.width / this.height;
+            this.camera.updateProjectionMatrix();
         }
     }
 
@@ -104,6 +105,7 @@ export class Photos3D {
         this.background.init();
 
         this.categoryListView = new CategoryListView(this.scene,
+                                                     this.camera,
                                                      this.width,
                                                      this.height,
                                                      this.dataService,
@@ -135,5 +137,6 @@ export class Photos3D {
         let delta = this.clock.getDelta();
 
         this.background.render(delta);
+        this.categoryListView.render(delta);
     }
 }

@@ -7,16 +7,23 @@ export class CategoryListView {
     private years: Array<Year> = [];
 
     constructor(private scene: THREE.Scene,
+                private camera: THREE.PerspectiveCamera,
                 private width: number,
                 private height: number,
                 private dataService: DataService,
                 private zWhenDisplayed: number,
                 private zBetweenYears: number) {
-
+         
     }
 
     init() {
         this.loadCategories();
+    }
+
+    render(delta: number) {
+        for(let i = 0; i < this.years.length; i++) {
+            this.years[i].render(delta);
+        }
     }
 
     private loadCategories() {
@@ -32,9 +39,13 @@ export class CategoryListView {
         let categoryMap = list.GroupBy(cat => cat.year, cat => cat);
         let yearKeys = this.getSortedYears(categoryMap);
 
+        // http://gamedev.stackexchange.com/questions/96317/determining-view-boundaries-based-on-z-position-when-using-a-perspective-project
+        let heightWhenDisplayed = 2 * Math.tan(this.camera.fov * 0.5 * (Math.PI/180)) * (this.camera.position.z - this.zWhenDisplayed);
+        let widthWhenDisplayed = heightWhenDisplayed * this.camera.aspect;
+
         for (let i = 0; i < yearKeys.length; i++) {
             let key = yearKeys[i];
-            let year = new Year(parseInt(key), this.scene, i, this.zWhenDisplayed, this.zBetweenYears, categoryMap[key]);
+            let year = new Year(parseInt(key), this.scene, i, heightWhenDisplayed, widthWhenDisplayed, this.zWhenDisplayed, this.zBetweenYears, categoryMap[key]);
 
             year.init();
 

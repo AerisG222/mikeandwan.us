@@ -11,15 +11,23 @@ export class Year {
     constructor(public year: number,
                 private scene: THREE.Scene,
                 private index: number,
+                private heightWhenDisplayed: number,
+                private widthWhenDisplayed: number,
                 private zWhenDisplayed: number,
                 private zBetweenYears: number,
                 private categories: Array<ICategory>) {
         this.color = this.generateColor();
     }
 
-    public init() {
+    init() {
         this.z = this.zWhenDisplayed - (this.index * this.zBetweenYears);
         this.prepareCategories();
+    }
+
+    render(delta: number) {
+        for(let i = 0; i < this.categoryObject3dList.length; i++) {
+            this.categoryObject3dList[i].render(delta);
+        }
     }
 
     private generateColor(): number {
@@ -51,8 +59,8 @@ export class Year {
     }
 
     private getCategoryPosition(index: number, count: number) {
-        let x = Math.random() * this.width - (this.width * 0.5);
-        let y = Math.random() * this.height;
+        let x = Math.random() * this.widthWhenDisplayed - (this.widthWhenDisplayed * 0.5);
+        let y = Math.random() * this.heightWhenDisplayed;
         let endPos = new THREE.Vector3(x, y, this.z);
 
         return endPos;

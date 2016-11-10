@@ -27,6 +27,12 @@ export class CategoryObject3D extends THREE.Object3D {
         this.add(this.backgroundMesh);
     }
 
+    render(delta: number) {
+        if(this.position.equals(this.endPosition)) {
+            return;
+        }
+    }
+
     private createObject(texture: THREE.Texture) {
         this.createImage(texture);
         this.add(this.imageMesh);

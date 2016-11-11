@@ -96,21 +96,8 @@ export class CategoryObject3D extends THREE.Object3D {
     }
 
     private createExtrudeGeometry(edgeLength: number, depth: number): THREE.ExtrudeGeometry {
-        let points: Array<THREE.Vector2> = [];
-
-        // a^2 + (edgelength/2)^2 = edgelength^2
-        let halfLength = edgeLength / 2;
-        let halfHeight = Math.sqrt(Math.pow(edgeLength, 2) - Math.pow(halfLength, 2));
-        let totalHeight = halfHeight * 2;
-
-        points.push(new THREE.Vector2(halfLength, 0));
-        points.push(new THREE.Vector2(-halfLength, 0));
-        points.push(new THREE.Vector2(-edgeLength, halfHeight));
-        points.push(new THREE.Vector2(-halfLength, totalHeight));
-        points.push(new THREE.Vector2(halfLength, totalHeight));
-        points.push(new THREE.Vector2(edgeLength, halfHeight));
-        points.push(new THREE.Vector2(halfLength, 0));
-
+        // get hexagon here
+        
         let shape = new THREE.Shape(points);
 
         let settings = { 

@@ -1,10 +1,10 @@
 import { ICategory } from './icategory';
 import { CategoryObject3D } from './category-object3d';
+import { CategoryLayoutCalculator } from './category-layout-calculator';
+import { CategoryLayout } from './category-layout';
 
 export class Year {
     private color: number;
-    private width = 800;
-    private height = 500;
     private z: number;
     private categoryObject3dList: Array<CategoryObject3D> = [];
 
@@ -40,6 +40,8 @@ export class Year {
 
     private prepareCategories() {
         let z = this.zWhenDisplayed - (this.zBetweenYears * this.index);
+        let clc = new CategoryLayoutCalculator();
+        let layout = clc.calculate(this.categories.length);
 
         for(let i = 0; i < this.categories.length; i++) {
             let category = this.categories[i];

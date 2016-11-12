@@ -31,6 +31,22 @@ export class Photos3D {
         this.animate();
     }
 
+    strafeLeft() {
+        this.camera.position.x -= 25;
+    }
+
+    strafeRight() {
+        this.camera.position.x += 25;
+    }
+
+    stepForward() {
+        this.camera.position.z -= 25;
+    }
+
+    stepBackward() {
+        this.camera.position.z += 25;
+    }
+
     togglePause() {
         this.isPaused = !this.isPaused;
         this.animate();

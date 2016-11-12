@@ -19,29 +19,33 @@ export class CategoryLayoutCalculator {
     }
 
     calculate(categoryCount: number): CategoryLayout {
-        let maxHex = this.getMaxHexagon(categoryCount);
         let layout: LayoutPosition[][] = [];
+        let maxHex = this.getMaxHexagon(categoryCount);
+        let itemWidth = (2 * maxHex.centerToVertexLength) + (2 * CategoryLayoutCalculator.CATEGORY_PADDING);
+        let horizontalCenterToCenterDistance = itemWidth + maxHex.centerToVertexLength;
+        
         let top = this.frustrumHeight - CategoryLayoutCalculator.FRUSTRUM_MARGIN_TOP_BOTTOM - maxHex.centerToMidEdgeLength;
         let left = -(this.frustrumWidth - CategoryLayoutCalculator.FRUSTRUM_MARGIN_SIDES - maxHex.centerToVertexLength) / 2;
-        let maxRows = this.frustrumHeight / ((2 * maxHex.centerToMidEdgeLength) + CategoryLayoutCalculator.TOTAL_PAD);
-        let maxCols = this.frustrumWidth / ((2 * maxHex.centerToMidEdgeLength) + CategoryLayoutCalculator.TOTAL_PAD);
-        let totalSlots = maxRows * maxCols;
+
         let currIdx = 0;
-
-        let itemWidth = 2 * maxHex.centerToVertexLength + CategoryLayoutCalculator.CATEGORY_PADDING;
-        let itemHeight = 2 * maxHex.centerToMidEdgeLength + CategoryLayoutCalculator.CATEGORY_PADDING;
-
+        
+        let maxRows = (this.frustrumHeight - (2 * CategoryLayoutCalculator.FRUSTRUM_MARGIN_TOP_BOTTOM)) / (maxHex.centerToMidEdgeLength + CategoryLayoutCalculator.TOTAL_PAD);
+        let maxCols = (this.frustrumWidth - (2 * CategoryLayoutCalculator.FRUSTRUM_MARGIN_SIDES)) / horizontalCenterToCenterDistance;
+        
         // TODO: make layout appealing - not top left to bottom right
         for(let i = 0; i < maxRows; i++) {
             layout[i] = [];
             let even = i % 2;
 
+            let x = left + (even * (1.5 * maxHex.centerToVertexLength + CategoryLayoutCalculator.CATEGORY_PADDING));
+            let y = top - (i * CategoryLayoutCalculator.BORDER_WIDTH) - (i * maxHex.centerToMidEdgeLength);
+
             for(let j = 0; j < maxCols; j++) {
                 let pos = new LayoutPosition();
-                let x = left + (j * itemWidth) + (even * maxHex.centerToVertexLength);
-                let y = top - (i * itemWidth) + (even * maxHex.centerToMidEdgeLength);
                 pos.center = new THREE.Vector2(x, y);
                 pos.index = currIdx++;
+
+                x += horizontalCenterToCenterDistance;
 
                 layout[i][j] = pos;
             }

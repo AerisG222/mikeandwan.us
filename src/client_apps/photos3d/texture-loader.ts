@@ -1,5 +1,8 @@
 export class TextureLoader {
-    private loader = new THREE.TextureLoader();
+    // TODO: typings do not recognize the other loading functions (progress+error), so we
+    //       mark the loader as any to avoid associated errors today.  once the typings
+    //       support this, remove the any typing.
+    private loader: any = new THREE.TextureLoader();
 
     loadTexture(url: string): Promise<THREE.Texture> {
         return new Promise((resolve, reject) => {

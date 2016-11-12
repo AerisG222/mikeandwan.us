@@ -40,17 +40,24 @@ export class Year {
 
     private prepareCategories() {
         let z = this.zWhenDisplayed - (this.zBetweenYears * this.index);
-        let clc = new CategoryLayoutCalculator();
+        let clc = new CategoryLayoutCalculator(this.heightWhenDisplayed, this.widthWhenDisplayed);
         let layout = clc.calculate(this.categories.length);
 
-        for(let i = 0; i < this.categories.length; i++) {
-            let category = this.categories[i];
-            let pos = this.getCategoryPosition(i, this.categories.length);
-            let categoryObject = new CategoryObject3D(category, pos, this.color); 
-            
-            categoryObject.init();
+        for(let row = 0; row < layout.positions.length; row++) {
+            for(let col = 0; col < layout.positions[row].length; col++) {
+                let lp = layout.positions[row][col];
 
-            this.scene.add(categoryObject);
+                if(lp.index < this.categories.length) {
+                    let categoryObject = new CategoryObject3D(this.categories[lp.index],
+                                                              layout.hexagon,
+                                                              new THREE.Vector3(lp.center.x, lp.center.y, z), 
+                                                              this.color);
+
+                    categoryObject.init();
+
+                    this.scene.add(categoryObject);
+                }
+            }
         }
     }
 
@@ -58,13 +65,5 @@ export class Year {
         for(let i = 0; i < this.categoryObject3dList.length; i++) {
             this.scene.remove(this.categoryObject3dList[i]);
         }
-    }
-
-    private getCategoryPosition(index: number, count: number) {
-        let x = Math.random() * this.widthWhenDisplayed - (this.widthWhenDisplayed * 0.5);
-        let y = Math.random() * this.heightWhenDisplayed;
-        let endPos = new THREE.Vector3(x, y, this.z);
-
-        return endPos;
     }
 }

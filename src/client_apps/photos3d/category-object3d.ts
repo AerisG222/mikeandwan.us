@@ -1,9 +1,9 @@
 import { ICategory } from './icategory';
+import { Hexagon } from './hexagon';
 
 export class CategoryObject3D extends THREE.Object3D {
     private static BACKGROUND_DEPTH = 0.1;
     private static IMAGE_DEPTH = 0.3;
-    private static EDGE_LENGTH = 24;
     private static BORDER_WIDTH = 2;
     private static loader = new THREE.TextureLoader();
 
@@ -11,6 +11,7 @@ export class CategoryObject3D extends THREE.Object3D {
     private imageMesh: THREE.Mesh = null;
 
     constructor(private category: ICategory,
+                private hexagon: Hexagon,
                 private endPosition: THREE.Vector3,
                 private color: number) {
         super();
@@ -41,16 +42,15 @@ export class CategoryObject3D extends THREE.Object3D {
     }
 
     private createBackground() {
-        let len = CategoryObject3D.EDGE_LENGTH;
-        let geometry = this.createExtrudeGeometry(CategoryObject3D.EDGE_LENGTH, CategoryObject3D.BACKGROUND_DEPTH);
+        let len = this.hexagon.centerToVertexLength + CategoryObject3D.BORDER_WIDTH;
+        let geometry = this.createExtrudeGeometry(len, CategoryObject3D.BACKGROUND_DEPTH);
         let material = new THREE.MeshLambertMaterial({ color: this.color, side: THREE.DoubleSide });
         
         this.backgroundMesh = new THREE.Mesh(geometry, material);
     }
 
     private createImage(texture: THREE.Texture) {
-        let len = CategoryObject3D.EDGE_LENGTH - CategoryObject3D.BORDER_WIDTH;
-        let geometry = this.createExtrudeGeometry(len, CategoryObject3D.IMAGE_DEPTH);
+        let geometry = this.createExtrudeGeometry(this.hexagon.centerToVertexLength, CategoryObject3D.IMAGE_DEPTH);
 
         this.mapUvs(geometry);
 
@@ -96,10 +96,8 @@ export class CategoryObject3D extends THREE.Object3D {
     }
 
     private createExtrudeGeometry(edgeLength: number, depth: number): THREE.ExtrudeGeometry {
-        // get hexagon here
-        
-        let shape = new THREE.Shape(points);
-
+        let hex = new Hexagon(edgeLength);
+        let shape = new THREE.Shape(hex.generatePoints());
         let settings = { 
             amount: depth,
             bevelEnabled: false

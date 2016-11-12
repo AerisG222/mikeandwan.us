@@ -1,7 +1,9 @@
+import { Hexagon } from './hexagon';
+import { LayoutPosition } from './layout-position';
+
 export class CategoryLayout {
-    constructor(public rows: number,
-                public cols: number,
-                public edgeLength: number) {
+    constructor(public hexagon: Hexagon,
+                public positions: LayoutPosition[][]) {
 
     }
 }

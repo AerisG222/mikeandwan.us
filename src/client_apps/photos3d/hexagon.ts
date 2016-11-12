@@ -1,4 +1,5 @@
 export class Hexagon {
+    private static readonly AREA_MULTIPLIER = 3 * Math.sqrt(3) / 2;
     private halfEdgeLength: number;
     private totalLength: number;
     private totalHeight: number;
@@ -11,16 +12,29 @@ export class Hexagon {
         this.totalHeight = this.halfHeight * 2;
     }
 
+    get centerToVertexLength() {
+        return this.edgeLength;
+    }
+
+    get centerToMidEdgeLength() {
+        return this.halfHeight;
+    }
+
+    area(): number {
+        // cool: search google for 'area of hexagon'
+        return Hexagon.AREA_MULTIPLIER * Math.pow(this.edgeLength, 2);
+    }
+
     generatePoints(): Array<THREE.Vector2> {
         let points: Array<THREE.Vector2> = [];
 
-        points.push(new THREE.Vector2(this.halfEdgeLength, 0));
-        points.push(new THREE.Vector2(-this.halfEdgeLength, 0));
-        points.push(new THREE.Vector2(-this.edgeLength, this.halfHeight));
-        points.push(new THREE.Vector2(-this.halfEdgeLength, this.totalHeight));
-        points.push(new THREE.Vector2(this.halfEdgeLength, this.totalHeight));
-        points.push(new THREE.Vector2(this.edgeLength, this.halfHeight));
-        points.push(new THREE.Vector2(this.halfEdgeLength, 0));
+        points.push(new THREE.Vector2(-this.halfEdgeLength, this.halfHeight));
+        points.push(new THREE.Vector2(this.halfEdgeLength, this.halfHeight));
+        points.push(new THREE.Vector2(this.edgeLength, 0));
+        points.push(new THREE.Vector2(this.halfEdgeLength, -this.halfHeight));
+        points.push(new THREE.Vector2(-this.halfEdgeLength, -this.halfHeight));
+        points.push(new THREE.Vector2(-this.edgeLength, 0));
+        points.push(new THREE.Vector2(-this.halfEdgeLength, this.halfHeight));
 
         return points;
     }

@@ -6,7 +6,8 @@ export class CategoryObject3D extends THREE.Object3D {
     private static IMAGE_DEPTH = 0.3;
     private static BORDER_WIDTH = 2;
     private static loader = new THREE.TextureLoader();
-
+    
+    private counter = Math.random() * 2 * Math.PI;
     private backgroundMesh: THREE.Mesh = null;
     private imageMesh: THREE.Mesh = null;
 
@@ -31,9 +32,8 @@ export class CategoryObject3D extends THREE.Object3D {
     }
 
     render(delta: number) {
-        if(this.position.equals(this.endPosition)) {
-            return;
-        }
+        this.counter += (2 * delta);
+        this.position.z += Math.sin(this.counter);
     }
 
     private createObject(texture: THREE.Texture) {

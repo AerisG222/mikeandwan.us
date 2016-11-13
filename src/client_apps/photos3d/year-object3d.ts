@@ -3,19 +3,19 @@ import { CategoryObject3D } from './category-object3d';
 import { CategoryLayoutCalculator } from './category-layout-calculator';
 import { CategoryLayout } from './category-layout';
 
-export class Year {
+export class YearObject3D extends THREE.Object3D {
     private color: number;
     private z: number;
     private categoryObject3dList: Array<CategoryObject3D> = [];
 
     constructor(public year: number,
-                private scene: THREE.Scene,
                 private index: number,
                 private heightWhenDisplayed: number,
                 private widthWhenDisplayed: number,
                 private zWhenDisplayed: number,
                 private zBetweenYears: number,
                 private categories: Array<ICategory>) {
+        super();
         this.color = this.generateColor();
     }
 
@@ -55,7 +55,8 @@ export class Year {
 
                     categoryObject.init();
 
-                    this.scene.add(categoryObject);
+                    this.categoryObject3dList.push(categoryObject);
+                    this.add(categoryObject);
                 }
             }
         }
@@ -63,7 +64,7 @@ export class Year {
 
     private removeCategories() {
         for(let i = 0; i < this.categoryObject3dList.length; i++) {
-            this.scene.remove(this.categoryObject3dList[i]);
+            this.remove(this.categoryObject3dList[i]);
         }
     }
 }

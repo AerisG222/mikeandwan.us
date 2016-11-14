@@ -1,7 +1,12 @@
 import { ICategory } from './icategory';
 import { YearObject3D } from './year-object3d';
 import { DataService } from './data-service';
+import { StateService } from './state-service';
 import { List } from 'linqts/linq';
+import { NavEvent } from './nav-event';
+import { NavEventType } from './nav-event-type';
+import { NavItem } from './nav-item';
+import { NavType } from './nav-type';
 
 export class CategoryListView {
     private years: Array<YearObject3D> = [];
@@ -11,6 +16,7 @@ export class CategoryListView {
                 private width: number,
                 private height: number,
                 private dataService: DataService,
+                private stateService: StateService,
                 private zWhenDisplayed: number,
                 private zBetweenYears: number) {
          
@@ -53,6 +59,9 @@ export class CategoryListView {
 
             this.years.push(year);
         }
+
+        // TODO: put this in a better spot
+        this.stateService.updateActiveNav(new NavEvent(NavEventType.Update, new NavItem(NavType.Year, this.years[0].year.toString())));
     }
 
     private getSortedYears(categoryMap: any) : Array<string> {

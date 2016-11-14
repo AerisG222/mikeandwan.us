@@ -1,7 +1,8 @@
 import { DataService } from './data-service';
+import { StateService } from './state-service';
 import { Background } from './background';
 import { CategoryListView } from './category-list-view';
-import { Nav } from './nav';
+import { NavDisplay } from './nav-display';
 
 export class Photos3D {
     private camera: THREE.PerspectiveCamera;
@@ -10,7 +11,7 @@ export class Photos3D {
     private directionalLight: THREE.DirectionalLight;
     private axisHelper: THREE.AxisHelper;
     private background: Background;
-    private nav: Nav;
+    private nav: NavDisplay;
     private categoryListView: CategoryListView;
     private height: number;
     private width: number;
@@ -18,6 +19,7 @@ export class Photos3D {
 
     private clock = new THREE.Clock();
     private dataService = new DataService();
+    private stateService = new StateService();
     private scene = new THREE.Scene();
     private isPaused = false;
 
@@ -97,6 +99,10 @@ export class Photos3D {
         this.renderer.setSize(this.width, this.height);
         document.body.appendChild(this.renderer.domElement);
 
+        // status / nav bar
+        this.nav = new NavDisplay(this.stateService);
+        this.nav.init();
+
         // camera
         this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 2000);
         this.camera.position.set(0, 200, 1000);
@@ -125,14 +131,12 @@ export class Photos3D {
                                                      this.width,
                                                      this.height,
                                                      this.dataService,
+                                                     this.stateService,
                                                      500,
                                                      2000);
         this.categoryListView.init();
 
         this.toggleAxisHelper();
-        
-        this.nav = new Nav();
-        this.nav.init();
         
         this.animate();
     }

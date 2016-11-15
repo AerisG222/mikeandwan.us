@@ -13,13 +13,13 @@ export class CategoryObject3D extends THREE.Object3D {
 
     constructor(private category: ICategory,
                 private hexagon: Hexagon,
-                private endPosition: THREE.Vector3,
+                private endPosition: THREE.Vector2,
                 private color: number) {
         super();
 
         this.position.x = this.endPosition.x;
         this.position.y = this.endPosition.y;
-        this.position.z = this.endPosition.z;
+        this.position.z = 0;
     }
 
     init() {

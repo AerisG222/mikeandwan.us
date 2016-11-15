@@ -5,7 +5,6 @@ import { CategoryLayout } from './category-layout';
 
 export class YearObject3D extends THREE.Object3D {
     private color: number;
-    private z: number;
     private categoryObject3dList: Array<CategoryObject3D> = [];
 
     constructor(public year: number,
@@ -20,7 +19,8 @@ export class YearObject3D extends THREE.Object3D {
     }
 
     init() {
-        this.z = this.zWhenDisplayed - (this.index * this.zBetweenYears);
+        this.position.z = this.zWhenDisplayed - (this.index * this.zBetweenYears);
+
         this.prepareCategories();
     }
 
@@ -39,7 +39,6 @@ export class YearObject3D extends THREE.Object3D {
     }
 
     private prepareCategories() {
-        let z = this.zWhenDisplayed - (this.zBetweenYears * this.index);
         let clc = new CategoryLayoutCalculator(this.heightWhenDisplayed, this.widthWhenDisplayed);
         let layout = clc.calculate(this.categories.length);
 
@@ -50,7 +49,7 @@ export class YearObject3D extends THREE.Object3D {
                 if(lp.index < this.categories.length) {
                     let categoryObject = new CategoryObject3D(this.categories[lp.index],
                                                               layout.hexagon,
-                                                              new THREE.Vector3(lp.center.x, lp.center.y, z), 
+                                                              lp.center, 
                                                               this.color);
 
                     categoryObject.init();

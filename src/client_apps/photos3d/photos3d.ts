@@ -2,7 +2,7 @@ import { DataService } from './data-service';
 import { StateService } from './state-service';
 import { Background } from './background';
 import { CategoryListView } from './category-list-view';
-import { NavDisplay } from './nav-display';
+import { StatusBar } from './status-bar';
 
 export class Photos3D {
     private camera: THREE.PerspectiveCamera;
@@ -11,7 +11,7 @@ export class Photos3D {
     private directionalLight: THREE.DirectionalLight;
     private axisHelper: THREE.AxisHelper;
     private background: Background;
-    private nav: NavDisplay;
+    private nav: StatusBar;
     private categoryListView: CategoryListView;
     private height: number;
     private width: number;
@@ -100,7 +100,7 @@ export class Photos3D {
         document.body.appendChild(this.renderer.domElement);
 
         // status / nav bar
-        this.nav = new NavDisplay(this.stateService);
+        this.nav = new StatusBar(this.stateService);
         this.nav.init();
 
         // camera

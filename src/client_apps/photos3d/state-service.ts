@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { NavEvent } from './nav-event';
+import { ActiveStatus } from './active-status';
 
 export class StateService {
-    private activeNavSubject = new Subject<NavEvent>();
-    private temporalNavSubject = new Subject<NavEvent>();
+    private activeNavSubject = new Subject<ActiveStatus>();
+    private temporalNavSubject = new Subject<string>();
 
     get ActiveNavObservable() {
         return this.activeNavSubject.asObservable();
@@ -14,11 +14,11 @@ export class StateService {
         return this.temporalNavSubject.asObservable();
     }
 
-    updateTemporalNav(event: NavEvent) {
-        this.temporalNavSubject.next(event);
+    updateTemporalNav(category: string) {
+        this.temporalNavSubject.next(category);
     }
 
-    updateActiveNav(event: NavEvent) {
-        this.activeNavSubject.next(event);
+    updateActiveNav(year: number, category?: string) {
+        this.activeNavSubject.next(new ActiveStatus(year, category));
     }
 }

@@ -1,8 +1,7 @@
 import { StateService } from './state-service';
-import { NavEvent } from './nav-event';
-import { NavEventType } from './nav-event-type';
+import { ActiveStatus } from './active-status';
 
-export class NavDisplay {
+export class StatusBar {
     navDiv: HTMLDivElement;
     actualDiv: HTMLDivElement;
     temporalDiv: HTMLDivElement;
@@ -52,19 +51,16 @@ export class NavDisplay {
         return div;
     }
 
-    private updateTemporal(event: NavEvent) {
-        this.temporalDiv.innerHTML = event.navItem.name;
+    private updateTemporal(category: string) {
+        this.temporalDiv.innerHTML = category;
     }
 
-    private updateActive(event: NavEvent) {
-        if(event.navEventType == NavEventType.Remove) {
-
+    private updateActive(status: ActiveStatus) {
+        if(status.category != null) {
+            this.actualDiv.innerHTML = `${status.year} | ${status.category}`;
         }
-        else if(event.navEventType == NavEventType.Add) {
-            this.actualDiv.innerHTML += ` | ${event.navItem.name}`;
-        }
-        else if(event.navEventType == NavEventType.Update) {
-            this.actualDiv.innerHTML = event.navItem.name;
+        else {
+            this.actualDiv.innerHTML = status.year.toString();
         }
     }
 

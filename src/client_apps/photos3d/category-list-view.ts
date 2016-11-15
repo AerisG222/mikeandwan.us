@@ -3,10 +3,6 @@ import { YearObject3D } from './year-object3d';
 import { DataService } from './data-service';
 import { StateService } from './state-service';
 import { List } from 'linqts/linq';
-import { NavEvent } from './nav-event';
-import { NavEventType } from './nav-event-type';
-import { NavItem } from './nav-item';
-import { NavType } from './nav-type';
 
 export class CategoryListView {
     private years: Array<YearObject3D> = [];
@@ -61,7 +57,7 @@ export class CategoryListView {
         }
 
         // TODO: put this in a better spot
-        this.stateService.updateActiveNav(new NavEvent(NavEventType.Update, new NavItem(NavType.Year, this.years[0].year.toString())));
+        this.stateService.updateActiveNav(this.years[0].year);
     }
 
     private getSortedYears(categoryMap: any) : Array<string> {

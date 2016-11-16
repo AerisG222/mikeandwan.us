@@ -47,7 +47,14 @@ export class CategoryListView {
 
         for (let i = 0; i < yearKeys.length; i++) {
             let key = yearKeys[i];
-            let year = new YearObject3D(parseInt(key), i, heightWhenDisplayed, widthWhenDisplayed, this.zWhenDisplayed, this.zBetweenYears, categoryMap[key]);
+            let year = new YearObject3D(parseInt(key), 
+                                        this.stateService, 
+                                        i, 
+                                        heightWhenDisplayed, 
+                                        widthWhenDisplayed, 
+                                        this.zWhenDisplayed, 
+                                        this.zBetweenYears, 
+                                        categoryMap[key]);
 
             year.init();
 

@@ -1,5 +1,6 @@
 import { ICategory } from './icategory';
 import { Hexagon } from './hexagon';
+import { StateService } from './state-service';
 
 export class CategoryObject3D extends THREE.Object3D {
     private static BACKGROUND_DEPTH = 0.1;
@@ -7,11 +8,13 @@ export class CategoryObject3D extends THREE.Object3D {
     private static BORDER_WIDTH = 2;
     private static loader = new THREE.TextureLoader();
     
+    private isMouseOver = false;
     private counter = Math.random() * 2 * Math.PI;
     private backgroundMesh: THREE.Mesh = null;
     private imageMesh: THREE.Mesh = null;
 
-    constructor(private category: ICategory,
+    constructor(private stateService: StateService,
+                private category: ICategory,
                 private hexagon: Hexagon,
                 private endPosition: THREE.Vector2,
                 private color: number) {
@@ -29,11 +32,13 @@ export class CategoryObject3D extends THREE.Object3D {
 
         this.createBackground();
         this.add(this.backgroundMesh);
+
+        this.stateService.MouseoverObservable.subscribe(x => this.onMouseOver(x));
     }
 
     render(delta: number) {
-        this.counter += (2 * delta);
-        this.position.z += Math.sin(this.counter);
+        //this.counter += (2 * delta);
+        //this.position.z += Math.sin(this.counter);
     }
 
     private createObject(texture: THREE.Texture) {
@@ -60,6 +65,33 @@ export class CategoryObject3D extends THREE.Object3D {
 
         this.imageMesh.position.y = CategoryObject3D.BORDER_WIDTH / 2;
         this.imageMesh.position.z = (CategoryObject3D.IMAGE_DEPTH - CategoryObject3D.BACKGROUND_DEPTH) / 2;
+    }
+
+    private onMouseOver(intersections: Array<THREE.Intersection>) {
+        if(intersections.length == 0) {
+            this.isMouseOver = false;
+            this.position.z = 0;
+        }
+        else {
+            let isMouseOver = false;
+
+            for(var i = 0; i < intersections.length; i++) {
+                if(intersections[i].object.parent instanceof CategoryObject3D) {
+                    if(this.uuid == intersections[i].object.parent.uuid) {
+                        isMouseOver = true;
+                    }
+                }
+            }
+
+            this.isMouseOver = isMouseOver;
+
+            if(isMouseOver) {
+                this.position.z = 10;
+            }
+            else {
+                this.position.z = 0;
+            }
+        }
     }
 
     // https://github.com/mrdoob/three.js/issues/2065

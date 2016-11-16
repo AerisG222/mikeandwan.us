@@ -2,12 +2,14 @@ import { ICategory } from './icategory';
 import { CategoryObject3D } from './category-object3d';
 import { CategoryLayoutCalculator } from './category-layout-calculator';
 import { CategoryLayout } from './category-layout';
+import { StateService } from './state-service';
 
 export class YearObject3D extends THREE.Object3D {
     private color: number;
     private categoryObject3dList: Array<CategoryObject3D> = [];
 
     constructor(public year: number,
+                private stateService: StateService,
                 private index: number,
                 private heightWhenDisplayed: number,
                 private widthWhenDisplayed: number,
@@ -47,7 +49,8 @@ export class YearObject3D extends THREE.Object3D {
                 let lp = layout.positions[row][col];
 
                 if(lp.index < this.categories.length) {
-                    let categoryObject = new CategoryObject3D(this.categories[lp.index],
+                    let categoryObject = new CategoryObject3D(this.stateService,
+                                                              this.categories[lp.index],
                                                               layout.hexagon,
                                                               lp.center, 
                                                               this.color);

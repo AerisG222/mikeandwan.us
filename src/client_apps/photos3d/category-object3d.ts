@@ -79,6 +79,10 @@ export class CategoryObject3D extends THREE.Object3D {
                 if(intersections[i].object.parent instanceof CategoryObject3D) {
                     if(this.uuid == intersections[i].object.parent.uuid) {
                         isMouseOver = true;
+
+                        this.stateService.updateTemporalNav(this.category.name);
+
+                        break;
                     }
                 }
             }

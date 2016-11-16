@@ -7,6 +7,7 @@ import { DataService } from './data-service';
 import { StateService } from './state-service';
 import { Background } from './background';
 import { CategoryListView } from './category-list-view';
+import { CategoryObject3D } from './category-object3d';
 import { StatusBar } from './status-bar';
 
 export class Photos3D {
@@ -114,8 +115,12 @@ export class Photos3D {
 
         let ray = new THREE.Raycaster(this.camera.position, vector.sub(this.camera.position).normalize());
 
-        // create an array containing all objects in the scene with which the ray intersects
-	    let intersects = ray.intersectObjects(this.scene.children, true);
+        // create an array containing all objects in the scene with which the ray intersects, though
+        // filter the list to just objects that care about this to optimize perf
+        // TODO: get rid of magic number in filter below
+	    let intersects = ray
+            .intersectObjects(this.scene.children, true)
+            .filter(x => x.distance < 800 && x.object.parent instanceof CategoryObject3D);
 
         this.stateService.updateMouseover(intersects);
     }

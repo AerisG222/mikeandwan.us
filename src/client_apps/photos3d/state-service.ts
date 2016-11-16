@@ -28,6 +28,7 @@ export class StateService {
     }
 
     updateMouseover(intersections: Array<THREE.Intersection>) {
+        this.updateTemporalNav(null);
         this.mouseoverSubject.next(intersections);
     }
 }

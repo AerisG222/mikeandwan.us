@@ -1,3 +1,8 @@
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/throttleTime';
+
 import { DataService } from './data-service';
 import { StateService } from './state-service';
 import { Background } from './background';
@@ -16,6 +21,7 @@ export class Photos3D {
     private height: number;
     private width: number;
     private sizeCode: string;
+    private mouseoverSubscription: Subscription;
 
     private clock = new THREE.Clock();
     private dataService = new DataService();
@@ -30,6 +36,12 @@ export class Photos3D {
 
         this.onResize();
         this.prepareScene();
+
+        this.mouseoverSubscription = Observable
+            .fromEvent<MouseEvent>(document, 'mousemove')
+            .throttleTime(10)
+            .subscribe(evt => this.onMouseMove(evt));
+
         this.animate();
     }
 
@@ -91,6 +103,21 @@ export class Photos3D {
             this.camera.aspect = this.width / this.height;
             this.camera.updateProjectionMatrix();
         }
+    }
+
+    // http://stemkoski.github.io/Three.js/Mouse-Over.html
+    private onMouseMove(event: MouseEvent) {
+        let x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	    let y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        let vector = new THREE.Vector3(x, y, 0.5);
+        vector.unproject(this.camera);
+
+        let ray = new THREE.Raycaster(this.camera.position, vector.sub(this.camera.position).normalize());
+
+        // create an array containing all objects in the scene with which the ray intersects
+	    let intersects = ray.intersectObjects(this.scene.children, true);
+
+        this.stateService.updateMouseover(intersects);
     }
 
     private prepareScene() {

@@ -32,13 +32,9 @@ export class StatusBar {
         this.navDiv.appendChild(this.actualDiv);
 
         this.temporalDiv = this.createInfoDiv('33%', 'left')
-        this.temporalDiv.style.width = '33%';
-        this.temporalDiv.innerHTML = 'temp';
         this.navDiv.appendChild(this.temporalDiv);
 
-        this.statusDiv = document.createElement('div');
-        this.statusDiv.style.width = '33%';
-        this.statusDiv.innerHTML = 'stat';
+        this.statusDiv = this.createInfoDiv('33%', 'right');
         this.navDiv.appendChild(this.statusDiv);
     }
 

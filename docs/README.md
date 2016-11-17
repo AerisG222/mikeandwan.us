@@ -199,6 +199,21 @@ decisions below, which are called out separately below.
     - Run `crontab -e` and enter the following [tasks](crontab/crontab.conf)
 
 
+## Upgrade Fedora 23 to Fedora 24
+
+1. Follow instructions to upgrade: [DNF_system_upgrade](https://fedoraproject.org/wiki/DNF_system_upgrade)
+2. `sudo dnf install rpmconf`
+3. `sudo rpmconf -a`: go through and clean up old configs
+4. `sudo dnf install postgresql-upgrade`
+5. `sudo postgresql-setup --upgrade`
+6. Re-apply configurations
+    - `diff /var/lib/pgsql/data/pg_hba.conf /var/lib/pgsql/data-old/pg_hba.conf`
+    - `diff /var/lib/pgsql/data/postgresql.conf /var/lib/pgsql/data-old/postgresql.conf`
+7. `sudo systemctl start postgresql.service`
+8. `sudo rm -rf /opt/dotnet`  (preview versions were causing issues for me)
+9. Follow instructions on installing for Fedora 24: [fedora 24 instructions](https://www.microsoft.com/net/core#linuxfedora)
+
+
 ## Old Notes
 
 The following was needed on earlier versions of the site, but not sure if this is

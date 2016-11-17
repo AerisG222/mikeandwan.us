@@ -10,10 +10,10 @@
         }
     },
     "dependencies": {
-        "Microsoft.AspNetCore.Identity": "1.1.0-preview1-*",
-        "Microsoft.Extensions.Logging": "1.1.0-preview1-*",
-        "Microsoft.Extensions.Logging.Abstractions": "1.1.0-preview1-*",
-        "MailKit": "1.8.1",
+        "Microsoft.AspNetCore.Identity": "1.1.0",
+        "Microsoft.Extensions.Logging": "1.1.0",
+        "Microsoft.Extensions.Logging.Abstractions": "1.1.0",
+        "MailKit": "1.10.0",
         "Newtonsoft.Json": "9.0.1"
     },
     "frameworks": {
@@ -25,8 +25,8 @@
         },
         "netstandard1.6": {
             "dependencies": {
-                "System.Net.Http": "4.3.0-preview1-*",
-                "System.Security.Cryptography.Algorithms": "4.3.0-preview1-*"
+                "System.Net.Http": "4.3.0",
+                "System.Security.Cryptography.Algorithms": "4.3.0"
             },
             "imports": [
                 "dotnet55",

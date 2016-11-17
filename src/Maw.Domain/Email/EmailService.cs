@@ -63,8 +63,8 @@ namespace Maw.Domain.Email
                 }
                 
                 var msg = new MimeMessage();
-                msg.From.Add(new MailboxAddress(null, from));
-				msg.To.Add(new MailboxAddress(null, to));
+                msg.From.Add(new MailboxAddress((string)null, from));
+				msg.To.Add(new MailboxAddress((string)null, to));
 				msg.Subject = subject;
 				msg.Body = builder.ToMessageBody();
                 

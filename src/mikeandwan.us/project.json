@@ -18,13 +18,13 @@
         "Microsoft.AspNetCore.Hosting.Server.Abstractions": "1.1.0",
         "Microsoft.AspNetCore.HttpOverrides": "1.1.0",
         "Microsoft.AspNetCore.Mvc": "1.1.0",
-        "Microsoft.AspNetCore.Razor.Tools": {
-            "version": "1.0.0-*",
+        "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Tools": {
+            "version": "1.1.0-preview4-final",
             "type": "build"
         },
-        "Microsoft.AspNetCore.Mvc.Razor.Precompilation.Design": {
+        "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Design": {
             "type": "build",
-            "version": "1.0.0-*",
+            "version": "1.1.0-preview4-final",
             "target": "package"
         },
         "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
@@ -50,12 +50,6 @@
         }
     },
     "frameworks": {
-        "net451": {
-            "frameworkAssemblies": {
-                "System.IO.Compression": "",
-                "System.IO.Compression.FileSystem": ""
-            }
-        },
         "netcoreapp1.1": {
             "dependencies": {
                 "Microsoft.NETCore.App": {
@@ -83,8 +77,8 @@
         ]
     },
     "tools": {
-        "Microsoft.AspNetCore.Razor.Tools": "1.0.0-*",
-        "Microsoft.AspNetCore.Mvc.Razor.Precompilation.Tools": "1.0.0-*",
-        "Microsoft.DotNet.Watcher.Tools": "1.0.0-*"
+        "Microsoft.AspNetCore.Razor.Tools": "1.1.0-preview4-final",
+        "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Tools": "1.1.0-preview4-final",
+        "Microsoft.DotNet.Watcher.Tools": "1.1.0-preview4-final"
     }
 }

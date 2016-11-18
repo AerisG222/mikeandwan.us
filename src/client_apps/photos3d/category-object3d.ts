@@ -9,6 +9,7 @@ export class CategoryObject3D extends THREE.Object3D {
     private static loader = new THREE.TextureLoader();
     
     private isMouseOver = false;
+    private isMouseOverTextureSet = false;
     private counter = Math.random() * 2 * Math.PI;
     private backgroundMesh: THREE.Mesh = null;
     private imageMesh: THREE.Mesh = null;
@@ -37,8 +38,34 @@ export class CategoryObject3D extends THREE.Object3D {
     }
 
     render(delta: number) {
-        //this.counter += (2 * delta);
-        //this.position.z += Math.sin(this.counter);
+        if(this.isMouseOver) {
+            if(!this.isMouseOverTextureSet) {
+                this.backgroundMesh.material = new THREE.MeshLambertMaterial({ color: 255, side: THREE.DoubleSide });
+                this.isMouseOverTextureSet = true;
+            }
+
+            if(this.position.z < 12) {
+                this.position.z += 2;
+
+                if(this.position.z > 12) {
+                    this.position.z = 12;
+                }
+            }
+        }
+        else {
+            if(this.isMouseOverTextureSet) {
+                this.backgroundMesh.material = new THREE.MeshLambertMaterial({ color: this.color, side: THREE.DoubleSide });
+                this.isMouseOverTextureSet = false;
+            }
+
+            if(this.position.z > 0) {
+                this.position.z -= 0.2;
+
+                if(this.position.z < 0) {
+                    this.position.z = 0;
+                }
+            }
+        }
     }
 
     private createObject(texture: THREE.Texture) {
@@ -88,13 +115,6 @@ export class CategoryObject3D extends THREE.Object3D {
             }
 
             this.isMouseOver = isMouseOver;
-
-            if(isMouseOver) {
-                this.position.z = 10;
-            }
-            else {
-                this.position.z = 0;
-            }
         }
     }
 

@@ -43,6 +43,14 @@ export class Photos3D {
             .throttleTime(10)
             .subscribe(evt => this.onMouseMove(evt));
 
+        Mousetrap.bind('space', e => { this.togglePause(); });
+        Mousetrap.bind('b', e => { this.toggleBackground(); });
+        Mousetrap.bind('x', e => { this.toggleAxisHelper(); });
+        Mousetrap.bind('s', e => { this.stepBackward(); });
+        Mousetrap.bind('w', e => { this.stepForward(); });
+        Mousetrap.bind('a', e => { this.strafeLeft(); });
+        Mousetrap.bind('d', e => { this.strafeRight(); });
+
         this.animate();
     }
 

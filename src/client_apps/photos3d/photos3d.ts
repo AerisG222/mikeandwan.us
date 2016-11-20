@@ -3,12 +3,12 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/throttleTime';
 
-import { DataService } from './data-service';
-import { StateService } from './state-service';
-import { Background } from './background';
-import { CategoryListView } from './category-list-view';
-import { CategoryObject3D } from './category-object3d';
-import { StatusBar } from './status-bar';
+import { DataService } from './services/data-service';
+import { StateService } from './services/state-service';
+import { Background } from './views/background';
+import { CategoryListView } from './views/category-list-view';
+import { CategoryObject3D } from './views/category-object3d';
+import { StatusBar } from './views/status-bar';
 
 export class Photos3D {
     private camera: THREE.PerspectiveCamera;

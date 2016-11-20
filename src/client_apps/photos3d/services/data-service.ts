@@ -1,5 +1,5 @@
-import { ICategory } from './icategory';
-import { IPhoto } from './iphoto';
+import { ICategory } from '../models/icategory';
+import { IPhoto } from '../models/iphoto';
 
 // TODO: fetch not currently understood by tsc, so we wrap window as any to avoid errors, which
 //       makes it easier to spot real errors introduced in the code.  once tsc understands this,

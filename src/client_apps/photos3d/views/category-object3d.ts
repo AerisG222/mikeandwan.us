@@ -1,6 +1,6 @@
-import { ICategory } from './icategory';
-import { Hexagon } from './hexagon';
-import { StateService } from './state-service';
+import { ICategory } from '../models/icategory';
+import { Hexagon } from '../models/hexagon';
+import { StateService } from '../services/state-service';
 
 export class CategoryObject3D extends THREE.Object3D {
     private static BACKGROUND_DEPTH = 0.1;

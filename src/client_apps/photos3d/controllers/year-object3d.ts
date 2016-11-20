@@ -1,8 +1,8 @@
-import { ICategory } from './icategory';
-import { CategoryObject3D } from './category-object3d';
-import { CategoryLayoutCalculator } from './category-layout-calculator';
-import { CategoryLayout } from './category-layout';
-import { StateService } from './state-service';
+import { ICategory } from '../models/icategory';
+import { CategoryObject3D } from '../views/category-object3d';
+import { CategoryLayoutCalculator } from '../services/category-layout-calculator';
+import { CategoryLayout } from '../models/category-layout';
+import { StateService } from '../services/state-service';
 
 export class YearObject3D extends THREE.Object3D {
     private color: number;

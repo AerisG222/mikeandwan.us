@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { ActiveStatus } from './active-status';
+import { ActiveStatus } from '../models/active-status';
 
 export class StateService {
     private scene: THREE.Scene;

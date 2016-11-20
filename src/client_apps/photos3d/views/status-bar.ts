@@ -1,5 +1,5 @@
-import { StateService } from './state-service';
-import { ActiveStatus } from './active-status';
+import { StateService } from '../services/state-service';
+import { ActiveStatus } from '../models/active-status';
 
 export class StatusBar {
     navDiv: HTMLDivElement;

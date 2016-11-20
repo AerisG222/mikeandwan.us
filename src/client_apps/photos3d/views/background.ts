@@ -1,4 +1,4 @@
-import { TextureLoader } from './texture-loader';
+import { TextureLoader } from '../services/texture-loader';
 
 export class Background {
     private static readonly TEXTURE_WATER = 'water.jpg';

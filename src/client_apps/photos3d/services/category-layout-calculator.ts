@@ -1,6 +1,6 @@
-import { CategoryLayout } from './category-layout';
-import { Hexagon } from './hexagon';
-import { LayoutPosition } from './layout-position';
+import { CategoryLayout } from '../models/category-layout';
+import { Hexagon } from '../models/hexagon';
+import { LayoutPosition } from '../models/layout-position';
 
 export class CategoryLayoutCalculator {
     private static readonly MAX_EDGE_LENGTH = 80;

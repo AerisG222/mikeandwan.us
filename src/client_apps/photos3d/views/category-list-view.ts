@@ -1,7 +1,7 @@
-import { ICategory } from './icategory';
-import { YearObject3D } from './year-object3d';
-import { DataService } from './data-service';
-import { StateService } from './state-service';
+import { ICategory } from '../models/icategory';
+import { YearObject3D } from '../controllers/year-object3d';
+import { DataService } from '../services/data-service';
+import { StateService } from '../services/state-service';
 import { List } from 'linqts/linq';
 
 export class CategoryListView {

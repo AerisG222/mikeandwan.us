@@ -52,6 +52,7 @@ export class YearObject3D extends THREE.Object3D {
                     let categoryObject = new CategoryObject3D(this.stateService,
                                                               this.categories[lp.index],
                                                               layout.hexagon,
+                                                              this.getOffscreenPosition(),
                                                               lp.center, 
                                                               this.color);
 
@@ -64,9 +65,21 @@ export class YearObject3D extends THREE.Object3D {
         }
     }
 
-    private removeCategories() {
+    private removeCategories(): void {
         for(let i = 0; i < this.categoryObject3dList.length; i++) {
             this.remove(this.categoryObject3dList[i]);
         }
     }
+
+    private getOffscreenPosition(): THREE.Vector3 {
+        let min = -3000;
+        let fullLength = 2 * Math.abs(min);
+        let x = min + (Math.random() * fullLength);
+        let y = min + (Math.random() * fullLength);
+        let z = Math.random() * 2000 + (1000 + this.stateService.Camera.position.z);
+
+        return new THREE.Vector3(x, y, z);        
+    }
+
+    private RandomBoolean
 }

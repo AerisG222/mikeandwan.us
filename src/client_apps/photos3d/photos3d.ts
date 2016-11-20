@@ -23,10 +23,10 @@ export class Photos3D {
     private width: number;
     private sizeCode: string;
     private mouseoverSubscription: Subscription;
+    private stateService;
 
     private clock = new THREE.Clock();
     private dataService = new DataService();
-    private stateService = new StateService();
     private scene = new THREE.Scene();
     private isPaused = false;
 
@@ -131,14 +131,16 @@ export class Photos3D {
         this.renderer.setSize(this.width, this.height);
         document.body.appendChild(this.renderer.domElement);
 
-        // status / nav bar
-        this.nav = new StatusBar(this.stateService);
-        this.nav.init();
-
         // camera
         this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 2000);
         this.camera.position.set(0, 200, 1000);
         this.camera.lookAt(new THREE.Vector3(0, 200, 0));
+
+        this.stateService = new StateService(this.scene, this.camera);
+
+        // status / nav bar
+        this.nav = new StatusBar(this.stateService);
+        this.nav.init();
 
         // ambient light
         this.ambientLight = new THREE.AmbientLight(0x404040);

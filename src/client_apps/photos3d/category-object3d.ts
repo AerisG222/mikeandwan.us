@@ -17,6 +17,7 @@ export class CategoryObject3D extends THREE.Object3D {
     constructor(private stateService: StateService,
                 private category: ICategory,
                 private hexagon: Hexagon,
+                private offscreenPosition: THREE.Vector3,
                 private endPosition: THREE.Vector2,
                 private color: number) {
         super();

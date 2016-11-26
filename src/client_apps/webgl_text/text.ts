@@ -63,7 +63,7 @@ class TextDemo {
 
 		// floor
 		let textureLoader = new THREE.TextureLoader();
-		textureLoader.load('/img/photos3d/floor.jpg', texture => {
+		textureLoader.load('/img/webgl/floor_texture.jpg', texture => {
 			let floorPlane = new THREE.PlaneGeometry(1000, 1000);
 			texture.wrapS = THREE.RepeatWrapping;
 			texture.wrapT = THREE.RepeatWrapping;

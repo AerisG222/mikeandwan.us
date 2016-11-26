@@ -46,7 +46,7 @@ export class CategoryVisual extends THREE.Object3D {
 
         this._bringIntoViewTween = new TWEEN.Tween(this.position)
             .to(this.onscreenPosition, 1200)
-            .easing(TWEEN.Easing.Quadratic.Out)
+            .easing(TWEEN.Easing.Back.Out)
             .start();
     }
 

@@ -27,4 +27,16 @@ export class Year {
     get container(): THREE.Object3D {
         return this._containerVisual;
     }
+
+    bringIntoView(): void {
+        for(let i = 0; i < this._categoryList.length; i++) {
+            this._categoryList[i].visual.bringIntoView();
+        }
+    }
+
+    removeFromView(): void {
+        for(let i = 0; i < this._categoryList.length; i++) {
+            this._categoryList[i].visual.removeFromView();
+        }
+    }
 }

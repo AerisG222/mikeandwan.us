@@ -13,19 +13,18 @@ export class CategoryVisual extends THREE.Object3D {
     private counter = Math.random() * 2 * Math.PI;
     private backgroundMesh: THREE.Mesh = null;
     private imageMesh: THREE.Mesh = null;
+    private _bringIntoViewTween: TWEEN.Tween;
+    private _removeFromViewTween: TWEEN.Tween;
 
     constructor(private stateService: StateService,
                 private category: ICategory,
                 private hexagon: Hexagon,
+                private onscreenPosition: THREE.Vector3,
                 private offscreenPosition: THREE.Vector3,
-                private endPosition: THREE.Vector2,
-                private color: number,
-                private zStart: number) {
+                private color: number) {
         super();
 
-        this.position.x = this.endPosition.x;
-        this.position.y = this.endPosition.y;
-        this.position.z = zStart;
+        this.position.set(offscreenPosition.x, offscreenPosition.y, offscreenPosition.z);
     }
 
     init() {
@@ -39,7 +38,32 @@ export class CategoryVisual extends THREE.Object3D {
         this.stateService.mouseoverObservable.subscribe(x => this.onMouseOver(x));
     }
 
+    bringIntoView(): void {
+        if(this._removeFromViewTween != null) {
+            this._removeFromViewTween.stop();
+            this._removeFromViewTween = null;
+        }
+
+        this._bringIntoViewTween = new TWEEN.Tween(this.position)
+            .to(this.onscreenPosition, 1200)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .start();
+    }
+
+    removeFromView(): void {
+        if(this._bringIntoViewTween != null) {
+            this._bringIntoViewTween.stop();
+            this._bringIntoViewTween = null;
+        }
+
+        this._removeFromViewTween = new TWEEN.Tween(this.position)
+            .to(this.offscreenPosition, 1200)
+            .easing(TWEEN.Easing.Sinusoidal.Out)
+            .start();
+    }
+
     render(delta: number) {
+        /*
         if(this.isMouseOver) {
             if(!this.isMouseOverTextureSet) {
                 this.backgroundMesh.material = new THREE.MeshLambertMaterial({ color: 255, side: THREE.DoubleSide });
@@ -68,6 +92,7 @@ export class CategoryVisual extends THREE.Object3D {
                 }
             }
         }
+        */
     }
 
     private createObject(texture: THREE.Texture) {

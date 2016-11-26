@@ -13,14 +13,15 @@ import { DataService } from '../services/data-service';
 import { StateService } from '../services/state-service';
 
 export class CategoryListController implements IController {
+    private static readonly zWhenDisplayed = 500;
+    
     private _ctx: VisualContext;
 
+    private _idx = 0;
     private _visualsEnabled = true;
     private _yearList: Array<Year> = [];
     private heightWhenDisplayed: number;
     private widthWhenDisplayed: number;
-    private zWhenDisplayed = 500;
-    private zBetweenYears = 1000;
 
     constructor(private dataService: DataService,
                 private stateService: StateService) {
@@ -35,7 +36,7 @@ export class CategoryListController implements IController {
         this._ctx = stateService.visualContext;
 
         // http://gamedev.stackexchange.com/questions/96317/determining-view-boundaries-based-on-z-position-when-using-a-perspective-project
-        this.heightWhenDisplayed = 2 * Math.tan(this._ctx.camera.fov * 0.5 * (Math.PI/180)) * (this._ctx.camera.position.z - this.zWhenDisplayed);
+        this.heightWhenDisplayed = 2 * Math.tan(this._ctx.camera.fov * 0.5 * (Math.PI/180)) * (this._ctx.camera.position.z - CategoryListController.zWhenDisplayed);
         this.widthWhenDisplayed = this.heightWhenDisplayed * this._ctx.camera.aspect;
     }
 
@@ -46,6 +47,27 @@ export class CategoryListController implements IController {
     init() {
         this.loadCategories();
     }
+
+    moveNextYear() {
+        if(this._idx > 0) {
+            this._yearList[this._idx].removeFromView();
+            this._idx--;
+            this._yearList[this._idx].bringIntoView();
+
+            this.stateService.updateActiveNav(this._yearList[this._idx].year);
+        }
+    }
+
+    movePrevYear() {
+        if(this._idx < this._yearList.length - 1) {
+            this._yearList[this._idx].removeFromView();
+            this._idx++;
+            this._yearList[this._idx].bringIntoView();
+
+            this.stateService.updateActiveNav(this._yearList[this._idx].year);
+        }
+    }
+
 
     render(delta: number) {
         for(let i = 0; i < this._yearList.length; i++) {
@@ -83,6 +105,10 @@ export class CategoryListController implements IController {
 
             this._yearList.push(year);
             this._ctx.scene.add(year.container);
+
+            if(i === 0) {
+                year.bringIntoView();
+            }
         }
     }
 
@@ -92,7 +118,6 @@ export class CategoryListController implements IController {
         let clc = new CategoryLayoutCalculator(this.heightWhenDisplayed, this.widthWhenDisplayed);
         let layout = clc.calculate(categories.length);
         let catIndex = 0;
-        let z = this.zWhenDisplayed - (yearIndex * this.zBetweenYears);
 
         for(let row = 0; row < layout.positions.length; row++) {
             for(let col = 0; col < layout.positions[row].length; col++) {
@@ -103,10 +128,9 @@ export class CategoryListController implements IController {
                     let categoryVisual = new CategoryVisual(this.stateService,
                                                             cat,
                                                             layout.hexagon,
+                                                            new THREE.Vector3(lp.center.x, lp.center.y, CategoryListController.zWhenDisplayed),
                                                             this.getOffscreenPosition(),
-                                                            lp.center, 
-                                                            year.color,
-                                                            z);
+                                                            year.color);
 
                     categoryVisual.init();
 

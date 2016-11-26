@@ -15,7 +15,7 @@ export class Photos3D {
     private _axisHelper: THREE.AxisHelper;
     private _bg: IController;
     private _status: IController;
-    private _catList: IController;
+    private _catList: CategoryListController;
     private _mouseoverSubscription: Subscription;
     private _stateService: StateService;
 
@@ -38,6 +38,8 @@ export class Photos3D {
             .subscribe(evt => this.onMouseMove(evt));
 
         Mousetrap.bind('space', e => { this.togglePause(); });
+        Mousetrap.bind('right', e => { this.moveNext(); });
+        Mousetrap.bind('left', e => { this.movePrev(); });
         Mousetrap.bind('b', e => { this.toggleBackground(); });
         Mousetrap.bind('x', e => { this.toggleAxisHelper(); });
         Mousetrap.bind('s', e => { this.stepBackward(); });
@@ -48,32 +50,40 @@ export class Photos3D {
         this.animate();
     }
 
-    strafeLeft() {
+    private moveNext() {
+        this._catList.moveNextYear();
+    }
+
+    private movePrev() {
+        this._catList.movePrevYear();
+    }
+
+    private strafeLeft() {
         this._ctx.camera.position.x -= 25;
     }
 
-    strafeRight() {
+    private strafeRight() {
         this._ctx.camera.position.x += 25;
     }
 
-    stepForward() {
+    private stepForward() {
         this._ctx.camera.position.z -= 25;
     }
 
-    stepBackward() {
+    private stepBackward() {
         this._ctx.camera.position.z += 25;
     }
 
-    togglePause() {
+    private togglePause() {
         this._isPaused = !this._isPaused;
         this.animate();
     }
 
-    toggleBackground() { 
+    private toggleBackground() { 
         this._bg.enableVisuals(!this._bg.areVisualsEnabled);
     }
 
-    toggleAxisHelper() {
+    private toggleAxisHelper() {
         if(this._axisHelper == null) {
             this._axisHelper = new THREE.AxisHelper(500);
             this._ctx.scene.add(this._axisHelper);
@@ -163,5 +173,7 @@ export class Photos3D {
         this._bg.render(delta);
         this._catList.render(delta);
         this._status.render(delta);
+
+        TWEEN.update();
     }
 }

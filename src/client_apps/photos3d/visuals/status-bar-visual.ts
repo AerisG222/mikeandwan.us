@@ -1,19 +1,18 @@
-import { StateService } from '../services/state-service';
+import { IVisual } from './ivisual';
+import { ArgumentNullError } from '../models/argument-null-error';
 import { ActiveStatus } from '../models/active-status';
+import { StatusBarController } from '../controllers/status-bar-controller';
 
-export class StatusBar {
+export class StatusBarVisual implements IVisual {
     navDiv: HTMLDivElement;
     actualDiv: HTMLDivElement;
     temporalDiv: HTMLDivElement;
     statusDiv: HTMLDivElement;
     
-    constructor(private stateService: StateService) {
-        if(stateService == null) {
-            throw new Error("stateService is not defined!");
+    constructor(private _controller: StatusBarController) {
+        if(_controller == null) {
+            throw new ArgumentNullError('_controller');
         }
-
-        this.stateService.ActiveNavObservable.subscribe(evt => { this.updateActive(evt); });
-        this.stateService.TemporalNavObservable.subscribe(evt => { this.updateTemporal(evt); });
     }
 
     init() {
@@ -38,20 +37,15 @@ export class StatusBar {
         this.navDiv.appendChild(this.statusDiv);
     }
 
-    private createInfoDiv(width: string, align: string) {
-        let div = document.createElement('div');
+    render() {
 
-        div.style.width = width;
-        div.style.cssFloat = 'left';
-
-        return div;
     }
 
-    private updateTemporal(category: string) {
+    updateTemporal(category: string) {
         this.temporalDiv.innerHTML = category;
     }
 
-    private updateActive(status: ActiveStatus) {
+    updateActive(status: ActiveStatus) {
         if(status.category != null) {
             this.actualDiv.innerHTML = `${status.year} | ${status.category}`;
         }
@@ -60,7 +54,16 @@ export class StatusBar {
         }
     }
 
-    private updateStatus() {
+    updateStatus() {
         // TODO: anything we want to show here?  fps? help/keybindings? exit? about?
+    }
+
+    private createInfoDiv(width: string, align: string) {
+        let div = document.createElement('div');
+
+        div.style.width = width;
+        div.style.cssFloat = 'left';
+
+        return div;
     }
 }

@@ -2,7 +2,7 @@ import { ICategory } from '../models/icategory';
 import { Hexagon } from '../models/hexagon';
 import { StateService } from '../services/state-service';
 
-export class CategoryObject3D extends THREE.Object3D {
+export class CategoryVisual extends THREE.Object3D {
     private static BACKGROUND_DEPTH = 0.1;
     private static IMAGE_DEPTH = 0.3;
     private static BORDER_WIDTH = 2;
@@ -19,23 +19,24 @@ export class CategoryObject3D extends THREE.Object3D {
                 private hexagon: Hexagon,
                 private offscreenPosition: THREE.Vector3,
                 private endPosition: THREE.Vector2,
-                private color: number) {
+                private color: number,
+                private zStart: number) {
         super();
 
         this.position.x = this.endPosition.x;
         this.position.y = this.endPosition.y;
-        this.position.z = 0;
+        this.position.z = zStart;
     }
 
     init() {
-        CategoryObject3D.loader.load(this.category.teaserImage.path, texture => {
+        CategoryVisual.loader.load(this.category.teaserImage.path, texture => {
             this.createObject(texture);
         });
 
         this.createBackground();
         this.add(this.backgroundMesh);
 
-        this.stateService.MouseoverObservable.subscribe(x => this.onMouseOver(x));
+        this.stateService.mouseoverObservable.subscribe(x => this.onMouseOver(x));
     }
 
     render(delta: number) {
@@ -45,11 +46,11 @@ export class CategoryObject3D extends THREE.Object3D {
                 this.isMouseOverTextureSet = true;
             }
 
-            if(this.position.z < 12) {
+            if(this.position.z < this.zStart + 12) {
                 this.position.z += 2;
 
-                if(this.position.z > 12) {
-                    this.position.z = 12;
+                if(this.position.z > this.zStart + 12) {
+                    this.position.z = this.zStart + 12;
                 }
             }
         }
@@ -59,11 +60,11 @@ export class CategoryObject3D extends THREE.Object3D {
                 this.isMouseOverTextureSet = false;
             }
 
-            if(this.position.z > 0) {
+            if(this.position.z > this.zStart) {
                 this.position.z -= 0.2;
 
-                if(this.position.z < 0) {
-                    this.position.z = 0;
+                if(this.position.z < this.zStart) {
+                    this.position.z = this.zStart;
                 }
             }
         }
@@ -75,15 +76,15 @@ export class CategoryObject3D extends THREE.Object3D {
     }
 
     private createBackground() {
-        let len = this.hexagon.centerToVertexLength + CategoryObject3D.BORDER_WIDTH;
-        let geometry = this.createExtrudeGeometry(len, CategoryObject3D.BACKGROUND_DEPTH);
+        let len = this.hexagon.centerToVertexLength + CategoryVisual.BORDER_WIDTH;
+        let geometry = this.createExtrudeGeometry(len, CategoryVisual.BACKGROUND_DEPTH);
         let material = new THREE.MeshLambertMaterial({ color: this.color, side: THREE.DoubleSide });
         
         this.backgroundMesh = new THREE.Mesh(geometry, material);
     }
 
     private createImage(texture: THREE.Texture) {
-        let geometry = this.createExtrudeGeometry(this.hexagon.centerToVertexLength, CategoryObject3D.IMAGE_DEPTH);
+        let geometry = this.createExtrudeGeometry(this.hexagon.centerToVertexLength, CategoryVisual.IMAGE_DEPTH);
 
         this.mapUvs(geometry);
 
@@ -91,20 +92,21 @@ export class CategoryObject3D extends THREE.Object3D {
 
         this.imageMesh = new THREE.Mesh(geometry, material);
 
-        this.imageMesh.position.y = CategoryObject3D.BORDER_WIDTH / 2;
-        this.imageMesh.position.z = (CategoryObject3D.IMAGE_DEPTH - CategoryObject3D.BACKGROUND_DEPTH) / 2;
+        this.imageMesh.position.y = CategoryVisual.BORDER_WIDTH / 2;
+        this.imageMesh.position.z = (CategoryVisual.IMAGE_DEPTH - CategoryVisual.BACKGROUND_DEPTH) / 2;
     }
 
     private onMouseOver(intersections: Array<THREE.Intersection>) {
+        intersections = intersections.filter(x => x.object.parent instanceof CategoryVisual);
+
         if(intersections.length == 0) {
             this.isMouseOver = false;
-            this.position.z = 0;
         }
         else {
             let isMouseOver = false;
 
             for(var i = 0; i < intersections.length; i++) {
-                if(intersections[i].object.parent instanceof CategoryObject3D) {
+                if(intersections[i].object.parent instanceof CategoryVisual) {
                     if(this.uuid == intersections[i].object.parent.uuid) {
                         isMouseOver = true;
 

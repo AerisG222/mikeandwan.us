@@ -1,6 +1,9 @@
+import { ArgumentNullError } from '../models/argument-null-error';
+import { IVisual } from './ivisual'
 import { TextureLoader } from '../services/texture-loader';
+import { VisualContext } from '../models/visual-context';
 
-export class Background {
+export class PondBackgroundVisual implements IVisual {
     private static readonly TEXTURE_WATER = 'water.jpg';
     private static readonly TEXTURE_TREES = 'trees_blur20.jpg';
     private static readonly TEXTURE_NOISE = 'noise.png';
@@ -11,27 +14,9 @@ export class Background {
     private treeMesh: THREE.Mesh;
     private textureLoader = new TextureLoader();
 
-    isShown = true;
-
-    constructor(private renderer: THREE.Renderer, 
-                private scene: THREE.Scene,
-                private camera: THREE.Camera, 
-                private directionalLight: THREE.DirectionalLight,
-                private size: string) {
-        if(renderer == null) {
-            throw new Error('renderer should not be null');
-        }
-
-        if(scene == null) {
-            throw new Error('scene should not be null');
-        }
-
-        if(camera == null) {
-            throw new Error('camera should not be null');
-        }
-        
-        if(size == null) {
-            throw new Error('size should not be null');
+    constructor(private _ctx: VisualContext) {
+        if(_ctx == null) {
+            throw new ArgumentNullError('_ctx');
         }
     }
 
@@ -41,58 +26,37 @@ export class Background {
         this.updateTextures(texturePromise);
     }
     
-    setSize(size: string) {
-        if(size == this.size) {
-            return;
-        }
-
-        this.size = size;
-        this.updateTextures(this.loadTextures());
-    }
-
     show() { 
-        if(this.isShown) {
-            return;
-        }
-
         if(this.treeMesh != null) {
-            this.scene.add(this.treeMesh);
+            this._ctx.scene.add(this.treeMesh);
         }
 
         if(this.waterMesh != null) {
-            this.scene.add(this.waterMesh);
+            this._ctx.scene.add(this.waterMesh);
         }
-
-        this.isShown = true;
     }
 
     hide() {
-        if(!this.isShown) {
-            return;
-        }
-
         if(this.treeMesh != null) {
-            this.scene.remove(this.treeMesh);
+            this._ctx.scene.remove(this.treeMesh);
         }
 
         if(this.waterMesh != null) {
-            this.scene.remove(this.waterMesh);
+            this._ctx.scene.remove(this.waterMesh);
         }
-
-        this.isShown = false;
     }
 
     render(clockDelta: number) {
-        if(this.isShown && this.waterUniform != null) {
+        if(this.waterUniform != null) {
             this.waterUniform.time.value += clockDelta;
         }
     }
 
     private loadTextures() {
         return this.textureLoader.loadTextures([
-            `/img/photos3d/${this.size}/${Background.TEXTURE_NOISE}`,
-            `/img/photos3d/${this.size}/${Background.TEXTURE_TREES}`,
-            `/img/photos3d/${this.size}/${Background.TEXTURE_WATER}`
+            `/img/photos3d/${this._ctx.size}/${PondBackgroundVisual.TEXTURE_NOISE}`,
+            `/img/photos3d/${this._ctx.size}/${PondBackgroundVisual.TEXTURE_TREES}`,
+            `/img/photos3d/${this._ctx.size}/${PondBackgroundVisual.TEXTURE_WATER}`
         ]);
     }
 
@@ -103,13 +67,13 @@ export class Background {
             let noiseTexture: THREE.Texture = null;
 
             for(let texture of textures) {
-                if(texture.name.indexOf(Background.TEXTURE_NOISE) > 0) {
+                if(texture.name.indexOf(PondBackgroundVisual.TEXTURE_NOISE) > 0) {
                     noiseTexture = texture;
                 }
-                else if(texture.name.indexOf(Background.TEXTURE_TREES) > 0) {
+                else if(texture.name.indexOf(PondBackgroundVisual.TEXTURE_TREES) > 0) {
                     this.updateTrees(texture);
                 }
-                else if(texture.name.indexOf(Background.TEXTURE_WATER) > 0) {
+                else if(texture.name.indexOf(PondBackgroundVisual.TEXTURE_WATER) > 0) {
                     waterTexture = texture;
                 }
             }
@@ -122,7 +86,7 @@ export class Background {
 
     private updateTrees(texture: THREE.Texture) {
         if(this.treeMesh != null) {
-            this.scene.remove(this.treeMesh);
+            this._ctx.scene.remove(this.treeMesh);
         }
 
         let treeGeometry = new THREE.PlaneGeometry(texture.image.width * this.horizontalRepeat, texture.image.height);
@@ -134,12 +98,12 @@ export class Background {
 
         this.treeMesh.material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
 
-        this.scene.add(this.treeMesh);
+        this._ctx.scene.add(this.treeMesh);
     }
 
     private updateWater(waterTexture: THREE.Texture, noiseTexture: THREE.Texture) {
         if(this.waterMesh != null) {
-            this.scene.remove(this.waterMesh);
+            this._ctx.scene.remove(this.waterMesh);
         }
 
         let waterGeometry = new THREE.PlaneGeometry(waterTexture.image.width * this.horizontalRepeat, waterTexture.image.height);
@@ -175,6 +139,6 @@ export class Background {
         
         this.waterMesh.material = waterMaterial;
 
-        this.scene.add(this.waterMesh);
+        this._ctx.scene.add(this.waterMesh);
     }
 }

@@ -1,59 +1,49 @@
+import { ArgumentNullError } from '../models/argument-null-error';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { ActiveStatus } from '../models/active-status';
+import { VisualContext } from '../models/visual-context';
 
 export class StateService {
-    private scene: THREE.Scene;
-    private camera: THREE.PerspectiveCamera;
+    private _activeNavSubject = new Subject<ActiveStatus>();
+    private _temporalNavSubject = new Subject<string>();
+    private _mouseoverSubject = new Subject<Array<THREE.Intersection>>();
+    private _visualContext: VisualContext;
     
-    private activeNavSubject = new Subject<ActiveStatus>();
-    private temporalNavSubject = new Subject<string>();
-    private mouseoverSubject = new Subject<Array<THREE.Intersection>>();
-
-    constructor(scene: THREE.Scene,
-                camera: THREE.PerspectiveCamera) {
-        if(scene == null) {
-            throw new Error('scene must be defined');
+    constructor(context: VisualContext) {
+        if(context == null) {
+            throw new ArgumentNullError('context');
         }
 
-        if(camera == null) {
-            throw new Error('camera must be defined');
-        }
-
-        this.scene = scene;
-        this.camera = camera;
+        this._visualContext = context;
     }
 
-    get Scene() {
-        return this.scene;
+    get visualContext() { 
+        return this._visualContext;
     }
 
-    get Camera() {
-        return this.camera;
+    get activeNavObservable() {
+        return this._activeNavSubject.asObservable();
     }
 
-    get ActiveNavObservable() {
-        return this.activeNavSubject.asObservable();
+    get temporalNavObservable() {
+        return this._temporalNavSubject.asObservable();
     }
 
-    get TemporalNavObservable() {
-        return this.temporalNavSubject.asObservable();
-    }
-
-    get MouseoverObservable() {
-        return this.mouseoverSubject.asObservable();
+    get mouseoverObservable() {
+        return this._mouseoverSubject.asObservable();
     }
 
     updateTemporalNav(category: string) {
-        this.temporalNavSubject.next(category);
+        this._temporalNavSubject.next(category);
     }
 
     updateActiveNav(year: number, category?: string) {
-        this.activeNavSubject.next(new ActiveStatus(year, category));
+        this._activeNavSubject.next(new ActiveStatus(year, category));
     }
 
     updateMouseover(intersections: Array<THREE.Intersection>) {
         this.updateTemporalNav(null);
-        this.mouseoverSubject.next(intersections);
+        this._mouseoverSubject.next(intersections);
     }
 }

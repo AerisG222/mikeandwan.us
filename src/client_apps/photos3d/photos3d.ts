@@ -3,42 +3,36 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/throttleTime';
 
+import { VisualContext } from './models/visual-context';
 import { DataService } from './services/data-service';
 import { StateService } from './services/state-service';
-import { Background } from './views/background';
-import { CategoryListView } from './views/category-list-view';
-import { CategoryObject3D } from './views/category-object3d';
-import { StatusBar } from './views/status-bar';
+import { IController } from './controllers/icontroller';
+import { BackgroundController } from './controllers/background-controller';
+import { StatusBarController } from './controllers/status-bar-controller';
+import { CategoryListController } from './controllers/category-list-controller';
 
 export class Photos3D {
-    private camera: THREE.PerspectiveCamera;
-    private renderer: THREE.WebGLRenderer;
-    private ambientLight: THREE.AmbientLight;
-    private directionalLight: THREE.DirectionalLight;
-    private axisHelper: THREE.AxisHelper;
-    private background: Background;
-    private nav: StatusBar;
-    private categoryListView: CategoryListView;
-    private height: number;
-    private width: number;
-    private sizeCode: string;
-    private mouseoverSubscription: Subscription;
-    private stateService;
+    private _axisHelper: THREE.AxisHelper;
+    private _bg: IController;
+    private _status: IController;
+    private _catList: IController;
+    private _mouseoverSubscription: Subscription;
+    private _stateService: StateService;
 
-    private clock = new THREE.Clock();
-    private dataService = new DataService();
-    private scene = new THREE.Scene();
-    private isPaused = false;
+    private _ctx = new VisualContext();
+    private _clock = new THREE.Clock();
+    private _dataService = new DataService();
+    private _isPaused = false;
 
     run() {
         // ensure scrollbars do not appear
         document.getElementsByTagName('body')[0].style.overflow = "hidden";
-        window.addEventListener("resize", () => this.onResize(), false);
-
-        this.onResize();
+        
         this.prepareScene();
 
-        this.mouseoverSubscription = Observable
+        window.addEventListener("resize", () => this.onResize(), false);
+
+        this._mouseoverSubscription = Observable
             .fromEvent<MouseEvent>(document, 'mousemove')
             .throttleTime(10)
             .subscribe(evt => this.onMouseMove(evt));
@@ -55,63 +49,45 @@ export class Photos3D {
     }
 
     strafeLeft() {
-        this.camera.position.x -= 25;
+        this._ctx.camera.position.x -= 25;
     }
 
     strafeRight() {
-        this.camera.position.x += 25;
+        this._ctx.camera.position.x += 25;
     }
 
     stepForward() {
-        this.camera.position.z -= 25;
+        this._ctx.camera.position.z -= 25;
     }
 
     stepBackward() {
-        this.camera.position.z += 25;
+        this._ctx.camera.position.z += 25;
     }
 
     togglePause() {
-        this.isPaused = !this.isPaused;
+        this._isPaused = !this._isPaused;
         this.animate();
     }
 
     toggleBackground() { 
-        if(this.background.isShown) {
-            this.background.hide();
-        }
-        else {
-            this.background.show();
-        }
+        this._bg.enableVisuals(!this._bg.areVisualsEnabled);
     }
 
     toggleAxisHelper() {
-        if(this.axisHelper == null) {
-            this.axisHelper = new THREE.AxisHelper(500);
-            this.scene.add(this.axisHelper);
+        if(this._axisHelper == null) {
+            this._axisHelper = new THREE.AxisHelper(500);
+            this._ctx.scene.add(this._axisHelper);
         }
         else {
-            this.scene.remove(this.axisHelper);
-            this.axisHelper = null;
+            this._ctx.scene.remove(this._axisHelper);
+            this._axisHelper = null;
         }
     }
 
     private onResize() {
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
-
-        if(this.width < 2200) {
-            this.sizeCode = 'md';
-        }
-        else {
-            this.sizeCode = 'lg';
-        }
-
-        // adjust view
-        if(this.renderer != null) {
-            this.renderer.setSize(this.width, this.height);
-            this.camera.aspect = this.width / this.height;
-            this.camera.updateProjectionMatrix();
-        }
+        this._ctx.renderer.setSize(this._ctx.width, this._ctx.height);
+        this._ctx.camera.aspect = this._ctx.width / this._ctx.height;
+        this._ctx.camera.updateProjectionMatrix();
     }
 
     // http://stemkoski.github.io/Three.js/Mouse-Over.html
@@ -119,64 +95,50 @@ export class Photos3D {
         let x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	    let y = - ( event.clientY / window.innerHeight ) * 2 + 1;
         let vector = new THREE.Vector3(x, y, 0.5);
-        vector.unproject(this.camera);
+        vector.unproject(this._ctx.camera);
 
-        let ray = new THREE.Raycaster(this.camera.position, vector.sub(this.camera.position).normalize());
+        let ray = new THREE.Raycaster(this._ctx.camera.position, vector.sub(this._ctx.camera.position).normalize());
 
         // create an array containing all objects in the scene with which the ray intersects, though
         // filter the list to just objects that care about this to optimize perf
         // TODO: get rid of magic number in filter below
+        // TODO: add filter back to correct location:  x.object.parent instanceof CategoryVisual
 	    let intersects = ray
-            .intersectObjects(this.scene.children, true)
-            .filter(x => x.distance < 800 && x.object.parent instanceof CategoryObject3D);
+            .intersectObjects(this._ctx.scene.children, true)
+            .filter(x => x.distance < 800);
 
-        this.stateService.updateMouseover(intersects);
+        this._stateService.updateMouseover(intersects);
     }
 
     private prepareScene() {
-        // renderer
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        this.renderer.setSize(this.width, this.height);
-        document.body.appendChild(this.renderer.domElement);
+        this._ctx.scene = new THREE.Scene();
 
-        // camera
-        this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 2000);
-        this.camera.position.set(0, 200, 1000);
-        this.camera.lookAt(new THREE.Vector3(0, 200, 0));
+        this._ctx.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this._ctx.renderer.setSize(this._ctx.width, this._ctx.height);
+        document.body.appendChild(this._ctx.renderer.domElement);
 
-        this.stateService = new StateService(this.scene, this.camera);
+        this._ctx.camera = new THREE.PerspectiveCamera(45, this._ctx.width / this._ctx.height, 0.1, 2000);
+        this._ctx.camera.position.set(0, 200, 1000);
+        this._ctx.camera.lookAt(new THREE.Vector3(0, 200, 0));
 
-        // status / nav bar
-        this.nav = new StatusBar(this.stateService);
-        this.nav.init();
+        this._stateService = new StateService(this._ctx);
 
-        // ambient light
-        this.ambientLight = new THREE.AmbientLight(0x404040);
-        this.scene.add(this.ambientLight);
+        this._status = new StatusBarController(this._stateService);
+        this._status.init();
 
-        // directional light
-        this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
-        this.directionalLight.position.set(-1, 1, 1);
-        this.directionalLight.castShadow = true;
-        this.scene.add(this.directionalLight);
+        this._ctx.ambient = new THREE.AmbientLight(0x404040);
+        this._ctx.scene.add(this._ctx.ambient);
 
-        // background
-        this.background = new Background(this.renderer, 
-                                         this.scene, 
-                                         this.camera,
-                                         this.directionalLight,
-                                         this.sizeCode);
-        this.background.init();
+        this._ctx.sun = new THREE.DirectionalLight(0xffffff, 0.9);
+        this._ctx.sun.position.set(-1, 1, 1);
+        this._ctx.sun.castShadow = true;
+        this._ctx.scene.add(this._ctx.sun);
 
-        this.categoryListView = new CategoryListView(this.scene,
-                                                     this.camera,
-                                                     this.width,
-                                                     this.height,
-                                                     this.dataService,
-                                                     this.stateService,
-                                                     500,
-                                                     2000);
-        this.categoryListView.init();
+        this._bg = new BackgroundController(this._stateService);
+        this._bg.init();
+
+        this._catList = new CategoryListController(this._dataService, this._stateService);
+        this._catList.init();
 
         this.toggleAxisHelper();
         
@@ -184,7 +146,7 @@ export class Photos3D {
     }
 
     private animate() {
-        if(this.isPaused) {
+        if(this._isPaused) {
             return;
         }
 
@@ -192,13 +154,14 @@ export class Photos3D {
 
         this.render();
 
-        this.renderer.render(this.scene, this.camera);
+        this._ctx.renderer.render(this._ctx.scene, this._ctx.camera);
     }
 
     private render() {
-        let delta = this.clock.getDelta();
+        let delta = this._clock.getDelta();
 
-        this.background.render(delta);
-        this.categoryListView.render(delta);
+        this._bg.render(delta);
+        this._catList.render(delta);
+        this._status.render(delta);
     }
 }

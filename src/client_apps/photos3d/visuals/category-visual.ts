@@ -9,12 +9,13 @@ export class CategoryVisual extends THREE.Object3D {
     private static loader = new THREE.TextureLoader();
     
     private isMouseOver = false;
-    private isMouseOverTextureSet = false;
-    private counter = Math.random() * 2 * Math.PI;
     private backgroundMesh: THREE.Mesh = null;
     private imageMesh: THREE.Mesh = null;
+    private hoverPosition: THREE.Vector3;
     private _bringIntoViewTween: TWEEN.Tween;
     private _removeFromViewTween: TWEEN.Tween;
+    private _mouseOverTween: TWEEN.Tween;
+    private _mouseOutTween: TWEEN.Tween;
 
     constructor(private stateService: StateService,
                 private category: ICategory,
@@ -25,6 +26,7 @@ export class CategoryVisual extends THREE.Object3D {
         super();
 
         this.position.set(offscreenPosition.x, offscreenPosition.y, offscreenPosition.z);
+        this.hoverPosition = new THREE.Vector3(onscreenPosition.x, onscreenPosition.y, onscreenPosition.z + 12);
     }
 
     init() {
@@ -35,7 +37,7 @@ export class CategoryVisual extends THREE.Object3D {
         this.createBackground();
         this.add(this.backgroundMesh);
 
-        this.stateService.mouseoverObservable.subscribe(x => this.onMouseOver(x));
+        this.stateService.mouseoverObservable.subscribe(x => this.onMouseEvent(x));
     }
 
     bringIntoView(): void {
@@ -63,36 +65,7 @@ export class CategoryVisual extends THREE.Object3D {
     }
 
     render(delta: number) {
-        /*
-        if(this.isMouseOver) {
-            if(!this.isMouseOverTextureSet) {
-                this.backgroundMesh.material = new THREE.MeshLambertMaterial({ color: 255, side: THREE.DoubleSide });
-                this.isMouseOverTextureSet = true;
-            }
-
-            if(this.position.z < this.zStart + 12) {
-                this.position.z += 2;
-
-                if(this.position.z > this.zStart + 12) {
-                    this.position.z = this.zStart + 12;
-                }
-            }
-        }
-        else {
-            if(this.isMouseOverTextureSet) {
-                this.backgroundMesh.material = new THREE.MeshLambertMaterial({ color: this.color, side: THREE.DoubleSide });
-                this.isMouseOverTextureSet = false;
-            }
-
-            if(this.position.z > this.zStart) {
-                this.position.z -= 0.2;
-
-                if(this.position.z < this.zStart) {
-                    this.position.z = this.zStart;
-                }
-            }
-        }
-        */
+        // all rendering done by tweens now
     }
 
     private createObject(texture: THREE.Texture) {
@@ -121,20 +94,24 @@ export class CategoryVisual extends THREE.Object3D {
         this.imageMesh.position.z = (CategoryVisual.IMAGE_DEPTH - CategoryVisual.BACKGROUND_DEPTH) / 2;
     }
 
-    private onMouseOver(intersections: Array<THREE.Intersection>) {
+    private onMouseEvent(intersections: Array<THREE.Intersection>) {
         intersections = intersections.filter(x => x.object.parent instanceof CategoryVisual);
 
         if(intersections.length == 0) {
-            this.isMouseOver = false;
+            if(this.isMouseOver) {
+                this.onMouseOut();
+            }
         }
         else {
             let isMouseOver = false;
 
-            for(var i = 0; i < intersections.length; i++) {
+            for(let i = 0; i < intersections.length; i++) {
                 if(intersections[i].object.parent instanceof CategoryVisual) {
                     if(this.uuid == intersections[i].object.parent.uuid) {
                         isMouseOver = true;
 
+                        // TODO: we currently clear the temporal status on a mouse event, expecting a hovered category to set this
+                        //       seems like there might be a more performant option
                         this.stateService.updateTemporalNav(this.category.name);
 
                         break;
@@ -142,8 +119,43 @@ export class CategoryVisual extends THREE.Object3D {
                 }
             }
 
-            this.isMouseOver = isMouseOver;
+            if(isMouseOver && !this.isMouseOver) {
+                this.onMouseOver();
+            }
+            else if(!isMouseOver && this.isMouseOver) {
+                this.onMouseOut();
+            }
         }
+    }
+
+    private onMouseOver() {
+        this.isMouseOver = true;
+        this.backgroundMesh.material = new THREE.MeshLambertMaterial({ color: 255, side: THREE.DoubleSide });
+
+        if(this._mouseOutTween != null) {
+            this._mouseOutTween.stop();
+            this._mouseOutTween = null;
+        }
+                
+        this._mouseOverTween = new TWEEN.Tween(this.position)
+            .to(this.hoverPosition, 1000)
+            .easing(TWEEN.Easing.Elastic.Out)
+            .start();
+    }
+
+    private onMouseOut() {
+        this.isMouseOver = false;
+        this.backgroundMesh.material = new THREE.MeshLambertMaterial({ color: this.color, side: THREE.DoubleSide });
+        
+        if(this._mouseOverTween != null) {
+            this._mouseOverTween.stop();
+            this._mouseOverTween = null;
+        }
+
+        this._mouseOutTween = new TWEEN.Tween(this.position)
+            .to(this.onscreenPosition, 1200)
+            .easing(TWEEN.Easing.Linear.None)
+            .start();
     }
 
     // https://github.com/mrdoob/three.js/issues/2065

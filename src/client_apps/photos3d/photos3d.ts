@@ -149,8 +149,6 @@ export class Photos3D {
 
         this._catList = new CategoryListController(this._dataService, this._stateService);
         this._catList.init();
-
-        this.toggleAxisHelper();
         
         this.animate();
     }

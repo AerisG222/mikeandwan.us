@@ -38,6 +38,8 @@ export class CategoryListController implements IController {
         this.heightWhenDisplayed = 2 * Math.tan(this._ctx.camera.fov * 0.5 * (Math.PI / 180))
                                      * (this._ctx.camera.position.z - CategoryListController.zWhenDisplayed);
         this.widthWhenDisplayed = this.heightWhenDisplayed * this._ctx.camera.aspect;
+
+        this.stateService.categorySelectedSubject.subscribe(cat => this.onCategorySelected(cat));
     }
 
     get areVisualsEnabled(): boolean {
@@ -54,7 +56,7 @@ export class CategoryListController implements IController {
             this._idx--;
             this._yearList[this._idx].bringIntoView();
 
-            this.stateService.updateActiveNav(this._yearList[this._idx].year);
+            this.stateService.publishActiveNav(this._yearList[this._idx].year);
         }
     }
 
@@ -64,12 +66,16 @@ export class CategoryListController implements IController {
             this._idx++;
             this._yearList[this._idx].bringIntoView();
 
-            this.stateService.updateActiveNav(this._yearList[this._idx].year);
+            this.stateService.publishActiveNav(this._yearList[this._idx].year);
         }
     }
 
 
     render(delta: number) {
+        if(!this._visualsEnabled) {
+            return;
+        }
+
         for (let i = 0; i < this._yearList.length; i++) {
             let year = this._yearList[i];
 
@@ -80,7 +86,18 @@ export class CategoryListController implements IController {
     }
 
     enableVisuals(areEnabled: boolean): void {
+        this._visualsEnabled = areEnabled;
 
+        if(!areEnabled) {
+            this._yearList[this._idx].removeFromView();
+        }
+        else {
+            this._yearList[this._idx].bringIntoView();
+        }
+    }
+
+    private onCategorySelected(category: ICategory) {
+        this.enableVisuals(false);
     }
 
     private loadCategories() {
@@ -89,7 +106,7 @@ export class CategoryListController implements IController {
             .then(categories => {
                 this.prepareAllYears(categories);
 
-                this.stateService.updateActiveNav(this._yearList[0].year);
+                this.stateService.publishActiveNav(this._yearList[0].year);
             });
     }
 

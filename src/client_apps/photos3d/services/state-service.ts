@@ -1,12 +1,16 @@
-import { ArgumentNullError } from '../models/argument-null-error';
 import { Subject } from 'rxjs/Subject';
+
 import { ActiveStatus } from '../models/active-status';
+import { ArgumentNullError } from '../models/argument-null-error';
+import { ICategory } from '../models/icategory';
 import { VisualContext } from '../models/visual-context';
 
 export class StateService {
     private _activeNavSubject = new Subject<ActiveStatus>();
     private _temporalNavSubject = new Subject<string>();
     private _mouseoverSubject = new Subject<Array<THREE.Intersection>>();
+    private _mouseclickSubject = new Subject<Array<THREE.Intersection>>();
+    private _categorySelectedSubject = new Subject<ICategory>();
     private _visualContext: VisualContext;
 
     constructor(context: VisualContext) {
@@ -33,16 +37,32 @@ export class StateService {
         return this._mouseoverSubject.asObservable();
     }
 
-    updateTemporalNav(category: string) {
+    get mouseclickObservable() {
+        return this._mouseclickSubject.asObservable();
+    }
+
+    get categorySelectedSubject() {
+        return this._categorySelectedSubject.asObservable();
+    }
+
+    publishTemporalNav(category: string) {
         this._temporalNavSubject.next(category);
     }
 
-    updateActiveNav(year: number, category?: string) {
+    publishActiveNav(year: number, category?: string) {
         this._activeNavSubject.next(new ActiveStatus(year, category));
     }
 
-    updateMouseover(intersections: Array<THREE.Intersection>) {
-        this.updateTemporalNav(null);
+    publishMouseover(intersections: Array<THREE.Intersection>) {
+        this.publishTemporalNav(null);
         this._mouseoverSubject.next(intersections);
+    }
+
+    publishMouseClick(intersections: Array<THREE.Intersection>) {
+        this._mouseclickSubject.next(intersections);
+    }
+
+    publishCategorySelected(category: ICategory) {
+        this._categorySelectedSubject.next(category);
     }
 }

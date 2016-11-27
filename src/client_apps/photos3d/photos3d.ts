@@ -3,19 +3,21 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/throttleTime';
 
-import { VisualContext } from './models/visual-context';
-import { DataService } from './services/data-service';
-import { StateService } from './services/state-service';
-import { IController } from './controllers/icontroller';
 import { BackgroundController } from './controllers/background-controller';
-import { StatusBarController } from './controllers/status-bar-controller';
 import { CategoryListController } from './controllers/category-list-controller';
+import { DataService } from './services/data-service';
+import { IController } from './controllers/icontroller';
+import { PhotoListController } from './controllers/photo-list-controller';
+import { StateService } from './services/state-service';
+import { StatusBarController } from './controllers/status-bar-controller';
+import { VisualContext } from './models/visual-context';
 
 export class Photos3D {
     private _axisHelper: THREE.AxisHelper;
     private _bg: IController;
     private _status: IController;
     private _catList: CategoryListController;
+    private _photoList: PhotoListController;
     private _mouseoverSubscription: Subscription;
     private _mouseclickSubscription: Subscription;
     private _resizeSubscription: Subscription;
@@ -108,27 +110,30 @@ export class Photos3D {
     }
 
     // http://stemkoski.github.io/Three.js/Mouse-Over.html
-    private onMouseMove(event: MouseEvent) {
-        let x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        let y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    private onMouseMove(evt: MouseEvent) {
+        this._stateService.publishMouseover(this.getIntersects(evt));
+    }
+
+    private onMouseClick(evt: MouseEvent) {
+        this._stateService.publishMouseClick(this.getIntersects(evt));
+    }
+
+    private getIntersects(evt: MouseEvent): Array<THREE.Intersection> {
+        let x = ( evt.clientX / window.innerWidth ) * 2 - 1;
+        let y = - ( evt.clientY / window.innerHeight ) * 2 + 1;
         let vector = new THREE.Vector3(x, y, 0.5);
+
         vector.unproject(this._ctx.camera);
 
         let ray = new THREE.Raycaster(this._ctx.camera.position, vector.sub(this._ctx.camera.position).normalize());
 
         // create an array containing all objects in the scene with which the ray intersects, though
         // filter the list to just objects that care about this to optimize perf
-        // TODO: get rid of magic number in filter below
-        // TODO: add filter back to correct location:  x.object.parent instanceof CategoryVisual
         let intersects = ray
             .intersectObjects(this._ctx.scene.children, true)
-            .filter(i => i.distance < 800);
+            .filter(i => i.distance);
 
-        this._stateService.updateMouseover(intersects);
-    }
-
-    private onMouseClick(evt: MouseEvent) {
-        console.log('click!');
+        return intersects;
     }
 
     private prepareScene() {
@@ -160,6 +165,9 @@ export class Photos3D {
 
         this._catList = new CategoryListController(this._dataService, this._stateService);
         this._catList.init();
+
+        this._photoList = new PhotoListController(this._dataService, this._stateService);
+        this._photoList.init();
 
         this.animate();
     }

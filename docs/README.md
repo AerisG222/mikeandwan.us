@@ -99,6 +99,44 @@ but will try to get this well organized below to make it easy to follow.
     sudo systemctl start postgresql.service
     sudo systemctl enable postgresql.service
     ```
+- Create admin account
+    ```
+    su - postgres
+    psql
+    CREATE USER mmorano;
+    ALTER USER mmorano WITH SUPERUSER;
+    ```
+- Create database [and migrate data from mysql]
+    - `000/create_maw_website.sh`
+- Copy update scripts to server
+    - `rsync -a -f"+ */" -f"+ *.sql" -f"- *" . mmorano@tifa:/home/mmorano/deploy/update_scripts`
+- Run fixups - cd to root directory containing year folders
+    ```
+    # 0: cd to the root directory containing the year folders (images_new)
+
+    # 1: correct sigmoidal_contrast_adjustment column name
+    find . -type f -exec sed -i 's/ sigmoidal_adjustment / sigmoidal_contrast_adjustment /g' {} +
+
+    # 2: correct for case sensitivity
+    find . -type f -exec sed -i "s/WHERE lg_path = '\(.*\)'/WHERE UPPER(lg_path) = UPPER('\1')/g" {} +
+
+    # 3: create temp index to support following case insensitive lookups
+    CREATE INDEX photo_upper_lg_path ON photo.photo (UPPER(lg_path));
+    CREATE INDEX photo_src_path ON photo.photo (src_path);
+    
+    # 4: apply all sql updates to database (all glacier sql files are in the root, so skip those - need to do in this order so src_path is properly set first):
+    find . -mindepth 2 -type f -execdir psql -d maw_website -f {} \;
+    
+    # 5: apply glacier backup updates to database:
+    find . -maxdepth 1 -type f -execdir psql -d maw_website -f {} \;
+    
+    # 6: confirm all photos have backup info
+    select count(1) from photo.photo where aws_archive_id is null;
+    
+    # 7: drop temp index
+    DROP INDEX photo.photo_upper_lg_path;
+    DROP INDEX photo.photo_src_path;
+    ```
 
 
 ## .NET Core
@@ -122,7 +160,6 @@ but will try to get this well organized below to make it easy to follow.
     sudo systemctl start nginx.service
     sudo systemctl enable nginx.service
     ```
-
 
 ## Supervisord
 
@@ -190,6 +227,14 @@ decisions below, which are called out separately below.
     ```
 8. Deploy assets to server, then update SELinux labels
     - `restorecon -Rv /srv/www/website_assets/`
+9. Prepare log directory
+    ```
+    mkdir /var/log/nginx/mikeandwan.us
+    chmod g+rx /var/log/nginx
+    chown nginx:nginx /var/log/nginx/mikeandwan.us
+    chmod g+rwx /var/log/nginx/mikeandwan.us
+    ```
+10. Reference: [https://docs.asp.net/en/latest/publishing/linuxproduction.html](ASP.Net Linux Production)
 
 
 ## Scheduled Maintenance

@@ -8,6 +8,7 @@ export class CategoryVisual extends THREE.Object3D {
     private static BORDER_WIDTH = 2;
     private static loader = new THREE.TextureLoader();
     
+    private ignoreMouseOver = true;
     private isMouseOver = false;
     private backgroundMesh: THREE.Mesh = null;
     private imageMesh: THREE.Mesh = null;
@@ -49,10 +50,13 @@ export class CategoryVisual extends THREE.Object3D {
         this._bringIntoViewTween = new TWEEN.Tween(this.position)
             .to(this.onscreenPosition, 1200)
             .easing(TWEEN.Easing.Back.Out)
-            .start();
+            .start()
+            .onComplete(x => { this.ignoreMouseOver = false; });
     }
 
     removeFromView(): void {
+        this.ignoreMouseOver = true;
+
         if(this._bringIntoViewTween != null) {
             this._bringIntoViewTween.stop();
             this._bringIntoViewTween = null;
@@ -95,6 +99,10 @@ export class CategoryVisual extends THREE.Object3D {
     }
 
     private onMouseEvent(intersections: Array<THREE.Intersection>) {
+        if(this.ignoreMouseOver) {
+            return;
+        }
+        
         intersections = intersections.filter(x => x.object.parent instanceof CategoryVisual);
 
         if(intersections.length == 0) {

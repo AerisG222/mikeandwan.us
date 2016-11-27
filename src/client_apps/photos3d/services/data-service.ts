@@ -18,7 +18,7 @@ export class DataService {
     }
 
     getPhotos(categoryId: number): Promise<Array<IPhoto>> {
-        return (<any>window).fetch(`/api/photos/getPhotos3D/{categoryId}`, this.reqOpts)
+        return (<any>window).fetch(`/api/photos/getPhotos3D/${categoryId}`, this.reqOpts)
             .then(this.status)
             .then(this.json)
             .then(data => data)

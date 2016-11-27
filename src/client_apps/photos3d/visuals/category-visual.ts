@@ -1,8 +1,9 @@
 import { ICategory } from '../models/icategory';
+import { IVisual } from './ivisual';
 import { Hexagon } from '../models/hexagon';
 import { StateService } from '../services/state-service';
 
-export class CategoryVisual extends THREE.Object3D {
+export class CategoryVisual extends THREE.Object3D implements IVisual {
     private static readonly BACKGROUND_DEPTH = 0.1;
     private static readonly IMAGE_DEPTH = 0.3;
     private static readonly BORDER_WIDTH = 2;

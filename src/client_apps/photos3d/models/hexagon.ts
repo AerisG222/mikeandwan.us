@@ -1,7 +1,6 @@
 export class Hexagon {
     private static readonly AREA_MULTIPLIER = 3 * Math.sqrt(3) / 2;
     private halfEdgeLength: number;
-    private totalLength: number;
     private totalHeight: number;
     private halfHeight: number;
 

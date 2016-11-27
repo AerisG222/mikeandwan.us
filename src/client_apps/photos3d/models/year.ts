@@ -8,14 +8,13 @@ export class Year {
     constructor(public year: number,
                 public color: number,
                 categoryList?: Array<Category>) {
-        if(year == null) {
+        if (year == null) {
             throw new ArgumentNullError('year');
         }
 
-        if(categoryList == null) {
+        if (categoryList == null) {
             this._categoryList = [];
-        }
-        else {
+        } else {
             this._categoryList = categoryList;
         }
     }
@@ -29,13 +28,13 @@ export class Year {
     }
 
     bringIntoView(): void {
-        for(let i = 0; i < this._categoryList.length; i++) {
+        for (let i = 0; i < this._categoryList.length; i++) {
             this._categoryList[i].visual.bringIntoView();
         }
     }
 
     removeFromView(): void {
-        for(let i = 0; i < this._categoryList.length; i++) {
+        for (let i = 0; i < this._categoryList.length; i++) {
             this._categoryList[i].visual.removeFromView();
         }
     }

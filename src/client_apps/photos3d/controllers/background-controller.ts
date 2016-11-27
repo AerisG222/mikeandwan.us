@@ -9,7 +9,7 @@ export class BackgroundController implements IController {
     private _background: IVisual;
 
     constructor(private _stateService: StateService) {
-        if(_stateService == null) {
+        if (_stateService == null) {
             throw new ArgumentNullError('_stateService');
         }
     }
@@ -25,7 +25,7 @@ export class BackgroundController implements IController {
     }
 
     render(clockDelta: number): void {
-        if(this._visualsEnabled) {
+        if (this._visualsEnabled) {
             this._background.render(clockDelta);
         }
     }

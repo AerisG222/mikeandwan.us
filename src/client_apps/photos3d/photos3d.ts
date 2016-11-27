@@ -26,11 +26,11 @@ export class Photos3D {
 
     run() {
         // ensure scrollbars do not appear
-        document.getElementsByTagName('body')[0].style.overflow = "hidden";
-        
+        document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+
         this.prepareScene();
 
-        window.addEventListener("resize", () => this.onResize(), false);
+        window.addEventListener('resize', () => this.onResize(), false);
 
         this._mouseoverSubscription = Observable
             .fromEvent<MouseEvent>(document, 'mousemove')
@@ -79,16 +79,15 @@ export class Photos3D {
         this.animate();
     }
 
-    private toggleBackground() { 
+    private toggleBackground() {
         this._bg.enableVisuals(!this._bg.areVisualsEnabled);
     }
 
     private toggleAxisHelper() {
-        if(this._axisHelper == null) {
+        if (this._axisHelper == null) {
             this._axisHelper = new THREE.AxisHelper(500);
             this._ctx.scene.add(this._axisHelper);
-        }
-        else {
+        } else {
             this._ctx.scene.remove(this._axisHelper);
             this._axisHelper = null;
         }
@@ -103,7 +102,7 @@ export class Photos3D {
     // http://stemkoski.github.io/Three.js/Mouse-Over.html
     private onMouseMove(event: MouseEvent) {
         let x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	    let y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        let y = - ( event.clientY / window.innerHeight ) * 2 + 1;
         let vector = new THREE.Vector3(x, y, 0.5);
         vector.unproject(this._ctx.camera);
 
@@ -113,9 +112,9 @@ export class Photos3D {
         // filter the list to just objects that care about this to optimize perf
         // TODO: get rid of magic number in filter below
         // TODO: add filter back to correct location:  x.object.parent instanceof CategoryVisual
-	    let intersects = ray
+        let intersects = ray
             .intersectObjects(this._ctx.scene.children, true)
-            .filter(x => x.distance < 800);
+            .filter(i => i.distance < 800);
 
         this._stateService.updateMouseover(intersects);
     }
@@ -149,12 +148,12 @@ export class Photos3D {
 
         this._catList = new CategoryListController(this._dataService, this._stateService);
         this._catList.init();
-        
+
         this.animate();
     }
 
     private animate() {
-        if(this._isPaused) {
+        if (this._isPaused) {
             return;
         }
 

@@ -8,7 +8,7 @@ export class StatusBarController implements IController {
     private _status: StatusBarVisual;
 
     constructor(private _stateService: StateService) {
-        if(_stateService == null) {
+        if (_stateService == null) {
             throw new ArgumentNullError('_stateService');
         }
     }
@@ -21,13 +21,13 @@ export class StatusBarController implements IController {
         // replace with factory if/when there are other background types
         this._status = new StatusBarVisual(this);
         this._status.init();
-        
+
         this._stateService.activeNavObservable.subscribe(evt => { this._status.updateActive(evt); });
         this._stateService.temporalNavObservable.subscribe(evt => { this._status.updateTemporal(evt); });
     }
 
     render(): void {
-        
+
     }
 
     enableVisuals(areEnabled: boolean): void {

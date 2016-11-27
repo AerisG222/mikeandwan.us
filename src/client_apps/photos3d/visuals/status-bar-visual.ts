@@ -8,9 +8,9 @@ export class StatusBarVisual implements IVisual {
     actualDiv: HTMLDivElement;
     temporalDiv: HTMLDivElement;
     statusDiv: HTMLDivElement;
-    
+
     constructor(private _controller: StatusBarController) {
-        if(_controller == null) {
+        if (_controller == null) {
             throw new ArgumentNullError('_controller');
         }
     }
@@ -30,7 +30,7 @@ export class StatusBarVisual implements IVisual {
         this.actualDiv = this.createInfoDiv('33%', 'left');
         this.navDiv.appendChild(this.actualDiv);
 
-        this.temporalDiv = this.createInfoDiv('33%', 'left')
+        this.temporalDiv = this.createInfoDiv('33%', 'left');
         this.navDiv.appendChild(this.temporalDiv);
 
         this.statusDiv = this.createInfoDiv('33%', 'right');
@@ -46,10 +46,9 @@ export class StatusBarVisual implements IVisual {
     }
 
     updateActive(status: ActiveStatus) {
-        if(status.category != null) {
+        if (status.category != null) {
             this.actualDiv.innerHTML = `${status.year} | ${status.category}`;
-        }
-        else {
+        } else {
             this.actualDiv.innerHTML = status.year.toString();
         }
     }

@@ -1,5 +1,4 @@
 import { ArgumentNullError } from '../models/argument-null-error';
-import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { ActiveStatus } from '../models/active-status';
 import { VisualContext } from '../models/visual-context';
@@ -9,16 +8,16 @@ export class StateService {
     private _temporalNavSubject = new Subject<string>();
     private _mouseoverSubject = new Subject<Array<THREE.Intersection>>();
     private _visualContext: VisualContext;
-    
+
     constructor(context: VisualContext) {
-        if(context == null) {
+        if (context == null) {
             throw new ArgumentNullError('context');
         }
 
         this._visualContext = context;
     }
 
-    get visualContext() { 
+    get visualContext() {
         return this._visualContext;
     }
 

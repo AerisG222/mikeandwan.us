@@ -7,7 +7,7 @@ export class CategoryVisual extends THREE.Object3D {
     private static IMAGE_DEPTH = 0.3;
     private static BORDER_WIDTH = 2;
     private static loader = new THREE.TextureLoader();
-    
+
     private ignoreMouseOver = true;
     private isMouseOver = false;
     private backgroundMesh: THREE.Mesh = null;
@@ -42,7 +42,7 @@ export class CategoryVisual extends THREE.Object3D {
     }
 
     bringIntoView(): void {
-        if(this._removeFromViewTween != null) {
+        if (this._removeFromViewTween != null) {
             this._removeFromViewTween.stop();
             this._removeFromViewTween = null;
         }
@@ -57,7 +57,7 @@ export class CategoryVisual extends THREE.Object3D {
     removeFromView(): void {
         this.ignoreMouseOver = true;
 
-        if(this._bringIntoViewTween != null) {
+        if (this._bringIntoViewTween != null) {
             this._bringIntoViewTween.stop();
             this._bringIntoViewTween = null;
         }
@@ -81,7 +81,7 @@ export class CategoryVisual extends THREE.Object3D {
         let len = this.hexagon.centerToVertexLength + CategoryVisual.BORDER_WIDTH;
         let geometry = this.createExtrudeGeometry(len, CategoryVisual.BACKGROUND_DEPTH);
         let material = new THREE.MeshLambertMaterial({ color: this.color, side: THREE.DoubleSide });
-        
+
         this.backgroundMesh = new THREE.Mesh(geometry, material);
     }
 
@@ -99,23 +99,22 @@ export class CategoryVisual extends THREE.Object3D {
     }
 
     private onMouseEvent(intersections: Array<THREE.Intersection>) {
-        if(this.ignoreMouseOver) {
+        if (this.ignoreMouseOver) {
             return;
         }
-        
+
         intersections = intersections.filter(x => x.object.parent instanceof CategoryVisual);
 
-        if(intersections.length == 0) {
-            if(this.isMouseOver) {
+        if (intersections.length === 0) {
+            if (this.isMouseOver) {
                 this.onMouseOut();
             }
-        }
-        else {
+        } else {
             let isMouseOver = false;
 
-            for(let i = 0; i < intersections.length; i++) {
-                if(intersections[i].object.parent instanceof CategoryVisual) {
-                    if(this.uuid == intersections[i].object.parent.uuid) {
+            for (let i = 0; i < intersections.length; i++) {
+                if (intersections[i].object.parent instanceof CategoryVisual) {
+                    if (this.uuid === intersections[i].object.parent.uuid) {
                         isMouseOver = true;
 
                         // TODO: we currently clear the temporal status on a mouse event, expecting a hovered category to set this
@@ -127,10 +126,9 @@ export class CategoryVisual extends THREE.Object3D {
                 }
             }
 
-            if(isMouseOver && !this.isMouseOver) {
+            if (isMouseOver && !this.isMouseOver) {
                 this.onMouseOver();
-            }
-            else if(!isMouseOver && this.isMouseOver) {
+            } else if (!isMouseOver && this.isMouseOver) {
                 this.onMouseOut();
             }
         }
@@ -140,11 +138,11 @@ export class CategoryVisual extends THREE.Object3D {
         this.isMouseOver = true;
         this.backgroundMesh.material = new THREE.MeshLambertMaterial({ color: 255, side: THREE.DoubleSide });
 
-        if(this._mouseOutTween != null) {
+        if (this._mouseOutTween != null) {
             this._mouseOutTween.stop();
             this._mouseOutTween = null;
         }
-                
+
         this._mouseOverTween = new TWEEN.Tween(this.position)
             .to(this.hoverPosition, 1000)
             .easing(TWEEN.Easing.Elastic.Out)
@@ -154,8 +152,8 @@ export class CategoryVisual extends THREE.Object3D {
     private onMouseOut() {
         this.isMouseOver = false;
         this.backgroundMesh.material = new THREE.MeshLambertMaterial({ color: this.color, side: THREE.DoubleSide });
-        
-        if(this._mouseOverTween != null) {
+
+        if (this._mouseOverTween != null) {
             this._mouseOverTween.stop();
             this._mouseOverTween = null;
         }
@@ -183,8 +181,7 @@ export class CategoryVisual extends THREE.Object3D {
 
         geometry.faceVertexUvs[0] = [];
 
-        for(let faceIdx = 0; faceIdx < faceCount; ++faceIdx)
-        {
+        for (let faceIdx = 0; faceIdx < faceCount; ++faceIdx) {
             let face = geometry.faces[faceIdx];
             let vtx = geometry.vertices[face.a];
             uvA.set((vtx.x - minX) / deltaX, (vtx.y - minY) / deltaY);
@@ -202,7 +199,7 @@ export class CategoryVisual extends THREE.Object3D {
     private createExtrudeGeometry(edgeLength: number, depth: number): THREE.ExtrudeGeometry {
         let hex = new Hexagon(edgeLength);
         let shape = new THREE.Shape(hex.generatePoints());
-        let settings = { 
+        let settings = {
             amount: depth,
             bevelEnabled: false
         };

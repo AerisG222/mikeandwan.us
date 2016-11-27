@@ -6,12 +6,12 @@ export class TextureLoader {
 
     loadTexture(url: string): Promise<THREE.Texture> {
         return new Promise((resolve, reject) => {
-            this.loader.load(url, 
+            this.loader.load(url,
                 texture => {
                     texture.name = url;
                     resolve(texture);
                 },
-                progress => { 
+                progress => {
                     console.log(`downloading ${url}: ${progress.loaded}`);
                 },
                 error => {
@@ -24,7 +24,7 @@ export class TextureLoader {
     loadTextures(urls: Array<string>): Array<Promise<THREE.Texture>> {
         let list: Array<Promise<THREE.Texture>> = [];
 
-        for(var i = 0; i < urls.length; i++) {
+        for (let i = 0; i < urls.length; i++) {
             list.push(this.loadTexture(urls[i]));
         }
 

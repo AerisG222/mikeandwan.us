@@ -1,5 +1,5 @@
 import { ArgumentNullError } from '../models/argument-null-error';
-import { IVisual } from './ivisual'
+import { IVisual } from './ivisual';
 import { TextureLoader } from '../services/texture-loader';
 import { VisualContext } from '../models/visual-context';
 
@@ -15,39 +15,39 @@ export class PondBackgroundVisual implements IVisual {
     private textureLoader = new TextureLoader();
 
     constructor(private _ctx: VisualContext) {
-        if(_ctx == null) {
+        if (_ctx == null) {
             throw new ArgumentNullError('_ctx');
         }
     }
 
     init() {
-        var texturePromise = this.loadTextures();
-        
+        let texturePromise = this.loadTextures();
+
         this.updateTextures(texturePromise);
     }
-    
-    show() { 
-        if(this.treeMesh != null) {
+
+    show() {
+        if (this.treeMesh != null) {
             this._ctx.scene.add(this.treeMesh);
         }
 
-        if(this.waterMesh != null) {
+        if (this.waterMesh != null) {
             this._ctx.scene.add(this.waterMesh);
         }
     }
 
     hide() {
-        if(this.treeMesh != null) {
+        if (this.treeMesh != null) {
             this._ctx.scene.remove(this.treeMesh);
         }
 
-        if(this.waterMesh != null) {
+        if (this.waterMesh != null) {
             this._ctx.scene.remove(this.waterMesh);
         }
     }
 
     render(clockDelta: number) {
-        if(this.waterUniform != null) {
+        if (this.waterUniform != null) {
             this.waterUniform.time.value += clockDelta;
         }
     }
@@ -60,20 +60,17 @@ export class PondBackgroundVisual implements IVisual {
         ]);
     }
 
-    private updateTextures(texturePromises: Array<Promise<THREE.Texture>>)
-    {
+    private updateTextures(texturePromises: Array<Promise<THREE.Texture>>) {
         Promise.all(texturePromises).then(textures => {
             let waterTexture: THREE.Texture = null;
             let noiseTexture: THREE.Texture = null;
 
-            for(let texture of textures) {
-                if(texture.name.indexOf(PondBackgroundVisual.TEXTURE_NOISE) > 0) {
+            for (let texture of textures) {
+                if (texture.name.indexOf(PondBackgroundVisual.TEXTURE_NOISE) > 0) {
                     noiseTexture = texture;
-                }
-                else if(texture.name.indexOf(PondBackgroundVisual.TEXTURE_TREES) > 0) {
+                } else if (texture.name.indexOf(PondBackgroundVisual.TEXTURE_TREES) > 0) {
                     this.updateTrees(texture);
-                }
-                else if(texture.name.indexOf(PondBackgroundVisual.TEXTURE_WATER) > 0) {
+                } else if (texture.name.indexOf(PondBackgroundVisual.TEXTURE_WATER) > 0) {
                     waterTexture = texture;
                 }
             }
@@ -85,7 +82,7 @@ export class PondBackgroundVisual implements IVisual {
     }
 
     private updateTrees(texture: THREE.Texture) {
-        if(this.treeMesh != null) {
+        if (this.treeMesh != null) {
             this._ctx.scene.remove(this.treeMesh);
         }
 
@@ -102,7 +99,7 @@ export class PondBackgroundVisual implements IVisual {
     }
 
     private updateWater(waterTexture: THREE.Texture, noiseTexture: THREE.Texture) {
-        if(this.waterMesh != null) {
+        if (this.waterMesh != null) {
             this._ctx.scene.remove(this.waterMesh);
         }
 
@@ -115,18 +112,18 @@ export class PondBackgroundVisual implements IVisual {
         waterTexture.repeat.set(this.horizontalRepeat, 1);
         waterTexture.wrapT = THREE.MirroredRepeatWrapping;
         waterTexture.wrapS = THREE.MirroredRepeatWrapping;
-        
+
         noiseTexture.repeat.set(2, 1);
         noiseTexture.wrapT = THREE.MirroredRepeatWrapping;
         noiseTexture.wrapS = THREE.MirroredRepeatWrapping;
 
         this.waterUniform = {
-            baseTexture: 	{ type: "t", value: waterTexture },
-            baseSpeed: 		{ type: "f", value: 0.005 },
-            noiseTexture: 	{ type: "t", value: noiseTexture },
-            noiseScale:		{ type: "f", value: 0.1 },
-            alpha: 			{ type: "f", value: 0.8 },
-            time: 			{ type: "f", value: 1.0 }
+            baseTexture: 	{ type: 't', value: waterTexture },
+            baseSpeed: 		{ type: 'f', value: 0.005 },
+            noiseTexture: 	{ type: 't', value: noiseTexture },
+            noiseScale:		{ type: 'f', value: 0.1 },
+            alpha: 			{ type: 'f', value: 0.8 },
+            time: 			{ type: 'f', value: 1.0 }
         };
 
         let waterMaterial = new THREE.ShaderMaterial({
@@ -136,7 +133,7 @@ export class PondBackgroundVisual implements IVisual {
         });
 
         waterMaterial.side = THREE.DoubleSide;
-        
+
         this.waterMesh.material = waterMaterial;
 
         this._ctx.scene.add(this.waterMesh);

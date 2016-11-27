@@ -13,7 +13,7 @@ export class VisualContext {
     }
 
     set scene(scene: THREE.Scene) {
-        if(scene == null) {
+        if (scene == null) {
             throw new ArgumentNullError('scene');
         }
 
@@ -25,7 +25,7 @@ export class VisualContext {
     }
 
     set camera(camera: THREE.PerspectiveCamera) {
-        if(camera == null) {
+        if (camera == null) {
             throw new ArgumentNullError('camera');
         }
 
@@ -37,7 +37,7 @@ export class VisualContext {
     }
 
     set renderer(renderer: THREE.Renderer) {
-        if(renderer == null) {
+        if (renderer == null) {
             throw new ArgumentNullError('renderer');
         }
 
@@ -49,7 +49,7 @@ export class VisualContext {
     }
 
     set sun(sun: THREE.DirectionalLight) {
-        if(sun == null) {
+        if (sun == null) {
             throw new ArgumentNullError('sun');
         }
 
@@ -61,7 +61,7 @@ export class VisualContext {
     }
 
     set ambient(ambient: THREE.AmbientLight) {
-        if(ambient == null) {
+        if (ambient == null) {
             throw new ArgumentNullError('ambient');
         }
 
@@ -75,12 +75,11 @@ export class VisualContext {
     get width() {
         return window.innerWidth;
     }
-    
+
     get size() {
-        if(this.width < 2200) {
+        if (this.width < 2200) {
             return 'md';
-        }
-        else {
+        } else {
             return 'lg';
         }
     }

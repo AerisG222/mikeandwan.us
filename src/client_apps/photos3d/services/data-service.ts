@@ -29,11 +29,10 @@ export class DataService {
 
     // https://developers.google.com/web/updates/2015/03/introduction-to-fetch
     private status(response) {
-        if(response.status >= 200 && response.status < 300) {
+        if (response.status >= 200 && response.status < 300) {
             return Promise.resolve(response);
-        }
-        else {
-            return Promise.reject(new Error(response.statusText))
+        } else {
+            return Promise.reject(new Error(response.statusText));
         }
     }
 

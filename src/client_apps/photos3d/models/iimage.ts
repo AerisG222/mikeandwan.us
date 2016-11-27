@@ -1,5 +1,5 @@
 export interface IImage {
-    path: string,
-    width: number,
-    height: number
+    path: string;
+    width: number;
+    height: number;
 }

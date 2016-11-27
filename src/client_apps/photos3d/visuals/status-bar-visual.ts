@@ -24,16 +24,21 @@ export class StatusBarVisual implements IVisual {
         this.navDiv.style.backgroundColor = '#333';
         this.navDiv.style.height = '24px';
         this.navDiv.style.width = '100%';
+        this.navDiv.style.fontWeight = 'bold';
 
         document.body.appendChild(this.navDiv);
 
         this.actualDiv = this.createInfoDiv('33%', 'left');
+        this.actualDiv.style.padding = '2px 8px';
         this.navDiv.appendChild(this.actualDiv);
 
         this.temporalDiv = this.createInfoDiv('33%', 'left');
+        this.temporalDiv.style.padding = '2px 8px';
+        this.temporalDiv.style.textAlign = 'center';
         this.navDiv.appendChild(this.temporalDiv);
 
         this.statusDiv = this.createInfoDiv('33%', 'right');
+        this.statusDiv.style.padding = '2px 8px';
         this.navDiv.appendChild(this.statusDiv);
     }
 

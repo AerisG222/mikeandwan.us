@@ -17,6 +17,8 @@ export class Photos3D {
     private _status: IController;
     private _catList: CategoryListController;
     private _mouseoverSubscription: Subscription;
+    private _mouseclickSubscription: Subscription;
+    private _resizeSubscription: Subscription;
     private _stateService: StateService;
 
     private _ctx = new VisualContext();
@@ -30,12 +32,18 @@ export class Photos3D {
 
         this.prepareScene();
 
-        window.addEventListener('resize', () => this.onResize(), false);
+        this._resizeSubscription = Observable
+            .fromEvent<UIEvent>(window, 'resize')
+            .subscribe(evt => this.onResize(evt));
 
         this._mouseoverSubscription = Observable
             .fromEvent<MouseEvent>(document, 'mousemove')
-            .throttleTime(10)
+            //.throttleTime(10)
             .subscribe(evt => this.onMouseMove(evt));
+
+        this._mouseclickSubscription = Observable
+            .fromEvent<MouseEvent>(document, 'click')
+            .subscribe(evt => this.onMouseClick(evt));
 
         Mousetrap.bind('space', e => { this.togglePause(); });
         Mousetrap.bind('right', e => { this.moveNext(); });
@@ -49,7 +57,7 @@ export class Photos3D {
 
         this.animate();
     }
-
+    
     private moveNext() {
         this._catList.moveNextYear();
     }
@@ -93,7 +101,7 @@ export class Photos3D {
         }
     }
 
-    private onResize() {
+    private onResize(evt: UIEvent) {
         this._ctx.renderer.setSize(this._ctx.width, this._ctx.height);
         this._ctx.camera.aspect = this._ctx.width / this._ctx.height;
         this._ctx.camera.updateProjectionMatrix();
@@ -117,6 +125,10 @@ export class Photos3D {
             .filter(i => i.distance < 800);
 
         this._stateService.updateMouseover(intersects);
+    }
+
+    private onMouseClick(evt: MouseEvent) {
+        console.log('click!');
     }
 
     private prepareScene() {

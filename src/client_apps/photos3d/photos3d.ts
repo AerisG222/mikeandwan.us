@@ -6,8 +6,10 @@ import 'rxjs/add/operator/throttleTime';
 import { BackgroundController } from './controllers/background-controller';
 import { CategoryListController } from './controllers/category-list-controller';
 import { DataService } from './services/data-service';
+import { FrustrumCalculator } from './services/frustrum-calculator';
 import { IController } from './controllers/icontroller';
 import { PhotoListController } from './controllers/photo-list-controller';
+import { ScaleCalculator } from './services/scale-calculator';
 import { StateService } from './services/state-service';
 import { StatusBarController } from './controllers/status-bar-controller';
 import { VisualContext } from './models/visual-context';
@@ -26,6 +28,8 @@ export class Photos3D {
     private _ctx = new VisualContext();
     private _clock = new THREE.Clock();
     private _dataService = new DataService();
+    private _frustrumCalculator = new FrustrumCalculator();
+    private _scaleCalculator = new ScaleCalculator();
     private _isPaused = false;
 
     run() {
@@ -40,7 +44,7 @@ export class Photos3D {
 
         this._mouseoverSubscription = Observable
             .fromEvent<MouseEvent>(document, 'mousemove')
-            //.throttleTime(10)
+            // .throttleTime(10)
             .subscribe(evt => this.onMouseMove(evt));
 
         this._mouseclickSubscription = Observable
@@ -59,7 +63,7 @@ export class Photos3D {
 
         this.animate();
     }
-    
+
     private moveNext() {
         this._catList.moveNextYear();
     }
@@ -163,10 +167,10 @@ export class Photos3D {
         this._bg = new BackgroundController(this._stateService);
         this._bg.init();
 
-        this._catList = new CategoryListController(this._dataService, this._stateService);
+        this._catList = new CategoryListController(this._dataService, this._stateService, this._frustrumCalculator);
         this._catList.init();
 
-        this._photoList = new PhotoListController(this._dataService, this._stateService);
+        this._photoList = new PhotoListController(this._dataService, this._stateService, this._frustrumCalculator, this._scaleCalculator);
         this._photoList.init();
 
         this.animate();

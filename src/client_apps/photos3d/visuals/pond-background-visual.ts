@@ -90,6 +90,7 @@ export class PondBackgroundVisual implements IVisual {
         this.treeMesh = new THREE.Mesh(treeGeometry);
         this.treeMesh.position.y = texture.image.height / 2;
 
+        texture.minFilter = THREE.LinearFilter;
         texture.repeat.set(this.horizontalRepeat, 1);
         texture.wrapS = THREE.MirroredRepeatWrapping;
 
@@ -109,10 +110,12 @@ export class PondBackgroundVisual implements IVisual {
         this.waterMesh.rotation.x = (Math.PI / 2);
         this.waterMesh.position.z = waterTexture.image.height / 2;
 
+        waterTexture.minFilter = THREE.LinearFilter;
         waterTexture.repeat.set(this.horizontalRepeat, 1);
         waterTexture.wrapT = THREE.MirroredRepeatWrapping;
         waterTexture.wrapS = THREE.MirroredRepeatWrapping;
 
+        noiseTexture.minFilter = THREE.LinearFilter;
         noiseTexture.repeat.set(2, 1);
         noiseTexture.wrapT = THREE.MirroredRepeatWrapping;
         noiseTexture.wrapS = THREE.MirroredRepeatWrapping;

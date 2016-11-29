@@ -89,6 +89,8 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
     }
 
     private createImage(texture: THREE.Texture) {
+        texture.minFilter = THREE.LinearFilter;
+
         let geometry = this.createExtrudeGeometry(this.hexagon.centerToVertexLength, CategoryVisual.IMAGE_DEPTH);
 
         this.mapUvs(geometry);
@@ -109,7 +111,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         let isMouseOver = this.isMouseEventForThisInstance(intersections);
 
         if (!isMouseOver) {
-            if(this._isMouseOver) {
+            if (this._isMouseOver) {
                 this.onMouseOut();
             }
         } else {
@@ -130,7 +132,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
 
         let isMouseOver = this.isMouseEventForThisInstance(intersections);
 
-        if(isMouseOver) {
+        if (isMouseOver) {
             this.stateService.publishTemporalNav(null);
             this.stateService.publishActiveNav(this.category.year, this.category.name);
             this.stateService.publishCategorySelected(this.category);
@@ -140,7 +142,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
     private isMouseEventForThisInstance(intersections: Array<THREE.Intersection>): boolean {
         intersections = intersections.filter(x => x.object.parent instanceof CategoryVisual);
 
-        if(intersections.length === 0) {
+        if (intersections.length === 0) {
             return false;
         }
 

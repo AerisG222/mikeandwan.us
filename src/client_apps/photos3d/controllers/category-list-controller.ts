@@ -1,15 +1,16 @@
 import { List } from 'linqts/linq';
 
 import { ArgumentNullError } from '../models/argument-null-error';
-import { IController } from './icontroller';
-import { ICategory } from '../models/icategory';
-import { Year } from '../models/year';
-import { CategoryVisual } from '../visuals/category-visual';
 import { Category } from '../models/category';
-import { VisualContext } from '../models/visual-context';
 import { CategoryLayoutCalculator } from '../services/category-layout-calculator';
+import { CategoryVisual } from '../visuals/category-visual';
 import { DataService } from '../services/data-service';
+import { FrustrumCalculator } from '../services/frustrum-calculator';
+import { ICategory } from '../models/icategory';
+import { IController } from './icontroller';
 import { StateService } from '../services/state-service';
+import { VisualContext } from '../models/visual-context';
+import { Year } from '../models/year';
 
 export class CategoryListController implements IController {
     private static readonly zWhenDisplayed = 500;
@@ -23,7 +24,8 @@ export class CategoryListController implements IController {
     private widthWhenDisplayed: number;
 
     constructor(private dataService: DataService,
-                private stateService: StateService) {
+                private stateService: StateService,
+                private frustrumCalculator: FrustrumCalculator) {
         if (dataService == null) {
             throw new ArgumentNullError('dataService');
         }
@@ -34,10 +36,10 @@ export class CategoryListController implements IController {
 
         this._ctx = stateService.visualContext;
 
-        // http://gamedev.stackexchange.com/questions/96317/determining-view-boundaries-based-on-z-position-when-using-a-perspective-project
-        this.heightWhenDisplayed = 2 * Math.tan(this._ctx.camera.fov * 0.5 * (Math.PI / 180))
-                                     * (this._ctx.camera.position.z - CategoryListController.zWhenDisplayed);
-        this.widthWhenDisplayed = this.heightWhenDisplayed * this._ctx.camera.aspect;
+        let bounds = this.frustrumCalculator.calculateBounds(this._ctx.camera, CategoryListController.zWhenDisplayed);
+
+        this.heightWhenDisplayed = bounds.y;
+        this.widthWhenDisplayed = bounds.x;
 
         this.stateService.categorySelectedSubject.subscribe(cat => this.onCategorySelected(cat));
     }
@@ -70,9 +72,8 @@ export class CategoryListController implements IController {
         }
     }
 
-
     render(delta: number) {
-        if(!this._visualsEnabled) {
+        if (!this._visualsEnabled) {
             return;
         }
 
@@ -88,10 +89,9 @@ export class CategoryListController implements IController {
     enableVisuals(areEnabled: boolean): void {
         this._visualsEnabled = areEnabled;
 
-        if(!areEnabled) {
+        if (!areEnabled) {
             this._yearList[this._idx].removeFromView();
-        }
-        else {
+        } else {
             this._yearList[this._idx].bringIntoView();
         }
     }

@@ -4,6 +4,7 @@ import { FrustrumCalculator } from '../services/frustrum-calculator';
 import { ICategory } from '../models/icategory';
 import { IController } from './icontroller';
 import { IPhoto } from '../models/iphoto';
+import { PhotoBackgroundVisual } from '../visuals/photo-background-visual';
 import { PhotoVisual } from '../visuals/photo-visual';
 import { ScaleCalculator } from '../services/scale-calculator';
 import { StateService } from '../services/state-service';
@@ -14,6 +15,7 @@ export class PhotoListController implements IController {
     private _activePhoto: PhotoVisual;
     private _targetWidth: number;
     private _targetHeight: number;
+    private _bg: PhotoBackgroundVisual;
 
     private _visualsEnabled = true;
     private _photos: Array<IPhoto> = [];
@@ -84,6 +86,8 @@ export class PhotoListController implements IController {
     }
 
     private showPhoto(): void {
+        this.ensureBackground();
+
         let oldPhoto = this._activePhoto;
         let newPhoto = new PhotoVisual(this._photos[this._idx],
                                        this._stateService,
@@ -102,5 +106,12 @@ export class PhotoListController implements IController {
         this._stateService.visualContext.scene.add(newPhoto);
 
         this._activePhoto = newPhoto;
+    }
+
+    private ensureBackground(): void {
+        if (this._bg == null) {
+            this._bg = new PhotoBackgroundVisual(this._stateService, this._frustrumCalculator, PhotoListController.z - 1);
+            this._bg.init();
+        }
     }
 }

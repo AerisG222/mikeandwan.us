@@ -61,6 +61,9 @@ export class PhotoListController implements IController {
         if (!areEnabled && this.areVisualsEnabled) {
             this._stateService.visualContext.scene.remove(this._bg);
             this._stateService.visualContext.scene.remove(this._activePhoto);
+
+            this._bg = null;
+            this._activePhoto = null;
         }
     }
 

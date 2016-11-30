@@ -34,7 +34,7 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
     }
 
     init() {
-        PhotoVisual.loader.load(this._photo.lgImage.path, texture => {
+        PhotoVisual.loader.load(this.getPhotoUrl(), texture => {
             this.createPhoto(texture);
         });
 
@@ -43,6 +43,14 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
 
     render() {
 
+    }
+
+    private getPhotoUrl(): string {
+        if (this._width < 1600) {
+            return this._photo.mdImage.path;
+        }
+
+        return this._photo.lgImage.path;
     }
 
     private createPhoto(texture: THREE.Texture): void {

@@ -31,6 +31,14 @@ export class StatusBarController implements IController {
     }
 
     enableVisuals(areEnabled: boolean): void {
+        if (areEnabled !== this.areVisualsEnabled) {
+            this._visualsEnabled = areEnabled;
 
+            if (areEnabled) {
+                this._status.show();
+            } else {
+                this._status.hide();
+            }
+        }
     }
 }

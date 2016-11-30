@@ -64,8 +64,13 @@ export class Photos3D {
         Mousetrap.bind('w', e => { this.stepForward(); });
         Mousetrap.bind('a', e => { this.strafeLeft(); });
         Mousetrap.bind('d', e => { this.strafeRight(); });
+        Mousetrap.bind('h', e => { this.toggleStatus(); });
 
         this.animate();
+    }
+
+    private toggleStatus() {
+        this._status.enableVisuals(!this._status.areVisualsEnabled);
     }
 
     private enterPhotoListMode() {

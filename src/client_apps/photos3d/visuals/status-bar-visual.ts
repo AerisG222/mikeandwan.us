@@ -4,7 +4,7 @@ import { ActiveStatus } from '../models/active-status';
 import { StatusBarController } from '../controllers/status-bar-controller';
 
 export class StatusBarVisual implements IVisual {
-    navDiv: HTMLDivElement;
+    rootDiv: HTMLDivElement;
     actualDiv: HTMLDivElement;
     temporalDiv: HTMLDivElement;
     statusDiv: HTMLDivElement;
@@ -16,34 +16,42 @@ export class StatusBarVisual implements IVisual {
     }
 
     init() {
-        this.navDiv = document.createElement('div');
-        this.navDiv.id = 'nav';
-        this.navDiv.style.position = 'absolute';
-        this.navDiv.style.bottom = '0';
-        this.navDiv.style.opacity = '0.7';
-        this.navDiv.style.backgroundColor = '#333';
-        this.navDiv.style.height = '24px';
-        this.navDiv.style.width = '100%';
-        this.navDiv.style.fontWeight = 'bold';
+        this.rootDiv = document.createElement('div');
+        this.rootDiv.id = 'nav';
+        this.rootDiv.style.position = 'absolute';
+        this.rootDiv.style.bottom = '0';
+        this.rootDiv.style.opacity = '0.7';
+        this.rootDiv.style.backgroundColor = '#333';
+        this.rootDiv.style.height = '24px';
+        this.rootDiv.style.width = '100%';
+        this.rootDiv.style.fontWeight = 'bold';
 
-        document.body.appendChild(this.navDiv);
+        document.body.appendChild(this.rootDiv);
 
         this.actualDiv = this.createInfoDiv('33%', 'left');
         this.actualDiv.style.padding = '2px 8px';
-        this.navDiv.appendChild(this.actualDiv);
+        this.rootDiv.appendChild(this.actualDiv);
 
         this.temporalDiv = this.createInfoDiv('33%', 'left');
         this.temporalDiv.style.padding = '2px 8px';
         this.temporalDiv.style.textAlign = 'center';
-        this.navDiv.appendChild(this.temporalDiv);
+        this.rootDiv.appendChild(this.temporalDiv);
 
         this.statusDiv = this.createInfoDiv('33%', 'right');
         this.statusDiv.style.padding = '2px 8px';
-        this.navDiv.appendChild(this.statusDiv);
+        this.rootDiv.appendChild(this.statusDiv);
     }
 
     render() {
 
+    }
+
+    show() {
+        this.rootDiv.style.display = 'block';
+    }
+
+    hide() {
+        this.rootDiv.style.display = 'none';
     }
 
     updateTemporal(category: string) {

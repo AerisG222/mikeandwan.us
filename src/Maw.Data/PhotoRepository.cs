@@ -787,6 +787,11 @@ namespace Maw.Data
                         Width = x.XsWidth,
                         Height = x.XsHeight
                     },
+                    MdImage = new Image3D {
+                        Path = x.MdPath,
+                        Width = x.MdWidth,
+                        Height = x.MdHeight
+                    },
                     LgImage = new Image3D {
                         Path = x.LgPath,
                         Width = x.LgWidth,

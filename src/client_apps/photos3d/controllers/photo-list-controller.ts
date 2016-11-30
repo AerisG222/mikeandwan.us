@@ -47,7 +47,10 @@ export class PhotoListController implements IController {
     }
 
     init(): void {
-        this._stateService.categorySelectedSubject.subscribe(cat => { this.loadPhotos(cat); } );
+        this._stateService.categorySelectedSubject.subscribe(cat => {
+            this.loadPhotos(cat);
+            this._visualsEnabled = true;
+        } );
     }
 
     render(): void {
@@ -55,7 +58,10 @@ export class PhotoListController implements IController {
     }
 
     enableVisuals(areEnabled: boolean): void {
-
+        if (!areEnabled && this.areVisualsEnabled) {
+            this._stateService.visualContext.scene.remove(this._bg);
+            this._stateService.visualContext.scene.remove(this._activePhoto);
+        }
     }
 
     showNext(): void {
@@ -99,7 +105,6 @@ export class PhotoListController implements IController {
         newPhoto.init();
 
         if (oldPhoto != null) {
-            // remove from view
             this._stateService.visualContext.scene.remove(oldPhoto);
         }
 
@@ -112,6 +117,8 @@ export class PhotoListController implements IController {
         if (this._bg == null) {
             this._bg = new PhotoBackgroundVisual(this._stateService, this._frustrumCalculator, PhotoListController.z - 1);
             this._bg.init();
+
+            this._stateService.visualContext.scene.add(this._bg);
         }
     }
 }

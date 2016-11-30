@@ -3,12 +3,12 @@ import { FrustrumCalculator } from '../services/frustrum-calculator';
 import { IVisual } from './ivisual';
 import { StateService } from '../services/state-service';
 
-export class PhotoBackgroundVisual implements IVisual {
-    private _bgMesh: THREE.Mesh;
-
+export class PhotoBackgroundVisual extends THREE.Object3D implements IVisual {
     constructor(private _stateService: StateService,
                 private _frustrumCalculator: FrustrumCalculator,
                 private _z) {
+        super();
+
         if (_stateService == null) {
             throw new ArgumentNullError('_stateService');
         }
@@ -31,11 +31,11 @@ export class PhotoBackgroundVisual implements IVisual {
 
         let plane = new THREE.PlaneGeometry(bounds.x, bounds.y);
         let material = new THREE.MeshBasicMaterial({ color: '#000000', transparent: true, opacity: 0.88, side: THREE.DoubleSide });
-        this._bgMesh = new THREE.Mesh(plane, material);
+        let mesh = new THREE.Mesh(plane, material);
 
-        this._bgMesh.position.z = this._z;
-        this._bgMesh.position.y = bounds.y / 2;
+        mesh.position.z = this._z;
+        mesh.position.y = bounds.y / 2;
 
-        this._stateService.visualContext.scene.add(this._bgMesh);
+        this.add(mesh);
     }
 }

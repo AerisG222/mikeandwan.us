@@ -15,7 +15,7 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
                 private _scaleCalculator: ScaleCalculator,
                 private _height: number,
                 private _width: number,
-                private _z: number,) {
+                private _z: number) {
         super();
 
         if (_photo == null) {

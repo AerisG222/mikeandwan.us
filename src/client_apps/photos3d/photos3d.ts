@@ -31,6 +31,7 @@ export class Photos3D {
     private _frustrumCalculator = new FrustrumCalculator();
     private _scaleCalculator = new ScaleCalculator();
     private _isPaused = false;
+    private _photoListMode = false;
 
     run() {
         // ensure scrollbars do not appear
@@ -51,6 +52,9 @@ export class Photos3D {
             .fromEvent<MouseEvent>(document, 'click')
             .subscribe(evt => this.onMouseClick(evt));
 
+        this._stateService.categorySelectedSubject.subscribe(x => { this.enterPhotoListMode(); });
+
+        Mousetrap.bind('esc', e => { this.exitMode(); });
         Mousetrap.bind('space', e => { this.togglePause(); });
         Mousetrap.bind('right', e => { this.moveNext(); });
         Mousetrap.bind('left', e => { this.movePrev(); });
@@ -64,12 +68,32 @@ export class Photos3D {
         this.animate();
     }
 
+    private enterPhotoListMode() {
+        this._photoListMode = true;
+    }
+
+    private exitMode() {
+        if (this._photoListMode) {
+            this._catList.enableVisuals(true);
+            this._photoList.enableVisuals(false);
+            this._photoListMode = false;
+        }
+    }
+
     private moveNext() {
-        this._catList.moveNextYear();
+        if (this._photoListMode) {
+            this._photoList.showNext();
+        } else {
+            this._catList.moveNextYear();
+        }
     }
 
     private movePrev() {
-        this._catList.movePrevYear();
+        if (this._photoListMode) {
+            this._photoList.showPrev();
+        } else {
+            this._catList.movePrevYear();
+        }
     }
 
     private strafeLeft() {

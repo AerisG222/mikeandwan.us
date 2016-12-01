@@ -46,7 +46,7 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
     }
 
     private getPhotoUrl(): string {
-        if (this._width < 1600) {
+        if (this._width < 1600 || this._height < 1200) {
             return this._photo.mdImage.path;
         }
 

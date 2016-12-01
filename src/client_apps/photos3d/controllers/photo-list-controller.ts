@@ -36,7 +36,7 @@ export class PhotoListController implements IController {
             throw new ArgumentNullError('_frustrumCalculator');
         }
 
-        this._photoZ = this.calculateZ();
+        this._photoZ = _frustrumCalculator.calculateZForFullFrame(this._stateService.visualContext.camera);
         let bounds = _frustrumCalculator.calculateBounds(this._stateService.visualContext.camera, this._photoZ);
         this._targetWidth = bounds.x;
         this._targetHeight = bounds.y;
@@ -83,15 +83,6 @@ export class PhotoListController implements IController {
 
         this._idx--;
         this.showPhoto();
-    }
-
-    private calculateZ(): number {
-        let camera = this._stateService.visualContext.camera;
-        let angleDeg = 90 - (camera.fov / 2);
-        let angleRad = angleDeg * Math.PI / 180;
-        let len = Math.tan(angleRad) * camera.position.y;
-
-        return camera.position.z - len;
     }
 
     private loadPhotos(category: ICategory): void {

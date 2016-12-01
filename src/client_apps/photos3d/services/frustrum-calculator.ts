@@ -6,4 +6,12 @@ export class FrustrumCalculator {
 
         return new THREE.Vector2(width, height);
     }
+
+    calculateZForFullFrame(camera: THREE.PerspectiveCamera): number {
+        let angleDeg = 90 - (camera.fov / 2);
+        let angleRad = angleDeg * Math.PI / 180;
+        let len = Math.tan(angleRad) * camera.position.y;
+
+        return camera.position.z - len;
+    }
 }

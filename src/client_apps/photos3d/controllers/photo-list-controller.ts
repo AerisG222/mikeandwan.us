@@ -10,8 +10,7 @@ import { ScaleCalculator } from '../services/scale-calculator';
 import { StateService } from '../services/state-service';
 
 export class PhotoListController implements IController {
-    private static readonly z = 510;
-
+    private _photoZ: number;
     private _activePhoto: PhotoVisual;
     private _targetWidth: number;
     private _targetHeight: number;
@@ -37,7 +36,8 @@ export class PhotoListController implements IController {
             throw new ArgumentNullError('_frustrumCalculator');
         }
 
-        let bounds = _frustrumCalculator.calculateBounds(this._stateService.visualContext.camera, PhotoListController.z);
+        this._photoZ = this.calculateZ();
+        let bounds = _frustrumCalculator.calculateBounds(this._stateService.visualContext.camera, this._photoZ);
         this._targetWidth = bounds.x;
         this._targetHeight = bounds.y;
     }
@@ -85,6 +85,15 @@ export class PhotoListController implements IController {
         this.showPhoto();
     }
 
+    private calculateZ(): number {
+        let camera = this._stateService.visualContext.camera;
+        let angleDeg = 90 - (camera.fov / 2);
+        let angleRad = angleDeg * Math.PI / 180;
+        let len = Math.tan(angleRad) * camera.position.y;
+
+        return camera.position.z - len;
+    }
+
     private loadPhotos(category: ICategory): void {
         this._dataService
             .getPhotos(category.id)
@@ -103,7 +112,7 @@ export class PhotoListController implements IController {
                                        this._scaleCalculator,
                                        this._targetHeight,
                                        this._targetWidth,
-                                       PhotoListController.z);
+                                       this._photoZ);
 
         newPhoto.init();
 
@@ -118,7 +127,7 @@ export class PhotoListController implements IController {
 
     private ensureBackground(): void {
         if (this._bg == null) {
-            this._bg = new PhotoBackgroundVisual(this._stateService, this._frustrumCalculator, PhotoListController.z - 1);
+            this._bg = new PhotoBackgroundVisual(this._stateService, this._frustrumCalculator, this._photoZ - 0.1);
             this._bg.init();
 
             this._stateService.visualContext.scene.add(this._bg);

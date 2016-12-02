@@ -47,13 +47,13 @@ export class PhotoListController implements IController {
     }
 
     init(): void {
-        this._stateService.categorySelectedSubject.subscribe(cat => {
+        this._stateService.categorySelectedObservable.subscribe(cat => {
             this.loadPhotos(cat);
             this._visualsEnabled = true;
         } );
     }
 
-    render(): void {
+    render(clockDelta: number): void {
 
     }
 

@@ -11,6 +11,7 @@ export class StateService {
     private _mouseoverSubject = new Subject<Array<THREE.Intersection>>();
     private _mouseclickSubject = new Subject<Array<THREE.Intersection>>();
     private _categorySelectedSubject = new Subject<ICategory>();
+    private _dialogDisplayedSubject = new Subject<boolean>();
     private _visualContext: VisualContext;
 
     constructor(context: VisualContext) {
@@ -41,8 +42,12 @@ export class StateService {
         return this._mouseclickSubject.asObservable();
     }
 
-    get categorySelectedSubject() {
+    get categorySelectedObservable() {
         return this._categorySelectedSubject.asObservable();
+    }
+
+    get dialogDisplayedObservable() {
+        return this._dialogDisplayedSubject.asObservable();
     }
 
     publishTemporalNav(category: string) {
@@ -64,5 +69,9 @@ export class StateService {
 
     publishCategorySelected(category: ICategory) {
         this._categorySelectedSubject.next(category);
+    }
+
+    publishDialogDisplayed(isDisplayed: boolean) {
+        this._dialogDisplayedSubject.next(isDisplayed);
     }
 }

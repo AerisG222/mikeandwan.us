@@ -25,9 +25,10 @@ export class Photos3D {
     private _mouseoverSubscription: Subscription;
     private _mouseclickSubscription: Subscription;
     private _resizeSubscription: Subscription;
-    private _stateService: StateService;
 
+    private _ignoreMouseEvents = false;
     private _ctx = new VisualContext();
+    private _stateService = new StateService(this._ctx);
     private _clock = new THREE.Clock();
     private _dataService = new DataService();
     private _frustrumCalculator = new FrustrumCalculator();
@@ -40,6 +41,12 @@ export class Photos3D {
         document.getElementsByTagName('body')[0].style.overflow = 'hidden';
 
         this.prepareScene();
+
+        this._status = new StatusBarController(this._stateService);
+        this._status.init();
+
+        this._help = new HelpController(this._stateService);
+        this._help.init();
 
         this._resizeSubscription = Observable
             .fromEvent<UIEvent>(window, 'resize')
@@ -54,7 +61,8 @@ export class Photos3D {
             .fromEvent<MouseEvent>(document, 'click')
             .subscribe(evt => this.onMouseClick(evt));
 
-        this._stateService.categorySelectedSubject.subscribe(x => { this.enterPhotoListMode(); });
+        this._stateService.categorySelectedObservable.subscribe(x => { this.enterPhotoListMode(); });
+        this._stateService.dialogDisplayedObservable.subscribe(x => { this.onDialogDisplayed(x); });
 
         Mousetrap.bind('esc', e => { this.exitMode(); });
         Mousetrap.bind('space', e => { this.togglePause(); });
@@ -70,6 +78,10 @@ export class Photos3D {
         Mousetrap.bind('?', e => { this.toggleHelp(); });
 
         this.animate();
+    }
+
+    private onDialogDisplayed(isDisplayed: boolean) {
+        this._ignoreMouseEvents = isDisplayed;
     }
 
     private toggleHelp() {
@@ -151,10 +163,18 @@ export class Photos3D {
 
     // http://stemkoski.github.io/Three.js/Mouse-Over.html
     private onMouseMove(evt: MouseEvent) {
+        if (this._ignoreMouseEvents) {
+            return;
+        }
+
         this._stateService.publishMouseover(this.getIntersects(evt));
     }
 
     private onMouseClick(evt: MouseEvent) {
+        if (this._ignoreMouseEvents) {
+            return;
+        }
+
         this._stateService.publishMouseClick(this.getIntersects(evt));
     }
 
@@ -177,9 +197,6 @@ export class Photos3D {
     }
 
     private prepareScene() {
-        this._help = new HelpController();
-        this._help.init();
-
         this._ctx.scene = new THREE.Scene();
 
         this._ctx.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -189,11 +206,6 @@ export class Photos3D {
         this._ctx.camera = new THREE.PerspectiveCamera(45, this._ctx.width / this._ctx.height, 0.1, 2000);
         this._ctx.camera.position.set(0, 200, 1000);
         this._ctx.camera.lookAt(new THREE.Vector3(0, 200, 0));
-
-        this._stateService = new StateService(this._ctx);
-
-        this._status = new StatusBarController(this._stateService);
-        this._status.init();
 
         this._ctx.ambient = new THREE.AmbientLight(0x404040);
         this._ctx.scene.add(this._ctx.ambient);
@@ -232,7 +244,7 @@ export class Photos3D {
 
         this._bg.render(delta);
         this._catList.render(delta);
-        this._status.render(delta);
+        this._photoList.render(delta);
 
         TWEEN.update();
     }

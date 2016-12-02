@@ -41,7 +41,7 @@ export class CategoryListController implements IController {
         this.heightWhenDisplayed = bounds.y;
         this.widthWhenDisplayed = bounds.x;
 
-        this.stateService.categorySelectedSubject.subscribe(cat => this.onCategorySelected(cat));
+        this.stateService.categorySelectedObservable.subscribe(cat => this.onCategorySelected(cat));
     }
 
     get areVisualsEnabled(): boolean {

@@ -30,6 +30,22 @@ footer { margin-top: 80px; background: none repeat scroll 0 0 #1c1e22; padding: 
 .copyright { margin-top: 24px; }
 .social a { font-size: 36px; margin: 0 12px; }
 
+/* shamelessly stolen from github */
+kbd {
+    display: inline-block;
+    padding: 3px 5px;
+    font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    line-height: 10px;
+    color: #555;
+    vertical-align: middle;
+    background-color: #fcfcfc;
+    border: solid 1px #ccc;
+    border-bottom-color: #bbb;
+    border-radius: 3px;
+    box-shadow: inset 0 -1px 0 #bbb;
+    font-weight: bold;
+}
+
 /* adblock plus apparently is stripping out font-awesome icons for social sites, add them here with custom names to avoid this */
 .fa-gp:before { content: ""; }
 .fa-fb:before { content: ""; }

@@ -7,6 +7,7 @@ import { BackgroundController } from './controllers/background-controller';
 import { CategoryListController } from './controllers/category-list-controller';
 import { DataService } from './services/data-service';
 import { FrustrumCalculator } from './services/frustrum-calculator';
+import { HelpController } from './controllers/help-controller';
 import { IController } from './controllers/icontroller';
 import { PhotoListController } from './controllers/photo-list-controller';
 import { ScaleCalculator } from './services/scale-calculator';
@@ -18,6 +19,7 @@ export class Photos3D {
     private _axisHelper: THREE.AxisHelper;
     private _bg: IController;
     private _status: IController;
+    private _help: IController;
     private _catList: CategoryListController;
     private _photoList: PhotoListController;
     private _mouseoverSubscription: Subscription;
@@ -65,8 +67,13 @@ export class Photos3D {
         Mousetrap.bind('a', e => { this.strafeLeft(); });
         Mousetrap.bind('d', e => { this.strafeRight(); });
         Mousetrap.bind('h', e => { this.toggleStatus(); });
+        Mousetrap.bind('?', e => { this.toggleHelp(); });
 
         this.animate();
+    }
+
+    private toggleHelp() {
+        this._help.enableVisuals(!this._help.areVisualsEnabled);
     }
 
     private toggleStatus() {
@@ -170,6 +177,9 @@ export class Photos3D {
     }
 
     private prepareScene() {
+        this._help = new HelpController();
+        this._help.init();
+
         this._ctx.scene = new THREE.Scene();
 
         this._ctx.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });

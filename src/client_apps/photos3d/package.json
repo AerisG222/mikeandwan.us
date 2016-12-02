@@ -5,8 +5,9 @@
   "repository": "https://www.github.com/AerisG222",
   "description": "3D photo viewing application for www.mikeandwan.us",
   "devDependencies": {
+    "@types/bootstrap": "^3.3.32",
     "@types/es6-promise": "0.0.32",
-    "@types/jquery": "^2.0.33",
+    "@types/jquery": "^2.0.34",
     "@types/mousetrap": "^1.5.32",
     "@types/stats": "^0.16.30",
     "@types/three": "0.0.26",

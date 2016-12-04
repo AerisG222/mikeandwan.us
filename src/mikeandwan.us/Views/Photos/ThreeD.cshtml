@@ -1,0 +1,152 @@
+@{
+    ViewBag.Title = "photos 3d"; 
+    Layout = "_LayoutMinimal";
+}
+
+@section custom_head {
+    @Html.Partial("_css_Bootstrap")
+    @Html.Partial("_css_site")
+    <style>
+        body { margin: 0; padding: 0; }
+        canvas { width: 99%; height: 99% }
+    </style>
+}
+
+@Html.Partial("_js_Jquery")
+@Html.Partial("_js_Bootstrap")
+@Html.Partial("_js_Threejs")
+@Html.Partial("_js_Tween")
+@Html.Partial("_js_Mousetrap")
+
+<div id="help" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Help</h4>
+            </div>
+            <div class="modal-body">
+                <div class="content">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <kbd class="pull-right">esc</kbd>
+                        </div>
+                        <div class="col-sm-4">
+                            Exit Photo Listing
+                        </div>
+                        <div class="col-sm-2">
+                            <kbd class="pull-right">space</kbd>
+                        </div>
+                        <div class="col-sm-4">
+                            Pause Animation
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <kbd class="pull-right">&rarr;</kbd>
+                        </div>
+                        <div class="col-sm-4">
+                            Move Next
+                        </div>
+                        <div class="col-sm-2">
+                            <kbd class="pull-right">&larr;</kbd>
+                        </div>
+                        <div class="col-sm-4">
+                            Move Previous
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <kbd class="pull-right">b</kbd>
+                        </div>
+                        <div class="col-sm-4">
+                            Toggle Background
+                        </div>
+                        <div class="col-sm-2">
+                            <kbd class="pull-right">x</kbd>
+                        </div>
+                        <div class="col-sm-4">
+                            Toggle Axis Helper
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <kbd class="pull-right">w</kbd>
+                        </div>
+                        <div class="col-sm-4">
+                            Move Forward
+                        </div>
+                        <div class="col-sm-2">
+                            <kbd class="pull-right">s</kbd>
+                        </div>
+                        <div class="col-sm-4">
+                            Move Backwards
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <kbd class="pull-right">a</kbd>
+                        </div>
+                        <div class="col-sm-4">
+                            Strafe Left
+                        </div>
+                        <div class="col-sm-2">
+                            <kbd class="pull-right">d</kbd>
+                        </div>
+                        <div class="col-sm-4">
+                            Strafe Right
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <kbd class="pull-right">h</kbd>
+                        </div>
+                        <div class="col-sm-4">
+                            Toggle Status Bar
+                        </div>
+                        <div class="col-sm-2">
+                            <kbd class="pull-right">?</kbd>
+                        </div>
+                        <div class="col-sm-4">
+                            Help
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="helpClose" type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* http://stemkoski.github.io/Three.js/Shader-Animate.html *@
+<script id="waterVertexShader" type="x-shader/x-vertex">
+varying vec2 vUv;
+void main() 
+{ 
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+}
+</script>
+
+<script id="waterFragmentShader" type="x-shader/x-vertex"> 
+uniform sampler2D baseTexture;
+uniform float baseSpeed;
+uniform sampler2D noiseTexture;
+uniform float noiseScale;
+uniform float alpha;
+uniform float time;
+
+varying vec2 vUv;
+void main() 
+{
+	vec2 uvTimeShift = vUv + vec2( -0.7, 1.5 ) * time * baseSpeed;	
+	vec4 noiseGeneratorTimeShift = texture2D( noiseTexture, uvTimeShift );
+	vec2 uvNoiseTimeShift = vUv + noiseScale * vec2( noiseGeneratorTimeShift.r, noiseGeneratorTimeShift.b );
+	vec4 baseColor = texture2D( baseTexture, uvNoiseTimeShift );
+
+	baseColor.a = alpha;
+	gl_FragColor = baseColor;
+}  
+</script>
+<script src="/js/photos3d/bundle.js"></script>

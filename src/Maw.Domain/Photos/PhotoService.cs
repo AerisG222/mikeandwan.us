@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Maw.Domain.Photos.ThreeD;
 
 
 namespace Maw.Domain.Photos
@@ -178,6 +179,18 @@ namespace Maw.Domain.Photos
         public Task<List<CategoryPhotoCount>> GetStats(bool allowPrivate)
         {
             return _repo.GetStats(allowPrivate);
+        }
+
+
+        public Task<List<Category3D>> GetAllCategories3D()
+        {
+            return _repo.GetAllCategories3D();
+        }
+
+
+        public Task<List<Photo3D>> GetPhotos3D(int categoryId)
+        {
+            return _repo.GetPhotos3D(categoryId);
         }
     }
 }

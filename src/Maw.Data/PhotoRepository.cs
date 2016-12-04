@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Maw.Data.EntityFramework.Photos;
+using Maw.Domain.Photos.ThreeD;
 using D = Maw.Domain.Photos;
+
 
 
 // TODO: try with an updated EF to see if we can run some of the commented out queries fully in the db.
@@ -757,6 +759,51 @@ namespace Maw.Data
         }
 
         
+        public async Task<List<Category3D>> GetAllCategories3D()
+        {
+            return await _ctx.Category
+                .OrderBy(x => x.Id)
+                .Select(x => new Category3D {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Year = x.Year,
+                    TeaserImage = new Image3D {
+                        Path = x.TeaserPhotoPath,
+                        Width = (short)x.TeaserPhotoWidth,
+                        Height = (short)x.TeaserPhotoHeight
+                    }
+                })
+                .ToListAsync();
+        }
+
+
+        public async Task<List<Photo3D>> GetPhotos3D(int categoryId)
+        {
+            return await _ctx.Photo
+                .Where(x => x.CategoryId == categoryId)
+                .OrderBy(x => x.CreateDate)
+                .Select(x => new Photo3D {
+                    Id = x.Id,
+                    XsImage = new Image3D {
+                        Path = x.XsPath,
+                        Width = x.XsWidth,
+                        Height = x.XsHeight
+                    },
+                    MdImage = new Image3D {
+                        Path = x.MdPath,
+                        Width = x.MdWidth,
+                        Height = x.MdHeight
+                    },
+                    LgImage = new Image3D {
+                        Path = x.LgPath,
+                        Width = x.LgWidth,
+                        Height = x.LgHeight
+                    }
+                })
+                .ToListAsync();
+        }
+
+
         async Task<short> GetUserId(string username)
         {
             return await _ctx.User

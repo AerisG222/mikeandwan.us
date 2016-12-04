@@ -68,6 +68,16 @@ namespace MawMvcApp.Controllers
         }
 
 
+        [HttpGet("3d/{*extra}")]
+        [TypeFilter(typeof(ApiAntiforgeryActionFilter))]
+        public ActionResult ThreeD()
+        {
+            ViewBag.NavigationZone = NavigationZone.Photos;
+
+            return View();
+        }
+
+
         [HttpGet("stats")]
         public ActionResult Stats()
         {

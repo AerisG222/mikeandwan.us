@@ -49,6 +49,7 @@ export class PhotoListController implements IController {
 
     init(): void {
         this._stateService.categorySelectedObservable.subscribe(cat => {
+            this._idx = 0;
             this.loadPhotos(cat);
             this._visualsEnabled = true;
         } );

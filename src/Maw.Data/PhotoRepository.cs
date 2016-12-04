@@ -762,6 +762,7 @@ namespace Maw.Data
         public async Task<List<Category3D>> GetAllCategories3D()
         {
             return await _ctx.Category
+                .OrderBy(x => x.Id)
                 .Select(x => new Category3D {
                     Id = x.Id,
                     Name = x.Name,
@@ -780,6 +781,7 @@ namespace Maw.Data
         {
             return await _ctx.Photo
                 .Where(x => x.CategoryId == categoryId)
+                .OrderBy(x => x.CreateDate)
                 .Select(x => new Photo3D {
                     Id = x.Id,
                     XsImage = new Image3D {

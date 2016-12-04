@@ -90,7 +90,7 @@ export class PhotoListController implements IController {
     }
 
     showNext(): void {
-        if (this._idx >= this._photos.length) {
+        if (this._idx >= this._photos.length - 1) {
             return;
         }
 

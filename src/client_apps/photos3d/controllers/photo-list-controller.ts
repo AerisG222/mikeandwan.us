@@ -16,6 +16,7 @@ export class PhotoListController implements IController {
     private _targetHeight: number;
     private _bg: PhotoBackgroundVisual;
 
+    private _oldPhotos: Array<PhotoVisual> = [];
     private _visualsEnabled = true;
     private _photos: Array<IPhoto> = [];
     private _idx = 0;
@@ -54,7 +55,28 @@ export class PhotoListController implements IController {
     }
 
     render(clockDelta: number): void {
+        if (this._activePhoto != null) {
+            this._activePhoto.render(clockDelta);
+        }
 
+        for (let i = 0; i < this._oldPhotos.length; i++) {
+            let oldPhoto = this._oldPhotos[i];
+
+            oldPhoto.render(clockDelta);
+
+            if (oldPhoto.isHidden) {
+                this._stateService.visualContext.scene.remove(oldPhoto);
+            }
+        }
+
+        for (let i = this._oldPhotos.length - 1; i >= 0; i--) {
+            let oldPhoto = this._oldPhotos[i];
+
+            if (oldPhoto.isHidden) {
+                this._stateService.visualContext.scene.remove(oldPhoto);
+                this._oldPhotos.splice(i, 1);
+            }
+        }
     }
 
     enableVisuals(areEnabled: boolean): void {
@@ -97,7 +119,11 @@ export class PhotoListController implements IController {
     private showPhoto(): void {
         this.ensureBackground();
 
-        let oldPhoto = this._activePhoto;
+        if (this._activePhoto != null) {
+            this._activePhoto.hide();
+            this._oldPhotos.push(this._activePhoto);
+        }
+
         let newPhoto = new PhotoVisual(this._photos[this._idx],
                                        this._stateService,
                                        this._scaleCalculator,
@@ -106,10 +132,6 @@ export class PhotoListController implements IController {
                                        this._photoZ);
 
         newPhoto.init();
-
-        if (oldPhoto != null) {
-            this._stateService.visualContext.scene.remove(oldPhoto);
-        }
 
         this._stateService.visualContext.scene.add(newPhoto);
 

@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { PhotoDataService } from '../shared/photo-data.service';
 import { IComment } from '../shared/icomment.model';

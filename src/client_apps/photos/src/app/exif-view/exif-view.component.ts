@@ -156,12 +156,12 @@ export class ExifViewComponent {
     private getExifData(): void {
         this._dataService.getPhotoExifData(this._photo.photo.id)
             .subscribe(exif => {
-                let exifInfo = new PhotoExifInfo()
+                let exifInfo = new PhotoExifInfo();
 
-                for(let fmt of this._map) {
+                for (let fmt of this._map) {
                     let item = new ExifDetail(fmt.displayName, this.formatExif((<any>exif)[fmt.fieldName], fmt.formatFunction));
 
-                    switch(fmt.category) {
+                    switch (fmt.category) {
                         case ExifCategory.Exif:
                             exifInfo.exifList.push(item);
                             break;

@@ -13,7 +13,7 @@ export class ExifTableComponent {
     exif: Array<Array<ExifDetail>> = [];
 
     @Input() set data(values: Array<ExifDetail>) {
-        if(values == null) {
+        if (values == null) {
             return;
         }
 

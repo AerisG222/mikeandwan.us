@@ -4,8 +4,8 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "@types/jquery": "^1.10.31",
+    "@types/jquery": "^2.0.34",
     "@types/stats": "^0.16.30",
-    "@types/three": "0.0.24"
+    "@types/three": "0.0.27"
   }
 }

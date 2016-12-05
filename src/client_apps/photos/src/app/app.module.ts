@@ -33,7 +33,6 @@ import { RatingViewComponent } from './rating-view/rating-view.component';
 import { SaveDialogComponent } from './save-dialog/save-dialog.component';
 import { SlideshowButtonComponent } from './slideshow-button/slideshow-button.component';
 import { ModeRouteInfo } from './shared/mode-route-info.model';
-import { RouteMode } from './shared/route-mode.model';
 import { PhotoDataService } from './shared/photo-data.service';
 import { PhotoSourceFactory } from './shared/photo-source-factory.model';
 import { PhotoStateService } from './shared/photo-state.service';

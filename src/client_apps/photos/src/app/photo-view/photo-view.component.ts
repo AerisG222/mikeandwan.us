@@ -53,7 +53,7 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
         }
     }
 
-    constructor(private _zone : NgZone,
+    constructor(private _zone: NgZone,
                 private _stateService: PhotoStateService,
                 private _navService: PhotoNavigationService,
                 private _responsiveService: ResponsiveService) {

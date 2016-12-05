@@ -5,6 +5,6 @@ interface PixasticStatic {
 
 declare var Pixastic: PixasticStatic;
 
-declare module "pixastic" {
+declare module 'pixastic' {
     export = Pixastic;
 }

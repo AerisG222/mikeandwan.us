@@ -18,6 +18,7 @@ matrix:
       env: CONFIGURATION=Release FRAMEWORK=netcoreapp1.1 DOTNETCORE=1
 
 script:
-  - cd src/mikeandwan.us
+  - cd src
   - dotnet restore
+  - cd mikeandwan.us
   - dotnet build -c $CONFIGURATION -f $FRAMEWORK

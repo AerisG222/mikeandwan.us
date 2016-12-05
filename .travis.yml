@@ -8,12 +8,14 @@ matrix:
       dist: trusty
       sudo: required
       dotnet: 1.0.0-preview2-003131
-      env: CONFIGURATION=Debug FRAMEWORK=netcoreapp1.1
+      mono: none
+      env: CONFIGURATION=Debug FRAMEWORK=netcoreapp1.1 DOTNETCORE=1
     - os: linux
       dist: trusty
       sudo: required
       dotnet: 1.0.0-preview2-003131
-      env: CONFIGURATION=Release FRAMEWORK=netcoreapp1.1
+      mono: none
+      env: CONFIGURATION=Release FRAMEWORK=netcoreapp1.1 DOTNETCORE=1
 
 script:
   - cd src/mikeandwan.us

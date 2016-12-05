@@ -7,12 +7,12 @@ matrix:
     - os: linux
       dist: trusty
       sudo: required
-      dotnet: 1.1.0
+      dotnet: 1.0.0-preview2-003131
       env: CONFIGURATION=Debug FRAMEWORK=netcoreapp1.1
     - os: linux
       dist: trusty
       sudo: required
-      dotnet: 1.1.0
+      dotnet: 1.0.0-preview2-003131
       env: CONFIGURATION=Release FRAMEWORK=netcoreapp1.1
 
 script:

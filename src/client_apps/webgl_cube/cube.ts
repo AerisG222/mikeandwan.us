@@ -31,9 +31,7 @@ class CubeDemo {
 
         // stats
         this.stats = new Stats();
-        this.stats.domElement.style.position = 'absolute';
-        this.stats.domElement.style.top = '0px';
-        document.body.appendChild(this.stats.domElement);
+        document.body.appendChild(this.stats.dom);
 
         // camera
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -87,8 +85,7 @@ class CubeDemo {
     }
 
     render() {
-        if(this.loadCounter < 2)
-        {
+        if (this.loadCounter < 2) {
             return;
         }
 

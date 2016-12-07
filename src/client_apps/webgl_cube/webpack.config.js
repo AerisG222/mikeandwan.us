@@ -1,5 +1,5 @@
 module.exports = {
-    entry: './app.ts',
+    entry: './cube.ts',
     devtool: 'source-map',
     output: {
         filename: 'dist/main.bundle.js'

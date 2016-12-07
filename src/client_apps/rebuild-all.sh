@@ -1,5 +1,21 @@
-NG_APPS=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learning" "memory" "money_spin" "photos" "time" "videos" "weekend_countdown" )
-TS_APPS=( "photo_stats" "webgl_cube" "webgl_text" )
+APPS=(
+    "bandwidth"
+    "binary_clock"
+    "byte_counter"
+    "filesize"
+    "googlemaps"
+    "learning"
+    "memory"
+    "money_spin"
+    "photo_stats"
+    "photos"
+    "photos3d"
+    "time"
+    "videos"
+    "webgl_cube" 
+    "webgl_text"
+    "weekend_countdown"
+)
 
 DOWORK=$1
 PROD=$2
@@ -8,17 +24,11 @@ build() {
     cd "${1}"
 
     if [ "${PROD}" == 'y' ]; then
-        ng build --prod --aot --environment prod
+        npm run prod_build
     else
-        ng build && ng lint
+        npm run dev_build
     fi
 
-    cd ..
-}
-
-buildgl() {
-    cd "${1}"
-    tsc
     cd ..
 }
 
@@ -28,15 +38,9 @@ if [ "${DOWORK}" == '' ]; then
 fi
 
 if [ "${DOWORK}" == "y" ]; then
-    for I in "${NG_APPS[@]}"
+    for I in "${APPS[@]}"
     do
         echo "building ${I}..."
         build "${I}"
-    done
-
-    for I in "${TS_APPS[@]}"
-    do
-        echo "building ${I}..."
-        buildgl "${I}"
     done
 fi

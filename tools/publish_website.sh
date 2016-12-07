@@ -11,13 +11,7 @@ DIST_ROOT="${PROJECT_ROOT}/dist"
 DEBUG=n
 WD=$( pwd )
 
-TSAPPS=(
-    "photo_stats"
-    "webgl_cube"
-    "webgl_text"
-)
-
-NGAPPS=( 
+JSAPPS=( 
     "bandwidth"
     "binary_clock"
     "byte_counter"
@@ -26,9 +20,13 @@ NGAPPS=(
     "learning"
     "memory"
     "money_spin"
+    "photo_stats"
     "photos"
+    "photos3d"
     "time"
     "videos"
+    "webgl_cube"
+    "webgl_text"
     "weekend_countdown"
 )
 
@@ -37,30 +35,6 @@ copy_app() {
 
     # https://silentorbit.com/notes/2013/08/rsync-by-extension/
     rsync -ah --include '*/' --include '*.js' --exclude '*' "${SRC_ROOT}/client_apps/${APP}/dist/" "${DIST_ROOT}/wwwroot/js/${APP}"
-}
-
-uglify_app() {
-    local APP=$1
-
-    if [ ${DEBUG} = 'y' ]; then
-        echo "uglifying: ${DIST_ROOT}/wwwroot/js/${APP}"
-    fi
-
-    for JS in $( find "${DIST_ROOT}/wwwroot/js/${APP}" -name '*.js' ); do
-        local DIRNAME=$( dirname "$JS" )
-        local FILENAME=$( basename "$JS" )
-        local EXTENSION="${FILENAME##*.}"
-        local FILENAME="${FILENAME%.*}"
-        local SHA1=$( sha1sum "${JS}" | awk '{print $1}' )
-
-        uglifyjs "${JS}" --mangle --compress --output "${DIRNAME}/${FILENAME}.${SHA1}.${EXTENSION}"
-
-        rm "${JS}"
-
-        if [ -e "${JS}.map" ]; then
-            rm "${JS}.map"
-        fi
-    done
 }
 
 update_script_refs() {
@@ -74,9 +48,7 @@ update_script_refs() {
         local ORIGURL="/js/${APP}/${ORIGFILENAME}.${EXTENSION}"
         local NEWURL="/js/${APP}/${NEWFILENAME}"
 
-        # this is a bit of a hack, but not sure how to best improve this right now...
-        #
-        # angular apps add 'bundle' to the name, and their hash is between the real
+        # angular/webpack apps add 'bundle' to the name, and their hash is between the real
         # filename part and the 'bundle.js' part.  this check injects the .bundle back
         # in if needed
         if [[ ${NEWURL} = *"bundle"* ]]; then
@@ -103,16 +75,7 @@ ensure_dir() {
 }
 
 publish_client_apps() {
-    # non-angular apps won't have the hash in their filename
-    for APP in ${TSAPPS[@]}; do
-        ensure_dir "${APP}"
-        copy_app "${APP}"
-        uglify_app "${APP}"
-        update_script_refs "${APP}"
-    done
-
-    # angular cli will bake in a hash to the production filenames
-    for APP in ${NGAPPS[@]}; do
+    for APP in ${JSAPPS[@]}; do
         ensure_dir "${APP}"
         copy_app "${APP}"
         update_script_refs "${APP}"
@@ -151,22 +114,6 @@ if [ "${DO_BUILD_CLIENT}" = "y" ]; then
     cd "${SRC_ROOT}/client_apps"
     ./rebuild-all.sh y y
     cd "${WD}"
-fi
-
-# temporary work around until angular cli starts adding a hash to the inline.js file
-echo '***********************************'
-echo '** STEP 1a: add sha to inline.js **'
-echo '***********************************'
-if [ "${DO_BUILD_CLIENT}" = "y" ]; then
-    for APP in ${NGAPPS[@]}; do
-        SRCJS="${SRC_ROOT}/client_apps/${APP}/dist/inline.js"
-
-        if [ -e "${SRCJS}" ]; then
-            SHA1=$( sha1sum "${SRCJS}" | awk '{print $1}' )
-
-            mv "${SRCJS}" "${SRC_ROOT}/client_apps/${APP}/dist/inline.${SHA1}.js"
-        fi
-    done
 fi
 
 echo ''

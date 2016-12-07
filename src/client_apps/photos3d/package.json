@@ -20,5 +20,9 @@
   },
   "dependencies": {
     "linqts": "^1.6.0"
+  },
+  "scripts": {
+    "dev_build": "rm -rf dist && webpack",
+    "prod_build": "rm -rf dist && webpack -p --config ./webpack.production.config.js"
   }
 }

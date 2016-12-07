@@ -7,6 +7,13 @@
     "@types/es6-promise": "0.0.32",
     "@types/jquery": "^2.0.34",
     "@types/stats": "^0.16.30",
-    "@types/three": "0.0.27"
+    "@types/three": "0.0.27",
+    "awesome-typescript-loader": "^3.0.0-beta.9",
+    "typescript": "^2.0.10",
+    "webpack": "^2.1.0-beta.25"
+  },
+  "scripts": {
+    "dev_build": "rm -rf dist && webpack",
+    "prod_build": "rm -rf dist && webpack -p --config ./webpack.production.config.js"
   }
 }

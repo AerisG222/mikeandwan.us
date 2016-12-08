@@ -21,8 +21,8 @@ import { PhotoDialogComponent } from '../photo-dialog/photo-dialog.component';
 
 @Component({
     selector: 'app-photo-list',
-    templateUrl: 'photo-list.component.html',
-    styleUrls: [ 'photo-list.component.css' ]
+    templateUrl: './photo-list.component.html',
+    styleUrls: [ './photo-list.component.css' ]
 })
 export class PhotoListComponent implements AfterViewInit, OnDestroy {
     @ViewChild(PagerComponent) pager: PagerComponent;

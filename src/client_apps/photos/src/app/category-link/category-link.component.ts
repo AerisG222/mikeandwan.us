@@ -10,8 +10,8 @@ import { CategoryBreadcrumb } from '../shared/category-breadcrumb.model';
 
 @Component({
     selector: 'app-category-link',
-    templateUrl: 'category-link.component.html',
-    styleUrls: [ 'category-link.component.css' ]
+    templateUrl: './category-link.component.html',
+    styleUrls: [ './category-link.component.css' ]
 })
 export class CategoryLinkComponent {
     @Input() category: ICategory;

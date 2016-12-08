@@ -7,8 +7,8 @@ import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
     selector: 'app-preference-dialog',
-    templateUrl: 'preference-dialog.component.html',
-    styleUrls: [ 'preference-dialog.component.css' ]
+    templateUrl: './preference-dialog.component.html',
+    styleUrls: [ './preference-dialog.component.css' ]
 })
 export class PreferenceDialogComponent implements AfterViewInit {
     @ViewChild(DialogComponent) dialog: DialogComponent;

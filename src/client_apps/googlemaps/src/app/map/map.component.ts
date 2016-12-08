@@ -5,8 +5,8 @@ import { MapContext } from '../map-context.model';
 
 @Component({
     selector: 'app-map',
-    templateUrl: 'map.component.html',
-    styleUrls: [ 'map.component.css' ]
+    templateUrl: './map.component.html',
+    styleUrls: [ './map.component.css' ]
 })
 export class MapComponent implements AfterViewInit {
     isVisible: boolean = false;

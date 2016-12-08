@@ -11,8 +11,8 @@ import { RouteMode } from '../shared/route-mode.model';
 
 @Component({
     selector: 'app-mode',
-    templateUrl: 'mode.component.html',
-    styleUrls: [ 'mode.component.css' ]
+    templateUrl: './mode.component.html',
+    styleUrls: [ './mode.component.css' ]
 })
 export class ModeComponent implements OnInit {
     private _mode: RouteMode = null;

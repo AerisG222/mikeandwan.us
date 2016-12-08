@@ -4,8 +4,8 @@ import { BoardSector } from '../board-sector.model';
 
 @Component({
     selector: 'app-spinner',
-    templateUrl: 'spinner.component.html',
-    styleUrls: [ 'spinner.component.css' ]
+    templateUrl: './spinner.component.html',
+    styleUrls: [ './spinner.component.css' ]
 })
 export class SpinnerComponent implements OnInit, OnDestroy {
     private static SECTORS = [

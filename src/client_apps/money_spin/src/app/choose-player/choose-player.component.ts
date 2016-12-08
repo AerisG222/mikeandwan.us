@@ -5,8 +5,8 @@ import { StateService } from '../state.service';
 
 @Component({
     selector: 'app-choose-player',
-    templateUrl: 'choose-player.component.html',
-    styleUrls: [ 'choose-player.component.css' ]
+    templateUrl: './choose-player.component.html',
+    styleUrls: [ './choose-player.component.css' ]
 })
 export class ChoosePlayerComponent {
     player1characters: Array<Character>;

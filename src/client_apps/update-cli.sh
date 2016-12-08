@@ -3,7 +3,7 @@ NG_APPS=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "lea
 update_ngcli_global() {
     sudo npm uninstall -g angular-cli
     sudo npm cache clean
-    sudo npm install -g angular-cli
+    sudo npm install -g angular-cli@latest
 }
 
 update_ngcli() {

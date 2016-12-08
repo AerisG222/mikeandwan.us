@@ -4,8 +4,8 @@ import { Character } from '../character.model';
 
 @Component({
     selector: 'app-player-select',
-    templateUrl: 'player-select.component.html',
-    styleUrls: [ 'player-select.component.css' ]
+    templateUrl: './player-select.component.html',
+    styleUrls: [ './player-select.component.css' ]
 })
 export class PlayerSelectComponent {
     @Input() characters: Array<Character> = [];

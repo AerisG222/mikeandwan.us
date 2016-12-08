@@ -2,8 +2,8 @@ import { Component, Input, ElementRef, OnInit } from '@angular/core';
 
 @Component({
     selector: 'maw-three-dlink',
-    templateUrl: 'three-dlink.component.html',
-    styleUrls: [ 'three-dlink.component.css' ]
+    templateUrl: './three-dlink.component.html',
+    styleUrls: [ './three-dlink.component.css' ]
 })
 export class ThreeDLinkComponent implements OnInit {
     private _el: HTMLElement = null;

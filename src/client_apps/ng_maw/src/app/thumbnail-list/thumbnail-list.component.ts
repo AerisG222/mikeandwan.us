@@ -5,8 +5,8 @@ import { ResponsiveService } from '../shared/';
 
 @Component({
     selector: 'maw-thumbnail-list',
-    templateUrl: 'thumbnail-list.component.html',
-    styleUrls: [ 'thumbnail-list.component.css' ]
+    templateUrl: './thumbnail-list.component.html',
+    styleUrls: [ './thumbnail-list.component.css' ]
 })
 export class ThumbnailListComponent {
     rowsPerPage: number = 3;

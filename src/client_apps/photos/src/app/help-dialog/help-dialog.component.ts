@@ -4,8 +4,8 @@ import { DialogComponent } from '../../ng_maw/dialog/dialog.component';
 
 @Component({
     selector: 'app-help-dialog',
-    templateUrl: 'help-dialog.component.html',
-    styleUrls: [ 'help-dialog.component.css' ]
+    templateUrl: './help-dialog.component.html',
+    styleUrls: [ './help-dialog.component.css' ]
 })
 export class HelpDialogComponent {
     @ViewChild(DialogComponent) dialog: DialogComponent;

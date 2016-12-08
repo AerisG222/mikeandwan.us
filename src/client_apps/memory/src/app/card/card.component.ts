@@ -4,8 +4,8 @@ import { ICardInfo } from '../icard-info.model';
 
 @Component({
     selector: 'app-card',
-    templateUrl: 'card.component.html',
-    styleUrls: [ 'card.component.css' ]
+    templateUrl: './card.component.html',
+    styleUrls: [ './card.component.css' ]
 })
 export class CardComponent {
     private _isFlipped: boolean = false;
@@ -29,7 +29,7 @@ export class CardComponent {
         this._isRemoved = value;
     }
 
-    protected onClick() {
+    onClick() {
         this.select.next(this);
     }
 }

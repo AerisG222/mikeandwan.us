@@ -5,8 +5,8 @@ import { MemoryService } from '../memory.service';
 
 @Component({
     selector: 'app-choose-turtle',
-    templateUrl: 'choose-turtle.component.html',
-    styleUrls: [ 'choose-turtle.component.css' ]
+    templateUrl: './choose-turtle.component.html',
+    styleUrls: [ './choose-turtle.component.css' ]
 })
 export class ChooseTurtleComponent {
     private _character1: ICharacter = null;

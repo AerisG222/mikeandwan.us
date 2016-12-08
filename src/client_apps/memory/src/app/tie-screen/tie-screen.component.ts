@@ -4,8 +4,8 @@ import { IPlayer } from '../iplayer.model';
 
 @Component({
     selector: 'app-tie-screen',
-    templateUrl: 'tie-screen.component.html',
-    styleUrls: [ 'tie-screen.component.css' ]
+    templateUrl: './tie-screen.component.html',
+    styleUrls: [ './tie-screen.component.css' ]
 })
 export class TieScreenComponent {
     @Input() player1: IPlayer;

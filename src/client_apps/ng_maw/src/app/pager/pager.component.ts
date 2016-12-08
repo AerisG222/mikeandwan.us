@@ -9,8 +9,8 @@ import { ResponsiveService } from '../shared/responsive.service';
 
 @Component({
     selector: 'maw-pager',
-    templateUrl: 'pager.component.html',
-    styleUrls: [ 'pager.component.css' ]
+    templateUrl: './pager.component.html',
+    styleUrls: [ './pager.component.css' ]
 })
 export class PagerComponent {
     @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();

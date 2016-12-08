@@ -5,8 +5,8 @@ import { FilterSettings } from '../shared/filter-settings.model';
 
 @Component({
     selector: 'app-effects-view',
-    templateUrl: 'effects-view.component.html',
-    styleUrls: [ 'effects-view.component.css' ]
+    templateUrl: './effects-view.component.html',
+    styleUrls: [ './effects-view.component.css' ]
 })
 export class EffectsViewComponent {
     private _photo: Photo;

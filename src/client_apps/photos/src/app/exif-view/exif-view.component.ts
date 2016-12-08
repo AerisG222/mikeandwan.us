@@ -9,8 +9,8 @@ import { PhotoExifInfo } from '../shared/photo-exif-info.model';
 
 @Component({
     selector: 'app-exif-view',
-    templateUrl: 'exif-view.component.html',
-    styleUrls: [ 'exif-view.component.css' ]
+    templateUrl: './exif-view.component.html',
+    styleUrls: [ './exif-view.component.css' ]
 })
 export class ExifViewComponent {
     private _photo: Photo;

@@ -4,8 +4,8 @@ import { ExifDetail } from '../exif-view/exif-detail.model';
 
 @Component({
     selector: 'app-exif-table',
-    templateUrl: 'exif-table.component.html',
-    styleUrls: [ 'exif-table.component.css' ]
+    templateUrl: './exif-table.component.html',
+    styleUrls: [ './exif-table.component.css' ]
 })
 export class ExifTableComponent {
     private _data: Array<ExifDetail>;

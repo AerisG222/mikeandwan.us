@@ -6,8 +6,8 @@ import { IPhoto } from '../shared/iphoto.model';
 
 @Component({
     selector: 'app-comment-view',
-    templateUrl: 'comment-view.component.html',
-    styleUrls: [ 'comment-view.component.css' ]
+    templateUrl: './comment-view.component.html',
+    styleUrls: [ './comment-view.component.css' ]
 })
 export class CommentViewComponent {
     private _photo: IPhoto = null;

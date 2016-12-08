@@ -5,8 +5,8 @@ import { StateService } from '../state.service';
 
 @Component({
     selector: 'app-winner',
-    templateUrl: 'winner.component.html',
-    styleUrls: [ 'winner.component.css' ]
+    templateUrl: './winner.component.html',
+    styleUrls: [ './winner.component.css' ]
 })
 export class WinnerComponent {
     winner: Player;

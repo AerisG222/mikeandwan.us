@@ -5,8 +5,8 @@ import { PhotoDataService } from '../shared/photo-data.service';
 
 @Component({
     selector: 'app-rating-view',
-    templateUrl: 'rating-view.component.html',
-    styleUrls: [ 'rating-view.component.css' ]
+    templateUrl: './rating-view.component.html',
+    styleUrls: [ './rating-view.component.css' ]
 })
 export class RatingViewComponent {
     averageRating = -1;

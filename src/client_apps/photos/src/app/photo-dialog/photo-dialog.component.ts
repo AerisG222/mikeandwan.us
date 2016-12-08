@@ -8,8 +8,8 @@ import { IPhoto } from '../shared/iphoto.model';
 
 @Component({
     selector: 'app-photo-dialog',
-    templateUrl: 'photo-dialog.component.html',
-    styleUrls: [ 'photo-dialog.component.css' ]
+    templateUrl: './photo-dialog.component.html',
+    styleUrls: [ './photo-dialog.component.css' ]
 })
 export class PhotoDialogComponent implements AfterViewInit {
     @ViewChild(DialogComponent) dialog: DialogComponent;

@@ -5,8 +5,8 @@ declare var jQuery: any;
 
 @Component({
     selector: 'maw-dialog',
-    templateUrl: 'dialog.component.html',
-    styleUrls: [ 'dialog.component.css' ]
+    templateUrl: './dialog.component.html',
+    styleUrls: [ './dialog.component.css' ]
 })
 export class DialogComponent implements AfterViewInit {
     private _modalDiv: HTMLDivElement = null;

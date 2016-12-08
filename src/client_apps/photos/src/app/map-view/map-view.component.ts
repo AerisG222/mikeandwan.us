@@ -6,8 +6,8 @@ import { PhotoListContext } from '../shared/photo-list-context.model';
 
 @Component({
     selector: 'app-map-view',
-    templateUrl: 'map-view.component.html',
-    styleUrls: [ 'map-view.component.css' ]
+    templateUrl: './map-view.component.html',
+    styleUrls: [ './map-view.component.css' ]
 })
 export class MapViewComponent implements OnDestroy, AfterViewInit {
     private _markerImage = {

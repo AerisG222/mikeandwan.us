@@ -5,8 +5,8 @@ import { MemoryService } from '../memory.service';
 
 @Component({
     selector: 'app-play',
-    templateUrl: 'play.component.html',
-    styleUrls: [ 'play.component.css' ]
+    templateUrl: './play.component.html',
+    styleUrls: [ './play.component.css' ]
 })
 export class PlayComponent implements OnInit {
     private _activePlayer: IPlayer = null;

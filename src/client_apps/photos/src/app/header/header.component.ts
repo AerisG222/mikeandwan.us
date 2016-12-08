@@ -9,8 +9,8 @@ import { CategoryBreadcrumb } from '../shared/category-breadcrumb.model';
 
 @Component({
     selector: 'app-header',
-    templateUrl: 'header.component.html',
-    styleUrls: [ 'header.component.css' ]
+    templateUrl: './header.component.html',
+    styleUrls: [ './header.component.css' ]
 })
 export class HeaderComponent implements AfterViewInit {
     @ViewChild(BreadcrumbListComponent) breadcrumbList: BreadcrumbListComponent;

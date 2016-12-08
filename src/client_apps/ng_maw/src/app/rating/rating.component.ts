@@ -2,8 +2,8 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
 @Component({
     selector: 'maw-rating',
-    templateUrl: 'rating.component.html',
-    styleUrls: [ 'rating.component.css' ]
+    templateUrl: './rating.component.html',
+    styleUrls: [ './rating.component.css' ]
 })
 export class RatingComponent implements OnInit {
     private _rating: number = null;

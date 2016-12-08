@@ -16,8 +16,8 @@ import { SaveDialogComponent } from '../save-dialog/save-dialog.component';
 
 @Component({
     selector: 'app-photo-view',
-    templateUrl: 'photo-view.component.html',
-    styleUrls: [ 'photo-view.component.css' ]
+    templateUrl: './photo-view.component.html',
+    styleUrls: [ './photo-view.component.css' ]
 })
 export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     private _containerBox: ContainerBox = null;

@@ -5,8 +5,8 @@ import { BreadcrumbService } from '../shared/breadcrumb.service';
 
 @Component({
     selector: 'maw-breadcrumb-list',
-    templateUrl: 'breadcrumb-list.component.html',
-    styleUrls: [ 'breadcrumb-list.component.css' ]
+    templateUrl: './breadcrumb-list.component.html',
+    styleUrls: [ './breadcrumb-list.component.css' ]
 })
 export class BreadcrumbListComponent {
     breadcrumbs: Array<Breadcrumb> = [];

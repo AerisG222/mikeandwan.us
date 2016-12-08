@@ -7,8 +7,8 @@ import { IPhotoInfo } from '../shared/iphoto-info.model';
 
 @Component({
     selector: 'app-save-dialog',
-    templateUrl: 'save-dialog.component.html',
-    styleUrls: [ 'save-dialog.component.css' ]
+    templateUrl: './save-dialog.component.html',
+    styleUrls: [ './save-dialog.component.css' ]
 })
 export class SaveDialogComponent implements AfterViewInit {
     @ViewChild(DialogComponent) dialog: DialogComponent;

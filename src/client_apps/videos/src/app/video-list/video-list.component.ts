@@ -15,8 +15,8 @@ import { VideoThumbnailInfo } from '../shared/video-thumbnail-info.model';
 
 @Component({
     selector: 'app-video-list',
-    templateUrl: 'video-list.component.html',
-    styleUrls: [ 'video-list.component.css' ]
+    templateUrl: './video-list.component.html',
+    styleUrls: [ './video-list.component.css' ]
 })
 export class VideoListComponent implements OnInit, AfterViewInit {
     @ViewChild(PagerComponent) pager: PagerComponent;

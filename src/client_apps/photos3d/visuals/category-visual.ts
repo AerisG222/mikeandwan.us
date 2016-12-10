@@ -4,8 +4,7 @@ import { Hexagon } from '../models/hexagon';
 import { StateService } from '../services/state-service';
 
 export class CategoryVisual extends THREE.Object3D implements IVisual {
-    private static readonly BACKGROUND_DEPTH = 0.1;
-    private static readonly IMAGE_DEPTH = 0.3;
+    private static readonly IMAGE_DEPTH = 8;
     private static readonly BORDER_WIDTH = 2;
 
     private static loader = new THREE.TextureLoader();
@@ -30,6 +29,14 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
 
         this.position.set(offscreenPosition.x, offscreenPosition.y, offscreenPosition.z);
         this._hoverPosition = new THREE.Vector3(onscreenPosition.x, onscreenPosition.y, onscreenPosition.z + 12);
+    }
+
+    private get backgroundEdgeLength() {
+        return this.hexagon.centerToVertexLength + CategoryVisual.BORDER_WIDTH;
+    }
+
+    private get imageEdgeLength() {
+        return this.hexagon.centerToVertexLength;
     }
 
     init() {
@@ -81,8 +88,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
     }
 
     private createBackground() {
-        let len = this.hexagon.centerToVertexLength + CategoryVisual.BORDER_WIDTH;
-        let geometry = this.createExtrudeGeometry(len, CategoryVisual.BACKGROUND_DEPTH);
+        let geometry = this.createExtrudeGeometry(this.backgroundEdgeLength, this.imageEdgeLength + 1);
         let material = new THREE.MeshLambertMaterial({ color: this.color, side: THREE.DoubleSide });
 
         this._backgroundMesh = new THREE.Mesh(geometry, material);
@@ -91,7 +97,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
     private createImage(texture: THREE.Texture) {
         texture.minFilter = THREE.LinearFilter;
 
-        let geometry = this.createExtrudeGeometry(this.hexagon.centerToVertexLength, CategoryVisual.IMAGE_DEPTH);
+        let geometry = this.createExtrudeGeometry(this.imageEdgeLength, null);
 
         this.mapUvs(geometry);
 
@@ -100,7 +106,6 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         this._imageMesh = new THREE.Mesh(geometry, material);
 
         this._imageMesh.position.y = CategoryVisual.BORDER_WIDTH / 2;
-        this._imageMesh.position.z = (CategoryVisual.IMAGE_DEPTH - CategoryVisual.BACKGROUND_DEPTH) / 2;
     }
 
     private onMouseEvent(intersections: Array<THREE.Intersection>) {
@@ -219,11 +224,17 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         }
     }
 
-    private createExtrudeGeometry(edgeLength: number, depth: number): THREE.ExtrudeGeometry {
-        let hex = new Hexagon(edgeLength);
+    private createExtrudeGeometry(outerLength: number, innerLength?: number): THREE.ExtrudeGeometry {
+        let hex = new Hexagon(outerLength);
         let shape = new THREE.Shape(hex.generatePoints());
+
+        if (innerLength != null) {
+            let hexHole = new Hexagon(innerLength);
+            shape.holes.push(new THREE.Path(hexHole.generatePoints()));
+        }
+
         let settings = {
-            amount: depth,
+            amount: CategoryVisual.IMAGE_DEPTH,
             bevelEnabled: false
         };
 

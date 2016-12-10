@@ -28,11 +28,11 @@ export class Hexagon {
         let points: Array<THREE.Vector2> = [];
 
         points.push(new THREE.Vector2(-this.halfEdgeLength, this.halfHeight));
-        points.push(new THREE.Vector2(this.halfEdgeLength, this.halfHeight));
-        points.push(new THREE.Vector2(this.edgeLength, 0));
-        points.push(new THREE.Vector2(this.halfEdgeLength, -this.halfHeight));
-        points.push(new THREE.Vector2(-this.halfEdgeLength, -this.halfHeight));
         points.push(new THREE.Vector2(-this.edgeLength, 0));
+        points.push(new THREE.Vector2(-this.halfEdgeLength, -this.halfHeight));
+        points.push(new THREE.Vector2(this.halfEdgeLength, -this.halfHeight));
+        points.push(new THREE.Vector2(this.edgeLength, 0));
+        points.push(new THREE.Vector2(this.halfEdgeLength, this.halfHeight));
         points.push(new THREE.Vector2(-this.halfEdgeLength, this.halfHeight));
 
         return points;

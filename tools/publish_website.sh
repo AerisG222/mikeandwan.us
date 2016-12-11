@@ -34,13 +34,13 @@ copy_app() {
     local APP=$1
 
     # https://silentorbit.com/notes/2013/08/rsync-by-extension/
-    rsync -ah --include '*/' --include '*.js' --exclude '*' "${SRC_ROOT}/client_apps/${APP}/dist/" "${DIST_ROOT}/wwwroot/js/${APP}"
+    rsync -ah --include '*/' --include '*.js' --include '*.css' --exclude '*' "${SRC_ROOT}/client_apps/${APP}/dist/" "${DIST_ROOT}/wwwroot/js/${APP}"
 }
 
-update_script_refs() {
+update_refs() {
     local APP=$1
 
-    for JS in $( find "${DIST_ROOT}/wwwroot/js/${APP}" -name '*.js' ); do
+    for JS in $( find "${DIST_ROOT}/wwwroot/js/${APP}" -name '*.js' -o -name '*.css' ); do
         local NEWFILENAME=$( basename "$JS" )
         local EXTENSION="${NEWFILENAME##*.}"
         local ORIGFILENAME="${NEWFILENAME%%.*}"
@@ -78,7 +78,7 @@ publish_client_apps() {
     for APP in ${JSAPPS[@]}; do
         ensure_dir "${APP}"
         copy_app "${APP}"
-        update_script_refs "${APP}"
+        update_refs "${APP}"
     done
 }
 

@@ -10,6 +10,7 @@ import { FrustrumCalculator } from './services/frustrum-calculator';
 import { HelpController } from './controllers/help-controller';
 import { IController } from './controllers/icontroller';
 import { PhotoListController } from './controllers/photo-list-controller';
+import { PointLightController } from './controllers/point-light-controller';
 import { ScaleCalculator } from './services/scale-calculator';
 import { StateService } from './services/state-service';
 import { StatusBarController } from './controllers/status-bar-controller';
@@ -22,6 +23,7 @@ export class Photos3D {
     private _help: IController;
     private _catList: CategoryListController;
     private _photoList: PhotoListController;
+    private _pointLights: IController;
     private _mouseoverSubscription: Subscription;
     private _mouseclickSubscription: Subscription;
     private _resizeSubscription: Subscription;
@@ -75,6 +77,7 @@ export class Photos3D {
         Mousetrap.bind('a', e => { this.strafeLeft(); });
         Mousetrap.bind('d', e => { this.strafeRight(); });
         Mousetrap.bind('h', e => { this.toggleStatus(); });
+        Mousetrap.bind('p', e => { this.togglePointLights(); });
         Mousetrap.bind('?', e => { this.toggleHelp(); });
 
         this.animate();
@@ -82,6 +85,10 @@ export class Photos3D {
 
     private onDialogDisplayed(isDisplayed: boolean) {
         this._ignoreMouseEvents = isDisplayed;
+    }
+
+    private togglePointLights() {
+        this._pointLights.enableVisuals(!this._pointLights.areVisualsEnabled);
     }
 
     private toggleHelp() {
@@ -218,6 +225,9 @@ export class Photos3D {
         this._bg = new BackgroundController(this._stateService);
         this._bg.init();
 
+        this._pointLights = new PointLightController(this._stateService, this._frustrumCalculator);
+        this._pointLights.init();
+
         this._catList = new CategoryListController(this._dataService, this._stateService, this._frustrumCalculator);
         this._catList.init();
 
@@ -245,6 +255,7 @@ export class Photos3D {
         this._bg.render(delta);
         this._catList.render(delta);
         this._photoList.render(delta);
+        this._pointLights.render(delta);
 
         TWEEN.update();
     }

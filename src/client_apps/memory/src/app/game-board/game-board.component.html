@@ -1,5 +1,5 @@
 <div class="row board_row" *ngFor="let boardRow of board">
-	<div class="col-sm-2" *ngFor="let cardinf of boardRow">
+	<div class="col-sm-2" [class.col-sm-offset-1]="isFirst" *ngFor="let cardinf of boardRow; let isFirst = first">
 		<app-card #card [cardInfo]="cardinf" (select)="selectCard(card)"></app-card>
 	</div>
 </div>

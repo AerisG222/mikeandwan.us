@@ -4,7 +4,7 @@ import { Hexagon } from '../models/hexagon';
 import { StateService } from '../services/state-service';
 
 export class CategoryVisual extends THREE.Object3D implements IVisual {
-    private static readonly IMAGE_DEPTH = 8;
+    private static readonly IMAGE_DEPTH = 4;
     private static readonly BORDER_WIDTH = 2;
 
     private static loader = new THREE.TextureLoader();
@@ -101,7 +101,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
 
         this.mapUvs(geometry);
 
-        let material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+        let material = new THREE.MeshLambertMaterial({ map: texture, side: THREE.DoubleSide });
 
         this._imageMesh = new THREE.Mesh(geometry, material);
 

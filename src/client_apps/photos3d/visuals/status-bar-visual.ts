@@ -42,7 +42,7 @@ export class StatusBarVisual implements IVisual {
         this.rootDiv.appendChild(this.statusDiv);
     }
 
-    render() {
+    render(clockDelta: number, elapsed: number) {
 
     }
 

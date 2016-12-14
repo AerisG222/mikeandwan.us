@@ -251,11 +251,12 @@ export class Photos3D {
 
     private render() {
         let delta = this._clock.getDelta();
+        let elapsed = this._clock.getElapsedTime();
 
-        this._bg.render(delta);
-        this._catList.render(delta);
-        this._photoList.render(delta);
-        this._pointLights.render(delta);
+        this._bg.render(delta, elapsed);
+        this._catList.render(delta, elapsed);
+        this._photoList.render(delta, elapsed);
+        this._pointLights.render(delta, elapsed);
 
         TWEEN.update();
     }

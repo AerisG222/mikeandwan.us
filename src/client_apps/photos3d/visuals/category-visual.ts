@@ -18,6 +18,11 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
     private _removeFromViewTween: TWEEN.Tween;
     private _mouseOverTween: TWEEN.Tween;
     private _mouseOutTween: TWEEN.Tween;
+    private _rotateAnimationWaitTime: number;
+    private _rotateNextTriggerTime: number;
+    private _rotateStopTime: number;
+    private _rotateDuration: number;
+    private _rotateIsAnimating = false;
 
     constructor(private stateService: StateService,
                 private category: ICategory,
@@ -26,6 +31,11 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
                 private offscreenPosition: THREE.Vector3,
                 private color: number) {
         super();
+
+        this._rotateAnimationWaitTime = Math.random() * 110 + 10;
+        this._rotateDuration = 1.0;
+        this._rotateNextTriggerTime = this._rotateAnimationWaitTime;
+        this._rotateStopTime = this._rotateDuration + this._rotateNextTriggerTime;
 
         this.position.set(offscreenPosition.x, offscreenPosition.y, offscreenPosition.z);
         this._hoverPosition = new THREE.Vector3(onscreenPosition.x, onscreenPosition.y, onscreenPosition.z + 12);
@@ -78,8 +88,22 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
             .start();
     }
 
-    render(delta: number) {
-        // all rendering done by tweens now
+    render(delta: number, elapsed: number) {
+        if (this._rotateIsAnimating) {
+            if (elapsed > this._rotateStopTime) {
+                this._rotateIsAnimating = false;
+                this._backgroundMesh.rotation.set(0, 0, 0);
+            } else {
+                let axis = new THREE.Vector3(Math.random() * 200, Math.random() * 200, Math.random() * 200);
+                this._backgroundMesh.rotateOnAxis(axis.normalize(), Math.random() * 0.4);
+            }
+        } else {
+            if (elapsed > this._rotateNextTriggerTime) {
+                this._rotateIsAnimating = true;
+                this._rotateNextTriggerTime += this._rotateAnimationWaitTime;
+                this._rotateStopTime = elapsed + this._rotateDuration;
+            }
+        }
     }
 
     private createObject(texture: THREE.Texture) {

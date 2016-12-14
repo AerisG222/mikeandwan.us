@@ -26,7 +26,7 @@ export class StatusBarController implements IController {
         this._stateService.temporalNavObservable.subscribe(evt => { this._status.updateTemporal(evt); });
     }
 
-    render(): void {
+    render(clockDelta: number, elapsed: number): void {
 
     }
 

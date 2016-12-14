@@ -55,15 +55,15 @@ export class PhotoListController implements IController {
         } );
     }
 
-    render(clockDelta: number): void {
+    render(clockDelta: number, elapsed: number): void {
         if (this._activePhoto != null) {
-            this._activePhoto.render(clockDelta);
+            this._activePhoto.render(clockDelta, elapsed);
         }
 
         for (let i = 0; i < this._oldPhotos.length; i++) {
             let oldPhoto = this._oldPhotos[i];
 
-            oldPhoto.render(clockDelta);
+            oldPhoto.render(clockDelta, elapsed);
 
             if (oldPhoto.isHidden) {
                 this._stateService.visualContext.scene.remove(oldPhoto);

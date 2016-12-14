@@ -71,7 +71,7 @@ export class PointLightController implements IController {
         this._visualsEnabled = areEnabled;
     }
 
-    render(clockDelta: number): void {
+    render(clockDelta: number, elapsed: number): void {
         if (this.areVisualsEnabled) {
             for (let i = 0; i < this._lights.length; i++) {
                 this.updateLight(this._lights[i]);

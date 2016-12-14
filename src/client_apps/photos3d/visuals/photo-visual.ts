@@ -48,7 +48,7 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
         this.position.z = this._z;
     }
 
-    render(clockDelta: number) {
+    render(clockDelta: number, elapsed: number) {
         if (this._fadeOut) {
             this._mesh.material.opacity -= 0.02;
         }

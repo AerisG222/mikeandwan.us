@@ -46,7 +46,7 @@ export class PondBackgroundVisual implements IVisual {
         }
     }
 
-    render(clockDelta: number) {
+    render(clockDelta: number, elapsed: number) {
         if (this.waterUniform != null) {
             this.waterUniform.time.value += clockDelta;
         }

@@ -35,7 +35,7 @@ export class HelpVisual implements IVisual {
         });
     }
 
-    render(clockDelta: number) {
+    render(clockDelta: number, elapsed: number) {
 
     }
 

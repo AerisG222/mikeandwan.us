@@ -21,7 +21,7 @@ export class HelpController implements IController {
         this._help.init();
     }
 
-    render(): void {
+    render(delta: number, elapsed: number): void {
 
     }
 

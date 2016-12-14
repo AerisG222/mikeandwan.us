@@ -22,7 +22,7 @@ export class PhotoBackgroundVisual extends THREE.Object3D implements IVisual {
         this.createBackground();
     }
 
-    render(clockDelta: number) {
+    render(clockDelta: number, elapsed: number) {
 
     }
 

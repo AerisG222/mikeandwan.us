@@ -72,7 +72,7 @@ export class CategoryListController implements IController {
         }
     }
 
-    render(delta: number) {
+    render(delta: number, elapsed: number) {
         if (!this._visualsEnabled) {
             return;
         }
@@ -81,7 +81,7 @@ export class CategoryListController implements IController {
             let year = this._yearList[i];
 
             for (let j = 0; j < year.categoryList.length; j++) {
-                year.categoryList[j].visual.render(delta);
+                year.categoryList[j].visual.render(delta, elapsed);
             }
         }
     }

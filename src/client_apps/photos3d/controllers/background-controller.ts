@@ -24,9 +24,9 @@ export class BackgroundController implements IController {
         this._background.init();
     }
 
-    render(clockDelta: number): void {
+    render(clockDelta: number, elapsed: number): void {
         if (this._visualsEnabled) {
-            this._background.render(clockDelta);
+            this._background.render(clockDelta, elapsed);
         }
     }
 

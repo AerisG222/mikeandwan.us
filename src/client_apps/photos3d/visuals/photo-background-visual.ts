@@ -26,6 +26,10 @@ export class PhotoBackgroundVisual extends THREE.Object3D implements IVisual {
 
     }
 
+    dispose(): void {
+
+    }
+
     private createBackground(): void {
         let bounds = this._frustrumCalculator.calculateBounds(this._stateService.visualContext.camera, this._z);
 

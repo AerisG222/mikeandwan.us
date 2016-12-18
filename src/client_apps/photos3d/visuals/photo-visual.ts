@@ -1,4 +1,5 @@
 import { ArgumentNullError } from '../models/argument-null-error';
+import { DisposalService } from '../services/disposal-service';
 import { IPhoto } from '../models/iphoto';
 import { IVisual } from './ivisual';
 import { ScaleCalculator } from '../services/scale-calculator';
@@ -8,13 +9,16 @@ import { VisualContext } from '../models/visual-context';
 export class PhotoVisual extends THREE.Object3D implements IVisual {
     private static readonly loader = new THREE.TextureLoader();
 
-    private _fadeOut: boolean = false;
+    private _disposed = false;
+    private _fadeOut = false;
 
     private _ctx: VisualContext;
     private _mesh: THREE.Mesh;
+    private _rotationAnchor: THREE.Object3D;
 
     constructor(private _photo: IPhoto,
                 private _stateService: StateService,
+                private _disposalService: DisposalService,
                 private _scaleCalculator: ScaleCalculator,
                 private _height: number,
                 private _width: number,
@@ -29,30 +33,48 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
             throw new ArgumentNullError('_stateService');
         }
 
+        if (_disposalService == null) {
+            throw new ArgumentNullError('_disposalService');
+        }
+
         if (_scaleCalculator == null) {
             throw new ArgumentNullError('_scaleCalculator');
         }
 
         this._ctx = this._stateService.visualContext;
+
+        this._rotationAnchor = new THREE.Object3D();
+        this.add(this._rotationAnchor);
     }
 
     get isHidden() {
-        return this._mesh.material.opacity <= 0.0;
+        return this._disposed || this._mesh.material.opacity <= 0.0;
     }
 
     init() {
         PhotoVisual.loader.load(this.getPhotoUrl(), texture => {
             this.createPhoto(texture);
         });
-
-        this.position.z = this._z;
     }
 
     render(clockDelta: number, elapsed: number) {
+        if (this._disposed) {
+            return;
+        }
+
         if (this._fadeOut) {
             this._mesh.position.z -= 2;
-            this._mesh.rotateZ(Math.PI / 100);
             this._mesh.material.opacity -= 0.02;
+
+            this._rotationAnchor.rotateY(Math.PI / 100);
+        }
+    }
+
+    dispose(): void {
+        if (!this._disposed) {
+            this._disposed = true;
+
+            this._disposalService.dispose(this);
         }
     }
 
@@ -76,7 +98,8 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
         let material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
         this._mesh = new THREE.Mesh(plane, material);
 
-        this.position.y = dimensions.y / 2;
-        this.add(this._mesh);
+        this._mesh.position.y = dimensions.y / 2;
+        this._mesh.position.z = this._z;
+        this._rotationAnchor.add(this._mesh);
     }
 }

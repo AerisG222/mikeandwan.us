@@ -5,6 +5,7 @@ import { Category } from '../models/category';
 import { CategoryLayoutCalculator } from '../services/category-layout-calculator';
 import { CategoryVisual } from '../visuals/category-visual';
 import { DataService } from '../services/data-service';
+import { DisposalService } from '../services/disposal-service';
 import { FrustrumCalculator } from '../services/frustrum-calculator';
 import { ICategory } from '../models/icategory';
 import { IController } from './icontroller';
@@ -25,13 +26,18 @@ export class CategoryListController implements IController {
 
     constructor(private dataService: DataService,
                 private stateService: StateService,
-                private frustrumCalculator: FrustrumCalculator) {
+                private frustrumCalculator: FrustrumCalculator,
+                private _disposalService: DisposalService) {
         if (dataService == null) {
             throw new ArgumentNullError('dataService');
         }
 
         if (stateService == null) {
             throw new ArgumentNullError('stateService');
+        }
+
+        if (_disposalService == null) {
+            throw new ArgumentNullError('_disposalService');
         }
 
         this._ctx = stateService.visualContext;

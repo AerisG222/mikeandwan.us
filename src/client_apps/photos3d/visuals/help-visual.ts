@@ -39,6 +39,10 @@ export class HelpVisual implements IVisual {
 
     }
 
+    dispose(): void {
+
+    }
+
     show() {
         this._modal.modal('show');
     }

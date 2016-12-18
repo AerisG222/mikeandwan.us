@@ -1,16 +1,22 @@
 import { ArgumentNullError } from '../models/argument-null-error';
-import { StateService } from '../services/state-service';
+import { DisposalService } from '../services/disposal-service';
 import { IController } from './icontroller';
 import { IVisual } from '../visuals/ivisual';
 import { PondBackgroundVisual } from '../visuals/pond-background-visual';
+import { StateService } from '../services/state-service';
 
 export class BackgroundController implements IController {
     private _visualsEnabled = true;
     private _background: IVisual;
 
-    constructor(private _stateService: StateService) {
+    constructor(private _stateService: StateService,
+                private _disposalService: DisposalService) {
         if (_stateService == null) {
             throw new ArgumentNullError('_stateService');
+        }
+
+        if (_disposalService == null) {
+            throw new ArgumentNullError('_disposalService');
         }
     }
 

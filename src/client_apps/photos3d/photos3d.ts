@@ -6,6 +6,7 @@ import 'rxjs/add/operator/throttleTime';
 import { BackgroundController } from './controllers/background-controller';
 import { CategoryListController } from './controllers/category-list-controller';
 import { DataService } from './services/data-service';
+import { DisposalService } from './services/disposal-service';
 import { FrustrumCalculator } from './services/frustrum-calculator';
 import { HelpController } from './controllers/help-controller';
 import { IController } from './controllers/icontroller';
@@ -33,6 +34,7 @@ export class Photos3D {
     private _stateService = new StateService(this._ctx);
     private _clock = new THREE.Clock();
     private _dataService = new DataService();
+    private _disposalService = new DisposalService();
     private _frustrumCalculator = new FrustrumCalculator();
     private _scaleCalculator = new ScaleCalculator();
     private _isPaused = false;
@@ -222,16 +224,17 @@ export class Photos3D {
         this._ctx.sun.castShadow = true;
         this._ctx.scene.add(this._ctx.sun);
 
-        this._bg = new BackgroundController(this._stateService);
+        this._bg = new BackgroundController(this._stateService, this._disposalService);
         this._bg.init();
 
-        this._pointLights = new PointLightController(this._stateService, this._frustrumCalculator);
+        this._pointLights = new PointLightController(this._stateService, this._frustrumCalculator, this._disposalService);
         this._pointLights.init();
 
-        this._catList = new CategoryListController(this._dataService, this._stateService, this._frustrumCalculator);
+        this._catList = new CategoryListController(this._dataService, this._stateService, this._frustrumCalculator, this._disposalService);
         this._catList.init();
 
-        this._photoList = new PhotoListController(this._dataService, this._stateService, this._frustrumCalculator, this._scaleCalculator);
+        this._photoList = new PhotoListController(this._dataService, this._stateService, this._frustrumCalculator, this._scaleCalculator,
+                                                  this._disposalService);
         this._photoList.init();
 
         this.animate();

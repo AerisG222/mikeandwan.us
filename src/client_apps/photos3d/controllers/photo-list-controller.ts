@@ -1,5 +1,6 @@
 import { ArgumentNullError } from '../models/argument-null-error';
 import { DataService } from '../services/data-service';
+import { DisposalService } from '../services/disposal-service';
 import { FrustrumCalculator } from '../services/frustrum-calculator';
 import { ICategory } from '../models/icategory';
 import { IController } from './icontroller';
@@ -24,7 +25,8 @@ export class PhotoListController implements IController {
     constructor(private _dataService: DataService,
                 private _stateService: StateService,
                 private _frustrumCalculator: FrustrumCalculator,
-                private _scaleCalculator: ScaleCalculator) {
+                private _scaleCalculator: ScaleCalculator,
+                private _disposalService: DisposalService) {
         if (_dataService == null) {
             throw new ArgumentNullError('_dataService');
         }
@@ -35,6 +37,10 @@ export class PhotoListController implements IController {
 
         if (_frustrumCalculator == null) {
             throw new ArgumentNullError('_frustrumCalculator');
+        }
+
+        if (_disposalService == null) {
+            throw new ArgumentNullError('_disposalService');
         }
 
         this._photoZ = _frustrumCalculator.calculateZForFullFrame(this._stateService.visualContext.camera);
@@ -67,6 +73,7 @@ export class PhotoListController implements IController {
 
             if (oldPhoto.isHidden) {
                 this._stateService.visualContext.scene.remove(oldPhoto);
+                oldPhoto.dispose();
             }
         }
 
@@ -127,6 +134,7 @@ export class PhotoListController implements IController {
 
         let newPhoto = new PhotoVisual(this._photos[this._idx],
                                        this._stateService,
+                                       this._disposalService,
                                        this._scaleCalculator,
                                        this._targetHeight,
                                        this._targetWidth,

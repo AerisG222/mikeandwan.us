@@ -52,6 +52,10 @@ export class PondBackgroundVisual implements IVisual {
         }
     }
 
+    dispose(): void {
+
+    }
+
     private loadTextures() {
         return this.textureLoader.loadTextures([
             `/img/photos3d/${this._ctx.size}/${PondBackgroundVisual.TEXTURE_NOISE}`,

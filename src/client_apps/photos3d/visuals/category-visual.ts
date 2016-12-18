@@ -106,6 +106,10 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         }
     }
 
+    dispose(): void {
+
+    }
+
     private createObject(texture: THREE.Texture) {
         this.createImage(texture);
         this.add(this._imageMesh);

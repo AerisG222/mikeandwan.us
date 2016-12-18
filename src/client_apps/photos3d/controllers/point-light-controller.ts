@@ -1,4 +1,5 @@
 import { ArgumentNullError } from '../models/argument-null-error';
+import { DisposalService } from '../services/disposal-service';
 import { FrustrumCalculator } from '../services/frustrum-calculator';
 import { IController } from './icontroller';
 import { StateService } from '../services/state-service';
@@ -13,13 +14,18 @@ export class PointLightController implements IController {
     private _maxX: number;
 
     constructor(private _stateService: StateService,
-                private _frustrumCalculator: FrustrumCalculator) {
+                private _frustrumCalculator: FrustrumCalculator,
+                private _disposalService: DisposalService) {
         if (_stateService == null) {
             throw new ArgumentNullError('_stateService');
         }
 
         if (_frustrumCalculator == null) {
             throw new ArgumentNullError('_frustrumCalculator');
+        }
+
+        if (_disposalService == null) {
+            throw new ArgumentNullError('_disposalService');
         }
 
         let width = this._frustrumCalculator.calculateBounds(this._stateService.visualContext.camera, 510).x;

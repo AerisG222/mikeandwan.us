@@ -1,11 +1,18 @@
 import { ArgumentNullError } from './argument-null-error';
+import { DisposalService } from '../services/disposal-service';
 
 export class VisualContext {
-    constructor(private _scene?: THREE.Scene,
+    private _disposed = false;
+
+    constructor(private _disposalService: DisposalService,
+                private _scene?: THREE.Scene,
                 private _camera?: THREE.PerspectiveCamera,
-                private _renderer?: THREE.Renderer,
+                private _renderer?: THREE.WebGLRenderer,
                 private _sun?: THREE.DirectionalLight,
                 private _ambient?: THREE.AmbientLight) {
+        if (_disposalService == null) {
+            throw new ArgumentNullError('_disposalService');
+        }
     }
 
     get scene() {
@@ -36,7 +43,7 @@ export class VisualContext {
         return this._renderer;
     }
 
-    set renderer(renderer: THREE.Renderer) {
+    set renderer(renderer: THREE.WebGLRenderer) {
         if (renderer == null) {
             throw new ArgumentNullError('renderer');
         }
@@ -81,6 +88,30 @@ export class VisualContext {
             return 'md';
         } else {
             return 'lg';
+        }
+    }
+
+    dispose(): void {
+        if (!this._disposed) {
+            this._disposed = true;
+
+            this.scene.remove(this._sun);
+            this._disposalService.dispose(this._sun);
+            this._sun = null;
+
+            this.scene.remove(this._ambient);
+            this._disposalService.dispose(this._ambient);
+            this._ambient = null;
+
+            this.scene.remove(this._camera);
+            this._disposalService.dispose(this._camera);
+            this._camera = null;
+
+            this._disposalService.dispose(this._scene);
+            this._scene = null;
+
+            this._renderer.dispose();
+            this._renderer = null;
         }
     }
 }

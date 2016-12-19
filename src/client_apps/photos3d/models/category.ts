@@ -6,11 +6,11 @@ export class Category {
     constructor(private _category: ICategory,
                 private _visual: CategoryVisual) {
         if (_category == null) {
-            throw new ArgumentNullError('category');
+            throw new ArgumentNullError('_category');
         }
 
         if (_visual == null) {
-            throw new ArgumentNullError('visual');
+            throw new ArgumentNullError('_visual');
         }
     }
 

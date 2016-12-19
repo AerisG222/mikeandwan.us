@@ -1,4 +1,5 @@
 import { List } from 'linqts/linq';
+import { Subscription } from 'rxjs/Subscription';
 
 import { ArgumentNullError } from '../models/argument-null-error';
 import { Category } from '../models/category';
@@ -11,44 +12,46 @@ import { ICategory } from '../models/icategory';
 import { IController } from './icontroller';
 import { StateService } from '../services/state-service';
 import { VisualContext } from '../models/visual-context';
-import { Year } from '../models/year';
+import { YearVisual } from '../visuals/year-visual';
 
 export class CategoryListController implements IController {
     private static readonly zWhenDisplayed = 500;
 
     private _ctx: VisualContext;
+    private _categorySelectedSubscription: Subscription;
 
+    private _disposed = false;
     private _lastElapsed = 0;
     private _idx = 0;
     private _visualsEnabled = true;
-    private _yearList: Array<Year> = [];
-    private heightWhenDisplayed: number;
-    private widthWhenDisplayed: number;
+    private _yearList: Array<YearVisual> = [];
+    private _heightWhenDisplayed: number;
+    private _widthWhenDisplayed: number;
 
-    constructor(private dataService: DataService,
-                private stateService: StateService,
-                private frustrumCalculator: FrustrumCalculator,
+    constructor(private _dataService: DataService,
+                private _stateService: StateService,
+                private _frustrumCalculator: FrustrumCalculator,
                 private _disposalService: DisposalService) {
-        if (dataService == null) {
-            throw new ArgumentNullError('dataService');
+        if (_dataService == null) {
+            throw new ArgumentNullError('_dataService');
         }
 
-        if (stateService == null) {
-            throw new ArgumentNullError('stateService');
+        if (_stateService == null) {
+            throw new ArgumentNullError('_stateService');
         }
 
         if (_disposalService == null) {
             throw new ArgumentNullError('_disposalService');
         }
 
-        this._ctx = stateService.visualContext;
+        this._ctx = _stateService.visualContext;
 
-        let bounds = this.frustrumCalculator.calculateBounds(this._ctx.camera, CategoryListController.zWhenDisplayed);
+        let bounds = this._frustrumCalculator.calculateBounds(this._ctx.camera, CategoryListController.zWhenDisplayed);
 
-        this.heightWhenDisplayed = bounds.y;
-        this.widthWhenDisplayed = bounds.x;
+        this._heightWhenDisplayed = bounds.y;
+        this._widthWhenDisplayed = bounds.x;
 
-        this.stateService.categorySelectedObservable.subscribe(cat => this.onCategorySelected(cat));
+        this._categorySelectedSubscription = this._stateService.categorySelectedObservable.subscribe(cat => this.onCategorySelected(cat));
     }
 
     get areVisualsEnabled(): boolean {
@@ -60,26 +63,38 @@ export class CategoryListController implements IController {
     }
 
     moveNextYear() {
+        if (this._disposed) {
+            return;
+        }
+
         if (this._idx > 0) {
             this._yearList[this._idx].removeFromView();
             this._idx--;
             this._yearList[this._idx].bringIntoView();
 
-            this.stateService.publishActiveNav(this._yearList[this._idx].year);
+            this._stateService.publishActiveNav(this._yearList[this._idx].year);
         }
     }
 
     movePrevYear() {
+        if (this._disposed) {
+            return;
+        }
+
         if (this._idx < this._yearList.length - 1) {
             this._yearList[this._idx].removeFromView();
             this._idx++;
             this._yearList[this._idx].bringIntoView();
 
-            this.stateService.publishActiveNav(this._yearList[this._idx].year);
+            this._stateService.publishActiveNav(this._yearList[this._idx].year);
         }
     }
 
     render(delta: number, elapsed: number) {
+        if (this._disposed) {
+            return;
+        }
+
         this._lastElapsed = elapsed;
 
         if (!this._visualsEnabled) {
@@ -106,6 +121,22 @@ export class CategoryListController implements IController {
         }
     }
 
+    dispose(): void {
+        if (!this._disposed) {
+            this._disposed = true;
+
+            this._categorySelectedSubscription.unsubscribe();
+            this._categorySelectedSubscription = null;
+
+            for (let i = 0; i < this._yearList.length; i++) {
+                this._yearList[i].dispose();
+                this._yearList[i] = null;
+            }
+
+            this._yearList = null;
+        }
+    }
+
     private updateYearsElapsedTime(): void {
         for (let i = 0; i < this._yearList.length; i++) {
             this._yearList[i].updateElapsedTime(this._lastElapsed);
@@ -117,12 +148,12 @@ export class CategoryListController implements IController {
     }
 
     private loadCategories() {
-        this.dataService
+        this._dataService
             .getCategories()
             .then(categories => {
                 this.prepareAllYears(categories);
 
-                this.stateService.publishActiveNav(this._yearList[0].year);
+                this._stateService.publishActiveNav(this._yearList[0].year);
             });
     }
 
@@ -137,7 +168,7 @@ export class CategoryListController implements IController {
             let year = this.prepareYear(i, parseInt(key, 10), categoryMap[key]);
 
             this._yearList.push(year);
-            this._ctx.scene.add(year.container);
+            this._ctx.scene.add(year);
 
             if (i === 0) {
                 year.bringIntoView();
@@ -145,10 +176,10 @@ export class CategoryListController implements IController {
         }
     }
 
-    private prepareYear(yearIndex: number, theYear: number, categories: Array<ICategory>): Year {
-        let year = new Year(theYear, this.generateColor());
+    private prepareYear(yearIndex: number, theYear: number, categories: Array<ICategory>): YearVisual {
+        let year = new YearVisual(this._disposalService, theYear, this.generateColor());
 
-        let clc = new CategoryLayoutCalculator(this.heightWhenDisplayed, this.widthWhenDisplayed);
+        let clc = new CategoryLayoutCalculator(this._heightWhenDisplayed, this._widthWhenDisplayed);
         let layout = clc.calculate(categories.length);
         let catIndex = 0;
 
@@ -158,7 +189,8 @@ export class CategoryListController implements IController {
                 let cat = categories[catIndex];
 
                 if (lp.index < categories.length) {
-                    let categoryVisual = new CategoryVisual(this.stateService,
+                    let categoryVisual = new CategoryVisual(this._stateService,
+                                                            this._disposalService,
                                                             cat,
                                                             layout.hexagon,
                                                             new THREE.Vector3(lp.center.x,
@@ -170,7 +202,7 @@ export class CategoryListController implements IController {
                     categoryVisual.init();
 
                     year.categoryList.push(new Category(cat, categoryVisual));
-                    year.container.add(categoryVisual);
+                    year.add(categoryVisual);
                 }
 
                 catIndex++;

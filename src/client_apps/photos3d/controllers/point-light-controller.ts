@@ -8,6 +8,7 @@ export class PointLightController implements IController {
     private static readonly NUM_LIGHTS = 3;
     private static readonly COLORS = [ 0xff3333, 0x33ff33, 0x3333ff ];
 
+    private _disposed = false;
     private _visualsEnabled = false;
     private _lights: Array<THREE.PointLight> = [];
     private _minX: number;
@@ -65,23 +66,46 @@ export class PointLightController implements IController {
         }
 
         if (areEnabled) {
-            for (let i = 0; i < PointLightController.NUM_LIGHTS; i++) {
-                this._stateService.visualContext.scene.add(this._lights[i]);
-            }
+            this.addLights();
         } else {
-            for (let i = this._lights.length - 1; i >= 0; i--) {
-                this._stateService.visualContext.scene.remove(this._lights[i]);
-            }
+            this.removeLights();
         }
 
         this._visualsEnabled = areEnabled;
     }
 
     render(clockDelta: number, elapsed: number): void {
-        if (this.areVisualsEnabled) {
+        if (!this._disposed && this.areVisualsEnabled) {
             for (let i = 0; i < this._lights.length; i++) {
                 this.updateLight(this._lights[i]);
             }
+        }
+    }
+
+    dispose(): void {
+        if (!this._disposed) {
+            this._disposed = true;
+
+            this.removeLights();
+
+            for (let i = 0; i < PointLightController.NUM_LIGHTS; i++) {
+                this._disposalService.dispose(this._lights[i]);
+                this._lights[i] = null;
+            }
+
+            this._lights = null;
+        }
+    }
+
+    private addLights() {
+        for (let i = 0; i < PointLightController.NUM_LIGHTS; i++) {
+            this._stateService.visualContext.scene.add(this._lights[i]);
+        }
+    }
+
+    private removeLights() {
+        for (let i = this._lights.length - 1; i >= 0; i--) {
+            this._stateService.visualContext.scene.remove(this._lights[i]);
         }
     }
 

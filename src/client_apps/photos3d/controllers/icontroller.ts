@@ -3,4 +3,5 @@ export interface IController {
     init(): void;
     render(delta: number, elapsed: number): void;
     enableVisuals(areEnabled: boolean): void;
+    dispose(): void;
 }

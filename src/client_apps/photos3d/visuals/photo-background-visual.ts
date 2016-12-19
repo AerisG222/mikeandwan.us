@@ -1,10 +1,12 @@
 import { ArgumentNullError } from '../models/argument-null-error';
+import { DisposalService } from '../services/disposal-service';
 import { FrustrumCalculator } from '../services/frustrum-calculator';
 import { IVisual } from './ivisual';
 import { StateService } from '../services/state-service';
 
 export class PhotoBackgroundVisual extends THREE.Object3D implements IVisual {
     constructor(private _stateService: StateService,
+                private _disposalService: DisposalService,
                 private _frustrumCalculator: FrustrumCalculator,
                 private _z) {
         super();
@@ -15,6 +17,10 @@ export class PhotoBackgroundVisual extends THREE.Object3D implements IVisual {
 
         if (_frustrumCalculator == null) {
             throw new ArgumentNullError('_frustrumCalculator');
+        }
+
+        if (_disposalService == null) {
+            throw new ArgumentNullError('_disposalService');
         }
     }
 
@@ -34,7 +40,7 @@ export class PhotoBackgroundVisual extends THREE.Object3D implements IVisual {
         let bounds = this._frustrumCalculator.calculateBounds(this._stateService.visualContext.camera, this._z);
 
         let plane = new THREE.PlaneGeometry(bounds.x, bounds.y);
-        let material = new THREE.MeshBasicMaterial({ color: '#000000', transparent: true, opacity: 0.88, side: THREE.DoubleSide });
+        let material = new THREE.MeshPhongMaterial({ color: '#000000', transparent: true, opacity: 0.88, side: THREE.DoubleSide });
         let mesh = new THREE.Mesh(plane, material);
 
         mesh.position.z = this._z;

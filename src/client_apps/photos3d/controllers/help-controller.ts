@@ -6,6 +6,8 @@ import { StateService } from '../services/state-service';
 export class HelpController implements IController {
     private _help: HelpVisual;
 
+    private _disposed = false;
+
     constructor(private _stateService: StateService) {
         if (_stateService == null) {
             throw new ArgumentNullError('_stateService');
@@ -32,6 +34,15 @@ export class HelpController implements IController {
             } else {
                 this._help.hide();
             }
+        }
+    }
+
+    dispose(): void {
+        if (!this._disposed) {
+            this._disposed = true;
+
+            this._help.dispose();
+            this._help = null;
         }
     }
 }

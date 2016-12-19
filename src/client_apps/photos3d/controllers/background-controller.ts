@@ -1,13 +1,12 @@
 import { ArgumentNullError } from '../models/argument-null-error';
 import { DisposalService } from '../services/disposal-service';
 import { IController } from './icontroller';
-import { IVisual } from '../visuals/ivisual';
 import { PondBackgroundVisual } from '../visuals/pond-background-visual';
 import { StateService } from '../services/state-service';
 
 export class BackgroundController implements IController {
     private _visualsEnabled = true;
-    private _background: IVisual;
+    private _background: PondBackgroundVisual;
 
     constructor(private _stateService: StateService,
                 private _disposalService: DisposalService) {
@@ -26,8 +25,9 @@ export class BackgroundController implements IController {
 
     init(): void {
         // replace with factory if/when there are other background types
-        this._background = new PondBackgroundVisual(this._stateService.visualContext);
+        this._background = new PondBackgroundVisual(this._disposalService, this._stateService.visualContext);
         this._background.init();
+        this._stateService.visualContext.scene.add(this._background);
     }
 
     render(clockDelta: number, elapsed: number): void {
@@ -38,5 +38,9 @@ export class BackgroundController implements IController {
 
     enableVisuals(areEnabled: boolean): void {
 
+    }
+
+    dispose(): void {
+        this._background.dispose();
     }
 }

@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs/Subscription';
+
 import { ArgumentNullError } from '../models/argument-null-error';
 import { DataService } from '../services/data-service';
 import { DisposalService } from '../services/disposal-service';
@@ -16,7 +18,9 @@ export class PhotoListController implements IController {
     private _targetWidth: number;
     private _targetHeight: number;
     private _bg: PhotoBackgroundVisual;
+    private _categorySelectedSubscription: Subscription;
 
+    private _disposed = false;
     private _oldPhotos: Array<PhotoVisual> = [];
     private _visualsEnabled = true;
     private _photos: Array<IPhoto> = [];
@@ -54,7 +58,7 @@ export class PhotoListController implements IController {
     }
 
     init(): void {
-        this._stateService.categorySelectedObservable.subscribe(cat => {
+        this._categorySelectedSubscription = this._stateService.categorySelectedObservable.subscribe(cat => {
             this._idx = 0;
             this.loadPhotos(cat);
             this._visualsEnabled = true;
@@ -62,26 +66,25 @@ export class PhotoListController implements IController {
     }
 
     render(clockDelta: number, elapsed: number): void {
+        if (this._disposed) {
+            return;
+        }
+
         if (this._activePhoto != null) {
             this._activePhoto.render(clockDelta, elapsed);
         }
 
-        for (let i = 0; i < this._oldPhotos.length; i++) {
+        for (let i = this._oldPhotos.length - 1; i >= 0; i--) {
             let oldPhoto = this._oldPhotos[i];
 
             oldPhoto.render(clockDelta, elapsed);
 
             if (oldPhoto.isHidden) {
                 this._stateService.visualContext.scene.remove(oldPhoto);
-                oldPhoto.dispose();
-            }
-        }
 
-        for (let i = this._oldPhotos.length - 1; i >= 0; i--) {
-            let oldPhoto = this._oldPhotos[i];
+                this._oldPhotos[i].dispose();
+                this._oldPhotos[i] = null;
 
-            if (oldPhoto.isHidden) {
-                this._stateService.visualContext.scene.remove(oldPhoto);
                 this._oldPhotos.splice(i, 1);
             }
         }
@@ -113,6 +116,29 @@ export class PhotoListController implements IController {
 
         this._idx--;
         this.showPhoto(-1);
+    }
+
+    dispose(): void {
+        if (!this._disposed) {
+            this._disposed = true;
+
+            this._categorySelectedSubscription.unsubscribe();
+            this._categorySelectedSubscription = null;
+
+            if (this._activePhoto != null) {
+                this._activePhoto.dispose();
+                this._activePhoto = null;
+            }
+
+            if (this._oldPhotos != null) {
+                for (let i = 0; i < this._oldPhotos.length; i++) {
+                    this._oldPhotos[i].dispose();
+                    this._oldPhotos[i] = null;
+                }
+
+                this._oldPhotos = null;
+            }
+        }
     }
 
     private loadPhotos(category: ICategory): void {
@@ -149,7 +175,7 @@ export class PhotoListController implements IController {
 
     private ensureBackground(): void {
         if (this._bg == null) {
-            this._bg = new PhotoBackgroundVisual(this._stateService, this._frustrumCalculator, this._photoZ - 0.1);
+            this._bg = new PhotoBackgroundVisual(this._stateService, this._disposalService, this._frustrumCalculator, this._photoZ - 0.1);
             this._bg.init();
 
             this._stateService.visualContext.scene.add(this._bg);

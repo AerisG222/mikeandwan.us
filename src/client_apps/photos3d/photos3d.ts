@@ -28,15 +28,16 @@ export class Photos3D {
     private _mouseoverSubscription: Subscription;
     private _mouseclickSubscription: Subscription;
     private _resizeSubscription: Subscription;
+    private _unloadSubscription: Subscription;
 
     private _ignoreMouseEvents = false;
-    private _ctx = new VisualContext();
-    private _stateService = new StateService(this._ctx);
     private _clock = new THREE.Clock();
     private _dataService = new DataService();
     private _disposalService = new DisposalService();
     private _frustrumCalculator = new FrustrumCalculator();
     private _scaleCalculator = new ScaleCalculator();
+    private _ctx = new VisualContext(this._disposalService);
+    private _stateService = new StateService(this._ctx);
     private _isPaused = false;
     private _photoListMode = false;
 
@@ -64,6 +65,10 @@ export class Photos3D {
         this._mouseclickSubscription = Observable
             .fromEvent<MouseEvent>(document, 'click')
             .subscribe(evt => this.onMouseClick(evt));
+
+        this._unloadSubscription = Observable
+            .fromEvent<Event>(window, 'unload')
+            .subscribe(evt => this.unload(evt));
 
         this._stateService.categorySelectedObservable.subscribe(x => { this.enterPhotoListMode(); });
         this._stateService.dialogDisplayedObservable.subscribe(x => { this.onDialogDisplayed(x); });
@@ -262,5 +267,44 @@ export class Photos3D {
         this._pointLights.render(delta, elapsed);
 
         TWEEN.update();
+    }
+
+    private unload(evt: Event) {
+        this._mouseoverSubscription.unsubscribe();
+        this._mouseoverSubscription = null;
+
+        this._mouseclickSubscription.unsubscribe();
+        this._mouseclickSubscription = null;
+
+        this._resizeSubscription.unsubscribe();
+        this._resizeSubscription = null;
+
+        this._unloadSubscription.unsubscribe();
+        this._unloadSubscription = null;
+
+        Mousetrap.unbind('esc');
+        Mousetrap.unbind('space');
+        Mousetrap.unbind('right');
+        Mousetrap.unbind('left');
+        Mousetrap.unbind('b');
+        Mousetrap.unbind('x');
+        Mousetrap.unbind('s');
+        Mousetrap.unbind('w');
+        Mousetrap.unbind('a');
+        Mousetrap.unbind('d');
+        Mousetrap.unbind('h');
+        Mousetrap.unbind('p');
+        Mousetrap.unbind('?');
+
+        TWEEN.removeAll();
+
+        this._bg.dispose();
+        this._help.dispose();
+        this._status.dispose();
+        this._catList.dispose();
+        this._photoList.dispose();
+        this._pointLights.dispose();
+
+        this._ctx.dispose();
     }
 }

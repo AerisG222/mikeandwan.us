@@ -1,6 +1,9 @@
+import { Subscription } from 'rxjs/Subscription';
+
+import { DisposalService } from '../services/disposal-service';
+import { Hexagon } from '../models/hexagon';
 import { ICategory } from '../models/icategory';
 import { IVisual } from './ivisual';
-import { Hexagon } from '../models/hexagon';
 import { StateService } from '../services/state-service';
 
 export class CategoryVisual extends THREE.Object3D implements IVisual {
@@ -9,6 +12,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
 
     private static loader = new THREE.TextureLoader();
 
+    private _disposed = false;
     private _ignoreMouseEvents = true;
     private _isMouseOver = false;
     private _backgroundMesh: THREE.Mesh = null;
@@ -16,6 +20,8 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
     private _hoverPosition: THREE.Vector3;
     private _bringIntoViewTween: TWEEN.Tween;
     private _removeFromViewTween: TWEEN.Tween;
+    private _mouseOverSubscription: Subscription;
+    private _mouseClickSubscription: Subscription;
     private _mouseOverTween: TWEEN.Tween;
     private _mouseOutTween: TWEEN.Tween;
     private _rotateAnimationWaitTime: number;
@@ -24,12 +30,13 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
     private _rotateDuration: number;
     private _rotateIsAnimating = false;
 
-    constructor(private stateService: StateService,
-                private category: ICategory,
-                private hexagon: Hexagon,
-                private onscreenPosition: THREE.Vector3,
-                private offscreenPosition: THREE.Vector3,
-                private color: number) {
+    constructor(private _stateService: StateService,
+                private _disposalService: DisposalService,
+                private _category: ICategory,
+                private _hexagon: Hexagon,
+                private _onscreenPosition: THREE.Vector3,
+                private _offscreenPosition: THREE.Vector3,
+                private _color: number) {
         super();
 
         this._rotateAnimationWaitTime = Math.random() * 110 + 10;
@@ -37,28 +44,28 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         this._rotateNextTriggerTime = this._rotateAnimationWaitTime;
         this._rotateStopTime = this._rotateDuration + this._rotateNextTriggerTime;
 
-        this.position.set(offscreenPosition.x, offscreenPosition.y, offscreenPosition.z);
-        this._hoverPosition = new THREE.Vector3(onscreenPosition.x, onscreenPosition.y, onscreenPosition.z + 12);
+        this.position.set(_offscreenPosition.x, _offscreenPosition.y, _offscreenPosition.z);
+        this._hoverPosition = new THREE.Vector3(_onscreenPosition.x, _onscreenPosition.y, _onscreenPosition.z + 12);
     }
 
     private get backgroundEdgeLength() {
-        return this.hexagon.centerToVertexLength + CategoryVisual.BORDER_WIDTH;
+        return this._hexagon.centerToVertexLength + CategoryVisual.BORDER_WIDTH;
     }
 
     private get imageEdgeLength() {
-        return this.hexagon.centerToVertexLength;
+        return this._hexagon.centerToVertexLength;
     }
 
     init() {
-        CategoryVisual.loader.load(this.category.teaserImage.path, texture => {
+        CategoryVisual.loader.load(this._category.teaserImage.path, texture => {
             this.createObject(texture);
         });
 
         this.createBackground();
         this.add(this._backgroundMesh);
 
-        this.stateService.mouseoverObservable.subscribe(x => this.onMouseEvent(x));
-        this.stateService.mouseclickObservable.subscribe(x => this.onMouseClick(x));
+        this._mouseOverSubscription = this._stateService.mouseoverObservable.subscribe(x => this.onMouseEvent(x));
+        this._mouseClickSubscription = this._stateService.mouseclickObservable.subscribe(x => this.onMouseClick(x));
     }
 
     bringIntoView(): void {
@@ -68,7 +75,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         }
 
         this._bringIntoViewTween = new TWEEN.Tween(this.position)
-            .to(this.onscreenPosition, 1200)
+            .to(this._onscreenPosition, 1200)
             .easing(TWEEN.Easing.Back.Out)
             .start()
             .onComplete(x => { this._ignoreMouseEvents = false; });
@@ -83,12 +90,16 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         }
 
         this._removeFromViewTween = new TWEEN.Tween(this.position)
-            .to(this.offscreenPosition, 1200)
+            .to(this._offscreenPosition, 1200)
             .easing(TWEEN.Easing.Sinusoidal.Out)
             .start();
     }
 
     render(delta: number, elapsed: number) {
+        if (this._disposed) {
+            return;
+        }
+
         if (this._rotateIsAnimating) {
             if (elapsed > this._rotateStopTime) {
                 this._rotateIsAnimating = false;
@@ -107,7 +118,20 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
     }
 
     dispose(): void {
+        if (!this._disposed) {
+            this._disposed = true;
 
+            this._mouseClickSubscription.unsubscribe();
+            this._mouseClickSubscription = null;
+
+            this._mouseOverSubscription.unsubscribe();
+            this._mouseOverSubscription = null;
+
+            this._disposalService.dispose(this);
+
+            this._backgroundMesh = null;
+            this._imageMesh = null;
+        }
     }
 
     updateElapsedTime(elapsed: number): void {
@@ -121,7 +145,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
 
     private createBackground() {
         let geometry = this.createExtrudeGeometry(this.backgroundEdgeLength, this.imageEdgeLength + 1);
-        let material = new THREE.MeshLambertMaterial({ color: this.color, side: THREE.DoubleSide });
+        let material = new THREE.MeshLambertMaterial({ color: this._color, side: THREE.DoubleSide });
 
         this._backgroundMesh = new THREE.Mesh(geometry, material);
     }
@@ -154,7 +178,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         } else {
             // TODO: we currently clear the temporal status on a mouse event, expecting a hovered category to set this
             //       seems like there might be a more performant option
-            this.stateService.publishTemporalNav(this.category.name);
+            this._stateService.publishTemporalNav(this._category.name);
 
             if (!this._isMouseOver) {
                 this.onMouseOver();
@@ -170,9 +194,9 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         let isMouseOver = this.isMouseEventForThisInstance(intersections);
 
         if (isMouseOver) {
-            this.stateService.publishTemporalNav(null);
-            this.stateService.publishActiveNav(this.category.year, this.category.name);
-            this.stateService.publishCategorySelected(this.category);
+            this._stateService.publishTemporalNav(null);
+            this._stateService.publishActiveNav(this._category.year, this._category.name);
+            this._stateService.publishCategorySelected(this._category);
         }
     }
 
@@ -211,7 +235,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
 
     private onMouseOut() {
         this._isMouseOver = false;
-        this._backgroundMesh.material = new THREE.MeshLambertMaterial({ color: this.color, side: THREE.DoubleSide });
+        this._backgroundMesh.material = new THREE.MeshLambertMaterial({ color: this._color, side: THREE.DoubleSide });
 
         if (this._mouseOverTween != null) {
             this._mouseOverTween.stop();
@@ -219,7 +243,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         }
 
         this._mouseOutTween = new TWEEN.Tween(this.position)
-            .to(this.onscreenPosition, 1200)
+            .to(this._onscreenPosition, 1200)
             .easing(TWEEN.Easing.Linear.None)
             .start();
     }

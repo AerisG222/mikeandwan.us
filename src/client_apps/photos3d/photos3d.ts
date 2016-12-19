@@ -29,6 +29,8 @@ export class Photos3D {
     private _mouseclickSubscription: Subscription;
     private _resizeSubscription: Subscription;
     private _unloadSubscription: Subscription;
+    private _categorySelectedSubscription: Subscription;
+    private _dialogSubscription: Subscription;
 
     private _ignoreMouseEvents = false;
     private _clock = new THREE.Clock();
@@ -70,8 +72,8 @@ export class Photos3D {
             .fromEvent<Event>(window, 'unload')
             .subscribe(evt => this.unload(evt));
 
-        this._stateService.categorySelectedObservable.subscribe(x => { this.enterPhotoListMode(); });
-        this._stateService.dialogDisplayedObservable.subscribe(x => { this.onDialogDisplayed(x); });
+        this._categorySelectedSubscription = this._stateService.categorySelectedObservable.subscribe(x => { this.enterPhotoListMode(); });
+        this._dialogSubscription = this._stateService.dialogDisplayedObservable.subscribe(x => { this.onDialogDisplayed(x); });
 
         Mousetrap.bind('esc', e => { this.exitMode(); });
         Mousetrap.bind('space', e => { this.togglePause(); });
@@ -281,6 +283,12 @@ export class Photos3D {
 
         this._unloadSubscription.unsubscribe();
         this._unloadSubscription = null;
+
+        this._categorySelectedSubscription.unsubscribe();
+        this._categorySelectedSubscription = null;
+
+        this._dialogSubscription.unsubscribe();
+        this._dialogSubscription = null;
 
         Mousetrap.unbind('esc');
         Mousetrap.unbind('space');

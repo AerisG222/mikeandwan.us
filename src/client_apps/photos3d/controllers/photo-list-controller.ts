@@ -103,7 +103,7 @@ export class PhotoListController implements IController {
         }
 
         this._idx++;
-        this.showPhoto();
+        this.showPhoto(1);
     }
 
     showPrev(): void {
@@ -112,7 +112,7 @@ export class PhotoListController implements IController {
         }
 
         this._idx--;
-        this.showPhoto();
+        this.showPhoto(-1);
     }
 
     private loadPhotos(category: ICategory): void {
@@ -120,15 +120,15 @@ export class PhotoListController implements IController {
             .getPhotos(category.id)
             .then(photos => {
                 this._photos = photos;
-                this.showPhoto();
+                this.showPhoto(1);
             });
     }
 
-    private showPhoto(): void {
+    private showPhoto(direction: number): void {
         this.ensureBackground();
 
         if (this._activePhoto != null) {
-            this._activePhoto.hide();
+            this._activePhoto.hide(direction);
             this._oldPhotos.push(this._activePhoto);
         }
 

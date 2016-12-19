@@ -10,7 +10,7 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
     private static readonly loader = new THREE.TextureLoader();
 
     private _disposed = false;
-    private _fadeOut = false;
+    private _rotateOutDirection = 0;
 
     private _ctx: VisualContext;
     private _mesh: THREE.Mesh;
@@ -62,11 +62,11 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
             return;
         }
 
-        if (this._fadeOut) {
+        if (this._rotateOutDirection !== 0.0) {
             this._mesh.position.z -= 2;
             this._mesh.material.opacity -= 0.02;
 
-            this._rotationAnchor.rotateY(Math.PI / 100);
+            this._rotationAnchor.rotateY(this._rotateOutDirection * Math.PI / 100);
         }
     }
 
@@ -78,8 +78,8 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
         }
     }
 
-    hide() {
-        this._fadeOut = true;
+    hide(direction: number) {
+        this._rotateOutDirection = direction;
     }
 
     private getPhotoUrl(): string {

@@ -100,7 +100,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         } else {
             if (elapsed > this._rotateNextTriggerTime) {
                 this._rotateIsAnimating = true;
-                this._rotateNextTriggerTime += this._rotateAnimationWaitTime;
+                this.updateElapsedTime(elapsed);
                 this._rotateStopTime = elapsed + this._rotateDuration;
             }
         }
@@ -108,6 +108,10 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
 
     dispose(): void {
 
+    }
+
+    updateElapsedTime(elapsed: number): void {
+        this._rotateNextTriggerTime = elapsed + this._rotateAnimationWaitTime;
     }
 
     private createObject(texture: THREE.Texture) {

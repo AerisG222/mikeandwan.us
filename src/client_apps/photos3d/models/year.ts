@@ -38,4 +38,10 @@ export class Year {
             this._categoryList[i].visual.removeFromView();
         }
     }
+
+    updateElapsedTime(elapsed: number): void {
+        for (let i = 0; i < this._categoryList.length; i++) {
+            this._categoryList[i].visual.updateElapsedTime(elapsed);
+        }
+    }
 }

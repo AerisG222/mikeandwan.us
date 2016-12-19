@@ -18,6 +18,7 @@ export class CategoryListController implements IController {
 
     private _ctx: VisualContext;
 
+    private _lastElapsed = 0;
     private _idx = 0;
     private _visualsEnabled = true;
     private _yearList: Array<Year> = [];
@@ -79,6 +80,8 @@ export class CategoryListController implements IController {
     }
 
     render(delta: number, elapsed: number) {
+        this._lastElapsed = elapsed;
+
         if (!this._visualsEnabled) {
             return;
         }
@@ -98,7 +101,14 @@ export class CategoryListController implements IController {
         if (!areEnabled) {
             this._yearList[this._idx].removeFromView();
         } else {
+            this.updateYearsElapsedTime();
             this._yearList[this._idx].bringIntoView();
+        }
+    }
+
+    private updateYearsElapsedTime(): void {
+        for (let i = 0; i < this._yearList.length; i++) {
+            this._yearList[i].updateElapsedTime(this._lastElapsed);
         }
     }
 

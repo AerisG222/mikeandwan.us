@@ -252,11 +252,11 @@ export class Photos3D {
             return;
         }
 
-        requestAnimationFrame(() => this.animate());
-
         this.render();
 
         this._ctx.renderer.render(this._ctx.scene, this._ctx.camera);
+
+        requestAnimationFrame(() => this.animate());
     }
 
     private render() {

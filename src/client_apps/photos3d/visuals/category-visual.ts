@@ -24,6 +24,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
     private _mouseClickSubscription: Subscription;
     private _mouseOverTween: TWEEN.Tween;
     private _mouseOutTween: TWEEN.Tween;
+    private _pauseSubscription: Subscription;
     private _rotateAnimationWaitTime: number;
     private _rotateNextTriggerTime: number;
     private _rotateStopTime: number;
@@ -66,6 +67,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
 
         this._mouseOverSubscription = this._stateService.mouseoverObservable.subscribe(x => this.onMouseEvent(x));
         this._mouseClickSubscription = this._stateService.mouseclickObservable.subscribe(x => this.onMouseClick(x));
+        this._pauseSubscription = this._stateService.pausedObservable.subscribe(x => this.onPause(x));
     }
 
     bringIntoView(): void {
@@ -102,8 +104,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
 
         if (this._rotateIsAnimating) {
             if (elapsed > this._rotateStopTime) {
-                this._rotateIsAnimating = false;
-                this._backgroundMesh.rotation.set(0, 0, 0);
+                this.stopRotation();
             } else {
                 let axis = new THREE.Vector3(Math.random() * 200, Math.random() * 200, Math.random() * 200);
                 this._backgroundMesh.rotateOnAxis(axis.normalize(), Math.random() * 0.4);
@@ -112,7 +113,6 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
             if (elapsed > this._rotateNextTriggerTime) {
                 this._rotateIsAnimating = true;
                 this.updateElapsedTime(elapsed);
-                this._rotateStopTime = elapsed + this._rotateDuration;
             }
         }
     }
@@ -127,6 +127,9 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
             this._mouseOverSubscription.unsubscribe();
             this._mouseOverSubscription = null;
 
+            this._pauseSubscription.unsubscribe();
+            this._pauseSubscription = null;
+
             this._disposalService.dispose(this);
 
             this._backgroundMesh = null;
@@ -136,6 +139,23 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
 
     updateElapsedTime(elapsed: number): void {
         this._rotateNextTriggerTime = elapsed + this._rotateAnimationWaitTime;
+        this._rotateStopTime = elapsed + this._rotateDuration;
+    }
+
+    private stopRotation() {
+        this._rotateIsAnimating = false;
+        this._backgroundMesh.rotation.set(0, 0, 0);
+    }
+
+    private onPause(isPaused: boolean) {
+        if(isPaused) {
+            if(this._rotateIsAnimating) {
+                this.stopRotation();
+            }
+
+            // clock resets after pause
+            this.updateElapsedTime(0);
+        }
     }
 
     private createObject(texture: THREE.Texture) {

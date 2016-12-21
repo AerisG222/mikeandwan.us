@@ -220,6 +220,8 @@ export class Photos3D {
             this._clock.start();
             this.animate();
         }
+
+        this._stateService.publishPaused(this._isPaused);
     }
 
     private getIntersects(evt: MouseEvent): Array<THREE.Intersection> {

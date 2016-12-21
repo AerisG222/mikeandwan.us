@@ -31,6 +31,8 @@ export class Photos3D {
     private _unloadSubscription: Subscription;
     private _categorySelectedSubscription: Subscription;
     private _dialogSubscription: Subscription;
+    private _blurSubscription: Subscription;
+    private _focusSubscription: Subscription;
 
     private _ignoreMouseEvents = false;
     private _clock = new THREE.Clock();
@@ -72,6 +74,14 @@ export class Photos3D {
             .fromEvent<Event>(window, 'unload')
             .subscribe(evt => this.unload(evt));
 
+        this._blurSubscription = Observable
+            .fromEvent<Event>(window, 'blur')
+            .subscribe(evt => this.onBlur(evt));
+        
+        this._focusSubscription = Observable
+            .fromEvent<Event>(window, 'focus')
+            .subscribe(evt => this.onFocus(evt));
+
         this._categorySelectedSubscription = this._stateService.categorySelectedObservable.subscribe(x => { this.enterPhotoListMode(); });
         this._dialogSubscription = this._stateService.dialogDisplayedObservable.subscribe(x => { this.onDialogDisplayed(x); });
 
@@ -90,6 +100,14 @@ export class Photos3D {
         Mousetrap.bind('?', e => { this.toggleHelp(); });
 
         this.animate();
+    }
+
+    private onBlur(evt: Event) {
+        this.pause(true);
+    }
+
+    private onFocus(evt: Event) {
+        this.pause(false);
     }
 
     private onDialogDisplayed(isDisplayed: boolean) {
@@ -153,8 +171,7 @@ export class Photos3D {
     }
 
     private togglePause() {
-        this._isPaused = !this._isPaused;
-        this.animate();
+        this.pause(!this._isPaused);
     }
 
     private toggleBackground() {
@@ -192,6 +209,17 @@ export class Photos3D {
         }
 
         this._stateService.publishMouseClick(this.getIntersects(evt));
+    }
+
+    private pause(doPause: boolean) {
+        this._isPaused = doPause;
+
+        if(this._isPaused) {
+            this._clock.stop();
+        } else {
+            this._clock.start();
+            this.animate();
+        }
     }
 
     private getIntersects(evt: MouseEvent): Array<THREE.Intersection> {
@@ -290,6 +318,12 @@ export class Photos3D {
         this._dialogSubscription.unsubscribe();
         this._dialogSubscription = null;
 
+        this._blurSubscription.unsubscribe();
+        this._blurSubscription = null;
+
+        this._focusSubscription.unsubscribe();
+        this._focusSubscription = null;
+        
         Mousetrap.unbind('esc');
         Mousetrap.unbind('space');
         Mousetrap.unbind('right');

@@ -160,8 +160,6 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         let material = new THREE.MeshLambertMaterial({ map: texture, side: THREE.DoubleSide });
 
         this._imageMesh = new THREE.Mesh(geometry, material);
-
-        this._imageMesh.position.y = CategoryVisual.BORDER_WIDTH / 2;
     }
 
     private onMouseEvent(intersections: Array<THREE.Intersection>) {

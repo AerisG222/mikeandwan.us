@@ -13,7 +13,7 @@ export class DataService {
             .then(this.json)
             .then(data => data)
             .catch((err: Error) => {
-                alert(`There was an error getting data: {err}`);
+                alert(`There was an error getting data: ${err}`);
             });
     }
 
@@ -23,7 +23,7 @@ export class DataService {
             .then(this.json)
             .then(data => data)
             .catch((err: Error) => {
-                alert(`There was an error getting data: {err}`);
+                alert(`There was an error getting data: ${err}`);
             });
     }
 

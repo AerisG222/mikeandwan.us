@@ -8,8 +8,6 @@ import { VisualContext } from '../models/visual-context';
 export class StateService {
     private _activeNavSubject = new Subject<ActiveStatus>();
     private _temporalNavSubject = new Subject<string>();
-    private _mouseoverSubject = new Subject<Array<THREE.Intersection>>();
-    private _mouseclickSubject = new Subject<Array<THREE.Intersection>>();
     private _categorySelectedSubject = new Subject<ICategory>();
     private _dialogDisplayedSubject = new Subject<boolean>();
     private _pauseSubject = new Subject<boolean>();
@@ -35,14 +33,6 @@ export class StateService {
         return this._temporalNavSubject.asObservable();
     }
 
-    get mouseoverObservable() {
-        return this._mouseoverSubject.asObservable();
-    }
-
-    get mouseclickObservable() {
-        return this._mouseclickSubject.asObservable();
-    }
-
     get categorySelectedObservable() {
         return this._categorySelectedSubject.asObservable();
     }
@@ -61,15 +51,6 @@ export class StateService {
 
     publishActiveNav(year: number, category?: string) {
         this._activeNavSubject.next(new ActiveStatus(year, category));
-    }
-
-    publishMouseover(intersections: Array<THREE.Intersection>) {
-        this.publishTemporalNav(null);
-        this._mouseoverSubject.next(intersections);
-    }
-
-    publishMouseClick(intersections: Array<THREE.Intersection>) {
-        this._mouseclickSubject.next(intersections);
     }
 
     publishCategorySelected(category: ICategory) {

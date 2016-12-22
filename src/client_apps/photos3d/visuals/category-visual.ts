@@ -3,10 +3,13 @@ import { Subscription } from 'rxjs/Subscription';
 import { DisposalService } from '../services/disposal-service';
 import { Hexagon } from '../models/hexagon';
 import { ICategory } from '../models/icategory';
+import { IMouseClickReceiver } from './imouse-click-reciever';
+import { IMouseOverReceiver } from './imouse-over-reciever';
 import { IVisual } from './ivisual';
+import { MouseWatcherEvent } from '../models/mouse-watcher-event';
 import { StateService } from '../services/state-service';
 
-export class CategoryVisual extends THREE.Object3D implements IVisual {
+export class CategoryVisual extends THREE.Object3D implements IVisual, IMouseOverReceiver, IMouseClickReceiver {
     private static readonly IMAGE_DEPTH = 4;
     private static readonly BORDER_WIDTH = 2;
 
@@ -20,8 +23,6 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
     private _hoverPosition: THREE.Vector3;
     private _bringIntoViewTween: TWEEN.Tween;
     private _removeFromViewTween: TWEEN.Tween;
-    private _mouseOverSubscription: Subscription;
-    private _mouseClickSubscription: Subscription;
     private _mouseOverTween: TWEEN.Tween;
     private _mouseOutTween: TWEEN.Tween;
     private _pauseSubscription: Subscription;
@@ -65,8 +66,6 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         this.createBackground();
         this.add(this._backgroundMesh);
 
-        this._mouseOverSubscription = this._stateService.mouseoverObservable.subscribe(x => this.onMouseEvent(x));
-        this._mouseClickSubscription = this._stateService.mouseclickObservable.subscribe(x => this.onMouseClick(x));
         this._pauseSubscription = this._stateService.pausedObservable.subscribe(x => this.onPause(x));
     }
 
@@ -121,12 +120,6 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         if (!this._disposed) {
             this._disposed = true;
 
-            this._mouseClickSubscription.unsubscribe();
-            this._mouseClickSubscription = null;
-
-            this._mouseOverSubscription.unsubscribe();
-            this._mouseOverSubscription = null;
-
             this._pauseSubscription.unsubscribe();
             this._pauseSubscription = null;
 
@@ -140,6 +133,48 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
     updateElapsedTime(elapsed: number): void {
         this._rotateNextTriggerTime = elapsed + this._rotateAnimationWaitTime;
         this._rotateStopTime = elapsed + this._rotateDuration;
+    }
+
+    onMouseClick(evt: MouseWatcherEvent): void {
+        evt.watcher.ignoreMouseEvents = true;
+        
+        this._stateService.publishTemporalNav(null);
+        this._stateService.publishActiveNav(this._category.year, this._category.name);
+        this._stateService.publishCategorySelected(this._category);
+    }
+
+    onMouseOver(evt: MouseWatcherEvent) {
+        this._isMouseOver = true;
+        this._backgroundMesh.material = new THREE.MeshLambertMaterial({ color: 255, side: THREE.DoubleSide });
+
+        if (this._mouseOutTween != null) {
+            this._mouseOutTween.stop();
+            this._mouseOutTween = null;
+        }
+
+        this._mouseOverTween = new TWEEN.Tween(this.position)
+            .to(this._hoverPosition, 1000)
+            .easing(TWEEN.Easing.Elastic.Out)
+            .start();
+
+        this._stateService.publishTemporalNav(this._category.name);
+    }
+
+    onMouseOut(evt: MouseWatcherEvent) {
+        this._isMouseOver = false;
+        this._backgroundMesh.material = new THREE.MeshLambertMaterial({ color: this._color, side: THREE.DoubleSide });
+
+        if (this._mouseOverTween != null) {
+            this._mouseOverTween.stop();
+            this._mouseOverTween = null;
+        }
+
+        this._mouseOutTween = new TWEEN.Tween(this.position)
+            .to(this._onscreenPosition, 1200)
+            .easing(TWEEN.Easing.Linear.None)
+            .start();
+        
+        this._stateService.publishTemporalNav(null);
     }
 
     private stopRotation() {
@@ -180,90 +215,6 @@ export class CategoryVisual extends THREE.Object3D implements IVisual {
         let material = new THREE.MeshLambertMaterial({ map: texture, side: THREE.DoubleSide });
 
         this._imageMesh = new THREE.Mesh(geometry, material);
-    }
-
-    private onMouseEvent(intersections: Array<THREE.Intersection>) {
-        if (this._ignoreMouseEvents) {
-            return;
-        }
-
-        let isMouseOver = this.isMouseEventForThisInstance(intersections);
-
-        if (!isMouseOver) {
-            if (this._isMouseOver) {
-                this.onMouseOut();
-            }
-        } else {
-            // TODO: we currently clear the temporal status on a mouse event, expecting a hovered category to set this
-            //       seems like there might be a more performant option
-            this._stateService.publishTemporalNav(this._category.name);
-
-            if (!this._isMouseOver) {
-                this.onMouseOver();
-            }
-        }
-    }
-
-    private onMouseClick(intersections: Array<THREE.Intersection>) {
-        if (this._ignoreMouseEvents) {
-            return;
-        }
-
-        let isMouseOver = this.isMouseEventForThisInstance(intersections);
-
-        if (isMouseOver) {
-            this._stateService.publishTemporalNav(null);
-            this._stateService.publishActiveNav(this._category.year, this._category.name);
-            this._stateService.publishCategorySelected(this._category);
-        }
-    }
-
-    private isMouseEventForThisInstance(intersections: Array<THREE.Intersection>): boolean {
-        intersections = intersections.filter(x => x.object.parent instanceof CategoryVisual);
-
-        if (intersections.length === 0) {
-            return false;
-        }
-
-        for (let i = 0; i < intersections.length; i++) {
-            if (intersections[i].object.parent instanceof CategoryVisual) {
-                if (this.uuid === intersections[i].object.parent.uuid) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private onMouseOver() {
-        this._isMouseOver = true;
-        this._backgroundMesh.material = new THREE.MeshLambertMaterial({ color: 255, side: THREE.DoubleSide });
-
-        if (this._mouseOutTween != null) {
-            this._mouseOutTween.stop();
-            this._mouseOutTween = null;
-        }
-
-        this._mouseOverTween = new TWEEN.Tween(this.position)
-            .to(this._hoverPosition, 1000)
-            .easing(TWEEN.Easing.Elastic.Out)
-            .start();
-    }
-
-    private onMouseOut() {
-        this._isMouseOver = false;
-        this._backgroundMesh.material = new THREE.MeshLambertMaterial({ color: this._color, side: THREE.DoubleSide });
-
-        if (this._mouseOverTween != null) {
-            this._mouseOverTween.stop();
-            this._mouseOverTween = null;
-        }
-
-        this._mouseOutTween = new TWEEN.Tween(this.position)
-            .to(this._onscreenPosition, 1200)
-            .easing(TWEEN.Easing.Linear.None)
-            .start();
     }
 
     // https://github.com/mrdoob/three.js/issues/2065

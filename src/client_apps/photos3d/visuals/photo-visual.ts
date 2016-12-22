@@ -48,7 +48,7 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
     }
 
     get isHidden() {
-        return this._disposed || this._mesh.material.opacity <= 0.0;
+        return this._disposed || this._mesh == null || this._mesh.material.opacity <= 0.0;
     }
 
     init() {
@@ -58,7 +58,7 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
     }
 
     render(clockDelta: number, elapsed: number) {
-        if (this._disposed) {
+        if (this._disposed || this._mesh == null) {
             return;
         }
 

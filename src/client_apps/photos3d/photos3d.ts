@@ -10,6 +10,7 @@ import { DisposalService } from './services/disposal-service';
 import { FrustrumCalculator } from './services/frustrum-calculator';
 import { HelpController } from './controllers/help-controller';
 import { IController } from './controllers/icontroller';
+import { MouseWatcher } from './models/mouse-watcher';
 import { PhotoListController } from './controllers/photo-list-controller';
 import { PointLightController } from './controllers/point-light-controller';
 import { ScaleCalculator } from './services/scale-calculator';
@@ -25,16 +26,14 @@ export class Photos3D {
     private _catList: CategoryListController;
     private _photoList: PhotoListController;
     private _pointLights: IController;
-    private _mouseoverSubscription: Subscription;
-    private _mouseclickSubscription: Subscription;
     private _resizeSubscription: Subscription;
     private _unloadSubscription: Subscription;
     private _categorySelectedSubscription: Subscription;
     private _dialogSubscription: Subscription;
     private _blurSubscription: Subscription;
     private _focusSubscription: Subscription;
+    private _mouseWatcher: MouseWatcher;
 
-    private _ignoreMouseEvents = false;
     private _clock = new THREE.Clock();
     private _dataService = new DataService();
     private _disposalService = new DisposalService();
@@ -51,6 +50,8 @@ export class Photos3D {
 
         this.prepareScene();
 
+        this._mouseWatcher = new MouseWatcher(this._ctx);
+        
         this._status = new StatusBarController(this._stateService);
         this._status.init();
 
@@ -60,15 +61,6 @@ export class Photos3D {
         this._resizeSubscription = Observable
             .fromEvent<UIEvent>(window, 'resize')
             .subscribe(evt => this.onResize(evt));
-
-        this._mouseoverSubscription = Observable
-            .fromEvent<MouseEvent>(document, 'mousemove')
-            // .throttleTime(10)
-            .subscribe(evt => this.onMouseMove(evt));
-
-        this._mouseclickSubscription = Observable
-            .fromEvent<MouseEvent>(document, 'click')
-            .subscribe(evt => this.onMouseClick(evt));
 
         this._unloadSubscription = Observable
             .fromEvent<Event>(window, 'unload')
@@ -111,7 +103,7 @@ export class Photos3D {
     }
 
     private onDialogDisplayed(isDisplayed: boolean) {
-        this._ignoreMouseEvents = isDisplayed;
+        this._mouseWatcher.ignoreMouseEvents = isDisplayed;
     }
 
     private togglePointLights() {
@@ -135,6 +127,7 @@ export class Photos3D {
             this._catList.enableVisuals(true);
             this._photoList.enableVisuals(false);
             this._photoListMode = false;
+            this._mouseWatcher.ignoreMouseEvents = false;
         }
     }
 
@@ -194,23 +187,6 @@ export class Photos3D {
         this._ctx.camera.updateProjectionMatrix();
     }
 
-    // http://stemkoski.github.io/Three.js/Mouse-Over.html
-    private onMouseMove(evt: MouseEvent) {
-        if (this._ignoreMouseEvents) {
-            return;
-        }
-
-        this._stateService.publishMouseover(this.getIntersects(evt));
-    }
-
-    private onMouseClick(evt: MouseEvent) {
-        if (this._ignoreMouseEvents) {
-            return;
-        }
-
-        this._stateService.publishMouseClick(this.getIntersects(evt));
-    }
-
     private pause(doPause: boolean) {
         this._isPaused = doPause;
 
@@ -222,24 +198,6 @@ export class Photos3D {
         }
 
         this._stateService.publishPaused(this._isPaused);
-    }
-
-    private getIntersects(evt: MouseEvent): Array<THREE.Intersection> {
-        let x = ( evt.clientX / window.innerWidth ) * 2 - 1;
-        let y = - ( evt.clientY / window.innerHeight ) * 2 + 1;
-        let vector = new THREE.Vector3(x, y, 0.5);
-
-        vector.unproject(this._ctx.camera);
-
-        let ray = new THREE.Raycaster(this._ctx.camera.position, vector.sub(this._ctx.camera.position).normalize());
-
-        // create an array containing all objects in the scene with which the ray intersects, though
-        // filter the list to just objects that care about this to optimize perf
-        let intersects = ray
-            .intersectObjects(this._ctx.scene.children, true)
-            .filter(i => i.distance);
-
-        return intersects;
     }
 
     private prepareScene() {
@@ -302,12 +260,6 @@ export class Photos3D {
     }
 
     private unload(evt: Event) {
-        this._mouseoverSubscription.unsubscribe();
-        this._mouseoverSubscription = null;
-
-        this._mouseclickSubscription.unsubscribe();
-        this._mouseclickSubscription = null;
-
         this._resizeSubscription.unsubscribe();
         this._resizeSubscription = null;
 

@@ -51,7 +51,7 @@ export class Photos3D {
         this.prepareScene();
 
         this._mouseWatcher = new MouseWatcher(this._ctx);
-        
+
         this._status = new StatusBarController(this._stateService);
         this._status.init();
 
@@ -69,7 +69,7 @@ export class Photos3D {
         this._blurSubscription = Observable
             .fromEvent<Event>(window, 'blur')
             .subscribe(evt => this.onBlur(evt));
-        
+
         this._focusSubscription = Observable
             .fromEvent<Event>(window, 'focus')
             .subscribe(evt => this.onFocus(evt));
@@ -190,7 +190,7 @@ export class Photos3D {
     private pause(doPause: boolean) {
         this._isPaused = doPause;
 
-        if(this._isPaused) {
+        if (this._isPaused) {
             this._clock.stop();
         } else {
             this._clock.start();
@@ -277,7 +277,7 @@ export class Photos3D {
 
         this._focusSubscription.unsubscribe();
         this._focusSubscription = null;
-        
+
         Mousetrap.unbind('esc');
         Mousetrap.unbind('space');
         Mousetrap.unbind('right');

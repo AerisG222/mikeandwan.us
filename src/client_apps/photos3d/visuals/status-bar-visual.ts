@@ -86,11 +86,11 @@ export class StatusBarVisual implements IVisual {
         div.style.width = width;
         div.style.cssFloat = 'left';
 
-        if(padding != null) {
+        if (padding != null) {
             div.style.padding = padding;
         }
 
-        if(textAlign != null) {
+        if (textAlign != null) {
             div.style.textAlign = textAlign;
         }
 

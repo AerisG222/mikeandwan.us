@@ -4,11 +4,11 @@ import { MouseWatcher } from './mouse-watcher';
 export class MouseWatcherEvent {
     constructor(private _watcher: MouseWatcher,
                 private _event: MouseEvent) {
-        if(_watcher == null) {
+        if (_watcher == null) {
             throw new ArgumentNullError('_watcher');
         }
 
-        if(_event == null) {
+        if (_event == null) {
             throw new ArgumentNullError('_event');
         }
     }

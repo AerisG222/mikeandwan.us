@@ -15,12 +15,12 @@ export class MouseWatcher {
         this.startWatching();
     }
 
-    get ignoreMouseEvents() : boolean {
+    get ignoreMouseEvents(): boolean {
         return this._mouseoverSubscription != null;
     }
 
     set ignoreMouseEvents(ignore: boolean) {
-        if(ignore) {
+        if (ignore) {
             this.stopWatching();
         } else {
             this.startWatching();
@@ -32,13 +32,13 @@ export class MouseWatcher {
     }
 
     private startWatching(): void {
-        if(this._mouseoverSubscription == null) {
+        if (this._mouseoverSubscription == null) {
             this._mouseoverSubscription = Observable
                 .fromEvent<MouseEvent>(document, 'mousemove')
                 .subscribe(evt => this.onMouseMove(evt));
         }
 
-        if(this._mouseclickSubscription == null) {
+        if (this._mouseclickSubscription == null) {
             this._mouseclickSubscription = Observable
                 .fromEvent<MouseEvent>(document, 'click')
                 .subscribe(evt => this.onMouseClick(evt));
@@ -46,12 +46,12 @@ export class MouseWatcher {
     }
 
     private stopWatching(): void {
-        if(this._mouseoverSubscription != null) {
+        if (this._mouseoverSubscription != null) {
             this._mouseoverSubscription.unsubscribe();
             this._mouseoverSubscription = null;
         }
 
-        if(this._mouseclickSubscription != null) {
+        if (this._mouseclickSubscription != null) {
             this._mouseclickSubscription.unsubscribe();
             this._mouseclickSubscription = null;
         }
@@ -61,13 +61,13 @@ export class MouseWatcher {
         let handled = false;
         let intersects = this.getIntersects(evt);
 
-        for(let i = 0; i < intersects.length; i++) {
-            if(intersects[i].object.parent != null && this.isIMouseOverReceiver(intersects[i].object.parent)) {
+        for (let i = 0; i < intersects.length; i++) {
+            if (intersects[i].object.parent != null && this.isIMouseOverReceiver(intersects[i].object.parent)) {
                 let newReceiver = (intersects[i].object.parent as any as IMouseOverReceiver);
 
                 // mouseout always called before mouseover
-                if(newReceiver != this._currMouseOverReceiver) {
-                    if(this._currMouseOverReceiver != null) {
+                if (newReceiver !== this._currMouseOverReceiver) {
+                    if (this._currMouseOverReceiver != null) {
                         this._currMouseOverReceiver.onMouseOut(new MouseWatcherEvent(this, evt));
                         this._currMouseOverReceiver = newReceiver;
                     }
@@ -81,7 +81,7 @@ export class MouseWatcher {
             }
         }
 
-        if(!handled && this._currMouseOverReceiver != null) {
+        if (!handled && this._currMouseOverReceiver != null) {
             this._currMouseOverReceiver.onMouseOut(new MouseWatcherEvent(this, evt));
             this._currMouseOverReceiver = null;
         }
@@ -90,8 +90,8 @@ export class MouseWatcher {
     private onMouseClick(evt: MouseEvent): void {
         let intersects = this.getIntersects(evt);
 
-        for(let i = 0; i < intersects.length; i++) {
-            if(intersects[i].object.parent != null && this.isIMouseClickReceiver(intersects[i].object.parent)) {
+        for (let i = 0; i < intersects.length; i++) {
+            if (intersects[i].object.parent != null && this.isIMouseClickReceiver(intersects[i].object.parent)) {
                 (intersects[i].object.parent as any as IMouseClickReceiver).onMouseClick(new MouseWatcherEvent(this, evt));
             }
         }

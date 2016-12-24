@@ -137,7 +137,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual, IMouseOve
 
     onMouseClick(evt: MouseWatcherEvent): void {
         evt.watcher.ignoreMouseEvents = true;
-        
+
         this._stateService.publishTemporalNav(null);
         this._stateService.publishActiveNav(this._category.year, this._category.name);
         this._stateService.publishCategorySelected(this._category);
@@ -173,7 +173,7 @@ export class CategoryVisual extends THREE.Object3D implements IVisual, IMouseOve
             .to(this._onscreenPosition, 1200)
             .easing(TWEEN.Easing.Linear.None)
             .start();
-        
+
         this._stateService.publishTemporalNav(null);
     }
 
@@ -183,8 +183,8 @@ export class CategoryVisual extends THREE.Object3D implements IVisual, IMouseOve
     }
 
     private onPause(isPaused: boolean) {
-        if(isPaused) {
-            if(this._rotateIsAnimating) {
+        if (isPaused) {
+            if (this._rotateIsAnimating) {
                 this.stopRotation();
             }
 

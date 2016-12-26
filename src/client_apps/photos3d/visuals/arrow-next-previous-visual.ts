@@ -40,7 +40,7 @@ export class ArrowNextPreviousVisual extends THREE.Object3D implements IVisual {
             throw new ArgumentNullError('_disposalService');
         }
 
-        this._boundsDepth = this._frustrumCalculator.calculateZForFullFrame(this._visualContext.camera) - 20;
+        this._boundsDepth = this._frustrumCalculator.calculateZForFullFrame(this._visualContext.camera);
 
         let bounds = this._frustrumCalculator.calculateBounds(this._visualContext.camera, this._boundsDepth);
 

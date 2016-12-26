@@ -48,9 +48,9 @@ export class Photos3D {
         // ensure scrollbars do not appear
         document.getElementsByTagName('body')[0].style.overflow = 'hidden';
 
-        this.prepareScene();
-
         this._mouseWatcher = new MouseWatcher(this._ctx);
+
+        this.prepareScene();
 
         this._status = new StatusBarController(this._stateService);
         this._status.init();
@@ -229,7 +229,7 @@ export class Photos3D {
         this._catList.init();
 
         this._photoList = new PhotoListController(this._dataService, this._stateService, this._frustrumCalculator, this._scaleCalculator,
-                                                  this._disposalService);
+                                                  this._disposalService, this._mouseWatcher);
         this._photoList.init();
 
         this.animate();

@@ -1,12 +1,14 @@
 import { Subscription } from 'rxjs/Subscription';
 
 import { ArgumentNullError } from '../models/argument-null-error';
+import { ArrowNextPreviousVisual } from '../visuals/arrow-next-previous-visual';
 import { DataService } from '../services/data-service';
 import { DisposalService } from '../services/disposal-service';
 import { FrustrumCalculator } from '../services/frustrum-calculator';
 import { ICategory } from '../models/icategory';
 import { IController } from './icontroller';
 import { IPhoto } from '../models/iphoto';
+import { MouseWatcher } from '../models/mouse-watcher';
 import { PhotoBackgroundVisual } from '../visuals/photo-background-visual';
 import { PhotoVisual } from '../visuals/photo-visual';
 import { ScaleCalculator } from '../services/scale-calculator';
@@ -19,6 +21,7 @@ export class PhotoListController implements IController {
     private _targetHeight: number;
     private _bg: PhotoBackgroundVisual;
     private _categorySelectedSubscription: Subscription;
+    private _arrows: ArrowNextPreviousVisual;
 
     private _disposed = false;
     private _oldPhotos: Array<PhotoVisual> = [];
@@ -30,7 +33,8 @@ export class PhotoListController implements IController {
                 private _stateService: StateService,
                 private _frustrumCalculator: FrustrumCalculator,
                 private _scaleCalculator: ScaleCalculator,
-                private _disposalService: DisposalService) {
+                private _disposalService: DisposalService,
+                private _mouseWatcher: MouseWatcher) {
         if (_dataService == null) {
             throw new ArgumentNullError('_dataService');
         }
@@ -45,6 +49,10 @@ export class PhotoListController implements IController {
 
         if (_disposalService == null) {
             throw new ArgumentNullError('_disposalService');
+        }
+
+        if (_mouseWatcher == null) {
+            throw new ArgumentNullError('_mouseWatcher');
         }
 
         this._photoZ = _frustrumCalculator.calculateZForFullFrame(this._stateService.visualContext.camera);
@@ -74,6 +82,10 @@ export class PhotoListController implements IController {
             this._activePhoto.render(clockDelta, elapsed);
         }
 
+        if (this._arrows != null) {
+            this._arrows.render(clockDelta, elapsed);
+        }
+
         for (let i = this._oldPhotos.length - 1; i >= 0; i--) {
             let oldPhoto = this._oldPhotos[i];
 
@@ -92,11 +104,7 @@ export class PhotoListController implements IController {
 
     enableVisuals(areEnabled: boolean): void {
         if (!areEnabled && this.areVisualsEnabled) {
-            this._stateService.visualContext.scene.remove(this._bg);
-            this._stateService.visualContext.scene.remove(this._activePhoto);
-
-            this._bg = null;
-            this._activePhoto = null;
+            this.disposeVisuals();
         }
     }
 
@@ -125,19 +133,41 @@ export class PhotoListController implements IController {
             this._categorySelectedSubscription.unsubscribe();
             this._categorySelectedSubscription = null;
 
-            if (this._activePhoto != null) {
-                this._activePhoto.dispose();
-                this._activePhoto = null;
+            this.disposeVisuals();
+        }
+    }
+
+    private disposeVisuals(): void {
+        if(this._bg != null) {
+            this._stateService.visualContext.scene.remove(this._bg);
+            this._bg.dispose();
+            this._disposalService.dispose(this._bg);
+            this._bg = null;
+        }
+
+        if(this._arrows != null) {
+            this._stateService.visualContext.scene.remove(this._arrows);
+            this._arrows.dispose();
+            this._disposalService.dispose(this._arrows);
+            this._arrows = null;
+        }
+        
+        if (this._activePhoto != null) {
+            this._stateService.visualContext.scene.remove(this._activePhoto);
+            this._activePhoto.dispose();
+            this._disposalService.dispose(this._activePhoto);
+            this._activePhoto = null;
+        }
+
+        if (this._oldPhotos.length > 0) {
+            for (let i = 0; i < this._oldPhotos.length; i++) {
+                this._stateService.visualContext.scene.remove(this._oldPhotos[i]);
+                this._oldPhotos[i].dispose();
+                this._disposalService.dispose(this._oldPhotos[i]);
+                this._oldPhotos[i] = null;
             }
 
-            if (this._oldPhotos != null) {
-                for (let i = 0; i < this._oldPhotos.length; i++) {
-                    this._oldPhotos[i].dispose();
-                    this._oldPhotos[i] = null;
-                }
-
-                this._oldPhotos = null;
-            }
+            this._oldPhotos = [];
         }
     }
 
@@ -152,6 +182,7 @@ export class PhotoListController implements IController {
 
     private showPhoto(direction: number): void {
         this.ensureBackground();
+        this.ensureArrows();
 
         if (this._activePhoto != null) {
             this._activePhoto.hide(direction);
@@ -171,6 +202,13 @@ export class PhotoListController implements IController {
         this._stateService.visualContext.scene.add(newPhoto);
 
         this._activePhoto = newPhoto;
+
+        this.updateArrowVisibility();
+    }
+
+    private updateArrowVisibility() {
+        this._arrows.showNext(this._idx < this._photos.length - 1);
+        this._arrows.showPrevious(this._idx > 0);
     }
 
     private ensureBackground(): void {
@@ -179,6 +217,18 @@ export class PhotoListController implements IController {
             this._bg.init();
 
             this._stateService.visualContext.scene.add(this._bg);
+        }
+    }
+
+    private ensureArrows(): void {
+        if (this._arrows == null) {
+            this._arrows = new ArrowNextPreviousVisual(this._stateService.visualContext, this._frustrumCalculator, this._disposalService);
+            this._arrows.init();
+            this._arrows.nextObservable.subscribe(() => this.showNext());
+            this._arrows.prevObservable.subscribe(() => this.showPrev());
+            this._stateService.visualContext.scene.add(this._arrows);
+
+            this._mouseWatcher.ignoreMouseEvents = false;
         }
     }
 }

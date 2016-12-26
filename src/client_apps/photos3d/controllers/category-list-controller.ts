@@ -2,7 +2,7 @@ import { List } from 'linqts/linq';
 import { Subscription } from 'rxjs/Subscription';
 
 import { ArgumentNullError } from '../models/argument-null-error';
-import { ArrowVisual } from '../visuals/arrow-visual';
+import { ArrowNextPreviousVisual } from '../visuals/arrow-next-previous-visual';
 import { Category } from '../models/category';
 import { CategoryLayoutCalculator } from '../services/category-layout-calculator';
 import { CategoryVisual } from '../visuals/category-visual';
@@ -16,8 +16,6 @@ import { VisualContext } from '../models/visual-context';
 import { YearVisual } from '../visuals/year-visual';
 
 export class CategoryListController implements IController {
-    private static readonly zWhenDisplayed = 500;
-
     private _ctx: VisualContext;
     private _categorySelectedSubscription: Subscription;
 
@@ -28,10 +26,8 @@ export class CategoryListController implements IController {
     private _yearList: Array<YearVisual> = [];
     private _heightWhenDisplayed: number;
     private _widthWhenDisplayed: number;
-    private _prevArrow: ArrowVisual;
-    private _prevArrowDisplayed = false;
-    private _nextArrow: ArrowVisual;
-    private _nextArrowDisplayed = false;
+    private _zWhenDisplayed: number;
+    private _arrows: ArrowNextPreviousVisual;
 
     constructor(private _dataService: DataService,
                 private _stateService: StateService,
@@ -45,18 +41,29 @@ export class CategoryListController implements IController {
             throw new ArgumentNullError('_stateService');
         }
 
+        if (_frustrumCalculator == null) {
+            throw new ArgumentNullError('_frustrumCalculator');
+        }
+
         if (_disposalService == null) {
             throw new ArgumentNullError('_disposalService');
         }
 
         this._ctx = _stateService.visualContext;
+        this._zWhenDisplayed = this._frustrumCalculator.calculateZForFullFrame(this._ctx.camera) - 20;
 
-        let bounds = this._frustrumCalculator.calculateBounds(this._ctx.camera, CategoryListController.zWhenDisplayed);
+        let bounds = this._frustrumCalculator.calculateBounds(this._ctx.camera, this._zWhenDisplayed);
 
         this._heightWhenDisplayed = bounds.y;
         this._widthWhenDisplayed = bounds.x;
 
         this._categorySelectedSubscription = this._stateService.categorySelectedObservable.subscribe(cat => this.onCategorySelected(cat));
+
+        this._arrows = new ArrowNextPreviousVisual(this._ctx, this._frustrumCalculator, this._disposalService);
+        this._arrows.init();
+        this._arrows.nextObservable.subscribe(() => this.moveNextYear());
+        this._arrows.prevObservable.subscribe(() => this.movePrevYear());
+        this._ctx.scene.add(this._arrows);
     }
 
     get areVisualsEnabled(): boolean {
@@ -110,13 +117,7 @@ export class CategoryListController implements IController {
             return;
         }
 
-        if (this._nextArrow != null) {
-            this._nextArrow.render(delta, elapsed);
-        }
-
-        if (this._prevArrow != null) {
-            this._prevArrow.render(delta, elapsed);
-        }
+        this._arrows.render(delta, elapsed);
 
         for (let i = 0; i < this._yearList.length; i++) {
             let year = this._yearList[i];
@@ -132,9 +133,11 @@ export class CategoryListController implements IController {
 
         if (!areEnabled) {
             this._yearList[this._idx].removeFromView();
+            this._ctx.scene.remove(this._arrows);
         } else {
             this.updateYearsElapsedTime();
             this._yearList[this._idx].bringIntoView();
+            this._ctx.scene.add(this._arrows);
         }
     }
 
@@ -145,12 +148,6 @@ export class CategoryListController implements IController {
             this._categorySelectedSubscription.unsubscribe();
             this._categorySelectedSubscription = null;
 
-            this._disposalService.dispose(this._nextArrow);
-            this._nextArrow = null;
-
-            this._disposalService.dispose(this._prevArrow);
-            this._prevArrow = null;
-
             for (let i = 0; i < this._yearList.length; i++) {
                 this._yearList[i].dispose();
                 this._yearList[i] = null;
@@ -160,41 +157,9 @@ export class CategoryListController implements IController {
         }
     }
 
-    private prepareArrows(): void {
-        this._nextArrow = new ArrowVisual();
-        this._nextArrow.init();
-        this._nextArrow.position.set((this._widthWhenDisplayed / 2) - this._nextArrow.width,
-                                     this._heightWhenDisplayed / 2,
-                                     CategoryListController.zWhenDisplayed);
-        this._nextArrow.clickObservable.subscribe(() => { this.moveNextYear(); });
-
-        this._prevArrow = new ArrowVisual();
-        this._prevArrow.init();
-        this._prevArrow.rotateY(Math.PI);
-        this._prevArrow.position.set(-(this._widthWhenDisplayed / 2) + this._prevArrow.width,
-                                     this._heightWhenDisplayed / 2,
-                                     CategoryListController.zWhenDisplayed);
-        this._prevArrow.clickObservable.subscribe(() => { this.movePrevYear(); });
-
-        this.updateArrowVisibility();
-    }
-
     private updateArrowVisibility(): void {
-        if (this._idx > 0 && !this._nextArrowDisplayed) {
-            this._ctx.scene.add(this._nextArrow);
-            this._nextArrowDisplayed = true;
-        } else if (this._idx === 0 && this._nextArrowDisplayed) {
-            this._ctx.scene.remove(this._nextArrow);
-            this._nextArrowDisplayed = false;
-        }
-
-        if (this._idx < this._yearList.length - 1) {
-            this._ctx.scene.add(this._prevArrow);
-            this._prevArrowDisplayed = true;
-        } else if (this._idx === this._yearList.length - 1 && this._prevArrowDisplayed) {
-            this._ctx.scene.remove(this._prevArrow);
-            this._prevArrowDisplayed = false;
-        }
+        this._arrows.showNext(this._idx > 0);
+        this._arrows.showPrevious(this._idx < this._yearList.length - 1);
     }
 
     private updateYearsElapsedTime(): void {
@@ -212,7 +177,7 @@ export class CategoryListController implements IController {
             .getCategories()
             .then(categories => {
                 this.prepareAllYears(categories);
-                this.prepareArrows();
+                this.updateArrowVisibility();
                 this._stateService.publishActiveNav(this._yearList[0].year);
             });
     }
@@ -255,7 +220,7 @@ export class CategoryListController implements IController {
                                                             layout.hexagon,
                                                             new THREE.Vector3(lp.center.x,
                                                                               lp.center.y,
-                                                                              CategoryListController.zWhenDisplayed),
+                                                                              this._zWhenDisplayed),
                                                             this.getOffscreenPosition(),
                                                             year.color);
 

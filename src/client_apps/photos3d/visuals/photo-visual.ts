@@ -1,15 +1,16 @@
 import { ArgumentNullError } from '../models/argument-null-error';
 import { DisposalService } from '../services/disposal-service';
+import { IDisposable } from '../models/idisposable';
 import { IPhoto } from '../models/iphoto';
 import { IVisual } from './ivisual';
 import { ScaleCalculator } from '../services/scale-calculator';
 import { StateService } from '../services/state-service';
 import { VisualContext } from '../models/visual-context';
 
-export class PhotoVisual extends THREE.Object3D implements IVisual {
+export class PhotoVisual extends THREE.Object3D implements IDisposable, IVisual {
     private static readonly loader = new THREE.TextureLoader();
 
-    private _disposed = false;
+    private _isDisposed = false;
     private _rotateOutDirection = 0;
 
     private _ctx: VisualContext;
@@ -48,7 +49,7 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
     }
 
     get isHidden() {
-        return this._disposed || this._mesh == null || this._mesh.material.opacity <= 0.0;
+        return this._isDisposed || this._mesh == null || this._mesh.material.opacity <= 0.0;
     }
 
     init() {
@@ -58,7 +59,7 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
     }
 
     render(clockDelta: number, elapsed: number) {
-        if (this._disposed || this._mesh == null) {
+        if (this._isDisposed || this._mesh == null) {
             return;
         }
 
@@ -71,11 +72,19 @@ export class PhotoVisual extends THREE.Object3D implements IVisual {
     }
 
     dispose(): void {
-        if (!this._disposed) {
-            this._disposed = true;
-
-            this._disposalService.dispose(this);
+        if (this._isDisposed) {
+            return;
         }
+
+        this._isDisposed = true;
+
+        this._rotationAnchor.remove(this._mesh);
+        this._disposalService.dispose(this._mesh);
+        this._mesh = null;
+
+        this.remove(this._rotationAnchor);
+        this._disposalService.dispose(this._rotationAnchor);
+        this._rotationAnchor = null;
     }
 
     hide(direction: number) {

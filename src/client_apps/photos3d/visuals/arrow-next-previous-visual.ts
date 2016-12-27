@@ -5,10 +5,11 @@ import { ArgumentNullError } from '../models/argument-null-error';
 import { ArrowVisual } from './arrow-visual';
 import { DisposalService } from '../services/disposal-service';
 import { FrustrumCalculator } from '../services/frustrum-calculator';
+import { IDisposable } from '../models/idisposable';
 import { IVisual } from './ivisual';
 import { VisualContext } from '../models/visual-context';
 
-export class ArrowNextPreviousVisual extends THREE.Object3D implements IVisual {
+export class ArrowNextPreviousVisual extends THREE.Object3D implements IDisposable, IVisual {
     private _isDisposed = false;
 
     private _boundsHeight: number;
@@ -60,17 +61,17 @@ export class ArrowNextPreviousVisual extends THREE.Object3D implements IVisual {
         this.prepareArrows();
     }
 
-    render(delta: number, elapsed: number): void {
+    render(clockDelta: number, elapsed: number): void {
         if(this._isDisposed) {
             return;
         }
 
         if (this._nextArrow != null) {
-            this._nextArrow.render(delta, elapsed);
+            this._nextArrow.render(clockDelta, elapsed);
         }
 
         if (this._prevArrow != null) {
-            this._prevArrow.render(delta, elapsed);
+            this._prevArrow.render(clockDelta, elapsed);
         }
     }
 
@@ -79,12 +80,12 @@ export class ArrowNextPreviousVisual extends THREE.Object3D implements IVisual {
             return;
         }
 
-        this._disposalService.dispose(this);
-
-        this._nextArrow.dispose();
+        this.remove(this._nextArrow);
+        this._disposalService.dispose(this._nextArrow);
         this._nextArrow = null;
 
-        this._prevArrow.dispose();
+        this.remove(this._prevArrow);
+        this._disposalService.dispose(this._prevArrow);
         this._prevArrow = null;
     }
 
@@ -117,14 +118,14 @@ export class ArrowNextPreviousVisual extends THREE.Object3D implements IVisual {
     }
 
     private prepareArrows(): void {
-        this._nextArrow = new ArrowVisual();
+        this._nextArrow = new ArrowVisual(this._disposalService);
         this._nextArrow.init();
         this._nextArrow.position.set((this._boundsWidth / 2) - this._nextArrow.width,
                                      this._boundsHeight / 2,
                                      this._boundsDepth);
         this._nextArrow.clickObservable.subscribe(() => { this.onNextClicked(); });
 
-        this._prevArrow = new ArrowVisual();
+        this._prevArrow = new ArrowVisual(this._disposalService);
         this._prevArrow.init();
         this._prevArrow.rotateY(Math.PI);
         this._prevArrow.position.set(-(this._boundsWidth / 2) + this._prevArrow.width,

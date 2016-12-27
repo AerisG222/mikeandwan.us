@@ -52,10 +52,6 @@ export class StatusBarVisual implements IVisual {
 
     }
 
-    dispose(): void {
-
-    }
-
     show() {
         this._rootDiv.style.display = 'block';
     }

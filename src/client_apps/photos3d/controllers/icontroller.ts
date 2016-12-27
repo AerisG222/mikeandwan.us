@@ -1,7 +1,6 @@
 export interface IController {
     readonly areVisualsEnabled: boolean;
-    init(): void;
-    render(delta: number, elapsed: number): void;
     enableVisuals(areEnabled: boolean): void;
-    dispose(): void;
+    init(): void;
+    render(clockDelta: number, elapsed: number): void;
 }

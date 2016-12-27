@@ -2,17 +2,18 @@ import { ArgumentNullError } from '../models/argument-null-error';
 import { DisposalService } from '../services/disposal-service';
 import { FrustrumCalculator } from '../services/frustrum-calculator';
 import { IController } from './icontroller';
+import { IDisposable } from '../models/idisposable';
 import { StateService } from '../services/state-service';
 
-export class PointLightController implements IController {
+export class PointLightController implements IController, IDisposable {
     private static readonly NUM_LIGHTS = 3;
     private static readonly COLORS = [ 0xff3333, 0x33ff33, 0x3333ff ];
 
-    private _disposed = false;
-    private _visualsEnabled = false;
+    private _isDisposed = false;
     private _lights: Array<THREE.PointLight> = [];
-    private _minX: number;
     private _maxX: number;
+    private _minX: number;
+    private _visualsEnabled = false;
 
     constructor(private _stateService: StateService,
                 private _frustrumCalculator: FrustrumCalculator,
@@ -75,7 +76,7 @@ export class PointLightController implements IController {
     }
 
     render(clockDelta: number, elapsed: number): void {
-        if (!this._disposed && this.areVisualsEnabled) {
+        if (!this._isDisposed && this.areVisualsEnabled) {
             for (let i = 0; i < this._lights.length; i++) {
                 this.updateLight(this._lights[i]);
             }
@@ -83,18 +84,20 @@ export class PointLightController implements IController {
     }
 
     dispose(): void {
-        if (!this._disposed) {
-            this._disposed = true;
-
-            this.removeLights();
-
-            for (let i = 0; i < PointLightController.NUM_LIGHTS; i++) {
-                this._disposalService.dispose(this._lights[i]);
-                this._lights[i] = null;
-            }
-
-            this._lights = null;
+        if (this._isDisposed) {
+            return;
         }
+
+        this._isDisposed = true;
+
+        this.removeLights();
+
+        for (let i = 0; i < PointLightController.NUM_LIGHTS; i++) {
+            this._disposalService.dispose(this._lights[i]);
+            this._lights[i] = null;
+        }
+
+        this._lights = null;
     }
 
     private addLights() {

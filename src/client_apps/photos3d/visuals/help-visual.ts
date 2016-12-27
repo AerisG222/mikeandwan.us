@@ -1,4 +1,5 @@
 import { ArgumentNullError } from '../models/argument-null-error';
+import { IDisposable } from '../models/idisposable';
 import { IVisual } from './ivisual';
 import { StateService } from '../services/state-service';
 
@@ -36,10 +37,6 @@ export class HelpVisual implements IVisual {
     }
 
     render(clockDelta: number, elapsed: number) {
-
-    }
-
-    dispose(): void {
 
     }
 

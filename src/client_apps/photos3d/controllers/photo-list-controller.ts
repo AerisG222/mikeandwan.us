@@ -7,6 +7,7 @@ import { DisposalService } from '../services/disposal-service';
 import { FrustrumCalculator } from '../services/frustrum-calculator';
 import { ICategory } from '../models/icategory';
 import { IController } from './icontroller';
+import { IDisposable } from '../models/idisposable';
 import { IPhoto } from '../models/iphoto';
 import { MouseWatcher } from '../models/mouse-watcher';
 import { PhotoBackgroundVisual } from '../visuals/photo-background-visual';
@@ -14,20 +15,19 @@ import { PhotoVisual } from '../visuals/photo-visual';
 import { ScaleCalculator } from '../services/scale-calculator';
 import { StateService } from '../services/state-service';
 
-export class PhotoListController implements IController {
-    private _photoZ: number;
+export class PhotoListController implements IController, IDisposable {
     private _activePhoto: PhotoVisual;
-    private _targetWidth: number;
-    private _targetHeight: number;
+    private _arrows: ArrowNextPreviousVisual;
     private _bg: PhotoBackgroundVisual;
     private _categorySelectedSubscription: Subscription;
-    private _arrows: ArrowNextPreviousVisual;
-
-    private _disposed = false;
-    private _oldPhotos: Array<PhotoVisual> = [];
-    private _visualsEnabled = true;
-    private _photos: Array<IPhoto> = [];
     private _idx = 0;
+    private _isDisposed = false;
+    private _oldPhotos: Array<PhotoVisual> = [];
+    private _photos: Array<IPhoto> = [];
+    private _photoZ: number;
+    private _targetHeight: number;
+    private _targetWidth: number;
+    private _visualsEnabled = true;
 
     constructor(private _dataService: DataService,
                 private _stateService: StateService,
@@ -74,7 +74,7 @@ export class PhotoListController implements IController {
     }
 
     render(clockDelta: number, elapsed: number): void {
-        if (this._disposed) {
+        if (this._isDisposed) {
             return;
         }
 
@@ -127,42 +127,34 @@ export class PhotoListController implements IController {
     }
 
     dispose(): void {
-        if (!this._disposed) {
-            this._disposed = true;
-
-            this._categorySelectedSubscription.unsubscribe();
-            this._categorySelectedSubscription = null;
-
-            this.disposeVisuals();
+        if (this._isDisposed) {
+            return;
         }
+
+        this._isDisposed = true;
+
+        this._categorySelectedSubscription.unsubscribe();
+        this._categorySelectedSubscription = null;
+
+        this.disposeVisuals();
     }
 
     private disposeVisuals(): void {
-        if(this._bg != null) {
-            this._stateService.visualContext.scene.remove(this._bg);
-            this._bg.dispose();
-            this._disposalService.dispose(this._bg);
-            this._bg = null;
-        }
+        this._stateService.visualContext.scene.remove(this._activePhoto);
+        this._disposalService.dispose(this._activePhoto);
+        this._activePhoto = null;
 
-        if(this._arrows != null) {
-            this._stateService.visualContext.scene.remove(this._arrows);
-            this._arrows.dispose();
-            this._disposalService.dispose(this._arrows);
-            this._arrows = null;
-        }
-        
-        if (this._activePhoto != null) {
-            this._stateService.visualContext.scene.remove(this._activePhoto);
-            this._activePhoto.dispose();
-            this._disposalService.dispose(this._activePhoto);
-            this._activePhoto = null;
-        }
+        this._stateService.visualContext.scene.remove(this._arrows);
+        this._disposalService.dispose(this._arrows);
+        this._arrows = null;
+
+        this._stateService.visualContext.scene.remove(this._bg);
+        this._disposalService.dispose(this._bg);
+        this._bg = null;
 
         if (this._oldPhotos.length > 0) {
             for (let i = 0; i < this._oldPhotos.length; i++) {
                 this._stateService.visualContext.scene.remove(this._oldPhotos[i]);
-                this._oldPhotos[i].dispose();
                 this._disposalService.dispose(this._oldPhotos[i]);
                 this._oldPhotos[i] = null;
             }

@@ -1,12 +1,13 @@
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
+import { IDisposable } from './idisposable';
 import { IMouseClickReceiver } from '../visuals/imouse-click-reciever';
 import { IMouseOverReceiver } from '../visuals/imouse-over-reciever';
 import { MouseWatcherEvent } from './mouse-watcher-event';
 import { VisualContext } from './visual-context';
 
-export class MouseWatcher {
+export class MouseWatcher implements IDisposable {
     private _mouseoverSubscription: Subscription;
     private _mouseclickSubscription: Subscription;
     private _currMouseOverReceiver: IMouseOverReceiver;

@@ -1,8 +1,9 @@
 import { ArgumentNullError } from './argument-null-error';
 import { DisposalService } from '../services/disposal-service';
+import { IDisposable } from './idisposable';
 
-export class VisualContext {
-    private _disposed = false;
+export class VisualContext implements IDisposable {
+    private _isDisposed = false;
 
     constructor(private _disposalService: DisposalService,
                 private _scene?: THREE.Scene,
@@ -92,26 +93,28 @@ export class VisualContext {
     }
 
     dispose(): void {
-        if (!this._disposed) {
-            this._disposed = true;
-
-            this.scene.remove(this._sun);
-            this._disposalService.dispose(this._sun);
-            this._sun = null;
-
-            this.scene.remove(this._ambient);
-            this._disposalService.dispose(this._ambient);
-            this._ambient = null;
-
-            this.scene.remove(this._camera);
-            this._disposalService.dispose(this._camera);
-            this._camera = null;
-
-            this._disposalService.dispose(this._scene);
-            this._scene = null;
-
-            this._renderer.dispose();
-            this._renderer = null;
+        if (this._isDisposed) {
+            return;
         }
+
+        this._isDisposed = true;
+
+        this.scene.remove(this._sun);
+        this._disposalService.dispose(this._sun);
+        this._sun = null;
+
+        this.scene.remove(this._ambient);
+        this._disposalService.dispose(this._ambient);
+        this._ambient = null;
+
+        this.scene.remove(this._camera);
+        this._disposalService.dispose(this._camera);
+        this._camera = null;
+
+        this._disposalService.dispose(this._scene);
+        this._scene = null;
+
+        this._renderer.dispose();
+        this._renderer = null;
     }
 }

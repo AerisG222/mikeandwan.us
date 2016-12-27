@@ -1,10 +1,11 @@
 import { ArgumentNullError } from '../models/argument-null-error';
 import { Category } from '../models/category';
 import { DisposalService } from '../services/disposal-service';
+import { IDisposable } from '../models/idisposable';
 import { IVisual } from './ivisual';
 
-export class YearVisual extends THREE.Object3D implements IVisual {
-    private _disposed = false;
+export class YearVisual extends THREE.Object3D implements IDisposable, IVisual {
+    private _isDisposed = false;
 
     private _categoryList: Array<Category>;
 
@@ -55,21 +56,25 @@ export class YearVisual extends THREE.Object3D implements IVisual {
         }
     }
 
-    render(): void {
-
+    render(clockDelta: number, elapsed: number): void {
+        for (let i = 0; i < this._categoryList.length; i++) {
+            this._categoryList[i].visual.render(clockDelta, elapsed);
+        }
     }
 
     dispose(): void {
-        if (!this._disposed) {
-            this._disposed = true;
-
-            for (let i = 0; i < this._categoryList.length; i++) {
-                this._categoryList[i].visual.dispose();
-                this._categoryList[i] = null;
-            }
-
-            this._disposalService.dispose(this);
-            this._categoryList = null;
+        if (this._isDisposed) {
+            return;
         }
+
+        this._isDisposed = true;
+
+        for (let i = 0; i < this._categoryList.length; i++) {
+            this.remove(this._categoryList[i].visual);
+            this._disposalService.dispose(this._categoryList[i].visual);
+            this._categoryList[i] = null;
+        }
+
+        this._categoryList = null;
     }
 }

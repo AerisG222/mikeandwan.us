@@ -11,23 +11,23 @@ import { DisposalService } from '../services/disposal-service';
 import { FrustrumCalculator } from '../services/frustrum-calculator';
 import { ICategory } from '../models/icategory';
 import { IController } from './icontroller';
+import { IDisposable } from '../models/idisposable';
 import { StateService } from '../services/state-service';
 import { VisualContext } from '../models/visual-context';
 import { YearVisual } from '../visuals/year-visual';
 
-export class CategoryListController implements IController {
-    private _ctx: VisualContext;
+export class CategoryListController implements IController, IDisposable {
+    private _arrows: ArrowNextPreviousVisual;
     private _categorySelectedSubscription: Subscription;
-
-    private _disposed = false;
-    private _lastElapsed = 0;
+    private _ctx: VisualContext;
     private _idx = 0;
+    private _isDisposed = false;
+    private _lastElapsed = 0;
+    private _maxDepth: number;
+    private _maxHeight: number;
+    private _maxWidth: number;
     private _visualsEnabled = true;
     private _yearList: Array<YearVisual> = [];
-    private _heightWhenDisplayed: number;
-    private _widthWhenDisplayed: number;
-    private _zWhenDisplayed: number;
-    private _arrows: ArrowNextPreviousVisual;
 
     constructor(private _dataService: DataService,
                 private _stateService: StateService,
@@ -50,12 +50,12 @@ export class CategoryListController implements IController {
         }
 
         this._ctx = _stateService.visualContext;
-        this._zWhenDisplayed = this._frustrumCalculator.calculateZForFullFrame(this._ctx.camera) - 20;
+        this._maxDepth = this._frustrumCalculator.calculateZForFullFrame(this._ctx.camera) - 20;
 
-        let bounds = this._frustrumCalculator.calculateBounds(this._ctx.camera, this._zWhenDisplayed);
+        let bounds = this._frustrumCalculator.calculateBounds(this._ctx.camera, this._maxDepth);
 
-        this._heightWhenDisplayed = bounds.y;
-        this._widthWhenDisplayed = bounds.x;
+        this._maxHeight = bounds.y;
+        this._maxWidth = bounds.x;
 
         this._categorySelectedSubscription = this._stateService.categorySelectedObservable.subscribe(cat => this.onCategorySelected(cat));
 
@@ -75,7 +75,7 @@ export class CategoryListController implements IController {
     }
 
     moveNextYear() {
-        if (this._disposed) {
+        if (this._isDisposed) {
             return;
         }
 
@@ -91,7 +91,7 @@ export class CategoryListController implements IController {
     }
 
     movePrevYear() {
-        if (this._disposed) {
+        if (this._isDisposed) {
             return;
         }
 
@@ -106,8 +106,8 @@ export class CategoryListController implements IController {
         }
     }
 
-    render(delta: number, elapsed: number) {
-        if (this._disposed) {
+    render(clockDelta: number, elapsed: number) {
+        if (this._isDisposed) {
             return;
         }
 
@@ -117,14 +117,10 @@ export class CategoryListController implements IController {
             return;
         }
 
-        this._arrows.render(delta, elapsed);
+        this._arrows.render(clockDelta, elapsed);
 
         for (let i = 0; i < this._yearList.length; i++) {
-            let year = this._yearList[i];
-
-            for (let j = 0; j < year.categoryList.length; j++) {
-                year.categoryList[j].visual.render(delta, elapsed);
-            }
+            this._yearList[i].render(clockDelta, elapsed);
         }
     }
 
@@ -142,19 +138,26 @@ export class CategoryListController implements IController {
     }
 
     dispose(): void {
-        if (!this._disposed) {
-            this._disposed = true;
-
-            this._categorySelectedSubscription.unsubscribe();
-            this._categorySelectedSubscription = null;
-
-            for (let i = 0; i < this._yearList.length; i++) {
-                this._yearList[i].dispose();
-                this._yearList[i] = null;
-            }
-
-            this._yearList = null;
+        if (this._isDisposed) {
+            return;
         }
+
+        this._isDisposed = true;
+
+        this._categorySelectedSubscription.unsubscribe();
+        this._categorySelectedSubscription = null;
+
+        this._ctx.scene.remove(this._arrows);
+        this._disposalService.dispose(this._arrows);
+        this._arrows = null;
+
+        for (let i = 0; i < this._yearList.length; i++) {
+            this._ctx.scene.remove(this._yearList[i]);
+            this._disposalService.dispose(this._yearList[i]);
+            this._yearList[i] = null;
+        }
+
+        this._yearList = null;
     }
 
     private updateArrowVisibility(): void {
@@ -204,7 +207,7 @@ export class CategoryListController implements IController {
     private prepareYear(yearIndex: number, theYear: number, categories: Array<ICategory>): YearVisual {
         let year = new YearVisual(this._disposalService, theYear, this.generateColor());
 
-        let clc = new CategoryLayoutCalculator(this._heightWhenDisplayed, this._widthWhenDisplayed);
+        let clc = new CategoryLayoutCalculator(this._maxHeight, this._maxWidth);
         let layout = clc.calculate(categories.length);
         let catIndex = 0;
 
@@ -220,7 +223,7 @@ export class CategoryListController implements IController {
                                                             layout.hexagon,
                                                             new THREE.Vector3(lp.center.x,
                                                                               lp.center.y,
-                                                                              this._zWhenDisplayed),
+                                                                              this._maxDepth),
                                                             this.getOffscreenPosition(),
                                                             year.color);
 

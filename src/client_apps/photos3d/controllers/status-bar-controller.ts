@@ -4,10 +4,8 @@ import { StateService } from '../services/state-service';
 import { StatusBarVisual } from '../visuals/status-bar-visual';
 
 export class StatusBarController implements IController {
-    private _visualsEnabled = true;
-    private _disposed = false;
-
     private _status: StatusBarVisual;
+    private _visualsEnabled = true;
 
     constructor(private _stateService: StateService) {
         if (_stateService == null) {
@@ -41,15 +39,6 @@ export class StatusBarController implements IController {
             } else {
                 this._status.hide();
             }
-        }
-    }
-
-    dispose(): void {
-        if (!this._disposed) {
-            this._disposed = true;
-
-            this._status.dispose();
-            this._status = null;
         }
     }
 }

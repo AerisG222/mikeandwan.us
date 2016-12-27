@@ -21,28 +21,28 @@ import { VisualContext } from './models/visual-context';
 export class Photos3D {
     private _axisHelper: THREE.AxisHelper;
     private _bg: IController;
-    private _status: IController;
-    private _help: IController;
-    private _catList: CategoryListController;
-    private _photoList: PhotoListController;
-    private _pointLights: IController;
-    private _resizeSubscription: Subscription;
-    private _unloadSubscription: Subscription;
-    private _categorySelectedSubscription: Subscription;
-    private _dialogSubscription: Subscription;
     private _blurSubscription: Subscription;
-    private _focusSubscription: Subscription;
-    private _mouseWatcher: MouseWatcher;
-
+    private _categorySelectedSubscription: Subscription;
+    private _catList: CategoryListController;
     private _clock = new THREE.Clock();
     private _dataService = new DataService();
+    private _dialogSubscription: Subscription;
     private _disposalService = new DisposalService();
+    private _focusSubscription: Subscription;
     private _frustrumCalculator = new FrustrumCalculator();
+    private _help: IController;
+    private _isPaused = false;
+    private _mouseWatcher: MouseWatcher;
+    private _photoList: PhotoListController;
+    private _photoListMode = false;
+    private _pointLights: IController;
+    private _resizeSubscription: Subscription;
     private _scaleCalculator = new ScaleCalculator();
+    private _status: IController;
+    private _unloadSubscription: Subscription;
+
     private _ctx = new VisualContext(this._disposalService);
     private _stateService = new StateService(this._ctx);
-    private _isPaused = false;
-    private _photoListMode = false;
 
     run() {
         // ensure scrollbars do not appear
@@ -176,9 +176,17 @@ export class Photos3D {
             this._axisHelper = new THREE.AxisHelper(500);
             this._ctx.scene.add(this._axisHelper);
         } else {
-            this._ctx.scene.remove(this._axisHelper);
-            this._axisHelper = null;
+            this.removeAxisHelper();
         }
+    }
+
+    private removeAxisHelper() {
+        if (this._axisHelper == null) {
+            return;
+        }
+
+        this._ctx.scene.remove(this._axisHelper);
+        this._disposalService.dispose(this._axisHelper);
     }
 
     private onResize(evt: UIEvent) {
@@ -248,23 +256,22 @@ export class Photos3D {
     }
 
     private render() {
-        let delta = this._clock.getDelta();
+        let clockDelta = this._clock.getDelta();
         let elapsed = this._clock.getElapsedTime();
 
-        this._bg.render(delta, elapsed);
-        this._catList.render(delta, elapsed);
-        this._photoList.render(delta, elapsed);
-        this._pointLights.render(delta, elapsed);
+        this._bg.render(clockDelta, elapsed);
+        this._catList.render(clockDelta, elapsed);
+        this._photoList.render(clockDelta, elapsed);
+        this._pointLights.render(clockDelta, elapsed);
 
         TWEEN.update();
     }
 
     private unload(evt: Event) {
-        this._resizeSubscription.unsubscribe();
-        this._resizeSubscription = null;
+        this.pause(true);
 
-        this._unloadSubscription.unsubscribe();
-        this._unloadSubscription = null;
+        this._blurSubscription.unsubscribe();
+        this._blurSubscription = null;
 
         this._categorySelectedSubscription.unsubscribe();
         this._categorySelectedSubscription = null;
@@ -272,11 +279,14 @@ export class Photos3D {
         this._dialogSubscription.unsubscribe();
         this._dialogSubscription = null;
 
-        this._blurSubscription.unsubscribe();
-        this._blurSubscription = null;
-
         this._focusSubscription.unsubscribe();
         this._focusSubscription = null;
+
+        this._resizeSubscription.unsubscribe();
+        this._resizeSubscription = null;
+
+        this._unloadSubscription.unsubscribe();
+        this._unloadSubscription = null;
 
         Mousetrap.unbind('esc');
         Mousetrap.unbind('space');
@@ -294,13 +304,13 @@ export class Photos3D {
 
         TWEEN.removeAll();
 
-        this._bg.dispose();
-        this._help.dispose();
-        this._status.dispose();
-        this._catList.dispose();
-        this._photoList.dispose();
-        this._pointLights.dispose();
+        this.removeAxisHelper();
 
-        this._ctx.dispose();
+        this._disposalService.dispose(this._bg);
+        this._disposalService.dispose(this._catList);
+        this._disposalService.dispose(this._mouseWatcher);
+        this._disposalService.dispose(this._photoList);
+        this._disposalService.dispose(this._pointLights);
+        this._disposalService.dispose(this._ctx);
     }
 }

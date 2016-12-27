@@ -3,34 +3,34 @@ import { Subscription } from 'rxjs/Subscription';
 import { DisposalService } from '../services/disposal-service';
 import { Hexagon } from '../models/hexagon';
 import { ICategory } from '../models/icategory';
+import { IDisposable } from '../models/idisposable';
 import { IMouseClickReceiver } from './imouse-click-reciever';
 import { IMouseOverReceiver } from './imouse-over-reciever';
 import { IVisual } from './ivisual';
 import { MouseWatcherEvent } from '../models/mouse-watcher-event';
 import { StateService } from '../services/state-service';
 
-export class CategoryVisual extends THREE.Object3D implements IVisual, IMouseOverReceiver, IMouseClickReceiver {
+export class CategoryVisual extends THREE.Object3D implements IDisposable, IMouseClickReceiver, IMouseOverReceiver, IVisual {
     private static readonly IMAGE_DEPTH = 4;
     private static readonly BORDER_WIDTH = 2;
+    private static readonly loader = new THREE.TextureLoader();
 
-    private static loader = new THREE.TextureLoader();
-
-    private _disposed = false;
-    private _ignoreMouseEvents = true;
-    private _isMouseOver = false;
     private _backgroundMesh: THREE.Mesh = null;
-    private _imageMesh: THREE.Mesh = null;
-    private _hoverPosition: THREE.Vector3;
     private _bringIntoViewTween: TWEEN.Tween;
-    private _removeFromViewTween: TWEEN.Tween;
-    private _mouseOverTween: TWEEN.Tween;
+    private _hoverPosition: THREE.Vector3;
+    private _ignoreMouseEvents = true;
+    private _imageMesh: THREE.Mesh = null;
+    private _isDisposed = false;
+    private _isMouseOver = false;
     private _mouseOutTween: TWEEN.Tween;
+    private _mouseOverTween: TWEEN.Tween;
     private _pauseSubscription: Subscription;
+    private _removeFromViewTween: TWEEN.Tween;
     private _rotateAnimationWaitTime: number;
-    private _rotateNextTriggerTime: number;
-    private _rotateStopTime: number;
     private _rotateDuration: number;
     private _rotateIsAnimating = false;
+    private _rotateNextTriggerTime: number;
+    private _rotateStopTime: number;
 
     constructor(private _stateService: StateService,
                 private _disposalService: DisposalService,
@@ -96,8 +96,8 @@ export class CategoryVisual extends THREE.Object3D implements IVisual, IMouseOve
             .start();
     }
 
-    render(delta: number, elapsed: number) {
-        if (this._disposed) {
+    render(clockDelta: number, elapsed: number) {
+        if (this._isDisposed) {
             return;
         }
 
@@ -117,17 +117,22 @@ export class CategoryVisual extends THREE.Object3D implements IVisual, IMouseOve
     }
 
     dispose(): void {
-        if (!this._disposed) {
-            this._disposed = true;
-
-            this._pauseSubscription.unsubscribe();
-            this._pauseSubscription = null;
-
-            this._disposalService.dispose(this);
-
-            this._backgroundMesh = null;
-            this._imageMesh = null;
+        if (this._isDisposed) {
+            return;
         }
+
+        this._isDisposed = true;
+
+        this._pauseSubscription.unsubscribe();
+        this._pauseSubscription = null;
+
+        this.remove(this._backgroundMesh);
+        this._disposalService.dispose(this._backgroundMesh);
+        this._backgroundMesh = null;
+
+        this.remove(this._imageMesh);
+        this._disposalService.dispose(this._imageMesh);
+        this._imageMesh = null;
     }
 
     updateElapsedTime(elapsed: number): void {

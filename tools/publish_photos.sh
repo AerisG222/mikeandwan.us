@@ -7,8 +7,8 @@
 DEBUG=y
 SSH_REMOTE_HOST=tifa
 SSH_USERNAME=mmorano
-PATH_SIZE_PHOTOS="/home/mmorano/git/SizePhotos/src/SizePhotos"
-PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup"
+PATH_SIZE_PHOTOS="/home/mmorano/git/SizePhotos/src/SizePhotos/bin/Debug/netcoreapp1.1/SizePhotos.dll"
+PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup/bin/Debug/netcoreapp1.1/GlacierBackup.dll"
 PATH_ASSET_ROOT="/srv/www/website_assets"
 PATH_IMAGE_SOURCE=
 CAT_NAME=
@@ -47,7 +47,7 @@ if [ "${PREVIEWMODE}" = 'y' ]; then
         rm -rf "${PATH_IMAGE_SOURCE}/review"
     fi
 
-    dotnet run -p "${PATH_SIZE_PHOTOS}" SizePhotos -f -p "${PATH_IMAGE_SOURCE}"
+    dotnet "${PATH_SIZE_PHOTOS}" -f -p "${PATH_IMAGE_SOURCE}"
 
     echo ''
     echo '****'
@@ -153,7 +153,7 @@ fi
 
 echo '* processing photos...'
 
-dotnet run -p "${PATH_SIZE_PHOTOS}" SizePhotos -i -c "${CAT_NAME}" -o "${PATH_LOCAL_SQL_FILE}" -p "${PATH_IMAGE_SOURCE}" -w "images" -y ${YEAR} ${PRIVATE_FLAG}
+dotnet "${PATH_SIZE_PHOTOS}" -i -c "${CAT_NAME}" -o "${PATH_LOCAL_SQL_FILE}" -p "${PATH_IMAGE_SOURCE}" -w "images" -y ${YEAR} ${PRIVATE_FLAG}
 
 # after processing the first time, we typically want to manually review all the photos to make sure
 # we keep the good ones and toss the bad / dupes /etc.  This check allows the user to bail if this
@@ -182,7 +182,7 @@ echo '* applying sql to local database...'
 psql -d maw_website -f "${PATH_LOCAL_SQL_FILE}"
 
 echo '* backing up photos to AWS Glacier...'
-dotnet run -p "${PATH_GLACIER_BACKUP}" glacier_backup us-east-1 photos assets "${DEST_IMAGES_CATEGORY_ROOT}" "${DEST_IMAGES_ROOT}/" photosql "${PATH_LOCAL_GLACIER_SQL_FILE}"
+dotnet "${PATH_GLACIER_BACKUP}" glacier_backup us-east-1 photos assets "${DEST_IMAGES_CATEGORY_ROOT}" "${DEST_IMAGES_ROOT}/" photosql "${PATH_LOCAL_GLACIER_SQL_FILE}"
 
 echo '* applying glacier sql file to local database...'
 psql -d maw_website -f "${PATH_LOCAL_GLACIER_SQL_FILE}"

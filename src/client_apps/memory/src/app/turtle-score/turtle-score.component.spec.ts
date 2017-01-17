@@ -5,7 +5,7 @@ import { TurtleScoreComponent } from './turtle-score.component';
 
 describe('Component: TurtleScore', () => {
   it('should create an instance', () => {
-    let component = new TurtleScoreComponent();
+    const component = new TurtleScoreComponent();
     expect(component).toBeTruthy();
   });
 });

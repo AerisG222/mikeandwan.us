@@ -39,7 +39,7 @@ export class CategoryListComponent implements AfterViewInit {
 
             this._navService.getCategoryDestinations(this._year)
                 .subscribe(destinations => {
-                    let d = destinations.map(x => new CategoryThumbnailInfo(x.category.teaserPhotoInfo.path,
+                    const d = destinations.map(x => new CategoryThumbnailInfo(x.category.teaserPhotoInfo.path,
                         x.category.teaserPhotoInfo.height,
                         x.category.teaserPhotoInfo.width,
                         x,
@@ -49,10 +49,10 @@ export class CategoryListComponent implements AfterViewInit {
                     this.thumbnailList.setItemList(d);
                     this.pager.setPageCount(this.pager.calcPageCount(d.length, this.thumbnailList.itemsPerPage));
 
-                    let lastIndex = this._stateService.lastCategoryIndex;
+                    const lastIndex = this._stateService.lastCategoryIndex;
 
                     if (lastIndex > 0) {
-                        let page = Math.floor(lastIndex / this.thumbnailList.itemsPerPage);
+                        const page = Math.floor(lastIndex / this.thumbnailList.itemsPerPage);
 
                         this.thumbnailList.setPageDisplayedIndex(page);
                         this.pager.setActivePage(page);

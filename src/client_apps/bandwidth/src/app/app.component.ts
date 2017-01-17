@@ -31,7 +31,7 @@ export class AppComponent {
     calculate(size: number, sizeScale: string, timeScale: string): void {
         let timeInSeconds = 0;
         let sizeInBytes = 0;
-        let calcResults: Result[] = [];
+        const calcResults: Result[] = [];
 
         // determine the divisor based on the time interval
         switch (timeScale) {
@@ -48,7 +48,7 @@ export class AppComponent {
                 timeInSeconds = 60 * 60 * 24;
                 break;
             default:
-                throw 'Invalid time interval specified!';
+                throw new Error('Invalid time interval specified!');
         }
 
         // now determine the full size of the file, in bits, based
@@ -67,7 +67,7 @@ export class AppComponent {
                 sizeInBytes = size * 1024 * 1024 * 1024 * 8;
                 break;
             default:
-                throw 'Invalid file size scale specified!';
+                throw new Error('Invalid file size scale specified!');
         }
 
         for (let i = 0; i < this.sizeArray.length; i++) {

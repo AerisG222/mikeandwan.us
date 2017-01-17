@@ -85,23 +85,23 @@ export class ThumbnailListComponent {
             return;
         }
 
-        let pageStartItemIndex = this.pageDisplayedIndex * this.itemsPerPage;
+        const pageStartItemIndex = this.pageDisplayedIndex * this.itemsPerPage;
 
         for (let i = 0; i < this.rowsPerPage; i++) {
-            let rowStartIndex = pageStartItemIndex + (this.itemsPerRow * i);
+            const rowStartIndex = pageStartItemIndex + (this.itemsPerRow * i);
 
             if (rowStartIndex >= this.itemList.length) {
                 return;
             }
 
-            let endPosition = Math.min(rowStartIndex + this.itemsPerRow, this.itemList.length);
+            const endPosition = Math.min(rowStartIndex + this.itemsPerRow, this.itemList.length);
 
             this.displayedRows.push(this.itemList.slice(rowStartIndex, endPosition));
         }
     }
 
     private updateItemsPerRow(): void {
-        let origItemsPerPage = this.itemsPerPage;
+        const origItemsPerPage = this.itemsPerPage;
 
         if (this._responsiveService._currBp === ResponsiveService.BP_LG) {
             this.itemsPerRow = 6;
@@ -111,7 +111,7 @@ export class ThumbnailListComponent {
 
         if (origItemsPerPage !== this.itemsPerPage) {
             // reset page displayed index to best match where the user left off
-            let targetIndex = origItemsPerPage * this.pageDisplayedIndex;
+            const targetIndex = origItemsPerPage * this.pageDisplayedIndex;
             this.pageDisplayedIndex = Math.floor(targetIndex / this.itemsPerPage);
 
             this.itemsPerPageUpdated.next(null);

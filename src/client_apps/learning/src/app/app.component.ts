@@ -41,7 +41,7 @@ export class AppComponent {
         this.currentChar = this.getNextChar();
 
         if (this.currentSpeaker !== 'No Sound') {
-            let srcs = this.getCurrentAudioSources();
+            const srcs = this.getCurrentAudioSources();
 
             // originally tried to use the source elements under the audio, but could not get this to
             // work cross browser (worked fine in ff, but in chrome only played the audio after moving
@@ -58,7 +58,7 @@ export class AppComponent {
     }
 
     getCurrentAudioSources(): AudioSource {
-        let prefix = `/audio/learning/${this.currentSpeaker.toLowerCase()}/${this.currentChar.toLowerCase()}`;
+        const prefix = `/audio/learning/${this.currentSpeaker.toLowerCase()}/${this.currentChar.toLowerCase()}`;
 
         return new AudioSource(`${prefix}.mp3`, `${prefix}.ogg`);
     }
@@ -73,7 +73,7 @@ export class AppComponent {
         } else if (this.currentLesson === 'Numbers') {
             return this.getNextInArray(this.currentChar, this.numbers);
         } else {
-            let arr = this.letters.concat(this.numbers);
+            const arr = this.letters.concat(this.numbers);
             return arr[Math.floor(Math.random() * arr.length)];
         }
     }

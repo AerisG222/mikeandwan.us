@@ -5,7 +5,7 @@ import {PhotoListContext} from './photo-list-context.model';
 
 describe('PhotoListContext', () => {
   it('should create an instance', () => {
-    let component = new PhotoListContext(null, null, null);
+    const component = new PhotoListContext(null, null, null);
     expect(component).toBeTruthy();
   });
 });

@@ -5,7 +5,7 @@ import { WinnerScreenComponent } from './winner-screen.component';
 
 describe('Component: WinnerScreen', () => {
   it('should create an instance', () => {
-    let component = new WinnerScreenComponent();
+    const component = new WinnerScreenComponent();
     expect(component).toBeTruthy();
   });
 });

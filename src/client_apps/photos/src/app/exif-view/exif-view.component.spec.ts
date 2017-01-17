@@ -5,7 +5,7 @@ import { ExifViewComponent } from './exif-view.component';
 
 describe('Component: ExifView', () => {
   it('should create an instance', () => {
-    let component = new ExifViewComponent(null);
+    const component = new ExifViewComponent(null);
     expect(component).toBeTruthy();
   });
 });

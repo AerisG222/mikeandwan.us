@@ -5,7 +5,7 @@ import { PlayerSelectComponent } from './player-select.component';
 
 describe('Component: PlayerSelect', () => {
   it('should create an instance', () => {
-    let component = new PlayerSelectComponent();
+    const component = new PlayerSelectComponent();
     expect(component).toBeTruthy();
   });
 });

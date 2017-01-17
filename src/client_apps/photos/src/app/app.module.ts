@@ -1,8 +1,9 @@
-import { NgModule }      from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }   from '@angular/forms';
-import { HttpModule }     from '@angular/http';
-import { RouterModule }  from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { RouterModule } from '@angular/router';
+import { Data } from '@angular/router';
 
 import { BreadcrumbListComponent } from '../ng_maw/breadcrumb-list/breadcrumb-list.component';
 import { DialogComponent } from '../ng_maw/dialog/dialog.component';
@@ -13,7 +14,7 @@ import { BreadcrumbService } from '../ng_maw/shared/breadcrumb.service';
 import { LocalStorageService } from '../ng_maw/shared/local-storage.service';
 import { ResponsiveService } from '../ng_maw/shared/responsive.service';
 
-import { AppComponent }  from './app.component';
+import { AppComponent } from './app.component';
 import { CategoryLinkComponent } from './category-link/category-link.component';
 import { CategoryListComponent } from './category-list/category-list.component';
 import { CommentViewComponent } from './comment-view/comment-view.component';
@@ -47,11 +48,11 @@ import { PhotoNavigationService } from './shared/photo-navigation.service';
         HttpModule,
         RouterModule.forRoot([
             { path: '',                     component: ModeComponent },
-            { path: 'random',               component: PhotoListComponent,   data: ModeRouteInfo.RANDOM },
+            { path: 'random',               component: PhotoListComponent,   data: { mode: ModeRouteInfo.MODE_RANDOM } },
             { path: 'year/:year',           component: CategoryListComponent },
-            { path: 'year/:year/:category', component: PhotoListComponent,   data: ModeRouteInfo.CATEGORY },
-            { path: 'comment/:type/:order', component: PhotoListComponent,   data: ModeRouteInfo.COMMENT },
-            { path: 'rating/:type/:order',  component: PhotoListComponent,   data: ModeRouteInfo.RATING },
+            { path: 'year/:year/:category', component: PhotoListComponent,   data: { mode: ModeRouteInfo.MODE_CATEGORY } },
+            { path: 'comment/:type/:order', component: PhotoListComponent,   data: { mode: ModeRouteInfo.MODE_COMMENT } },
+            { path: 'rating/:type/:order',  component: PhotoListComponent,   data: { mode: ModeRouteInfo.MODE_RATING } },
             { path: ':mode',                component: ModeComponent },
             { path: '**',                   redirectTo: '/' }
         ])

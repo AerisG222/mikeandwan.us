@@ -5,7 +5,7 @@ import { CommentViewComponent } from './comment-view.component';
 
 describe('Component: CommentView', () => {
   it('should create an instance', () => {
-    let component = new CommentViewComponent(null);
+    const component = new CommentViewComponent(null);
     expect(component).toBeTruthy();
   });
 });

@@ -41,7 +41,7 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
                 photoSourceFactory: PhotoSourceFactory) {
         this._activatedRoute.params.subscribe(params => {
             this._activatedRoute.data.subscribe(data => {
-                this._modeInfo = <ModeRouteInfo>data;
+                this._modeInfo = ModeRouteInfo.getMode(data[ModeRouteInfo.PARAM_MODE]);
                 this._photoSource = photoSourceFactory.create(data, params);
                 this.showPhotoView = _stateService.config.displayMode === Config.DISPLAY_MODE_INLINE;
             });
@@ -87,7 +87,7 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
                     this.context = new RandomPhotoListContext(photos, this._modeInfo.mode, this._stateService, this._photoSource);
 
                     (<RandomPhotoListContext>this.context).photoAddedEventEmitter.subscribe((photo: Photo) => {
-                        let thumb = new PhotoThumbnailInfo(photo.photo.xsInfo.path,
+                        const thumb = new PhotoThumbnailInfo(photo.photo.xsInfo.path,
                             photo.photo.xsInfo.height,
                             photo.photo.xsInfo.width,
                             photo);
@@ -100,7 +100,7 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
 
                 this.context.photoUpdated.subscribe((idx: number) => this.onPhotoUpdated(idx));
 
-                let thumbs = photos.map(x => new PhotoThumbnailInfo(x.photo.xsInfo.path,
+                const thumbs = photos.map(x => new PhotoThumbnailInfo(x.photo.xsInfo.path,
                     x.photo.xsInfo.height,
                     x.photo.xsInfo.width,
                     x));

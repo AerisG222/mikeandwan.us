@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     isWeekend(currDate: Date): boolean {
-        let day: number = currDate.getDay();
+        const day: number = currDate.getDay();
 
         if (day === 0 || day === 6) {
             return true;
@@ -33,7 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     updateMessage(): void {
-        let theDate: Date = new Date();
+        const theDate: Date = new Date();
 
         if (this.isWeekend(theDate)) {
             this.value = 'Sweet! It\'s the weekend!';

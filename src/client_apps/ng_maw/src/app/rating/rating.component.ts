@@ -15,8 +15,8 @@ export class RatingComponent implements OnInit {
     ratingIcons: Array<string> = [];
 
     ngOnInit(): void {
-        let range: Array<number> = [];
-        let icons: Array<string> = [];
+        const range: Array<number> = [];
+        const icons: Array<string> = [];
 
         for (let i = 0; i < this.maxRating; i++) {
             range.push(i + 1);

@@ -5,7 +5,7 @@ import { EffectsViewComponent } from './effects-view.component';
 
 describe('Component: EffectsView', () => {
   it('should create an instance', () => {
-    let component = new EffectsViewComponent();
+    const component = new EffectsViewComponent();
     expect(component).toBeTruthy();
   });
 });

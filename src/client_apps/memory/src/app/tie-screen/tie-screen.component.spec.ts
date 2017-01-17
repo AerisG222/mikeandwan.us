@@ -5,7 +5,7 @@ import { TieScreenComponent } from './tie-screen.component';
 
 describe('Component: TieScreen', () => {
   it('should create an instance', () => {
-    let component = new TieScreenComponent();
+    const component = new TieScreenComponent();
     expect(component).toBeTruthy();
   });
 });

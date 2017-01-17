@@ -5,7 +5,7 @@ import { PhotoDialogComponent } from './photo-dialog.component';
 
 describe('Component: PhotoDialog', () => {
   it('should create an instance', () => {
-    let component = new PhotoDialogComponent(null, null);
+    const component = new PhotoDialogComponent(null, null);
     expect(component).toBeTruthy();
   });
 });

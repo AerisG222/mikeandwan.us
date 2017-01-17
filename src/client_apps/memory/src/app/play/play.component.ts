@@ -53,7 +53,7 @@ export class PlayComponent implements OnInit {
 
         if (this.player1.character.name === this.player2.character.name) {
             // handle case where both players selected same character
-            let tmp = {
+            const tmp = {
                 character: {
                     name: `Player$(playerNumber}`,
                     color: this.player1.character.color,

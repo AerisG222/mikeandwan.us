@@ -92,21 +92,21 @@ export class GameBoardComponent {
     // http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
     private shuffle(cards: Array<ICardInfo>): void {
         for (let i = 0; i < cards.length; i++) {
-            let rand = this.getRandomInt(i, cards.length);
-            let tmp = cards[i];
+            const rand = this.getRandomInt(i, cards.length);
+            const tmp = cards[i];
             cards[i] = cards[rand];
             cards[rand] = tmp;
         };
     }
 
     private generateGameBoard(): Array<Array<ICardInfo>> {
-        let sourceCards = this._svc.allCards;
-        let gameCards: Array<ICardInfo> = [];
+        const sourceCards = this._svc.allCards;
+        const gameCards: Array<ICardInfo> = [];
 
         // get the cards that will be on the board, and add a copy for the matching elements
         for (let i = 0; i < 10; i++) {
-            let idxToRemove = this.getRandomInt(0, sourceCards.length);
-            let c = sourceCards.splice(idxToRemove, 1)[0];
+            const idxToRemove = this.getRandomInt(0, sourceCards.length);
+            const c = sourceCards.splice(idxToRemove, 1)[0];
 
             // add clones to the board
             gameCards[i] = JSON.parse(JSON.stringify(c));

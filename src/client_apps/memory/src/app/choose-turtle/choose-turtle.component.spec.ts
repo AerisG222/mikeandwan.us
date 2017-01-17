@@ -5,7 +5,7 @@ import { ChooseTurtleComponent } from './choose-turtle.component';
 
 describe('Component: ChooseTurtle', () => {
   it('should create an instance', () => {
-    let component = new ChooseTurtleComponent(null);
+    const component = new ChooseTurtleComponent(null);
     expect(component).toBeTruthy();
   });
 });

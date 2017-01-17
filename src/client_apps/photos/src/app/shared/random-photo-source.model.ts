@@ -16,7 +16,7 @@ export class RandomPhotoSource extends PhotoSource {
             this._dataService
                 .getRandomPhoto()
                 .subscribe((x: IPhotoAndCategory) => {
-                    let arr: Array<Photo> = [];
+                    const arr: Array<Photo> = [];
 
                     arr.push(new Photo(x.photo, x.category));
 

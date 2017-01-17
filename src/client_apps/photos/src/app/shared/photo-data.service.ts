@@ -102,7 +102,7 @@ export class PhotoDataService {
                 .map((res: Response) => res.json())
                 .subscribe(comments => {
                     // deal with dates
-                    let c = comments.map((x: IComment) => {
+                    const c = comments.map((x: IComment) => {
                         x.entryDate = new Date(x.entryDate.toString());
                         return x;
                     });
@@ -121,7 +121,7 @@ export class PhotoDataService {
     }
 
     private getPostHeaders(): Headers {
-        let h = new Headers();
+        const h = new Headers();
         h.append('Accept', 'application/json');
         h.append('Content-Type', 'application/json');
 

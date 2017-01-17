@@ -5,7 +5,7 @@ import { VideoListComponent } from './video-list.component';
 
 describe('Component: VideoList', () => {
   it('should create an instance', () => {
-    let component = new VideoListComponent(null, null, null, null, null, null);
+    const component = new VideoListComponent(null, null, null, null, null, null);
     expect(component).toBeTruthy();
   });
 });

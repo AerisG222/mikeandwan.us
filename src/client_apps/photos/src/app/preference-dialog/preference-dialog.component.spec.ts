@@ -5,7 +5,7 @@ import { PreferenceDialogComponent } from './preference-dialog.component';
 
 describe('Component: PreferenceDialog', () => {
   it('should create an instance', () => {
-    let component = new PreferenceDialogComponent(null, null);
+    const component = new PreferenceDialogComponent(null, null);
     expect(component).toBeTruthy();
   });
 });

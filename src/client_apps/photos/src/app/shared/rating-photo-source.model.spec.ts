@@ -5,7 +5,7 @@ import {RatingPhotoSource} from './rating-photo-source.model';
 
 describe('RatingPhotoSource', () => {
   it('should create an instance', () => {
-    let component = new RatingPhotoSource(null, null, null);
+    const component = new RatingPhotoSource(null, null, null);
     expect(component).toBeTruthy();
   });
 });

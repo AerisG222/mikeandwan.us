@@ -5,7 +5,7 @@ import { BreadcrumbListComponent } from './breadcrumb-list.component';
 
 describe('Component: BreadcrumbList', () => {
   it('should create an instance', () => {
-    let component = new BreadcrumbListComponent(null);
+    const component = new BreadcrumbListComponent(null);
     expect(component).toBeTruthy();
   });
 });

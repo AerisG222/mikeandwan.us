@@ -1,8 +1,8 @@
-import { NgModule }      from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }   from '@angular/forms';
-import { HttpModule }     from '@angular/http';
-import { RouterModule }  from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { RouterModule } from '@angular/router';
 
 import { BreadcrumbListComponent } from '../ng_maw/breadcrumb-list/breadcrumb-list.component';
 import { DialogComponent } from '../ng_maw/dialog/dialog.component';
@@ -12,7 +12,7 @@ import { BreadcrumbService } from '../ng_maw/shared/breadcrumb.service';
 import { LocalStorageService } from '../ng_maw/shared/local-storage.service';
 import { ResponsiveService } from '../ng_maw/shared/responsive.service';
 
-import { AppComponent }  from './app.component';
+import { AppComponent } from './app.component';
 import { CategoryListComponent } from './category-list/category-list.component';
 import { HeaderComponent } from './header/header.component';
 import { PreferenceDialogComponent } from './preference-dialog/preference-dialog.component';

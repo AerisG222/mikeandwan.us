@@ -4,7 +4,7 @@ export class SizeService {
     RATIO = this.MAX_THUMB_WIDTH / this.MAX_THUMB_HEIGHT;
 
     getThumbHeight(width: number, height: number): number {
-        let thumbRatio = width / height;
+        const thumbRatio = width / height;
 
         if (thumbRatio <= this.RATIO) {
             return this.MAX_THUMB_HEIGHT;
@@ -14,7 +14,7 @@ export class SizeService {
     }
 
     getThumbWidth(width: number, height: number): number {
-        let thumbRatio = width / height;
+        const thumbRatio = width / height;
 
         if (thumbRatio >= this.RATIO) {
             return this.MAX_THUMB_WIDTH;

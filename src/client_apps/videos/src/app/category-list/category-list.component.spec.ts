@@ -5,7 +5,7 @@ import { CategoryListComponent } from './category-list.component';
 
 describe('Component: CategoryList', () => {
   it('should create an instance', () => {
-    let component = new CategoryListComponent(null, null, null, null, null, null);
+    const component = new CategoryListComponent(null, null, null, null, null, null);
     expect(component).toBeTruthy();
   });
 });

@@ -5,7 +5,7 @@ import { ExifTableComponent } from './exif-table.component';
 
 describe('Component: ExifTable', () => {
   it('should create an instance', () => {
-    let component = new ExifTableComponent();
+    const component = new ExifTableComponent();
     expect(component).toBeTruthy();
   });
 });

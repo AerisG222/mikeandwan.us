@@ -37,7 +37,7 @@ export class DialogComponent implements AfterViewInit {
     }
 
     setVisibility(isShown: boolean): void {
-        let doShow = isShown ? 'show' : 'hide';
+        const doShow = isShown ? 'show' : 'hide';
 
         jQuery(this._modalDiv).modal(doShow);
 

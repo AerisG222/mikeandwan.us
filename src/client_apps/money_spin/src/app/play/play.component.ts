@@ -21,7 +21,7 @@ export class PlayComponent {
     }
 
     addScore(score: number): void {
-        let isGameOver = this._stateService.evaluateTurn(score);
+        const isGameOver = this._stateService.evaluateTurn(score);
 
         if (!isGameOver) {
             this.updateCurrentPlayer();

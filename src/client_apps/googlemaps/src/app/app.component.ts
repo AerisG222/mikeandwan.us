@@ -2,7 +2,7 @@ import { Component, ViewChild, NgZone } from '@angular/core';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/concat';
 
-import { MapComponent }  from './map/map.component';
+import { MapComponent } from './map/map.component';
 
 @Component({
     selector: 'app-root',

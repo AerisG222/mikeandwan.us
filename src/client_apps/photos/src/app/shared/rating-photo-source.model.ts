@@ -32,7 +32,7 @@ export class RatingPhotoSource extends PhotoSource {
             }
 
             obs.subscribe((results: Array<IPhotoAndCategory>) => {
-                let result = results.map(x => new Photo(x.photo, x.category));
+                const result = results.map(x => new Photo(x.photo, x.category));
 
                 observer.next(result);
                 observer.complete();

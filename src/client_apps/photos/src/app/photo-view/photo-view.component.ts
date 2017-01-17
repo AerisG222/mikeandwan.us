@@ -133,7 +133,7 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     toggleFullscreen(): void {
         this.showFullscreen = !this.showFullscreen;
 
-        let body = <HTMLElement>document.querySelector('body');
+        const body = <HTMLElement>document.querySelector('body');
 
         if (this.showFullscreen) {
             body.style.overflow = 'hidden';
@@ -148,7 +148,7 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     rotate(direction: number): void {
-        let idx = this.context.current.rotationClassIndex + direction;
+        const idx = this.context.current.rotationClassIndex + direction;
 
         if (idx < 0) {
             this.context.current.rotationClassIndex = this.rotationClassArray.length - 1;
@@ -160,7 +160,7 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
 
         // apply the class to the canvas if we are showing histograms
         if (this.showHistogram) {
-            let canvas = this.getHistogramCanvas();
+            const canvas = this.getHistogramCanvas();
 
             canvas.className = this.rotationClassArray[this.context.current.rotationClassIndex];
         }
@@ -192,11 +192,11 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     onFiltersUpdated(filters: FilterSettings): void {
-        let img = <HTMLElement>document.querySelector('div.main-image img, div.main-image canvas');
+        const img = <HTMLElement>document.querySelector('div.main-image img, div.main-image canvas');
 
         // img will be null when in popup mode
         if (img != null) {
-            let styl = filters.styleValue;
+            const styl = filters.styleValue;
 
             img.style.webkitFilter = styl;
             img.style.filter = styl;
@@ -204,7 +204,7 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     private hideHistogram(): void {
-        let canvas = this.getHistogramCanvas();
+        const canvas = this.getHistogramCanvas();
 
         if (canvas != null) {
             Pixastic.revert(canvas);
@@ -224,13 +224,13 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
             return;
         }
 
-        let canvas = this.getHistogramCanvas();
+        const canvas = this.getHistogramCanvas();
 
         if (canvas != null) {
             this.hideHistogram();
         }
 
-        let img = this.getHistogramImage();
+        const img = this.getHistogramImage();
 
         Pixastic.process(img, 'histogram', { average: true, paint: true, color: 'rgba(255,255,255,0.5)' });
     }
@@ -256,7 +256,7 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
 
         // images are already scaled to fit w/o rotation, so no need to do anything in the standard orientation
         if (this.context.current.rotationClassIndex % 2 === 1) {
-            let img = <HTMLElement>document.querySelector('div.main-image img, div.main-image canvas');
+            const img = <HTMLElement>document.querySelector('div.main-image img, div.main-image canvas');
 
             if (img.clientWidth > this._containerBox.height) {
                 this.rotationContainmentMaxWidth = this._containerBox.height + 'px';
@@ -268,7 +268,7 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
         }
 
         if (this.showHistogram) {
-            let canvas = this.getHistogramCanvas();
+            const canvas = this.getHistogramCanvas();
 
             canvas.style.maxHeight = this.rotationContainmentMaxHeight;
             canvas.style.maxWidth = this.rotationContainmentMaxWidth;
@@ -276,7 +276,7 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     private updateContainerBox(): void {
-        let el = document.querySelector('div.main-image > div');
+        const el = document.querySelector('div.main-image > div');
 
         this._containerBox = new ContainerBox(el.clientWidth, el.clientHeight);
     }

@@ -20,7 +20,7 @@ export class BreadcrumbService {
     navigateToBreadcrumb(dest: Breadcrumb): Promise<any> {
         // remove from end of list until we find the selected entry
         while (this.breadcrumbs.length > 0) {
-            let lastBreadcrumb = this.breadcrumbs.pop();
+            const lastBreadcrumb = this.breadcrumbs.pop();
 
             if (lastBreadcrumb === dest) {
                 break;

@@ -5,7 +5,7 @@ import { RatingViewComponent } from './rating-view.component';
 
 describe('Component: RatingView', () => {
   it('should create an instance', () => {
-    let component = new RatingViewComponent(null);
+    const component = new RatingViewComponent(null);
     expect(component).toBeTruthy();
   });
 });

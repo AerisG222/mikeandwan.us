@@ -21,7 +21,7 @@ export class ExifTableComponent {
         this._data = values;
 
         for (let i = 0; i < values.length; i++) {
-          let leftDetail = values[i];
+          const leftDetail = values[i];
           let rightDetail = new ExifDetail('', '');
 
           i++;

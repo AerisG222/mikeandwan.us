@@ -55,7 +55,7 @@ export class CategoryListComponent implements AfterViewInit {
     setCategories(categories: Array<ICategory>): void {
         this.categories = categories;
 
-        let thumbnails: Array<CategoryThumbnailInfo> = categories.map((cat: ICategory) =>
+        const thumbnails: Array<CategoryThumbnailInfo> = categories.map((cat: ICategory) =>
             new CategoryThumbnailInfo(cat.teaserThumbnail.path,
                 this._sizeService.getThumbHeight(cat.teaserThumbnail.width, cat.teaserThumbnail.height),
                 this._sizeService.getThumbWidth(cat.teaserThumbnail.width, cat.teaserThumbnail.height),
@@ -75,7 +75,7 @@ export class CategoryListComponent implements AfterViewInit {
 
     onThumbnailSelected(item: SelectedThumbnail): void {
         if (item.index >= 0 && this.categories.length > item.index) {
-            let cat: ICategory = (<CategoryThumbnailInfo>item.thumbnail).category;
+            const cat: ICategory = (<CategoryThumbnailInfo>item.thumbnail).category;
             this._navService.gotoVideoList(cat.year, cat);
         }
     }

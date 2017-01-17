@@ -24,16 +24,16 @@ export class VideoNavigationService {
 
     onRouterEvent(navEnd: NavigationEnd): void {
         if (!this._isInitialized) {
-            let snapshot = this._router.routerState.snapshot;
-            let parts = snapshot.url.toLowerCase().split('/').filter(el => el.length !== 0);
-            let crumbs = [];
+            const snapshot = this._router.routerState.snapshot;
+            const parts = snapshot.url.toLowerCase().split('/').filter(el => el.length !== 0);
+            const crumbs = [];
 
             if (parts.length > 0) {
                 crumbs.push(new Breadcrumb(parts[0], [ '/' ]));
 
                 if (parts.length > 1) {
                     this._dataService.getCategoriesForYear(parseInt(parts[0], 10)).subscribe(x => {
-                        let matches = x.filter(y => y.id === parseInt(parts[1], 10));
+                        const matches = x.filter(y => y.id === parseInt(parts[1], 10));
 
                         if (matches.length === 1) {
                             crumbs.push(new Breadcrumb(matches[0].name, [ '/' + parts[0] ]));
@@ -65,7 +65,7 @@ export class VideoNavigationService {
     }
 
     private getYearListBreadcrumbs(year: number): Array<Breadcrumb> {
-        let crumbs: Array<Breadcrumb> = [];
+        const crumbs: Array<Breadcrumb> = [];
 
         crumbs.push(this.getYearListBreadcrumb(year));
 
@@ -73,7 +73,7 @@ export class VideoNavigationService {
     }
 
     private getCategoryListBreadcrumbs(year: number, category: ICategory): Array<Breadcrumb> {
-        let crumbs: Array<Breadcrumb> = [];
+        const crumbs: Array<Breadcrumb> = [];
 
         crumbs.push(this.getYearListBreadcrumb(year));
         crumbs.push(this.getCategoryListBreadcrumb(year, category));

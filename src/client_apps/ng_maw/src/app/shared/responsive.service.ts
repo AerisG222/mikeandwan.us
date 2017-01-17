@@ -21,7 +21,7 @@ export class ResponsiveService {
         this._currBp = this.getBreakpoint();
 
         window.onresize = ((evt: UIEvent) => {
-            let bp = this.getBreakpoint();
+            const bp = this.getBreakpoint();
 
             if (this._currBp !== bp) {
                 this._currBp = bp;
@@ -32,7 +32,7 @@ export class ResponsiveService {
     }
 
     getBreakpoint(): string {
-        let width = this.getWidth();
+        const width = this.getWidth();
 
         for (let i = 1; i < this.breakpoints.length; i++) {
             if (width < this.breakpoints[i].width) {

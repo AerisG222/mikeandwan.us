@@ -75,7 +75,7 @@ export class VideoListComponent implements OnInit, AfterViewInit {
 
     onThumbnailSelected(item: SelectedThumbnail): void {
         if (item.index >= 0 && this.videoList.length > item.index) {
-            let vid: IVideo = (<VideoThumbnailInfo>item.thumbnail).video;
+            const vid: IVideo = (<VideoThumbnailInfo>item.thumbnail).video;
             this.currentVideo = vid;
             this.updateVideo();
         }
@@ -84,7 +84,7 @@ export class VideoListComponent implements OnInit, AfterViewInit {
     setVideos(videos: Array<IVideo>): void {
         this.videoList = videos;
 
-        let thumbnails: Array<VideoThumbnailInfo> = videos.map((vid: IVideo) =>
+        const thumbnails: Array<VideoThumbnailInfo> = videos.map((vid: IVideo) =>
             new VideoThumbnailInfo(vid.thumbnailVideo.path,
                 this._sizeService.getThumbHeight(vid.thumbnailVideo.width, vid.thumbnailVideo.height),
                 this._sizeService.getThumbWidth(vid.thumbnailVideo.width, vid.thumbnailVideo.height),
@@ -104,7 +104,7 @@ export class VideoListComponent implements OnInit, AfterViewInit {
         }
 
         setTimeout(function () {
-            let el = (<HTMLMediaElement>document.querySelector('video'));
+            const el = (<HTMLMediaElement>document.querySelector('video'));
             el.load();
             el.play();
         }, 0, false);

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class LocalStorageService {
     get(name: string, defaultValue: any): any {
-        let val = window.localStorage.getItem(name);
+        const val = window.localStorage.getItem(name);
 
         if (val == null) {
             return defaultValue;

@@ -22,13 +22,13 @@ export class CategoryLinkComponent {
     }
 
     gotoYear(cat: ICategory): void {
-        let b = new Breadcrumb(cat.year.toString(), [ '/year', cat.year ]);
+        const b = new Breadcrumb(cat.year.toString(), [ '/year', cat.year ]);
 
         this._navService.gotoSpecificMode(b, RouteMode.Category);
     }
 
     gotoCategory(cat: ICategory): void {
-        let b = new CategoryBreadcrumb(cat.name, [ '/year', cat.year, cat.id ], cat);
+        const b = new CategoryBreadcrumb(cat.name, [ '/year', cat.year, cat.id ], cat);
 
         this._navService.gotoCategoryPhotoList(b);
     }

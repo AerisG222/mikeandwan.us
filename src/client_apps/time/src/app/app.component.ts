@@ -18,7 +18,7 @@ export class AppComponent {
 
     calculate(time: number, timeScale: string): void {
         let timeInSeconds = 0;
-        let results: Result[] = [];
+        const results: Result[] = [];
         let i = 0;
 
         for (i = 0; i < this.sizes.length; i++) {

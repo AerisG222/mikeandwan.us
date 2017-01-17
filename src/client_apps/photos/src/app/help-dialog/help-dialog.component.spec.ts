@@ -5,7 +5,7 @@ import { HelpDialogComponent } from './help-dialog.component';
 
 describe('Component: HelpDialog', () => {
   it('should create an instance', () => {
-    let component = new HelpDialogComponent();
+    const component = new HelpDialogComponent();
     expect(component).toBeTruthy();
   });
 });

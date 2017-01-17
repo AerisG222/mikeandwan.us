@@ -9,7 +9,7 @@ export class FilterSettings {
     invert = 0;
 
     get styleValue(): string {
-        let style: Array<string> = [];
+        const style: Array<string> = [];
 
         if (this.grayscale > 0) {
             style.push('grayscale(' + this.grayscale + '%)');

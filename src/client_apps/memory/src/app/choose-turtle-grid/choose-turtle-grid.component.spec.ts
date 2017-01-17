@@ -5,7 +5,7 @@ import { ChooseTurtleGridComponent } from './choose-turtle-grid.component';
 
 describe('Component: ChooseTurtleGrid', () => {
   it('should create an instance', () => {
-    let component = new ChooseTurtleGridComponent(null);
+    const component = new ChooseTurtleGridComponent(null);
     expect(component).toBeTruthy();
   });
 });

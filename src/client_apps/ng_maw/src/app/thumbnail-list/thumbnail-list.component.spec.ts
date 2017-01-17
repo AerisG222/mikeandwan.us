@@ -5,7 +5,7 @@ import { ThumbnailListComponent } from './thumbnail-list.component';
 
 describe('Component: ThumbnailList', () => {
   it('should create an instance', () => {
-    let component = new ThumbnailListComponent(null);
+    const component = new ThumbnailListComponent(null);
     expect(component).toBeTruthy();
   });
 });

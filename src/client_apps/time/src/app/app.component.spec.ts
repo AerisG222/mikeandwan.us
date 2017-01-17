@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 
 describe('App: Time', () => {
   it('should create an instance', () => {
-    let component = new AppComponent();
+    const component = new AppComponent();
     expect(component).toBeTruthy();
   });
 });

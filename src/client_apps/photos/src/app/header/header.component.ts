@@ -59,10 +59,10 @@ export class HeaderComponent implements AfterViewInit {
         this.downloadUrl = null;
 
         if (breadcrumbs != null && breadcrumbs.length > 0) {
-            let dest = breadcrumbs[breadcrumbs.length - 1];
+            const dest = breadcrumbs[breadcrumbs.length - 1];
 
             if (dest instanceof CategoryBreadcrumb) {
-                let cat = (<CategoryBreadcrumb>dest).category;
+                const cat = (<CategoryBreadcrumb>dest).category;
 
                 this.downloadUrl = `/photos/download-category/${cat.id}`;
 

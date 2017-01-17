@@ -5,7 +5,7 @@ import { PhotoListComponent } from './photo-list.component';
 
 describe('Component: PhotoList', () => {
   it('should create an instance', () => {
-    let component = new PhotoListComponent(null, null, null, null, null);
+    const component = new PhotoListComponent(null, null, null, null, null);
     expect(component).toBeTruthy();
   });
 });

@@ -5,7 +5,7 @@ import { MapComponent } from './map.component';
 
 describe('Component: MapComponent', () => {
   it('should create an instance', () => {
-    let component = new MapComponent();
+    const component = new MapComponent();
     expect(component).toBeTruthy();
   });
 });

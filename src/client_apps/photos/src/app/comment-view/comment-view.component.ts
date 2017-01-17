@@ -38,7 +38,7 @@ export class CommentViewComponent {
     }
 
     addComment(): void {
-        let photo = this._photo;
+        const photo = this._photo;
 
         if (photo !== null) {
             this._dataService.addCommentForPhoto(photo.id, this.newComment)

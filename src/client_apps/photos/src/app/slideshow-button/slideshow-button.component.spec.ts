@@ -5,7 +5,7 @@ import { SlideshowButtonComponent } from './slideshow-button.component';
 
 describe('Component: SlideshowButton', () => {
   it('should create an instance', () => {
-    let component = new SlideshowButtonComponent();
+    const component = new SlideshowButtonComponent();
     expect(component).toBeTruthy();
   });
 });

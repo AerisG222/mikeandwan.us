@@ -27,7 +27,7 @@ export class MapComponent implements AfterViewInit {
     show(zoom: number, location: google.maps.LatLng): void {
         this.isVisible = true;
 
-        let myOptions: google.maps.MapOptions = {
+        const myOptions: google.maps.MapOptions = {
             zoom: zoom,
             center: location,
             mapTypeId: google.maps.MapTypeId.ROADMAP,

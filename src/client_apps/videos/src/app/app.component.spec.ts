@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 
 describe('App: Videos', () => {
   it('should create an instance', () => {
-    let component = new AppComponent(null);
+    const component = new AppComponent(null);
     expect(component).toBeTruthy();
   });
 });

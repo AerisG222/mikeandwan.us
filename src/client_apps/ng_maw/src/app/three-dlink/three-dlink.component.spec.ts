@@ -5,7 +5,7 @@ import { ThreeDLinkComponent } from './three-dlink.component';
 
 describe('Component: ThreeDLink', () => {
   it('should create an instance', () => {
-    let component = new ThreeDLinkComponent(null);
+    const component = new ThreeDLinkComponent(null);
     expect(component).toBeTruthy();
   });
 });

@@ -5,7 +5,7 @@ import {CommentPhotoSource} from './comment-photo-source.model';
 
 describe('CommentPhotoSource', () => {
   it('should create an instance', () => {
-    let component = new CommentPhotoSource(null, null, null);
+    const component = new CommentPhotoSource(null, null, null);
     expect(component).toBeTruthy();
   });
 });

@@ -26,9 +26,9 @@ export class PhotoNavigationService {
 
     onRouterEvent(navEnd: NavigationEnd): void {
         if (!this._isInitialized) {
-            let snapshot = this._router.routerState.snapshot;
-            let parts = snapshot.url.toLowerCase().split('/').filter(el => el.length !== 0);
-            let crumbs = [];
+            const snapshot = this._router.routerState.snapshot;
+            const parts = snapshot.url.toLowerCase().split('/').filter(el => el.length !== 0);
+            const crumbs = [];
 
             if (parts.length > 0) {
                 switch (parts[0]) {
@@ -41,7 +41,7 @@ export class PhotoNavigationService {
 
                         if (parts.length > 2) {
                             this.getCategoryDestinations(parseInt(parts[1], 10)).subscribe(x => {
-                                let matches = x.filter(y => y.category.id === parseInt(parts[2], 10));
+                                const matches = x.filter(y => y.category.id === parseInt(parts[2], 10));
 
                                 if (matches.length === 1) {
                                     crumbs.push(new Breadcrumb(matches[0].title, [ '/year/' + parts[1] ]));
@@ -56,7 +56,7 @@ export class PhotoNavigationService {
 
                         if (parts.length > 2) {
                             this.getCommentDestinations().subscribe(x => {
-                                let match = x.filter(y => y.linkParamArray[1] === parts[1] &&
+                                const match = x.filter(y => y.linkParamArray[1] === parts[1] &&
                                                           y.linkParamArray[2] === parts[2])[0];
 
                                 crumbs.push(new Breadcrumb(match.title, [ '/comment' ]));
@@ -69,7 +69,7 @@ export class PhotoNavigationService {
 
                         if (parts.length > 2) {
                             this.getRatingDestinations().subscribe(x => {
-                                let match = x.filter(y => y.linkParamArray[1] === parts[1] &&
+                                const match = x.filter(y => y.linkParamArray[1] === parts[1] &&
                                                           y.linkParamArray[2] === parts[2])[0];
 
                                 crumbs.push(new Breadcrumb(match.title, [ '/rating' ]));
@@ -89,7 +89,7 @@ export class PhotoNavigationService {
     }
 
     getRootDestinations(): Observable<Array<Breadcrumb>> {
-        let result = [
+        const result = [
             new Breadcrumb('By Year', [ '/year' ]),
             new Breadcrumb('By Comment', [ '/comment' ]),
             new Breadcrumb('By Rating', [ '/rating' ]),
@@ -100,7 +100,7 @@ export class PhotoNavigationService {
     }
 
     getCommentDestinations(): Observable<Array<Breadcrumb>> {
-        let result = [
+        const result = [
             new Breadcrumb('Newest', [ '/comment', 'age', 'newest' ]),
             new Breadcrumb('Oldest', [ '/comment', 'age', 'oldest' ]),
             new Breadcrumb('Your Newest', [ '/comment', 'your', 'newest' ]),
@@ -113,7 +113,7 @@ export class PhotoNavigationService {
     }
 
     getRatingDestinations(): Observable<Array<Breadcrumb>> {
-        let result = [
+        const result = [
             new Breadcrumb('Average Rating', [ '/rating', 'avg', 'newest' ]),
             new Breadcrumb('Your Rating', [ '/rating', 'your', 'newest' ])
             // TODO:
@@ -129,7 +129,7 @@ export class PhotoNavigationService {
             this._dataService
                 .getYears()
                 .subscribe(result => {
-                    let d = result.map(x => new Breadcrumb(x.toString(), [ '/year', x ]));
+                    const d = result.map(x => new Breadcrumb(x.toString(), [ '/year', x ]));
                     observer.next(d);
                     observer.complete();
                 });
@@ -141,7 +141,7 @@ export class PhotoNavigationService {
             this._dataService
                 .getCategoriesForYear(year)
                 .subscribe(result => {
-                    let d = result.map(x => new CategoryBreadcrumb(x.name, [ '/year', x.year, x.id ], x));
+                    const d = result.map(x => new CategoryBreadcrumb(x.name, [ '/year', x.year, x.id ], x));
                     observer.next(d);
                     observer.complete();
                 });
@@ -157,7 +157,7 @@ export class PhotoNavigationService {
     }
 
     gotoCategoryPhotoList(dest: CategoryBreadcrumb): void {
-        let bcs = this.getCategoryListBreadcrumbs(dest);
+        const bcs = this.getCategoryListBreadcrumbs(dest);
 
         this.gotoDestination(dest.linkParamArray, bcs);
     }
@@ -167,7 +167,7 @@ export class PhotoNavigationService {
     }
 
     private getModeBreadcrumbs(dest: Breadcrumb, mode: RouteMode): Array<Breadcrumb> {
-        let crumbs: Array<Breadcrumb> = [];
+        const crumbs: Array<Breadcrumb> = [];
 
         if (mode == null) {
             crumbs.push(this.getPrimaryModeBreadcrumb(dest.title));
@@ -187,8 +187,8 @@ export class PhotoNavigationService {
 
     private getCategoryListBreadcrumbs(cb: CategoryBreadcrumb): Array<Breadcrumb> {
         // lets reuse our existing function to start building out the list of breadcrumbs
-        let catListBreadcrumb = new Breadcrumb(cb.category.year.toString(), null);
-        let crumbs = this.getModeBreadcrumbs(catListBreadcrumb, RouteMode.Category);
+        const catListBreadcrumb = new Breadcrumb(cb.category.year.toString(), null);
+        const crumbs = this.getModeBreadcrumbs(catListBreadcrumb, RouteMode.Category);
 
         crumbs.push(new CategoryBreadcrumb(cb.category.name, [ '/year', cb.category.year ], cb.category));
 

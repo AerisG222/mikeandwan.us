@@ -5,7 +5,7 @@ import {CategoryPhotoSource} from './category-photo-source.model';
 
 describe('CategoryPhotoSource', () => {
   it('should create an instance', () => {
-    let component = new CategoryPhotoSource(null, null);
+    const component = new CategoryPhotoSource(null, null);
     expect(component).toBeTruthy();
   });
 });

@@ -5,7 +5,7 @@ import { PlayComponent } from './play.component';
 
 describe('Component: Play', () => {
   it('should create an instance', () => {
-    let component = new PlayComponent(null);
+    const component = new PlayComponent(null);
     expect(component).toBeTruthy();
   });
 });

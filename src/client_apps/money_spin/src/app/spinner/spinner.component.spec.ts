@@ -5,7 +5,7 @@ import { SpinnerComponent } from './spinner.component';
 
 describe('Component: Spinner', () => {
   it('should create an instance', () => {
-    let component = new SpinnerComponent(null);
+    const component = new SpinnerComponent(null);
     expect(component).toBeTruthy();
   });
 });

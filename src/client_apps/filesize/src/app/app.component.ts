@@ -18,7 +18,7 @@ export class AppComponent {
 
     calculate(size: number, sizeScale: string): void {
         let sizeInBytes = 0;
-        let results: Result[] = [];
+        const results: Result[] = [];
         let i = 0;
 
         for (i = 0; i < this.sizes.length; i++) {

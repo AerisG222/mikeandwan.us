@@ -1,8 +1,8 @@
-import { NgModule }      from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule }   from '@angular/router';
+import { RouterModule } from '@angular/router';
 
-import { AppComponent }  from './app.component';
+import { AppComponent } from './app.component';
 import { CardComponent } from './card/card.component';
 import { ChooseTurtleComponent } from './choose-turtle/choose-turtle.component';
 import { ChooseTurtleGridComponent } from './choose-turtle-grid/choose-turtle-grid.component';

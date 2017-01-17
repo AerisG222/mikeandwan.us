@@ -5,7 +5,7 @@ import { PagerComponent } from './pager.component';
 
 describe('Component: Pager', () => {
   it('should create an instance', () => {
-    let component = new PagerComponent(null);
+    const component = new PagerComponent(null);
     expect(component).toBeTruthy();
   });
 });

@@ -80,17 +80,17 @@ export class SpinnerComponent implements OnInit, OnDestroy {
         this._arrow = new THREE.Group();
         this._scene.add(this._arrow);
 
-        let loader = new THREE.TextureLoader();
+        const loader = new THREE.TextureLoader();
         loader.load('/img/games/money_spin/board.png', (texture: THREE.Texture) => {
-            let geometry = new THREE.PlaneGeometry(640, 498);
-            let material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
-            let mesh = new THREE.Mesh(geometry, material);
+            const geometry = new THREE.PlaneGeometry(640, 498);
+            const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+            const mesh = new THREE.Mesh(geometry, material);
             this._board.add(mesh);
         });
         loader.load('/img/games/money_spin/arrow.png', (texture: THREE.Texture) => {
-            let geometry = new THREE.PlaneGeometry(240, 200);
-            let material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
-            let mesh = new THREE.Mesh(geometry, material);
+            const geometry = new THREE.PlaneGeometry(240, 200);
+            const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
+            const mesh = new THREE.Mesh(geometry, material);
             this._arrow.add(mesh);
             this._arrow.position.z = -1;
         });
@@ -107,7 +107,7 @@ export class SpinnerComponent implements OnInit, OnDestroy {
         this._slowDown = false;
         this._arrowSpeed = SpinnerComponent.MIN_TOP_SPEED + (Math.random() * SpinnerComponent.MAX_ADDITIONAL_TOP_SPEED);
         this._speedDropoff = SpinnerComponent.MIN_DROPOFF + (Math.random() * SpinnerComponent.MAX_ADDITIONAL_DROPOFF);
-        let fullSpeedTime = SpinnerComponent.MIN_TOP_SPEED_TIME_MS + (Math.random() * SpinnerComponent.MAX_ADDITIONAL_TOP_SPEED_TIME_MS);
+        const fullSpeedTime = SpinnerComponent.MIN_TOP_SPEED_TIME_MS + (Math.random() * SpinnerComponent.MAX_ADDITIONAL_TOP_SPEED_TIME_MS);
 
         setTimeout(() => {
             this._slowDown = true;
@@ -124,7 +124,7 @@ export class SpinnerComponent implements OnInit, OnDestroy {
 
                 if (this._arrowSpeed <= 0) {
                     this._arrowSpeed = 0;
-                    let deg = THREE.Math.radToDeg(this._arrow.rotation.z);
+                    const deg = THREE.Math.radToDeg(this._arrow.rotation.z);
                     this.spinCompleted.next(this.getScore(deg));
                 }
             }
@@ -141,7 +141,7 @@ export class SpinnerComponent implements OnInit, OnDestroy {
         }
 
         for (let i = 0; i < SpinnerComponent.SECTORS.length; i++) {
-            let score = SpinnerComponent.SECTORS[i];
+            const score = SpinnerComponent.SECTORS[i];
 
             if (deg <= score.minDegree) {
                 return score.value;

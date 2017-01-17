@@ -5,7 +5,7 @@ import { RatingComponent } from './rating.component';
 
 describe('Component: Rating', () => {
   it('should create an instance', () => {
-    let component = new RatingComponent();
+    const component = new RatingComponent();
     expect(component).toBeTruthy();
   });
 });

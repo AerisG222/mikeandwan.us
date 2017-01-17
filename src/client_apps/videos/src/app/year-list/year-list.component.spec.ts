@@ -5,7 +5,7 @@ import { YearListComponent } from './year-list.component';
 
 describe('Component: YearList', () => {
   it('should create an instance', () => {
-    let component = new YearListComponent(null, null);
+    const component = new YearListComponent(null, null);
     expect(component).toBeTruthy();
   });
 });

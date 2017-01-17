@@ -70,7 +70,7 @@ export class MapViewComponent implements OnDestroy, AfterViewInit {
 
     private onPhotoUpdated(): void {
         let index = -1;
-        let photo = this.context.photos[this.context.currentIndex];
+        const photo = this.context.photos[this.context.currentIndex];
 
         for (let i = 0; i < this._photos.length; i++) {
             if (this._photos[i].photo.id === photo.photo.id) {
@@ -87,9 +87,9 @@ export class MapViewComponent implements OnDestroy, AfterViewInit {
     }
 
     private initMap(): void {
-        let center = new google.maps.LatLng(this._photos[0].photo.latitude, this._photos[0].photo.longitude);
+        const center = new google.maps.LatLng(this._photos[0].photo.latitude, this._photos[0].photo.longitude);
 
-        let opts = {
+        const opts = {
             center: center,
             zoom: 17,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -102,8 +102,8 @@ export class MapViewComponent implements OnDestroy, AfterViewInit {
 
     private addPhotosToMap(): void {
         for (let i = 0; i < this._photos.length; i++) {
-            let photo = this._photos[i];
-            let marker = this.createMapMarker(photo);
+            const photo = this._photos[i];
+            const marker = this.createMapMarker(photo);
 
             this._googleMapMarkerList.push(marker);
         }
@@ -114,9 +114,9 @@ export class MapViewComponent implements OnDestroy, AfterViewInit {
     }
 
     private createMapMarker(photo: Photo): google.maps.Marker {
-        let point = new google.maps.LatLng(photo.photo.latitude, photo.photo.longitude);
-        let infoWindow = new google.maps.InfoWindow({ content: this.generatePhotoHtmlForMap(photo.photo) });
-        let marker = new google.maps.Marker({
+        const point = new google.maps.LatLng(photo.photo.latitude, photo.photo.longitude);
+        const infoWindow = new google.maps.InfoWindow({ content: this.generatePhotoHtmlForMap(photo.photo) });
+        const marker = new google.maps.Marker({
             icon: this._markerImage,
             position: point,
             map: this._googleMap

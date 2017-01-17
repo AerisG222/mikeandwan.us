@@ -9,7 +9,7 @@ update_ngcli_global() {
 update_ngcli() {
     cd "${1}"
     rm -rf node_modules dist tmp typings
-    npm install --save-dev angular-cli
+    npm install --save-dev angular-cli@latest
     cd ..
 }
 

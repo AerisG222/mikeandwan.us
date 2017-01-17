@@ -17,13 +17,13 @@ export class PhotoSourceFactory {
     }
 
     create(routeData: Data, routeParams: Params): PhotoSource {
-        let modeInfo = <ModeRouteInfo>routeData;
+        const modeInfo = <ModeRouteInfo>routeData;
         let type: string = null;
         let order: string = null;
 
         switch (modeInfo.mode) {
             case RouteMode.Category:
-                let categoryId = parseInt(routeParams[ModeRouteInfo.PARAM_CATEGORY], 10);
+                const categoryId = parseInt(routeParams[ModeRouteInfo.PARAM_CATEGORY], 10);
                 return new CategoryPhotoSource(this._dataService, categoryId);
             case RouteMode.Comment:
                 type = routeParams[ModeRouteInfo.PARAM_TYPE];

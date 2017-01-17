@@ -5,7 +5,7 @@ import { GameBoardComponent } from './game-board.component';
 
 describe('Component: GameBoard', () => {
   it('should create an instance', () => {
-    let component = new GameBoardComponent(null);
+    const component = new GameBoardComponent(null);
     expect(component).toBeTruthy();
   });
 });

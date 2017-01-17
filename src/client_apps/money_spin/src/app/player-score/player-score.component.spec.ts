@@ -5,7 +5,7 @@ import { PlayerScoreComponent } from './player-score.component';
 
 describe('Component: PlayerScore', () => {
   it('should create an instance', () => {
-    let component = new PlayerScoreComponent();
+    const component = new PlayerScoreComponent();
     expect(component).toBeTruthy();
   });
 });

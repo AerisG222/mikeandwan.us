@@ -5,7 +5,7 @@ import { MapViewComponent } from './map-view.component';
 
 describe('Component: MapView', () => {
   it('should create an instance', () => {
-    let component = new MapViewComponent(null, null);
+    const component = new MapViewComponent(null, null);
     expect(component).toBeTruthy();
   });
 });

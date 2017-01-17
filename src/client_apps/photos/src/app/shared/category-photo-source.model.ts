@@ -16,16 +16,16 @@ export class CategoryPhotoSource extends PhotoSource {
 
     getPhotos(): Observable<Array<Photo>> {
         return Observable.create((observer: Observer<Array<Photo>>) => {
-            let catObs = this.getCategoryObservable();
-            let photoObs = this.getPhotoObservable();
+            const catObs = this.getCategoryObservable();
+            const photoObs = this.getPhotoObservable();
 
             catObs.zip(photoObs, (c, p) => {
                 return { category: c, photos: p };
             })
                 .subscribe((result: any) => {
-                    let cat: ICategory = result.category;
-                    let photos: Array<IPhoto> = result.photos;
-                    let list = photos.map(x => new Photo(x, cat, null));
+                    const cat: ICategory = result.category;
+                    const photos: Array<IPhoto> = result.photos;
+                    const list = photos.map(x => new Photo(x, cat, null));
 
                     observer.next(list);
                     observer.complete();

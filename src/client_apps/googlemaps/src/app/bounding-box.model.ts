@@ -5,13 +5,13 @@ export class BoundingBox {
     lowerRight: google.maps.LatLng;
 
     constructor(sourceMap: google.maps.Map) {
-        let bounds = sourceMap.getBounds();
+        const bounds = sourceMap.getBounds();
 
         if (bounds) {
-            let minY = bounds.getSouthWest().lat();
-            let minX = bounds.getSouthWest().lng();
-            let maxY = bounds.getNorthEast().lat();
-            let maxX = bounds.getNorthEast().lng();
+            const minY = bounds.getSouthWest().lat();
+            const minX = bounds.getSouthWest().lng();
+            const maxY = bounds.getNorthEast().lat();
+            const maxX = bounds.getNorthEast().lng();
 
             this.upperLeft = new google.maps.LatLng(maxY, minX);
             this.upperRight = new google.maps.LatLng(maxY, maxX);
@@ -21,7 +21,7 @@ export class BoundingBox {
     }
 
     get boundsArray(): Array<google.maps.LatLng> {
-        let points: Array<google.maps.LatLng> = new Array(5);
+        const points: Array<google.maps.LatLng> = new Array(5);
 
         points[0] = this.upperLeft;
         points[1] = this.upperRight;

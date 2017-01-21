@@ -259,11 +259,23 @@ decisions below, which are called out separately below.
 9. Follow instructions on installing for Fedora 24: [fedora 24 instructions](https://www.microsoft.com/net/core#linuxfedora)
 
 
-## Old Notes
+## GMail SSL/TLS updates
 
-The following was needed on earlier versions of the site, but not sure if this is
-still needed with .NET Core / ASP.NET Core:
+.Net core uses Openssl on linux for SSL/TLS connections.  The certs for gmail are not typically included
+with that distribution, at least it hasn't on my Fedora boxes.  Here are the steps needed to configure openssl
+to allow for the certs to be verified:
 
-- add the appropriate certificate bits for gmail connectivity (as root)
-    - `certmgr -ssl -m smtps://smtp.gmail.com:465`
-    - type 'yes' for all prompts
+1. List all certs / intermediate certs for gmail:
+    - `openssl s_client -starttls smtp -connect smtp.gmail.com:587 -showcerts`
+        - This currently results in 3 certs in the list, one for smtp.gmail.com, one for Google CA, and one for GeoTrust
+        - Copy each PEM formatted certificate (between the -- BEGIN CERTIFICATE -- ... -- END CERTIFICATE -- delimiters) as its own file
+        - You can then use openssl to verify / view these certs
+            - `openssl verify filename.crt`
+            - `openssl x509 -in filename.crt -text`
+    - I was getting errors on the GeoTrust cert, and thought it was because I did not have the root CA - the Equifax Secure Certificate Authority.
+    - I then searched for this cert and found it, which seemed to be the missing piece in getting this to work
+2. Copy all these certs (total of 4, see the gmail_certs folder for the ones I am currently using) to `/usr/share/pki/ca-trust-source/anchors`
+3. `update-ca-trust`
+4. `update-ca-trust extract`
+5. `killall dotnet` / reboot / restart the webapp
+6. this should now work!

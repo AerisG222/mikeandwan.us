@@ -6,7 +6,7 @@ import { Config } from './config.model';
 
 @Injectable()
 export class VideoStateService {
-    private static KEY_CONFIG: string = 'videoConfig';
+    private static KEY_CONFIG = 'videoConfig';
     showPreferencesEventEmitter: EventEmitter<any> = new EventEmitter<any>();
     configUpdatedEventEmitter: EventEmitter<Config> = new EventEmitter<Config>();
     config: Config;

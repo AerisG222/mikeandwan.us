@@ -30,12 +30,12 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     showFullscreen = false;
     supportCssFilters = (<any>Modernizr).cssfilters;  // workaround for this missing in modernizr type definition
     rotationClassArray = ['', 'rotate_90', 'rotate_180', 'rotate_270'];
-    rotationContainmentMaxWidth: string = '';
-    rotationContainmentMaxHeight: string = '';
+    rotationContainmentMaxWidth = '';
+    rotationContainmentMaxHeight = '';
     @ViewChild(HelpDialogComponent) private _helpDialog: HelpDialogComponent;
     @ViewChild(SaveDialogComponent) private _saveDialog: SaveDialogComponent;
     @Input() context: PhotoListContext;
-    @Input() showCategoryLink: boolean = false;
+    @Input() showCategoryLink = false;
 
     get photo(): IPhoto {
         try {

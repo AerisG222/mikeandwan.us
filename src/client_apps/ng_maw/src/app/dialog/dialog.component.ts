@@ -10,7 +10,7 @@ declare var jQuery: any;
 })
 export class DialogComponent implements AfterViewInit {
     private _modalDiv: HTMLDivElement = null;
-    isVisible: boolean = false;
+    isVisible = false;
     @Input() title: string = null;
     buttons: Array<DialogButton> = [];
     @Output() buttonClick: EventEmitter<DialogButton> = new EventEmitter<DialogButton>();

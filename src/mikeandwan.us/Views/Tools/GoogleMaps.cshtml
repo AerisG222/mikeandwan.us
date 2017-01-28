@@ -7,10 +7,13 @@
     <base href="/" />
 }
 
+@section stylesheets {
+    <link rel="stylesheet" href="/js/googlemaps/styles.bundle.css" />
+}
+
 @section scripts_footer {
     @Html.Partial("_js_GoogleMaps")
     <script type="text/javascript" src="/js/googlemaps/inline.bundle.js"></script>
-    <script type="text/javascript" src="/js/googlemaps/styles.bundle.js"></script>
     <script type="text/javascript" src="/js/googlemaps/vendor.bundle.js"></script>
     <script type="text/javascript" src="/js/googlemaps/main.bundle.js"></script>
 }

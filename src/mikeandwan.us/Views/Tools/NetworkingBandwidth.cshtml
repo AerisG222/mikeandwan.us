@@ -11,9 +11,12 @@
     @Html.Partial("_PageHeader", "Bandwidth Calculator")
 }
 
+@section stylesheets {
+    <link rel="stylesheet" href="/js/bandwidth/styles.bundle.css" />
+}
+
 @section scripts_footer {
     <script type="text/javascript" src="/js/bandwidth/inline.bundle.js"></script>
-    <script type="text/javascript" src="/js/bandwidth/styles.bundle.js"></script>
     <script type="text/javascript" src="/js/bandwidth/vendor.bundle.js"></script>
     <script type="text/javascript" src="/js/bandwidth/main.bundle.js"></script>
 }

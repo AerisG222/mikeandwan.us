@@ -10,3 +10,5 @@ project.lock.json
 
 **/node_modules/*
 **/typings/*
+
+**/npm-debug.log

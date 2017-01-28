@@ -8,8 +8,8 @@ import { ICardInfo } from '../icard-info.model';
     styleUrls: [ './card.component.css' ]
 })
 export class CardComponent {
-    private _isFlipped: boolean = false;
-    private _isRemoved: boolean = false;
+    private _isFlipped = false;
+    private _isRemoved = false;
     @Input() cardInfo: ICardInfo;
     @Output() select: EventEmitter<CardComponent> = new EventEmitter<CardComponent>();
 

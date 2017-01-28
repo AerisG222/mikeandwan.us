@@ -13,8 +13,8 @@ export class PlayComponent implements OnInit {
     winningPlayer: IPlayer = null;
     player1: IPlayer;
     player2: IPlayer;
-    isGameOver: boolean = false;
-    isTie: boolean = false;
+    isGameOver = false;
+    isTie = false;
 
     constructor(private _svc: MemoryService) {
         this.player1 = this._svc.player1;

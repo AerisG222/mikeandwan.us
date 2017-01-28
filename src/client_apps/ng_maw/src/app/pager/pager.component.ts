@@ -14,10 +14,10 @@ import { ResponsiveService } from '../shared/responsive.service';
 })
 export class PagerComponent {
     @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();
-    maxPagesDisplayed: number = 10;
-    pageCount: number = 0;
-    activePageIndex: number = 0;
-    firstPageIndex: number = 0;
+    maxPagesDisplayed = 10;
+    pageCount = 0;
+    activePageIndex = 0;
+    firstPageIndex = 0;
     pageArray: Array<number> = [];
 
     constructor(private _responsiveService: ResponsiveService) {

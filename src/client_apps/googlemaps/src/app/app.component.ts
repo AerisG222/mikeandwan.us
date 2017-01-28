@@ -11,7 +11,7 @@ import { MapComponent } from './map/map.component';
 })
 export class AppComponent {
     addressToMap = '';
-    show: boolean = true;
+    show = true;
     geocoder: google.maps.Geocoder = new google.maps.Geocoder();
 
     @ViewChild('map1') map1: MapComponent;

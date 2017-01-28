@@ -9,10 +9,10 @@ import { ResponsiveService } from '../shared/';
     styleUrls: [ './thumbnail-list.component.css' ]
 })
 export class ThumbnailListComponent {
-    rowsPerPage: number = 3;
-    itemsPerRow: number = 6;
-    pageDisplayedIndex: number = 0;
-    itemSelectedIndex: number = -1;
+    rowsPerPage = 3;
+    itemsPerRow = 6;
+    pageDisplayedIndex = 0;
+    itemSelectedIndex = -1;
     itemList: Array<ThumbnailInfo> = [];
     displayedRows: Array<Array<ThumbnailInfo>> = [];
     activeItem: ThumbnailInfo = null;

@@ -6,9 +6,9 @@ import { Component } from '@angular/core';
     styleUrls: [ './app.component.css' ]
 })
 export class AppComponent {
-    bCount: number = 0;
-    kbCount: number = 0;
-    mbCount: number = 0;
+    bCount = 0;
+    kbCount = 0;
+    mbCount = 0;
 
     calculate(value: string): void {
         this.bCount = value.length;

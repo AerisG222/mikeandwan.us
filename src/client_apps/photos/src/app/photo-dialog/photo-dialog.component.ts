@@ -14,8 +14,8 @@ import { IPhoto } from '../shared/iphoto.model';
 export class PhotoDialogComponent implements AfterViewInit {
     @ViewChild(DialogComponent) dialog: DialogComponent;
     @Input() photo: IPhoto = null;
-    maxHeight: string = '480px';
-    maxWidth: string = '640px';
+    maxHeight = '480px';
+    maxWidth = '640px';
 
     constructor(private _responsiveService: ResponsiveService,
                 private _changeDetectionRef: ChangeDetectorRef) {

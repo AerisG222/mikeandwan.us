@@ -5,7 +5,7 @@ import { PhotoExifInfo } from './photo-exif-info.model';
 
 export class Photo {
     filters: FilterSettings = new FilterSettings();
-    rotationClassIndex: number = 0;
+    rotationClassIndex = 0;
 
     constructor(public photo: IPhoto, public category: ICategory, public exif?: PhotoExifInfo) {
 

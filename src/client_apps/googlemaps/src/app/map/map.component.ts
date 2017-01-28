@@ -9,7 +9,7 @@ import { MapContext } from '../map-context.model';
     styleUrls: [ './map.component.css' ]
 })
 export class MapComponent implements AfterViewInit {
-    isVisible: boolean = false;
+    isVisible = false;
     map: google.maps.Map = null;
     mapDiv: HTMLElement;
     marker: google.maps.Marker = null;
@@ -18,7 +18,7 @@ export class MapComponent implements AfterViewInit {
     boundingBoxOverlay: google.maps.Polyline = null;
     @Output() updated: EventEmitter<MapContext> = new EventEmitter<MapContext>();
     @ViewChild('map') mapElement: ElementRef;
-    updateCount: number = 0;
+    updateCount = 0;
 
     ngAfterViewInit(): void {
         this.mapDiv = this.mapElement.nativeElement;

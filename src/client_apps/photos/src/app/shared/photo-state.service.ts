@@ -7,7 +7,7 @@ import { Config } from './config.model';
 
 @Injectable()
 export class PhotoStateService {
-    private static KEY_CONFIG: string = 'photoConfig';
+    private static KEY_CONFIG = 'photoConfig';
     showPreferencesEventEmitter: EventEmitter<any> = new EventEmitter<any>();
     configUpdatedEventEmitter: EventEmitter<Config> = new EventEmitter<Config>();
     toggleMapsEventEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();

@@ -7,7 +7,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 })
 export class AppComponent implements OnInit, OnDestroy {
     intervalId: number = null;
-    value: string = '';
+    value = '';
 
     ngOnInit(): void {
         this.updateMessage();

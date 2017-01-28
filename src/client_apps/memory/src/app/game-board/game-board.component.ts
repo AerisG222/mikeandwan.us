@@ -11,11 +11,11 @@ import { MemoryService } from '../memory.service';
     styleUrls: [ './game-board.component.css' ]
 })
 export class GameBoardComponent {
-    private static CARDS_IN_GAME: number = 20;
+    private static CARDS_IN_GAME = 20;
     protected board: Array<Array<ICardInfo>> = null;
     private _selectedCards: ISelectedCards = { card1: null, card2: null };
     private _matchedCards: Array<CardComponent> = [];
-    private ignoreSelect: boolean = false;
+    private ignoreSelect = false;
     @Output() match: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() nonmatch: EventEmitter<any> = new EventEmitter<any>();
 

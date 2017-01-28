@@ -7,10 +7,10 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 })
 export class RatingComponent implements OnInit {
     private _rating: number = null;
-    @Input() editable: boolean = false;
-    @Input() maxRating: number = 5;
+    @Input() editable = false;
+    @Input() maxRating = 5;
     @Output() rate: EventEmitter<number> = new EventEmitter<number>();
-    hover: number = -1;
+    hover = -1;
     ratingRange: Array<number> = [];
     ratingIcons: Array<string> = [];
 

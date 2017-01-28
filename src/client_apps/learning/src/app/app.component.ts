@@ -15,12 +15,12 @@ export class AppComponent {
     numbers: string[] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
     speakers: string[] = ['Mommy', 'Daddy', 'No Sound'];
     lessons: string[] = ['Letters', 'Numbers', 'Random'];
-    currentSpeaker: string = 'Mommy';
-    currentLesson: string = 'Letters';
-    currentChar: string = '';
-    currentCharAudio: string = '';
-    doRun: boolean = false;
-    runButtonText: string = 'Start';
+    currentSpeaker = 'Mommy';
+    currentLesson = 'Letters';
+    currentChar = '';
+    currentCharAudio = '';
+    doRun = false;
+    runButtonText = 'Start';
     intervalId: number = null;
     @ViewChild('audio') audioElement: ElementRef;
 

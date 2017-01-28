@@ -30,8 +30,8 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
     @ViewChild(PhotoDialogComponent) private _photoDialog: PhotoDialogComponent;
     private _modeInfo: ModeRouteInfo = null;
     private _photoSource: PhotoSource = null;
-    showMapView: boolean = false;
-    showPhotoView: boolean = false;
+    showMapView = false;
+    showPhotoView = false;
     context: PhotoListContext;
 
     constructor(private _dataService: PhotoDataService,

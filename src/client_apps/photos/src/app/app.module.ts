@@ -33,11 +33,11 @@ import { PreferenceDialogComponent } from './preference-dialog/preference-dialog
 import { RatingViewComponent } from './rating-view/rating-view.component';
 import { SaveDialogComponent } from './save-dialog/save-dialog.component';
 import { SlideshowButtonComponent } from './slideshow-button/slideshow-button.component';
-import { ModeRouteInfo } from './shared/mode-route-info.model';
 import { PhotoDataService } from './shared/photo-data.service';
 import { PhotoSourceFactory } from './shared/photo-source-factory.model';
 import { PhotoStateService } from './shared/photo-state.service';
 import { PhotoNavigationService } from './shared/photo-navigation.service';
+import { RouteMode } from './shared/route-mode.model';
 
 // TODO: the odd constants for data below are to satisfy an AOT requirement - is there a better way?
 //  SEE: https://github.com/angular/angular/issues/10789
@@ -48,11 +48,11 @@ import { PhotoNavigationService } from './shared/photo-navigation.service';
         HttpModule,
         RouterModule.forRoot([
             { path: '',                     component: ModeComponent },
-            { path: 'random',               component: PhotoListComponent,   data: { mode: ModeRouteInfo.MODE_RANDOM } },
+            { path: 'random',               component: PhotoListComponent,   data: { mode: RouteMode.Random } },
             { path: 'year/:year',           component: CategoryListComponent },
-            { path: 'year/:year/:category', component: PhotoListComponent,   data: { mode: ModeRouteInfo.MODE_CATEGORY } },
-            { path: 'comment/:type/:order', component: PhotoListComponent,   data: { mode: ModeRouteInfo.MODE_COMMENT } },
-            { path: 'rating/:type/:order',  component: PhotoListComponent,   data: { mode: ModeRouteInfo.MODE_RATING } },
+            { path: 'year/:year/:category', component: PhotoListComponent,   data: { mode: RouteMode.Category } },
+            { path: 'comment/:type/:order', component: PhotoListComponent,   data: { mode: RouteMode.Comment } },
+            { path: 'rating/:type/:order',  component: PhotoListComponent,   data: { mode: RouteMode.Rating } },
             { path: ':mode',                component: ModeComponent },
             { path: '**',                   redirectTo: '/' }
         ])

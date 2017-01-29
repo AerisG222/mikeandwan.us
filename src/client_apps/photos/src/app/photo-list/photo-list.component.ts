@@ -28,7 +28,7 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
     @ViewChild(PagerComponent) pager: PagerComponent;
     @ViewChild(ThumbnailListComponent) thumbnailList: ThumbnailListComponent;
     @ViewChild(PhotoDialogComponent) private _photoDialog: PhotoDialogComponent;
-    private _modeInfo: ModeRouteInfo = null;
+    private _modeInfo: RouteMode = null;
     private _photoSource: PhotoSource = null;
     showMapView = false;
     showPhotoView = false;
@@ -41,7 +41,7 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
                 photoSourceFactory: PhotoSourceFactory) {
         this._activatedRoute.params.subscribe(params => {
             this._activatedRoute.data.subscribe(data => {
-                this._modeInfo = ModeRouteInfo.getMode(data[ModeRouteInfo.PARAM_MODE]);
+                this._modeInfo = data[ModeRouteInfo.PARAM_MODE];
                 this._photoSource = photoSourceFactory.create(data, params);
                 this.showPhotoView = _stateService.config.displayMode === Config.DISPLAY_MODE_INLINE;
             });
@@ -83,8 +83,8 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
         this._photoSource
             .getPhotos()
             .subscribe(photos => {
-                if (this._modeInfo.mode === RouteMode.Random) {
-                    this.context = new RandomPhotoListContext(photos, this._modeInfo.mode, this._stateService, this._photoSource);
+                if (this._modeInfo === RouteMode.Random) {
+                    this.context = new RandomPhotoListContext(photos, this._modeInfo, this._stateService, this._photoSource);
 
                     (<RandomPhotoListContext>this.context).photoAddedEventEmitter.subscribe((photo: Photo) => {
                         const thumb = new PhotoThumbnailInfo(photo.photo.xsInfo.path,
@@ -95,7 +95,7 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
                         this.updatePager();
                     });
                 } else {
-                    this.context = new PhotoListContext(photos, this._modeInfo.mode, this._stateService);
+                    this.context = new PhotoListContext(photos, this._modeInfo, this._stateService);
                 }
 
                 this.context.photoUpdated.subscribe((idx: number) => this.onPhotoUpdated(idx));

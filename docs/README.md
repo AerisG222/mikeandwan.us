@@ -279,3 +279,13 @@ to allow for the certs to be verified:
 4. `update-ca-trust extract`
 5. `killall dotnet` / reboot / restart the webapp
 6. this should now work!
+
+
+## Notes for copying assets for dev
+
+```
+mkdir -p /srv/www/website_assets
+cd /srv/www/website_assets
+rsync --progress -a -f "+ */" -f "+ */xs/*" -f "- *"   mmorano@tifa:/srv/www/website_assets/images .
+rsync --progress -a -f "+ */" -f "+ */thumbnails/*" -f "- *"   mmorano@tifa:/srv/www/website_assets/movies .
+```

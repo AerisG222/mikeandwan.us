@@ -7,19 +7,19 @@
   "devDependencies": {
     "@types/bootstrap": "^3.3.32",
     "@types/es6-promise": "0.0.32",
-    "@types/jquery": "^2.0.34",
-    "@types/mousetrap": "^1.5.32",
+    "@types/jquery": "^2.0.40",
+    "@types/mousetrap": "^1.5.33",
     "@types/stats": "^0.16.30",
-    "@types/three": "0.0.26",
+    "@types/three": "0.83.4",
     "@types/tween.js": "0.0.31",
-    "awesome-typescript-loader": "^2.2.4",
-    "rxjs": "^5.0.0-rc.2",
-    "tslint": "^4.0.2",
-    "typescript": "^2.0.7",
-    "webpack": "^2.2.0-rc.2"
+    "awesome-typescript-loader": "^3.0.8",
+    "rxjs": "^5.2.0",
+    "tslint": "^4.4.2",
+    "typescript": "^2.2.1",
+    "webpack": "^2.2.1"
   },
   "dependencies": {
-    "linqts": "^1.6.0"
+    "linqts": "^1.7.5"
   },
   "scripts": {
     "dev_build": "rm -rf dist && webpack",

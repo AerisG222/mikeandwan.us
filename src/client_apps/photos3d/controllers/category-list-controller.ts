@@ -1,4 +1,4 @@
-import { List } from 'linqts/linq';
+import { List } from 'linqts';
 import { Subscription } from 'rxjs/Subscription';
 
 import { ArgumentNullError } from '../models/argument-null-error';

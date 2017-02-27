@@ -26,12 +26,12 @@ class PhotoStats {
     colors = d3.scaleOrdinal(d3.schemeCategory20);
 
     arc = d3.arc()
-        .startAngle(d => Math.max(0, Math.min(2 * Math.PI, this.x(d.x0))))
-        .endAngle(d => Math.max(0, Math.min(2 * Math.PI, this.x(d.x1))))
-        .innerRadius(d => Math.max(0, this.y(d.y0)))
-        .outerRadius(d => Math.max(0, this.y(d.y1)));
+        .startAngle((d: any) => Math.max(0, Math.min(2 * Math.PI, this.x(d.x0))))
+        .endAngle((d: any) => Math.max(0, Math.min(2 * Math.PI, this.x(d.x1))))
+        .innerRadius((d: any) => Math.max(0, this.y(d.y0)))
+        .outerRadius((d: any) => Math.max(0, this.y(d.y1)));
 
-    statChildren(d): string {
+    statChildren(d): string[] {
         return d.categoryStats;
     }
 
@@ -136,7 +136,7 @@ class PhotoStats {
             .attr('text-anchor', 'middle')
             .html(d => this.getNodeName(d));
 
-        entering.attr('transform', (d, i: number) => {
+        entering.attr('transform', (d: any, i: number) => {
             return 'translate(' + d.depth * (this.b.w + this.b.s) + ', 0)';
         });
 
@@ -225,7 +225,7 @@ class PhotoStats {
         this.updatePhotoCount(0);
         this.initSunburst();
 
-        d3.json('/api/photos/getStats', (error, root) => {
+        d3.json('/api/photos/getStats', (error, root: any) => {
             if (error) throw error;
 
             root = { name: 'All Photos', categoryStats: root };

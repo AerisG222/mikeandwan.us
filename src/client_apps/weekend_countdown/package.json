@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "dev_build": "ng build --extract-css && ng lint",
-    "prod_build": "ng build --aot --target prod --environment prod"
+    "prod_build": "ng build --aot --target production --environment prod"
   },
   "private": true,
   "dependencies": {

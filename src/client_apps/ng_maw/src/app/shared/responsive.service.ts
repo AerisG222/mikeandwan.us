@@ -4,10 +4,10 @@ import { ResponsiveBreakpoint } from './responsive-breakpoint.model';
 
 @Injectable()
 export class ResponsiveService {
-    static get BP_XS(): string { return 'xs'; };
-    static get BP_SM(): string { return 'sm'; };
-    static get BP_MD(): string { return 'md'; };
-    static get BP_LG(): string { return 'lg'; };
+    static readonly BP_XS = 'xs';
+    static readonly BP_SM = 'sm';
+    static readonly BP_MD = 'md';
+    static readonly BP_LG = 'lg';
 
     onBreakpointChange: EventEmitter<string> = new EventEmitter<string>();
     breakpoints = [

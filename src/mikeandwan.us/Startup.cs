@@ -12,8 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using NLog.Extensions.Logging;
+using NLog.Web;
 using NMagickWand;
 using Maw.Data.EntityFramework.Blogs;
 using Maw.Data.EntityFramework.Identity;
@@ -129,7 +128,7 @@ namespace MawMvcApp
             }
             else
             {
-                loggerFactory.AddNLog();
+                app.AddNLogWeb();
                 env.ConfigureNLog("nlog.config");
 
                 app.UseExceptionHandler("/error/");

@@ -1,9 +1,0 @@
-{
-    "projects": [ 
-        "Maw.Data",
-        "Maw.Data.EntityFramework",
-        "Maw.Domain",
-        "Maw.TagHelpers",
-        "mikeandwan.us" 
-    ]
-}

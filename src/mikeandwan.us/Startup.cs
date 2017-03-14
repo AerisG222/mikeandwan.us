@@ -33,6 +33,7 @@ using MawMvcApp.ViewModels.About;
 namespace MawMvcApp
 {
     // TODO: googlemaps add async defer back and handle callback when it loads
+    // TODO: upgrade EF to 1.1.2 once it comes out, which should fix https://github.com/aspnet/EntityFramework/issues/7811
     public class Startup
     {
         readonly IConfiguration _config;

@@ -34,13 +34,13 @@ copy_app() {
     local APP=$1
 
     # https://silentorbit.com/notes/2013/08/rsync-by-extension/
-    rsync -ah --include '*/' --include '*.js' --include '*.css' --exclude '*' "${SRC_ROOT}/client_apps/${APP}/dist/" "${DIST_ROOT}/wwwroot/js/${APP}"
+    rsync -ah --include '*/' --include '*.js' --include '*.css' --exclude '*' "${SRC_ROOT}/client_apps/${APP}/dist/" "${BUILD_WWW}/wwwroot/js/${APP}"
 }
 
 update_refs() {
     local APP=$1
 
-    for JS in $( find "${DIST_ROOT}/wwwroot/js/${APP}" -name '*.js' -o -name '*.css' ); do
+    for JS in $( find "${BUILD_WWW}/wwwroot/js/${APP}" -name '*.js' -o -name '*.css' ); do
         local NEWFILENAME=$( basename "$JS" )
         local EXTENSION="${NEWFILENAME##*.}"
         local ORIGFILENAME="${NEWFILENAME%%.*}"
@@ -69,8 +69,8 @@ update_refs() {
 ensure_dir() {
     local APP=$1
 
-    if [ ! -d "${DIST_ROOT}/wwwroot/js/${APP}" ]; then
-        mkdir "${DIST_ROOT}/wwwroot/js/${APP}"
+    if [ ! -d "${BUILD_WWW}/wwwroot/js/${APP}" ]; then
+        mkdir "${BUILD_WWW}/wwwroot/js/${APP}"
     fi
 }
 
@@ -142,11 +142,10 @@ cp -r "${SRC_ROOT}/Maw.TagHelpers" "${BUILD_ROOT}/Maw.TagHelpers"
 cp -r "${SRC_WWW}" "${BUILD_WWW}"
 
 cd "${BUILD_WWW}"
-dotnet publish -f netcoreapp1.1 -o "${DIST_ROOT}" -c Release
 
 publish_client_apps
 
-dotnet razor-precompile -f netcoreapp1.1 -o "${DIST_ROOT}" -c Release
+dotnet publish -f netcoreapp1.1 -o "${DIST_ROOT}" -c Release
 rm -rf "${BUILD_ROOT}"
 
 # add the media links for testing

@@ -4,13 +4,12 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "@types/es6-promise": "0.0.32",
-    "@types/jquery": "^2.0.40",
+    "@types/jquery": "^2.0.41",
     "@types/stats": "^0.16.30",
-    "@types/three": "0.83.4",
-    "awesome-typescript-loader": "^3.0.8",
+    "@types/three": "0.84.3",
+    "awesome-typescript-loader": "^3.1.2",
     "typescript": "^2.2.1",
-    "webpack": "^2.2.1"
+    "webpack": "^2.3.2"
   },
   "scripts": {
     "dev_build": "rm -rf dist && webpack",

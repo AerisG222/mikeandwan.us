@@ -6,20 +6,19 @@
   "description": "3D photo viewing application for www.mikeandwan.us",
   "devDependencies": {
     "@types/bootstrap": "^3.3.32",
-    "@types/es6-promise": "0.0.32",
-    "@types/jquery": "^2.0.40",
+    "@types/jquery": "^2.0.41",
     "@types/mousetrap": "^1.5.33",
     "@types/stats": "^0.16.30",
-    "@types/three": "0.83.4",
+    "@types/three": "0.84.3",
     "@types/tween.js": "0.0.31",
-    "awesome-typescript-loader": "^3.0.8",
+    "awesome-typescript-loader": "^3.1.2",
     "rxjs": "^5.2.0",
-    "tslint": "^4.4.2",
+    "tslint": "^4.5.1",
     "typescript": "^2.2.1",
-    "webpack": "^2.2.1"
+    "webpack": "^2.3.2"
   },
   "dependencies": {
-    "linqts": "^1.7.5"
+    "linqts": "^1.8.1"
   },
   "scripts": {
     "dev_build": "rm -rf dist && webpack",

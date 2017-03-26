@@ -2,6 +2,7 @@ import { Component, EventEmitter } from '@angular/core';
 
 import { Breadcrumb } from '../shared/breadcrumb.model';
 import { BreadcrumbService } from '../shared/breadcrumb.service';
+import { SvgIcon } from '../svg-icon/svg-icon.enum';
 
 @Component({
     selector: 'maw-breadcrumb-list',
@@ -9,6 +10,7 @@ import { BreadcrumbService } from '../shared/breadcrumb.service';
     styleUrls: [ './breadcrumb-list.component.css' ]
 })
 export class BreadcrumbListComponent {
+    svgIcon = SvgIcon;
     breadcrumbs: Array<Breadcrumb> = [];
     breadcrumbsChangedEventEmitter: EventEmitter<Array<Breadcrumb>> = new EventEmitter<Array<Breadcrumb>>();
 

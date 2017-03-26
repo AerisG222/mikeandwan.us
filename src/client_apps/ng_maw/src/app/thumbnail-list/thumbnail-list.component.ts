@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 
 import { ThumbnailInfo, SelectedThumbnail } from './';
 import { ResponsiveService } from '../shared/';
+import { SvgIcon } from '../svg-icon/svg-icon.enum';
 
 @Component({
     selector: 'maw-thumbnail-list',
@@ -9,6 +10,7 @@ import { ResponsiveService } from '../shared/';
     styleUrls: [ './thumbnail-list.component.css' ]
 })
 export class ThumbnailListComponent {
+    svgIcon = SvgIcon;
     rowsPerPage = 3;
     itemsPerRow = 6;
     pageDisplayedIndex = 0;

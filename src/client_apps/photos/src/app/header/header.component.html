@@ -5,12 +5,12 @@
     </div>
     <div class="col-sm-4 hidden-xs text-right">
         <div class="btn-group">
-            <a target="_blank" class="btn btn-default btn-sm" *ngIf="downloadUrl" [href]="downloadUrl">Download <i class="fa fa-download"></i></a>
-            <button type="button" class="btn btn-default btn-sm" *ngIf="showRegularButton" (click)="toggleMapView()">Regular View <i class="fa fa-home"></i></button>
-            <button type="button" class="btn btn-default btn-sm" *ngIf="showMapButton" (click)="toggleMapView()">Map View <i class="fa fa-map-marker"></i></button>
-            <button type="button" class="btn btn-default btn-sm" (click)="clickConfig()">Settings <i class="fa fa-wrench"></i></button>
-            <button type="button" class="btn btn-default btn-sm" title="Interactive Statistics" (click)="clickStats()"><i class="fa fa-pie-chart"></i></button>
-            <button type="button" class="btn btn-default btn-sm" title="Get Android App" (click)="clickAndroid()"><i class="fa fa-android"></i></button>
+            <a target="_blank" class="btn btn-default btn-sm" *ngIf="downloadUrl" [href]="downloadUrl"><span style="margin-right:6px;">Download</span><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Download"></app-svg-icon></a>
+            <button type="button" class="btn btn-default btn-sm" *ngIf="showRegularButton" (click)="toggleMapView()"><span style="margin-right:6px;">Regular View</span><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Home"></app-svg-icon></button>
+            <button type="button" class="btn btn-default btn-sm" *ngIf="showMapButton" (click)="toggleMapView()"><span style="margin-right:6px;">Map View</span><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.MapMarker"></app-svg-icon></button>
+            <button type="button" class="btn btn-default btn-sm" (click)="clickConfig()"><span style="margin-right:6px;">Settings</span><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Wrench"></app-svg-icon></button>
+            <button type="button" class="btn btn-default btn-sm" title="Interactive Statistics" (click)="clickStats()"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.PieChart"></app-svg-icon></button>
+            <button type="button" class="btn btn-default btn-sm" title="Get Android App" (click)="clickAndroid()"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Android"></app-svg-icon></button>
         </div>
     </div>
 </div>

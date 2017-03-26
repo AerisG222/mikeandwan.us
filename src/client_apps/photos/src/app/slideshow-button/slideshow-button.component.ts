@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
+
 import { PhotoListContext } from '../shared/photo-list-context.model';
 
 @Component({
@@ -8,5 +10,6 @@ import { PhotoListContext } from '../shared/photo-list-context.model';
     styleUrls: [ './slideshow-button.component.css' ]
 })
 export class SlideshowButtonComponent {
+    svgIcon = SvgIcon;
     @Input() context: PhotoListContext;
 }

@@ -1,1 +1,4 @@
-<button type="button" class="btn btn-default btn-xs" (click)="context.toggleSlideshow()" [ngClass]="{active: context.isSlideshowPlaying}"><i class="fa" [ngClass]="{'fa-play': !context.isSlideshowPlaying, 'fa-stop': context.isSlideshowPlaying}"></i></button>
+<button type="button" class="btn btn-default btn-xs" (click)="context.toggleSlideshow()" [ngClass]="{active: context.isSlideshowPlaying}">
+    <app-svg-icon *ngIf="!context.isSlideshowPlaying" [klass]="'icon vcenter clickable'" [icon]="svgIcon.Play"></app-svg-icon>
+    <app-svg-icon *ngIf="context.isSlideshowPlaying" [klass]="'icon vcenter clickable'" [icon]="svgIcon.Stop"></app-svg-icon>
+</button>

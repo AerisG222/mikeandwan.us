@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 
+import { SvgIcon } from '../svg-icon/svg-icon.enum';
 import { DialogButton } from './dialog-button.model';
 declare var jQuery: any;
 
@@ -10,6 +11,7 @@ declare var jQuery: any;
 })
 export class DialogComponent implements AfterViewInit {
     private _modalDiv: HTMLDivElement = null;
+    svgIcon = SvgIcon;
     isVisible = false;
     @Input() title: string = null;
     buttons: Array<DialogButton> = [];

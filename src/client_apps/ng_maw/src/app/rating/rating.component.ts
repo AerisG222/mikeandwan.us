@@ -1,5 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
+import { SvgIcon } from '../svg-icon/svg-icon.enum';
+
 @Component({
     selector: 'maw-rating',
     templateUrl: './rating.component.html',
@@ -7,16 +9,17 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 })
 export class RatingComponent implements OnInit {
     private _rating: number = null;
+    svgIcon = SvgIcon;
     @Input() editable = false;
     @Input() maxRating = 5;
     @Output() rate: EventEmitter<number> = new EventEmitter<number>();
     hover = -1;
     ratingRange: Array<number> = [];
-    ratingIcons: Array<string> = [];
+    ratingIcons: Array<SvgIcon> = [];
 
     ngOnInit(): void {
         const range: Array<number> = [];
-        const icons: Array<string> = [];
+        const icons: Array<SvgIcon> = [];
 
         for (let i = 0; i < this.maxRating; i++) {
             range.push(i + 1);
@@ -36,7 +39,7 @@ export class RatingComponent implements OnInit {
         return this._rating;
     }
 
-    getIcon(value: number): string {
+    getIcon(value: number): SvgIcon {
         let compareVal: number;
 
         if (this.hover === -1) {
@@ -46,9 +49,9 @@ export class RatingComponent implements OnInit {
         }
 
         if (value <= compareVal) {
-            return '&#xf005;';
+            return SvgIcon.Star;
         } else {
-            return '&#xf006;';
+            return SvgIcon.StarO;
         }
     }
 

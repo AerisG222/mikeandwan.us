@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
+
 import { VideoStateService } from '../shared/video-state.service';
 
 @Component({
@@ -8,6 +10,8 @@ import { VideoStateService } from '../shared/video-state.service';
     styleUrls: [ './header.component.css' ]
 })
 export class HeaderComponent {
+    svgIcon = SvgIcon;
+
     constructor(private _stateService: VideoStateService) {
 
     }

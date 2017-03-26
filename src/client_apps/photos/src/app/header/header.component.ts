@@ -2,6 +2,7 @@ import { Component, ViewChild, AfterViewInit } from '@angular/core';
 
 import { BreadcrumbListComponent } from '../../ng_maw/breadcrumb-list/breadcrumb-list.component';
 import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
+import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
 
 import { PhotoNavigationService } from '../shared/photo-navigation.service';
 import { PhotoStateService } from '../shared/photo-state.service';
@@ -13,6 +14,7 @@ import { CategoryBreadcrumb } from '../shared/category-breadcrumb.model';
     styleUrls: [ './header.component.css' ]
 })
 export class HeaderComponent implements AfterViewInit {
+    svgIcon = SvgIcon;
     @ViewChild(BreadcrumbListComponent) breadcrumbList: BreadcrumbListComponent;
     downloadUrl: string = null;
     showMapButton = false;

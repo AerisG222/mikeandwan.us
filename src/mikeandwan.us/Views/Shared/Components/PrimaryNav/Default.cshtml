@@ -9,14 +9,20 @@
     <li maw-action="Index" maw-controller="Webgl" maw-text="webgl" maw-active="@Model.ActiveNavigationZone == NavigationZone.Webgl"></li>
 
     @if(Model.AuthorizedForPhotos) {
-        <li maw-action="Index" maw-controller="Photos" maw-icon="fa-camera" maw-route-extra="" maw-active="@Model.ActiveNavigationZone == NavigationZone.Photos"></li>
+        <li maw-action="Index" maw-controller="Photos" maw-route-extra="" maw-active="@Model.ActiveNavigationZone == NavigationZone.Photos">
+            <svg-icon class="icon" icon="Camera"></svg-icon>
+        </li>
     }
 
 	@if(Model.AuthorizedForVideos) {
-        <li maw-action="Index" maw-controller="Videos" maw-icon="fa-video-camera" maw-route-extra="" maw-active="@Model.ActiveNavigationZone == NavigationZone.Videos"></li>
+        <li maw-action="Index" maw-controller="Videos" maw-route-extra="" maw-active="@Model.ActiveNavigationZone == NavigationZone.Videos">
+            <svg-icon class="icon" icon="VideoCamera"></svg-icon>
+        </li>
     }
 
     @if(Model.AuthorizedForAdmin) {
-        <li maw-action="Index" maw-controller="Admin" maw-icon="fa-cog" maw-active="@Model.ActiveNavigationZone == NavigationZone.Administration"></li>
+        <li maw-action="Index" maw-controller="Admin" maw-active="@Model.ActiveNavigationZone == NavigationZone.Administration">
+            <svg-icon class="icon" icon="Cog"></svg-icon>
+        </li>
     }
 </ul>

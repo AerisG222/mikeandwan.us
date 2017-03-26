@@ -13,6 +13,7 @@ import { ThumbnailListComponent } from '../ng_maw/thumbnail-list/thumbnail-list.
 import { BreadcrumbService } from '../ng_maw/shared/breadcrumb.service';
 import { LocalStorageService } from '../ng_maw/shared/local-storage.service';
 import { ResponsiveService } from '../ng_maw/shared/responsive.service';
+import { SvgIconComponent } from '../ng_maw/svg-icon/svg-icon.component';
 
 import { AppComponent } from './app.component';
 import { CategoryLinkComponent } from './category-link/category-link.component';
@@ -63,6 +64,7 @@ import { RouteMode } from './shared/route-mode.model';
         DialogComponent,
         PagerComponent,
         RatingComponent,
+        SvgIconComponent,
         ThumbnailListComponent,
         CategoryLinkComponent,
         CategoryListComponent,

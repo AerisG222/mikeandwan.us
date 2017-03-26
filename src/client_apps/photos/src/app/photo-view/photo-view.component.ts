@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild, AfterViewInit, OnDestroy, OnChanges, NgZone } from '@angular/core';
 
 import { ResponsiveService } from '../../ng_maw/shared/responsive.service';
+import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
 
 import { PhotoNavigationService } from '../shared/photo-navigation.service';
 import { PhotoStateService } from '../shared/photo-state.service';
@@ -21,6 +22,7 @@ import { SaveDialogComponent } from '../save-dialog/save-dialog.component';
 })
 export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     private _containerBox: ContainerBox = null;
+    svgIcon = SvgIcon;
     showHistogramButton = true;
     showComments = false;
     showRatings = false;

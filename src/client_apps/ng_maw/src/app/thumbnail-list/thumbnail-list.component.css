@@ -15,20 +15,6 @@
 .thumbnail.ng-leave.ng-leave-active { position: absolute; left: -1000px; opacity: 0; }
 .thumbnail.ng-enter-stagger, .thumbnail.ng-leave-stagger { -moz-transition-delay: 0.02s; -webkit-transition-delay: 0.02s; -o-transition-delay: 0.02s; transition-delay: 0.02s; -moz-transition-duration: 0; -webkit-transition-duration: 0; -o-transition-duration: 0; transition-duration: 0; }
 
-.badge { display: none; position: absolute; border-radius: 4px 0; }
-
-/* sm (and larger) */
 @media (min-width: 768px) {
     .thumbnail { margin-bottom: 0; }
-    .badge { display: inline-block; top: 103px; right: 12px; }
-}
-
-/* md (and larger) */
-@media (min-width: 992px) {
-    .badge { right: 42px; }
-}
-
-/* lg */
-@media (min-width: 1200px) {
-    .badge { right: 18px; }
 }

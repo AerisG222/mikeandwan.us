@@ -4,7 +4,7 @@
 <ul class="nav navbar-nav navbar-right">
     @if(Model.IsAuthenticated) {
         <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-user"></i><i class="fa fa-caret-down"></i></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><svg-icon icon="Person" class="icon"></svg-icon><svg-icon icon="CaretDown" class="icon icon-caret"></svg-icon></a>
             <ul class="dropdown-menu">
                 <li><a asp-controller="account" asp-action="changepassword">change password</a></li>
                 <li><a asp-controller="account" asp-action="editprofile">edit profile</a></li>
@@ -13,8 +13,8 @@
         </li>
     }
     else {
-        <li><a asp-controller="account" asp-action="login"><i class="fa fa-user"></i></a></li>
+        <li><a asp-controller="account" asp-action="login"><svg-icon icon="Person" class="icon"></svg-icon></a></li>
     }
 
-	<li><a asp-controller="about" asp-action="contact"><i class="fa fa-envelope"></i></a></li>
+	<li><a asp-controller="about" asp-action="contact"><svg-icon icon="Envelope" class="icon"></svg-icon></a></li>
 </ul>

@@ -12,7 +12,7 @@
         @if(Context.User.Identity.IsAuthenticated) {
             <div class="col-sm-offset-2 col-sm-2 spotlight">
                 <p class="text-center">
-                    <a asp-controller="photos" asp-action="index"><i class="fa fa-camera"></i></a>
+                    <a asp-controller="photos" asp-action="index"><svg-icon icon="Camera" class="icon-hp-feature"></svg-icon></a>
                 </p>
                 <p class="text-center">
                     <a class="h2" asp-controller="photos" asp-action="index">Photos</a>
@@ -25,7 +25,7 @@
         else {
             <div class="col-sm-offset-2 col-sm-2 spotlight">
                 <p class="text-center">
-                    <a asp-controller="account" asp-action="login"><i class="fa fa-user"></i></a>
+                    <a asp-controller="account" asp-action="login"><svg-icon icon="Person" class="icon-hp-feature"></svg-icon></a>
                 </p>
                 <p class="text-center">
                     <a class="h2" asp-controller="account" asp-action="login">Login</a>
@@ -38,7 +38,7 @@
 
         <div class="col-sm-offset-1 col-sm-2 spotlight">
             <p class="text-center">
-                <a asp-controller="tools" asp-action="index"><i class="fa fa-wrench"></i></a>
+                <a asp-controller="tools" asp-action="index"><svg-icon icon="Wrench" class="icon-hp-feature"></svg-icon></a>
             </p>
             <p class="text-center">
                 <a class="h2" asp-controller="tools" asp-action="index">Tools</a>
@@ -50,7 +50,7 @@
 
         <div class="col-sm-offset-1 col-sm-2 spotlight">
             <p class="text-center">
-                <a asp-controller="about" asp-action="news"><i class="fa fa-flag"></i></a>
+                <a asp-controller="about" asp-action="news"><svg-icon icon="Flag" class="icon-hp-feature"></svg-icon></a>
             </p>
             <p class="text-center">
                 <a class="h2" asp-controller="about" asp-action="news">News</a>

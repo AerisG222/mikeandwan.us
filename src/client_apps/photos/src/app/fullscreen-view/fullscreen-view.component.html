@@ -5,9 +5,9 @@
             <app-category-link [category]="context.current.category"></app-category-link>
         </div>
         <div class="pull-right">
-            <button type="button" class="btn btn-default btn-xs" (click)="context.movePrevious()"><i class="fa fa-arrow-left"></i></button>
+            <button type="button" class="btn btn-default btn-xs" (click)="context.movePrevious()"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.ArrowLeft"></app-svg-icon></button>
             <app-slideshow-button [context]="context"></app-slideshow-button>
-            <button type="button" class="btn btn-default btn-xs" (click)="context.moveNext()"><i class="fa fa-arrow-right"></i></button>
+            <button type="button" class="btn btn-default btn-xs" (click)="context.moveNext()"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.ArrowRight"></app-svg-icon></button>
         </div>
     </div>
 </div>

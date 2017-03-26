@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PagerComponent } from '../../ng_maw/pager/pager.component';
 import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
 import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
+import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
 
 import { Config, ModeRouteInfo, PhotoNavigationService, PhotoStateService, CategoryThumbnailInfo } from '../shared';
 
@@ -44,7 +45,7 @@ export class CategoryListComponent implements AfterViewInit {
                         x.category.teaserPhotoInfo.width,
                         x,
                         x.category.name,
-                        x.category.hasGpsData ? 'fa-map-marker' : null));
+                        x.category.hasGpsData ? SvgIcon.MapMarker : null));
 
                     this.thumbnailList.setItemList(d);
                     this.pager.setPageCount(this.pager.calcPageCount(d.length, this.thumbnailList.itemsPerPage));

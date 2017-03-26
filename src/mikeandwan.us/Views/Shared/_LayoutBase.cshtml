@@ -4,7 +4,6 @@
 	@await RenderSectionAsync("custom_head", required: false)
 	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine:bold" />
-	@Html.Partial("_css_FontAwesome")
 	@Html.Partial("_css_Bootstrap")
 	@Html.Partial("_css_site")
 	@await RenderSectionAsync("stylesheets", required: false)
@@ -17,14 +16,14 @@
 <footer class="container-fluid">
 	<div class="row social">
 		<div class="col-xs-12 text-center">
-			<a href="https://play.google.com/store/apps/developer?id=mmorano"><i class="fa fa-android"></i></a>
-			<a href="https://twitter.com/AerisG222"><i class="fa fa-tw"></i></a>
-			<a href="https://www.google.com/+MikeMorano222"><i class="fa fa-gp"></i></a>
-			<a href="https://www.linkedin.com/pub/mike-morano/0/b51/805"><i class="fa fa-ln"></i></a>
-			<a href="https://www.facebook.com/AerisG222"><i class="fa fa-fb"></i></a>
-			<a href="https://trello.com/aerisg222"><i class="fa fa-trello"></i></a>
-			<a href="https://github.com/AerisG222"><i class="fa fa-github"></i></a>
-			<a href="https://steamcommunity.com/profiles/76561197974977949/"><i class="fa fa-steam"></i></a>
+			<a href="https://play.google.com/store/apps/developer?id=mmorano"><svg-icon class="icon icon-social" icon="Android"></svg-icon></a>
+			<a href="https://twitter.com/AerisG222"><svg-icon class="icon icon-social" icon="Twitter"></svg-icon></a>
+			<a href="https://www.google.com/+MikeMorano222"><svg-icon class="icon icon-social" icon="GooglePlus"></svg-icon></a>
+			<a href="https://www.linkedin.com/pub/mike-morano/0/b51/805"><svg-icon class="icon icon-social" icon="LinkedIn"></svg-icon></a>
+			<a href="https://www.facebook.com/AerisG222"><svg-icon class="icon icon-social" icon="Facebook"></svg-icon></a>
+			<a href="https://trello.com/aerisg222"><svg-icon class="icon icon-social" icon="Trello"></svg-icon></a>
+			<a href="https://github.com/AerisG222"><svg-icon class="icon icon-social" icon="Github"></svg-icon></a>
+			<a href="https://steamcommunity.com/profiles/76561197974977949/"><svg-icon class="icon icon-social" icon="Steam"></svg-icon></a>
 		</div>
 	</div>
 	<div class="row copyright">

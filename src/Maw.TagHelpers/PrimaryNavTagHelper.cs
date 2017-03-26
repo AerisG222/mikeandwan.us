@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -11,7 +12,6 @@ namespace Maw.TagHelpers
 	[HtmlTargetElement("li", Attributes = ControllerAttributeName)]
 	[HtmlTargetElement("li", Attributes = ActionAttributeName)]
 	[HtmlTargetElement("li", Attributes = LinkTextAttributeName)]
-	[HtmlTargetElement("li", Attributes = IconAttributeName)]
 	[HtmlTargetElement("li", Attributes = IsActiveAttributeName)]
 	[HtmlTargetElement("li", Attributes = RouteValuesDictionaryName)]
 	[HtmlTargetElement("li", Attributes = RouteValuesPrefix + "*")]
@@ -21,7 +21,6 @@ namespace Maw.TagHelpers
 		const string ActionAttributeName = "maw-action";
 		const string ControllerAttributeName = "maw-controller";
 		const string LinkTextAttributeName = "maw-text";
-		const string IconAttributeName = "maw-icon";
 		const string IsActiveAttributeName = "maw-active";
 		const string RouteValuesDictionaryName = "maw-all-route-data";
 		const string RouteValuesPrefix = "maw-route-";
@@ -43,11 +42,7 @@ namespace Maw.TagHelpers
 		
 		[HtmlAttributeName(LinkTextAttributeName)]	
 		public string LinkText { get; set; }
-		
-		
-		[HtmlAttributeName(IconAttributeName)]	
-		public string Icon { get; set; }
-		
+				
 		
 		[HtmlAttributeName(IsActiveAttributeName)]	
 		public bool IsActive { get; set; }
@@ -69,14 +64,10 @@ namespace Maw.TagHelpers
 		}
 		
 		
-		public override void Process(TagHelperContext context, TagHelperOutput output)
+		public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
 		{
 			if(LinkText == null)
 			{
-				if(Icon == null) {
-					throw new InvalidOperationException("This tag requires either the link text or icon to be set");
-				}
-				
 				LinkText = string.Empty;
 			}
 			
@@ -93,16 +84,7 @@ namespace Maw.TagHelpers
 			var action = Action.Replace("-", string.Empty);
 			var anchor = _htmlGenerator.GenerateActionLink(ViewContext, LinkText, action, Controller, null, null, null, routeValues, null);
 			
-			if(!string.IsNullOrEmpty(Icon))
-			{
-				var iconBuilder = new TagBuilder("i");
-				
-				iconBuilder.AddCssClass("fa");
-            	iconBuilder.AddCssClass(Icon);
-			    
-				anchor.InnerHtml.AppendHtml(iconBuilder);
-			}
-			
+			anchor.InnerHtml.AppendHtml(await output.GetChildContentAsync());
 			output.Content.AppendHtml(anchor);
 		}
 	}

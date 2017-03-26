@@ -1,5 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
+import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
+
 import { Photo } from '../shared/photo.model';
 import { FilterSettings } from '../shared/filter-settings.model';
 
@@ -10,6 +12,7 @@ import { FilterSettings } from '../shared/filter-settings.model';
 })
 export class EffectsViewComponent {
     private _photo: Photo;
+    svgIcon = SvgIcon;
     @Output() update: EventEmitter<FilterSettings> = new EventEmitter<FilterSettings>();
 
     @Input() set photo(value: Photo) {

@@ -11,6 +11,7 @@ import { ThumbnailListComponent } from '../ng_maw/thumbnail-list/thumbnail-list.
 import { BreadcrumbService } from '../ng_maw/shared/breadcrumb.service';
 import { LocalStorageService } from '../ng_maw/shared/local-storage.service';
 import { ResponsiveService } from '../ng_maw/shared/responsive.service';
+import { SvgIconComponent } from '../ng_maw/svg-icon/svg-icon.component';
 
 import { AppComponent } from './app.component';
 import { CategoryListComponent } from './category-list/category-list.component';
@@ -40,6 +41,7 @@ import { VideoStateService } from './shared/video-state.service';
         BreadcrumbListComponent,
         DialogComponent,
         PagerComponent,
+        SvgIconComponent,
         ThumbnailListComponent,
         CategoryListComponent,
         HeaderComponent,

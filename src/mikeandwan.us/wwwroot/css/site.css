@@ -25,10 +25,21 @@ body { padding-right: 0 !important; }
 .spotlight i { width: 100%; text-align: center; font-size: 96px; }
 .panel-heading + .list-group .list-group-item:first-child { border-top-width: 1px; }
 .modal-footer { padding: 8px; }
-footer { margin-top: 80px; background: none repeat scroll 0 0 #1c1e22; padding: 20px 0 80px 0; color: #777; }
-.social { margin-bottom: 24px; }
+footer { margin-top: 80px; background: none repeat scroll 0 0 #1c1e22; padding: 20px 0 40px 0; color: #777; }
 .copyright { margin-top: 24px; }
-.social a { font-size: 36px; margin: 0 12px; }
+.social { margin: 24px; }
+.social a { margin: 0 12px; }
+
+.icon { fill: #c8c8c8; font-size: 12px; height: 1em; }
+.icon-bright { fill: #fff; }
+.icon-caret { height: 0.4em; margin-bottom: 4px; }
+.icon-hp-feature { fill: #fff; height: 7em; }
+.icon-social { height: 2.4em; }
+.icon-dialog-close { height: 1.4em; }
+.icon-lg { height: 3em; }
+.icon-md { height: 0.8em; }
+.icon-sm { height: 0.6em; }
+.icon-xs { height: 0.4em; }
 
 /* shamelessly stolen from github */
 kbd {
@@ -46,27 +57,25 @@ kbd {
     font-weight: bold;
 }
 
-/* adblock plus apparently is stripping out font-awesome icons for social sites, add them here with custom names to avoid this */
-.fa-gp:before { content: ""; }
-.fa-fb:before { content: ""; }
-.fa-ln:before { content: ""; }
-.fa-tw:before { content: ""; }
-
 .vcenter { display: inline-block; vertical-align: middle; }
+
+.badge { display: none; position: absolute; border-radius: 4px 0; font-size: 20px; }
 
 /* sm (and larger) */
 @media (min-width: 768px) {
     .banner { background-image: url('/img/banner_sm.jpg'); height: 300px; margin-bottom: 30px; }
+    .badge { display: inline-block; top: 101px; right: 10px; }
 }
 
 /* md (and larger) */
 @media (min-width: 992px) {
-
+    .badge { right: 65px; }
 }
 
 /* lg */
 @media (min-width: 1200px) {
     .banner { background-image: url('/img/banner_lg.jpg'); height: 340px; margin-bottom: 40px; }
+    .badge { right: 17px; }
 }
 
 /* hp image breakpoint - xl */

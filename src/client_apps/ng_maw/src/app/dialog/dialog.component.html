@@ -2,7 +2,7 @@
     <div class="modal-dialog" [ngClass]="sizeClass">
         <div class="modal-content">
             <div class="modal-header" *ngIf="title">
-                <button type="button" class="close" (click)="onCancel()"><i class="fa fa-times"></i></button>
+                <button type="button" class="close" (click)="onCancel()"><app-svg-icon [klass]="'icon icon-dialog-close'" [icon]="svgIcon.Close"></app-svg-icon></button>
                 <h4 class="modal-title">{{title}}</h4>
             </div>
             <div class="modal-body">

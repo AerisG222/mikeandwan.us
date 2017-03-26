@@ -12,10 +12,12 @@ import { MemoryService } from '../memory.service';
 })
 export class GameBoardComponent {
     private static CARDS_IN_GAME = 20;
-    protected board: Array<Array<ICardInfo>> = null;
+
     private _selectedCards: ISelectedCards = { card1: null, card2: null };
     private _matchedCards: Array<CardComponent> = [];
     private ignoreSelect = false;
+
+    board: Array<Array<ICardInfo>> = null;
     @Output() match: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() nonmatch: EventEmitter<any> = new EventEmitter<any>();
 

@@ -28,7 +28,7 @@ using Maw.Domain.Videos;
 using Maw.Domain.Photos;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
-
+using Microsoft.AspNetCore.Mvc;
 
 namespace MawMvcApp
 {
@@ -37,10 +37,13 @@ namespace MawMvcApp
     public class Startup
     {
         readonly IConfiguration _config;
+        readonly IHostingEnvironment _env;
 
 
         public Startup(IHostingEnvironment hostingEnvironment)
         {
+            _env = hostingEnvironment;
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(hostingEnvironment.ContentRootPath)
                 .AddJsonFile("config.json")
@@ -64,10 +67,10 @@ namespace MawMvcApp
                 .Configure<ContactConfig>(_config.GetSection("ContactUs"));
 
             services
-                .AddDbContext<BlogContext>(options => options.UseNpgsql(_config["Environment:DbConnectionString"]))
-                .AddDbContext<IdentityContext>(options => options.UseNpgsql(_config["Environment:DbConnectionString"]))
-                .AddDbContext<PhotoContext>(options => options.UseNpgsql(_config["Environment:DbConnectionString"]))
-                .AddDbContext<VideoContext>(options => options.UseNpgsql(_config["Environment:DbConnectionString"]));
+                .AddDbContext<BlogContext>(opts => opts.UseNpgsql(_config["Environment:DbConnectionString"]))
+                .AddDbContext<IdentityContext>(opts => opts.UseNpgsql(_config["Environment:DbConnectionString"]))
+                .AddDbContext<PhotoContext>(opts => opts.UseNpgsql(_config["Environment:DbConnectionString"]))
+                .AddDbContext<VideoContext>(opts => opts.UseNpgsql(_config["Environment:DbConnectionString"]));
 
             services
                 .AddScoped<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
@@ -81,7 +84,7 @@ namespace MawMvcApp
                 .AddScoped<IUserStore<MawUser>, MawUserStore>()
                 .AddScoped<IRoleStore<MawRole>, MawRoleStore>();
 
-            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+            services.AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN");
 
             services.AddLogging();
 
@@ -112,13 +115,20 @@ namespace MawMvcApp
                     opts.AddPolicy(MawConstants.POLICY_ADMIN_SITE, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_ADMIN).Build());
                 });
 
-            services.AddMvc();
+            services.AddMvc(opts => 
+                {
+                    if(_env.IsProduction())
+                    {
+                        // this should already be set in nginx, but this protects us if that is misconfigured
+                        opts.Filters.Add(new RequireHttpsAttribute());
+                    }
+                });
         }
 
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            if (env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 loggerFactory.AddConsole();
 
@@ -130,7 +140,7 @@ namespace MawMvcApp
             else
             {
                 app.AddNLogWeb();
-                env.ConfigureNLog("nlog.config");
+                _env.ConfigureNLog("nlog.config");
 
                 app.UseExceptionHandler("/error/");
             }

@@ -1,6 +1,3 @@
-using System;
-
-
 namespace Maw.Domain
 {
 	public class EnvironmentConfig

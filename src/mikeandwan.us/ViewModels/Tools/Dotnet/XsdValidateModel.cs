@@ -1,14 +1,13 @@
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Text;
-using System.Xml;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 #if NET451
+using System.IO;
+using System.Xml;
 using System.Xml.Schema;
-#endif
-
 using Maw.Domain.Utilities;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+#endif
 
 
 namespace MawMvcApp.ViewModels.Tools.Dotnet

@@ -14,6 +14,8 @@ using MawMvcApp.ViewModels.Account;
 using MawMvcApp.ViewModels.Navigation;
 using MawMvcApp.ViewModels.About;
 using SignInRes = Microsoft.AspNetCore.Identity.SignInResult;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 
 namespace MawMvcApp.Controllers
@@ -30,6 +32,7 @@ namespace MawMvcApp.Controllers
 		readonly UserManager<MawUser> _userMgr;
 		readonly IEmailService _emailService;
 		readonly ILoginService _loginService;
+		readonly string _externalCookieScheme;
 
 
 		public AccountController(ILogger<AccountController> log, 
@@ -38,7 +41,8 @@ namespace MawMvcApp.Controllers
 			                     SignInManager<MawUser> signInManager, 
 								 UserManager<MawUser> userManager, 
 								 IEmailService emailService,
-								 ILoginService loginService)
+								 ILoginService loginService,
+								 IOptions<IdentityCookieOptions> identityCookieOptions)
 			: base(log)
         {
 			if(userRepository == null)
@@ -71,27 +75,41 @@ namespace MawMvcApp.Controllers
 				throw new ArgumentNullException(nameof(loginService));
 			}
 
+			if(identityCookieOptions == null)
+			{
+				throw new ArgumentNullException(nameof(identityCookieOptions));
+			}
+
 			_contactConfig = contactOpts.Value;
             _repo = userRepository;
             _signInManager = signInManager;
 			_userMgr = userManager;
 			_emailService = emailService;
 			_loginService = loginService;
+			_externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
         }
 
 		
 		[HttpGet("login")]
-		public ActionResult Login(string returnUrl = null)
+		public async Task<ActionResult> Login(string returnUrl = null)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 			ViewBag.ReturnUrl = returnUrl;
+
+			// Clear the existing external cookie to ensure a clean login process
+            await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
             if (User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
             }
 
-			return View(new LoginModel());
+			var vm = new LoginModel
+			{
+				ExternalSchemes = GetExternalLoginSchemes()
+			};
+
+			return View(vm);
 		}
 
 		
@@ -102,6 +120,7 @@ namespace MawMvcApp.Controllers
 			ViewBag.NavigationZone = NavigationZone.Account;
 			ViewBag.ReturnUrl = returnUrl;
 			
+			model.ExternalSchemes = GetExternalLoginSchemes();
 			model.WasAttempted = true;
 
             if(!ModelState.IsValid)
@@ -134,6 +153,75 @@ namespace MawMvcApp.Controllers
             return View(model);
         }
 		
+
+		[HttpGet("external-login")]
+		public ActionResult ExternalLogin(string provider, string returnUrl = null)
+		{
+			if(!_signInManager.GetExternalAuthenticationSchemes().Any(x => string.Equals(x.AuthenticationScheme, provider, StringComparison.OrdinalIgnoreCase)))
+			{
+				_log.LogError($"Invalid external authentication scheme specified: {provider}");
+				return Redirect(nameof(Login));
+			}
+
+			var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { ReturnUrl = returnUrl });
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
+        	return Challenge(properties, provider);
+		} 
+
+
+		[HttpGet("external-login-callback")]
+		public async Task<ActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+		{
+			ViewBag.NavigationZone = NavigationZone.Account;
+			
+			if(!string.IsNullOrEmpty(remoteError))
+			{
+				_log.LogError($"Unable to authenticate externally: {remoteError}");
+				return RedirectToAction(nameof(Login));
+			}
+
+			var info = await _signInManager.GetExternalLoginInfoAsync();
+
+			if(info == null)
+			{
+				_log.LogError("Unable to obtain external login info");
+				return RedirectToAction(nameof(Login));
+			}
+
+			if(!_signInManager.GetExternalAuthenticationSchemes().Any(x => string.Equals(x.AuthenticationScheme, info.LoginProvider, StringComparison.OrdinalIgnoreCase)))
+			{
+				_log.LogError($"External provider {info.LoginProvider} is not supported");
+				return RedirectToAction(nameof(Login));
+			}
+
+			var email = info.Principal?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email);
+
+			if(email == null)
+			{
+				_log.LogError($"Unable to obtain email from External Authentication Provider {info.LoginProvider}");
+				return View(info);
+			}
+
+			var user = await _userMgr.FindByEmailAsync(email.Value);
+
+            if (user != null)
+            {
+				await _signInManager.SignInAsync(user, false);
+
+                _log.LogInformation($"User {user.Username} logged in with {info.LoginProvider} provider.");
+
+				if(!string.IsNullOrEmpty(returnUrl))
+				{
+	                return Redirect(returnUrl);
+				}
+
+				return Redirect("/");
+            }
+
+			return View(info);
+		}
+
 		
 		[Authorize]
 		[HttpGet("access-denied")]
@@ -389,6 +477,15 @@ namespace MawMvcApp.Controllers
                 Value = x.Code, 
                 Text = x.Name
             });
+		}
+
+
+		IEnumerable<ExternalLoginScheme> GetExternalLoginSchemes()
+		{
+			return _signInManager
+				.GetExternalAuthenticationSchemes()
+				.Select(x => new ExternalLoginScheme(x))
+				.OrderBy(x => x.ExternalAuth.DisplayName);
 		}
     }
 }

@@ -1,0 +1,18 @@
+@model Microsoft.AspNetCore.Identity.ExternalLoginInfo
+@{ ViewBag.Title = "google auth succeeded"; }
+
+@Html.Partial("_PageHeader", "External Authentication Error")
+
+<div class="row">
+    <div class="col-sm-6">
+        <p maw-alert-type="Danger">
+            Sorry, there was an error trying to authenticate you with the external service.  For this to work on this
+            site, the external source must provide an email address that matches the email for your user account on this
+            website.
+        </p>
+        <br/>
+        <p>
+            Please try to <a asp-action="Login">login</a> again.
+        </p>
+    </div>
+</div>

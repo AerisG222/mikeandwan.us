@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
+using AspNet.Security.OAuth.GitHub;
 using NLog.Web;
 using NMagickWand;
 using Maw.Data.EntityFramework.Blogs;
@@ -28,7 +30,7 @@ using Maw.Domain.Videos;
 using Maw.Domain.Photos;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
-using Microsoft.AspNetCore.Mvc;
+
 
 namespace MawMvcApp
 {
@@ -61,10 +63,10 @@ namespace MawMvcApp
 
             // http://docs.asp.net/en/latest/fundamentals/configuration.html#options-config-objects
             services
-                .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
+                .Configure<ContactConfig>(_config.GetSection("ContactUs"))
                 .Configure<EmailConfig>(_config.GetSection("Email"))
-                .Configure<GoogleCaptchaConfig>(_config.GetSection("Google"))
-                .Configure<ContactConfig>(_config.GetSection("ContactUs"));
+                .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
+                .Configure<GoogleCaptchaConfig>(_config.GetSection("GoogleRecaptcha"));
 
             services
                 .AddDbContext<BlogContext>(opts => opts.UseNpgsql(_config["Environment:DbConnectionString"]))
@@ -89,40 +91,34 @@ namespace MawMvcApp
             services.AddLogging();
 
             services.AddIdentity<MawUser, MawRole>(opts =>
-                {
-                    // relax the pwd requirements to match previous settings
-                    // future enhancement would be to enable and force users to change, but this
-                    // is additionally complicated as the logic should be replicated in both this
-                    // and the android app.
-                    opts.Password.RequireDigit = false;
-                    opts.Password.RequireLowercase = false;
-                    opts.Password.RequireNonAlphanumeric = false;
-                    opts.Password.RequireUppercase = false;
-                    opts.Password.RequiredLength = 4;
-
-                    opts.Cookies.ApplicationCookie.CookieName = "maw_auth";
-                    opts.Cookies.ApplicationCookie.LoginPath = "/account/login";
-                    opts.Cookies.ApplicationCookie.LogoutPath = "/account/logout";
-                    opts.Cookies.ApplicationCookie.AccessDeniedPath = "/account/access-denied";
-                    opts.Cookies.ApplicationCookie.ExpireTimeSpan = new TimeSpan(0, 20, 0);  // auth timeout = 20min [sliding]
-                })
-                .AddDefaultTokenProviders();
+            {
+                // relax the pwd requirements to match previous settings
+                // future enhancement would be to enable and force users to change, but this
+                // is additionally complicated as the logic should be replicated in both this
+                // and the android app.
+                opts.Password.RequireDigit = false;
+                opts.Password.RequireLowercase = false;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequireUppercase = false;
+                opts.Password.RequiredLength = 4;
+            })
+            .AddDefaultTokenProviders();
 
             services.AddAuthorization(opts =>
-                {
-                    opts.AddPolicy(MawConstants.POLICY_VIEW_PHOTOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());
-                    opts.AddPolicy(MawConstants.POLICY_VIEW_VIDEOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());
-                    opts.AddPolicy(MawConstants.POLICY_ADMIN_SITE, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_ADMIN).Build());
-                });
+            {
+                opts.AddPolicy(MawConstants.POLICY_VIEW_PHOTOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());
+                opts.AddPolicy(MawConstants.POLICY_VIEW_VIDEOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());
+                opts.AddPolicy(MawConstants.POLICY_ADMIN_SITE, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_ADMIN).Build());
+            });
 
             services.AddMvc(opts => 
+            {
+                if(_env.IsProduction())
                 {
-                    if(_env.IsProduction())
-                    {
-                        // this should already be set in nginx, but this protects us if that is misconfigured
-                        opts.Filters.Add(new RequireHttpsAttribute());
-                    }
-                });
+                    // this should already be set in nginx, but this protects us if that is misconfigured
+                    opts.Filters.Add(new RequireHttpsAttribute());
+                }
+            });
         }
 
 
@@ -146,21 +142,59 @@ namespace MawMvcApp
             }
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
-                {
-                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-                });
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             // note: using the forwarded middleware allowed the auth ticket to be marked secure.  however, the antiforgery
             //       only seems to be set when the antiforgery option is configured with RequireSsl = true.  The policy
             //       below ensures that all cookies are forced to match the request
             //       [HttpOnly will interfere with custom XSRF API filters]
             app.UseCookiePolicy(new CookiePolicyOptions
-                {
-                    //HttpOnly = HttpOnlyPolicy.Always,
-                    Secure = CookieSecurePolicy.SameAsRequest
-                });
+            {
+                //HttpOnly = HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.SameAsRequest
+            });
 
             app.UseIdentity();
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                CookieName = "maw_auth",
+                LoginPath = "/account/login",
+                LogoutPath = "/account/logout",
+                AccessDeniedPath = "/account/access-denied",
+                ExpireTimeSpan = new TimeSpan(0, 20, 0)  // auth timeout = 20min [sliding]
+            });
+
+            app.UseGitHubAuthentication(new GitHubAuthenticationOptions
+            {
+                ClientId = _config["GitHub:ClientId"],
+                ClientSecret = _config["GitHub:ClientSecret"],
+                Scope = { "user:email" }
+            });
+
+            app.UseGoogleAuthentication(new GoogleOptions
+            {
+                ClientId = _config["GooglePlus:ClientId"],
+                ClientSecret = _config["GooglePlus:ClientSecret"]
+            });
+            
+            app.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions()
+            {
+                ClientId = _config["Microsoft:ApplicationId"],
+                ClientSecret = _config["Microsoft:Secret"]
+            });
+
+            app.UseTwitterAuthentication(new TwitterOptions()
+            {
+                ConsumerKey = _config["Twitter:ConsumerKey"],
+                ConsumerSecret = _config["Twitter:ConsumerSecret"],
+                RetrieveUserDetails = true
+            });
+
             app.UseStaticFiles();
             app.UseMvc();
         }

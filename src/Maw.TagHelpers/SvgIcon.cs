@@ -12,12 +12,14 @@ namespace Maw.TagHelpers
         Flag,
         Github,
         GooglePlus,
+        GooglePlusSquare,
         LinkedIn,
         Person,
         Steam,
         Trello,
         Twitter,
         VideoCamera,
+        Windows,
         Wrench
     }
 }

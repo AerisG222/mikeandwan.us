@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -15,6 +16,9 @@ namespace MawMvcApp.ViewModels.Account
 		[DataType(DataType.Password)]
 		public string Password { get; set; }
 
+		[BindNever]
+		public IEnumerable<ExternalLoginScheme> ExternalSchemes { get; set; }
+		
 		[BindNever]
 		public bool WasAttempted { get; set; }
 	}

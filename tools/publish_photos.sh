@@ -40,7 +40,7 @@ if [ "${PATH_IMAGE_SOURCE}" = "" ]; then
     PATH_IMAGE_SOURCE="${PATH_IMAGE_SOURCE%/}"
 fi
 
-PREVIEWMODE=$(get_value 'Would you like to preview the photos first [y/n]?' 'n')
+PREVIEWMODE=$(get_value 'Would you like to preview the photos first [y/n]? ' 'n')
 
 if [ "${PREVIEWMODE}" = 'y' ]; then
     if [ -d "${PATH_IMAGE_SOURCE}/review" ]; then
@@ -173,7 +173,9 @@ fi
 #################################################
 ## LOCAL PROCESSING
 #################################################
-mkdir "${DEST_IMAGES_YEAR_ROOT}"
+if [ ! -d "${DEST_IMAGES_YEAR_ROOT}" ]; then
+    mkdir "${DEST_IMAGES_YEAR_ROOT}"
+fi
 
 echo '* moving photos for local site...'
 mv "${PATH_IMAGE_SOURCE}" "${DEST_IMAGES_YEAR_ROOT}"
@@ -199,7 +201,10 @@ echo '* deploying (please provide remote password when prompted)...'
 ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
     echo \"These commands will be run on: \$( uname -n )\"
 
-    sudo mkdir '${DEST_IMAGES_YEAR_ROOT}'
+    if [ ! -d '${DEST_IMAGES_YEAR_ROOT}' ]; then
+        sudo mkdir '${DEST_IMAGES_YEAR_ROOT}'
+    fi
+
     sudo mv '${CATEGORY_DIRECTORY_NAME}' '${DEST_IMAGES_YEAR_ROOT}'
     sudo chown -R root:root '${DEST_IMAGES_CATEGORY_ROOT}'
     sudo chmod -R go-w '${DEST_IMAGES_CATEGORY_ROOT}'

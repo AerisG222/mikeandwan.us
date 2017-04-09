@@ -15,6 +15,7 @@ namespace Maw.Domain.Identity
         Task<bool> UpdateUserAsync(MawUser updatedUser);
 		Task<bool> UpdateUserPasswordAsync(MawUser user);
         Task<bool> AddLoginHistoryAsync(string username, short loginActivityTypeId, short loginAreaId);
+        Task<bool> AddExternalLoginHistoryAsync(string email, short loginActivityTypeId, short loginAreaId);
         Task<List<UserAndLastLogin>> GetUsersToManageAsync();
         Task<List<string>> GetAllUsernamesAsync();
         Task<List<string>> GetAllRoleNamesAsync();

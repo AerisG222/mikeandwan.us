@@ -13,7 +13,7 @@ namespace Maw.Data.EntityFramework.Identity
         public short? UserId { get; set; }
         [Required]
         [Column("username", TypeName = "varchar")]
-        [MaxLength(30)]
+        [MaxLength(255)]
         public string Username { get; set; }
         [Column("attempt_time")]
         public DateTime AttemptTime { get; set; }

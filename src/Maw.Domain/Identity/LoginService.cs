@@ -70,5 +70,32 @@ namespace Maw.Domain.Identity
 			
 			return SignInResult.Failed;
 		}
+
+
+		public async Task LogExternalLoginAttemptAsync(string email, string provider, bool wasSuccessful)
+		{
+			var activityType = wasSuccessful ? (short) 1: (short) 2;
+			var area = (short)0;
+
+			switch(provider.ToLower())
+			{
+				case "github":
+					area = 3;
+					break;
+				case "google":
+					area = 4;
+					break;
+				case "microsoft":
+					area = 5;
+					break;
+				case "twitter":
+					area = 6;
+					break;
+				default:
+					throw new Exception("Invalid login area specified!");
+			}
+
+			await _repo.AddExternalLoginHistoryAsync(email, activityType, area).ConfigureAwait(false);
+		}
 	}
 }

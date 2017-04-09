@@ -236,31 +236,27 @@ namespace Maw.Data.Identity
 				throw new ArgumentException("username must not be null or empty", nameof(username));
 			}
 
-			short? userId = null;
+			username = username.ToLower();
 
-            var loginHistory = new LoginHistory 
-			{
-                UserId = userId,
-            	Username = username.ToLower(),
-                LoginActivityTypeId = loginActivityTypeId,
-                LoginAreaId = loginAreaId,
-                AttemptTime = DateTime.Now,
-            };
+			short? userId = (await _ctx.User.SingleOrDefaultAsync(x => x.Username == username).ConfigureAwait(false))?.Id;
 
-            _ctx.LoginHistory.Add(loginHistory);
-
-			try
-			{
-                await _ctx.SaveChangesAsync().ConfigureAwait(false);
-
-				return true;
-			}
-			catch(DbUpdateException ex)
-			{
-				LogEntityFrameworkError(nameof(AddLoginHistoryAsync), ex);
-				throw;
-			}
+            return await AddLoginHistoryAsync(userId, username, loginActivityTypeId, loginAreaId).ConfigureAwait(false);
         }
+
+
+		public async Task<bool> AddExternalLoginHistoryAsync(string email, short loginActivityTypeId, short loginAreaId)
+		{
+			if(string.IsNullOrEmpty(email))
+			{
+				throw new ArgumentException("email must not be null or empty", nameof(email));
+			}
+
+			email = email.ToLower();
+
+			short? userId = (await _ctx.User.SingleOrDefaultAsync(x => x.Email == email).ConfigureAwait(false))?.Id;
+
+			return await AddLoginHistoryAsync(userId, email, loginActivityTypeId, loginAreaId).ConfigureAwait(false);
+		}
 
 
         public Task<List<D.UserAndLastLogin>> GetUsersToManageAsync()
@@ -671,6 +667,33 @@ namespace Maw.Data.Identity
             };
         }
 
+
+		async Task<bool> AddLoginHistoryAsync(short? userId, string usernameOrEmail, short loginActivityTypeId, short loginAreaId)
+		{
+			var loginHistory = new LoginHistory 
+			{
+                UserId = userId,
+            	Username = usernameOrEmail,
+                LoginActivityTypeId = loginActivityTypeId,
+                LoginAreaId = loginAreaId,
+                AttemptTime = DateTime.Now,
+            };
+
+            _ctx.LoginHistory.Add(loginHistory);
+
+			try
+			{
+                await _ctx.SaveChangesAsync().ConfigureAwait(false);
+
+				return true;
+			}
+			catch(DbUpdateException ex)
+			{
+				LogEntityFrameworkError(nameof(AddLoginHistoryAsync), ex);
+				throw;
+			}
+		}
+		
 
 		void LogEntityFrameworkError(string method, DbUpdateException ex)
 		{

@@ -208,7 +208,8 @@ namespace MawMvcApp.Controllers
             if (user != null)
             {
 				await _signInManager.SignInAsync(user, false);
-
+				await _loginService.LogExternalLoginAttemptAsync(email.Value, info.LoginProvider, true);
+				
                 _log.LogInformation($"User {user.Username} logged in with {info.LoginProvider} provider.");
 
 				if(!string.IsNullOrEmpty(returnUrl))
@@ -218,6 +219,8 @@ namespace MawMvcApp.Controllers
 
 				return Redirect("/");
             }
+
+			await _loginService.LogExternalLoginAttemptAsync(email.Value, info.LoginProvider, false);
 
 			return View(info);
 		}

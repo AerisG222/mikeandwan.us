@@ -1,24 +1,21 @@
-# originally based on: https://github.com/nsubstitute/NSubstitute/blob/9f2323f4885d96ff863d0e26cc32b652b09ee930/.travis.yml
-# updated based on: https://docs.microsoft.com/en-us/dotnet/articles/core/tools/using-ci-with-cli
 language: csharp
+solution: mikeandwan.us.sln
+mono: none
+dotnet: 1.0.1
 
 matrix:
   include:
     - os: linux
       dist: trusty
       sudo: required
-      dotnet: 1.0.0-preview2-003131
-      mono: none
-      env: CONFIGURATION=Debug FRAMEWORK=netcoreapp1.1 DOTNETCORE=1
+      env: CONFIGURATION=Debug DOTNETCORE=1
     - os: linux
       dist: trusty
       sudo: required
-      dotnet: 1.0.0-preview2-003131
-      mono: none
-      env: CONFIGURATION=Release FRAMEWORK=netcoreapp1.1 DOTNETCORE=1
+      env: CONFIGURATION=Release DOTNETCORE=1
 
 script:
   - cd src
   - dotnet restore
   - cd mikeandwan.us
-  - dotnet build -c $CONFIGURATION -f $FRAMEWORK
+  - dotnet build -c $CONFIGURATION

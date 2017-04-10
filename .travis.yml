@@ -1,5 +1,4 @@
 language: csharp
-solution: mikeandwan.us.sln
 
 matrix:
   include:
@@ -15,3 +14,7 @@ matrix:
       mono: none
       dotnet: 1.0.1
       env: CONFIGURATION=Release DOTNETCORE=1
+
+script:
+  - dotnet restore
+  - dotnet build -c $CONFIGURATION mikeandwan.us.sln

@@ -329,7 +329,7 @@ namespace Maw.Data.Identity
 
 			_log.LogInformation("getting users in role: " + roleName);
 
-			return await _repo.GetUsersInRoleAsync(roleName).ConfigureAwait(false);
+			return (await _repo.GetUsersInRoleAsync(roleName).ConfigureAwait(false)).ToList();
 		}
 		#endregion
 

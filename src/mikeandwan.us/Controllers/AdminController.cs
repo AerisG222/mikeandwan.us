@@ -169,6 +169,7 @@ namespace MawMvcApp.Controllers
 				catch(Exception ex)
 				{
 					_log.LogError("error creating user", ex);
+					model.Result = IdentityResult.Failed(new IdentityError { Description = ex.Message });
 				}
 			}
 			else
@@ -187,7 +188,7 @@ namespace MawMvcApp.Controllers
 			
 			if(string.IsNullOrEmpty(id))
 			{
-				RedirectToAction("Index");
+				RedirectToAction(nameof(Index));
 			}
 			
 			var model = new DeleteUserModel();
@@ -205,19 +206,22 @@ namespace MawMvcApp.Controllers
 
 			if(ModelState.IsValid)
 			{			
-				if(StringValues.IsNullOrEmpty(collection["delete"]))
+				if(collection.Any(x => string.Equals(x.Key, "delete", StringComparison.OrdinalIgnoreCase)))
 				{
 					var user = await _userMgr.FindByNameAsync(model.Username);
 	
 					try
 					{
 						model.Result = await _userMgr.DeleteAsync(user);
-						return RedirectToAction("ManageUsers");
+						return RedirectToAction(nameof(ManageUsers));
 					}
 					catch(Exception ex)
 					{
 						_log.LogError("there was an error deleting the user", ex);
 					}
+				}
+				else {
+					return RedirectToAction(nameof(ManageUsers));
 				}
 			}
 			else
@@ -270,7 +274,7 @@ namespace MawMvcApp.Controllers
 			
 			if(string.IsNullOrEmpty(id))
 			{
-				return RedirectToAction("Index");
+				return RedirectToAction(nameof(Index));
 			}
 
 			var model = new DeleteRoleModel();
@@ -288,12 +292,15 @@ namespace MawMvcApp.Controllers
 
 			if(ModelState.IsValid)
 			{
-				if(StringValues.IsNullOrEmpty(collection["delete"]))
+				if(collection.Any(x => string.Equals(x.Key, "delete", StringComparison.OrdinalIgnoreCase)))
 				{
 					var r = await _roleMgr.FindByNameAsync(model.Role);
 					model.Result = await _roleMgr.DeleteAsync(r);
 
-					return RedirectToAction("ManageRoles");
+					return RedirectToAction(nameof(ManageRoles));
+				}
+				else {
+					return RedirectToAction(nameof(ManageRoles));
 				}
 			}
 			else
@@ -312,7 +319,7 @@ namespace MawMvcApp.Controllers
 			
 			if(string.IsNullOrEmpty(id))
 			{
-				return RedirectToAction("Index");
+				return RedirectToAction(nameof(Index));
 			}
 			
             var user = await _userMgr.FindByNameAsync(id);
@@ -331,7 +338,7 @@ namespace MawMvcApp.Controllers
 	        }
 			else
 			{
-				return RedirectToAction("Index");
+				return RedirectToAction(nameof(Index));
 			}
 		}
 		
@@ -368,7 +375,7 @@ namespace MawMvcApp.Controllers
 			
 			if(string.IsNullOrEmpty(id))
 			{
-				return RedirectToAction("Index");
+				return RedirectToAction(nameof(Index));
 			}
 
 			var user = await _userMgr.FindByNameAsync(id);
@@ -455,7 +462,7 @@ namespace MawMvcApp.Controllers
 			
 			if(string.IsNullOrEmpty(id))
 			{
-				RedirectToAction("Index");
+				RedirectToAction(nameof(Index));
 			}
 			
 			var model = new EditRoleMembersModel();

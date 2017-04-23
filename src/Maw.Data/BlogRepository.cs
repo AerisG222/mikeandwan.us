@@ -1,106 +1,108 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Threading.Tasks;
-using D = Maw.Domain.Blogs;
-using Maw.Data.EntityFramework.Blogs;
+using Dapper;
+using Maw.Domain.Blogs;
 
 
 namespace Maw.Data
 {
 	public class BlogRepository
-		: D.IBlogRepository
+		: Repository, IBlogRepository
 	{
-		readonly BlogContext _ctx;
-
-
-		public BlogRepository(BlogContext context)
+		public BlogRepository(string connectionString)
+			: base(connectionString)
 		{
-			if(context == null)
-			{
-				throw new ArgumentNullException(nameof(context));
-			}
 
-			_ctx = context;
 		}
 
 
-		public Task<List<D.Blog>> GetBlogsAsync()
+		public Task<IEnumerable<Blog>> GetBlogsAsync()
 		{
-			return _ctx.Blog
-				.Select(x => new D.Blog 
+			return RunAsync(conn => {
+				return conn.QueryAsync<Blog>(
+					@"SELECT *,
+							 (SELECT MAX(publish_date) 
+								FROM blog.post
+							   WHERE blog_id = b.id
+							 ) AS last_post_date 
+						FROM blog.blog b;"
+				);
+			});
+		}
+
+
+		public Task<IEnumerable<Post>> GetAllPostsAsync(short blogId)
+		{
+			return RunAsync(conn => {
+				return conn.QueryAsync<Post>(
+					@"SELECT *
+					    FROM blog.post
+					   WHERE blog_id = @blogId
+					   ORDER BY publish_date DESC;",
+					new { blogId = blogId }
+				);
+			});
+		}
+
+
+		public Task<IEnumerable<Post>> GetLatestPostsAsync(short blogId, short postCount)
+		{
+			return RunAsync(conn => {
+				return conn.QueryAsync<Post>(
+					@"SELECT *
+					    FROM blog.post
+					   WHERE blog_id = @blogId
+					   ORDER BY publish_date DESC
+					   LIMIT @postCount;",
+					new { 
+						blogId = blogId,
+					    postCount = postCount 
+					}
+				);
+			});
+		}
+
+
+		public Task<Post> GetPostAsync(short id)
+		{
+			return RunAsync(conn => {
+				return conn.QuerySingleOrDefaultAsync<Post>(
+					@"SELECT *
+					    FROM blog.post
+					   WHERE id = @id;",
+					new { id = id }
+				);
+			});
+		}
+
+
+		public Task AddPostAsync(Post post)
+		{
+			return RunAsync(async conn => {
+				var result = await conn.ExecuteAsync(
+					@"INSERT INTO blog.post
+					       ( 
+							 blog_id,
+							 title,
+							 description,
+							 publish_date
+						   )
+					  VALUES
+					       (
+							 @BlogId,
+							 @Title,
+							 @Description,
+							 @PublishDate
+						   );",
+					post
+				);
+
+				if(result != 1)
 				{
-					Id = x.Id,
-					Title = x.Title,
-					Copyright = x.Copyright,
-					Description = x.Description,
-					LastPostDate = x.Post.Select(p => p.PublishDate).Max(d => d)
-				})
-				.ToListAsync();
-		}
-
-
-		public Task<List<D.Post>> GetAllPostsAsync(short blogId)
-		{
-			return _ctx.Post
-				.Where(x => x.BlogId == blogId)
-				.Select(x => BuildPost(x))
-				.OrderByDescending(x => x.PublishDate)
-				.ToListAsync();
-		}
-
-
-		public async Task<IEnumerable<D.Post>> GetLatestPostsAsync(short blogId, short postCount)
-		{
-			var posts = await _ctx.Post
-				.Where(x => x.BlogId == blogId)
-				.OrderByDescending(x => x.PublishDate)
-				.Take(postCount)
-				.ToListAsync()
-				.ConfigureAwait(false);
-				
-			return posts.Select(x => BuildPost(x));
-		}
-
-
-		public Task<D.Post> GetPostAsync(short id)
-		{
-			return _ctx.Post
-				.Where(x => x.Id == id)
-				.Select(x => BuildPost(x))
-				.SingleAsync();
-		}
-
-
-		public async Task AddPostAsync(D.Post post)
-		{
-			var p = new Post
-			{
-				BlogId = post.BlogId,
-				Title = post.Title,
-				Description = post.Description,
-				PublishDate = post.PublishDate
-			};
-			
-			_ctx.Post
-				.Add(p);
-			
-			await _ctx.SaveChangesAsync().ConfigureAwait(false);
-		}
-		
-		
-		D.Post BuildPost(Post post)
-		{
-			return new D.Post 
-			{
-				Id = post.Id,
-				BlogId = post.BlogId,
-				Description = post.Description,
-				PublishDate = post.PublishDate,
-				Title = post.Title
-			};
+					throw new Exception("Did not save blog pos!");
+				}
+			});
 		}
 	}
 }
-

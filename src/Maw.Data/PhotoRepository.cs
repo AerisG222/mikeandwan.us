@@ -1,892 +1,826 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Maw.Data.EntityFramework.Photos;
+using Dapper;
 using Maw.Domain.Photos.ThreeD;
-using D = Maw.Domain.Photos;
+using Maw.Domain.Photos;
 
 
-
-// TODO: try with an updated EF to see if we can run some of the commented out queries fully in the db.
-//       as of 1.0.0, these queries fail
 namespace Maw.Data
 {
 	public class PhotoRepository
-        : D.IPhotoRepository
+        : Repository, IPhotoRepository
 	{
         const int MAX_RESULTS = 600;
 
+        const string CATEGORY_PROJECTION = @"
+            id,
+            name,
+            year,
+            (SELECT COUNT(1) 
+               FROM photo.photo p 
+              WHERE p.gps_latitude IS NOT NULL
+                AND p.category_id = photo.category.id) > 0 AS has_gps_data,
+            teaser_photo_path AS path,
+            teaser_photo_width AS width,
+            teaser_photo_height AS height";
 
-		readonly PhotoContext _ctx;
-		readonly ILogger _log;
+        const string PHOTO_PROJECTION = @"
+            id,
+            category_id,
+            CASE WHEN gps_latitude_ref_id = 'S' THEN -1.0 * gps_latitude
+                 ELSE gps_latitude 
+                  END AS latitude,
+            CASE WHEN gps_longitude_ref_id = 'W' THEN -1.0 * gps_longitude
+                 ELSE gps_longitude 
+                  END AS longitude,
+            xs_path AS path,
+            xs_width AS width,
+            xs_height AS height,
+            sm_path AS path,
+            sm_width AS width,
+            sm_height AS height,
+            md_path AS path,
+            md_width AS width,
+            md_height AS height,
+            lg_path AS path,
+            lg_width AS width,
+            lg_height AS height,
+            prt_path AS path,
+            prt_width AS width,
+            prt_height AS height";
+
+        const string PHOTO_AND_CATEGORY_PROJECTION = @"
+            p.id AS photo_id,
+            p.category_id,
+            p.xs_path,
+            p.xs_width,
+            p.xs_height,
+            p.sm_path,
+            p.sm_width,
+            p.sm_height,
+            p.md_path,
+            p.md_width,
+            p.md_height,
+            p.lg_path,
+            p.lg_width,
+            p.lg_height,
+            p.prt_path,
+            p.prt_width,
+            p.prt_height,
+            CASE WHEN p.gps_latitude_ref_id = 'S' THEN -1.0 * p.gps_latitude
+                 ELSE p.gps_latitude 
+                  END AS latitude,
+            CASE WHEN p.gps_longitude_ref_id = 'W' THEN -1.0 * p.gps_longitude
+                 ELSE p.gps_longitude 
+                  END AS longitude,
+            c.name,
+            c.year,
+            (SELECT COUNT(1) 
+               FROM photo.photo
+              WHERE gps_latitude IS NOT NULL
+                AND category_id = c.id) > 0 AS has_gps_data,
+            c.teaser_photo_path,
+            c.teaser_photo_width,
+            c.teaser_photo_height";
 
 
-        public PhotoRepository(ILoggerFactory loggerFactory, PhotoContext context)
+        public PhotoRepository(string connectionString)
+            : base(connectionString)
         {
-			if(loggerFactory == null)
-			{
-				throw new ArgumentNullException(nameof(loggerFactory));
-			}
-			if(context == null)
-			{
-				throw new ArgumentNullException(nameof(context));
-			}
 
-            _ctx = context;
-            _log = loggerFactory.CreateLogger<PhotoRepository>();
         }
 
 
-        public async Task<D.PhotoAndCategory> GetRandomPhotoAsync(bool allowPrivate)
+        public Task<PhotoAndCategory> GetRandomPhotoAsync(bool allowPrivate)
         {
-            var rand = new Random();
-			var count = await _ctx.Photo.CountAsync().ConfigureAwait(false);
-			var skip = (int)(rand.NextDouble() * count);
+            return RunAsync(async conn => {
+                var result = await conn.QueryAsync(
+                    $@"WITH random AS 
+                       (
+                            SELECT id
+                              FROM photo.photo
+                             WHERE (1 = @allowPrivate OR is_private = FALSE)
+                             ORDER BY RANDOM()
+                             LIMIT 1
+                       )
+                       SELECT {PHOTO_AND_CATEGORY_PROJECTION}
+                         FROM random
+                        INNER JOIN photo.photo p ON random.id = p.id
+                        INNER JOIN photo.category c ON p.category_id = c.id;",
+                    new { allowPrivate = allowPrivate ? 1 : 0 }
+                ).ConfigureAwait(false);
 
-            // originally tried to incorporate all data in this sql call, but that took almost 10s to complete, by
-            // separating the category pull, we are less than 15ms in sql!
-			var photo = await _ctx.Photo.OrderBy(x => x.Id)
-                .Skip(skip)
-                .Take(1)
-				.SingleAsync()
-                .ConfigureAwait(false);
+                if(result == null || result.Count() == 0)
+                {
+                    return null;
+                }
 
-            return new D.PhotoAndCategory 
-            {
-                Photo = BuildPhoto(photo),
-                Category = await GetCategoryAsync(photo.CategoryId, allowPrivate).ConfigureAwait(false)
-			};
+                // TODO: why is this cast needed?
+                return (PhotoAndCategory)BuildPhotoAndCategory(result.First());
+            });
         }
 
 
-		public async Task<List<short>> GetYearsAsync()
+		public Task<IEnumerable<short>> GetYearsAsync()
         {
-			return await _ctx.Category
-                .Select(x => x.Year)
-                .Distinct()
-                .OrderByDescending(x => x)
-				.ToListAsync()
-                .ConfigureAwait(false);
+            return RunAsync(conn => {
+                return conn.QueryAsync<short>(
+                    @"SELECT DISTINCT year
+                        FROM photo.category
+                       ORDER BY year DESC;"
+                );
+            });
         }
 
 
-        public Task<List<D.Category>> GetCategoriesForYearAsync(short year, bool allowPrivate)
+        public Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, bool allowPrivate)
 		{
-            return _ctx.Category
-                .Where(x => x.Year == year && (allowPrivate || !x.IsPrivate))
-                .OrderBy(x => x.Id)
-                .Select(x => new D.Category 
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Year = x.Year,
-					HasGpsData = x.Photo.Any(i => i.GpsLatitude != null),
-                    TeaserPhotoInfo = new D.PhotoInfo 
-                    { 
-                        Path = x.TeaserPhotoPath, 
-						Width = (short)x.TeaserPhotoWidth,
-						Height = (short)x.TeaserPhotoHeight
-                    }
-                })
-				.ToListAsync();
-		}
-
-
-        public async Task<short> GetCategoryCountAsync(bool allowPrivate)
-        {
-            var count = await _ctx.Category
-                .Where(x => allowPrivate || !x.IsPrivate)
-                .CountAsync()
-                .ConfigureAwait(false);
-
-			return Convert.ToInt16(count);
-        }
-
-
-        public Task<List<D.Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate)
-        {
-            return _ctx.Category
-                .Where(x => x.Id > sinceId && (allowPrivate || !x.IsPrivate))
-                .OrderBy(x => x.Id)
-                .Select(x => new D.Category 
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Year = x.Year,
-					HasGpsData = x.Photo.Any(i => i.GpsLatitude != null),
-                    TeaserPhotoInfo = new D.PhotoInfo 
-                    { 
-                        Path = x.TeaserPhotoPath, 
-						Width = (short)x.TeaserPhotoWidth,
-						Height = (short)x.TeaserPhotoHeight 
-                    }
-                })
-                .ToListAsync();
-        }
-
-
-		public async Task<List<D.Photo>> GetPhotosForCategoryAsync(short categoryId, bool allowPrivate)
-		{
-			var photos = await _ctx.Photo
-                .Where(x => x.CategoryId == categoryId && (allowPrivate || !x.IsPrivate))
-                .OrderBy(x => x.LgPath)
-				.ToListAsync()
-                .ConfigureAwait(false);
-
-			return photos
-				.Select(x => BuildPhoto(x))
-				.ToList();
-		}
-
-
-        // TODO: revert to true async processing once the following is fixed:
-        //       https://github.com/aspnet/EntityFramework/issues/6534
-		public Task<D.Category> GetCategoryAsync(short categoryId, bool allowPrivate)
-        {
-            var cat = _ctx.Category
-				.Where(x => x.Id == categoryId && (allowPrivate || !x.IsPrivate))
-				.Select(x => new 
-                { 
-                    Category = x, 
-                    HasGps = x.Photo.Any(i => i.GpsLatitude != null) 
-                })
-				.Single();
-
-			return Task.FromResult(BuildPhotoCategory(cat.Category, cat.HasGps));
-        }
-
-
-		public async Task<D.Photo> GetPhotoAsync(int photoId, bool allowPrivate)
-		{
-			var photo = await _ctx.Photo
-				.SingleAsync(x => x.Id == photoId && (allowPrivate || !x.IsPrivate))
-                .ConfigureAwait(false);
-
-			return BuildPhoto(photo);
-		}
-
-
-		public async Task<D.Detail> GetDetailForPhotoAsync(int photoId, bool allowPrivate)
-		{
-            var photo = await _ctx.Photo
-                .Include(x => x.ActiveDLighting)
-                .Include(x => x.AfAreaMode)
-                .Include(x => x.AfPoint)
-                .Include(x => x.AutoFocus)
-                .Include(x => x.Colorspace)
-                .Include(x => x.Compression)
-                .Include(x => x.Contrast)
-                .Include(x => x.ExposureMode)
-                .Include(x => x.ExposureProgram)
-                .Include(x => x.Flash)
-                .Include(x => x.FlashColorFilter)
-                .Include(x => x.FlashMode)
-                .Include(x => x.FlashSetting)
-                .Include(x => x.FlashType)
-                .Include(x => x.FocusMode)
-                .Include(x => x.GainControl)
-                .Include(x => x.GpsAltitudeRef)
-                .Include(x => x.GpsDirectionRef)
-                .Include(x => x.GpsLatitudeRef)
-                .Include(x => x.GpsLongitudeRef)
-                .Include(x => x.GpsMeasureMode)
-                .Include(x => x.GpsStatus)
-                .Include(x => x.HighIsoNoiseReduction)
-                .Include(x => x.HueAdjustment)
-                .Include(x => x.Lens)
-                .Include(x => x.LightSource)
-                .Include(x => x.Make)
-                .Include(x => x.MeteringMode)
-                .Include(x => x.Model)
-                .Include(x => x.NoiseReduction)
-                .Include(x => x.Orientation)
-                .Include(x => x.PictureControlName)
-                .Include(x => x.Saturation)
-                .Include(x => x.SceneCaptureType)
-                .Include(x => x.SceneType)
-                .Include(x => x.SensingMethod)
-                .Include(x => x.Sharpness)
-                .Include(x => x.VibrationReduction)
-                .Include(x => x.VignetteControl)
-                .Include(x => x.VrMode)
-                .Include(x => x.WhiteBalance)
-                .Where(x => x.Id == photoId && (allowPrivate || !x.IsPrivate))
-                .SingleAsync()
-                .ConfigureAwait(false);
-
-            return new D.Detail 
-            {
-                // exif
-                BitsPerSample = (ushort?)photo.BitsPerSample,
-                Compression = photo.Compression?.Name,
-                Contrast = photo.Contrast?.Name,
-                CreateDate = photo.CreateDate,
-                DigitalZoomRatio = photo.DigitalZoomRatio,
-                ExposureCompensation = photo.ExposureCompensation,
-                ExposureMode = photo.ExposureMode?.Name,
-                ExposureProgram = photo.ExposureProgram?.Name,
-                ExposureTime = photo.ExposureTime,
-                FNumber = (double?)photo.FNumber,
-                Flash = photo.Flash?.Name,
-                FocalLength = photo.FocalLength,
-                FocalLengthIn35mmFormat = photo.FocalLengthIn35MmFormat,
-                GainControl = photo.GainControl?.Name,
-                GpsAltitude = photo.GpsAltitude,
-                GpsAltitudeRef = photo.GpsAltitudeRef?.Name,
-                GpsDateStamp = photo.GpsDateTimeStamp,
-                GpsDirection = photo.GpsDirection,
-                GpsDirectionRef = photo.GpsDirectionRef?.Name,
-                GpsLatitude = photo.GpsLatitude,
-                GpsLatitudeRef = photo.GpsLatitudeRef?.Name,
-                GpsLongitude = photo.GpsLongitude,
-                GpsLongitudeRef = photo.GpsLongitudeRef?.Name,
-                GpsMeasureMode = photo.GpsMeasureMode?.Name,
-                GpsSatellites = photo.GpsSatellites,
-                GpsStatus = photo.GpsStatus?.Name,
-                GpsVersionId = photo.GpsVersionId,
-                Iso = photo.Iso,
-                LightSource = photo.LightSource?.Name,
-                Make = photo.Make?.Name,
-                MeteringMode = photo.MeteringMode?.Name,
-                Model = photo.Model?.Name,
-                Orientation = photo.Orientation?.Name,
-                Saturation = photo.Saturation?.Name,
-                SceneCaptureType = photo.SceneCaptureType?.Name,
-                SceneType = photo.SceneType?.Name,
-                SensingMethod = photo.SensingMethod?.Name,
-                Sharpness = photo.Sharpness?.Name,
-                // nikon
-                AutoFocusAreaMode = photo.AfAreaMode?.Name,
-                AutoFocusPoint = photo.AfPoint?.Name,
-                ActiveDLighting = photo.ActiveDLighting?.Name,
-                Colorspace = photo.Colorspace?.Name,
-                ExposureDifference = photo.ExposureDifference,
-                FlashColorFilter = photo.FlashColorFilter?.Name,
-                FlashCompensation = photo.FlashCompensation,
-                FlashControlMode = photo.FlashControlMode,
-                FlashExposureCompensation = photo.FlashExposureCompensation,
-                FlashFocalLength = photo.FlashFocalLength,
-                FlashMode = photo.FlashMode?.Name,
-                FlashSetting = photo.FlashSetting?.Name,
-                FlashType = photo.FlashType?.Name,
-                FocusDistance = photo.FocusDistance,
-                FocusMode = photo.FocusMode?.Name,
-                FocusPosition = photo.FocusPosition,
-                HighIsoNoiseReduction = photo.HighIsoNoiseReduction?.Name,
-                HueAdjustment = photo.HueAdjustment?.Name,
-                NoiseReduction = photo.NoiseReduction?.Name,
-                PictureControlName = photo.PictureControlName?.Name,
-                PrimaryAFPoint = photo.PrimaryAfPoint,
-                VRMode = photo.VrMode?.Name,
-                VibrationReduction = photo.VibrationReduction?.Name,
-                VignetteControl = photo.VignetteControl?.Name,
-                WhiteBalance = photo.WhiteBalance?.Name,
-                // composite
-                Aperture = (double?)photo.Aperture,
-                AutoFocus = photo.AutoFocus?.Name,
-                DepthOfField = photo.DepthOfField,
-                FieldOfView = photo.FieldOfView,
-                HyperfocalDistance = photo.HyperfocalDistance,
-                LensId = photo.Lens?.Name,
-                LightValue = photo.LightValue,
-                ScaleFactor35Efl = photo.ScaleFactor35Efl,
-                ShutterSpeed = photo.ShutterSpeed,
-                // processing info
-                RawConversionMode = photo.RawConversionMode?.Name,
-                SigmoidalContrastAdjustment = photo.SigmoidalContrastAdjustment,
-                SaturationAdjustment = photo.SaturationAdjustment,
-                CompressionQuality = photo.CompressionQuality
-            };
-		}
-
-
-		public Task<List<D.Comment>> GetCommentsForPhotoAsync(int photoId)
-		{
-            return _ctx.Comment
-                .Include(c => c.User)
-                .Where(x => x.PhotoId == photoId)
-                .OrderBy(x => x.EntryDate)
-                .Select(x => new D.Comment 
-                {
-                    CommentText = x.Message,
-                    EntryDate = x.EntryDate,
-                    Username = x.User.Username
-                })
-				.ToListAsync();
-		}
-
-
-		public async Task<D.Rating> GetRatingsAsync(int photoId, string username)
-		{
-            var rating = new D.Rating();
-
-			var userId = await GetUserId(username).ConfigureAwait(false);
-            var avg = await _ctx.Rating.Where(x => x.PhotoId == photoId).AverageAsync(x => (float?)x.Score).ConfigureAwait(false);
-            var usr = await _ctx.Rating.Where(x => x.PhotoId == photoId && x.UserId == userId).MaxAsync(x => (byte?)x.Score).ConfigureAwait(false);
-
-            if(avg != null)
-            {
-                rating.AverageRating = (float)avg;
-                rating.UserRating = (byte)usr;
-            }
-
-            return rating;
-		}
-
-
-		public async Task<int> InsertPhotoCommentAsync(int photoId, string username, string comment)
-        {
-            try{
-                var userId = await GetUserId(username).ConfigureAwait(false);
-                    
-                var ic = new Comment 
-                {
-                    UserId = userId,
-    				PhotoId = photoId,
-                    Message = comment,
-                    EntryDate = DateTime.Now
-                };
-    
-                _ctx.Comment.Add(ic);
-    
-                return await _ctx.SaveChangesAsync().ConfigureAwait(false);
-            }
-            catch(DbUpdateException ex)
-            {
-                LogEntityFrameworkError(nameof(InsertPhotoCommentAsync), ex);
-                throw;
-            }
-        }
-
-
-		public async Task<float?> SavePhotoRatingAsync(int photoId, string username, byte rating)
-        {
-            var userId = await GetUserId(username).ConfigureAwait(false);
-            var ir = await _ctx.Rating.SingleOrDefaultAsync(x => x.PhotoId == photoId && x.UserId == userId).ConfigureAwait(false);
-
-            if(ir == null)
-            {
-                ir = new Rating 
-                {
-					PhotoId = photoId,
-                    UserId = userId,
-					Score = rating
-                };
-
-                _ctx.Rating.Add(ir);
-                await _ctx.SaveChangesAsync().ConfigureAwait(false);
-            }
-            else if(ir.Score != rating)
-            {
-                ir.Score = rating;
-
-                await _ctx.SaveChangesAsync().ConfigureAwait(false);
-            }
-
-            return (float?) await _ctx.Rating.Where(x => x.PhotoId == photoId).AverageAsync(y => y.Score).ConfigureAwait(false);
-        }
-		
-		
-		public async Task<float?> RemovePhotoRatingAsync(int photoId, string username)
-		{
-            var userId = await GetUserId(username).ConfigureAwait(false);
-            var rating = await _ctx.Rating.SingleAsync(x => x.PhotoId == photoId && x.UserId == userId).ConfigureAwait(false);
-
-            _ctx.Rating.Remove(rating);
-
-            await _ctx.SaveChangesAsync().ConfigureAwait(false);
-
-            var avg = await _ctx.Rating
-                .Where(x => x.PhotoId == photoId)
-                .AverageAsync(y => (float?)y.Score)
-                .ConfigureAwait(false);
-            
-            return avg ?? 0;
-		}
-        
-
-/*
-        // TODO: for the following methods, we fake out the hasGps value on Category to false as we currently do not
-        //       use this when returning photos like this.  consider correcting this in the future
-        public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByCommentDateAsync(bool newestFirst, bool allowPrivate)
-        {
-			var query = _ctx.Comment
-                .Include(x => x.Photo)
-                .ThenInclude(x => x.Category)
-				.Where(x => allowPrivate || !x.Photo.IsPrivate)
-				.GroupBy(x => x.Photo)
-				.Select(x => new 
-                {
-					Photo = x.Key,
-                    Category = x.Key.Category,
-					FirstPostDate = x.Min(d => d.EntryDate),
-					LastPostDate = x.Max(d => d.EntryDate)
-				});
-
-			if(newestFirst)
-			{
-				query.OrderByDescending(x => x.LastPostDate);
-			}
-			else
-			{
-				query.OrderByDescending(x => x.FirstPostDate);
-			}
-
-			var photos = await query.ToListAsync();
-
-			return photos
-				.Select(x => new D.PhotoAndCategory 
-                {
-                    Photo = BuildPhoto(x.Photo),
-                    Category = BuildPhotoCategory(x.Category, false)
-                })
-				.Take(MAX_RESULTS)
-				.ToList();
-        }
-*/
-
-
-        public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByCommentDateAsync(bool newestFirst, bool allowPrivate)
-        {
-			var query = await _ctx.Comment
-                .Include(x => x.Photo)
-                .ThenInclude(x => x.Category)
-                .Where(x => allowPrivate || !x.Photo.IsPrivate)
-				.GroupBy(x => x.Photo)
-                .ToListAsync()
-                .ConfigureAwait(false);
-
-            var groups = query
-				.Select(g => new 
-                {
-					Photo = g.Key,
-                    Category = g.Key.Category,
-					FirstPostDate = g.Min(x => x.EntryDate), 
-					LastPostDate = g.Max(x => x.EntryDate)
-				});
-
-            if(newestFirst)
-            {
-				groups = groups.OrderByDescending(x => x.LastPostDate);
-            }
-            else
-            {
-				groups = groups.OrderBy(x => x.FirstPostDate);
-            }
-
-			return groups
-				.Select(x => new D.PhotoAndCategory 
-                {
-                    Photo = BuildPhoto(x.Photo),
-                    Category = BuildPhotoCategory(x.Category, false)
-                })
-				.Take(MAX_RESULTS)
-				.ToList();
-        }
-
-
-        public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByUserCommentDateAsync(string username, bool newestFirst, bool allowPrivate)
-        {
-			var query = await _ctx.Comment
-                .Include(x => x.Photo)
-                .ThenInclude(x => x.Category)
-				.Where(x => x.User.Username == username)
-                .Where(x => allowPrivate || !x.Photo.IsPrivate)
-				.GroupBy(x => x.Photo)
-                .ToListAsync()
-                .ConfigureAwait(false);
-
-            var groups = query
-				.Select(g => new 
-                {
-					Photo = g.Key,
-                    Category = g.Key.Category,
-					FirstPostDate = g.Min(x => x.EntryDate), 
-					LastPostDate = g.Max(x => x.EntryDate)
-				});
-
-            if(newestFirst)
-            {
-				groups = groups.OrderByDescending(x => x.LastPostDate);
-            }
-            else
-            {
-				groups = groups.OrderBy(x => x.FirstPostDate);
-            }
-
-			return groups
-				.Select(x => new D.PhotoAndCategory 
-                {
-                    Photo = BuildPhoto(x.Photo),
-                    Category = BuildPhotoCategory(x.Category, false)
-                })
-				.Take(MAX_RESULTS)
-				.ToList();
-        }
-
-        
-/*        
-		public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate)
-        {
-			var query = _ctx.Comment
-				.Include(c => c.User)
-				.Where(x => x.User.Username == username)
-				.GroupBy(x => x.Photo)
-				.Select(g => new 
-                {
-					Photo = g.Key,
-                    Category = g.Key.Category,
-					FirstPostDate = g.Min(x => x.EntryDate), 
-					LastPostDate = g.Max(x => x.EntryDate)
-				})
-				.Where(x => allowPrivate || !x.Photo.IsPrivate);
-
-            if(greatestFirst)
-            {
-				query.OrderByDescending(x => x.LastPostDate);
-            }
-            else
-            {
-				query.OrderBy(x => x.FirstPostDate);
-            }
-
-			var photos = await query.ToListAsync();
-
-			return photos
-				.Select(x => new D.PhotoAndCategory 
-                {
-                    Photo = BuildPhoto(x.Photo),
-                    Category = BuildPhotoCategory(x.Category, false)
-                })
-				.Take(MAX_RESULTS)
-				.ToList();
-        }
-*/
-
-
-        public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByCommentCountAsync(bool greatestFirst, bool allowPrivate)
-        {
-			var query = await _ctx.Comment
-                .Include(x => x.Photo)
-                .ThenInclude(x => x.Category)
-                .Where(x => allowPrivate || !x.Photo.IsPrivate)
-				.GroupBy(x => x.Photo)
-                .ToListAsync()
-                .ConfigureAwait(false);
-
-            var groups = query
-				.Select(g => new 
-                {
-					Photo = g.Key,
-                    Category = g.Key.Category,
-					CommentCount = g.Count()
-				});
-
-            if(greatestFirst)
-            {
-				groups = groups.OrderByDescending(x => x.CommentCount);
-            }
-            else
-            {
-				groups = groups.OrderBy(x => x.CommentCount);
-            }
-
-			return groups
-				.Select(x => new D.PhotoAndCategory 
-                {
-                    Photo = BuildPhoto(x.Photo),
-                    Category = BuildPhotoCategory(x.Category, false)
-                })
-				.Take(MAX_RESULTS)
-				.ToList();
-        }
-
-
-/*
-		public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByCommentCountAsync(bool greatestFirst, bool allowPrivate)
-        {
-			var query = _ctx.Comment
-				.GroupBy(x => x.Photo)
-				.Select(g => new 
-                {
-					Photo = g.Key, 
-                    Category = g.Key.Category,
-					CommentCount = g.Count()
-				})
-				.Where(x => allowPrivate || !x.Photo.IsPrivate);
-
-            if(greatestFirst)
-            {
-				query.OrderByDescending(x => x.CommentCount);
-            }
-            else
-            {
-				query.OrderBy(x => x.CommentCount);
-            }
-
-			var photos = await query.ToListAsync();
-
-			return photos
-				.Select(x => new D.PhotoAndCategory 
-                {
-                    Photo = BuildPhoto(x.Photo),
-                    Category = BuildPhotoCategory(x.Category, false)
-                })
-				.Take(MAX_RESULTS)
-				.ToList();
-        }
-*/		
-		
-        public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
-        {
-			var query = await _ctx.Rating
-                .Include(x => x.Photo)
-                .ThenInclude(x => x.Category)
-                .Where(x => allowPrivate || !x.Photo.IsPrivate)
-				.GroupBy(x => x.Photo)
-                .ToListAsync()
-                .ConfigureAwait(false);
-
-            var groups = query
-				.Select(g => new 
-                {
-					Photo = g.Key,
-                    Category = g.Key.Category,
-					AverageRating = g.Average(x => x.Score)
-				});
-
-            if(highestFirst)
-            {
-				groups = groups.OrderByDescending(x => x.AverageRating);
-            }
-            else
-            {
-				groups = groups.OrderBy(x => x.AverageRating);
-            }
-
-			return groups
-				.Select(x => new D.PhotoAndCategory 
-                {
-                    Photo = BuildPhoto(x.Photo),
-                    Category = BuildPhotoCategory(x.Category, false)
-                })
-				.Take(MAX_RESULTS)
-				.ToList();
-        }
-
-/*
-		public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
-		{
-            var query = _ctx.Rating
-                .GroupBy(x => x.Photo)
-                .Select(g => new 
-                {
-                    Photo = g.Key, 
-                    Category = g.Key.Category,
-                    AverageRating = g.Average(x => x.Score)
-                })
-                .Where(x => allowPrivate || !x.Photo.IsPrivate);
-
-            if(highestFirst) 
-            {
-                query.OrderByDescending(x => x.AverageRating);
-            }
-            else
-            {
-                query.OrderBy(x => x.AverageRating);
-            }
-
-			var photos = await query.ToListAsync();
-
-			return photos
-				.Select(x => new D.PhotoAndCategory 
-                {
-                    Photo = BuildPhoto(x.Photo),
-                    Category = BuildPhotoCategory(x.Category, false)
-                })
-                .Take(MAX_RESULTS)
-                .ToList();
-        }
-*/		
-		
-		public async Task<List<D.PhotoAndCategory>> GetPhotosAndCategoriesByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
-		{
-			var query = _ctx.Rating
-                .Include(x => x.Photo)
-                .ThenInclude(x => x.Category)
-				.Where(x => x.User.Username == username && (allowPrivate || !x.Photo.IsPrivate));
-
-            if(highestFirst)
-            {
-				query.OrderByDescending(x => x.Score);
-            }
-            else
-            {
-				query.OrderBy(x => x.Score);
-            }
-
-			var photos = await query.ToListAsync().ConfigureAwait(false);
-
-			return photos
-				.Select(x => new D.PhotoAndCategory 
-                {
-                    Photo = BuildPhoto(x.Photo),
-                    Category = BuildPhotoCategory(x.Photo.Category, false)
-                })
-				.Take(MAX_RESULTS)
-				.ToList();
-		}
-        
-
-        public async Task<List<D.CategoryPhotoCount>> GetStats(bool allowPrivate)
-        {
-            return await _ctx.Category
-                .Where(x => allowPrivate || !x.IsPrivate)
-                .Select(x => new D.CategoryPhotoCount
-                    {
-                        Year = x.Year,
-                        CategoryId = x.Id,
-                        CategoryName = x.Name,
-                        PhotoCount = _ctx.Photo.Count(p => p.CategoryId == x.Id)
-                    })
-                .OrderBy(x => x.Year)
-                .ThenBy(x => x.CategoryName)
-                .ToListAsync()
-                .ConfigureAwait(false);
-        }
-
-        
-        public async Task<List<Category3D>> GetAllCategories3D()
-        {
-            return await _ctx.Category
-                .OrderBy(x => x.Id)
-                .Select(x => new Category3D {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Year = x.Year,
-                    TeaserImage = new Image3D {
-                        Path = x.TeaserPhotoPath,
-                        Width = (short)x.TeaserPhotoWidth,
-                        Height = (short)x.TeaserPhotoHeight
-                    }
-                })
-                .ToListAsync();
-        }
-
-
-        public async Task<List<Photo3D>> GetPhotos3D(int categoryId)
-        {
-            return await _ctx.Photo
-                .Where(x => x.CategoryId == categoryId)
-                .OrderBy(x => x.CreateDate)
-                .Select(x => new Photo3D {
-                    Id = x.Id,
-                    XsImage = new Image3D {
-                        Path = x.XsPath,
-                        Width = x.XsWidth,
-                        Height = x.XsHeight
+            return RunAsync(conn => {
+                return conn.QueryAsync<Category, PhotoInfo, Category>(
+                    $@"SELECT {CATEGORY_PROJECTION}
+                         FROM photo.category
+                        WHERE (1 = @allowPrivate OR is_private = FALSE)
+                          AND year = @year
+                        ORDER BY id;",
+                    (category, photoInfo) => {
+                        category.TeaserPhotoInfo = photoInfo;
+                        return category;
                     },
-                    MdImage = new Image3D {
-                        Path = x.MdPath,
-                        Width = x.MdWidth,
-                        Height = x.MdHeight
+                    new { 
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        year = year
                     },
-                    LgImage = new Image3D {
-                        Path = x.LgPath,
-                        Width = x.LgWidth,
-                        Height = x.LgHeight
+                    splitOn: "path"
+                );
+            });
+		}
+
+
+        public Task<short> GetCategoryCountAsync(bool allowPrivate)
+        {
+            return RunAsync(conn => {
+                return conn.QuerySingleOrDefaultAsync<short>(
+                    @"SELECT COUNT(1)
+                        FROM photo.category
+                       WHERE (1 = @allowPrivate OR is_private = FALSE);",
+                    new { allowPrivate = allowPrivate ? 1 : 0 }
+                );
+            });
+        }
+
+
+        public Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate)
+        {
+            return RunAsync(conn => {
+                return conn.QueryAsync<Category, PhotoInfo, Category>(
+                    $@"SELECT {CATEGORY_PROJECTION}
+                        FROM photo.category
+                       WHERE (1 = @allowPrivate OR is_private = FALSE)
+                         AND id > @sinceId;",
+                    (category, photoInfo) => {
+                        category.TeaserPhotoInfo = photoInfo;
+                        return category;
+                    },
+                    new { 
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        sinceId = sinceId
+                    },
+                    splitOn: "path"
+                );
+            });
+        }
+
+
+		public Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, bool allowPrivate)
+		{
+            return RunAsync(conn => {
+                return conn.QueryAsync<Photo, PhotoInfo, PhotoInfo, PhotoInfo, PhotoInfo, PhotoInfo, Photo>(
+                    $@"SELECT {PHOTO_PROJECTION}
+                         FROM photo.photo
+                        WHERE (1 = @allowPrivate OR is_private = FALSE)
+                          AND category_id = @categoryId
+                        ORDER BY lg_path;",
+                    (photo, xs, sm, md, lg, prt) => {
+                        photo.XsInfo = xs;
+                        photo.SmInfo = sm;
+                        photo.MdInfo = md;
+                        photo.LgInfo = md;
+                        photo.PrtInfo = prt;
+
+                        return photo;
+                    },
+                    new { 
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        categoryId = categoryId
+                    },
+                    splitOn: "path"
+                );
+            });
+		}
+
+
+		public Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
+        {
+            return RunAsync(async conn => {
+                var result = await conn.QueryAsync<Category, PhotoInfo, Category>(
+                    $@"SELECT {CATEGORY_PROJECTION}
+                         FROM photo.category
+                        WHERE (1 = @allowPrivate OR is_private = FALSE)
+                          AND id = @categoryId;",
+                    (category, photoInfo) => {
+                        category.TeaserPhotoInfo = photoInfo;
+                        return category;
+                    },
+                    new { 
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        categoryId = categoryId
+                    },
+                    splitOn: "path"
+                ).ConfigureAwait(false);
+
+                return result.SingleOrDefault();
+            });
+        }
+
+
+		public Task<Photo> GetPhotoAsync(int photoId, bool allowPrivate)
+		{
+            return RunAsync(async conn => {
+                var result = await conn.QueryAsync<Photo, PhotoInfo, PhotoInfo, PhotoInfo, PhotoInfo, PhotoInfo, Photo>(
+                    $@"SELECT {PHOTO_PROJECTION}
+                         FROM photo.photo
+                        WHERE (1 = @allowPrivate OR is_private = FALSE)
+                          AND id = @photoId;",
+                    (photo, xs, sm, md, lg, prt) => {
+                        photo.XsInfo = xs;
+                        photo.SmInfo = sm;
+                        photo.MdInfo = md;
+                        photo.LgInfo = md;
+                        photo.PrtInfo = prt;
+
+                        return photo;
+                    },
+                    new {
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        photoId = photoId
+                    },
+                    splitOn: "path"
+                );
+
+                return result.SingleOrDefault();
+            });
+		}
+
+
+		public Task<Detail> GetDetailForPhotoAsync(int photoId, bool allowPrivate)
+		{
+            return RunAsync(conn => {
+                return conn.QuerySingleOrDefaultAsync<Detail>(
+                    @"SELECT p.bits_per_sample,
+                             cm.name AS compression,
+                             cn.name AS contrast,
+                             create_date,
+                             digital_zoom_ratio,
+                             exposure_compensation,
+                             em.name AS exposure_mode,
+                             ep.name AS exposure_program,
+                             exposure_time,
+                             f_number,
+                             f.name AS flash,
+                             focal_length,
+                             focal_length_in_35_mm_format,
+                             gc.name AS gain_control,
+                             gps_altitude,
+                             gpsar.name AS gps_alititude_ref,
+                             gps_date_time_stamp AS gps_date_stamp,
+                             gps_direction,
+                             gpsdr.name AS gps_direction_ref,
+                             gps_latitude,
+                             gpslatr.name AS gps_latitude_ref,
+                             gps_longitude,
+                             gpslngr.name AS gps_longitude_ref,
+                             gpsmm.name AS gps_measure_mode,
+                             gps_satellites,
+                             gpss.name AS gps_status,
+                             gps_version_id,
+                             iso,
+                             ls.name AS light_source,
+                             m.name AS make,
+                             mm.name AS metering_mode,
+                             md.name AS model,
+                             o.name AS orientation,
+                             s.name AS saturation,
+                             sct.name AS scene_capture_type,
+                             st.name AS scene_type,
+                             sm.name AS sensing_method,
+                             sh.name AS sharpness,
+                             afam.name AS auto_focus_area_mode,
+                             afp.name AS auto_focus_point,
+                             adl.name AS active_d_lighting,
+                             cs.name AS colorspace,
+                             exposure_difference,
+                             fcf.name AS flash_color_filter,
+                             flash_compensation,
+                             flash_control_mode,
+                             flash_exposure_compensation,
+                             flash_focal_length,
+                             fm.name AS flash_mode,
+                             fs.name AS flash_setting,
+                             ft.name AS flash_type,
+                             focus_distance,
+                             foc.name AS focus_mode,
+                             focus_position,
+                             hinr.name AS high_iso_noise_reduction,
+                             ha.name AS hue_adjustment,
+                             nr.name AS noise_reduction,
+                             pcn.name AS picture_control_name,
+                             primary_af_point,
+                             vrm.name AS vr_mode,
+                             vr.name AS vibration_reduction,
+                             vc.name AS vignette_control,
+                             wb.name AS white_balance,
+                             aperture,
+                             af.name AS auto_focus,
+                             depth_of_field,
+                             field_of_view,
+                             hyperfocal_distance,
+                             l.name AS lens_id,
+                             light_value,
+                             scale_factor_35_efl,
+                             shutter_speed,
+                             rcm.name AS raw_conversion_mode,
+                             sigmoidal_contrast_adjustment,
+                             saturation_adjustment,
+                             compression_quality
+                        FROM photo.photo p
+                        LEFT OUTER JOIN photo.active_d_lighting adl ON adl.id = p.active_d_lighting_id
+                        LEFT OUTER JOIN photo.af_area_mode afam ON afam.id = p.af_area_mode_id
+                        LEFT OUTER JOIN photo.af_point afp ON afp.id = p.af_point_id
+                        LEFT OUTER JOIN photo.auto_focus af ON af.id = p.auto_focus_id
+                        LEFT OUTER JOIN photo.colorspace cs ON cs.id = p.colorspace_id
+                        LEFT OUTER JOIN photo.compression cm ON cm.id = p.compression_id
+                        LEFT OUTER JOIN photo.contrast cn ON cn.id = p.contrast_id
+                        LEFT OUTER JOIN photo.exposure_mode em ON em.id = p.exposure_mode_id
+                        LEFT OUTER JOIN photo.exposure_program ep ON ep.id = p.exposure_program_id
+                        LEFT OUTER JOIN photo.flash f ON f.id = p.flash_id
+                        LEFT OUTER JOIN photo.flash_color_filter fcf ON fcf.id = p.flash_color_filter_id
+                        LEFT OUTER JOIN photo.flash_mode fm ON fm.id = p.flash_mode_id
+                        LEFT OUTER JOIN photo.flash_setting fs ON fs.id = p.flash_setting_id
+                        LEFT OUTER JOIN photo.flash_type ft ON ft.id = p.flash_type_id
+                        LEFT OUTER JOIN photo.focus_mode foc ON foc.id = p.focus_mode_id
+                        LEFT OUTER JOIN photo.gain_control gc ON gc.id = p.gain_control_id
+                        LEFT OUTER JOIN photo.gps_altitude_ref gpsar ON gpsar.id = p.gps_altitude_ref_id 
+                        LEFT OUTER JOIN photo.gps_direction_ref gpsdr ON gpsdr.id = p.gps_direction_ref_id
+                        LEFT OUTER JOIN photo.gps_latitude_ref gpslatr ON gpslatr.id = p.gps_latitude_ref_id
+                        LEFT OUTER JOIN photo.gps_longitude_ref gpslngr ON gpslngr.id = p.gps_longitude_ref_id
+                        LEFT OUTER JOIN photo.gps_measure_mode gpsmm ON gpsmm.id = p.gps_measure_mode_id
+                        LEFT OUTER JOIN photo.gps_status gpss ON gpss.id = p.gps_status_id
+                        LEFT OUTER JOIN photo.high_iso_noise_reduction hinr ON hinr.id = p.high_iso_noise_reduction_id
+                        LEFT OUTER JOIN photo.hue_adjustment ha ON ha.id = p.hue_adjustment_id
+                        LEFT OUTER JOIN photo.lens l ON l.id = p.lens_id
+                        LEFT OUTER JOIN photo.light_source ls ON ls.id = p.light_source_id
+                        LEFT OUTER JOIN photo.make m ON m.id = p.make_id
+                        LEFT OUTER JOIN photo.metering_mode mm ON mm.id = p.metering_mode_id
+                        LEFT OUTER JOIN photo.model md ON md.id = p.model_id
+                        LEFT OUTER JOIN photo.noise_reduction nr ON nr.id = p.noise_reduction_id
+                        LEFT OUTER JOIN photo.orientation o ON o.id = p.orientation_id
+                        LEFT OUTER JOIN photo.picture_control_name pcn ON pcn.id = p.picture_control_name_id
+                        LEFT OUTER JOIN photo.raw_conversion_mode rcm ON rcm.id = p.raw_conversion_mode_id
+                        LEFT OUTER JOIN photo.saturation s ON s.id = p.saturation_id
+                        LEFT OUTER JOIN photo.scene_capture_type sct ON sct.id = p.scene_capture_type_id
+                        LEFT OUTER JOIN photo.scene_type st ON st.id = p.scene_type_id
+                        LEFT OUTER JOIN photo.sensing_method sm ON sm.id = p.sensing_method_id
+                        LEFT OUTER JOIN photo.sharpness sh ON sh.id = p.sharpness_id
+                        LEFT OUTER JOIN photo.vibration_reduction vr ON vr.id = p.vibration_reduction_id
+                        LEFT OUTER JOIN photo.vignette_control vc ON vc.id = p.vignette_control_id
+                        LEFT OUTER JOIN photo.vr_mode vrm ON vrm.id = p.vr_mode_id
+                        LEFT OUTER JOIN photo.white_balance wb ON wb.id = p.white_balance_id
+                       WHERE (1 = @allowPrivate OR is_private = FALSE)
+                         AND p.id = @photoId;",
+                    new {
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        photoId = photoId
                     }
-                })
-                .ToListAsync();
+                );
+            });
+		}
+
+
+		public Task<IEnumerable<Comment>> GetCommentsForPhotoAsync(int photoId)
+		{
+            return RunAsync(conn => {
+                return conn.QueryAsync<Comment>(
+                    @"SELECT entry_date,
+                             message AS comment_text,
+                             u.username
+                        FROM photo.comment c
+                       INNER JOIN maw.user u ON c.user_id = u.id
+                       WHERE c.photo_id = @photoId
+                       ORDER by entry_date DESC;",
+                    new { photoId = photoId }
+                );
+            });
+		}
+
+
+		public Task<Rating> GetRatingsAsync(int photoId, string username)
+		{
+            return RunAsync(conn => {
+                return conn.QuerySingleOrDefaultAsync<Rating>(
+                    @"SELECT (SELECT AVG(score) 
+                                FROM photo.rating 
+                               WHERE photo_id = @photoId
+                             ) AS average_rating,
+                             (SELECT AVG(score)
+                                FROM photo.rating 
+                               WHERE photo_id = @photoId
+                                 AND user_id = (SELECT id 
+                                                  FROM maw.user 
+                                                 WHERE username = @username
+                                               )
+                             ) AS user_rating;",
+                    new {
+                        photoId = photoId,
+                        username = username.ToLower()
+                    }
+                );
+            });
+		}
+
+
+		public Task<int> InsertPhotoCommentAsync(int photoId, string username, string comment)
+        {
+            return RunAsync(conn => {
+                return conn.ExecuteAsync(
+                    @"INSERT INTO photo.comment
+                           (
+                             user_id,
+                             photo_id,
+                             message,
+                             entry_date
+                           )
+                      VALUES
+                           (
+                             (SELECT id FROM maw.user WHERE username = @username),
+                             @photoId,
+                             @message,
+                             @entryDate
+                           );",
+                    new {
+                        username = username.ToLower(),
+                        photoId = photoId,
+                        message = comment,
+                        entryDate = DateTime.Now
+                    }
+                );
+            });
         }
 
 
-        async Task<short> GetUserId(string username)
+		public Task<float?> SavePhotoRatingAsync(int photoId, string username, byte rating)
         {
-            return await _ctx.User
-                .Where(u => u.Username == username)
-                .Select(x => x.Id)
-                .SingleAsync()
-                .ConfigureAwait(false);
+            return RunAsync(async conn => {
+                var result = await conn.ExecuteAsync(
+                    @"INSERT INTO photo.rating 
+                           (
+                             photo_id, 
+                             user_id,
+                             score
+                           )
+                      VALUES 
+                           (
+                             @photoId, 
+                             (SELECT id
+                                FROM maw.user
+                               WHERE username = @username
+                             ),
+                             @score
+                           )
+                        ON CONFLICT (photo_id, user_id) 
+                        DO UPDATE
+                       SET score = @score;",
+                    new {
+                        photoId = photoId,
+                        username = username.ToLower(),
+                        score = rating
+                    }
+                ).ConfigureAwait(false);
+
+                return (await GetRatingsAsync(photoId, username).ConfigureAwait(false))?.AverageRating;
+            });
+        }
+		
+		
+		public Task<float?> RemovePhotoRatingAsync(int photoId, string username)
+		{
+            return RunAsync(async conn => {
+                var result = await conn.ExecuteAsync(
+                    @"DELETE FROM photo.rating
+                       WHERE photo_id = @photoId
+                         AND user_id = (SELECT id
+                                          FROM maw.user
+                                         WHERE username = @username
+                                       );",
+                    new {
+                        photoId = photoId,
+                        username = username.ToLower()
+                    }
+                ).ConfigureAwait(false);
+
+                return (await GetRatingsAsync(photoId, username).ConfigureAwait(false))?.AverageRating;
+            });
+		}
+        
+
+        public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentDateAsync(bool newestFirst, bool allowPrivate)
+        {
+            return RunAsync(async conn => {
+                var op = newestFirst ? "MAX" : "MIN";
+                var sort = newestFirst ? "DESC" : "ASC";
+
+                var result = await conn.QueryAsync(
+                    $@"WITH comments AS 
+                       (
+                            SELECT photo_id,
+                                   {op}(entry_date) AS entry_date
+                              FROM photo.comment
+                             GROUP BY photo_id
+                      )
+                      SELECT {PHOTO_AND_CATEGORY_PROJECTION}
+                        FROM comments
+                       INNER JOIN photo.photo p ON comments.photo_id = p.id AND (1 = @allowPrivate OR is_private = FALSE)
+                       INNER JOIN photo.category c ON p.category_id = c.id
+                       ORDER BY entry_date {sort}
+                       LIMIT @limit;",
+                    new {
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        limit = MAX_RESULTS
+                    }
+                ).ConfigureAwait(false);
+
+                // TODO: why is this cast needed?
+                return result
+                    .Select(x => BuildPhotoAndCategory(x))
+                    .Cast<PhotoAndCategory>();
+            });
+        }
+
+
+        public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserCommentDateAsync(string username, bool newestFirst, bool allowPrivate)
+        {
+            return RunAsync(async conn => {
+                var op = newestFirst ? "MAX" : "MIN";
+                var sort = newestFirst ? "DESC" : "ASC";
+
+                var result = await conn.QueryAsync(
+                    $@"WITH comments AS 
+                       (
+                            SELECT photo_id,
+                                   {op}(entry_date) AS entry_date
+                              FROM photo.comment c
+                             INNER JOIN maw.user u ON c.user_id = u.id AND u.username = @username
+                             GROUP BY photo_id
+                      )
+                      SELECT {PHOTO_AND_CATEGORY_PROJECTION}
+                        FROM comments
+                       INNER JOIN photo.photo p ON comments.photo_id = p.id AND (1 = @allowPrivate OR is_private = FALSE)
+                       INNER JOIN photo.category c ON p.category_id = c.id
+                       ORDER BY entry_date {sort}
+                       LIMIT @limit;",
+                    new {
+                        username = @username.ToLower(),
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        limit = MAX_RESULTS
+                    }
+                ).ConfigureAwait(false);
+
+                return result
+                    .Select(x => BuildPhotoAndCategory(x))
+                    .Cast<PhotoAndCategory>();
+            });
+        }
+
+
+        public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentCountAsync(bool greatestFirst, bool allowPrivate)
+        {
+            return RunAsync(async conn => {
+                var sort = greatestFirst ? "DESC" : "ASC";
+
+                var result = await conn.QueryAsync(
+                    $@"WITH comments AS 
+                       (
+                            SELECT photo_id,
+                                   COUNT(1) AS comment_count
+                              FROM photo.comment
+                             GROUP BY photo_id
+                      )
+                      SELECT {PHOTO_AND_CATEGORY_PROJECTION}
+                        FROM comments
+                       INNER JOIN photo.photo p ON comments.photo_id = p.id AND (1 = @allowPrivate OR is_private = FALSE)
+                       INNER JOIN photo.category c ON p.category_id = c.id
+                       ORDER BY comment_count {sort}
+                       LIMIT @limit;",
+                    new {
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        limit = MAX_RESULTS
+                    }
+                );
+
+                return result
+                    .Select(x => BuildPhotoAndCategory(x))
+                    .Cast<PhotoAndCategory>();
+            });
+        }
+
+		
+        public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
+        {
+            return RunAsync(async conn => {
+                var sort = highestFirst ? "DESC" : "ASC";
+
+                var result = await conn.QueryAsync(
+                    $@"WITH ratings AS 
+                       (
+                            SELECT photo_id,
+                                   AVG(score) AS avg_score
+                              FROM photo.rating
+                             GROUP BY photo_id
+                      )
+                      SELECT {PHOTO_AND_CATEGORY_PROJECTION}
+                        FROM ratings
+                       INNER JOIN photo.photo p ON ratings.photo_id = p.id AND (1 = @allowPrivate OR is_private = FALSE)
+                       INNER JOIN photo.category c ON p.category_id = c.id
+                       ORDER BY avg_score {sort}
+                       LIMIT @limit;",
+                    new {
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        limit = MAX_RESULTS
+                    }
+                );
+
+                return result
+                    .Select(x => BuildPhotoAndCategory(x))
+                    .Cast<PhotoAndCategory>();
+            });
+        }
+
+		
+		public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
+		{
+            return RunAsync(async conn => {
+                var sort = highestFirst ? "DESC" : "ASC";
+
+                var result = await conn.QueryAsync(
+                    $@"WITH ratings AS 
+                       (
+                            SELECT photo_id,
+                                   AVG(score) AS avg_score
+                              FROM photo.rating r
+                             INNER JOIN maw.user u ON r.user_id = u.id AND u.username = @username
+                             GROUP BY photo_id
+                      )
+                      SELECT {PHOTO_AND_CATEGORY_PROJECTION}
+                        FROM ratings
+                       INNER JOIN photo.photo p ON ratings.photo_id = p.id AND (1 = @allowPrivate OR is_private = FALSE)
+                       INNER JOIN photo.category c ON p.category_id = c.id
+                       ORDER BY avg_score {sort}
+                       LIMIT @limit;",
+                    new {
+                        username = username.ToLower(),
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        limit = MAX_RESULTS
+                    }
+                );
+
+                return result
+                    .Select(x => BuildPhotoAndCategory(x))
+                    .Cast<PhotoAndCategory>();
+            });
+		}
+        
+
+        public Task<IEnumerable<CategoryPhotoCount>> GetStats(bool allowPrivate)
+        {
+            return RunAsync(conn => {
+                return conn.QueryAsync<CategoryPhotoCount>(
+                    @"SELECT year, 
+                             id AS CategoryId, 
+                             name AS CategoryName,
+                             (SELECT COUNT(1)
+                                FROM photo.photo
+                               WHERE category_id = photo.category.id
+                             ) AS photo_count
+                       FROM photo.category
+                      WHERE (1 = @allowPrivate OR is_private = FALSE)
+                      ORDER BY year,
+                               name;",
+                    new { allowPrivate = allowPrivate ? 1 : 0 }
+                );
+            });
+        }
+
+        
+        public Task<IEnumerable<Category3D>> GetAllCategories3D()
+        {
+            return RunAsync(conn => {
+                return conn.QueryAsync<Category3D, Image3D, Category3D>(
+                    @"SELECT id,
+                             year,
+                             name,
+                             teaser_photo_path AS path,
+                             teaser_photo_width AS width,
+                             teaser_photo_height AS height
+                        FROM photo.category
+                       ORDER BY id;",
+                    (cat, img) => {
+                        cat.TeaserImage = img;
+                        return cat;
+                    },
+                    splitOn: "path"
+                );
+            });
+        }
+
+
+        public Task<IEnumerable<Photo3D>> GetPhotos3D(int categoryId)
+        {
+            return RunAsync(conn => {
+                return conn.QueryAsync<Photo3D, Image3D, Image3D, Image3D, Photo3D>(
+                    @"SELECT id,
+                             xs_path AS path,
+                             xs_width AS width,
+                             xs_height AS height,
+                             md_path AS path,
+                             md_width AS width,
+                             md_height AS height,
+                             lg_path AS path,
+                             lg_width AS width,
+                             lg_height AS height
+                        FROM photo.photo
+                       WHERE category_id = @categoryId
+                       ORDER BY create_date;",
+                    (photo, xs, md, lg) => {
+                        photo.XsImage = xs;
+                        photo.MdImage = md;
+                        photo.LgImage = lg;
+
+                        return photo;
+                    },
+                    new { categoryId = categoryId },
+                    splitOn: "path"
+                );
+            });
         }
         
-        
-		D.Photo BuildPhoto(Photo x)
+
+        PhotoAndCategory BuildPhotoAndCategory(dynamic item)
         {
-            return new D.Photo 
-            {
-                Id = x.Id,
-                CategoryId = x.CategoryId,
-                Latitude = string.Equals(x.GpsLatitudeRefId, "N", StringComparison.OrdinalIgnoreCase) ? x.GpsLatitude : -1.0f * x.GpsLatitude,
-                Longitude = string.Equals(x.GpsLongitudeRefId, "E", StringComparison.OrdinalIgnoreCase) ? x.GpsLongitude : -1.0f * x.GpsLongitude,
-                XsInfo = new D.PhotoInfo 
-                {
-                    Height = x.XsHeight,
-                    Width = x.XsWidth,
-                    Path = x.XsPath
+            return new PhotoAndCategory {
+                Photo = new Photo {
+                    Id = item.photo_id,
+                    CategoryId = item.category_id,
+                    Latitude = (float?)item.latitude,
+                    Longitude = (float?)item.longitude,
+                    XsInfo = new PhotoInfo {
+                        Path = item.xs_path,
+                        Width = item.xs_width,
+                        Height = item.xs_height
+                    },
+                    SmInfo = new PhotoInfo {
+                        Path = item.sm_path,
+                        Width = item.sm_width,
+                        Height = item.sm_height
+                    },
+                    MdInfo = new PhotoInfo {
+                        Path = item.md_path,
+                        Width = item.md_width,
+                        Height = item.md_height
+                    },
+                    LgInfo = new PhotoInfo {
+                        Path = item.lg_path,
+                        Width = item.lg_width,
+                        Height = item.lg_height
+                    },
+                    PrtInfo = new PhotoInfo {
+                        Path = item.prt_path,
+                        Width = item.prt_width,
+                        Height = item.prt_height
+                    },
                 },
-                SmInfo = new D.PhotoInfo 
-                {
-                    Height = x.SmHeight,
-                    Width = x.SmWidth,
-                    Path = x.SmPath
-                },
-                MdInfo = new D.PhotoInfo 
-                {
-                    Height = x.MdHeight,
-                    Width = x.MdWidth,
-                    Path = x.MdPath
-                },
-                LgInfo = new D.PhotoInfo 
-                {
-                    Height = x.LgHeight,
-                    Width = x.LgWidth,
-                    Path = x.LgPath
-                },
-                PrtInfo = new D.PhotoInfo 
-                {
-                    Height = x.PrtHeight,
-                    Width = x.PrtWidth,
-                    Path = x.PrtPath
+                Category = new Category {
+                    Id = item.category_id,
+                    Name = item.name,
+                    Year = item.year,
+                    HasGpsData = item.has_gps_data,
+                    TeaserPhotoInfo = new PhotoInfo {
+                        Path = item.teaser_photo_path,
+                        Width = item.teaser_photo_width,
+                        Height = item.teaser_photo_height
+                    }
                 }
             };
         }
-
-
-        D.Category BuildPhotoCategory(Category cat, bool hasGps)
-		{
-            return new D.Category
-            { 	Id = cat.Id,
-                Year = cat.Year,
-                Name = cat.Name,
-                TeaserPhotoInfo = new D.PhotoInfo 
-				{	
-                    Height = (short)cat.TeaserPhotoHeight,
-					Width = (short)cat.TeaserPhotoWidth,
-                    Path = cat.TeaserPhotoPath
-				},
-                HasGpsData = hasGps
-			};
-		}
-        
-        
-        void LogEntityFrameworkError(string method, DbUpdateException ex)
-		{
-			_log.LogError(string.Format("Error calling {0}: {1}", method, ex.Message));
-
-            /*
-			foreach(var dbErr in ex.EntityValidationErrors)
-			{
-				foreach(var err in dbErr.ValidationErrors)
-				{
-					_log.LogError(string.Format("Error with property [{0}]: {1}", err.PropertyName, err.ErrorMessage));
-				}
-			}
-            */
-		}
 	}
 }
-

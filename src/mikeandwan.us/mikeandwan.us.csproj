@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Description>www.mikeandwan.us</Description>
     <AssemblyTitle>mikeandwan.us</AssemblyTitle>
-    <VersionPrefix>1.0.0-beta1</VersionPrefix>
+    <VersionPrefix>1.0.0</VersionPrefix>
     <Authors>Mike Morano &lt;mmorano@mikeandwan.us&gt;</Authors>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -17,7 +17,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../Maw.Data/Maw.Data.csproj" />
-    <ProjectReference Include="../Maw.Data.EntityFramework/Maw.Data.EntityFramework.csproj" />
     <ProjectReference Include="../Maw.Domain/Maw.Domain.csproj" />
     <ProjectReference Include="../Maw.TagHelpers/Maw.TagHelpers.csproj" />
   </ItemGroup>
@@ -33,7 +32,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.HttpOverrides" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Tools" Version="1.1.0-preview4-final">

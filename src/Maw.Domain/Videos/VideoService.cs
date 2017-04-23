@@ -21,19 +21,19 @@ namespace Maw.Domain.Videos
         }
 
 
-        public Task<List<short>> GetYearsAsync(bool allowPrivate)
+        public Task<IEnumerable<short>> GetYearsAsync(bool allowPrivate)
         {
             return _repo.GetYearsAsync(allowPrivate);
         }
 
 
-        public Task<List<Category>> GetCategoriesAsync(short year, bool allowPrivate)
+        public Task<IEnumerable<Category>> GetCategoriesAsync(short year, bool allowPrivate)
         {
             return _repo.GetCategoriesAsync(year, allowPrivate);
         }
 
 
-        public Task<List<Video>> GetVideosInCategoryAsync(short categoryId, bool allowPrivate)
+        public Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, bool allowPrivate)
         {
             return _repo.GetVideosInCategoryAsync(categoryId, allowPrivate);
         }

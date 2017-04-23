@@ -21,13 +21,13 @@ namespace Maw.Domain.Blogs
 		}
 
 
-		public Task<List<Blog>> GetBlogsAsync()
+		public Task<IEnumerable<Blog>> GetBlogsAsync()
 		{
 			return _repo.GetBlogsAsync();
 		}
 
 
-		public Task<List<Post>> GetAllPostsAsync(byte blogId)
+		public Task<IEnumerable<Post>> GetAllPostsAsync(byte blogId)
 		{
 			return _repo.GetAllPostsAsync(blogId);
 		}

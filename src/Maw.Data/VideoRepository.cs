@@ -1,147 +1,167 @@
-using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Maw.Data.EntityFramework.Videos;
-using D = Maw.Domain.Videos;
+using Dapper;
+using Maw.Domain.Videos;
 
 
 namespace Maw.Data
 {
 	public class VideoRepository
-        : D.IVideoRepository
+        : Repository, IVideoRepository
 	{
-		readonly VideoContext _ctx;
-
-
-        public VideoRepository(VideoContext context)
+        public VideoRepository(string connectionString)
+            : base(connectionString)
         {
-			if(context == null)
-			{
-				throw new ArgumentNullException(nameof(context));
-			}
 
-            _ctx = context;
         }
 
 
-		public Task<List<short>> GetYearsAsync(bool allowPrivate)
+		public Task<IEnumerable<short>> GetYearsAsync(bool allowPrivate)
 		{
-            return _ctx.Category
-                .Where(x => allowPrivate || !x.IsPrivate)
-                .Select(x => x.Year)
-                .Distinct()
-                .OrderByDescending(x => x)
-				.ToListAsync();
+            return RunAsync(conn => {
+                return conn.QueryAsync<short>(
+                    @"SELECT DISTINCT year
+                        FROM video.category
+                       WHERE (1 = @allowPrivate OR is_private = FALSE)
+                       ORDER BY year DESC;",
+                    new { allowPrivate = allowPrivate ? 1 : 0 }
+                );
+            });
 		}
 		
 		
-		public async Task<List<D.Category>> GetCategoriesAsync(short year, bool allowPrivate)
+		public Task<IEnumerable<Category>> GetCategoriesAsync(short year, bool allowPrivate)
 		{
-			var cats = await _ctx.Category
-                .Where(x => x.Year == year && (allowPrivate || !x.IsPrivate))
-                .OrderBy(x => x.Id)
-				.ToListAsync()
-                .ConfigureAwait(false);
-
-			return cats
-                .Select(x => BuildVideoCategory(x))
-				.ToList();
+            return RunAsync(conn => {
+                return conn.QueryAsync<Category, VideoInfo, Category>(
+                    @"SELECT id,
+                             year,
+                             name,
+                             teaser_image_path AS path,
+                             teaser_image_width AS width,
+                             teaser_image_height AS height
+                        FROM video.category
+                       WHERE (1 = @allowPrivate OR is_private = FALSE)
+                         AND year = @year
+                       ORDER BY id;",
+                    (category, videoInfo) => {
+                        category.TeaserThumbnail = videoInfo;
+                        return category; 
+                    },
+                    new { 
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        year = year
+                    },
+                    splitOn: "path"
+                );
+            });
 		}
 		
 
-		public async Task<List<D.Video>> GetVideosInCategoryAsync(short categoryId, bool allowPrivate)
+		public Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, bool allowPrivate)
 		{
-			var vids = await _ctx.Video
-                .Where(x => x.CategoryId == categoryId && (allowPrivate || !x.IsPrivate))
-                .Join(_ctx.Category, vid => vid.CategoryId, cat => cat.Id, (vid, cat) => new 
-                { 
-                    Video = vid, 
-                    Category = cat 
-                })
-				.ToListAsync()
-                .ConfigureAwait(false);
+            return RunAsync(async conn => {
+                IEnumerable<dynamic> result = await conn.QueryAsync(
+                    @"SELECT *
+                        FROM video.video v
+                       INNER JOIN video.category c ON v.category_id = c.id
+                       WHERE (1 = @allowPrivate OR v.is_private = FALSE)
+                         AND c.id = @categoryId;",
+                    new { 
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        categoryId = categoryId
+                    }
+                );
 
-			return vids.Select(x => BuildVideo(x.Video, x.Category))
-				.ToList();
+                return result.Select(x => new Video {
+                    Id = x.id,
+                    Duration = x.duration,
+                    Category = new Category {
+                        Id = x.category_id,
+                        Year = x.year,
+                        Name = x.name,
+                        TeaserThumbnail = new VideoInfo {
+                            Path = x.teaser_image_path,
+                            Width = x.teaser_image_width,
+                            Height = x.teaser_image_height
+                        }
+                    },
+                    ScaledVideo = new VideoInfo {
+                        Path = x.scaled_path,
+                        Width = x.scaled_width,
+                        Height = x.scaled_height
+                    },
+                    FullsizeVideo = new VideoInfo {
+                        Path = x.full_path,
+                        Width = x.full_width,
+                        Height = x.full_height
+                    },
+                    ThumbnailVideo = new VideoInfo {
+                        Path = x.thumb_path,
+                        Width = x.thumb_width,
+                        Height = x.thumb_height
+                    }
+                });
+            });
 		}
 		
 		
-		public async Task<D.Video> GetVideoAsync(short id, bool allowPrivate)
+		public Task<Video> GetVideoAsync(short id, bool allowPrivate)
 		{
-			var video = await _ctx.Video
-                .Where(x => x.Id == id && (allowPrivate || !x.IsPrivate))
-                .Join(_ctx.Category, vid => vid.CategoryId, cat => cat.Id, (vid, cat) => new 
-                { 
-                    Video = vid, 
-                    Category = cat 
-                })
-				.SingleAsync()
-                .ConfigureAwait(false);
+            return RunAsync(async conn => {
+                var result = await conn.QueryAsync<Video, Category, Video>(
+                    @"SELECT *
+                        FROM video.video v
+                       INNER JOIN video.category c ON v.category_id = c.id
+                       WHERE (1 = @allowPrivate OR v.is_private = FALSE)
+                         AND v.id = @id;",
+                    (vid, cat) => {
+                        vid.Category = cat;
+                        return vid;
+                    },
+                    new { 
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        id = id
+                    }
+                ).ConfigureAwait(false);
 
-			return BuildVideo(video.Video, video.Category);
-		}
-		
-		
-		public async Task<D.Category> GetCategoryAsync(short categoryId, bool allowPrivate)
-		{
-			var cat = await _ctx.Category
-                .Where(x => x.Id == categoryId && (allowPrivate || !x.IsPrivate))
-				.SingleAsync()
-                .ConfigureAwait(false);
-
-			return BuildVideoCategory(cat);
+                return result.FirstOrDefault();
+            });
 		}
 		
 
-        D.Category BuildVideoCategory(Category x)
+        public Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
         {
-            return new D.Category 
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Year = x.Year,
-                TeaserThumbnail = new D.VideoInfo
-                {
-                    Path = x.TeaserImagePath,
-					Height = (short)x.TeaserImageHeight,
-					Width = (short)x.TeaserImageWidth
-                }
-            };
-        }
+            return RunAsync(async conn => {
+                var result = await conn.QueryAsync<Category, VideoInfo, Category>(
+                    @"SELECT id,
+                             year,
+                             name,
+                             teaser_image_path AS path,
+                             teaser_image_width AS width,
+                             teaser_image_height AS height
+                        FROM video.category
+                       WHERE (1 = @allowPrivate OR is_private = FALSE)
+                         AND id = @id;",
+                    (category, videoInfo) => {
+                        category.TeaserThumbnail = videoInfo;
+                        return category; 
+                    },
+                    new { 
+                        allowPrivate = allowPrivate ? 1 : 0,
+                        id = categoryId
+                    },
+                    splitOn: "path"
+                );
 
-
-        D.Video BuildVideo(Video x, Category y)
-        {
-            return new D.Video 
-            {
-                Id = x.Id,
-				ThumbnailVideo = new D.VideoInfo
+                if(result == null || result.Count() == 0)
                 {
-                    Height = x.ThumbHeight,
-                    Width = x.ThumbWidth,
-                    Path = x.ThumbPath
-                },
-				FullsizeVideo = new D.VideoInfo
-                {
-                    Height = x.FullHeight,
-                    Width = x.FullWidth,
-                    Path = x.FullPath
-                },
-				ScaledVideo = new D.VideoInfo
-                {
-                    Height = x.ScaledHeight,
-                    Width = x.ScaledWidth,
-                    Path = x.ScaledPath
-                },
-                Category = new D.Category 
-                { 
-                    Id = y.Id,
-                    Year = y.Year,
-                    Name = y.Name
+                    return null;
                 }
-            };
+
+                return result.First();
+            });
         }
 	}
 }

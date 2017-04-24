@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
+import * as THREE from 'three';
 
 import { BoardSector } from '../board-sector.model';
 

@@ -98,14 +98,7 @@ namespace MawMvcApp
                         opts.AddPolicy(MawConstants.POLICY_VIEW_VIDEOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());
                         opts.AddPolicy(MawConstants.POLICY_ADMIN_SITE, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_ADMIN).Build());
                     })
-                .AddMvc(opts => 
-                    {
-                        if(_env.IsProduction())
-                        {
-                            // this should already be set in nginx, but this protects us if that is misconfigured
-                            opts.Filters.Add(new RequireHttpsAttribute());
-                        }
-                    });
+                .AddMvc();
         }
 
 

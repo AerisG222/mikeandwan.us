@@ -136,7 +136,6 @@ unlink_media "${SRC_WWW}/wwwroot"
 # copy the src dirs for building 
 # (so we can update views w/ js references to cache bust js filenames)
 cp -r "${SRC_ROOT}/Maw.Data" "${BUILD_ROOT}/Maw.Data"
-cp -r "${SRC_ROOT}/Maw.Data.EntityFramework" "${BUILD_ROOT}/Maw.Data.EntityFramework"
 cp -r "${SRC_ROOT}/Maw.Domain" "${BUILD_ROOT}/Maw.Domain"
 cp -r "${SRC_ROOT}/Maw.TagHelpers" "${BUILD_ROOT}/Maw.TagHelpers"
 cp -r "${SRC_WWW}" "${BUILD_WWW}"

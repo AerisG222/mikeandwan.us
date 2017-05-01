@@ -6,10 +6,10 @@
   "devDependencies": {
     "@types/jquery": "^2.0.41",
     "@types/stats": "^0.16.30",
-    "@types/three": "0.84.3",
-    "awesome-typescript-loader": "^3.1.2",
-    "typescript": "^2.2.1",
-    "webpack": "^2.3.2"
+    "@types/three": "0.84.7",
+    "awesome-typescript-loader": "^3.1.3",
+    "typescript": "^2.3.2",
+    "webpack": "^2.4.1"
   },
   "scripts": {
     "dev_build": "rm -rf dist && webpack",

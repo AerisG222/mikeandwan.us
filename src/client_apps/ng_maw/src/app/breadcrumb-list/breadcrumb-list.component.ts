@@ -1,4 +1,5 @@
 import { Component, EventEmitter } from '@angular/core';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { Breadcrumb } from '../shared/breadcrumb.model';
 import { BreadcrumbService } from '../shared/breadcrumb.service';
@@ -7,7 +8,19 @@ import { SvgIcon } from '../svg-icon/svg-icon.enum';
 @Component({
     selector: 'maw-breadcrumb-list',
     templateUrl: './breadcrumb-list.component.html',
-    styleUrls: [ './breadcrumb-list.component.css' ]
+    styleUrls: [ './breadcrumb-list.component.css' ],
+    animations: [
+        trigger('fadeInOut', [
+            state('in', style({opacity: 1})),
+            transition('void => *', [
+                style({opacity: 0}),
+                animate(320)
+            ]),
+            transition('* => void', [
+                animate(320, style({opacity: 1}))
+            ])
+        ])
+    ]
 })
 export class BreadcrumbListComponent {
     svgIcon = SvgIcon;

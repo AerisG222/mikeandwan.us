@@ -1,5 +1,6 @@
 import { Component, ViewChild, ChangeDetectorRef, AfterViewInit, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { PagerComponent } from '../../ng_maw/pager/pager.component';
 import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
@@ -16,7 +17,19 @@ import { VideoThumbnailInfo } from '../shared/video-thumbnail-info.model';
 @Component({
     selector: 'app-video-list',
     templateUrl: './video-list.component.html',
-    styleUrls: [ './video-list.component.css' ]
+    styleUrls: [ './video-list.component.css' ],
+    animations: [
+        trigger('fadeInOut', [
+            state('in', style({opacity: 1})),
+            transition('void => *', [
+                style({opacity: 0}),
+                animate(320)
+            ]),
+            transition('* => void', [
+                animate(320, style({opacity: 1}))
+            ])
+        ])
+    ]
 })
 export class VideoListComponent implements OnInit, AfterViewInit {
     @ViewChild(PagerComponent) pager: PagerComponent;

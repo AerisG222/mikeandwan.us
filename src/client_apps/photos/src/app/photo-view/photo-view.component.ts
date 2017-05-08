@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild, AfterViewInit, OnDestroy, OnChanges, NgZone } from '@angular/core';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { ResponsiveService } from '../../ng_maw/shared/responsive.service';
 import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
@@ -18,7 +19,16 @@ import { SaveDialogComponent } from '../save-dialog/save-dialog.component';
 @Component({
     selector: 'app-photo-view',
     templateUrl: './photo-view.component.html',
-    styleUrls: [ './photo-view.component.css' ]
+    styleUrls: [ './photo-view.component.css' ],
+    animations: [
+        trigger('fadeInOut', [
+            state('in', style({opacity: 1})),
+            transition('void => *', [
+                style({opacity: 0}),
+                animate(320)
+            ])
+        ])
+    ]
 })
 export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     private _containerBox: ContainerBox = null;

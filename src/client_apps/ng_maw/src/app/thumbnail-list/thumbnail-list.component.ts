@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { ThumbnailInfo, SelectedThumbnail } from './';
 import { ResponsiveService } from '../shared/';
@@ -7,7 +8,19 @@ import { SvgIcon } from '../svg-icon/svg-icon.enum';
 @Component({
     selector: 'maw-thumbnail-list',
     templateUrl: './thumbnail-list.component.html',
-    styleUrls: [ './thumbnail-list.component.css' ]
+    styleUrls: [ './thumbnail-list.component.css' ],
+    animations: [
+        trigger('fadeInOut', [
+            state('in', style({opacity: 1})),
+            transition('void => *', [
+                style({opacity: 0}),
+                animate(320)
+            ]),
+            transition('* => void', [
+                animate(320, style({opacity: 1}))
+            ])
+        ])
+    ]
 })
 export class ThumbnailListComponent {
     svgIcon = SvgIcon;

@@ -1,6 +1,6 @@
 <div class="row" style="margin-left: 0; margin-right: 0">
-    <app-map-view class="col-xs-12" *ngIf="showMapView" [context]="context"></app-map-view>
-    <app-photo-view class="col-xs-12" *ngIf="showPhotoView && context?.current" [context]="context"></app-photo-view>
+    <app-map-view [@fadeInOut]="'in'" class="col-xs-12" *ngIf="showMapView" [context]="context"></app-map-view>
+    <app-photo-view [@fadeInOut]="'in'" class="col-xs-12" *ngIf="showPhotoView && context?.current" [context]="context"></app-photo-view>
 </div>
 <maw-pager (pageSelected)="onChangePage($event)"></maw-pager>
 <maw-thumbnail-list (selected)="onThumbnailSelected($event)"></maw-thumbnail-list>

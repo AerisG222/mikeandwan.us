@@ -1,5 +1,6 @@
 import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { PagerComponent } from '../../ng_maw/pager/pager.component';
 import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
@@ -22,7 +23,19 @@ import { PhotoDialogComponent } from '../photo-dialog/photo-dialog.component';
 @Component({
     selector: 'app-photo-list',
     templateUrl: './photo-list.component.html',
-    styleUrls: [ './photo-list.component.css' ]
+    styleUrls: [ './photo-list.component.css' ],
+    animations: [
+        trigger('fadeInOut', [
+            state('in', style({opacity: 1})),
+            transition('void => *', [
+                style({opacity: 0}),
+                animate(320)
+            ]),
+            transition('* => void', [
+                animate(320, style({opacity: 1}))
+            ])
+        ])
+    ]
 })
 export class PhotoListComponent implements AfterViewInit, OnDestroy {
     @ViewChild(PagerComponent) pager: PagerComponent;

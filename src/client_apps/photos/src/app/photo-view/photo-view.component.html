@@ -42,11 +42,11 @@
     	</div>
 
         <div class="row">
-        	<div class="col-sm-12 hidden-xs photo-info" *ngIf="showComments"><app-comment-view [photo]="photo"></app-comment-view></div>
-        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" *ngIf="showRatings"><app-rating-view [photo]="photo"></app-rating-view></div>
-        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info exif" *ngIf="showExif"><app-exif-view [photo]="context?.current"></app-exif-view></div>
-            <div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" *ngIf="showEffects"><app-effects-view [photo]="context?.current" (update)="onFiltersUpdated($event)"></app-effects-view></div>
-            <div class="col-sm-offset-2 col-sm-8 photo-info" *ngIf="showFullscreen"><app-fullscreen-view [context]="context"></app-fullscreen-view></div>
+        	<div class="col-sm-12 hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showComments"><app-comment-view [photo]="photo"></app-comment-view></div>
+        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showRatings"><app-rating-view [photo]="photo"></app-rating-view></div>
+        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info exif" [@fadeInOut]="'in'" *ngIf="showExif"><app-exif-view [photo]="context?.current"></app-exif-view></div>
+            <div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showEffects"><app-effects-view [photo]="context?.current" (update)="onFiltersUpdated($event)"></app-effects-view></div>
+            <div class="col-sm-offset-2 col-sm-8 photo-info" [@fadeInOut]="'in'" *ngIf="showFullscreen"><app-fullscreen-view [context]="context"></app-fullscreen-view></div>
         </div>
     </div>
 </div>

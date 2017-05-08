@@ -13,8 +13,21 @@ export class BreadcrumbService {
     }
 
     setBreadcrumbs(breadcrumbs: Array<Breadcrumb>): void {
-        this.breadcrumbs = breadcrumbs;
-        this.breadcrumbEventEmitter.next(this.breadcrumbs);
+        for (let i = 0; i < breadcrumbs.length; i++) {
+            if (this.breadcrumbs.length > i) {
+                if (this.breadcrumbs[i].title !== breadcrumbs[i].title) {
+                    this.breadcrumbs[i] = breadcrumbs[i];
+                }
+            } else {
+                this.breadcrumbs.push(breadcrumbs[i]);
+            }
+        }
+
+        while (this.breadcrumbs.length > breadcrumbs.length) {
+            this.breadcrumbs.pop();
+        }
+
+        this.notifyBreadcrumbChange();
     }
 
     navigateToBreadcrumb(dest: Breadcrumb): Promise<any> {

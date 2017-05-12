@@ -1,7 +1,9 @@
 using System;
 using System.IO;
+using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
 
 namespace MawMvcApp
@@ -16,15 +18,33 @@ namespace MawMvcApp
             if(isDevelopment)
             {
                 host
+                    .ConfigureLogging(factory =>
+                        {
+                            factory.AddConsole();
+                        })
                     .UseKestrel(opts => 
-                    {
-                        opts.UseHttps("test_certs/testcert.pfx", "TestCertificate");
-                    })
-                    .UseUrls("http://localhost:5000", "https://localhost:5001");
+                        {
+                            opts.Listen(IPAddress.Loopback, 5000);
+                            opts.Listen(IPAddress.Loopback, 5001, listenOptions => {
+                                listenOptions.UseHttps("test_certs/testcert.pfx", "TestCertificate");
+                            });
+                        });
+                    //.UseUrls("http://localhost:5000", "https://localhost:5001");
             }
             else
             {
-                host.UseKestrel();
+                host
+                    /*
+                    .ConfigureLogging(factory =>
+                        {
+                            factory.AddNLog();
+                        })
+                    */
+                    .UseKestrel(opts =>
+                    {
+                        opts.UseSystemd();
+                        opts.ListenUnixSocket("/tmp/kestrel.sock");
+                    });
             }
             
             host

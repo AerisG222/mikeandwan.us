@@ -166,7 +166,8 @@ namespace MawMvcApp.Controllers
 			var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 
-        	return Challenge(properties, provider);
+			return RedirectToAction(nameof(Login));
+        	//return Challenge(properties, provider);
 		} 
 
 

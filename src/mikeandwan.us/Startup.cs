@@ -1,5 +1,10 @@
 using System;
 using System.IO;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
+using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,7 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
-using AspNet.Security.OAuth.GitHub;
+//using AspNet.Security.OAuth.GitHub;
 using NLog.Web;
 using NMagickWand;
 using Maw.Data;
@@ -27,6 +32,7 @@ using MawMvcApp.ViewModels.About;
 namespace MawMvcApp
 {
     // TODO: googlemaps add async defer back and handle callback when it loads
+    // TODO: add github auth again
     public class Startup
     {
         readonly IConfiguration _config;
@@ -92,6 +98,22 @@ namespace MawMvcApp
                 .AddIdentity<MawUser, MawRole>()
                     .AddDefaultTokenProviders()
                     .Services
+                .AddGoogleAuthentication(opts => 
+                    {
+                        opts.ClientId = _config["GooglePlus:ClientId"];
+                        opts.ClientSecret = _config["GooglePlus:ClientSecret"];
+                    })
+                .AddMicrosoftAccountAuthentication(opts =>
+                    {
+                        opts.ClientId = _config["Microsoft:ApplicationId"];
+                        opts.ClientSecret = _config["Microsoft:Secret"];
+                    })
+                .AddTwitterAuthentication(opts =>
+                    {
+                        opts.ConsumerKey = _config["Twitter:ConsumerKey"];
+                        opts.ConsumerSecret = _config["Twitter:ConsumerSecret"];
+                        opts.RetrieveUserDetails = true;
+                    })
                 .AddAuthorization(opts =>
                     {
                         opts.AddPolicy(MawConstants.POLICY_VIEW_PHOTOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());
@@ -106,8 +128,6 @@ namespace MawMvcApp
         {
             if (_env.IsDevelopment())
             {
-                loggerFactory.AddConsole();
-
                 app.UseDeveloperExceptionPage();
 
                 AddDevPathMappings(app);
@@ -135,30 +155,16 @@ namespace MawMvcApp
                         //HttpOnly = HttpOnlyPolicy.Always,
                         Secure = CookieSecurePolicy.SameAsRequest
                     })
-                .UseIdentity()
-                .UseCookieAuthentication()
+                .UseAuthentication()
+                //.UseCookieAuthentication()
+                /*
                 .UseGitHubAuthentication(new GitHubAuthenticationOptions
                     {
                         ClientId = _config["GitHub:ClientId"],
                         ClientSecret = _config["GitHub:ClientSecret"],
                         Scope = { "user:email" }
                     })
-                .UseGoogleAuthentication(new GoogleOptions
-                    {
-                        ClientId = _config["GooglePlus:ClientId"],
-                        ClientSecret = _config["GooglePlus:ClientSecret"]
-                    })
-                .UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions()
-                    {
-                        ClientId = _config["Microsoft:ApplicationId"],
-                        ClientSecret = _config["Microsoft:Secret"]
-                    })
-                .UseTwitterAuthentication(new TwitterOptions()
-                    {
-                        ConsumerKey = _config["Twitter:ConsumerKey"],
-                        ConsumerSecret = _config["Twitter:ConsumerSecret"],
-                        RetrieveUserDetails = true
-                    })
+                */
                 .UseStaticFiles()
                 .UseMvc();
         }

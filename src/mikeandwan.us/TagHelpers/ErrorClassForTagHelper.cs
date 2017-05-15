@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 
-namespace Maw.TagHelpers
+namespace MawMvcApp.TagHelpers
 {
 	[HtmlTargetElement("div", Attributes = ForAttributeName)]
 	public class ErrorClassForTagHelper 

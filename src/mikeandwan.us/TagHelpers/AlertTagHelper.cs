@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 
-namespace Maw.TagHelpers
+namespace MawMvcApp.TagHelpers
 {
 	[HtmlTargetElement("p", Attributes = AlertTypeAttributeName)]
 	public class AlertTagHelper 

@@ -32,7 +32,7 @@ namespace MawMvcApp.Controllers
 		readonly UserManager<MawUser> _userMgr;
 		readonly IEmailService _emailService;
 		readonly ILoginService _loginService;
-		readonly string _externalCookieScheme;
+		//readonly string _externalCookieScheme;
 
 
 		public AccountController(ILogger<AccountController> log, 
@@ -86,7 +86,7 @@ namespace MawMvcApp.Controllers
 			_userMgr = userManager;
 			_emailService = emailService;
 			_loginService = loginService;
-			_externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
+			//_externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
         }
 
 		
@@ -97,7 +97,7 @@ namespace MawMvcApp.Controllers
 			ViewBag.ReturnUrl = returnUrl;
 
 			// Clear the existing external cookie to ensure a clean login process
-            await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+            //await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
             if (User.Identity.IsAuthenticated)
             {
@@ -106,7 +106,7 @@ namespace MawMvcApp.Controllers
 
 			var vm = new LoginModel
 			{
-				ExternalSchemes = GetExternalLoginSchemes()
+				ExternalSchemes = await GetExternalLoginSchemes()
 			};
 
 			return View(vm);
@@ -120,7 +120,7 @@ namespace MawMvcApp.Controllers
 			ViewBag.NavigationZone = NavigationZone.Account;
 			ViewBag.ReturnUrl = returnUrl;
 			
-			model.ExternalSchemes = GetExternalLoginSchemes();
+			model.ExternalSchemes = await GetExternalLoginSchemes();
 			model.WasAttempted = true;
 
             if(!ModelState.IsValid)
@@ -155,9 +155,11 @@ namespace MawMvcApp.Controllers
 		
 
 		[HttpGet("external-login")]
-		public ActionResult ExternalLogin(string provider, string returnUrl = null)
+		public async Task<ActionResult> ExternalLogin(string provider, string returnUrl = null)
 		{
-			if(!_signInManager.GetExternalAuthenticationSchemes().Any(x => string.Equals(x.AuthenticationScheme, provider, StringComparison.OrdinalIgnoreCase)))
+			var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
+
+			if(!schemes.Any(x => string.Equals(x.Name, provider, StringComparison.OrdinalIgnoreCase)))
 			{
 				_log.LogError($"Invalid external authentication scheme specified: {provider}");
 				return Redirect(nameof(Login));
@@ -166,8 +168,7 @@ namespace MawMvcApp.Controllers
 			var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 
-			return RedirectToAction(nameof(Login));
-        	//return Challenge(properties, provider);
+        	return Challenge(properties, provider);
 		} 
 
 
@@ -190,7 +191,9 @@ namespace MawMvcApp.Controllers
 				return RedirectToAction(nameof(Login));
 			}
 
-			if(!_signInManager.GetExternalAuthenticationSchemes().Any(x => string.Equals(x.AuthenticationScheme, info.LoginProvider, StringComparison.OrdinalIgnoreCase)))
+			var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
+
+			if(!schemes.Any(x => string.Equals(x.Name, info.LoginProvider, StringComparison.OrdinalIgnoreCase)))
 			{
 				_log.LogError($"External provider {info.LoginProvider} is not supported");
 				return RedirectToAction(nameof(Login));
@@ -484,10 +487,11 @@ namespace MawMvcApp.Controllers
 		}
 
 
-		IEnumerable<ExternalLoginScheme> GetExternalLoginSchemes()
+		async Task<IEnumerable<ExternalLoginScheme>> GetExternalLoginSchemes()
 		{
-			return _signInManager
-				.GetExternalAuthenticationSchemes()
+			var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
+
+			return schemes
 				.Select(x => new ExternalLoginScheme(x))
 				.OrderBy(x => x.ExternalAuth.DisplayName);
 		}

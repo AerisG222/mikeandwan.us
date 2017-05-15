@@ -44,7 +44,7 @@
         <div class="row">
         @foreach(var scheme in Model.ExternalSchemes) {
             <div class="col-sm-6 ext_auth">
-                <a href="/account/external-login?provider=@scheme.ExternalAuth.AuthenticationScheme" class="btn btn-default">@if(scheme.Icon != null) {<svg-icon class="icon" icon="@((SvgIcon)scheme.Icon)"></svg-icon> }@scheme.ExternalAuth.DisplayName</a>
+                <a href="/account/external-login?provider=@scheme.ExternalAuth.Name" class="btn btn-default">@if(scheme.Icon != null) {<svg-icon class="icon" icon="@((SvgIcon)scheme.Icon)"></svg-icon> }@scheme.ExternalAuth.DisplayName</a>
             </div>
         }
         </div>

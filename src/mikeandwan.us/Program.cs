@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 
@@ -29,12 +30,11 @@ namespace MawMvcApp
                                 listenOptions.UseHttps("test_certs/testcert.pfx", "TestCertificate");
                             });
                         });
-                    //.UseUrls("http://localhost:5000", "https://localhost:5001");
             }
             else
             {
                 host
-                    /*
+                    /* TODO: add nlog
                     .ConfigureLogging(factory =>
                         {
                             factory.AddNLog();
@@ -49,6 +49,11 @@ namespace MawMvcApp
             
             host
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .ConfigureAppConfiguration((context, builder) =>
+                    {
+                        builder.AddJsonFile("config.json");
+                        builder.AddEnvironmentVariables("MAW_");
+                    })
                 .CaptureStartupErrors(true)
                 .UseStartup<Startup>()
                 .Build()

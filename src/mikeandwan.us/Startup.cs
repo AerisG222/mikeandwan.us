@@ -1,9 +1,12 @@
 using System;
 using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -16,7 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
-//using AspNet.Security.OAuth.GitHub;
+using Newtonsoft.Json.Linq;
 using NLog.Web;
 using NMagickWand;
 using Maw.Data;
@@ -39,25 +42,27 @@ namespace MawMvcApp
         readonly IHostingEnvironment _env;
 
 
-        public Startup(IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration config, IHostingEnvironment hostingEnvironment)
         {
+            if(config == null) 
+            {
+                throw new ArgumentNullException(nameof(config));
+            }
+
+            if(hostingEnvironment == null) 
+            {
+                throw new ArgumentNullException(nameof(hostingEnvironment));
+            }
+
             _env = hostingEnvironment;
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(hostingEnvironment.ContentRootPath)
-                .AddJsonFile("config.json")
-                .AddEnvironmentVariables("MAW_");
-
+            _config = config;
             MagickWandEnvironment.Genesis();
-
-            _config = builder.Build();
         }
 
 
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddSingleton<FrameworkIdentifier>()
                 .Configure<ContactConfig>(_config.GetSection("ContactUs"))
                 .Configure<EmailConfig>(_config.GetSection("Email"))
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
@@ -73,18 +78,6 @@ namespace MawMvcApp
                         opts.Password.RequireNonAlphanumeric = false;
                         opts.Password.RequireUppercase = false;
                         opts.Password.RequiredLength = 4;
-
-                        opts.Cookies.ApplicationCookie.CookieName = "maw_auth";
-                        opts.Cookies.ApplicationCookie.LoginPath = "/account/login";
-                        opts.Cookies.ApplicationCookie.LogoutPath = "/account/logout";
-                        opts.Cookies.ApplicationCookie.AccessDeniedPath = "/account/access-denied";
-                        opts.Cookies.ApplicationCookie.ExpireTimeSpan = new TimeSpan(0, 20, 0);
-
-                        opts.Cookies.ExternalCookie.CookieName = "ext_auth";
-                        opts.Cookies.ExternalCookie.LoginPath = "/account/login";
-                        opts.Cookies.ExternalCookie.LogoutPath = "/account/logout";
-                        opts.Cookies.ExternalCookie.AccessDeniedPath = "/account/access-denied";
-                        opts.Cookies.ExternalCookie.ExpireTimeSpan = new TimeSpan(0, 20, 0);
                     })
                 .AddMawDataRepositories(_config["Environment:DbConnectionString"])
                 .AddScoped<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
@@ -95,6 +88,21 @@ namespace MawMvcApp
                 .AddScoped<IRoleStore<MawRole>, MawRoleStore>()
                 .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
                 .AddLogging()
+                .AddAuthentication(opts => 
+                    {
+                        opts.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        opts.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        opts.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    })
+                .AddCookieAuthentication(opts =>
+                    {
+                        opts.AccessDeniedPath = "/account/access-denied";
+                        opts.CookieName = "maw_auth";
+                        opts.ExpireTimeSpan = new TimeSpan(0, 20, 0);
+                        opts.LoginPath = "/account/login";
+                        opts.LogoutPath = "/account/logout";
+                        opts.SlidingExpiration = true;
+                    })
                 .AddIdentity<MawUser, MawRole>()
                     .AddDefaultTokenProviders()
                     .Services
@@ -102,17 +110,50 @@ namespace MawMvcApp
                     {
                         opts.ClientId = _config["GooglePlus:ClientId"];
                         opts.ClientSecret = _config["GooglePlus:ClientSecret"];
+                        opts.SaveTokens = true;
                     })
                 .AddMicrosoftAccountAuthentication(opts =>
                     {
                         opts.ClientId = _config["Microsoft:ApplicationId"];
                         opts.ClientSecret = _config["Microsoft:Secret"];
+                        opts.SaveTokens = true;
                     })
                 .AddTwitterAuthentication(opts =>
                     {
                         opts.ConsumerKey = _config["Twitter:ConsumerKey"];
                         opts.ConsumerSecret = _config["Twitter:ConsumerSecret"];
                         opts.RetrieveUserDetails = true;
+                        opts.SaveTokens = true;
+                    })
+                .AddOAuthAuthentication("GitHub", opts =>
+                    {
+                        opts.DisplayName = "GitHub";
+                        opts.ClientId = _config["GitHub:ClientId"];
+                        opts.ClientSecret = _config["GitHub:ClientSecret"];
+                        opts.CallbackPath = new PathString("/signin-github");
+                        opts.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
+                        opts.TokenEndpoint = "https://github.com/login/oauth/access_token";
+                        opts.UserInformationEndpoint = "https://api.github.com/user";
+                        opts.ClaimsIssuer = "OAuth2-Github";
+                        opts.SaveTokens = true;
+                        // Retrieving user information is unique to each provider.
+                        opts.Events = new OAuthEvents
+                        {
+                            OnCreatingTicket = async context =>
+                            {
+                                // Get the GitHub user
+                                var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
+                                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
+                                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                                var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
+                                response.EnsureSuccessStatusCode();
+
+                                var user = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+                                context.RunClaimActions(user);
+                            }
+                        };
                     })
                 .AddAuthorization(opts =>
                     {
@@ -156,15 +197,6 @@ namespace MawMvcApp
                         Secure = CookieSecurePolicy.SameAsRequest
                     })
                 .UseAuthentication()
-                //.UseCookieAuthentication()
-                /*
-                .UseGitHubAuthentication(new GitHubAuthenticationOptions
-                    {
-                        ClientId = _config["GitHub:ClientId"],
-                        ClientSecret = _config["GitHub:ClientSecret"],
-                        Scope = { "user:email" }
-                    })
-                */
                 .UseStaticFiles()
                 .UseMvc();
         }

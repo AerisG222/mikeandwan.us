@@ -1,20 +1,20 @@
 using System;
-using Maw.TagHelpers;
-using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Authentication;
+using MawMvcApp.TagHelpers;
 
 
 namespace MawMvcApp.ViewModels.Account
 {
     public class ExternalLoginScheme
     {
-        public AuthenticationDescription ExternalAuth { get; }
+        public AuthenticationScheme ExternalAuth { get; }
 
 
         public SvgIcon? Icon
         {
             get
             {
-                var scheme = ExternalAuth.AuthenticationScheme.ToLower();
+                var scheme = ExternalAuth.Name.ToLower();
 
                 switch(scheme)
                 {
@@ -33,14 +33,9 @@ namespace MawMvcApp.ViewModels.Account
         }
 
 
-        public ExternalLoginScheme(AuthenticationDescription authDesc)
+        public ExternalLoginScheme(AuthenticationScheme authScheme)
         {
-            if(authDesc == null)
-            {
-                throw new ArgumentNullException(nameof(authDesc));
-            }
-
-            ExternalAuth = authDesc;
+            ExternalAuth = authScheme ?? throw new ArgumentNullException(nameof(authScheme));
         }
     }
 }

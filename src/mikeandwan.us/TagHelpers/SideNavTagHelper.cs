@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 
-namespace Maw.TagHelpers
+namespace MawMvcApp.TagHelpers
 {
 	[HtmlTargetElement("a", Attributes = IsActiveAttributeName)]
 	public class SideNavTagHelper

@@ -45,47 +45,14 @@ namespace MawMvcApp.Controllers
 								 IOptions<IdentityCookieOptions> identityCookieOptions)
 			: base(log)
         {
-			if(userRepository == null)
-			{
-				throw new ArgumentNullException(nameof(userRepository));
-			}
-
-			if(signInManager == null)
-			{
-				throw new ArgumentNullException(nameof(signInManager));
-			}
-
-			if(userManager == null)
-			{
-				throw new ArgumentNullException(nameof(userManager));
-			}
-
-			if(emailService == null)
-			{
-				throw new ArgumentNullException(nameof(emailService));
-			}
-			
-			if(contactOpts == null)
-			{
-				throw new ArgumentNullException(nameof(contactOpts));
-			}
-
-			if(loginService == null)
-			{
-				throw new ArgumentNullException(nameof(loginService));
-			}
-
-			if(identityCookieOptions == null)
-			{
-				throw new ArgumentNullException(nameof(identityCookieOptions));
-			}
-
 			_contactConfig = contactOpts.Value;
-            _repo = userRepository;
-            _signInManager = signInManager;
-			_userMgr = userManager;
-			_emailService = emailService;
-			_loginService = loginService;
+            _repo = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+			_userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
+			_emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
+			_loginService = loginService ?? throw new ArgumentNullException(nameof(loginService));
+
+			// TODO: can we kill this?
 			//_externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
         }
 
@@ -96,6 +63,7 @@ namespace MawMvcApp.Controllers
 			ViewBag.NavigationZone = NavigationZone.Account;
 			ViewBag.ReturnUrl = returnUrl;
 
+			// TODO: kill?
 			// Clear the existing external cookie to ensure a clean login process
             //await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
@@ -180,53 +148,60 @@ namespace MawMvcApp.Controllers
 			if(!string.IsNullOrEmpty(remoteError))
 			{
 				_log.LogError($"Unable to authenticate externally: {remoteError}");
-				return RedirectToAction(nameof(Login));
+				return View();
 			}
 
-			var info = await _signInManager.GetExternalLoginInfoAsync();
+			var extLoginInfo = await _signInManager.GetExternalLoginInfoAsync();
 
-			if(info == null)
+			if(extLoginInfo == null)
 			{
 				_log.LogError("Unable to obtain external login info");
-				return RedirectToAction(nameof(Login));
+				return View();
 			}
 
 			var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
 
-			if(!schemes.Any(x => string.Equals(x.Name, info.LoginProvider, StringComparison.OrdinalIgnoreCase)))
+			if(!schemes.Any(x => string.Equals(x.Name, extLoginInfo.LoginProvider, StringComparison.OrdinalIgnoreCase)))
 			{
-				_log.LogError($"External provider {info.LoginProvider} is not supported");
-				return RedirectToAction(nameof(Login));
+				_log.LogError($"External provider {extLoginInfo.LoginProvider} is not supported");
+				return View();
 			}
 
-			var email = info.Principal?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email);
+			var email = extLoginInfo.Principal?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email);
 
 			if(email == null)
 			{
-				_log.LogError($"Unable to obtain email from External Authentication Provider {info.LoginProvider}");
-				return View(info);
+				_log.LogError($"Unable to obtain email from External Authentication Provider {extLoginInfo.LoginProvider}");
+				return View();
 			}
 
 			var user = await _userMgr.FindByEmailAsync(email.Value);
 
             if (user != null)
             {
-				await _signInManager.SignInAsync(user, false);
-				await _loginService.LogExternalLoginAttemptAsync(email.Value, info.LoginProvider, true);
-				
-                _log.LogInformation($"User {user.Username} logged in with {info.LoginProvider} provider.");
-
-				if(!string.IsNullOrEmpty(returnUrl))
+				if(user.IsExternalAuthEnabled(extLoginInfo.LoginProvider))
 				{
-	                return Redirect(returnUrl);
-				}
+					await _signInManager.SignInAsync(user, false);
+					await _loginService.LogExternalLoginAttemptAsync(email.Value, extLoginInfo.LoginProvider, true);
+					
+					_log.LogInformation($"User {user.Username} logged in with {extLoginInfo.LoginProvider} provider.");
 
-				return Redirect("/");
+					if(!string.IsNullOrEmpty(returnUrl))
+					{
+						return Redirect(returnUrl);
+					}
+
+					return Redirect("/");
+				}
+				else
+				{
+					_log.LogError($"User {user.Username} unable to login with {extLoginInfo.LoginProvider} as they have not yet opted-in for this provider.");
+				}
             }
 
-			await _loginService.LogExternalLoginAttemptAsync(email.Value, info.LoginProvider, false);
+			await _loginService.LogExternalLoginAttemptAsync(email.Value, extLoginInfo.LoginProvider, false);
 
-			return View(info);
+			return View();
 		}
 
 		
@@ -363,7 +338,11 @@ namespace MawMvcApp.Controllers
 				State = user.State,
 				PostalCode = user.PostalCode,
 				Country = user.Country,
-				Website = user.Website
+				Website = user.Website,
+				EnableGithubAuth = user.IsGithubAuthEnabled,
+				EnableGoogleAuth = user.IsGoogleAuthEnabled,
+				EnableMicrosoftAuth = user.IsMicrosoftAuthEnabled,
+				EnableTwitterAuth = user.IsTwitterAuthEnabled
 			};
 
 			return View(model);
@@ -403,6 +382,10 @@ namespace MawMvcApp.Controllers
 				user.PostalCode = model.PostalCode;
 				user.Country = model.Country;
 				user.Website = model.Website;
+				user.IsGithubAuthEnabled = model.EnableGithubAuth;
+				user.IsGoogleAuthEnabled = model.EnableGoogleAuth;
+				user.IsMicrosoftAuthEnabled = model.EnableMicrosoftAuth;
+				user.IsTwitterAuthEnabled = model.EnableTwitterAuth;
 
                 await _repo.UpdateUserAsync(user);
 

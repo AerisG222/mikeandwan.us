@@ -37,13 +37,8 @@ namespace MawMvcApp.Controllers
 				throw new ArgumentNullException(nameof(videoRepository));
 			}
 
-			if(fileProvider == null)
-			{
-				throw new ArgumentNullException(nameof(fileProvider));
-			}
-
             _svc = new VideoService(videoRepository);
-			_fileProvider = fileProvider;
+			_fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));;
         }
 
 

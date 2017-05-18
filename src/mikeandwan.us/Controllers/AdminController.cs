@@ -48,37 +48,14 @@ namespace MawMvcApp.Controllers
 				throw new ArgumentNullException(nameof(emailOpts));
 			}
 			
-			if(userRepository == null)
-			{
-				throw new ArgumentNullException(nameof(userRepository));
-			}
-
-			if(userManager == null)
-			{
-				throw new ArgumentNullException(nameof(userManager));
-			}
-
-			if(roleManager == null)
-			{
-				throw new ArgumentNullException(nameof(roleManager));
-			}
-
-			if (blogRepository == null)
-			{
-				throw new ArgumentNullException(nameof(blogRepository));
-			}
-			
-			if (emailService == null)
-			{
-				throw new ArgumentNullException(nameof(emailService));
-			}
-			
 			_emailConfig = emailOpts.Value;
-            _repo = userRepository;
-			_userMgr = userManager;
-			_roleMgr = roleManager;
-			_blogRepo = blogRepository;
-			_emailSvc = emailService;
+            _repo = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+			_userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
+			_roleMgr = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
+
+			// TODO: take a blog service
+			_blogRepo = blogRepository ?? throw new ArgumentNullException(nameof(blogRepository));
+			_emailSvc = emailService ?? throw new ArgumentNullException(nameof(emailService));
         }
 
 

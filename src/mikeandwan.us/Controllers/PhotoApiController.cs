@@ -35,12 +35,8 @@ namespace MawMvcApp.Controllers
                                   IPhotoRepository photoRepository)
             : base(log)
         {
-            if(photoRepository == null)
-            {
-                throw new ArgumentNullException(nameof(photoRepository));
-            }
-
-            _svc = new PhotoService(photoRepository);
+            // TODO: take a PhotoService
+            _svc = new PhotoService(photoRepository) ?? throw new ArgumentNullException(nameof(photoRepository));
         }
 
 

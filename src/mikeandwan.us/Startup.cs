@@ -36,6 +36,7 @@ namespace MawMvcApp
 {
     // TODO: googlemaps add async defer back and handle callback when it loads
     // TODO: add github auth again
+    // TODO: issue JWT tokens for android app / apis
     public class Startup
     {
         readonly IConfiguration _config;
@@ -136,6 +137,10 @@ namespace MawMvcApp
                         opts.UserInformationEndpoint = "https://api.github.com/user";
                         opts.ClaimsIssuer = "OAuth2-Github";
                         opts.SaveTokens = true;
+
+                        // TODO: fix github auth
+                        opts.Scope.Add("user:email");
+
                         // Retrieving user information is unique to each provider.
                         opts.Events = new OAuthEvents
                         {

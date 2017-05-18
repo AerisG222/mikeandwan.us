@@ -23,12 +23,7 @@ namespace MawMvcApp.Controllers
 									ILoginService loginService)
 			: base(log)
         {
-			if(loginService == null)
-			{
-				throw new ArgumentNullException(nameof(loginService));
-			}
-
-			_loginService = loginService;
+			_loginService = loginService ?? throw new ArgumentNullException(nameof(loginService));
         }
 
 

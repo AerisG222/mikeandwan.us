@@ -42,19 +42,10 @@ namespace MawMvcApp.Controllers
 				throw new ArgumentNullException(nameof(photoRepository));
 			}
 
-			if(fileProvider == null)
-			{
-				throw new ArgumentNullException(nameof(fileProvider));
-			}
-
-            if (antiForgery == null)
-            {
-                throw new ArgumentNullException(nameof(antiForgery));
-            }
-
+            // TODO: take a photoService
 			_svc = new PhotoService(photoRepository);
-			_fileProvider = fileProvider;
-            _antiForgery = antiForgery;
+			_fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+            _antiForgery = antiForgery ?? throw new ArgumentNullException(nameof(antiForgery));
         }
 
 

@@ -79,6 +79,18 @@ namespace MawMvcApp.ViewModels.Account
 		[Url(ErrorMessage = "Please enter a valid website address")]
 		public string Website { get; set; }
 
+		[Display(Name = "GitHub")]
+		public bool EnableGithubAuth { get; set; }
+
+		[Display(Name = "Google")]
+		public bool EnableGoogleAuth { get; set; }
+		
+		[Display(Name = "Microsoft")]
+		public bool EnableMicrosoftAuth { get; set; }
+
+		[Display(Name = "Twitter")]
+		public bool EnableTwitterAuth { get; set; }
+
 		[BindNever]
 		public bool WasAttempted { get; set; }
 		

@@ -41,20 +41,12 @@ namespace MawMvcApp.Controllers
 				throw new ArgumentNullException(nameof(blogRepository));
 			}
 
-			if(captchaService == null)
-			{
-				throw new ArgumentException(nameof(captchaService));
-			}
-
-			if(emailService == null)
-			{
-				throw new ArgumentException(nameof(emailService));
-			}
-
             _config = contactOpts.Value;
+
+			// TODO: should get the service, not the repo
 			_blogService = new BlogService(blogRepository);
-			_captchaService = captchaService;
-			_emailService = emailService;
+			_captchaService = captchaService ?? throw new ArgumentException(nameof(captchaService));
+			_emailService = emailService ?? throw new ArgumentException(nameof(emailService));
         }
 
 

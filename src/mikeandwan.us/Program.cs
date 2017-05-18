@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using Microsoft.AspNetCore.Builder;
@@ -21,7 +22,15 @@ namespace MawMvcApp
                 host
                     .ConfigureLogging(factory =>
                         {
-                            factory.AddConsole();
+                            factory
+                                .AddConsole()
+                                .AddFilter(new Dictionary<string, LogLevel>
+                                    {
+                                        { "Microsoft", LogLevel.Warning },
+                                        { "System", LogLevel.Warning },
+                                        { "Maw", LogLevel.Debug },
+                                        { "MawMvcApp", LogLevel.Debug },
+                                    });
                         })
                     .UseKestrel(opts => 
                         {

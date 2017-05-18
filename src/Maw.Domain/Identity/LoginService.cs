@@ -20,30 +20,10 @@ namespace Maw.Domain.Identity
 							UserManager<MawUser> userManager, 
 							ILogger<LoginService> log)
 		{
-			if(repo == null)
-			{
-				throw new ArgumentNullException(nameof(repo));
-			}
-			
-			if(signInManager == null)
-			{
-				throw new ArgumentNullException(nameof(signInManager));
-			}
-			
-			if(userManager == null)
-			{
-				throw new ArgumentNullException(nameof(userManager));
-			}
-			
-			if(log == null)
-			{
-				throw new ArgumentNullException(nameof(log));
-			}
-			
-			_repo = repo;
-			_signInManager = signInManager;
-			_userMgr = userManager;
-			_log = log;
+			_repo = repo ?? throw new ArgumentNullException(nameof(repo));
+			_signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+			_userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
+			_log = log ?? throw new ArgumentNullException(nameof(log));
 		}
 		
 		

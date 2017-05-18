@@ -146,7 +146,50 @@
             </div>
     	</div>
 	</fieldset>
+
+    <fieldset>
+    	<legend>Social Logins</legend>
+        <p>
+            If you have an account with one of the following systems, you can enable your account to use that
+            system for logging in.  This might allow you to skip entering a username and password if you are already
+            logged in to that system.
+        </p>
+        <p maw-alert-type="Info">
+            To use this successfully, you <strong>must</strong> ensure that the email address on the social platform matches the
+            email address for your mikeandwan.us account.  If this is not the case, <strong>please do not enable this option</strong>.
+        </p>
+        <div class="col-sm-offset-3 col-sm-9">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" asp-for="EnableGithubAuth" /> <svg-icon icon="Github" class="icon"></svg-icon> GitHub
+                </label>
+            </div>
+        </div>
+        <div class="col-sm-offset-3 col-sm-9">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" asp-for="EnableGoogleAuth" /> <svg-icon icon="GooglePlus" class="icon"></svg-icon> Google
+                </label>
+            </div>
+        </div>
+        <div class="col-sm-offset-3 col-sm-9">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" asp-for="EnableMicrosoftAuth" /> <svg-icon icon="Windows" class="icon"></svg-icon> Microsoft
+                </label>
+            </div>
+        </div>
+        <div class="col-sm-offset-3 col-sm-9">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" asp-for="EnableTwitterAuth" /> <svg-icon icon="Twitter" class="icon"></svg-icon> Twitter
+                </label>
+            </div>
+        </div>
+    </fieldset>
 	
+    <br />
+
     <div class="form-group">
         <div class="col-sm-offset-3 col-sm-2">
             <button type="submit" class="btn btn-default">Submit</button>

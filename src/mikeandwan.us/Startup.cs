@@ -19,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
+// using AspNet.Security.OAuth.GitHub;
 using Newtonsoft.Json.Linq;
 using NLog.Web;
 using NMagickWand;
@@ -35,7 +36,7 @@ using MawMvcApp.ViewModels.About;
 namespace MawMvcApp
 {
     // TODO: googlemaps add async defer back and handle callback when it loads
-    // TODO: add github auth again
+    // TODO: add official github auth again
     // TODO: issue JWT tokens for android app / apis
     public class Startup
     {
@@ -89,12 +90,6 @@ namespace MawMvcApp
                 .AddScoped<IRoleStore<MawRole>, MawRoleStore>()
                 .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
                 .AddLogging()
-                .AddAuthentication(opts => 
-                    {
-                        opts.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                        opts.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                        opts.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    })
                 .AddCookieAuthentication(opts =>
                     {
                         opts.AccessDeniedPath = "/account/access-denied";
@@ -126,40 +121,15 @@ namespace MawMvcApp
                         opts.RetrieveUserDetails = true;
                         opts.SaveTokens = true;
                     })
-                .AddOAuthAuthentication("GitHub", opts =>
+                /* 
+                .AddGitHubAuthentication(opts =>
                     {
-                        opts.DisplayName = "GitHub";
                         opts.ClientId = _config["GitHub:ClientId"];
                         opts.ClientSecret = _config["GitHub:ClientSecret"];
-                        opts.CallbackPath = new PathString("/signin-github");
-                        opts.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
-                        opts.TokenEndpoint = "https://github.com/login/oauth/access_token";
-                        opts.UserInformationEndpoint = "https://api.github.com/user";
-                        opts.ClaimsIssuer = "OAuth2-Github";
                         opts.SaveTokens = true;
-
-                        // TODO: fix github auth
                         opts.Scope.Add("user:email");
-
-                        // Retrieving user information is unique to each provider.
-                        opts.Events = new OAuthEvents
-                        {
-                            OnCreatingTicket = async context =>
-                            {
-                                // Get the GitHub user
-                                var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
-                                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
-                                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                                var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
-                                response.EnsureSuccessStatusCode();
-
-                                var user = JObject.Parse(await response.Content.ReadAsStringAsync());
-
-                                context.RunClaimActions(user);
-                            }
-                        };
                     })
+                */
                 .AddAuthorization(opts =>
                     {
                         opts.AddPolicy(MawConstants.POLICY_VIEW_PHOTOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());

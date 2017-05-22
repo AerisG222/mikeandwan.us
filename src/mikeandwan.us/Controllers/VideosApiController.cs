@@ -15,7 +15,7 @@ namespace MawMvcApp.Controllers
     public class VideosApiController 
         : MawBaseController<VideosApiController>
     {
-        readonly VideoService _svc;
+        readonly IVideoService _svc;
 
 
         bool IsAdmin
@@ -28,16 +28,10 @@ namespace MawMvcApp.Controllers
 
 
 		public VideosApiController(ILogger<VideosApiController> log, 
-                                   IVideoRepository videoRepository)
+                                   IVideoService videoService)
 			: base(log)
         {
-			if(videoRepository == null)
-			{
-				throw new ArgumentNullException(nameof(videoRepository));
-			}
-
-            // TODO: take a videoService
-			_svc = new VideoService(videoRepository);
+			_svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
         }
 
 

@@ -30,7 +30,7 @@ namespace MawMvcApp.Controllers
 		readonly EmailConfig _emailConfig;
 		readonly UserManager<MawUser> _userMgr;
 		readonly RoleManager<MawRole> _roleMgr;
-		readonly IBlogRepository _blogRepo;
+		readonly IBlogService _blogSvc;
 		readonly IEmailService _emailSvc;
 
 
@@ -39,7 +39,7 @@ namespace MawMvcApp.Controllers
 							   IUserRepository userRepository,  
 		                       UserManager<MawUser> userManager, 
 							   RoleManager<MawRole> roleManager, 
-							   IBlogRepository blogRepository, 
+							   IBlogService blogService, 
 							   IEmailService emailService)
 			: base(log)
         {
@@ -52,9 +52,7 @@ namespace MawMvcApp.Controllers
             _repo = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
 			_userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
 			_roleMgr = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
-
-			// TODO: take a blog service
-			_blogRepo = blogRepository ?? throw new ArgumentNullException(nameof(blogRepository));
+			_blogSvc = blogService ?? throw new ArgumentNullException(nameof(blogService));
 			_emailSvc = emailService ?? throw new ArgumentNullException(nameof(emailService));
         }
 
@@ -540,7 +538,6 @@ namespace MawMvcApp.Controllers
 				}
 				if (model.Behavior == BlogPostAction.Save)
 				{
-					var svc = new BlogService(_blogRepo);
 					var post = new Post()
 					{
 						BlogId = 1,
@@ -549,7 +546,7 @@ namespace MawMvcApp.Controllers
 						PublishDate = model.PublishDate
 					};
 					
-					await svc.AddPostAsync(post);
+					await _blogSvc.AddPostAsync(post);
 					
 					model.Success = true;
 				}

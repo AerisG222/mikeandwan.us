@@ -20,13 +20,13 @@ namespace MawMvcApp.Controllers
     {
 		readonly ContactConfig _config;
 		readonly ICaptchaService _captchaService;
-		readonly BlogService _blogService;
+		readonly IBlogService _blogService;
 		readonly IEmailService _emailService;
 
 
 		public AboutController(ILogger<AboutController> log, 
-							   IOptions<ContactConfig> contactOpts, 
-							   IBlogRepository blogRepository, 
+							   IOptions<ContactConfig> contactOpts,
+							   IBlogService blogService,
 							   ICaptchaService captchaService, 
 							   IEmailService emailService)
 			: base(log)
@@ -36,15 +36,9 @@ namespace MawMvcApp.Controllers
 				throw new ArgumentNullException(nameof(contactOpts));
 			}
 
-			if(blogRepository == null)
-			{
-				throw new ArgumentNullException(nameof(blogRepository));
-			}
-
             _config = contactOpts.Value;
 
-			// TODO: should get the service, not the repo
-			_blogService = new BlogService(blogRepository);
+			_blogService = blogService ?? throw new ArgumentNullException(nameof(blogService));
 			_captchaService = captchaService ?? throw new ArgumentException(nameof(captchaService));
 			_emailService = emailService ?? throw new ArgumentException(nameof(emailService));
         }

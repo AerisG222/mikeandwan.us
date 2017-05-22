@@ -32,7 +32,6 @@ namespace MawMvcApp.Controllers
 		readonly UserManager<MawUser> _userMgr;
 		readonly IEmailService _emailService;
 		readonly ILoginService _loginService;
-		//readonly string _externalCookieScheme;
 
 
 		public AccountController(ILogger<AccountController> log, 

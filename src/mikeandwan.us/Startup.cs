@@ -82,6 +82,7 @@ namespace MawMvcApp
                         opts.Password.RequiredLength = 4;
                     })
                 .AddMawDataRepositories(_config["Environment:DbConnectionString"])
+                .AddMawServices()
                 .AddScoped<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
                 .AddScoped<ICaptchaService, GoogleCaptchaService>()
                 .AddScoped<IEmailService, EmailService>()

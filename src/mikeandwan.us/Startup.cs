@@ -36,6 +36,7 @@ using MawMvcApp.ViewModels.About;
 namespace MawMvcApp
 {
     // TODO: googlemaps add async defer back and handle callback when it loads
+    // TODO: auth cookie timeout does not seem to be honored
     // TODO: add official github auth again
     // TODO: issue JWT tokens for android app / apis
     public class Startup

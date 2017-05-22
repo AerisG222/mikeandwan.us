@@ -50,9 +50,6 @@ namespace MawMvcApp.Controllers
 			_userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
 			_emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
 			_loginService = loginService ?? throw new ArgumentNullException(nameof(loginService));
-
-			// TODO: can we kill this?
-			//_externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
         }
 
 		
@@ -61,10 +58,6 @@ namespace MawMvcApp.Controllers
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 			ViewBag.ReturnUrl = returnUrl;
-
-			// TODO: kill?
-			// Clear the existing external cookie to ensure a clean login process
-            //await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
             if (User.Identity.IsAuthenticated)
             {
@@ -180,11 +173,15 @@ namespace MawMvcApp.Controllers
             {
 				if(user.IsExternalAuthEnabled(extLoginInfo.LoginProvider))
 				{
+					// clear out the external cookie
+					await _signInManager.SignOutAsync();
+
+					// now sign in the local user
 					await _signInManager.SignInAsync(user, false);
 					await _loginService.LogExternalLoginAttemptAsync(email.Value, extLoginInfo.LoginProvider, true);
 					
 					_log.LogInformation($"User {user.Username} logged in with {extLoginInfo.LoginProvider} provider.");
-
+					
 					if(!string.IsNullOrEmpty(returnUrl))
 					{
 						return Redirect(returnUrl);

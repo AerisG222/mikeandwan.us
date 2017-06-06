@@ -16,6 +16,10 @@ namespace Maw.Domain.Identity
 		const string CLAIM_TYPE_SALT = "http://mikeandwan.us/claimTypes/salt";
 		const string CLAIM_TYPE_USERID = "http://mikeandwan.us/claimTypes/userid";
 		const string CLAIM_TYPE_SECURITY_STAMP = "http://mikeandwan.us/claimTypes/security_stamp";
+        const string CLAIM_TYPE_ENABLE_GITHUB_AUTH = "http://mikeandwan.us/claimTypes/enable_github_auth";
+        const string CLAIM_TYPE_ENABLE_GOOGLE_AUTH = "http://mikeandwan.us/claimTypes/enable_google_auth";
+        const string CLAIM_TYPE_ENABLE_MICROSOFT_AUTH = "http://mikeandwan.us/claimTypes/enable_microsoft_auth";
+        const string CLAIM_TYPE_ENABLE_TWITTER_AUTH = "http://mikeandwan.us/claimTypes/enable_twitter_auth";
 
 
 		public short Id 
@@ -185,6 +189,34 @@ namespace Maw.Domain.Identity
 		}
 
 
+        public bool IsGithubAuthEnabled
+        {
+            get { return bool.Parse(GetSingleClaim(CLAIM_TYPE_ENABLE_GITHUB_AUTH)); }
+            set { SetSingleClaim(CLAIM_TYPE_ENABLE_GITHUB_AUTH, value.ToString()); }
+        }
+
+
+        public bool IsGoogleAuthEnabled
+        {
+            get { return bool.Parse(GetSingleClaim(CLAIM_TYPE_ENABLE_GOOGLE_AUTH)); }
+            set { SetSingleClaim(CLAIM_TYPE_ENABLE_GOOGLE_AUTH, value.ToString()); }
+        }
+
+
+        public bool IsMicrosoftAuthEnabled
+        {
+            get { return bool.Parse(GetSingleClaim(CLAIM_TYPE_ENABLE_MICROSOFT_AUTH)); }
+            set { SetSingleClaim(CLAIM_TYPE_ENABLE_MICROSOFT_AUTH, value.ToString()); }
+        }
+
+
+        public bool IsTwitterAuthEnabled
+        {
+            get { return bool.Parse(GetSingleClaim(CLAIM_TYPE_ENABLE_TWITTER_AUTH)); }
+            set { SetSingleClaim(CLAIM_TYPE_ENABLE_TWITTER_AUTH, value.ToString()); }
+        }
+
+
 		public void AddRole(string role)
 		{
 			AddClaim(new Claim(ClaimTypes.Role, role));
@@ -211,6 +243,31 @@ namespace Maw.Domain.Identity
 
 			return mawUser;
 		}
+
+
+        public bool IsExternalAuthEnabled(string provider)
+        {
+            if(string.IsNullOrWhiteSpace(provider))
+            {
+                return false;
+            }
+
+            provider = provider.ToLower();
+
+            switch(provider)
+            {
+                case "github":
+                    return IsGithubAuthEnabled;
+                case "google":
+                    return IsGoogleAuthEnabled;
+                case "microsoft":
+                    return IsMicrosoftAuthEnabled;
+                case "twitter":
+                    return IsTwitterAuthEnabled;
+                default:
+                    return false;
+            }
+        }
 
 
         string GetSingleClaim(string claimType)

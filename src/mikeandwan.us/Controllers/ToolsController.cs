@@ -429,7 +429,6 @@ namespace MawMvcApp.Controllers
 		}
 		
 
-#if NET451
 		[HttpGet("xml-validate")]
 		public ActionResult XmlValidate()
 		{
@@ -512,7 +511,6 @@ namespace MawMvcApp.Controllers
 			
 			return View(model);
 		}
-#endif
 
 
         [HttpGet("learning")]

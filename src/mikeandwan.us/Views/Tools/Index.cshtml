@@ -1,4 +1,3 @@
-@inject MawMvcApp.ViewModels.FrameworkIdentifier fid
 @{ 
     ViewBag.Title = "tools"; 
 }
@@ -69,11 +68,9 @@
 	            <a class="list-group-item" asp-controller="tools" asp-action="paths">Paths</a>
 	            <a class="list-group-item" asp-controller="tools" asp-action="randombytes">Random Bytes</a>
 	            <a class="list-group-item" asp-controller="tools" asp-action="urlencode">Url Encode / Decode</a>
-				@if (fid.IsFullFramework) {
-					<a class="list-group-item" asp-controller="tools" asp-action="xmlvalidate">XML Validator</a>
-					<a class="list-group-item" asp-controller="tools" asp-action="xsdvalidate">XSD Validator</a>
-					<a class="list-group-item" asp-controller="tools" asp-action="xsltransform">XSL Transform</a>
-				}
+				<a class="list-group-item" asp-controller="tools" asp-action="xmlvalidate">XML Validator</a>
+				<a class="list-group-item" asp-controller="tools" asp-action="xsdvalidate">XSD Validator</a>
+				<a class="list-group-item" asp-controller="tools" asp-action="xsltransform">XSL Transform</a>
 		    </div>
 		</div>
     </div>

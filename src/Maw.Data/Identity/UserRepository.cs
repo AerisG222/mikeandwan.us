@@ -156,7 +156,11 @@ namespace Maw.Data.Identity
 							 work_phone = @workPhone,
 							 hashed_password = @hashedPassword,
 							 security_stamp = @securityStamp,
-							 salt = @salt
+							 salt = @salt,
+							 enable_github_auth = @enableGithubAuth,
+							 enable_google_auth = @enableGoogleAuth,
+							 enable_microsoft_auth = @enableMicrosoftAuth,
+							 enable_twitter_auth = @enableTwitterAuth
 					   WHERE username = @username",
 					new { 
 						firstName = updatedUser.FirstName,
@@ -179,6 +183,10 @@ namespace Maw.Data.Identity
 						hashedPassword = updatedUser.HashedPassword,
 						securityStamp = updatedUser.SecurityStamp,
 						salt = updatedUser.Salt,
+						enableGithubAuth = updatedUser.IsGithubAuthEnabled,
+						enableGoogleAuth = updatedUser.IsGoogleAuthEnabled,
+						enableMicrosoftAuth = updatedUser.IsMicrosoftAuthEnabled,
+						enableTwitterAuth = updatedUser.IsTwitterAuthEnabled,
 						username = updatedUser.Username.ToLower()
 					}
 				).ConfigureAwait(false);
@@ -358,6 +366,10 @@ namespace Maw.Data.Identity
 				var users = await conn.QueryAsync<MawUser, State, Country, MawUser>(
 					$@"SELECT u.*, 
 						      u.company_name AS company,
+							  u.enable_github_auth AS is_github_auth_enabled,
+							  u.enable_google_auth AS is_google_auth_enabled,
+							  u.enable_microsoft_auth AS is_microsoft_auth_enabled,
+							  u.enable_twitter_auth AS is_twitter_auth_enabled,
 							  s.*,
 							  c.*
 						 FROM maw.user u
@@ -571,6 +583,10 @@ namespace Maw.Data.Identity
 				var userResult = await conn.QueryAsync<MawUser, State, Country, MawUser>(
 						$@"SELECT u.*, 
 						          u.company_name AS company,
+								  u.enable_github_auth AS is_github_auth_enabled,
+								  u.enable_google_auth AS is_google_auth_enabled,
+								  u.enable_microsoft_auth AS is_microsoft_auth_enabled,
+								  u.enable_twitter_auth AS is_twitter_auth_enabled,
 								  s.*,
 								  c.*
 							FROM maw.user u

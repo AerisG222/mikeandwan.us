@@ -26,35 +26,20 @@ namespace MawMvcApp.Controllers
         const string ZIP_MIME_TYPE = "application/zip";
 		const int MOBILE_THUMB_SIZE = 60;
 
-        readonly PhotoService _svc;
+        readonly IPhotoService _svc;
         readonly IFileProvider _fileProvider;
         readonly IAntiforgery _antiForgery;
 
 
 		public PhotosController(ILogger<PhotosController> log,
-                                IPhotoRepository photoRepository,
+                                IPhotoService photoService,
                                 IFileProvider fileProvider,
                                 IAntiforgery antiForgery)
 			: base(log)
         {
-			if(photoRepository == null)
-			{
-				throw new ArgumentNullException(nameof(photoRepository));
-			}
-
-			if(fileProvider == null)
-			{
-				throw new ArgumentNullException(nameof(fileProvider));
-			}
-
-            if (antiForgery == null)
-            {
-                throw new ArgumentNullException(nameof(antiForgery));
-            }
-
-			_svc = new PhotoService(photoRepository);
-			_fileProvider = fileProvider;
-            _antiForgery = antiForgery;
+			_svc = photoService ?? throw new ArgumentNullException(nameof(photoService));
+			_fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+            _antiForgery = antiForgery ?? throw new ArgumentNullException(nameof(antiForgery));
         }
 
 

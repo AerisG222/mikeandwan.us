@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace Maw.Domain.Videos
 {
     public class VideoService
+        : IVideoService
     {
         readonly IVideoRepository _repo;
 

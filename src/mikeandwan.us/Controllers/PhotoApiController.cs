@@ -19,7 +19,7 @@ namespace MawMvcApp.Controllers
     public class PhotoApiController
         : MawBaseController<PhotoApiController>
     {
-        readonly PhotoService _svc;
+        readonly IPhotoService _svc;
 
 
         bool IsAdmin
@@ -32,15 +32,10 @@ namespace MawMvcApp.Controllers
 
 
         public PhotoApiController(ILogger<PhotoApiController> log,
-                                  IPhotoRepository photoRepository)
+                                  IPhotoService photoService)
             : base(log)
         {
-            if(photoRepository == null)
-            {
-                throw new ArgumentNullException(nameof(photoRepository));
-            }
-
-            _svc = new PhotoService(photoRepository);
+            _svc = photoService ?? throw new ArgumentNullException(nameof(photoService));
         }
 
 

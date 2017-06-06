@@ -1,5 +1,13 @@
 using System;
 using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,7 +19,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
-using AspNet.Security.OAuth.GitHub;
+// using AspNet.Security.OAuth.GitHub;
+using Newtonsoft.Json.Linq;
 using NLog.Web;
 using NMagickWand;
 using Maw.Data;
@@ -27,31 +36,36 @@ using MawMvcApp.ViewModels.About;
 namespace MawMvcApp
 {
     // TODO: googlemaps add async defer back and handle callback when it loads
+    // TODO: auth cookie timeout does not seem to be honored
+    // TODO: add official github auth again
+    // TODO: issue JWT tokens for android app / apis
     public class Startup
     {
         readonly IConfiguration _config;
         readonly IHostingEnvironment _env;
 
 
-        public Startup(IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration config, IHostingEnvironment hostingEnvironment)
         {
+            if(config == null) 
+            {
+                throw new ArgumentNullException(nameof(config));
+            }
+
+            if(hostingEnvironment == null) 
+            {
+                throw new ArgumentNullException(nameof(hostingEnvironment));
+            }
+
             _env = hostingEnvironment;
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(hostingEnvironment.ContentRootPath)
-                .AddJsonFile("config.json")
-                .AddEnvironmentVariables("MAW_");
-
+            _config = config;
             MagickWandEnvironment.Genesis();
-
-            _config = builder.Build();
         }
 
 
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddSingleton<FrameworkIdentifier>()
                 .Configure<ContactConfig>(_config.GetSection("ContactUs"))
                 .Configure<EmailConfig>(_config.GetSection("Email"))
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
@@ -67,20 +81,9 @@ namespace MawMvcApp
                         opts.Password.RequireNonAlphanumeric = false;
                         opts.Password.RequireUppercase = false;
                         opts.Password.RequiredLength = 4;
-
-                        opts.Cookies.ApplicationCookie.CookieName = "maw_auth";
-                        opts.Cookies.ApplicationCookie.LoginPath = "/account/login";
-                        opts.Cookies.ApplicationCookie.LogoutPath = "/account/logout";
-                        opts.Cookies.ApplicationCookie.AccessDeniedPath = "/account/access-denied";
-                        opts.Cookies.ApplicationCookie.ExpireTimeSpan = new TimeSpan(0, 20, 0);
-
-                        opts.Cookies.ExternalCookie.CookieName = "ext_auth";
-                        opts.Cookies.ExternalCookie.LoginPath = "/account/login";
-                        opts.Cookies.ExternalCookie.LogoutPath = "/account/logout";
-                        opts.Cookies.ExternalCookie.AccessDeniedPath = "/account/access-denied";
-                        opts.Cookies.ExternalCookie.ExpireTimeSpan = new TimeSpan(0, 20, 0);
                     })
                 .AddMawDataRepositories(_config["Environment:DbConnectionString"])
+                .AddMawServices()
                 .AddScoped<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
                 .AddScoped<ICaptchaService, GoogleCaptchaService>()
                 .AddScoped<IEmailService, EmailService>()
@@ -89,9 +92,46 @@ namespace MawMvcApp
                 .AddScoped<IRoleStore<MawRole>, MawRoleStore>()
                 .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
                 .AddLogging()
+                .AddCookieAuthentication(opts =>
+                    {
+                        opts.AccessDeniedPath = "/account/access-denied";
+                        opts.CookieName = "maw_auth";
+                        opts.ExpireTimeSpan = new TimeSpan(0, 20, 0);
+                        opts.LoginPath = "/account/login";
+                        opts.LogoutPath = "/account/logout";
+                        opts.SlidingExpiration = true;
+                    })
                 .AddIdentity<MawUser, MawRole>()
                     .AddDefaultTokenProviders()
                     .Services
+                .AddGoogleAuthentication(opts => 
+                    {
+                        opts.ClientId = _config["GooglePlus:ClientId"];
+                        opts.ClientSecret = _config["GooglePlus:ClientSecret"];
+                        opts.SaveTokens = true;
+                    })
+                .AddMicrosoftAccountAuthentication(opts =>
+                    {
+                        opts.ClientId = _config["Microsoft:ApplicationId"];
+                        opts.ClientSecret = _config["Microsoft:Secret"];
+                        opts.SaveTokens = true;
+                    })
+                .AddTwitterAuthentication(opts =>
+                    {
+                        opts.ConsumerKey = _config["Twitter:ConsumerKey"];
+                        opts.ConsumerSecret = _config["Twitter:ConsumerSecret"];
+                        opts.RetrieveUserDetails = true;
+                        opts.SaveTokens = true;
+                    })
+                /* 
+                .AddGitHubAuthentication(opts =>
+                    {
+                        opts.ClientId = _config["GitHub:ClientId"];
+                        opts.ClientSecret = _config["GitHub:ClientSecret"];
+                        opts.SaveTokens = true;
+                        opts.Scope.Add("user:email");
+                    })
+                */
                 .AddAuthorization(opts =>
                     {
                         opts.AddPolicy(MawConstants.POLICY_VIEW_PHOTOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());
@@ -106,8 +146,6 @@ namespace MawMvcApp
         {
             if (_env.IsDevelopment())
             {
-                loggerFactory.AddConsole();
-
                 app.UseDeveloperExceptionPage();
 
                 AddDevPathMappings(app);
@@ -135,30 +173,7 @@ namespace MawMvcApp
                         //HttpOnly = HttpOnlyPolicy.Always,
                         Secure = CookieSecurePolicy.SameAsRequest
                     })
-                .UseIdentity()
-                .UseCookieAuthentication()
-                .UseGitHubAuthentication(new GitHubAuthenticationOptions
-                    {
-                        ClientId = _config["GitHub:ClientId"],
-                        ClientSecret = _config["GitHub:ClientSecret"],
-                        Scope = { "user:email" }
-                    })
-                .UseGoogleAuthentication(new GoogleOptions
-                    {
-                        ClientId = _config["GooglePlus:ClientId"],
-                        ClientSecret = _config["GooglePlus:ClientSecret"]
-                    })
-                .UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions()
-                    {
-                        ClientId = _config["Microsoft:ApplicationId"],
-                        ClientSecret = _config["Microsoft:Secret"]
-                    })
-                .UseTwitterAuthentication(new TwitterOptions()
-                    {
-                        ConsumerKey = _config["Twitter:ConsumerKey"],
-                        ConsumerSecret = _config["Twitter:ConsumerSecret"],
-                        RetrieveUserDetails = true
-                    })
+                .UseAuthentication()
                 .UseStaticFiles()
                 .UseMvc();
         }

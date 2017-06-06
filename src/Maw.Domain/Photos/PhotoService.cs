@@ -8,6 +8,7 @@ using Maw.Domain.Photos.ThreeD;
 namespace Maw.Domain.Photos
 {
     public class PhotoService
+        : IPhotoService
     {
         readonly IPhotoRepository _repo;
 

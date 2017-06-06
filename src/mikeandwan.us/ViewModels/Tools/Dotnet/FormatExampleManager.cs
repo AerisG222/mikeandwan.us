@@ -12,13 +12,10 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 			
 			var group = new FormatExampleGroup("Standard Formatting Methods");
 			
-#if NET451			
 			group.FormatExampleList.Add(new FormatExample("date.ToLongDateString()", date.ToLongDateString()));
 			group.FormatExampleList.Add(new FormatExample("date.ToLongTimeString()", date.ToLongTimeString()));
 			group.FormatExampleList.Add(new FormatExample("date.ToShortDateString()", date.ToShortDateString()));
 			group.FormatExampleList.Add(new FormatExample("date.ToShortTimeString()", date.ToShortTimeString()));
-#endif
-
 			group.FormatExampleList.Add(new FormatExample("date.ToString()", date.ToString()));
 			groupList.Add(group);
 			

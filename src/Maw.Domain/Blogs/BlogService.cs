@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace Maw.Domain.Blogs
 {
 	public class BlogService
+		: IBlogService
 	{
 		readonly IBlogRepository _repo;
 

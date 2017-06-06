@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 
 namespace MawMvcApp
@@ -16,19 +20,49 @@ namespace MawMvcApp
             if(isDevelopment)
             {
                 host
+                    .ConfigureLogging(factory =>
+                        {
+                            factory
+                                .AddConsole()
+                                .AddFilter(new Dictionary<string, LogLevel>
+                                    {
+                                        { "Microsoft", LogLevel.Warning },
+                                        { "System", LogLevel.Warning },
+                                        { "Maw", LogLevel.Debug },
+                                        { "MawMvcApp", LogLevel.Debug },
+                                    });
+                        })
                     .UseKestrel(opts => 
-                    {
-                        opts.UseHttps("test_certs/testcert.pfx", "TestCertificate");
-                    })
-                    .UseUrls("http://localhost:5000", "https://localhost:5001");
+                        {
+                            opts.Listen(IPAddress.Loopback, 5000);
+                            opts.Listen(IPAddress.Loopback, 5001, listenOptions => {
+                                listenOptions.UseHttps("test_certs/testcert.pfx", "TestCertificate");
+                            });
+                        });
             }
             else
             {
-                host.UseKestrel();
+                host
+                    /* TODO: add nlog
+                    .ConfigureLogging(factory =>
+                        {
+                            factory.AddNLog();
+                        })
+                    */
+                    .UseKestrel(opts =>
+                    {
+                        opts.UseSystemd();
+                        opts.ListenUnixSocket("/tmp/kestrel.sock");
+                    });
             }
             
             host
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .ConfigureAppConfiguration((context, builder) =>
+                    {
+                        builder.AddJsonFile("config.json");
+                        builder.AddEnvironmentVariables("MAW_");
+                    })
                 .CaptureStartupErrors(true)
                 .UseStartup<Startup>()
                 .Build()

@@ -23,27 +23,17 @@ namespace MawMvcApp.Controllers
         const int MOBILE_THUMB_SIZE = 60;
 
 
-        readonly VideoService _svc;
+        readonly IVideoService _svc;
         readonly IFileProvider _fileProvider;
 
 
 		public VideosController(ILogger<VideosController> log,
-                                IVideoRepository videoRepository,
+                                IVideoService videoService,
                                 IFileProvider fileProvider)
 			: base(log)
         {
-			if(videoRepository == null)
-			{
-				throw new ArgumentNullException(nameof(videoRepository));
-			}
-
-			if(fileProvider == null)
-			{
-				throw new ArgumentNullException(nameof(fileProvider));
-			}
-
-            _svc = new VideoService(videoRepository);
-			_fileProvider = fileProvider;
+            _svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
+			_fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));;
         }
 
 

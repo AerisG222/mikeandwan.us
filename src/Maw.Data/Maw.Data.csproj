@@ -3,18 +3,17 @@
     <Description>Data layer bound to Postgres for www.mikeandwan.us</Description>
     <VersionPrefix>1.0.0</VersionPrefix>
     <Authors>Mike Morano &lt;mmorano@mikeandwan.us&gt;</Authors>
-    <TargetFrameworks>netstandard1.3</TargetFrameworks>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>portable</DebugType>
     <AssemblyName>Maw.Data</AssemblyName>
     <PackageId>Maw.Data</PackageId>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.6' ">$(PackageTargetFallback);dotnet55;portable-dnxcore50+net45+win8+wp8+wpa81</PackageTargetFallback>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../Maw.Domain/Maw.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="1.50.2" />
-    <PackageReference Include="Npgsql" Version="3.2.2" />
+    <PackageReference Include="Dapper" Version="1.50.3-beta1" />
+    <PackageReference Include="Npgsql" Version="3.2.3" />
   </ItemGroup>
 </Project>

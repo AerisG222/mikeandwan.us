@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
 
@@ -14,18 +13,7 @@ import { RouteMode } from '../shared/route-mode.model';
     selector: 'app-mode',
     templateUrl: './mode.component.html',
     styleUrls: [ './mode.component.css' ],
-    animations: [
-        trigger('fadeInOut', [
-            state('in', style({opacity: 1})),
-            transition('void => *', [
-                style({opacity: 0}),
-                animate(320)
-            ]),
-            transition('* => void', [
-                animate(320, style({opacity: 1}))
-            ])
-        ])
-    ]
+    animations: [ ]
 })
 export class ModeComponent implements OnInit {
     private _mode: RouteMode = null;

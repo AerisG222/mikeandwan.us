@@ -7,6 +7,7 @@ APPS=(
     "learning"
     "memory"
     "money_spin"
+    "ng_maw"
     "photo_stats"
     "photos"
     "photos3d"

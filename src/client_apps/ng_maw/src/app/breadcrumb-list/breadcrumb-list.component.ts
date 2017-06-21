@@ -1,6 +1,7 @@
 import { Component, EventEmitter } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { trigger, query, state, style, animate, stagger, transition, useAnimation } from '@angular/animations';
 
+import { fadeAnimation } from '../shared/animation';
 import { Breadcrumb } from '../shared/breadcrumb.model';
 import { BreadcrumbService } from '../shared/breadcrumb.service';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
@@ -11,13 +12,39 @@ import { SvgIcon } from '../svg-icon/svg-icon.enum';
     styleUrls: [ './breadcrumb-list.component.css' ],
     animations: [
         trigger('fadeInOut', [
-            state('in', style({opacity: 1})),
-            transition('void => *', [
-                style({opacity: 0}),
-                animate(320)
-            ]),
-            transition('* => void', [
-                animate(320, style({opacity: 1}))
+            transition('* => *', [
+                // hide everything right away
+                query(':enter',
+                    style({ opacity: 0 }),
+                    { optional: true }
+                ),
+
+                // now display in a staggered fashion
+                query(':enter',
+                    stagger('100ms', [
+                        useAnimation(fadeAnimation, {
+                            params: {
+                                from: 0,
+                                to: 1,
+                                time: '320ms'
+                            }
+                        })
+                    ]),
+                    { optional: true }
+                ),
+
+                query(':leave',
+                    stagger('25ms', [
+                        useAnimation(fadeAnimation, {
+                            params: {
+                                from: 1,
+                                to: 0,
+                                time: '200ms'
+                            }
+                        })
+                    ]),
+                    { optional: true }
+                )
             ])
         ])
     ]

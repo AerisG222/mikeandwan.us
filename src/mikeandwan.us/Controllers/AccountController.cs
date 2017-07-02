@@ -40,8 +40,7 @@ namespace MawMvcApp.Controllers
 			                     SignInManager<MawUser> signInManager, 
 								 UserManager<MawUser> userManager, 
 								 IEmailService emailService,
-								 ILoginService loginService,
-								 IOptions<IdentityCookieOptions> identityCookieOptions)
+								 ILoginService loginService)
 			: base(log)
         {
 			_contactConfig = contactOpts.Value;

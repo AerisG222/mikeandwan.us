@@ -24,13 +24,10 @@ namespace MawMvcApp
                         {
                             factory
                                 .AddConsole()
-                                .AddFilter(new Dictionary<string, LogLevel>
-                                    {
-                                        { "Microsoft", LogLevel.Warning },
-                                        { "System", LogLevel.Warning },
-                                        { "Maw", LogLevel.Debug },
-                                        { "MawMvcApp", LogLevel.Debug },
-                                    });
+                                .AddFilter("Microsoft", LogLevel.Warning)
+                                .AddFilter("System", LogLevel.Warning)
+                                .AddFilter("Maw", LogLevel.Debug)
+                                .AddFilter("MawMvcApp", LogLevel.Debug);
                         })
                     .UseKestrel(opts => 
                         {

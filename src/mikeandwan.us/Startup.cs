@@ -29,6 +29,7 @@ using Maw.Domain;
 using Maw.Domain.Captcha;
 using Maw.Domain.Email;
 using Maw.Domain.Identity;
+using Maw.Domain.Photos;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
 
@@ -43,6 +44,8 @@ namespace MawMvcApp
     {
         readonly IConfiguration _config;
         readonly IHostingEnvironment _env;
+
+        ILoggerFactory _loggerFactory;
 
 
         public Startup(IConfiguration config, IHostingEnvironment hostingEnvironment)
@@ -82,16 +85,19 @@ namespace MawMvcApp
                         opts.Password.RequireUppercase = false;
                         opts.Password.RequiredLength = 4;
                     })
+                .AddLogging()
                 .AddMawDataRepositories(_config["Environment:DbConnectionString"])
                 .AddMawServices()
-                .AddScoped<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
+                // TODO: how to best register the below file provider, then simplify service registrations
+                //.AddSingleton<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
+                .AddSingleton<IImageCropper>(x => new ImageCropper(new PhysicalFileProvider(_config["Environment:AssetsPath"])))
+                .AddSingleton<IPhotoZipper>(x => new PhotoZipper(_loggerFactory.CreateLogger(nameof(PhotoZipper)), new PhysicalFileProvider(_config["Environment:AssetsPath"])))
                 .AddScoped<ICaptchaService, GoogleCaptchaService>()
                 .AddScoped<IEmailService, EmailService>()
                 .AddScoped<ILoginService, LoginService>()
                 .AddScoped<IUserStore<MawUser>, MawUserStore>()
                 .AddScoped<IRoleStore<MawRole>, MawRoleStore>()
                 .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
-                .AddLogging()
                 .AddCookieAuthentication(opts =>
                     {
                         opts.AccessDeniedPath = "/account/access-denied";
@@ -144,6 +150,8 @@ namespace MawMvcApp
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
+            _loggerFactory = loggerFactory;
+
             if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

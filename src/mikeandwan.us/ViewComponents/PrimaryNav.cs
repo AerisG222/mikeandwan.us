@@ -30,9 +30,10 @@ namespace MawMvcApp.ViewComponents
             var model = new PrimaryNavViewModel();
 
             model.ActiveNavigationZone = activeZone;
-            model.AuthorizedForPhotos = await _authzService.AuthorizeAsync(HttpContext.User, null, MawConstants.POLICY_VIEW_PHOTOS);
-            model.AuthorizedForVideos = await _authzService.AuthorizeAsync(HttpContext.User, null, MawConstants.POLICY_VIEW_VIDEOS);
-            model.AuthorizedForAdmin = await _authzService.AuthorizeAsync(HttpContext.User, null, MawConstants.POLICY_ADMIN_SITE);
+
+            model.AuthorizedForPhotos = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawConstants.POLICY_VIEW_PHOTOS)).Succeeded;
+            model.AuthorizedForVideos = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawConstants.POLICY_VIEW_VIDEOS)).Succeeded;
+            model.AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawConstants.POLICY_ADMIN_SITE)).Succeeded;
 
             return View(model);
         }

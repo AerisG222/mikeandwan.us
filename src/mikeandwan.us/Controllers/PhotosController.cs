@@ -1,13 +1,11 @@
 using System;
 using System.IO;
-using System.IO.Compression;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
-using NMagickWand;
 using Maw.Domain.Photos;
 using MawMvcApp.Filters;
 using MawMvcApp.ViewModels;
@@ -21,24 +19,26 @@ namespace MawMvcApp.Controllers
     public class PhotosController
         : MawBaseController<PhotosController>
     {
-		const int TWENTY_MB = 20 * 1024 * 1024;
 		const string MOBILE_THUMB_MIME_TYPE = "image/jpeg";
         const string ZIP_MIME_TYPE = "application/zip";
 		const int MOBILE_THUMB_SIZE = 60;
 
         readonly IPhotoService _svc;
-        readonly IFileProvider _fileProvider;
+        readonly IImageCropper _imageCropper;
+        readonly IPhotoZipper _photoZipper;
         readonly IAntiforgery _antiForgery;
 
 
 		public PhotosController(ILogger<PhotosController> log,
                                 IPhotoService photoService,
-                                IFileProvider fileProvider,
+                                IImageCropper imageCropper,
+                                IPhotoZipper photoZipper,
                                 IAntiforgery antiForgery)
 			: base(log)
         {
 			_svc = photoService ?? throw new ArgumentNullException(nameof(photoService));
-			_fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+			_imageCropper = imageCropper ?? throw new ArgumentNullException(nameof(imageCropper));
+            _photoZipper = photoZipper ?? throw new ArgumentNullException(nameof(photoZipper));
             _antiForgery = antiForgery ?? throw new ArgumentNullException(nameof(antiForgery));
         }
 
@@ -77,51 +77,29 @@ namespace MawMvcApp.Controllers
 		{
             var category = await _svc.GetCategoryAsync(id, User.IsInRole(MawConstants.ROLE_ADMIN));
 			var thumbInfo = category.TeaserPhotoInfo;
-            var fi = _fileProvider.GetFileInfo(thumbInfo.Path);
+            var croppedImageStream = _imageCropper.CropImage(thumbInfo.Path, MOBILE_THUMB_SIZE);
 
-            if(fi.Exists)
+            if(croppedImageStream == null)
             {
-                using(var mw = new MagickWand(fi.PhysicalPath))
-                {
-                    var leftPos = (mw.ImageWidth / 2) - (MOBILE_THUMB_SIZE / 2);
-                    var topPos = (mw.ImageHeight / 2) - (MOBILE_THUMB_SIZE / 2);
-
-                    var ms = new MemoryStream();
-
-                    mw.CropImage(MOBILE_THUMB_SIZE, MOBILE_THUMB_SIZE, (int)leftPos, (int)topPos);
-                    mw.WriteImage(ms);
-
-                    ms.Seek(0, SeekOrigin.Begin);
-
-                    return File(ms, MOBILE_THUMB_MIME_TYPE);
-                }
+                return NotFound();
             }
 
-            return NotFound();
+            return File(croppedImageStream, MOBILE_THUMB_MIME_TYPE);
 		}
 
 
         [HttpGet("download-category/{id:int}")]
-        public async Task<FileResult> DownloadCategory(short id)
+        public async Task<ActionResult> DownloadCategory(short id)
         {
             var photos = await _svc.GetPhotosForCategoryAsync(id, User.IsInRole(MawConstants.ROLE_ADMIN));
-			var ms = new MemoryStream(TWENTY_MB);
+            var stream = _photoZipper.Zip(photos);
 
-            using(var za = new ZipArchive(ms, ZipArchiveMode.Create, true))
+            if(stream == null)
             {
-                foreach(var photo in photos)
-                {
-					var path = _fileProvider.GetFileInfo(photo.LgInfo.Path).PhysicalPath;
-
-					_log.LogInformation(string.Format("Adding file {0} to archive", path));
-
-					za.CreateEntryFromFile(path, Path.GetFileName(path));
-                }
+                return NotFound();
             }
 
-			ms.Seek(0, SeekOrigin.Begin);
-
-			return File(ms, ZIP_MIME_TYPE, "photos.zip");
+			return File(stream, ZIP_MIME_TYPE, "photos.zip");
         }
     }
 }

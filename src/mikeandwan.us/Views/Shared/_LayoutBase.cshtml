@@ -2,7 +2,7 @@
 
 @section custom_head {
 	@await RenderSectionAsync("custom_head", required: false)
-	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+	@Html.Partial("_Favicons")
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine:bold" />
 	@Html.Partial("_css_Bootstrap")
 	@Html.Partial("_css_site")

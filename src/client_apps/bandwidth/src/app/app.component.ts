@@ -77,5 +77,5 @@ export class AppComponent {
         }
 
         this.results = calcResults;
-    };
+    }
 }

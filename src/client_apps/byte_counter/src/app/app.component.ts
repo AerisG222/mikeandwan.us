@@ -14,5 +14,5 @@ export class AppComponent {
         this.bCount = value.length;
         this.kbCount = this.bCount / 1024;
         this.mbCount = this.bCount / (1024 * 1024);
-    };
+    }
 }

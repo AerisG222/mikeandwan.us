@@ -22,12 +22,12 @@ import { PhotoNavigationService } from './shared/photo-navigation.service';
 
                 // animate the leave page away
                 query(':leave', [
-                    animate('1s', style({ opacity: 0 })),
+                    animate(2000, style({ opacity: 0 })),
                     style({ display: 'none' })
                 ]),
 
                 // make sure the new page is hidden first
-                query(':enter', animate('2s', style({ opacity: 1 })) )
+                query(':enter', animate(2000, style({ opacity: 1 })) )
             ])
         ])
     ]
@@ -52,7 +52,7 @@ export class AppComponent {
 
         if (anim !== this.routeAnimationState) {
             this.routeAnimationState = anim;
-            console.log("router animation state: " + anim);
+            console.log('router animation state: ' + anim);
         }
 
         return anim;

@@ -35,7 +35,7 @@ export class AppComponent {
         }
 
         this.runButtonText = this.getButtonText();
-    };
+    }
 
     run(): void {
         this.currentChar = this.getNextChar();

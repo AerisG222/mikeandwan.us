@@ -32,7 +32,7 @@ export class YearListComponent implements OnInit {
 
     selectItem(year: number): void {
         this._navService.gotoCategoryList(year);
-    };
+    }
 
     ngOnInit(): void {
         this._dataService.getYears()

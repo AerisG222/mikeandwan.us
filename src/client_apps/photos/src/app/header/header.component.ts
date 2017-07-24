@@ -45,7 +45,7 @@ export class HeaderComponent implements AfterViewInit {
 
     clickConfig(): void {
         this._stateService.showPreferencesDialog();
-    };
+    }
 
     clickStats(): void {
         window.open('/photos/stats', '_blank');

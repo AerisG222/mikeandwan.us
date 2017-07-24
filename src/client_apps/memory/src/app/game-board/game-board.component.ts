@@ -98,7 +98,7 @@ export class GameBoardComponent {
             const tmp = cards[i];
             cards[i] = cards[rand];
             cards[rand] = tmp;
-        };
+        }
     }
 
     private generateGameBoard(): Array<Array<ICardInfo>> {

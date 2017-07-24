@@ -18,5 +18,5 @@ export class HeaderComponent {
 
     clickConfig(): void {
         this._stateService.showPreferencesDialog();
-    };
+    }
 }

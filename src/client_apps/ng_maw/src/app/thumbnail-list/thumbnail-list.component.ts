@@ -2,52 +2,15 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { trigger, query, useAnimation, stagger, state, style, animate, transition } from '@angular/animations';
 
 import { fadeAnimation } from '../shared/animation';
-import { ThumbnailInfo, SelectedThumbnail } from './';
+import { ThumbnailInfo } from './thumbnail-info.model';
+import { SelectedThumbnail } from './selected-thumbnail.model';
 import { ResponsiveService } from '../shared/';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
 
 @Component({
     selector: 'maw-thumbnail-list',
     templateUrl: './thumbnail-list.component.html',
-    styleUrls: [ './thumbnail-list.component.css' ],
-    animations: [
-        trigger('fadeInOut', [
-            transition('* => *', [
-                // hide everything right away
-                query(':enter',
-                    style({ opacity: 0 }),
-                    { optional: true }
-                ),
-
-                // now display in a staggered fashion
-                query(':enter',
-                    stagger('200ms', [
-                        useAnimation(fadeAnimation, {
-                            params: {
-                                from: 0,
-                                to: 1,
-                                time: '320ms'
-                            }
-                        })
-                    ]),
-                    { optional: true }
-                ),
-
-                query(':leave',
-                    stagger('250ms', [
-                        useAnimation(fadeAnimation, {
-                            params: {
-                                from: 1,
-                                to: 0,
-                                time: '200ms'
-                            }
-                        })
-                    ]),
-                    { optional: true }
-                )
-            ])
-        ])
-    ]
+    styleUrls: [ './thumbnail-list.component.css' ]
 })
 export class ThumbnailListComponent {
     svgIcon = SvgIcon;

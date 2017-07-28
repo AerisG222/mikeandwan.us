@@ -37,7 +37,7 @@ using MawMvcApp.ViewModels.About;
 namespace MawMvcApp
 {
     // TODO: googlemaps add async defer back and handle callback when it loads
-    // TODO: auth cookie timeout does not seem to be honored
+    // TODO: auth cookie timeout does not seem to be honored - review configuration with https://github.com/aspnet/announcements/issues/262
     // TODO: add official github auth again
     // TODO: issue JWT tokens for android app / apis
     public class Startup
@@ -98,6 +98,9 @@ namespace MawMvcApp
                 .AddScoped<IUserStore<MawUser>, MawUserStore>()
                 .AddScoped<IRoleStore<MawRole>, MawRoleStore>()
                 .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
+                .AddIdentity<MawUser, MawRole>()
+                    .AddDefaultTokenProviders()
+                    .Services
                 .AddCookieAuthentication(opts =>
                     {
                         opts.AccessDeniedPath = "/account/access-denied";
@@ -107,9 +110,6 @@ namespace MawMvcApp
                         opts.LogoutPath = "/account/logout";
                         opts.SlidingExpiration = true;
                     })
-                .AddIdentity<MawUser, MawRole>()
-                    .AddDefaultTokenProviders()
-                    .Services
                 .AddGoogleAuthentication(opts => 
                     {
                         opts.ClientId = _config["GooglePlus:ClientId"];

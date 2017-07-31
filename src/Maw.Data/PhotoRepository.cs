@@ -206,7 +206,7 @@ namespace Maw.Data
                         photo.XsInfo = xs;
                         photo.SmInfo = sm;
                         photo.MdInfo = md;
-                        photo.LgInfo = md;
+                        photo.LgInfo = lg;
                         photo.PrtInfo = prt;
 
                         return photo;
@@ -257,7 +257,7 @@ namespace Maw.Data
                         photo.XsInfo = xs;
                         photo.SmInfo = sm;
                         photo.MdInfo = md;
-                        photo.LgInfo = md;
+                        photo.LgInfo = lg;
                         photo.PrtInfo = prt;
 
                         return photo;

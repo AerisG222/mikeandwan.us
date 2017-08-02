@@ -5,6 +5,7 @@ using System.IO.Compression;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 
+
 namespace Maw.Domain.Photos
 {
     public class PhotoZipper
@@ -16,7 +17,7 @@ namespace Maw.Domain.Photos
         readonly IFileProvider _fileProvider;
 
 
-        public PhotoZipper(ILogger log,
+        public PhotoZipper(ILogger<PhotoZipper> log,
                            IFileProvider fileProvider)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));

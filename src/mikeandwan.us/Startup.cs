@@ -37,31 +37,24 @@ using MawMvcApp.ViewModels.About;
 namespace MawMvcApp
 {
     // TODO: googlemaps add async defer back and handle callback when it loads
-    // TODO: auth cookie timeout does not seem to be honored
     // TODO: add official github auth again
     // TODO: issue JWT tokens for android app / apis
     public class Startup
     {
         readonly IConfiguration _config;
         readonly IHostingEnvironment _env;
+        readonly ILoggerFactory _loggerFactory;
+        readonly ILogger _log;
 
-        ILoggerFactory _loggerFactory;
 
-
-        public Startup(IConfiguration config, IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration config, IHostingEnvironment hostingEnvironment, ILoggerFactory loggerFactory)
         {
-            if(config == null) 
-            {
-                throw new ArgumentNullException(nameof(config));
-            }
+            _env = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
+            _config = config ?? throw new ArgumentNullException(nameof(config));
+            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
 
-            if(hostingEnvironment == null) 
-            {
-                throw new ArgumentNullException(nameof(hostingEnvironment));
-            }
+            _log = _loggerFactory.CreateLogger<Startup>();
 
-            _env = hostingEnvironment;
-            _config = config;
             MagickWandEnvironment.Genesis();
         }
 
@@ -86,50 +79,21 @@ namespace MawMvcApp
                         opts.Password.RequiredLength = 4;
                     })
                 .AddLogging()
-                .AddMawDataRepositories(_config["Environment:DbConnectionString"])
-                .AddMawServices()
-                // TODO: how to best register the below file provider, then simplify service registrations
-                //.AddSingleton<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
-                .AddSingleton<IImageCropper>(x => new ImageCropper(new PhysicalFileProvider(_config["Environment:AssetsPath"])))
-                .AddSingleton<IPhotoZipper>(x => new PhotoZipper(_loggerFactory.CreateLogger(nameof(PhotoZipper)), new PhysicalFileProvider(_config["Environment:AssetsPath"])))
-                .AddScoped<ICaptchaService, GoogleCaptchaService>()
-                .AddScoped<IEmailService, EmailService>()
-                .AddScoped<ILoginService, LoginService>()
-                .AddScoped<IUserStore<MawUser>, MawUserStore>()
-                .AddScoped<IRoleStore<MawRole>, MawRoleStore>()
+                .AddMawDataServices(_config["Environment:DbConnectionString"])
+                .AddMawDomainServices()
+                .AddSingleton<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
                 .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
-                .AddCookieAuthentication(opts =>
-                    {
-                        opts.AccessDeniedPath = "/account/access-denied";
-                        opts.CookieName = "maw_auth";
-                        opts.ExpireTimeSpan = new TimeSpan(0, 20, 0);
-                        opts.LoginPath = "/account/login";
-                        opts.LogoutPath = "/account/logout";
-                        opts.SlidingExpiration = true;
-                    })
                 .AddIdentity<MawUser, MawRole>()
-                    .AddDefaultTokenProviders()
                     .Services
-                .AddGoogleAuthentication(opts => 
-                    {
-                        opts.ClientId = _config["GooglePlus:ClientId"];
-                        opts.ClientSecret = _config["GooglePlus:ClientSecret"];
-                        opts.SaveTokens = true;
-                    })
-                .AddMicrosoftAccountAuthentication(opts =>
-                    {
-                        opts.ClientId = _config["Microsoft:ApplicationId"];
-                        opts.ClientSecret = _config["Microsoft:Secret"];
-                        opts.SaveTokens = true;
-                    })
-                .AddTwitterAuthentication(opts =>
-                    {
-                        opts.ConsumerKey = _config["Twitter:ConsumerKey"];
-                        opts.ConsumerSecret = _config["Twitter:ConsumerSecret"];
-                        opts.RetrieveUserDetails = true;
-                        opts.SaveTokens = true;
-                    })
-                /* 
+                .ConfigureApplicationCookie(opts => {
+                    opts.AccessDeniedPath = "/account/access-denied";
+                    opts.Cookie.Name = "maw_auth";
+                    opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+                    opts.LoginPath = "/account/login";
+                    opts.LogoutPath = "/account/logout";
+                })
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                /*
                 .AddGitHubAuthentication(opts =>
                     {
                         opts.ClientId = _config["GitHub:ClientId"];
@@ -138,6 +102,26 @@ namespace MawMvcApp
                         opts.Scope.Add("user:email");
                     })
                 */
+                .AddGoogle(opts => 
+                    {
+                        opts.ClientId = _config["GooglePlus:ClientId"];
+                        opts.ClientSecret = _config["GooglePlus:ClientSecret"];
+                        opts.SaveTokens = true;
+                    })
+                .AddMicrosoftAccount(opts =>
+                    {
+                        opts.ClientId = _config["Microsoft:ApplicationId"];
+                        opts.ClientSecret = _config["Microsoft:Secret"];
+                        opts.SaveTokens = true;
+                    })
+                .AddTwitter(opts =>
+                    {
+                        opts.ConsumerKey = _config["Twitter:ConsumerKey"];
+                        opts.ConsumerSecret = _config["Twitter:ConsumerSecret"];
+                        opts.RetrieveUserDetails = true;
+                        opts.SaveTokens = true;
+                    })
+                .Services
                 .AddAuthorization(opts =>
                     {
                         opts.AddPolicy(MawConstants.POLICY_VIEW_PHOTOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());
@@ -148,10 +132,8 @@ namespace MawMvcApp
         }
 
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
-            _loggerFactory = loggerFactory;
-
             if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -171,6 +153,7 @@ namespace MawMvcApp
                     {
                         ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
                     })
+                /*
                 .UseCookiePolicy(new CookiePolicyOptions
                     {
                         // note: using the forwarded middleware allowed the auth ticket to be marked secure.  however, the antiforgery
@@ -181,6 +164,7 @@ namespace MawMvcApp
                         //HttpOnly = HttpOnlyPolicy.Always,
                         Secure = CookieSecurePolicy.SameAsRequest
                     })
+                */
                 .UseAuthentication()
                 .UseStaticFiles()
                 .UseMvc();

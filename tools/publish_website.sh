@@ -137,14 +137,13 @@ unlink_media "${SRC_WWW}/wwwroot"
 # (so we can update views w/ js references to cache bust js filenames)
 cp -r "${SRC_ROOT}/Maw.Data" "${BUILD_ROOT}/Maw.Data"
 cp -r "${SRC_ROOT}/Maw.Domain" "${BUILD_ROOT}/Maw.Domain"
-cp -r "${SRC_ROOT}/Maw.TagHelpers" "${BUILD_ROOT}/Maw.TagHelpers"
 cp -r "${SRC_WWW}" "${BUILD_WWW}"
 
 cd "${BUILD_WWW}"
 
 publish_client_apps
 
-dotnet publish -f netcoreapp1.1 -o "${DIST_ROOT}" -c Release
+dotnet publish -f netcoreapp2.0 -o "${DIST_ROOT}" -c Release
 rm -rf "${BUILD_ROOT}"
 
 # add the media links for testing

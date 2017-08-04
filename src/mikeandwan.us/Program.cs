@@ -50,6 +50,7 @@ namespace MawMvcApp
                     {
                         opts.UseSystemd();
                         opts.ListenUnixSocket("/tmp/kestrel.sock");
+                        opts.Listen(IPAddress.Loopback, 5000);
                     });
             }
             

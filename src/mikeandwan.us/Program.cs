@@ -23,8 +23,6 @@ namespace MawMvcApp
                     {
                         isDevelopment = context.HostingEnvironment.IsDevelopment();
 
-                        Console.WriteLine($"isdev: {isDevelopment}");
-                        
                         if(isDevelopment)
                         {
                             factory
@@ -36,7 +34,7 @@ namespace MawMvcApp
                         }
                         else
                         {
-                            /* TODO: add nlog */
+                            /* TODO: add nlog - might be able to rely on systemd to capture output, avoiding need for nlog */
                             // factory.AddNLog();
                         }
                     })

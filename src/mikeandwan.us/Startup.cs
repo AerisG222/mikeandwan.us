@@ -21,7 +21,6 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 // using AspNet.Security.OAuth.GitHub;
 using Newtonsoft.Json.Linq;
-using NLog.Web;
 using NMagickWand;
 using Maw.Data;
 using Maw.Data.Identity;
@@ -43,17 +42,12 @@ namespace MawMvcApp
     {
         readonly IConfiguration _config;
         readonly IHostingEnvironment _env;
-        readonly ILoggerFactory _loggerFactory;
-        readonly ILogger _log;
 
 
-        public Startup(IConfiguration config, IHostingEnvironment hostingEnvironment, ILoggerFactory loggerFactory)
+        public Startup(IConfiguration config, IHostingEnvironment hostingEnvironment)
         {
             _env = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
             _config = config ?? throw new ArgumentNullException(nameof(config));
-            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-
-            _log = _loggerFactory.CreateLogger<Startup>();
 
             MagickWandEnvironment.Genesis();
         }
@@ -137,14 +131,10 @@ namespace MawMvcApp
             if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
                 AddDevPathMappings(app);
             }
             else
             {
-                app.AddNLogWeb();
-                _env.ConfigureNLog("nlog.config");
-
                 app.UseExceptionHandler("/error/");
             }
 

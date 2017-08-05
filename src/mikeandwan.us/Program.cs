@@ -34,8 +34,12 @@ namespace MawMvcApp
                         }
                         else
                         {
-                            /* TODO: add nlog - might be able to rely on systemd to capture output, avoiding need for nlog */
-                            // factory.AddNLog();
+                            factory
+                                .AddConsole()
+                                .AddFilter("Microsoft", LogLevel.Warning)
+                                .AddFilter("System", LogLevel.Warning)
+                                .AddFilter("Maw", LogLevel.Information)
+                                .AddFilter("MawMvcApp", LogLevel.Information);
                         }
                     })
                 .UseKestrel(opts =>

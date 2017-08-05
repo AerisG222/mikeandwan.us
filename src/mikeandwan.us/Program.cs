@@ -14,13 +14,18 @@ namespace MawMvcApp
     {
         public static void Main(string[] args)
         {
-            var isDevelopment = string.Equals("development", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), StringComparison.OrdinalIgnoreCase);
             var host = new WebHostBuilder();
-            
-            if(isDevelopment)
-            {
-                host
-                    .ConfigureLogging(factory =>
+            var isDevelopment = false;
+
+            host
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .ConfigureLogging((context, factory) =>
+                    {
+                        isDevelopment = context.HostingEnvironment.IsDevelopment();
+
+                        Console.WriteLine($"isdev: {isDevelopment}");
+                        
+                        if(isDevelopment)
                         {
                             factory
                                 .AddConsole()
@@ -28,34 +33,29 @@ namespace MawMvcApp
                                 .AddFilter("System", LogLevel.Warning)
                                 .AddFilter("Maw", LogLevel.Debug)
                                 .AddFilter("MawMvcApp", LogLevel.Debug);
-                        })
-                    .UseKestrel(opts => 
+                        }
+                        else
+                        {
+                            /* TODO: add nlog */
+                            // factory.AddNLog();
+                        }
+                    })
+                .UseKestrel(opts =>
+                    {
+                        if(isDevelopment)
                         {
                             opts.Listen(IPAddress.Loopback, 5000);
                             opts.Listen(IPAddress.Loopback, 5001, listenOptions => {
                                 listenOptions.UseHttps("test_certs/testcert.pfx", "TestCertificate");
                             });
-                        });
-            }
-            else
-            {
-                host
-                    /* TODO: add nlog
-                    .ConfigureLogging(factory =>
+                        }
+                        else
                         {
-                            factory.AddNLog();
-                        })
-                    */
-                    .UseKestrel(opts =>
-                    {
-                        opts.UseSystemd();
-                        opts.ListenUnixSocket("/tmp/kestrel.sock");
-                        opts.Listen(IPAddress.Loopback, 5000);
-                    });
-            }
-            
-            host
-                .UseContentRoot(Directory.GetCurrentDirectory())
+                            opts.UseSystemd();
+                            opts.ListenUnixSocket("/tmp/kestrel.sock");
+                            opts.Listen(IPAddress.Loopback, 5000);
+                        }
+                    })
                 .ConfigureAppConfiguration((context, builder) =>
                     {
                         builder.AddJsonFile("config.json");

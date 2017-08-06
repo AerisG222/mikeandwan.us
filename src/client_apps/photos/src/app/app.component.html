@@ -1,8 +1,10 @@
-<div class="container" [@routeAnimation]="prepRouteState(routerOutlet)">
+<div class="container">
     <div class="row">
         <div class="col-sm-12">
             <app-header></app-header>
-            <router-outlet #routerOutlet="outlet"></router-outlet>
+            <div [@routeAnimation]="prepRouteState(routerOutlet)">
+                <router-outlet #routerOutlet="outlet"></router-outlet>
+            </div>
         </div>
     </div>
 </div>

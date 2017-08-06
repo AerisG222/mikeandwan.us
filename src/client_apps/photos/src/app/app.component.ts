@@ -1,7 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { animate, group, query, stagger, sequence, style, trigger, transition, useAnimation } from '@angular/animations';
-
-import { fadeAnimation } from '../ng_maw/shared/animation';
+import { animate, group, query, stagger, sequence, state, style, trigger, transition } from '@angular/animations';
 
 import { PreferenceDialogComponent } from './preference-dialog/preference-dialog.component';
 import { PhotoStateService } from './shared/photo-state.service';
@@ -13,28 +11,25 @@ import { PhotoNavigationService } from './shared/photo-navigation.service';
     styleUrls: [ './app.component.css' ],
     animations: [
         trigger('routeAnimation', [
-            // no need to animate anything on load
-            transition(':enter', []),
-
-            // home to category list
-            transition('* <=> *', [
-                query(':enter', style({ opacity: 0 }) ),
-
+            transition('* => *', [
+                // make sure the new page is hidden first
+                query(':enter', style({ opacity: 0, display: 'none' }), { optional: true }),
                 // animate the leave page away
                 query(':leave', [
-                    animate(2000, style({ opacity: 0 })),
+                    animate('0.5s', style({ opacity: 0 })),
                     style({ display: 'none' })
-                ]),
-
-                // make sure the new page is hidden first
-                query(':enter', animate(2000, style({ opacity: 1 })) )
-            ])
+                ], { optional: true }),
+                // and now reveal the enter
+                query(':enter', [
+                    style({ display: 'block' }),
+                    animate('0.5s', style({ opacity: 1 }))
+                ], { optional: true }),
+            ]),
         ])
     ]
 })
 export class AppComponent {
     @ViewChild(PreferenceDialogComponent) private _prefsDialog: PreferenceDialogComponent;
-    public routeAnimationState: string;
 
     constructor(private _stateService: PhotoStateService,
                 private _navService: PhotoNavigationService) {
@@ -48,13 +43,6 @@ export class AppComponent {
     }
 
     prepRouteState(outlet: any) {
-        const anim = outlet.activatedRouteData['animation'] || 'home';
-
-        if (anim !== this.routeAnimationState) {
-            this.routeAnimationState = anim;
-            console.log('router animation state: ' + anim);
-        }
-
-        return anim;
+        return outlet.activatedRouteData['animation'] || 'home';
     }
 }

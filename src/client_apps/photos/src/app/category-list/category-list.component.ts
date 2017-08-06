@@ -11,8 +11,7 @@ import { Config, ModeRouteInfo, PhotoNavigationService, PhotoStateService, Categ
 @Component({
     selector: 'app-category-list',
     templateUrl: './category-list.component.html',
-    styleUrls: [ './category-list.component.css' ],
-    animations: [ ]
+    styleUrls: [ './category-list.component.css' ]
 })
 export class CategoryListComponent implements AfterViewInit {
     @ViewChild(PagerComponent) pager: PagerComponent;

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { BreadcrumbListComponent } from '../ng_maw/breadcrumb-list/breadcrumb-list.component';
@@ -30,7 +30,7 @@ import { VideoStateService } from './shared/video-state.service';
         BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
-        HttpModule,
+        HttpClientModule,
         RouterModule.forRoot([
             { path: '',                component: YearListComponent },
             { path: ':year',           component: CategoryListComponent },

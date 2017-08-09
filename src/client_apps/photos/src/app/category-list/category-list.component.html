@@ -1,2 +1,4 @@
-<maw-pager (pageSelected)="onChangePage($event)"></maw-pager>
-<maw-thumbnail-list (selected)="onThumbnailSelected($event)"></maw-thumbnail-list>
+<div [@fadeInOut]="'in'">
+    <maw-pager (pageSelected)="onChangePage($event)"></maw-pager>
+    <maw-thumbnail-list (selected)="onThumbnailSelected($event)"></maw-thumbnail-list>
+</div>

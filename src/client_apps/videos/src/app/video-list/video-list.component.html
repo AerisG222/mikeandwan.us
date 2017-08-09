@@ -7,7 +7,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row" [@fadeInOut]="'in'">
     <div class="col-sm-12">
         <maw-pager (pageSelected)="onChangePage($event)"></maw-pager>
         <maw-thumbnail-list (selected)="onThumbnailSelected($event)"></maw-thumbnail-list>

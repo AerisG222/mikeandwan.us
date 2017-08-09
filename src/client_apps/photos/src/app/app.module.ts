@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { Data } from '@angular/router';
 
 import { BreadcrumbListComponent } from '../ng_maw/breadcrumb-list/breadcrumb-list.component';
 import { DialogComponent } from '../ng_maw/dialog/dialog.component';
@@ -45,7 +43,6 @@ import { RouteMode } from './shared/route-mode.model';
 //  SEE: https://github.com/angular/angular/issues/10789
 @NgModule({
     imports: [
-        BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
         HttpClientModule,

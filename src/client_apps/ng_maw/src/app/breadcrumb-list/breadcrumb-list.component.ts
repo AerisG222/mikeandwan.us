@@ -1,7 +1,7 @@
 import { Component, EventEmitter } from '@angular/core';
 import { trigger, query, state, style, animate, stagger, transition, useAnimation } from '@angular/animations';
 
-import { fadeAnimation } from '../shared/animation';
+import { fadeIn, fadeOut } from '../shared/animation';
 import { Breadcrumb } from '../shared/breadcrumb.model';
 import { BreadcrumbService } from '../shared/breadcrumb.service';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
@@ -13,38 +13,9 @@ import { SvgIcon } from '../svg-icon/svg-icon.enum';
     animations: [
         trigger('fadeInOut', [
             transition('* => *', [
-                // hide everything right away
-                query(':enter',
-                    style({ opacity: 0 }),
-                    { optional: true }
-                ),
-
-                // now display in a staggered fashion
-                query(':enter',
-                    stagger('100ms', [
-                        useAnimation(fadeAnimation, {
-                            params: {
-                                from: 0,
-                                to: 1,
-                                time: '320ms'
-                            }
-                        })
-                    ]),
-                    { optional: true }
-                ),
-
-                query(':leave',
-                    stagger('25ms', [
-                        useAnimation(fadeAnimation, {
-                            params: {
-                                from: 1,
-                                to: 0,
-                                time: '200ms'
-                            }
-                        })
-                    ]),
-                    { optional: true }
-                )
+                query(':enter', style({ opacity: 0 }), { optional: true }),
+                query(':enter', stagger('100ms', useAnimation(fadeIn)), { optional: true }),
+                query(':leave', stagger('25ms', useAnimation(fadeOut)), { optional: true })
             ])
         ])
     ]

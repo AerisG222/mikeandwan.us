@@ -2,6 +2,9 @@
     <app-map-view [@fadeInOut]="'in'" class="col-xs-12" *ngIf="showMapView" [context]="context"></app-map-view>
     <app-photo-view [@fadeInOut]="'in'" class="col-xs-12" *ngIf="showPhotoView && context?.current" [context]="context"></app-photo-view>
 </div>
-<maw-pager (pageSelected)="onChangePage($event)"></maw-pager>
-<maw-thumbnail-list (selected)="onThumbnailSelected($event)"></maw-thumbnail-list>
+<div [@fadeInOut]="'in'">
+    <maw-pager (pageSelected)="onChangePage($event)"></maw-pager>
+    <maw-thumbnail-list (selected)="onThumbnailSelected($event)"></maw-thumbnail-list>
+</div>
+
 <app-photo-dialog [photo]="context?.current?.photo"></app-photo-dialog>

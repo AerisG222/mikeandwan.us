@@ -1,8 +1,9 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { animate, state, style, transition, trigger, useAnimation } from '@angular/animations';
 
+import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
 import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
 
 import { PhotoStateService } from '../shared/photo-state.service';
@@ -17,13 +18,8 @@ import { RouteMode } from '../shared/route-mode.model';
     animations: [
         trigger('fadeInOut', [
             state('in', style({opacity: 1})),
-            transition('void => *', [
-                style({opacity: 0}),
-                animate(320)
-            ]),
-            transition('* => void', [
-                animate(320, style({opacity: 1}))
-            ])
+            transition(':enter', useAnimation(fadeIn)),
+            transition(':leave', useAnimation(fadeOut))
         ])
     ]
 })

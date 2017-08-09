@@ -1,6 +1,8 @@
 import { Component, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { trigger, state, style, transition, useAnimation } from '@angular/animations';
 
+import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
 import { PagerComponent } from '../../ng_maw/pager/pager.component';
 import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
 import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
@@ -15,7 +17,14 @@ import { VideoStateService } from '../shared/video-state.service';
 @Component({
     selector: 'app-category-list',
     templateUrl: './category-list.component.html',
-    styleUrls: [ './category-list.component.css' ]
+    styleUrls: [ './category-list.component.css' ],
+    animations: [
+        trigger('fadeInOut', [
+            state('in', style({opacity: 1})),
+            transition(':enter', useAnimation(fadeIn)),
+            transition(':leave', useAnimation(fadeOut))
+        ])
+    ]
 })
 export class CategoryListComponent implements AfterViewInit {
     @ViewChild(PagerComponent) pager: PagerComponent;

@@ -1,6 +1,7 @@
 import { Component, EventEmitter } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { trigger, query, state, style, animate, stagger, transition, useAnimation } from '@angular/animations';
 
+import { fadeIn, fadeOut } from '../shared/animation';
 import { Breadcrumb } from '../shared/breadcrumb.model';
 import { BreadcrumbService } from '../shared/breadcrumb.service';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
@@ -11,13 +12,10 @@ import { SvgIcon } from '../svg-icon/svg-icon.enum';
     styleUrls: [ './breadcrumb-list.component.css' ],
     animations: [
         trigger('fadeInOut', [
-            state('in', style({opacity: 1})),
-            transition('void => *', [
-                style({opacity: 0}),
-                animate(320)
-            ]),
-            transition('* => void', [
-                animate(320, style({opacity: 1}))
+            transition('* => *', [
+                query(':enter', style({ opacity: 0 }), { optional: true }),
+                query(':enter', stagger('100ms', useAnimation(fadeIn)), { optional: true }),
+                query(':leave', stagger('25ms', useAnimation(fadeOut)), { optional: true })
             ])
         ])
     ]

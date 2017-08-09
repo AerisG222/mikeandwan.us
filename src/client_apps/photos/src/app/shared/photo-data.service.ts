@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/map';
@@ -13,93 +13,79 @@ import { IPhotoAndCategory } from './iphoto-and-category.model';
 
 @Injectable()
 export class PhotoDataService {
-    constructor(private _http: Http) {
+    constructor(private _http: HttpClient) {
 
     }
 
     getRandomPhoto(): Observable<IPhotoAndCategory> {
         return this._http
-            .get('/api/photos/getRandomPhoto')
-            .map((res: Response) => res.json());
+            .get<IPhotoAndCategory>('/api/photos/getRandomPhoto');
     }
 
     getYears(): Observable<Array<number>> {
         return this._http
-            .get('/api/photos/getPhotoYears')
-            .map((res: Response) => res.json());
+            .get<Array<number>>('/api/photos/getPhotoYears');
     }
 
     getCategory(categoryId: number): Observable<ICategory> {
         return this._http
-            .get('/api/photos/getCategory/' + categoryId)
-            .map((res: Response) => res.json());
+            .get<ICategory>(`/api/photos/getCategory/${categoryId}`);
     }
 
     getCategoriesForYear(year: number): Observable<Array<ICategory>> {
         return this._http
-            .get('/api/photos/getCategoriesForYear/' + year)
-            .map((res: Response) => res.json());
+            .get<Array<ICategory>>(`/api/photos/getCategoriesForYear/${year}`);
     }
 
     getPhotosByCategory(categoryId: number): Observable<Array<IPhoto>> {
         return this._http
-            .get('/api/photos/getPhotosByCategory/' + categoryId)
-            .map((res: Response) => res.json());
+            .get<Array<IPhoto>>(`/api/photos/getPhotosByCategory/${categoryId}`);
     }
 
     getPhotosByCommentDate(newestFirst: boolean): Observable<Array<IPhotoAndCategory>> {
         return this._http
-            .get('/api/photos/getPhotosAndCategoriesByCommentDate/' + newestFirst)
-            .map((res: Response) => res.json());
+            .get<Array<IPhotoAndCategory>>(`/api/photos/getPhotosAndCategoriesByCommentDate/${newestFirst}`);
     }
 
     getPhotosByUserCommentDate(newestFirst: boolean): Observable<Array<IPhotoAndCategory>> {
         return this._http
-            .get('/api/photos/getPhotosAndCategoriesByUserCommentDate/' + newestFirst)
-            .map((res: Response) => res.json());
+            .get<Array<IPhotoAndCategory>>(`/api/photos/getPhotosAndCategoriesByUserCommentDate/${newestFirst}`);
     }
 
     getPhotosByCommentCount(greatestFirst: boolean): Observable<Array<IPhotoAndCategory>> {
         return this._http
-            .get('/api/photos/getPhotosAndCategoriesByCommentCount/' + greatestFirst)
-            .map((res: Response) => res.json());
+            .get<Array<IPhotoAndCategory>>(`/api/photos/getPhotosAndCategoriesByCommentCount/${greatestFirst}`);
     }
 
     getPhotosByAverageRating(highestFirst: boolean): Observable<Array<IPhotoAndCategory>> {
         return this._http
-            .get('/api/photos/getPhotosAndCategoriesByAverageRating/' + highestFirst)
-            .map((res: Response) => res.json());
+            .get<Array<IPhotoAndCategory>>(`/api/photos/getPhotosAndCategoriesByAverageRating/${highestFirst}`);
     }
 
     getPhotosByUserRating(highestFirst: boolean): Observable<Array<IPhotoAndCategory>> {
         return this._http
-            .get('/api/photos/getPhotosAndCategoriesByUserRating/' + highestFirst)
-            .map((res: Response) => res.json());
+            .get<Array<IPhotoAndCategory>>(`/api/photos/getPhotosAndCategoriesByUserRating/${highestFirst}`);
     }
 
     getPhotoExifData(photoId: number): Observable<IExifDetail> {
         return this._http
-            .get('/api/photos/getPhotoExifData/' + photoId)
-            .map((res: Response) => res.json());
+            .get<IExifDetail>(`/api/photos/getPhotoExifData/${photoId}`);
     }
 
     getPhotoRatingData(photoId: number): Observable<IRating> {
         return this._http
-            .get('/api/photos/getRatingForPhoto/' + photoId)
-            .map((res: Response) => res.json());
+            .get<IRating>(`/api/photos/getRatingForPhoto/${photoId}`);
     }
 
     ratePhoto(photoId: number, rating: number): Observable<number> {
         return this._http
-            .post('/api/photos/ratePhoto', JSON.stringify({ photoId: photoId, rating: rating }), { headers: this.getPostHeaders() })
-            .map((res: Response) => res.json());
+            .post<number>('/api/photos/ratePhoto', { photoId: photoId, rating: rating });
     }
 
     getCommentsForPhoto(photoId: number): Observable<Array<IComment>> {
         return Observable.create((observer: Observer<Array<IComment>>) => {
             this._http
-                .get('/api/photos/getCommentsForPhoto/' + photoId)
-                .map((res: Response) => res.json())
+                .get<Array<IComment>>(`/api/photos/getCommentsForPhoto/${photoId}`)
                 .subscribe(comments => {
                     // deal with dates
                     const c = comments.map((x: IComment) => {
@@ -115,16 +101,6 @@ export class PhotoDataService {
 
     addCommentForPhoto(photoId: number, comment: string): Observable<any> {
         return this._http
-            .post('/api/photos/addCommentForPhoto',
-                  JSON.stringify({ photoId: photoId, comment: comment }), { headers: this.getPostHeaders() })
-            .map((res: Response) => res.json());
-    }
-
-    private getPostHeaders(): Headers {
-        const h = new Headers();
-        h.append('Accept', 'application/json');
-        h.append('Content-Type', 'application/json');
-
-        return h;
+            .post('/api/photos/addCommentForPhoto', { photoId: photoId, comment: comment });
     }
 }

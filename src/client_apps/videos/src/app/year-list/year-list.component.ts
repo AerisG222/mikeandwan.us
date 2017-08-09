@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { state, style, transition, trigger, useAnimation } from '@angular/animations';
+
+import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
 
 import { VideoDataService } from '../shared/video-data.service';
 import { VideoNavigationService } from '../shared/video-navigation.service';
@@ -11,13 +13,8 @@ import { VideoNavigationService } from '../shared/video-navigation.service';
     animations: [
         trigger('fadeInOut', [
             state('in', style({opacity: 1})),
-            transition('void => *', [
-                style({opacity: 0}),
-                animate(320)
-            ]),
-            transition('* => void', [
-                animate(320, style({opacity: 1}))
-            ])
+            transition(':enter', useAnimation(fadeIn)),
+            transition(':leave', useAnimation(fadeOut))
         ])
     ]
 })
@@ -32,7 +29,7 @@ export class YearListComponent implements OnInit {
 
     selectItem(year: number): void {
         this._navService.gotoCategoryList(year);
-    };
+    }
 
     ngOnInit(): void {
         this._dataService.getYears()

@@ -3,9 +3,9 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Videos;
+using Maw.Domain.Photos;
 using MawMvcApp.Filters;
 using MawMvcApp.ViewModels.Navigation;
 using MawMvcApp.ViewModels;
@@ -24,16 +24,16 @@ namespace MawMvcApp.Controllers
 
 
         readonly IVideoService _svc;
-        readonly IFileProvider _fileProvider;
+        readonly IImageCropper _imageCropper;
 
 
 		public VideosController(ILogger<VideosController> log,
                                 IVideoService videoService,
-                                IFileProvider fileProvider)
+                                IImageCropper imageCropper)
 			: base(log)
         {
             _svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
-			_fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));;
+			_imageCropper = imageCropper ?? throw new ArgumentNullException(nameof(imageCropper));;
         }
 
 
@@ -52,7 +52,7 @@ namespace MawMvcApp.Controllers
         {
             var category = await _svc.GetCategoryAsync(id, User.IsInRole(MawConstants.ROLE_ADMIN));
 
-            return GetScaledImage(category.TeaserThumbnail.Path, category.TeaserThumbnail.Width, category.TeaserThumbnail.Height);
+            return GetScaledImage(category.TeaserThumbnail.Path);
         }
 
 
@@ -61,33 +61,20 @@ namespace MawMvcApp.Controllers
         {
             var video = await _svc.GetVideoAsync(id, User.IsInRole (MawConstants.ROLE_ADMIN));
 
-            return GetScaledImage(video.ThumbnailVideo.Path, video.ThumbnailVideo.Width, video.ThumbnailVideo.Height);
+            return GetScaledImage(video.ThumbnailVideo.Path);
         }
 
 
-        ActionResult GetScaledImage(string path, int width, int height)
+        ActionResult GetScaledImage(string path)
         {
-            var fi = _fileProvider.GetFileInfo(path);
+            var croppedImageStream = _imageCropper.CropImage(path, MOBILE_THUMB_SIZE);
 
-            if(fi.Exists)
+            if(croppedImageStream == null)
             {
-                using(var mw = new MagickWand(fi.PhysicalPath))
-                {
-                    var leftPos = (mw.ImageWidth / 2) - (MOBILE_THUMB_SIZE / 2);
-                    var topPos = (mw.ImageHeight / 2) - (MOBILE_THUMB_SIZE / 2);
-
-                    var ms = new MemoryStream();
-
-                    mw.CropImage(MOBILE_THUMB_SIZE, MOBILE_THUMB_SIZE, (int)leftPos, (int)topPos);
-                    mw.WriteImage(ms);
-
-                    ms.Seek(0, SeekOrigin.Begin);
-
-                    return File(ms, MOBILE_THUMB_MIME_TYPE);
-                }
+                return NotFound();
             }
 
-            return NotFound();
+            return File(croppedImageStream, MOBILE_THUMB_MIME_TYPE);
         }
     }
 }

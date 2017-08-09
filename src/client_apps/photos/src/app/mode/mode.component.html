@@ -1,7 +1,7 @@
-<div class="row">
+<div class="row" [@fadeInOut]="'in'">
     <div class="col-sm-12">
         <ul class="select-list">
-            <li [@fadeInOut]="'in'" *ngFor="let item of items">
+            <li *ngFor="let item of items">
                 <button type="button" class="btn btn-default btn-sm" (click)="selectItem(item)">{{item.title}}</button>
             </li>
         </ul>

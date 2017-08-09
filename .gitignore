@@ -12,4 +12,3 @@ project.lock.json
 **/typings/*
 
 **/npm-debug.log
-**/yarn.lock

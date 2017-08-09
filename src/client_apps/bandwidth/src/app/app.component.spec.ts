@@ -1,16 +1,17 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
+
 import { AppComponent } from './app.component';
 
-describe('App: Bandwidth', () => {
-  beforeEach(() => {
+describe('AppComponent', () => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent
       ],
-    });
-  });
+    }).compileComponents();
+  }));
 
   it('should create the app', async(() => {
     const fixture = TestBed.createComponent(AppComponent);

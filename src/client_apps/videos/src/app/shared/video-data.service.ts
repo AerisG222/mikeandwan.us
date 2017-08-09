@@ -1,33 +1,28 @@
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import { ICategory } from './icategory.model';
 import { IVideo } from './ivideo.model';
 
 @Injectable()
-// TODO: determine if we should cache responses like prior version
 export class VideoDataService {
-    constructor(private http: Http) {
+    constructor(private _http: HttpClient) {
 
     }
 
     getYears(): Observable<Array<number>> {
-        return this.http
-            .get('/api/videos/getYears')
-            .map((res: Response) => res.json());
+        return this._http
+            .get<Array<number>>('/api/videos/getYears');
     }
 
     getCategoriesForYear(year: number): Observable<Array<ICategory>> {
-        return this.http
-            .get(`/api/videos/getCategoriesForYear/${year}`)
-            .map((res: Response) => res.json());
+        return this._http
+            .get<Array<ICategory>>(`/api/videos/getCategoriesForYear/${year}`);
     }
 
     getVideosForCategory(categoryId: number): Observable<Array<IVideo>> {
-        return this.http
-            .get(`/api/videos/getVideosByCategory/${categoryId}`)
-            .map((res: Response) => res.json());
+        return this._http
+            .get<Array<IVideo>>(`/api/videos/getVideosByCategory/${categoryId}`);
     }
 }

@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { Data } from '@angular/router';
 
 import { BreadcrumbListComponent } from '../ng_maw/breadcrumb-list/breadcrumb-list.component';
 import { DialogComponent } from '../ng_maw/dialog/dialog.component';
@@ -45,18 +43,17 @@ import { RouteMode } from './shared/route-mode.model';
 //  SEE: https://github.com/angular/angular/issues/10789
 @NgModule({
     imports: [
-        BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
-        HttpModule,
+        HttpClientModule,
         RouterModule.forRoot([
-            { path: '',                     component: ModeComponent },
-            { path: 'random',               component: PhotoListComponent,   data: { mode: RouteMode.Random } },
-            { path: 'year/:year',           component: CategoryListComponent },
-            { path: 'year/:year/:category', component: PhotoListComponent,   data: { mode: RouteMode.Category } },
-            { path: 'comment/:type/:order', component: PhotoListComponent,   data: { mode: RouteMode.Comment } },
-            { path: 'rating/:type/:order',  component: PhotoListComponent,   data: { mode: RouteMode.Rating } },
-            { path: ':mode',                component: ModeComponent },
+            { path: '',                     component: ModeComponent,         data: { animation: 'home' } },
+            { path: 'random',               component: PhotoListComponent,    data: { animation: 'random', mode: RouteMode.Random } },
+            { path: 'year/:year',           component: CategoryListComponent, data: { animation: 'years' } },
+            { path: 'year/:year/:category', component: PhotoListComponent,    data: { animation: 'categories', mode: RouteMode.Category } },
+            { path: 'comment/:type/:order', component: PhotoListComponent,    data: { animation: 'comments', mode: RouteMode.Comment } },
+            { path: 'rating/:type/:order',  component: PhotoListComponent,    data: { animation: 'rating', mode: RouteMode.Rating } },
+            { path: ':mode',                component: ModeComponent,         data: { animation: 'mode' } },
             { path: '**',                   redirectTo: '/' }
         ])
     ],

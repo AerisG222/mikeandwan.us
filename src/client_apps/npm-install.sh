@@ -21,7 +21,7 @@ APPS=(
 update() {
     cd "${1}"
     rm -rf node_modules
-    npm install
+    yarn install
     cd ..
 }
 

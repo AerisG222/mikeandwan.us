@@ -179,6 +179,8 @@ output to STDOUT and include it in the log / journal.
               This is needed because we are using 2 different users for the nginx process (nginx), and the kestrel service (svc_www_maw).
               This is why we needed to update nginx to be a member of svc_www_maw in earlier instructions.
         - Create startup script [/home/svc_www_maw/start_mikeandwan.us.sh](svc_www_maw/start_mikeandwan.us.sh)
+2. Create service unit file
+    - Create [/etc/systemd/maw_us.service](systemd/maw_us.service)
 3. Start and enable the webapp to start at boot
     ```
     sudo systemctl start maw_us.service

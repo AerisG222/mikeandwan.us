@@ -161,32 +161,28 @@ but will try to get this well organized below to make it easy to follow.
     sudo systemctl enable nginx.service
     ```
 
-## Supervisord
+## Systemd
 
-This application will ensure that the backend application server (Kestrel / your website)
+This will ensure that the backend application server (Kestrel / your website)
 runs at system startup.  Also, if the process dies, this will restart the process.  Depending
 on whether you want Nginx to connect to kestrel via TCP or Unix sockets will drive some of the
-decisions below, which are called out separately below.
+decisions below, which are called out separately.  Systemd will also collect
+output to STDOUT and include it in the log / journal.
 
-1. `sudo dnf install supervisord`
-2. Configure your webapp / Kestrel
-    - For TCP Sockets: 
-        - Create config file [/etc/supervisord/mikeandwan.us.ini](supervisord/tcp_mikeandwan.us.ini)
+1. Configure your webapp / Kestrel
     - For Unix Sockets:
         - `mkdir /var/kestrel`
         - `chown svc_www_maw:svc_www_maw /var/kestrel`
         - `chmod ug+rwx /var/kestrel`
-        - Create config file [/etc/supervisord/mikeandwan.us.ini](supervisord/unix_mikeandwan.us.ini)
-            - notice that the ASPNETCORE_URLS environment variable is set to define the location of the unix sockets
             - the command now points to the script below, which will ensure the unix socket is cleaned up before starting
             - also, umask is set to 002, which allows the owner and group to read, write, and execute the socket file when created.
               This is needed because we are using 2 different users for the nginx process (nginx), and the kestrel service (svc_www_maw).
               This is why we needed to update nginx to be a member of svc_www_maw in earlier instructions.
         - Create startup script [/home/svc_www_maw/start_mikeandwan.us.sh](svc_www_maw/start_mikeandwan.us.sh)
-3. Start and enable supervisord to start at boot
+3. Start and enable the webapp to start at boot
     ```
-    sudo systemctl start supervisord.service
-    sudo systemctl enable supervisord.service
+    sudo systemctl start maw_us.service
+    sudo systemctl enable maw_us.service
     ```
 4. Update SELinux for unix sockets
     - The process will fail when trying to use unix sockets due to SELinux preventing the connection from nginx to the kestrel unix socket.

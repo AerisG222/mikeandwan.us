@@ -35,6 +35,8 @@ copy_app() {
 
     # https://silentorbit.com/notes/2013/08/rsync-by-extension/
     rsync -ah --include '*/' --include '*.js' --include '*.css' --exclude '*' "${SRC_ROOT}/client_apps/${APP}/dist/" "${BUILD_WWW}/wwwroot/js/${APP}"
+
+    
 }
 
 update_refs() {
@@ -104,6 +106,23 @@ unlink_media() {
     fi
 }
 
+minify_css() {
+    local FILE=$1
+    local ORIG="${BUILD_WWW}/wwwroot/css/${FILE}.css"
+    local ORIGURL="/css/${FILE}.css"
+    local MIN="${BUILD_WWW}/wwwroot/css/${FILE}.min.css"
+
+    cleancss -o "${MIN}" "${ORIG}"
+    
+    local MD5="$(md5sum ${MIN} |cut -c 1-8)"
+    local MD5FILE="${BUILD_WWW}/wwwroot/css/${FILE}.min.${MD5}.css"
+    local MD5URL="/css/${FILE}.min.${MD5}.css"
+
+    mv "${MIN}" "${MD5FILE}"
+    rm "${ORIG}"
+
+    find "${BUILD_WWW}" -type f -name "*.cshtml" -exec sed -i "s#${ORIGURL}#${MD5URL}#g" {} +
+}
 
 echo '***************************************'
 echo '** STEP 1: build client applications **'
@@ -138,6 +157,21 @@ unlink_media "${SRC_WWW}/wwwroot"
 cp -r "${SRC_ROOT}/Maw.Data" "${BUILD_ROOT}/Maw.Data"
 cp -r "${SRC_ROOT}/Maw.Domain" "${BUILD_ROOT}/Maw.Domain"
 cp -r "${SRC_WWW}" "${BUILD_WWW}"
+
+# remove css / js libs that are replaced with cdns in prod
+rm -r "${BUILD_WWW}/wwwroot/css/libs"
+rm -r "${BUILD_WWW}/wwwroot/js/libs/bootstrap"
+rm -r "${BUILD_WWW}/wwwroot/js/libs/d3"
+rm -r "${BUILD_WWW}/wwwroot/js/libs/highlight"
+rm -r "${BUILD_WWW}/wwwroot/js/libs/jquery"
+rm -r "${BUILD_WWW}/wwwroot/js/libs/mousetrap"
+rm -r "${BUILD_WWW}/wwwroot/js/libs/reveal"
+rm -r "${BUILD_WWW}/wwwroot/js/libs/three"
+rm -r "${BUILD_WWW}/wwwroot/js/libs/tween"
+rm -r "${BUILD_WWW}/wwwroot/js/libs/webshim"
+
+minify_css 'site'
+minify_css 'games'
 
 cd "${BUILD_WWW}"
 

@@ -126,7 +126,7 @@ echo '***************************************'
 echo '** STEP 1: build client applications **'
 echo '***************************************'
 DO_BUILD_CLIENT=n
-read -e -r -p "Build Client Apps? [y/N]" DO_BUILD_CLIENT
+read -e -r -p "Build Client Apps? [y/N] " DO_BUILD_CLIENT
 if [ "${DO_BUILD_CLIENT}" = "y" ]; then
     cd "${SRC_ROOT}/client_apps"
     ./rebuild-all.sh y y

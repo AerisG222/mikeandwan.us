@@ -1,19 +1,18 @@
 [Unit]
-Description=mikeandwan.us web applicaion
+Description=mikeandwan.us web application
 
 [Service]
+EnvironmentFile=/etc/systemd/system/maw_us.env
 WorkingDirectory=/srv/www/mikeandwan.us
-ExecStart=/usr/local/bin/dotnet /srv/www/mikeandwan.us/mikeandwan.us.dll
+ExecStart=/opt/dotnet/dotnet mikeandwan.us.dll
+RuntimeDirectory=mikeandwan.us
+RuntimeDirectoryMode=0775
 Restart=always
-RestartSec=10  # Restart service after 10 seconds if dotnet service crashes
+RestartSec=10
 SyslogIdentifier=maw
 User=svc_www_maw
-Environment="ASPNETCORE_ENVIRONMENT=production"
-Environment="MAW_Environment__DbConnectionString=Server=localhost;Port=5432;Database=maw_website;User Id=svc_www_maw;Password=???"
-Environment="MAW_Email__User=email@example.com"
-Environment="MAW_Email__Password=???"
-Environment="MAW_Google__RecaptchaSiteKey=???"
-Environment="MAW_Google__RecaptchaSecretKey=???"
+Group=svc_www_maw
+UMask=002
 
 [Install]
 WantedBy=multi-user.target

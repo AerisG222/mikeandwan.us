@@ -54,7 +54,7 @@ namespace MawMvcApp
                         else
                         {
                             opts.UseSystemd();
-                            opts.ListenUnixSocket("/tmp/kestrel.sock");
+                            opts.ListenUnixSocket("/var/run/mikeandwan.us/kestrel.sock");
                             opts.Listen(IPAddress.Loopback, 5000);
                         }
                     })

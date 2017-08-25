@@ -169,24 +169,14 @@ on whether you want Nginx to connect to kestrel via TCP or Unix sockets will dri
 decisions below, which are called out separately.  Systemd will also collect
 output to STDOUT and include it in the log / journal.
 
-1. Configure your webapp / Kestrel
-    - For Unix Sockets:
-        - `mkdir /var/kestrel`
-        - `chown svc_www_maw:svc_www_maw /var/kestrel`
-        - `chmod ug+rwx /var/kestrel`
-            - the command now points to the script below, which will ensure the unix socket is cleaned up before starting
-            - also, umask is set to 002, which allows the owner and group to read, write, and execute the socket file when created.
-              This is needed because we are using 2 different users for the nginx process (nginx), and the kestrel service (svc_www_maw).
-              This is why we needed to update nginx to be a member of svc_www_maw in earlier instructions.
-        - Create startup script [/home/svc_www_maw/start_mikeandwan.us.sh](svc_www_maw/start_mikeandwan.us.sh)
-2. Create service unit file
+1. Create service unit file
     - Create [/etc/systemd/maw_us.service](systemd/maw_us.service)
-3. Start and enable the webapp to start at boot
+2. Start and enable the webapp to start at boot
     ```
     sudo systemctl start maw_us.service
     sudo systemctl enable maw_us.service
     ```
-4. Update SELinux for unix sockets
+3. Update SELinux for unix sockets
     - The process will fail when trying to use unix sockets due to SELinux preventing the connection from nginx to the kestrel unix socket.
       To fix this, do the following:
         - `audit2allow -i /var/log/audit/audit.log`
@@ -242,7 +232,7 @@ output to STDOUT and include it in the log / journal.
     - Run `crontab -e` and enter the following [tasks](crontab/crontab.conf)
 
 
-## Upgrade Fedora 23 to Fedora 24
+## Upgrade Fedora
 
 1. Follow instructions to upgrade: [DNF_system_upgrade](https://fedoraproject.org/wiki/DNF_system_upgrade)
 2. `sudo dnf install rpmconf`

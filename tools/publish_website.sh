@@ -214,7 +214,7 @@ if [ "${DO_DEPLOY}" = "y" ]; then
         sudo restorecon -R /srv/www/_staging
         
         sudo systemctl stop nginx.service
-        sudo supervisorctl stop mikeandwan.us
+        sudo systemctl stop maw_us.service
         
         if [ -d /srv/www/mikeandwan.us ]; then
             if [ -d /srv/www/mikeandwan.us_old ]; then
@@ -226,7 +226,7 @@ if [ "${DO_DEPLOY}" = "y" ]; then
 
         sudo mv /srv/www/_staging /srv/www/mikeandwan.us
 
-        sudo supervisorctl start mikeandwan.us
+        sudo systemctl start maw_us.service
         sudo systemctl start nginx.service
     "
 fi

@@ -12,9 +12,6 @@
     </style>
 }
 
-@Html.Partial("_js_Jquery")
-@Html.Partial("_js_Bootstrap")
-
 <div id="help" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -159,4 +156,10 @@ void main()
 	gl_FragColor = baseColor;
 }  
 </script>
+@Html.Partial("_js_Jquery")
+@Html.Partial("_js_Bootstrap")
 <script src="/js/photos3d/main.bundle.js"></script>
+<script>
+    let app = new Photos.Photos3D();
+    app.run();
+</script>

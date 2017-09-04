@@ -4,7 +4,9 @@ module.exports = {
     entry: './stats.ts',
     devtool: 'source-map',
     output: {
-        filename: 'dist/main.[hash].bundle.js'
+        filename: 'dist/main.[hash].bundle.js',
+        library: 'Photos',
+        libraryTarget: 'var'
     },
     resolve: {
         extensions: ['.webpack.js', '.web.js', '.ts', '.js']

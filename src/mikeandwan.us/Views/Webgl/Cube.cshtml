@@ -14,3 +14,9 @@
 
 @Html.Partial("_js_Jquery")
 <script src="/js/webgl_cube/main.bundle.js"></script>
+<script type="text/javascript">
+    $(function() {
+        var demo = new WebGLDemo.CubeDemo();
+        demo.run();
+    });
+</script>

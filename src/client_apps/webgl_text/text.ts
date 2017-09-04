@@ -1,12 +1,7 @@
 import * as THREE from 'three';
 import * as Stats from 'stats.js';
 
-jQuery(function() {
-    let demo = new TextDemo();
-    demo.run();
-});
-
-class TextDemo {
+export class TextDemo {
     scene: THREE.Scene;
     camera: THREE.PerspectiveCamera;
     renderer: THREE.Renderer;
@@ -25,7 +20,7 @@ class TextDemo {
         this.render();
     }
 
-    prepareScene() {
+    private prepareScene() {
         // scene
         this.scene = new THREE.Scene();
         this.scene.fog = new THREE.Fog(0x449999, 400, 1000);
@@ -86,7 +81,7 @@ class TextDemo {
         this.prepareText();
     }
 
-    prepareText() {
+    private prepareText() {
         let loader = new THREE.FontLoader();
 
         loader.load('/js/libs/fonts/open_sans_bold.json', response => {

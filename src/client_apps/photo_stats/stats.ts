@@ -1,13 +1,9 @@
 // shamelessly stolen from:
 //    http://bl.ocks.org/maybelinot/5552606564ef37b5de7e47ed2b7dc099
 //    http://jsfiddle.net/Hq4ef/
+import * as d3 from 'd3';
 
-jQuery(function() {
-    let stats = new PhotoStats();
-    stats.run();
-});
-
-class PhotoStats {
+export class PhotoStats {
     width = 960;
     height = 700;
     totalCount = 0;

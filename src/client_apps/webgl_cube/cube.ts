@@ -1,12 +1,7 @@
 import * as THREE from 'three';
 import * as Stats from 'stats.js';
 
-jQuery(function() {
-    let demo = new CubeDemo();
-    demo.run();
-});
-
-class CubeDemo {
+export class CubeDemo {
     scene: THREE.Scene;
     camera: THREE.PerspectiveCamera;
     renderer: THREE.Renderer;
@@ -20,7 +15,7 @@ class CubeDemo {
         this.render();
     }
 
-    prepareScene() {
+    private prepareScene() {
         // this.scene
         this.scene = new THREE.Scene();
 
@@ -87,7 +82,7 @@ class CubeDemo {
         });
     }
 
-    render() {
+    private render() {
         if (this.loadCounter < 2) {
             return;
         }

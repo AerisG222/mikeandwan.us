@@ -14,3 +14,9 @@
 
 @Html.Partial("_js_Jquery")
 <script src="/js/webgl_text/main.bundle.js"></script>
+<script>
+    $(function() {
+        var demo = new WebGLDemo.TextDemo();
+        demo.run();
+    });
+</script>

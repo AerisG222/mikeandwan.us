@@ -8,8 +8,13 @@
 }
 
 @section scripts_footer {
-    @Html.Partial("_js_d3")
     <script type="text/javascript" src="/js/photo_stats/main.bundle.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            let stats = new Photos.PhotoStats();
+            stats.run();
+        });
+    </script>
 }
 
 <div class="container">

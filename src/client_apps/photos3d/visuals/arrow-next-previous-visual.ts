@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import * as THREE from 'three';
 
 import { ArgumentNullError } from '../models/argument-null-error';
 import { ArrowVisual } from './arrow-visual';

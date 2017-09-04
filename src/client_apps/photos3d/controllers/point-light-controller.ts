@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import { ArgumentNullError } from '../models/argument-null-error';
 import { DisposalService } from '../services/disposal-service';
 import { FrustrumCalculator } from '../services/frustrum-calculator';

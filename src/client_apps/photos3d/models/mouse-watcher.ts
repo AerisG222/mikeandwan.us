@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import * as THREE from 'three';
 
 import { IDisposable } from './idisposable';
 import { IMouseClickReceiver } from '../visuals/imouse-click-reciever';

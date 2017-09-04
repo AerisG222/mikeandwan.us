@@ -18,7 +18,7 @@ update_ngcli() {
 
     # clean and install new cli
     rm -rf node_modules dist tmp typings
-    npm install --save-dev @angular/cli@latest
+    npm install --save-dev @angular/cli@1.4.0.rc.2
     npm install
 
     cd ..

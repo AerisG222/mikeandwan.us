@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 export class FrustrumCalculator {
     calculateBounds(camera: THREE.PerspectiveCamera, z: number): THREE.Vector2 {
         // http://gamedev.stackexchange.com/questions/96317/determining-view-boundaries-based-on-z-position-when-using-a-perspective-project

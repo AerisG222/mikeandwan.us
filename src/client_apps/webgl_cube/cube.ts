@@ -1,3 +1,6 @@
+import * as THREE from 'three';
+import * as Stats from 'stats.js';
+
 jQuery(function() {
     let demo = new CubeDemo();
     demo.run();

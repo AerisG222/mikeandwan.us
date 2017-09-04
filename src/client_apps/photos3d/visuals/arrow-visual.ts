@@ -1,5 +1,6 @@
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
+import * as THREE from 'three';
 
 import { DisposalService } from '../services/disposal-service';
 import { IDisposable } from '../models/idisposable';

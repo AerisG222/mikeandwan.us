@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import { ArgumentNullError } from './argument-null-error';
 import { DisposalService } from '../services/disposal-service';
 import { IDisposable } from './idisposable';

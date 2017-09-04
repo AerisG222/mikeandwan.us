@@ -1,4 +1,5 @@
 import { Component, Input, ElementRef, NgZone, OnDestroy, AfterViewInit } from '@angular/core';
+import * as Mousetrap from 'mousetrap';
 
 import { Photo } from '../shared/photo.model';
 import { IPhoto } from '../shared/iphoto.model';

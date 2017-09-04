@@ -1,4 +1,6 @@
 import { Subscription } from 'rxjs/Subscription';
+import * as THREE from 'three';
+import * as TWEEN from 'tween.js';
 
 import { DisposalService } from '../services/disposal-service';
 import { Hexagon } from '../models/hexagon';

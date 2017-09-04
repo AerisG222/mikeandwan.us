@@ -6,7 +6,6 @@ import { environment } from './environments/environment';
 
 import {} from '@types/googlemaps';
 import {} from '@types/modernizr';
-import {} from '@types/mousetrap';
 
 
 if (environment.production) {

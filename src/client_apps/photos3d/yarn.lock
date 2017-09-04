@@ -16,28 +16,6 @@
   version "2.0.48"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-2.0.48.tgz#3e90d8cde2d29015e5583017f7830cb3975b2eef"
 
-"@types/mousetrap@^1.5.33":
-  version "1.5.34"
-  resolved "https://registry.yarnpkg.com/@types/mousetrap/-/mousetrap-1.5.34.tgz#22b338d9c4bcdfd8f81c30684aefeb04a4727168"
-
-"@types/stats@^0.16.30":
-  version "0.16.30"
-  resolved "https://registry.yarnpkg.com/@types/stats/-/stats-0.16.30.tgz#deb5fa6e59c6d67bd6e0f61a51ef630a83a84ce9"
-
-"@types/three@0.84.7":
-  version "0.84.7"
-  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.84.7.tgz#66907c906495ca0e9db4e92a58697785db00d8ab"
-  dependencies:
-    "@types/webvr-api" "*"
-
-"@types/tween.js@0.0.31":
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@types/tween.js/-/tween.js-0.0.31.tgz#4e83a6ae518d3b0c07db34c13eb26805e08a5073"
-
-"@types/webvr-api@*":
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@types/webvr-api/-/webvr-api-0.0.31.tgz#f6061fe88a035d34a8b6a0c55f8758901ec8a08e"
-
 abbrev@1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.0.tgz#d0554c2256636e2f56e7c2e5ad183f859428d81f"
@@ -1428,7 +1406,7 @@ lcid@^1.0.0:
   dependencies:
     invert-kv "^1.0.0"
 
-linqts@^1.8.2:
+linqts@^1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/linqts/-/linqts-1.9.1.tgz#950db068591beac56e4f52d76c883c4007f51048"
 
@@ -1603,6 +1581,10 @@ mixin-deep@^1.1.3:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   dependencies:
     minimist "0.0.8"
+
+mousetrap@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/mousetrap/-/mousetrap-1.6.1.tgz#2a085f5c751294c75e7e81f6ec2545b29cbf42d9"
 
 ms@2.0.0:
   version "2.0.0"
@@ -2287,6 +2269,10 @@ static-extend@^0.1.1:
     define-property "^0.2.5"
     object-copy "^0.1.0"
 
+stats.js@^0.17.0:
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/stats.js/-/stats.js-0.17.0.tgz#b1c3dc46d94498b578b7fd3985b81ace7131cc7d"
+
 stream-browserify@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/stream-browserify/-/stream-browserify-2.0.1.tgz#66266ee5f9bdb9940a4e4514cafb43bb71e5c9db"
@@ -2410,6 +2396,10 @@ term-size@^1.2.0:
   dependencies:
     execa "^0.7.0"
 
+three@^0.87.1:
+  version "0.87.1"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.87.1.tgz#466a34edc4543459ced9b9d7d276b65216fe2ba8"
+
 timed-out@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/timed-out/-/timed-out-4.0.1.tgz#f32eacac5a175bea25d7fab565ab3ed8741ef56f"
@@ -2488,13 +2478,17 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
+tween.js@^16.6.0:
+  version "16.6.0"
+  resolved "https://registry.yarnpkg.com/tween.js/-/tween.js-16.6.0.tgz#739104c9336cc4f11ee53f9ce7cede51e6723624"
+
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-typescript@^2.3.2:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.4.2.tgz#f8395f85d459276067c988aa41837a8f82870844"
+typescript@^2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.5.2.tgz#038a95f7d9bbb420b1bf35ba31d4c5c1dd3ffe34"
 
 uglify-js@^2.8.27:
   version "2.8.29"

@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import { CategoryLayout } from '../models/category-layout';
 import { Hexagon } from '../models/hexagon';
 import { LayoutPosition } from '../models/layout-position';

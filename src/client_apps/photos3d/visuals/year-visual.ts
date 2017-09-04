@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import { ArgumentNullError } from '../models/argument-null-error';
 import { Category } from '../models/category';
 import { DisposalService } from '../services/disposal-service';

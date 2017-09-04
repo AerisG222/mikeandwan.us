@@ -1,5 +1,6 @@
 import { List } from 'linqts';
 import { Subscription } from 'rxjs/Subscription';
+import * as THREE from 'three';
 
 import { ArgumentNullError } from '../models/argument-null-error';
 import { ArrowNextPreviousVisual } from '../visuals/arrow-next-previous-visual';

@@ -1,5 +1,6 @@
 import { Component, Input, ViewChild, AfterViewInit, OnDestroy, OnChanges, NgZone } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import * as Mousetrap from 'mousetrap';
 
 import { ResponsiveService } from '../../ng_maw/shared/responsive.service';
 import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';

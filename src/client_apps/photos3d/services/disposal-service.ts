@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import { IDisposable } from '../models/idisposable';
 
 // http://stackoverflow.com/questions/22565737/cleanup-threejs-scene-leak

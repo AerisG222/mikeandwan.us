@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 export class Hexagon {
     private static readonly AREA_MULTIPLIER = 3 * Math.sqrt(3) / 2;
     private _halfEdgeLength: number;

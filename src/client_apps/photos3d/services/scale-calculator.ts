@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 export class ScaleCalculator {
     scale(maxWidth: number, maxHeight: number, actualWidth: number, actualHeight: number): THREE.Vector2 {
         let imgAspect = actualWidth / actualHeight;

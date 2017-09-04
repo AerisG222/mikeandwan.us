@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 
 module.exports = {
-    entry: './app.ts',
+    entry: './photos3d.ts',
     devtool: 'source-map',
     output: {
         filename: 'dist/main.[hash].bundle.js',

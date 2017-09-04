@@ -1,4 +1,5 @@
 NG_APPS=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learning" "memory" "money_spin" "ng_maw" "photos" "time" "videos" "weekend_countdown" )
+CLI_VERSION='@angular/cli@1.4.0-rc.2'
 
 update_ngcli_global() {
     # remove legacy cli
@@ -7,7 +8,7 @@ update_ngcli_global() {
     # global update
     sudo npm uninstall -g @angular/cli
     sudo npm cache clean
-    sudo npm install -g @angular/cli@latest
+    sudo npm install -g ${CLI_VERSION}
 }
 
 update_ngcli() {
@@ -18,7 +19,7 @@ update_ngcli() {
 
     # clean and install new cli
     rm -rf node_modules dist tmp typings
-    npm install --save-dev @angular/cli@1.4.0.rc.2
+    npm install --save-dev ${CLI_VERSION}
     npm install
 
     cd ..

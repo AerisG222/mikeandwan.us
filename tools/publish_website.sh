@@ -186,7 +186,7 @@ echo '**************************************************************'
 echo '** STEP 3: go to localhost:5000 to test - hit CTL-C to quit **'
 echo '**************************************************************'
 cd "${DIST_ROOT}"
-( ASPNETCORE_ENVIRONMENT=production dotnet "mikeandwan.us.dll" ) 
+( ASPNETCORE_ENVIRONMENT=staging dotnet "mikeandwan.us.dll" ) 
 
 # cleanup
 unlink_media "${DIST_ROOT}/wwwroot"

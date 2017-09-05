@@ -85,6 +85,11 @@ namespace MawMvcApp
                     opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
                     opts.LoginPath = "/account/login";
                     opts.LogoutPath = "/account/logout";
+
+                    if(_env.IsStaging())
+                    {
+                        opts.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                    }
                 })
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 /*

@@ -16,12 +16,14 @@ namespace MawMvcApp
         {
             var host = new WebHostBuilder();
             var isDevelopment = false;
+            var isStaging = false;
 
             host
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureLogging((context, factory) =>
                     {
                         isDevelopment = context.HostingEnvironment.IsDevelopment();
+                        isStaging = context.HostingEnvironment.IsStaging();
 
                         if(isDevelopment)
                         {
@@ -50,6 +52,10 @@ namespace MawMvcApp
                             opts.Listen(IPAddress.Loopback, 5001, listenOptions => {
                                 listenOptions.UseHttps("test_certs/testcert.pfx", "TestCertificate");
                             });
+                        }
+                        else if(isStaging)
+                        {
+                            opts.Listen(IPAddress.Loopback, 5000);
                         }
                         else
                         {

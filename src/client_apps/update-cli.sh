@@ -1,5 +1,5 @@
 NG_APPS=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learning" "memory" "money_spin" "ng_maw" "photos" "time" "videos" "weekend_countdown" )
-CLI_VERSION='@angular/cli@1.4.0-rc.2'
+CLI_VERSION='@angular/cli@1.4.1'
 
 update_ngcli_global() {
     # remove legacy cli

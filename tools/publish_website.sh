@@ -159,13 +159,9 @@ cp -r "${SRC_WWW}" "${BUILD_WWW}"
 # remove css / js libs that are replaced with cdns in prod
 rm -r "${BUILD_WWW}/wwwroot/css/libs"
 rm -r "${BUILD_WWW}/wwwroot/js/libs/bootstrap"
-rm -r "${BUILD_WWW}/wwwroot/js/libs/d3"
 rm -r "${BUILD_WWW}/wwwroot/js/libs/highlight"
 rm -r "${BUILD_WWW}/wwwroot/js/libs/jquery"
-rm -r "${BUILD_WWW}/wwwroot/js/libs/mousetrap"
 rm -r "${BUILD_WWW}/wwwroot/js/libs/reveal"
-rm -r "${BUILD_WWW}/wwwroot/js/libs/three"
-rm -r "${BUILD_WWW}/wwwroot/js/libs/tween"
 rm -r "${BUILD_WWW}/wwwroot/js/libs/webshim"
 
 minify_css 'site'

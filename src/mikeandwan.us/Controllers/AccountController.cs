@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,12 +12,12 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Email;
 using Maw.Domain.Identity;
-using MawMvcApp.ViewModels.Account;
-using MawMvcApp.ViewModels.Navigation;
 using MawMvcApp.ViewModels.About;
+using MawMvcApp.ViewModels.Account;
+using MawMvcApp.ViewModels.Email;
+using MawMvcApp.ViewModels.Navigation;
 using SignInRes = Microsoft.AspNetCore.Identity.SignInResult;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
+using Mvc.RenderViewToString;
 
 
 namespace MawMvcApp.Controllers
@@ -32,6 +34,7 @@ namespace MawMvcApp.Controllers
 		readonly UserManager<MawUser> _userMgr;
 		readonly IEmailService _emailService;
 		readonly ILoginService _loginService;
+		readonly RazorViewToStringRenderer _razorRenderer;
 
 
 		public AccountController(ILogger<AccountController> log, 
@@ -40,7 +43,8 @@ namespace MawMvcApp.Controllers
 			                     SignInManager<MawUser> signInManager, 
 								 UserManager<MawUser> userManager, 
 								 IEmailService emailService,
-								 ILoginService loginService)
+								 ILoginService loginService,
+								 RazorViewToStringRenderer razorRenderer)
 			: base(log)
         {
 			_contactConfig = contactOpts.Value;
@@ -49,6 +53,7 @@ namespace MawMvcApp.Controllers
 			_userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
 			_emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
 			_loginService = loginService ?? throw new ArgumentNullException(nameof(loginService));
+			_razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
         }
 
 		
@@ -244,8 +249,16 @@ namespace MawMvcApp.Controllers
                 _log.LogInformation($"user: {user.Name}");
                 _log.LogInformation($"code: {code}");
                 _log.LogInformation($"reset url: {callbackUrl}");
+
+				var emailModel = new ResetPasswordEmailModel
+					{
+						Title = "Reset Password",
+						CallbackUrl = callbackUrl
+					};
+
+				var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ResetPassword.cshtml", emailModel).ConfigureAwait(false);
                 
-				await _emailService.SendHtmlAsync(user.Email, _contactConfig.To, "Reset Password for mikeandwan.us", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>.");
+				await _emailService.SendHtmlAsync(user.Email, _contactConfig.To, "Reset Password for mikeandwan.us", body).ConfigureAwait(false);
 
 				model.WasEmailAttempted = true;
 

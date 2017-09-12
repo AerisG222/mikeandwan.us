@@ -1,0 +1,55 @@
+@model MawMvcApp.ViewModels.Email.CreateUserEmailModel
+@{ Layout = "~/Views/Email/_Layout.cshtml"; }
+
+<strong><font size="4">User Account Created</font></strong>
+
+<p>
+    Hello @Model.FirstName,
+</p>
+
+<p>
+    A user account has been created for you at <a href="https://www.mikeandwan.us"><font color="#c8c8c8">mikeandwan.us</font></a>.  
+    Please find your login details below.
+</p>
+
+<table cellpadding="4" cellspacing="4">
+    <tr>
+        <td align="right"><strong>Username</strong></td>
+        <td>@Model.Username</td>
+    </tr>
+    <tr>
+        <td align="right"><strong>Password</strong></td>
+        <td>@Model.Password</td>
+    </tr>
+</table>
+
+<p align="center">
+    <a href="https://www.mikeandwan.us/account/login" style="display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    border-color: rgba(0,0,0,0.6);
+    background-color: #3a3f44; text-shadow: 1px 1px 1px rgba(0,0,0,0.3); 
+    background-image: linear-gradient(#484e55, #3a3f44 60%, #313539);
+    -webkit-appearance: button;
+    margin: 0;"><font color="#ffffff">Login</font></a>
+</p>
+
+<p>
+    If you feel you have received this email in error, please discard.
+</p>
+
+<p>
+    Thank you.
+</p>

@@ -16,8 +16,9 @@ using Maw.Domain.Identity;
 using Maw.Domain.Utilities;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.Admin;
+using MawMvcApp.ViewModels.Email;
 using MawMvcApp.ViewModels.Navigation;
-
+using Mvc.RenderViewToString;
 
 namespace MawMvcApp.Controllers
 {
@@ -32,6 +33,7 @@ namespace MawMvcApp.Controllers
 		readonly RoleManager<MawRole> _roleMgr;
 		readonly IBlogService _blogSvc;
 		readonly IEmailService _emailSvc;
+		readonly RazorViewToStringRenderer _razorRenderer;
 
 
 		public AdminController(ILogger<AdminController> log, 
@@ -40,7 +42,8 @@ namespace MawMvcApp.Controllers
 		                       UserManager<MawUser> userManager, 
 							   RoleManager<MawRole> roleManager, 
 							   IBlogService blogService, 
-							   IEmailService emailService)
+							   IEmailService emailService,
+							   RazorViewToStringRenderer razorRenderer)
 			: base(log)
         {
 			if(emailOpts == null)
@@ -54,6 +57,7 @@ namespace MawMvcApp.Controllers
 			_roleMgr = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
 			_blogSvc = blogService ?? throw new ArgumentNullException(nameof(blogService));
 			_emailSvc = emailService ?? throw new ArgumentNullException(nameof(emailService));
+			_razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
         }
 
 
@@ -126,20 +130,20 @@ namespace MawMvcApp.Controllers
 				{
 					model.Result = await _userMgr.CreateAsync(user, password);
 					
-					var msg = new StringBuilder();
-					
-					msg.Append("Hello ").Append(model.FirstName).AppendLine(",")
-					   .AppendLine()
-					   .AppendLine("A user account has been created for you at https://www.mikeandwan.us.  Please find your login details below.")
-					   .AppendLine()
-					   .Append("Username: ").Append(model.Username).AppendLine()
-                       .Append("Password: ").Append(password).AppendLine()
-					   .AppendLine()
-					   .AppendLine("If you feel you have received this email in error, please discard.")
-					   .AppendLine()
-					   .AppendLine("Thanks!");
-					   
-					await _emailSvc.SendAsync(model.Email, _emailConfig.User, "mikeandwan.us user account", msg.ToString());
+					if(model.Result == IdentityResult.Success)
+					{
+						var emailModel = new CreateUserEmailModel
+						{
+							Title = "User Account Created",
+							Username = model.Username,
+							FirstName = model.FirstName,
+							Password = password
+						};
+
+						var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/CreateUser.cshtml", emailModel).ConfigureAwait(false);
+						
+						await _emailSvc.SendHtmlAsync(model.Email, _emailConfig.User, "Account Created for mikeandwan.us", body).ConfigureAwait(false);
+					}
 				}
 				catch(Exception ex)
 				{

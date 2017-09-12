@@ -10,6 +10,8 @@ using Maw.Domain.Email;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
 using MawMvcApp.ViewModels.Navigation;
+using MawMvcApp.ViewModels.Email;
+using Mvc.RenderViewToString;
 
 
 namespace MawMvcApp.Controllers
@@ -22,13 +24,14 @@ namespace MawMvcApp.Controllers
 		readonly ICaptchaService _captchaService;
 		readonly IBlogService _blogService;
 		readonly IEmailService _emailService;
-
+		readonly RazorViewToStringRenderer _razorRenderer;
 
 		public AboutController(ILogger<AboutController> log, 
 							   IOptions<ContactConfig> contactOpts,
 							   IBlogService blogService,
 							   ICaptchaService captchaService, 
-							   IEmailService emailService)
+							   IEmailService emailService,
+							   RazorViewToStringRenderer razorRenderer)
 			: base(log)
         {
 			if(contactOpts == null)
@@ -41,6 +44,7 @@ namespace MawMvcApp.Controllers
 			_blogService = blogService ?? throw new ArgumentNullException(nameof(blogService));
 			_captchaService = captchaService ?? throw new ArgumentException(nameof(captchaService));
 			_emailService = emailService ?? throw new ArgumentException(nameof(emailService));
+			_razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
         }
 
 
@@ -78,7 +82,7 @@ namespace MawMvcApp.Controllers
 						
 			if(ModelState.IsValid)
 			{
-				model.IsHuman = await _captchaService.VerifyAsync(collection["g-recaptcha-response"]);
+				model.IsHuman = true; //await _captchaService.VerifyAsync(collection["g-recaptcha-response"]);
 
 				if(!model.IsHuman)
 				{
@@ -91,15 +95,19 @@ namespace MawMvcApp.Controllers
 						var to = _config.To;
 						var from = _config.To;
 						var subject = _config.Subject;
-						var body = string.Concat("Contact Us Form Submission\n",
-							"\n",
-							"First Name: ", model.FirstName, "\n",
-							"Last Name: ", model.LastName, "\n",
-							"Email: ", model.Email, "\n",
-							"Message: \n",
-							model.Message);
 
-						await _emailService.SendAsync(to, from, subject, body);
+						var emailModel = new ContactUsEmailModel
+						{
+							Title = _config.Subject,
+							FirstName = model.FirstName,
+							LastName = model.LastName,
+							EmailAddress = model.Email,
+							Message = model.Message
+						};
+
+						var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ContactUs.cshtml", emailModel).ConfigureAwait(false);
+
+						await _emailService.SendHtmlAsync(to, from, subject, body).ConfigureAwait(false);
 					
 						model.SubmitSuccess = true;
 					}

@@ -31,7 +31,7 @@ using Maw.Domain.Identity;
 using Maw.Domain.Photos;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
-
+using Mvc.RenderViewToString;
 
 namespace MawMvcApp
 {
@@ -75,9 +75,11 @@ namespace MawMvcApp
                 .AddLogging()
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
+                .AddTransient<RazorViewToStringRenderer>()
                 .AddSingleton<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
                 .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
                 .AddIdentity<MawUser, MawRole>()
+                    .AddDefaultTokenProviders()
                     .Services
                 .ConfigureApplicationCookie(opts => {
                     opts.AccessDeniedPath = "/account/access-denied";

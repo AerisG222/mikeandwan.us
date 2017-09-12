@@ -1,0 +1,30 @@
+@model MawMvcApp.ViewModels.Email.ContactUsEmailModel
+@{ Layout = "~/Views/Email/_Layout.cshtml"; }
+
+<strong><font size="4">Contact Us Form Submission</font></strong>
+
+<p/>
+
+<table cellpadding="4" cellspacing="4">
+    <tr>
+        <td align="right"><strong>First Name</strong></td>
+        <td>@Model.FirstName</td>
+    </tr>
+    <tr>
+        <td align="right"><strong>Last Name</strong></td>
+        <td>@Model.LastName</td>
+    </tr>
+    <tr>
+        <td align="right"><strong>Email</strong></td>
+        <td><a href="mailto:@Model.EmailAddress"><font color="#c8c8c8">@Model.EmailAddress</font></a></td>
+    </tr>
+</table>
+
+<p />
+<p />
+
+<strong>Message:</strong>
+
+<p />
+
+@Model.Message

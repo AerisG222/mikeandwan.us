@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "dev_build": "ng build --extract-css --vendor-chunk=false && ng lint",
-    "prod_build": "ng build --aot --build-optimizer --target production --environment prod"
+    "prod_build": "ng build --aot --vendor-chunk=false --target production --environment prod"
   },
   "private": true,
   "dependencies": {

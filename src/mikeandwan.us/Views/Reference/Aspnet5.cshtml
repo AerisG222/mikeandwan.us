@@ -157,10 +157,9 @@
     </div>
 </div>
 
-@Html.Partial("_js_Jquery")
 @Html.Partial("_js_Reveal")
 <script>
-    $(function() {
+    document.addEventListener('DOMContentLoaded', function(event) {
         // Full list of configuration options available at:
         // https://github.com/hakimel/reveal.js#configuration
         Reveal.initialize({

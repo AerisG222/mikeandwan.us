@@ -156,10 +156,11 @@ void main()
 	gl_FragColor = baseColor;
 }  
 </script>
-@Html.Partial("_js_Jquery")
 @Html.Partial("_js_Bootstrap")
 <script src="/js/photos3d/main.bundle.js"></script>
 <script>
-    let app = new Photos.Photos3D();
-    app.run();
+    document.addEventListener('DOMContentLoaded', function(event) {
+        let app = new Photos.Photos3D();
+        app.run();
+    });
 </script>

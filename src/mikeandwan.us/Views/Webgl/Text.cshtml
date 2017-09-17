@@ -12,10 +12,9 @@
     </style>
 }
 
-@Html.Partial("_js_Jquery")
 <script src="/js/webgl_text/main.bundle.js"></script>
 <script>
-    $(function() {
+    document.addEventListener('DOMContentLoaded', function(event) {
         var demo = new WebGLDemo.TextDemo();
         demo.run();
     });

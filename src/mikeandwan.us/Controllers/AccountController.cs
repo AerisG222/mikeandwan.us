@@ -440,7 +440,7 @@ namespace MawMvcApp.Controllers
                 {
 					_log.LogWarning(result.ToString());
 					
-					ModelState.AddModelError(string.Empty, "Sorry, there was an error changing your password!");
+					AddErrors(result);
                 }
 			}
 			else
@@ -484,5 +484,14 @@ namespace MawMvcApp.Controllers
 				.Select(x => new ExternalLoginScheme(x))
 				.OrderBy(x => x.ExternalAuth.DisplayName);
 		}
+
+
+		void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
     }
 }

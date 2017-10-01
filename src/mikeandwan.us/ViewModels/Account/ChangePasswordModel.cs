@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace MawMvcApp.ViewModels.Account
 {
 	public class ChangePasswordModel
-		: IValidatableObject
 	{
 		[Required(ErrorMessage = "Please enter your current password")]
 		[Display(Name = "Current Password")]
@@ -29,15 +28,6 @@ namespace MawMvcApp.ViewModels.Account
 		
 		[BindNever]
 		public bool ChangeSucceeded { get; set; }
-
-
-		public IEnumerable<ValidationResult> Validate (ValidationContext validationContext)
-		{
-			if(NewPassword.Length < 6 || NewPassword.Length > 30)
-			{
-				yield return new ValidationResult("Your new password must be between 6 and 30 characters in length", new string[] { nameof(NewPassword) });
-			}
-		}
 	}
 }
 

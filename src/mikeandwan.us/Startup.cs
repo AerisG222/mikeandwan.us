@@ -33,8 +33,10 @@ using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
 using Mvc.RenderViewToString;
 
+
 namespace MawMvcApp
 {
+    // TODO: is Account/ResetPassword used?
     // TODO: googlemaps add async defer back and handle callback when it loads
     // TODO: add official github auth again
     // TODO: issue JWT tokens for android app / apis
@@ -62,15 +64,8 @@ namespace MawMvcApp
                 .Configure<GoogleCaptchaConfig>(_config.GetSection("GoogleRecaptcha"))
                 .Configure<IdentityOptions>(opts =>
                     {
-                        // relax the pwd requirements to match previous settings
-                        // future enhancement would be to enable and force users to change, but this
-                        // is additionally complicated as the logic should be replicated in both this
-                        // and the android app.
-                        opts.Password.RequireDigit = false;
-                        opts.Password.RequireLowercase = false;
-                        opts.Password.RequireNonAlphanumeric = false;
-                        opts.Password.RequireUppercase = false;
-                        opts.Password.RequiredLength = 4;
+                        opts.Password.RequiredLength = 8;
+                        opts.Password.RequiredUniqueChars = 6;
                     })
                 .AddLogging()
                 .AddMawDataServices(_config["Environment:DbConnectionString"])

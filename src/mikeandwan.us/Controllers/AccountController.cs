@@ -100,14 +100,12 @@ namespace MawMvcApp.Controllers
 			
 			if(result == SignInRes.Success)
 			{
-				if(string.IsNullOrEmpty(returnUrl))
+				if(string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
 				{
                     return RedirectToAction("Index", "Home");
 				}
-				else
-				{
-					return Redirect(returnUrl);
-				}
+
+				return Redirect(returnUrl);
 			}
 			else
 			{
@@ -126,7 +124,7 @@ namespace MawMvcApp.Controllers
 			if(!schemes.Any(x => string.Equals(x.Name, provider, StringComparison.OrdinalIgnoreCase)))
 			{
 				_log.LogError($"Invalid external authentication scheme specified: {provider}");
-				return Redirect(nameof(Login));
+				return RedirectToAction(nameof(Login));
 			}
 
 			var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { ReturnUrl = returnUrl });
@@ -186,12 +184,12 @@ namespace MawMvcApp.Controllers
 					
 					_log.LogInformation($"User {user.Username} logged in with {extLoginInfo.LoginProvider} provider.");
 					
-					if(!string.IsNullOrEmpty(returnUrl))
+					if(string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
 					{
-						return Redirect(returnUrl);
+						return RedirectToAction("Index", "Home");
 					}
-
-					return Redirect("/");
+					
+					return Redirect(returnUrl);
 				}
 				else
 				{

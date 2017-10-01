@@ -130,6 +130,11 @@ namespace MawMvcApp
                         opts.AddPolicy(MawConstants.POLICY_ADMIN_SITE, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_ADMIN).Build());
                     })
                 .AddMvc();
+                
+                if(_env.IsDevelopment())
+                {
+                    services.AddMiniProfiler();
+                }
         }
 
 
@@ -137,6 +142,7 @@ namespace MawMvcApp
         {
             if (_env.IsDevelopment())
             {
+                app.UseMiniProfiler();
                 app.UseDeveloperExceptionPage();
                 AddDevPathMappings(app);
             }

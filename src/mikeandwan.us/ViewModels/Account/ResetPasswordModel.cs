@@ -26,6 +26,9 @@ namespace MawMvcApp.ViewModels.Account
 		public string ConfirmPassword { get; set; }
 
 		[BindNever]
+		public bool ResetAttempted { get; set; }
+
+		[BindNever]
 		public bool WasReset { get; set; }
 	}
 }

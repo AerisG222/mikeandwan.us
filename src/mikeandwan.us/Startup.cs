@@ -36,7 +36,6 @@ using Mvc.RenderViewToString;
 
 namespace MawMvcApp
 {
-    // TODO: is Account/ResetPassword used?
     // TODO: googlemaps add async defer back and handle callback when it loads
     // TODO: add official github auth again
     // TODO: issue JWT tokens for android app / apis

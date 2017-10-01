@@ -290,6 +290,7 @@ namespace MawMvcApp.Controllers
 		public async Task<ActionResult> ResetPassword(ResetPasswordModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
+			model.ResetAttempted = true;
 
 			if(ModelState.IsValid)
 			{
@@ -302,7 +303,9 @@ namespace MawMvcApp.Controllers
 				}
 				else
 				{
-					ModelState.AddModelError(nameof(model.NewPassword), "Password does not meet complexity requirements.");
+					_log.LogWarning(result.ToString());
+					
+					AddErrors(result);
 				}
 			}
 			else
@@ -424,11 +427,10 @@ namespace MawMvcApp.Controllers
 		public async Task<ActionResult> ChangePassword(ChangePasswordModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
-			
+			model.ChangeAttempted = true;
+
 			if(ModelState.IsValid)
 			{
-				model.ChangeAttempted = true;
-
 				var user = await _repo.GetUserAsync(User.Identity.Name);
 				var result = await _userMgr.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 

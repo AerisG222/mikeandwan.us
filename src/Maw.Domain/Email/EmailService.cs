@@ -68,7 +68,6 @@ namespace Maw.Domain.Email
 				msg.Subject = subject;
 				msg.Body = builder.ToMessageBody();
                 
-                // TODO: look to use razorengine for emails
                 // TODO: consider using oauth2/cert and not require this to be configured as a 'less secure app'
                 //       http://stackoverflow.com/questions/33496290/how-to-send-email-by-using-mailkit
                 await smtp.ConnectAsync(_config.Server, _config.Port, SecureSocketOptions.StartTls).ConfigureAwait(false);

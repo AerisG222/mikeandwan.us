@@ -1,0 +1,52 @@
+﻿@{ 
+    ViewBag.Title = "text"; 
+    Layout = "_LayoutMinimal";
+}
+
+@section custom_head {
+    @Html.Partial("_css_Bootstrap")
+    @Html.Partial("_css_site")
+    <style>
+        #container { margin-left: auto; margin-right: auto; }
+    </style>
+}
+
+<div id="container">
+
+</div>
+
+<!-- REFERENCES -->
+<!--
+    https://aerotwist.com/tutorials/an-introduction-to-shaders-part-1/
+-->
+
+<script type="x-shader/x-vertex" id="vertexshader">
+    // switch on high precision floats
+    #ifdef GL_ES
+    precision highp float;
+    #endif
+    
+    void main()
+    {
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+    }
+</script>
+
+<script type="x-shader/x-fragment" id="fragmentshader">
+    #ifdef GL_ES
+    precision highp float;
+    #endif
+    
+    void main()
+    {
+        gl_FragColor = vec4(1.0,0.0,1.0,1.0);
+    }
+</script>
+
+<script src="/js/webgl_shader/main.bundle.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function(event) {
+        var demo = new WebGLDemo.ShaderDemo();
+        demo.run();
+    });
+</script>

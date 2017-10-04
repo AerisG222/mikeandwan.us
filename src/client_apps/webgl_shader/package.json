@@ -1,0 +1,20 @@
+{
+  "name": "webgl_shader",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.2.3",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.3",
+    "webpack": "^3.6.0"
+  },
+  "scripts": {
+    "dev_build": "rm -rf dist && webpack",
+    "prod_build": "rm -rf dist && webpack -p --config ./webpack.production.config.js"
+  },
+  "dependencies": {
+    "stats.js": "^0.17.0",
+    "three": "^0.87.1"
+  }
+}

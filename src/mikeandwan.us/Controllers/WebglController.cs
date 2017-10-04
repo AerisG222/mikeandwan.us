@@ -38,5 +38,13 @@ namespace MawMvcApp.Controllers
             ViewBag.NavigationZone = NavigationZone.Webgl;
             return View();
         }
+
+
+        [HttpGet("shader")]
+        public ActionResult Shader()
+        {
+            ViewBag.NavigationZone = NavigationZone.Webgl;
+            return View();
+        }
     }
 }

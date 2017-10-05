@@ -31,8 +31,23 @@ export class ShaderDemo {
         this.camera.position.set(0, 0, 300);
         this.camera.lookAt(this.scene.position);
 
+        this.setupSphere();
+    }
+
+    setupSphere() {
+        let geometry = new THREE.SphereBufferGeometry(100, 32, 32);
+
+        let verts = geometry.getAttribute('position');
+        let values = new Float32Array(verts.count);
+
+        for (let v = 0; v < verts.count; v++) {
+            values[v] = Math.random() * 20;
+        }
+
+        geometry.addAttribute('displacement', new THREE.BufferAttribute(values, 1));
+
         let sphere = new THREE.Mesh(
-            new THREE.SphereGeometry(100, 32, 32),
+            geometry,
             new THREE.ShaderMaterial({
                 vertexShader: document.getElementById('vertexshader').innerText,
                 fragmentShader: document.getElementById('fragmentshader').innerText

@@ -1,5 +1,5 @@
 ﻿@{ 
-    ViewBag.Title = "text"; 
+    ViewBag.Title = "custom shader"; 
     Layout = "_LayoutMinimal";
 }
 
@@ -28,10 +28,14 @@
     #endif
     
     attribute float displacement;
+    attribute vec3 colors;
+
     varying vec3 vNormal;
+    varying vec3 vColor;
 
     void main()
     {
+        vColor = colors;
         vNormal = normal;
 
         vec3 newPosition = position + normal * vec3(displacement);
@@ -45,7 +49,10 @@
     precision highp float;
     #endif
     
+    uniform vec3 color;
+
     varying vec3 vNormal;
+    varying vec3 vColor;
 
     void main()
     {
@@ -55,7 +62,8 @@
 
         float dProd = max(0.0, dot(vNormal, light));
 
-        gl_FragColor = vec4(dProd, dProd, dProd, 1.0);
+        gl_FragColor = vec4(vColor, 1.0);
+        // gl_FragColor = gl_FragColor * vec4(dProd, dProd, dProd, 1.0);
     }
 </script>
 

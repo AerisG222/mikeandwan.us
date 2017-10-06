@@ -38,13 +38,22 @@ export class ShaderDemo {
         let geometry = new THREE.SphereBufferGeometry(100, 32, 32);
 
         let verts = geometry.getAttribute('position');
-        let values = new Float32Array(verts.count);
+        let displacement = new Float32Array(verts.count);
+        let colors = new Float32Array(verts.count * 3);
+        let color = new THREE.Color();
 
-        for (let v = 0; v < verts.count; v++) {
-            values[v] = Math.random() * 20;
+        for (let v = 0, c = 0; v < verts.count; v++, c += 3) {
+            displacement[v] = Math.random() * 20;
+
+            color.setHSL(v / verts.count, 1.0, 0.5);
+
+            colors[c + 0] = color.r;
+            colors[c + 1] = color.g;
+            colors[c + 2] = color.b;
         }
 
-        geometry.addAttribute('displacement', new THREE.BufferAttribute(values, 1));
+        geometry.addAttribute('displacement', new THREE.BufferAttribute(displacement, 1));
+        geometry.addAttribute('colors', new THREE.BufferAttribute(colors, 3));
 
         let sphere = new THREE.Mesh(
             geometry,

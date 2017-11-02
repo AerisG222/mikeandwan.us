@@ -36,7 +36,7 @@ export class BackgroundController implements IController, IDisposable {
         if (this._isDisposed) {
             return;
         }
-        
+
         if (this._visualsEnabled) {
             this._background.render(clockDelta, elapsed);
         }
@@ -47,10 +47,10 @@ export class BackgroundController implements IController, IDisposable {
     }
 
     dispose(): void {
-        if(this._isDisposed) {
+        if (this._isDisposed) {
             return;
         }
-        
+
         this._isDisposed = true;
         this._stateService.visualContext.scene.remove(this._background);
         this._disposalService.dispose(this._background);

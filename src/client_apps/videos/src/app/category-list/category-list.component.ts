@@ -29,7 +29,7 @@ import { VideoStateService } from '../shared/video-state.service';
 export class CategoryListComponent implements AfterViewInit {
     @ViewChild(PagerComponent) pager: PagerComponent;
     @ViewChild(ThumbnailListComponent) thumbnailList: ThumbnailListComponent;
-    year: number = -1;
+    year = -1;
     categories: Array<ICategory> = [];
 
     constructor(private _sizeService: SizeService,

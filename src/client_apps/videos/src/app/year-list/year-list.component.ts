@@ -19,7 +19,7 @@ import { VideoNavigationService } from '../shared/video-navigation.service';
     ]
 })
 export class YearListComponent implements OnInit {
-    year: number = -1;
+    year = -1;
     years: Array<number> = [];
 
     constructor(private _dataService: VideoDataService,

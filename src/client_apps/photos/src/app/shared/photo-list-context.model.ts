@@ -9,7 +9,7 @@ export class PhotoListContext {
     private _firstGpsIndex: number = null;
     private _intervalId: number = null;
     current: Photo = null;
-    currentIndex: number = -1;
+    currentIndex = -1;
     photoUpdated: EventEmitter<number> = new EventEmitter<number>();
 
     constructor(public photos: Array<Photo>,

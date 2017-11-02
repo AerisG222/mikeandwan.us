@@ -4,15 +4,15 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "awesome-typescript-loader": "^3.2.3",
-    "typescript": "^2.5.2",
-    "webpack": "^3.5.5"
+    "awesome-typescript-loader": "^3.3.0",
+    "typescript": "^2.6.1",
+    "webpack": "^3.8.1"
   },
   "scripts": {
     "dev_build": "rm -rf dist && webpack",
     "prod_build": "rm -rf dist && webpack -p --config ./webpack.production.config.js"
   },
   "dependencies": {
-    "d3": "^4.10.2"
+    "d3": "^4.11.0"
   }
 }

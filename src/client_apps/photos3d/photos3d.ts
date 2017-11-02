@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/operator/throttleTime';
 import * as THREE from 'three';
 import * as TWEEN from 'tween.js';
 import * as Mousetrap from 'mousetrap';

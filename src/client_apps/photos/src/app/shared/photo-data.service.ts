@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
-import 'rxjs/add/operator/map';
+import { map } from 'rxjs/operators';
 
 import { ICategory } from './icategory.model';
 import { IPhoto } from './iphoto.model';

@@ -19,7 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
-// using AspNet.Security.OAuth.GitHub;
+using AspNet.Security.OAuth.GitHub;
 using Newtonsoft.Json.Linq;
 using NMagickWand;
 using Maw.Data;
@@ -88,15 +88,13 @@ namespace MawMvcApp
                     }
                 })
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                /*
-                .AddGitHubAuthentication(opts =>
+                .AddGitHub(opts =>
                     {
                         opts.ClientId = _config["GitHub:ClientId"];
                         opts.ClientSecret = _config["GitHub:ClientSecret"];
                         opts.SaveTokens = true;
                         opts.Scope.Add("user:email");
                     })
-                */
                 .AddGoogle(opts => 
                     {
                         opts.ClientId = _config["GooglePlus:ClientId"];

@@ -1,0 +1,22 @@
+{
+  "name": "mikeandwan.us",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^4.0.0-beta.2",
+    "jquery": "^1.9.1",
+    "popper.js": "^1.12.6"
+  },
+  "devDependencies": {
+    "node-sass": "^4.5.3",
+    "sass-lint": "^1.12.1"
+  },
+  "scripts": {
+    "sass": "npm run sass:site & npm run sass:games",
+    "sass:site":  "node-sass --output wwwroot/css --include-path node_modules scss/site.scss",
+    "sass:games": "node-sass --output wwwroot/css --include-path node_modules scss/games.scss"
+  },
+  "author": "",
+  "license": "MIT"
+}

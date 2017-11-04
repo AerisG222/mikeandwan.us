@@ -1,17 +1,60 @@
-﻿.player { margin-bottom: 12px; }
-.player.disabled:hover, .player.disabled:hover img { cursor: default; border-style: none; }
-.player.not_selected img { filter: grayscale(75%); -webkit-filter: grayscale(75%); -ms-filter: grayscale(75%); -moz-filter: grayscale(75%); -o-filter: grayscale(75%); }
+﻿.player {
+    margin-bottom: 12px;
+
+    .disabled:hover,
+    .disabled:hover img {
+        cursor: default;
+        border-style: none;
+    }
+}
+
+.player.not_selected img {
+    filter: grayscale(75%);
+    -webkit-filter: grayscale(75%);
+    -ms-filter: grayscale(75%);
+    -moz-filter: grayscale(75%);
+    -o-filter: grayscale(75%);
+}
+
 .player:hover { cursor: pointer; }
-.player:hover img, .player.selected img, .player.disabled.selected img { border-width: 4px; border-style: solid; filter: grayscale(0%); -webkit-filter: grayscale(0%); -ms-filter: grayscale(0%); -moz-filter: grayscale(0%); -o-filter: grayscale(0%); }
-.player.red:hover, .player.selected.red, .red.active { color: #c00; }
-.player.blue:hover, .player.selected.blue, .blue.active { color: #00c; }
-.player.purple:hover, .player.selected.purple, .purple.active { color: #c0c; }
-.player.orange:hover, .player.selected.orange, .orange.active { color: #cc7200; }
+
+.player:hover img,
+.player.selected img,
+.player.disabled.selected img {
+    border-width: 4px;
+    border-style: solid;
+    filter: grayscale(0%);
+    -webkit-filter: grayscale(0%);
+    -ms-filter: grayscale(0%);
+    -moz-filter: grayscale(0%);
+    -o-filter: grayscale(0%);
+}
+
+.player.red:hover,
+.player.selected.red,
+.red.active { color: #c00; }
+
+.player.blue:hover,
+.player.selected.blue,
+.blue.active { color: #00c; }
+
+.player.purple:hover,
+.player.selected.purple,
+.purple.active { color: #c0c; }
+
+.player.orange:hover,
+.player.selected.orange,
+.orange.active { color: #cc7200; }
+
 .player.red img { border-color: #c00; }
 .player.blue img { border-color: #00c; }
 .player.purple img { border-color: #c0c; }
 .player.orange img { border-color: #cc7200; }
-.vertical-align { display: flex; align-items: center; }
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
 
 /* thanks to: http://cssdeck.com/labs/pulsating-css3-input-search-box */
 .player.red.selected img { animation: glow_red 800ms ease-out infinite alternate; }
@@ -20,27 +63,72 @@
 .player.orange.selected img { animation: glow_orange 800ms ease-out infinite alternate; }
 
 @keyframes glow_red {
-    0% { border-color: #c00; box-shadow: 0 0 4px rgba(255,0,0,.5) }
-    100% { border-color: #f00; box-shadow: 0 0 24px rgba(255,0,0,.9) }
-}
-@keyframes glow_blue {
-    0% { border-color: #00c; box-shadow: 0 0 4px rgba(0,0,255,.5) }
-    100% { border-color: #33f; box-shadow: 0 0 24px rgba(0,0,255,.9) }
-}
-@keyframes glow_purple {
-    0% { border-color: #c0c; box-shadow: 0 0 4px rgba(204,0,204,.5) }
-    100% { border-color: #f0f; box-shadow: 0 0 24px rgba(255,0,255,.9) }
-}
-@keyframes glow_orange {
-    0% { border-color: #cc7200; box-shadow: 0 0 4px rgba(204,114,0,.5) }
-    100% { border-color: #ffa500; box-shadow: 0 0 24px rgba(255,165,0,.9) }
+    0% {
+        border-color: #c00;
+        box-shadow: 0 0 4px rgba(255, 0, 0, 0.5);
+    }
+
+    100% {
+        border-color: #f00;
+        box-shadow: 0 0 24px rgba(255, 0, 0, 0.9);
+    }
 }
 
-.overlay { top:0px; left:0px; position:absolute; z-index:1000; height:100%; width:100%; /* background-color:#808080; opacity:0.3; */}
+@keyframes glow_blue {
+    0% {
+        border-color: #00c;
+        box-shadow: 0 0 4px rgba(0, 0, 255, 0.5);
+    }
+
+    100% {
+        border-color: #33f;
+        box-shadow: 0 0 24px rgba(0, 0, 255, 0.9);
+    }
+}
+
+@keyframes glow_purple {
+    0% {
+        border-color: #c0c;
+        box-shadow: 0 0 4px rgba(204, 0, 204, 0.5);
+    }
+
+    100% {
+        border-color: #f0f;
+        box-shadow: 0 0 24px rgba(255, 0, 255, 0.9);
+    }
+}
+
+@keyframes glow_orange {
+    0% {
+        border-color: #cc7200;
+        box-shadow: 0 0 4px rgba(204, 114, 0, 0.5);
+    }
+
+    100% {
+        border-color: #ffa500;
+        box-shadow: 0 0 24px rgba(255, 165, 0, 0.9);
+    }
+}
+
+.overlay {
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: 1000;
+    height: 100%;
+    width: 100%;
+}
 
 .animate-winner { animation: show_winner 800ms ease-out 1 normal forwards; }
 
 @keyframes show_winner {
-    0% { opacity: 0; transform: scale(0, 0); }
-    100% { opacity: 1; transform: scale(1, 1); }
+    0% {
+        opacity: 0;
+        transform: scale(0, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1, 1);
+    }
 }

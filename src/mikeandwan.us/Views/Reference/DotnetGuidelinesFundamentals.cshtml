@@ -1,10 +1,10 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "reference | .net guidelines | fundamentals"; 
+    ViewBag.Title = "reference | .net guidelines | fundamentals";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", ".Net Framework Design Guidelines")
+    <h1>.Net Framework Design Guidelines</h1>
 }
 
 @section sidebar {
@@ -15,8 +15,7 @@
 
 <h2>Fundamentals</h2>
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover table-condensed">
+<table class="table table-responsive table-striped table-hover table-sm">
   	<tbody>
 	    <tr><td>Do</td><td>Design frameworks that are both powerful and easy to use.</td></tr>
 	    <tr><td>Do</td><td>Explicitly design for a broad range of developers with different programming styles, requirements, skill levels, and using different programming languages.</td></tr>
@@ -50,4 +49,3 @@
 	    <tr><td>Do</td><td>Ensure that layers of a single feature area are well integrated.</td></tr>
 	</tbody>
 </table>
-</div>   

@@ -2,20 +2,20 @@
 @model DeleteUserModel
 @{ ViewBag.Title = "admin | delete user"; }
 
-@Html.Partial("_PageHeader", "Delete User")
+<h1>Delete User</h1>
 
 @Html.Partial("_identityResult", new IdentityResultModel("user", Model.Result))
 
 @if(Model.Result == null || !Model.Result.Succeeded) {
 	<p>Are you sure you would like to delete user <strong>@Model.Username</strong>?</p>
 
-	<form asp-controller="admin" asp-action="deleteuser" method="post" class="form-horizontal" autocomplete="off" role="form">
+	<form asp-controller="admin" asp-action="deleteuser" method="post" autocomplete="off" role="form">
 		<input asp-for="Username" type="hidden" />
 
-	    <div class="form-group">
-	        <div class="col-sm-offset-3 col-sm-2">
-	            <button type="submit" name="delete" class="btn btn-default">Yes</button>
-	            <button type="submit" class="btn btn-default">No</button>
+	    <div class="form-group row">
+	        <div class="offset-sm-3 col-sm-2">
+	            <button type="submit" name="delete" class="btn btn-primary">Yes</button>
+	            <button type="submit" class="btn btn-primary">No</button>
 	        </div>
 	    </div>
 	</form>

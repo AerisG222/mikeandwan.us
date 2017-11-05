@@ -1,27 +1,27 @@
 @using MawMvcApp.ViewComponents
 @model PrimaryNavViewModel
 
-<ul class="nav navbar-nav">
-    <li maw-action="Index" maw-controller="About" maw-text="about" maw-active="@Model.ActiveNavigationZone == NavigationZone.About"></li>
-    <li maw-action="Index" maw-controller="Reference" maw-text="reference" maw-active="@Model.ActiveNavigationZone == NavigationZone.Reference"></li>
-    <li maw-action="Index" maw-controller="Tools" maw-text="tools" maw-active="@Model.ActiveNavigationZone == NavigationZone.Tools"></li>
-    <li maw-action="Index" maw-controller="Games" maw-text="games" maw-active="@Model.ActiveNavigationZone == NavigationZone.Games"></li>
-    <li maw-action="Index" maw-controller="Webgl" maw-text="webgl" maw-active="@Model.ActiveNavigationZone == NavigationZone.Webgl"></li>
+<ul class="navbar-nav mr-auto">
+    <li class="nav-item" maw-action="Index" maw-controller="About" maw-text="about" maw-active="@Model.ActiveNavigationZone == NavigationZone.About"></li>
+    <li class="nav-item" maw-action="Index" maw-controller="Reference" maw-text="reference" maw-active="@Model.ActiveNavigationZone == NavigationZone.Reference"></li>
+    <li class="nav-item" maw-action="Index" maw-controller="Tools" maw-text="tools" maw-active="@Model.ActiveNavigationZone == NavigationZone.Tools"></li>
+    <li class="nav-item" maw-action="Index" maw-controller="Games" maw-text="games" maw-active="@Model.ActiveNavigationZone == NavigationZone.Games"></li>
+    <li class="nav-item" maw-action="Index" maw-controller="Webgl" maw-text="webgl" maw-active="@Model.ActiveNavigationZone == NavigationZone.Webgl"></li>
 
     @if(Model.AuthorizedForPhotos) {
-        <li maw-action="Index" maw-controller="Photos" maw-route-extra="" maw-active="@Model.ActiveNavigationZone == NavigationZone.Photos">
+        <li class="nav-item" maw-action="Index" maw-controller="Photos" maw-route-extra="" maw-active="@Model.ActiveNavigationZone == NavigationZone.Photos">
             <svg-icon class="icon" icon="Camera"></svg-icon>
         </li>
     }
 
 	@if(Model.AuthorizedForVideos) {
-        <li maw-action="Index" maw-controller="Videos" maw-route-extra="" maw-active="@Model.ActiveNavigationZone == NavigationZone.Videos">
+        <li class="nav-item" maw-action="Index" maw-controller="Videos" maw-route-extra="" maw-active="@Model.ActiveNavigationZone == NavigationZone.Videos">
             <svg-icon class="icon" icon="VideoCamera"></svg-icon>
         </li>
     }
 
     @if(Model.AuthorizedForAdmin) {
-        <li maw-action="Index" maw-controller="Admin" maw-active="@Model.ActiveNavigationZone == NavigationZone.Administration">
+        <li class="nav-item" maw-action="Index" maw-controller="Admin" maw-active="@Model.ActiveNavigationZone == NavigationZone.Administration">
             <svg-icon class="icon" icon="Cog"></svg-icon>
         </li>
     }

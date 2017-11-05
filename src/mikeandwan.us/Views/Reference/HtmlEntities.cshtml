@@ -1,10 +1,10 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "reference | html entities"; 
+    ViewBag.Title = "reference | html entities";
 }
 
-@section header {   
-    @Html.Partial("_PageHeader", "Entity Codes")
+@section header {
+    <h1>Entity Codes</h1>
 }
 
 @section sidebar {
@@ -24,7 +24,7 @@
 
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade in active" id="characters">
-    	<table class="table table-striped table-hover table-condensed">
+    	<table class="table table-striped table-hover table-sm">
       		<tr><th>Character</th><th>Entity</th><th>Code</th><th>Description</th></tr>
     		<tr><td>&nbsp;</td><td>&amp;nbsp;</td><td>&amp;#160;</td><td>no-break space = non-breaking space, U+00A0 ISOnum</td></tr>
     		<tr><td>&iexcl;</td><td>&amp;iexcl;</td><td>&amp;#161;</td><td>inverted exclamation mark, U+00A1 ISOnum</td></tr>
@@ -126,7 +126,7 @@
         </div>
 
         <div role="tabpanel" class="tab-pane fade" id="symbols">
-    	<table class="table table-striped table-hover table-condensed">
+    	<table class="table table-striped table-hover table-sm">
     		<tr><th>Character</th><th>Entity</th><th>Code</th><th>Description</th></tr>
     		<tr><td>&Alpha;</td><td>&amp;Alpha;</td><td>&amp;#913;</td><td>greek capital letter alpha, U+0391</td></tr>
     		<tr><td>&Beta;</td><td>&amp;Beta;</td><td>&amp;#914;</td><td>greek capital letter beta, U+0392</td></tr>
@@ -255,7 +255,7 @@
     	</div>
 
         <div role="tabpanel" class="tab-pane fade" id="special">
-    	<table class="table table-striped table-hover table-condensed">
+    	<table class="table table-striped table-hover table-sm">
     		<tr><th>Character</th><th>Entity</th><th>Code</th><th>Description</th></tr>
     		<tr><td>&quot;</td><td>&amp;quot;</td><td>&amp;#34;</td><td>quotation mark = APL qoute, U+0022 ISOnum</td></tr>
     		<tr><td>&amp;</td><td>&amp;amp;</td><td>&amp;#38;</td><td>ampersand, U+0026 ISOnum</td></tr>

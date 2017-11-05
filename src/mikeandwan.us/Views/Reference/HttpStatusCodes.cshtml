@@ -1,10 +1,10 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "reference | http status codes"; 
+    ViewBag.Title = "reference | http status codes";
 }
 
-@section header {   
-    @Html.Partial("_PageHeader", "HTTP Status Codes")
+@section header {
+    <h1>HTTP Status Codes</h1>
 }
 
 @section sidebar {
@@ -26,7 +26,7 @@
 
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade in active" id="info">
-    	<table class="table table-striped table-hover table-condensed">
+    	<table class="table table-striped table-hover table-sm">
     		<tr><th colspan="2">1xx - Informational</th></tr>
     		<tr><th>Code</th><th>Name</th></tr>
     		<tr><td>100</td><td>Continue</td></tr>
@@ -35,7 +35,7 @@
     	</div>
 
         <div role="tabpanel" class="tab-pane fade" id="success">
-    	<table class="table table-striped table-hover table-condensed">
+    	<table class="table table-striped table-hover table-sm">
     		<tr><th colspan="2">2xx - Successful</th></tr>
     		<tr><th>Code</th><th>Name</th></tr>
     		<tr><td>200</td><td>OK</td></tr>
@@ -49,7 +49,7 @@
     	</div>
 
         <div role="tabpanel" class="tab-pane fade" id="redirection">
-    	<table class="table table-striped table-hover table-condensed">
+    	<table class="table table-striped table-hover table-sm">
     		<tr><th colspan="2">3xx - Redirection</th></tr>
     		<tr><th>Code</th><th>Name</th></tr>
     		<tr><td>300</td><td>Multiple Choices</td></tr>
@@ -64,7 +64,7 @@
     	</div>
 
         <div role="tabpanel" class="tab-pane fade" id="clienterror">
-    	<table class="table table-striped table-hover table-condensed">
+    	<table class="table table-striped table-hover table-sm">
     		<tr><th colspan="2">4xx - Client Error</th></tr>
     		<tr><th>Code</th><th>Name</th></tr>
     		<tr><td>400</td><td>Bad Request</td></tr>
@@ -89,7 +89,7 @@
     	</div>
 
         <div role="tabpanel" class="tab-pane fade" id="servererror">
-    	<table class="table table-striped table-hover table-condensed">
+    	<table class="table table-striped table-hover table-sm">
     		<tr><th colspan="2">5xx - Server Error</th></tr>
     		<tr><th>Code</th><th>Name</th></tr>
     		<tr><td>500</td><td>Internal Server Error</td></tr>

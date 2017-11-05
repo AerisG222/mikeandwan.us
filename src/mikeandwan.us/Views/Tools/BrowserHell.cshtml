@@ -1,6 +1,6 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "tools | browser hell"; 
+    ViewBag.Title = "tools | browser hell";
 }
 
 @section stylesheets {
@@ -10,7 +10,7 @@
 }
 
 @section header {
-    @Html.Partial("_PageHeader", "Browser Hell")
+    <h1>Browser Hell</h1>
 }
 
 @section sidebar {
@@ -18,8 +18,8 @@
 }
 
 <p>
-This page is fairly straightforward.  It simply takes an image, and attempts to render the 
-image pixel by pixel using table cells.  It is a fairly interesting test of browser 
+This page is fairly straightforward.  It simply takes an image, and attempts to render the
+image pixel by pixel using table cells.  It is a fairly interesting test of browser
 performance, given the large number of cells.
 </p>
 

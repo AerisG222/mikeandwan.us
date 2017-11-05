@@ -1,15 +1,13 @@
 ﻿@using MawMvcApp.ViewComponents
 
-<nav class="navbar navbar-default navbar-static-top">
+<nav class="navbar navbar-dark bg-primary navbar-expand-sm mb-3">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-head">
-                <span class="sr-only">Toggle navigation</span>
-                <svg-icon class="icon" icon="Bars"></svg-icon>
-            </button>
-            <a class="navbar-brand" href="/">mikeandwan.us</a>
-        </div>
-        <div class="collapse navbar-collapse" id="navbar-collapse-head">
+        <a class="navbar-brand" href="/">mikeandwan.us</a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse-head" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbar-collapse-head">
             @await Component.InvokeAsync(nameof(PrimaryNav), new { activeZone = ViewBag.NavigationZone })
             @await Component.InvokeAsync(nameof(AccountStatus), new { activeZone = ViewBag.NavigationZone })
         </div>

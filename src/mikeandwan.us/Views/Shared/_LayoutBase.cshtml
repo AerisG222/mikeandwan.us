@@ -3,8 +3,8 @@
 @section custom_head {
 	@await RenderSectionAsync("custom_head", required: false)
 	@Html.Partial("_Favicons")
+	<meta name="theme-color" content="#272b30">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine:bold" />
-	@Html.Partial("_css_Bootstrap")
 	@Html.Partial("_css_site")
 	@await RenderSectionAsync("stylesheets", required: false)
 	@Html.Partial("_js_Modernizr")
@@ -15,19 +15,19 @@
 
 <footer class="container-fluid">
 	<div class="row social">
-		<div class="col-xs-12 text-center">
-			<a href="https://play.google.com/store/apps/developer?id=mmorano"><svg-icon class="icon icon-social" icon="Android"></svg-icon></a>
-			<a href="https://twitter.com/AerisG222"><svg-icon class="icon icon-social" icon="Twitter"></svg-icon></a>
-			<a href="https://www.google.com/+MikeMorano222"><svg-icon class="icon icon-social" icon="GooglePlusSquare"></svg-icon></a>
-			<a href="https://www.linkedin.com/pub/mike-morano/0/b51/805"><svg-icon class="icon icon-social" icon="LinkedIn"></svg-icon></a>
-			<a href="https://www.facebook.com/AerisG222"><svg-icon class="icon icon-social" icon="Facebook"></svg-icon></a>
-			<a href="https://trello.com/aerisg222"><svg-icon class="icon icon-social" icon="Trello"></svg-icon></a>
-			<a href="https://github.com/AerisG222"><svg-icon class="icon icon-social" icon="Github"></svg-icon></a>
-			<a href="https://steamcommunity.com/profiles/76561197974977949/"><svg-icon class="icon icon-social" icon="Steam"></svg-icon></a>
+		<div class="col-12 text-center">
+			<a href="https://play.google.com/store/apps/developer?id=mmorano"><svg-icon class="icon social" icon="Android"></svg-icon></a>
+			<a href="https://twitter.com/AerisG222"><svg-icon class="icon social" icon="Twitter"></svg-icon></a>
+			<a href="https://www.google.com/+MikeMorano222"><svg-icon class="icon social" icon="GooglePlusSquare"></svg-icon></a>
+			<a href="https://www.linkedin.com/pub/mike-morano/0/b51/805"><svg-icon class="icon social" icon="LinkedIn"></svg-icon></a>
+			<a href="https://www.facebook.com/AerisG222"><svg-icon class="icon social" icon="Facebook"></svg-icon></a>
+			<a href="https://trello.com/aerisg222"><svg-icon class="icon social" icon="Trello"></svg-icon></a>
+			<a href="https://github.com/AerisG222"><svg-icon class="icon social" icon="Github"></svg-icon></a>
+			<a href="https://steamcommunity.com/profiles/76561197974977949/"><svg-icon class="icon social" icon="Steam"></svg-icon></a>
 		</div>
 	</div>
 	<div class="row copyright">
-		<div class="col-xs-12 text-center">
+		<div class="col-12 text-center">
 			<span>copyright &copy; @(DateTime.Now.Year) mike morano | all rights reserved</span>
 		</div>
 	</div>
@@ -37,6 +37,5 @@
 
 @Html.Partial("_js_Jquery")
 @Html.Partial("_js_Bootstrap")
-@Html.Partial("_js_Webshims")
 @await RenderSectionAsync("scripts_footer", required: false)
 @Html.Partial("_js_GoogleAnalytics")

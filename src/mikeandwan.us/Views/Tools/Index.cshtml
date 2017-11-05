@@ -1,11 +1,11 @@
-@{ 
-    ViewBag.Title = "tools"; 
+@{
+    ViewBag.Title = "tools";
 }
 
-@Html.Partial("_PageHeader", "Tools")
+<h1>Tools</h1>
 
 <div class="row">
-    <div class="col-xs-4">
+    <div class="col">
         <div class="panel panel-default">
 		    <div class="panel-heading">
 		        <h3 class="panel-title">General</h3>
@@ -21,7 +21,7 @@
 	        </div>
 		</div>
     </div>
-    <div class="col-xs-4">
+    <div class="col">
         <div class="panel panel-default">
 		    <div class="panel-heading">
 		        <h3 class="panel-title">Networking</h3>
@@ -32,7 +32,7 @@
 	            <a class="list-group-item" asp-controller="tools" asp-action="networkingtime">Time</a>
 		    </div>
 		</div>
-        
+
         <div class="panel panel-default">
 		    <div class="panel-heading">
 		        <h3 class="panel-title">Binary Clock</h3>
@@ -42,7 +42,7 @@
                 <a class="list-group-item" asp-controller="tools" asp-action="binaryclockabout">About Binary Clock</a>
 		    </div>
 		</div>
-        
+
         <div class="panel panel-default">
 		    <div class="panel-heading">
 		        <h3 class="panel-title">Learning</h3>
@@ -52,7 +52,7 @@
 		    </div>
 		</div>
     </div>
-    <div class="col-xs-4">
+    <div class="col">
         <div class="panel panel-default">
 		    <div class="panel-heading">
 		        <h3 class="panel-title">.Net</h3>

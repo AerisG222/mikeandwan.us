@@ -1,12 +1,12 @@
 @using MawMvcApp.ViewModels.Tools.Dotnet
 @model UrlEncodeModel
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "tools | url encoder / decoder"; 
+    ViewBag.Title = "tools | url encoder / decoder";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", "URL Encoder / Decoder")
+    <h1>URL Encoder / Decoder</h1>
 }
 
 @section sidebar {
@@ -15,38 +15,38 @@
 
 <p>This page allows you to encode and decode values suitable for a querystring.</p>
 
-<form asp-controller="tools" asp-action="urlencode" method="post" class="form-horizontal" autocomplete="off" role="form">
+<form asp-controller="tools" asp-action="urlencode" method="post" autocomplete="off" role="form">
 	<input type="hidden" name="Mode" value="@EncodeMode.Encode" />
-	<div class="form-group" maw-for="@Model.DecodedString">
-        <label asp-for="DecodedString" class="col-sm-3 control-label"></label>
+	<div class="form-group row" maw-for="@Model.DecodedString">
+        <label asp-for="DecodedString" class="col-sm-3 col-form-label"></label>
         <div class="col-sm-9">
             <textarea asp-for="DecodedString" rows="8" class="form-control" autofocus=""></textarea>
-            <span asp-validation-for="DecodedString" class="help-block"></span>
+            <span asp-validation-for="DecodedString" class="form-text"></span>
         </div>
 	</div>
-	
-    <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-2">
-            <button type="submit" class="btn btn-default">Encode</button>
+
+    <div class="form-group row">
+        <div class="offset-sm-3 col-sm-2">
+            <button type="submit" class="btn btn-primary">Encode</button>
         </div>
     </div>
 </form>
 
 <br/>
 
-<form asp-controller="tools" asp-action="urlencode" method="post" class="form-horizontal" autocomplete="off" role="form">
+<form asp-controller="tools" asp-action="urlencode" method="post" autocomplete="off" role="form">
 	<input type="hidden" name="Mode" value="@EncodeMode.Decode" />
-    <div class="form-group" maw-for="@Model.EncodedString">
-        <label asp-for="EncodedString" class="col-sm-3 control-label"></label>
+    <div class="form-group row" maw-for="@Model.EncodedString">
+        <label asp-for="EncodedString" class="col-sm-3 col-form-label"></label>
         <div class="col-sm-9">
             <textarea asp-for="EncodedString" rows="8" class="form-control"></textarea>
-            <span asp-validation-for="EncodedString" class="help-block"></span>
+            <span asp-validation-for="EncodedString" class="form-text"></span>
         </div>
 	</div>
-	
-    <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-2">
-            <button type="submit" class="btn btn-default">Decode</button>
+
+    <div class="form-group row">
+        <div class="offset-sm-3 col-sm-2">
+            <button type="submit" class="btn btn-primary">Decode</button>
         </div>
     </div>
 </form>

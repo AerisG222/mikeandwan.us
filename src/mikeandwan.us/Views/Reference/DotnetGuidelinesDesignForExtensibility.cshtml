@@ -1,10 +1,10 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "reference | .net guidelines | design for extensibility"; 
+    ViewBag.Title = "reference | .net guidelines | design for extensibility";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", ".Net Framework Design Guidelines")
+    <h1>.Net Framework Design Guidelines</h1>
 }
 
 @section sidebar {
@@ -13,8 +13,7 @@
 
 <h2>Designing For Extensibility</h2>
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover table-condensed">
+<table class="table table-responsive table-striped table-hover table-sm">
   	<tbody>
 	    <tr><td>Consider</td><td>Unsealed classes with no added virtual or protected members as a great way to provide inexpensive yet much appreciated extensibility to a framework.</td></tr>
 	    <tr><td>Consider</td><td>Using protected members for advanced customization.</td></tr>
@@ -37,4 +36,3 @@
 	    <tr><td>Consider</td><td>Sealing members that you override.</td></tr>
     </tbody>
 </table>
-</div>

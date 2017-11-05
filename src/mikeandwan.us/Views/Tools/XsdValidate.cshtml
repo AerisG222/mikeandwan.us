@@ -1,11 +1,11 @@
 @model MawMvcApp.ViewModels.Tools.Dotnet.XsdValidateModel
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "tools | xsd validator"; 
+    ViewBag.Title = "tools | xsd validator";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", "XSD Validator")
+    <h1>XSD Validator</h1>
 }
 
 @section sidebar {
@@ -16,17 +16,17 @@
 	This page allows you to validate an XML Schema document.
 </p>
 
-<form asp-controller="tools" asp-action="xsdvalidate" method="post" class="form-horizontal" autocomplete="off" role="form">
-    <div class="form-group" maw-for="@Model.XmlSchemaSource">
-		<label asp-for="XmlSchemaSource" class="col-sm-3 control-label"></label>
+<form asp-controller="tools" asp-action="xsdvalidate" method="post" autocomplete="off" role="form">
+    <div class="form-group row" maw-for="@Model.XmlSchemaSource">
+		<label asp-for="XmlSchemaSource" class="col-sm-3 col-form-label"></label>
         <div class="col-sm-9">
 			<textarea asp-for="XmlSchemaSource" rows="10" class="form-control" autofocus=""></textarea>
-			<span asp-validation-for="XmlSchemaSource" class="help-block"></span>
+			<span asp-validation-for="XmlSchemaSource" class="form-text"></span>
         </div>
 	</div>
-    <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-2">
-            <button type="submit" class="btn btn-default">Validate</button>
+    <div class="form-group row">
+        <div class="offset-sm-3 col-sm-2">
+            <button type="submit" class="btn btn-primary">Validate</button>
         </div>
     </div>
 </form>

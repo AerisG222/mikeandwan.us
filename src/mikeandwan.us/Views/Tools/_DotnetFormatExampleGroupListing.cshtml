@@ -6,7 +6,7 @@
         <div class="panel-heading">
 	        <h3 class="panel-title">@group.Name</h3>
 	    </div>
-    	<table class="table table-striped table-hover table-condensed">
+    	<table class="table table-striped table-hover table-sm">
     		<thead>
     	        <tr>
     	            <th>Format String</th>
@@ -14,7 +14,7 @@
     	        </tr>
             </thead>
             <tbody>
-            
+
     		@foreach(var example in group.FormatExampleList)
     		{
     			<tr>
@@ -22,7 +22,7 @@
     				<td>@example.Result</td>
     			</tr>
     		}
-    		
+
     		</tbody>
     	</table>
     </div>

@@ -1,44 +1,44 @@
 @model MawMvcApp.ViewModels.Tools.Dotnet.DateDiff
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "tools | date difference"; 
+    ViewBag.Title = "tools | date difference";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", "Date Difference Calculator")
+    <h1>Date Difference Calculator</h1>
 }
 
 @section sidebar {
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "date-diff" })
 }
 
-<form asp-controller="tools" asp-action="datediff" method="post" class="form-horizontal" autocomplete="off" role="form">
-	<div class="form-group" maw-for="@Model.StartDate">
-        <label asp-for="StartDate" class="col-sm-3 control-label"></label>
+<form asp-controller="tools" asp-action="datediff" method="post" autocomplete="off" role="form">
+	<div class="form-group row" maw-for="@Model.StartDate">
+        <label asp-for="StartDate" class="col-sm-3 col-form-label"></label>
         <div class="col-sm-5">
             <input asp-for="StartDate" class="form-control" autofocus="" />
-            <span asp-validation-for="StartDate" class="help-block"></span>
+            <span asp-validation-for="StartDate" class="form-text"></span>
         </div>
 	</div>
-	
-    <div class="form-group" maw-for="@Model.EndDate">
-        <label asp-for="EndDate" class="col-sm-3 control-label"></label>
+
+    <div class="form-group row" maw-for="@Model.EndDate">
+        <label asp-for="EndDate" class="col-sm-3 col-form-label"></label>
         <div class="col-sm-5">
             <input asp-for="EndDate" class="form-control" />
-            <span asp-validation-for="EndDate" class="help-block"></span>
+            <span asp-validation-for="EndDate" class="form-text"></span>
         </div>
 	</div>
-	
-    <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-2">
-            <button type="submit" class="btn btn-default">Submit</button>
+
+    <div class="form-group row">
+        <div class="offset-sm-3 col-sm-2">
+            <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </div>
 </form>
 
 @if(Model.ShowResults) {
 	<h2>Results</h2>
-	
+
     <p>
         Milliseconds: @Model.TotalMilliseconds.ToString("N2")
         <br/>

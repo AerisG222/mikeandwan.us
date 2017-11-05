@@ -1,10 +1,10 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "reference | .net guidelines | type design"; 
+    ViewBag.Title = "reference | .net guidelines | type design";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", ".Net Framework Design Guidelines")
+    <h1>.Net Framework Design Guidelines</h1>
 }
 
 @section sidebar {
@@ -13,8 +13,7 @@
 
 <h2>Type Design Guidelines</h2>
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover table-condensed">
+<table class="table table-responsive table-striped table-hover table-sm">
   	<tbody>
 	    <tr><td>Do</td><td>Ensure that each type is a well-defined set of related members, not just a random collection of unrelated functionality.</td></tr>
 	    <tr><td>Do</td><td>Use namespaces to organize types into a hierarchy of related feature areas.</td></tr>
@@ -74,4 +73,3 @@
 	    <tr><td>Do Not</td><td>Define a nested type as a member of an interface.</td></tr>
 	</tbody>
 </table>
-</div>   

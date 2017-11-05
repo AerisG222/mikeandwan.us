@@ -18,7 +18,8 @@
     "sass": "npm run sass:lint & npm run sass:site & npm run sass:games",
     "sass:lint": "stylelint scss/*.scss --syntax scss & exit 0",
     "sass:site": "node-sass --output wwwroot/css --include-path node_modules scss/site.scss",
-    "sass:games": "node-sass --output wwwroot/css --include-path node_modules scss/games.scss"
+    "sass:games": "node-sass --output wwwroot/css --include-path node_modules scss/games.scss",
+    "sass:watch": "node-sass --watch --output wwwroot/css --include-path node_modules scss/site.scss"
   },
   "author": "",
   "license": "MIT"

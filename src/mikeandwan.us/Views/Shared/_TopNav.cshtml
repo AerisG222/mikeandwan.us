@@ -1,6 +1,7 @@
 ﻿@using MawMvcApp.ViewComponents
+@model bool
 
-<nav class="navbar navbar-dark bg-primary navbar-expand-sm mb-3">
+<nav class="navbar navbar-dark @if(Model){ <text>bg-primary</text> } navbar-expand-sm mb-3">
     <div class="container">
         <a class="navbar-brand" href="/">mikeandwan.us</a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse-head" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

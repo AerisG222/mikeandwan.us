@@ -25,11 +25,11 @@ This page allows you to convert between different GPS coordinate representations
 }
 
 <form asp-controller="tools" asp-action="gpsconversion" method="post" autocomplete="off" role="form">
-    <div class="panel  panel-default">
-        <div class="panel-heading">
-	        <h3 class="panel-title">Degrees Minutes Seconds Format</h3>
+    <div class="card">
+        <div class="card-header">
+	        <strong class="card-title">Degrees Minutes Seconds Format</strong>
 	    </div>
-	    <div class="panel-body">
+	    <div class="card-body">
             <input type="hidden" name="ConversionMode" value="@GpsConversionMode.FromDegreesMinutesSeconds" />
             <div class="form-group row">
                 <label class="offset-2 col-2 col-form-label">Degrees</label>
@@ -81,11 +81,11 @@ This page allows you to convert between different GPS coordinate representations
 </form>
 
 <form asp-controller="tools" asp-action="gpsconversion" method="post" autocomplete="off" role="form">
-	<div class="panel  panel-default">
-        <div class="panel-heading">
-	        <h3 class="panel-title">Degrees Minutes Format</h3>
+	<div class="card">
+        <div class="card-header">
+	        <strong class="card-title">Degrees Minutes Format</strong>
 	    </div>
-	    <div class="panel-body">
+	    <div class="card-body">
         	<input type="hidden" name="ConversionMode" value="@GpsConversionMode.FromDegreesMinutes" />
     	    <div class="form-group row">
     			<label class="offset-2 col-2 col-form-label">Degrees</label>
@@ -130,11 +130,11 @@ This page allows you to convert between different GPS coordinate representations
 </form>
 
 <form asp-controller="tools" asp-action="gpsconversion" method="post" autocomplete="off" role="form">
-	<div class="panel  panel-default">
-        <div class="panel-heading">
-	        <h3 class="panel-title">Degrees Format</h3>
+	<div class="card">
+        <div class="card-header">
+	        <strong class="card-title">Degrees Format</strong>
 	    </div>
-	    <div class="panel-body">
+	    <div class="card-body">
         	<input type="hidden" name="ConversionMode" value="@GpsConversionMode.FromDegrees" />
     	    <div class="form-group row">
     			<label class="offset-2 col-2 col-form-label">Degrees</label>

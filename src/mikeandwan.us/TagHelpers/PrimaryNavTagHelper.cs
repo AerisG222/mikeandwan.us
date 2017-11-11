@@ -82,7 +82,7 @@ namespace MawMvcApp.TagHelpers
                     StringComparer.OrdinalIgnoreCase);
 
 			var action = Action.Replace("-", string.Empty);
-			var anchor = _htmlGenerator.GenerateActionLink(ViewContext, LinkText, action, Controller, null, null, null, routeValues, new { @class = "nav-link" });
+			var anchor = _htmlGenerator.GenerateActionLink(ViewContext, LinkText, action, Controller, null, null, null, routeValues, new { @class = "nav-link px-3" });
 
 			anchor.InnerHtml.AppendHtml(await output.GetChildContentAsync());
 			output.Content.AppendHtml(anchor);

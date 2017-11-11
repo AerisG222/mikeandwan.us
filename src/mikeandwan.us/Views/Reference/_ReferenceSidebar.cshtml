@@ -7,15 +7,12 @@
     var httpPanelClass = "panel";
     var httpGroupClass = "list-group collapse";
 
-    var networkingPanelClass = "panel";
-    var networkingGroupClass = "list-group collapse";
-
     var dotnetPanelClass = "panel";
     var dotnetGroupClass = "list-group collapse";
 
     var presentationPanelClass = "panel";
     var presentationGroupClass = "list-group collapse";
-    
+
     switch(Model.Group.ToLower()) {
         case "html":
             htmlPanelClass += " panel-default";
@@ -24,10 +21,6 @@
         case "http":
             httpPanelClass += " panel-default";
             httpGroupClass += " in";
-            break;
-        case "networking":
-            networkingPanelClass += " panel-default";
-            networkingGroupClass += " in";
             break;
         case "dotnet":
             dotnetPanelClass += " panel-default";
@@ -58,14 +51,6 @@
         <div id="http" class="@httpGroupClass">
             <a asp-controller="reference" asp-action="HttpStatusCodes" maw-active="@string.Equals(Model.Item, "http-status-codes", StringComparison.OrdinalIgnoreCase)">Status Codes</a>
             <a asp-controller="reference" asp-action="HttpRfcs" maw-active="@string.Equals(Model.Item, "http-rfcs", StringComparison.OrdinalIgnoreCase)">RFCs</a>
-        </div>
-    </div>
-    <div class="@networkingPanelClass">
-        <div class="panel-heading">
-            <a data-toggle="collapse" data-parent="#accordion" href="#networking">Networking</a>
-        </div>
-        <div id="networking" class="@networkingGroupClass">
-            <a asp-controller="reference" asp-action="NetworkingPorts" maw-active="@string.Equals(Model.Item, "networking-ports", StringComparison.OrdinalIgnoreCase)">Common Ports</a>
         </div>
     </div>
     <div class="@dotnetPanelClass">

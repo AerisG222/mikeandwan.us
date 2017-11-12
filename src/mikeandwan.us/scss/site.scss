@@ -9,6 +9,19 @@ pre {
 }
 //
 
+h1 {
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+    border-bottom: 1px solid #1c1e22;
+}
+
+footer {
+    margin-top: 80px;
+    background: none repeat scroll 0 0 #1c1e22;
+    padding: 20px 0 40px;
+    color: #777;
+}
+
 .banner {
     background-image: url('/img/banner_xs.jpg');
     background-repeat: no-repeat;
@@ -60,13 +73,6 @@ pre {
     }
 }
 
-footer {
-    margin-top: 80px;
-    background: none repeat scroll 0 0 #1c1e22;
-    padding: 20px 0 40px;
-    color: #777;
-}
-
 .copyright {
     margin-top: 24px;
 }
@@ -104,12 +110,6 @@ footer {
 
 .list-group-item {
     color: #c8c8c8;
-}
-
-h1 {
-    padding-bottom: 9px;
-    margin: 40px 0 20px;
-    border-bottom: 1px solid #1c1e22;
 }
 
 @include media-breakpoint-up(lg) {

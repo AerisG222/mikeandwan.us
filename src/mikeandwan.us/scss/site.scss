@@ -1,3 +1,5 @@
+$input-btn-padding-y:   .5rem !default;
+
 @import "bootswatch/dist/slate/variables";
 @import "bootstrap/scss/bootstrap";
 @import "bootswatch/dist/slate/bootswatch";
@@ -20,6 +22,17 @@ footer {
     background: none repeat scroll 0 0 #1c1e22;
     padding: 20px 0 40px;
     color: #777;
+}
+
+.ext_auth {
+    & a {
+        margin-top: 8px;
+        display: block;
+    }
+
+    & .icon {
+        margin-right: 8px;
+    }
 }
 
 .banner {

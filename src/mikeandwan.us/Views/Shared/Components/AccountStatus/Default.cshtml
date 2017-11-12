@@ -3,12 +3,12 @@
 
 <ul class="navbar-nav">
     @if(Model.IsAuthenticated) {
-        <li class="nav-item" class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><svg-icon icon="Person" class="icon"></svg-icon><svg-icon icon="CaretDown" class="icon caret"></svg-icon></a>
+        <li class="nav-item" class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"><svg-icon icon="Person" class="icon"></svg-icon></a>
             <ul class="dropdown-menu">
-                <li><a asp-controller="account" asp-action="changepassword">change password</a></li>
-                <li><a asp-controller="account" asp-action="editprofile">edit profile</a></li>
-                <li><a asp-controller="account" asp-action="logout">logout</a></li>
+                <li class="dropdown-item"><a asp-controller="account" asp-action="changepassword">change password</a></li>
+                <li class="dropdown-item"><a asp-controller="account" asp-action="editprofile">edit profile</a></li>
+                <li class="dropdown-item"><a asp-controller="account" asp-action="logout">logout</a></li>
             </ul>
         </li>
     }

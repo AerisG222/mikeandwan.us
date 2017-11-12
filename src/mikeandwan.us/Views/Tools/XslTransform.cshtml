@@ -45,10 +45,14 @@
 			<h2>Transform Results:</h2>
 
 			@if(Model.AreErrors) {
-				<pre>@Model.TransformErrors</pre>
+				<pre><code>
+@Model.TransformErrors
+				</code></pre>
 			}
 			else {
-				<pre>@Model.TransformResult</pre>
+				<pre><code>
+@Model.TransformResult
+				</code></pre>
 			}
 		</div>
     </div>

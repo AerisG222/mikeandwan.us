@@ -2,6 +2,13 @@
 @import "bootstrap/scss/bootstrap";
 @import "bootswatch/dist/slate/bootswatch";
 
+// hopefully can get rid of this in future
+pre {
+    background-color: #f8f9fa;
+    padding: 0 1rem;
+}
+//
+
 .banner {
     background-image: url('/img/banner_xs.jpg');
     background-repeat: no-repeat;

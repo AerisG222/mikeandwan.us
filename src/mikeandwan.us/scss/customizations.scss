@@ -15,16 +15,6 @@ body { padding-right: 0 !important; }
 .btn:active.focus,
 .btn.active.focus { outline: none; }
 
-.banner > .navbar-default .navbar-nav > li > a:hover,
-.banner > .navbar-default .navbar-nav > li > a:focus,
-.banner > .navbar-default .dropdown-menu,
-.banner > .navbar-default .dropdown.open > .dropdown-toggle,
-.dropdown-menu > li > a:hover,
-.dropdown-menu > li > a:focus { background: rgba(0, 0, 0, 0.4); }
-
-.dropdown-menu > li > span { padding: 3px 20px; }
-
-.panel-heading + .list-group .list-group-item:first-child { border-top-width: 1px; }
 .modal-footer { padding: 8px; }
 
 .icon-dialog-close { height: 1.4em; }

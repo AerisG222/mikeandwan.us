@@ -50,6 +50,20 @@ footer {
         border-width: 0 0 1px 0;
         margin: 0 -15px;
     }
+
+    .dropdown-menu {
+        background: rgba(0, 0, 0, 0.4);
+
+        a {
+            display: block;
+            color: #c8c8c8;
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.4);
+                color: #fff;
+            }
+        }
+    }
 }
 
 .navbar-brand {

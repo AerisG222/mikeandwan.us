@@ -141,13 +141,7 @@ but will try to get this well organized below to make it easy to follow.
 
 ## .NET Core
 
-- Adapted from this [guide](https://www.microsoft.com/net)
-    ```
-    sudo dnf install libunwind libicu
-    curl -sSL -o dotnet.tar.gz https://go.microsoft.com/fwlink/?LinkID=827531
-    sudo mkdir -p /opt/dotnet && sudo tar zxf dotnet.tar.gz -C /opt/dotnet
-    sudo ln -s /opt/dotnet/dotnet /usr/local/bin
-    ```
+- Follow [guide](https://www.microsoft.com/net/learn/get-started/linuxfedora)
 
 
 ## Nginx

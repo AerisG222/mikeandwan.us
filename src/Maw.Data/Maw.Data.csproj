@@ -13,8 +13,8 @@
     <ProjectReference Include="../Maw.Domain/Maw.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="1.50.3-beta1" />
-    <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.0-alpha8-165" />
+    <PackageReference Include="Dapper" Version="1.50.4-alpha1-00070" />
+    <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.0-alpha9-00206" />
     <PackageReference Include="Npgsql" Version="3.2.5" />
   </ItemGroup>
 </Project>

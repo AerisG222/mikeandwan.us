@@ -1,9 +1,7 @@
 <div class="row">
-    <div class="col-sm-12 text-center player disabled" [ngClass]="{selected : player === currentPlayer, red : player === currentPlayer}">
+    <div class="col text-center player disabled" [ngClass]="{selected : player === currentPlayer, red : player === currentPlayer}">
         <h4>{{player.character.name}}</h4>
-        <br />
-        <img [src]="player.character.imagePath" class="img-rounded" style="width: 150px; height: 150px;" />
-        <br />
+        <img [src]="player.character.imagePath" class="border-rounded mb-4" style="width: 150px; height: 150px;" />
         <h4>Money: ${{player.score}}</h4>
     </div>
 </div>

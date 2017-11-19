@@ -17,7 +17,7 @@ export class AppComponent {
     lessons: string[] = ['Letters', 'Numbers', 'Random'];
     currentSpeaker = 'Mommy';
     currentLesson = 'Letters';
-    currentChar = '';
+    currentChar = '&nbsp;';
     currentCharAudio = '';
     doRun = false;
     runButtonText = 'Start';

@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-sm-6 text-center player" [ngClass]="character.color" [class.selected]="isSelected(character)" [class.not_selected]="!isSelected(character)" (click)="selectCharacter(character)" *ngFor="let character of allCharacters">
-		<img [src]="character.img" class="img-circle" style="width: 150px; height: 192px;" />
+		<img [src]="character.img" class="rounded-circle" style="width: 150px; height: 192px;" />
 		<br/>
 		<strong>{{character.name}}</strong>
 	</div>

@@ -18,25 +18,19 @@
 </p>
 
 <form asp-controller="tools" asp-action="xmlvalidate" method="post" autocomplete="off" role="form">
-	<div class="form-group row" maw-for="@Model.XmlSource">
-		<label asp-for="XmlSource" class="col-sm-3 col-form-label"></label>
-        <div class="col-sm-9">
-			<textarea asp-for="XmlSource" rows="8" class="form-control" autofocus=""></textarea>
-			<span asp-validation-for="XmlSource" class="form-text"></span>
-        </div>
+	<div class="form-group">
+		<label asp-for="XmlSource" class="col-form-label"></label>
+		<textarea asp-for="XmlSource" rows="8" class="form-control" autofocus=""></textarea>
+		<span asp-validation-for="XmlSource" class="form-text"></span>
 	</div>
-    <div class="form-group row" maw-for="@Model.SchemaOrDtdSource">
-		<label asp-for="SchemaOrDtdSource" class="col-sm-3 col-form-label"></label>
-        <div class="col-sm-9">
-			<textarea asp-for="SchemaOrDtdSource" rows="8" class="form-control"></textarea>
-			<span asp-validation-for="SchemaOrDtdSource" class="form-text"></span>
-        </div>
+    <div class="form-group">
+		<label asp-for="SchemaOrDtdSource" class="col-form-label"></label>
+		<textarea asp-for="SchemaOrDtdSource" rows="8" class="form-control"></textarea>
+		<span asp-validation-for="SchemaOrDtdSource" class="form-text"></span>
 	</div>
 
-    <div class="form-group row">
-        <div class="offset-sm-3 col-sm-2">
-            <button type="submit" class="btn btn-primary">Validate</button>
-        </div>
+    <div class="form-group">
+		<button type="submit" class="btn btn-primary">Validate</button>
     </div>
 </form>
 

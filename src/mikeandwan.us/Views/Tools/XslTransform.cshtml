@@ -17,25 +17,19 @@
 </p>
 
 <form asp-controller="tools" asp-action="xsltransform" method="post" autocomplete="off" role="form">
-    <div class="form-group row" maw-for="@Model.XmlSource">
-		<label asp-for="XmlSource" class="col-sm-3 col-form-label"></label>
-        <div class="col-sm-9">
-			<textarea asp-for="XmlSource" rows="10" class="form-control" autofocus=""></textarea>
-			<span asp-validation-for="XmlSource" class="form-text"></span>
-        </div>
+    <div class="form-group">
+		<label asp-for="XmlSource" class="col-form-label"></label>
+		<textarea asp-for="XmlSource" rows="10" class="form-control" autofocus=""></textarea>
+		<span asp-validation-for="XmlSource" class="form-text"></span>
 	</div>
-	<div class="form-group row" maw-for="@Model.XsltSource">
-		<label asp-for="XsltSource" class="col-sm-3 col-form-label"></label>
-        <div class="col-sm-9">
-			<textarea asp-for="XsltSource" rows="10" class="form-control"></textarea>
-			<span asp-validation-for="XsltSource" class="form-text"></span>
-        </div>
+	<div class="form-group">
+		<label asp-for="XsltSource" class="col-form-label"></label>
+		<textarea asp-for="XsltSource" rows="10" class="form-control"></textarea>
+		<span asp-validation-for="XsltSource" class="form-text"></span>
 	</div>
 
-    <div class="form-group row">
-        <div class="offset-sm-3 col-sm-2">
-            <button type="submit" class="btn btn-primary">Transform</button>
-        </div>
+    <div class="form-group">
+		<button type="submit" class="btn btn-primary">Transform</button>
     </div>
 </form>
 

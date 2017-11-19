@@ -23,30 +23,36 @@ In an effort to facilitate decisions, this tool allows you to <i>roll the dice</
 </p>
 
 <form asp-controller="tools" asp-action="rollthedice" method="post" autocomplete="off" role="form">
-	<div class="form-group row" maw-for="@Model.NumberOfSides">
-		<label asp-for="NumberOfSides" class="col-sm-3 col-form-label"></label>
-        <div class="col-sm-2">
-			<input asp-for="NumberOfSides" class="form-control" autofocus="" />
-        </div>
-		<div class="col-sm-7">
-			<span asp-validation-for="NumberOfSides" class="form-text"></span>
+	<div class="form-group">
+		<div class="row">
+			<label asp-for="NumberOfSides" class="col col-form-label"></label>
+		</div>
+		<div class="row">
+			<div class="col-sm-4">
+				<input asp-for="NumberOfSides" class="form-control" autofocus="" />
+				<span asp-validation-for="NumberOfSides" class="form-text"></span>
+			</div>
 		</div>
     </div>
 
-    <div class="form-group row" maw-for="@Model.NumberOfThrows">
-		<label asp-for="NumberOfThrows" class="col-sm-3 col-form-label"></label>
-        <div class="col-sm-2">
-			<input asp-for="NumberOfThrows" class="form-control" />
-        </div>
-		<div class="col-sm-7">
-			<span asp-validation-for="NumberOfThrows" class="form-text"></span>
+    <div class="form-group">
+		<div class="row">
+			<label asp-for="NumberOfThrows" class="col col-form-label"></label>
+		</div>
+		<div class="row">
+			<div class="col-sm-4">
+				<input asp-for="NumberOfThrows" class="form-control" />
+				<span asp-validation-for="NumberOfThrows" class="form-text"></span>
+			</div>
 		</div>
 	</div>
 
-    <div class="form-group row">
-        <div class="offset-sm-3 col-sm-2">
-    	    <button type="submit" class="btn btn-primary">Roll</button>
-        </div>
+    <div class="form-group">
+		<div class="row">
+            <div class="col">
+   	    		<button type="submit" class="btn btn-primary">Roll</button>
+			</div>
+		</div>
     </div>
 </form>
 

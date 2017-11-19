@@ -29,46 +29,69 @@
     <p>Have something on your mind?  Let us know!</p>
 
     <form asp-controller="about" asp-action="contact" method="post" autocomplete="off" role="form">
-        <div class="form-group row" maw-for="@Model.FirstName">
-            <label asp-for="FirstName" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-6">
-                <input asp-for="FirstName" class="form-control" autofocus="" />
-                <span asp-validation-for="FirstName" class="form-text"></span>
+        <div class="form-group">
+            <div class="row">
+                <label asp-for="FirstName" class="col col-form-label"></label>
             </div>
-    	</div>
-        <div class="form-group row" maw-for="@Model.LastName">
-            <label asp-for="LastName" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-6">
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="form-text"></span>
-            </div>
-    	</div>
-        <div class="form-group row" maw-for="@Model.Email">
-            <label asp-for="Email" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-6">
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="form-text"></span>
-            </div>
-    	</div>
-        <div class="form-group row" maw-for="@Model.Message">
-            <label asp-for="Message" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-9">
-                <textarea asp-for="Message" rows="10" class="form-control"></textarea>
-                <span asp-validation-for="Message" class="form-text"></span>
+            <div class="row">
+                <div class="col-sm-6">
+                    <input asp-for="FirstName" class="form-control" autofocus="" />
+                    <span asp-validation-for="FirstName" class="form-text"></span>
+                </div>
             </div>
     	</div>
 
-        <div class="form-group row" maw-for="@Model.IsHuman">
-            <div class="offset-sm-3 col-sm-6">
-                @Html.Partial("_GoogleRecaptcha", @Model.RecaptchaSiteKey)
-                <span asp-validation-for="IsHuman" class="form-text"></span>
+        <div class="form-group">
+            <div class="row">
+                <label asp-for="LastName" class="col col-form-label"></label>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="form-text"></span>
+                </div>
+            </div>
+    	</div>
+
+        <div class="form-group">
+            <div class="row">
+                <label asp-for="Email" class="col col-form-label"></label>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="form-text"></span>
+                </div>
+            </div>
+    	</div>
+
+        <div class="form-group">
+            <div class="row">
+                <label asp-for="Message" class="col col-form-label"></label>
+            </div>
+            <div class="row">
+                <div class="col-sm-9">
+                    <textarea asp-for="Message" rows="10" class="form-control"></textarea>
+                    <span asp-validation-for="Message" class="form-text"></span>
+                </div>
+            </div>
+    	</div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    @Html.Partial("_GoogleRecaptcha", @Model.RecaptchaSiteKey)
+                    <span asp-validation-for="IsHuman" class="form-text"></span>
+                </div>
             </div>
         </div>
 
-        <div class="form-group row">
-            <div class="offset-sm-3 col-sm-2">
-        		<button type="submit" class="btn btn-primary">Submit</button>
-        	</div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
         </div>
     </form>
 }

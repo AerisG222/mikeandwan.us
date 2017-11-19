@@ -16,41 +16,46 @@
 <form asp-controller="account" asp-action="editprofile" method="post" autocomplete="off" role="form">
 	<fieldset>
     	<legend>General</legend>
-        <div class="form-group row">
+        <div class="form-row">
             <label asp-for="Username" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-6">
+            <div class="col-sm-">
     		    <label class="col-form-label">@Model.Username</label>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.FirstName">
+
+        <div class="form-row">
             <label asp-for="FirstName" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
                 <input asp-for="FirstName" class="form-control" autofocus="" />
                 <span asp-validation-for="FirstName" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.LastName">
+
+        <div class="form-row">
             <label asp-for="LastName" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.DateOfBirth">
+
+        <div class="form-row">
             <label asp-for="DateOfBirth" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
     		    <input asp-for="DateOfBirth" class="form-control" />
                 <span asp-validation-for="DateOfBirth" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.Company">
+
+        <div class="form-row">
             <label asp-for="Company" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
     		    <input asp-for="Company" class="form-control" />
                 <span asp-validation-for="Company" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.Position">
+
+        <div class="form-row">
             <label asp-for="Position" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
     		    <input asp-for="Position" class="form-control" />
@@ -61,84 +66,95 @@
 
 	<fieldset>
     	<legend>Address</legend>
-        <div class="form-group row" maw-for="@Model.PersonalEmail">
+        <div class="form-row">
             <label asp-for="PersonalEmail" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
     		    <input asp-for="PersonalEmail" class="form-control" />
                 <span asp-validation-for="PersonalEmail" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.WorkEmail">
+
+        <div class="form-row">
             <label asp-for="WorkEmail" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
     		    <input asp-for="WorkEmail" class="form-control" />
                 <span asp-validation-for="WorkEmail" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.HomePhone">
+
+        <div class="form-row">
             <label asp-for="HomePhone" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
     		    <input asp-for="HomePhone" class="form-control" />
                 <span asp-validation-for="HomePhone" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.MobilePhone">
+
+        <div class="form-row">
             <label asp-for="MobilePhone" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
     		    <input asp-for="MobilePhone" class="form-control" />
                 <span asp-validation-for="MobilePhone" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.WorkPhone">
+
+        <div class="form-row">
             <label asp-for="WorkPhone" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
     		    <input asp-for="WorkPhone" class="form-control" />
                 <span asp-validation-for="WorkPhone" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.Address1">
+
+        <div class="form-row">
             <label asp-for="Address1" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
     		    <input asp-for="Address1" class="form-control" />
                 <span asp-validation-for="Address1" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.Address2">
+
+        <div class="form-row">
             <label asp-for="Address2" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
     		    <input asp-for="Address2" class="form-control" />
                 <span asp-validation-for="Address2" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.City">
+
+        <div class="form-row">
             <label asp-for="City" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
     		    <input asp-for="City" class="form-control" />
                 <span asp-validation-for="City" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.State">
+
+        <div class="form-row">
             <label asp-for="State" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
                 <select class="form-control" asp-for="State" asp-items="(IEnumerable<SelectListItem>)ViewBag.States"></select>
                 <span asp-validation-for="State" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.PostalCode">
+
+        <div class="form-row">
             <label asp-for="PostalCode" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
     		    <input asp-for="PostalCode" class="form-control" />
                 <span asp-validation-for="PostalCode" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.Country">
+
+        <div class="form-row">
             <label asp-for="Country" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
                 <select class="form-control" asp-for="Country" asp-items="(IEnumerable<SelectListItem>)ViewBag.Countries"></select>
                 <span asp-validation-for="Country" class="form-text"></span>
             </div>
     	</div>
-        <div class="form-group row" maw-for="@Model.Website">
+
+        <div class="form-row">
             <label asp-for="Website" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
     		    <input asp-for="Website" class="form-control" />

@@ -17,36 +17,26 @@
 
 <form asp-controller="tools" asp-action="urlencode" method="post" autocomplete="off" role="form">
 	<input type="hidden" name="Mode" value="@EncodeMode.Encode" />
-	<div class="form-group row" maw-for="@Model.DecodedString">
-        <label asp-for="DecodedString" class="col-sm-3 col-form-label"></label>
-        <div class="col-sm-9">
-            <textarea asp-for="DecodedString" rows="8" class="form-control" autofocus=""></textarea>
-            <span asp-validation-for="DecodedString" class="form-text"></span>
-        </div>
+	<div class="form-group">
+        <label asp-for="DecodedString" class="col-form-label"></label>
+        <textarea asp-for="DecodedString" rows="8" class="form-control" autofocus=""></textarea>
+        <span asp-validation-for="DecodedString" class="form-text"></span>
 	</div>
 
-    <div class="form-group row">
-        <div class="offset-sm-3 col-sm-2">
-            <button type="submit" class="btn btn-primary">Encode</button>
-        </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Encode</button>
     </div>
 </form>
 
-<br/>
-
 <form asp-controller="tools" asp-action="urlencode" method="post" autocomplete="off" role="form">
 	<input type="hidden" name="Mode" value="@EncodeMode.Decode" />
-    <div class="form-group row" maw-for="@Model.EncodedString">
-        <label asp-for="EncodedString" class="col-sm-3 col-form-label"></label>
-        <div class="col-sm-9">
-            <textarea asp-for="EncodedString" rows="8" class="form-control"></textarea>
-            <span asp-validation-for="EncodedString" class="form-text"></span>
-        </div>
+    <div class="form-group">
+        <label asp-for="EncodedString" class="col-form-label"></label>
+        <textarea asp-for="EncodedString" rows="8" class="form-control"></textarea>
+        <span asp-validation-for="EncodedString" class="form-text"></span>
 	</div>
 
-    <div class="form-group row">
-        <div class="offset-sm-3 col-sm-2">
-            <button type="submit" class="btn btn-primary">Decode</button>
-        </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Decode</button>
     </div>
 </form>

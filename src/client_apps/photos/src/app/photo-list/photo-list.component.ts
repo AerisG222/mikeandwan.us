@@ -2,6 +2,8 @@ import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { trigger, state, style, transition, useAnimation } from '@angular/animations';
 
+import { NgbModal, NgbPagination } from '@ng-bootstrap/ng-bootstrap';
+
 import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
 import { PagerComponent } from '../../ng_maw/pager/pager.component';
 import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
@@ -34,16 +36,16 @@ import { PhotoDialogComponent } from '../photo-dialog/photo-dialog.component';
     ]
 })
 export class PhotoListComponent implements AfterViewInit, OnDestroy {
-    @ViewChild(PagerComponent) pager: PagerComponent;
+    @ViewChild(NgbPagination) pager: NgbPagination;
     @ViewChild(ThumbnailListComponent) thumbnailList: ThumbnailListComponent;
-    @ViewChild(PhotoDialogComponent) private _photoDialog: PhotoDialogComponent;
     private _modeInfo: RouteMode = null;
     private _photoSource: PhotoSource = null;
     showMapView = false;
     showPhotoView = false;
     context: PhotoListContext;
 
-    constructor(private _dataService: PhotoDataService,
+    constructor(private _modalService: NgbModal,
+                private _dataService: PhotoDataService,
                 private _stateService: PhotoStateService,
                 private _responsiveService: ResponsiveService,
                 private _activatedRoute: ActivatedRoute,
@@ -124,8 +126,8 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
         this.context.terminateSlideshow();
     }
 
-    onChangePage(pageIndex: number): void {
-        this.thumbnailList.setPageDisplayedIndex(pageIndex);
+    onChangePage(page: number): void {
+        this.thumbnailList.setPageDisplayedIndex(page - 1);
     }
 
     onThumbnailSelected(item: SelectedThumbnail): void {
@@ -133,11 +135,11 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
     }
 
     onPhotoUpdated(index: number): void {
-        this.pager.activatePage(this.pager.calcActivePage(index, this.thumbnailList.itemsPerPage));
         this.thumbnailList.setItemSelectedIndex(index);
 
         if (!this.showPhotoView && !this.showMapView) {
-            this._photoDialog.show();
+            const modal = this._modalService.open(PhotoDialogComponent);
+            modal.componentInstance.photo = this.context.current.photo;
         }
     }
 
@@ -152,7 +154,6 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
     }
 
     private updatePager() {
-        this.pager.setPageCount(this.pager.calcPageCount(this.thumbnailList.itemList.length, this.thumbnailList.itemsPerPage));
-        this.pager.setActivePage(this.thumbnailList.pageDisplayedIndex);
+        this.pager.page = this.thumbnailList.pageDisplayedIndex + 1;
     }
 }

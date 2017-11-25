@@ -2,8 +2,9 @@ import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { animate, state, style, transition, trigger, useAnimation } from '@angular/animations';
 
+import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
+
 import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
-import { PagerComponent } from '../../ng_maw/pager/pager.component';
 import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
 import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
 import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
@@ -23,7 +24,7 @@ import { Config, ModeRouteInfo, PhotoNavigationService, PhotoStateService, Categ
     ]
 })
 export class CategoryListComponent implements AfterViewInit {
-    @ViewChild(PagerComponent) pager: PagerComponent;
+    @ViewChild(NgbPagination) pager: NgbPagination;
     @ViewChild(ThumbnailListComponent) thumbnailList: ThumbnailListComponent;
     private _year: number = null;
 
@@ -57,7 +58,7 @@ export class CategoryListComponent implements AfterViewInit {
                         x.category.hasGpsData ? SvgIcon.MapMarker : null));
 
                     this.thumbnailList.setItemList(d);
-                    this.pager.setPageCount(this.pager.calcPageCount(d.length, this.thumbnailList.itemsPerPage));
+                    // this.pager.setPageCount(this.pager.calcPageCount(d.length, this.thumbnailList.itemsPerPage));
 
                     const lastIndex = this._stateService.lastCategoryIndex;
 
@@ -65,15 +66,15 @@ export class CategoryListComponent implements AfterViewInit {
                         const page = Math.floor(lastIndex / this.thumbnailList.itemsPerPage);
 
                         this.thumbnailList.setPageDisplayedIndex(page);
-                        this.pager.setActivePage(page);
+                        this.pager.page = page;
                     }
                 });
         });
     }
 
-    onChangePage(pageIndex: number) {
-        if (pageIndex >= 0) {
-            this.thumbnailList.setPageDisplayedIndex(pageIndex);
+    onChangePage(page: number) {
+        if (page >= 0) {
+            this.thumbnailList.setPageDisplayedIndex(page - 1);
         }
     }
 
@@ -90,7 +91,6 @@ export class CategoryListComponent implements AfterViewInit {
     }
 
     private updatePager() {
-        this.pager.setPageCount(this.pager.calcPageCount(this.thumbnailList.itemList.length, this.thumbnailList.itemsPerPage));
-        this.pager.setActivePage(this.thumbnailList.pageDisplayedIndex);
+        this.pager.page = this.thumbnailList.pageDisplayedIndex + 1;
     }
 }

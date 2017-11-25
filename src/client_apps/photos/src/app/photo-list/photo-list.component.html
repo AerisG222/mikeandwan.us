@@ -3,8 +3,10 @@
     <app-photo-view [@fadeInOut]="'in'" class="col-xs-12" *ngIf="showPhotoView && context?.current" [context]="context"></app-photo-view>
 </div>
 <div [@fadeInOut]="'in'">
-    <maw-pager (pageSelected)="onChangePage($event)"></maw-pager>
-    <maw-thumbnail-list (selected)="onThumbnailSelected($event)"></maw-thumbnail-list>
+    <div class="row">
+        <div class="col mt-2">
+            <ngb-pagination [collectionSize]="t.itemList.length" [pageSize]="t.itemsPerPage" [size]="'sm'" (pageChange)="onChangePage($event)" #p></ngb-pagination>
+        </div>
+    </div>
+    <maw-thumbnail-list (selected)="onThumbnailSelected($event)" #t></maw-thumbnail-list>
 </div>
-
-<app-photo-dialog [photo]="context?.current?.photo"></app-photo-dialog>

@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
 
-import { VideoStateService } from '../shared/video-state.service';
+import { PreferenceDialogComponent } from '../preference-dialog/preference-dialog.component';
 
 @Component({
     selector: 'app-header',
@@ -12,11 +14,11 @@ import { VideoStateService } from '../shared/video-state.service';
 export class HeaderComponent {
     svgIcon = SvgIcon;
 
-    constructor(private _stateService: VideoStateService) {
+    constructor(private modalService: NgbModal) {
 
     }
 
     clickConfig(): void {
-        this._stateService.showPreferencesDialog();
+        const modalRef = this.modalService.open(PreferenceDialogComponent);
     }
 }

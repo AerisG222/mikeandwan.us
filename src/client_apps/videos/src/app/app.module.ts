@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { BreadcrumbListComponent } from '../ng_maw/breadcrumb-list/breadcrumb-list.component';
-import { DialogComponent } from '../ng_maw/dialog/dialog.component';
-import { PagerComponent } from '../ng_maw/pager/pager.component';
 import { ThumbnailListComponent } from '../ng_maw/thumbnail-list/thumbnail-list.component';
 import { BreadcrumbService } from '../ng_maw/shared/breadcrumb.service';
 import { LocalStorageService } from '../ng_maw/shared/local-storage.service';
@@ -29,6 +29,7 @@ import { VideoStateService } from './shared/video-state.service';
         BrowserAnimationsModule,
         FormsModule,
         HttpClientModule,
+        NgbModule.forRoot(),
         RouterModule.forRoot([
             { path: '',                component: YearListComponent },
             { path: ':year',           component: CategoryListComponent },
@@ -39,8 +40,6 @@ import { VideoStateService } from './shared/video-state.service';
     declarations: [
         AppComponent,
         BreadcrumbListComponent,
-        DialogComponent,
-        PagerComponent,
         SvgIconComponent,
         ThumbnailListComponent,
         CategoryListComponent,
@@ -57,6 +56,9 @@ import { VideoStateService } from './shared/video-state.service';
         VideoDataService,
         VideoNavigationService,
         VideoStateService
+    ],
+    entryComponents: [
+        PreferenceDialogComponent
     ],
     bootstrap: [
         AppComponent

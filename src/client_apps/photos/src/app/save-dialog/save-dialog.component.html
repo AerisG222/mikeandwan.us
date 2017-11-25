@@ -1,4 +1,13 @@
-<maw-dialog (buttonClick)="hide($event)">
+<div class="modal-header">
+		<h4 class="modal-title">{{title}}</h4>
+		<button type="button" class="close" aria-label="Close" (click)="close()">
+		  <span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+<div class="modal-body">
 	<img [src]="photoInfo?.path" class="img-responsive" />
 	<p>To save, right click on the image and choose "Save Image As..."</p>
-</maw-dialog>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-primary" (click)="close()">Close</button>
+</div>

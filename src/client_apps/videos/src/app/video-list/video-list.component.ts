@@ -2,8 +2,9 @@ import { Component, ViewChild, ChangeDetectorRef, AfterViewInit, OnInit } from '
 import { ActivatedRoute } from '@angular/router';
 import { state, style, transition, trigger, useAnimation } from '@angular/animations';
 
+import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
+
 import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
-import { PagerComponent } from '../../ng_maw/pager/pager.component';
 import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
 import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
 
@@ -28,7 +29,7 @@ import { VideoThumbnailInfo } from '../shared/video-thumbnail-info.model';
     ]
 })
 export class VideoListComponent implements OnInit, AfterViewInit {
-    @ViewChild(PagerComponent) pager: PagerComponent;
+    @ViewChild(NgbPagination) pager: NgbPagination;
     @ViewChild(ThumbnailListComponent) thumbnailList: ThumbnailListComponent;
     categoryId: number = null;
     year: number = null;
@@ -78,8 +79,8 @@ export class VideoListComponent implements OnInit, AfterViewInit {
         });
     }
 
-    onChangePage(pageIndex: number): void {
-        this.thumbnailList.setPageDisplayedIndex(pageIndex);
+    onChangePage(page: number): void {
+        this.thumbnailList.setPageDisplayedIndex(page - 1);
     }
 
     onThumbnailSelected(item: SelectedThumbnail): void {
@@ -102,7 +103,6 @@ export class VideoListComponent implements OnInit, AfterViewInit {
         );
 
         this.thumbnailList.setItemList(thumbnails);
-        this.pager.setPageCount(Math.ceil(thumbnails.length / this.thumbnailList.itemsPerPage));
     }
 
     updateVideo(): void {
@@ -120,7 +120,6 @@ export class VideoListComponent implements OnInit, AfterViewInit {
     }
 
     private updatePager() {
-        this.pager.setPageCount(this.pager.calcPageCount(this.thumbnailList.itemList.length, this.thumbnailList.itemsPerPage));
-        this.pager.setActivePage(this.thumbnailList.pageDisplayedIndex);
+        this.pager.page = this.thumbnailList.pageDisplayedIndex + 1;
     }
 }

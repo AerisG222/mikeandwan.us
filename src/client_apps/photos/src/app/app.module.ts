@@ -4,10 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 import { BreadcrumbListComponent } from '../ng_maw/breadcrumb-list/breadcrumb-list.component';
-import { DialogComponent } from '../ng_maw/dialog/dialog.component';
-import { PagerComponent } from '../ng_maw/pager/pager.component';
-import { RatingComponent } from '../ng_maw/rating/rating.component';
 import { ThumbnailListComponent } from '../ng_maw/thumbnail-list/thumbnail-list.component';
 import { BreadcrumbService } from '../ng_maw/shared/breadcrumb.service';
 import { LocalStorageService } from '../ng_maw/shared/local-storage.service';
@@ -46,6 +45,7 @@ import { RouteMode } from './shared/route-mode.model';
         BrowserAnimationsModule,
         FormsModule,
         HttpClientModule,
+        NgbModule.forRoot(),
         RouterModule.forRoot([
             { path: '',                     component: ModeComponent,         data: { animation: 'home' } },
             { path: 'random',               component: PhotoListComponent,    data: { animation: 'random', mode: RouteMode.Random } },
@@ -60,9 +60,6 @@ import { RouteMode } from './shared/route-mode.model';
     declarations: [
         AppComponent,
         BreadcrumbListComponent,
-        DialogComponent,
-        PagerComponent,
-        RatingComponent,
         SvgIconComponent,
         ThumbnailListComponent,
         CategoryLinkComponent,
@@ -92,6 +89,12 @@ import { RouteMode } from './shared/route-mode.model';
         PhotoSourceFactory,
         PhotoStateService,
         PhotoNavigationService
+    ],
+    entryComponents: [
+        HelpDialogComponent,
+        PhotoDialogComponent,
+        PreferenceDialogComponent,
+        SaveDialogComponent
     ],
     bootstrap: [
         AppComponent

@@ -1,17 +1,28 @@
-<maw-dialog (buttonClick)="execute($event)">
-    <form class="form-horizontal">
-        <div class="form-group">
-            <label for="prefsDisplayMode" class="col-sm-6 control-label">Photo Display Mode</label>
-            <div class="col-sm-6">
+<div class="modal-header">
+    <h4 class="modal-title">Preferences</h4>
+    <button type="button" class="close" aria-label="Close" (click)="cancel()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form>
+        <div class="row">
+            <div class="col">
+                <label for="prefsDisplayMode" class="col-form-label">Photo Display Mode</label>
+            </div>
+            <div class="col">
                 <select id="prefsDisplayMode" class="form-control" [(ngModel)]="form.displayMode" name="displayMode">
                     <option value="1">Inline View</option>
                     <option value="2">Popup (optimized for small screens)</option>
                 </select>
             </div>
         </div>
-        <div class="form-group">
-            <label for="prefsThumbrowcount" class="col-sm-6 control-label">Thumbnail Rows Per Page</label>
-            <div class="col-sm-3">
+
+        <div class="row">
+            <div class="col">
+                <label for="prefsThumbrowcount" class="col-form-label">Thumbnail Rows Per Page</label>
+            </div>
+            <div class="col">
                 <select id="prefsThumbrowcount" class="form-control" [(ngModel)]="form.rowCount" name="rowCount">
                     <option>1</option>
                     <option>2</option>
@@ -21,9 +32,12 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
-            <label for="prefsSlideshowInterval" class="col-sm-6 control-label">Slideshow Interval</label>
-            <div class="col-sm-3">
+
+        <div class="row">
+            <div class="col">
+                <label for="prefsSlideshowInterval" class="col-form-label">Slideshow Interval</label>
+            </div>
+            <div class="col">
                 <select id="prefsSlideshowInterval" class="form-control" [(ngModel)]="form.slideshowInterval" name="slideshowInterval">
                     <option>1</option>
                     <option>2</option>
@@ -36,4 +50,8 @@
             </div>
         </div>
     </form>
-</maw-dialog>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="cancel()">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+</div>

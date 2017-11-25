@@ -2,8 +2,9 @@ import { Component, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular
 import { ActivatedRoute } from '@angular/router';
 import { trigger, state, style, transition, useAnimation } from '@angular/animations';
 
+import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
+
 import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
-import { PagerComponent } from '../../ng_maw/pager/pager.component';
 import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
 import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
 
@@ -27,7 +28,7 @@ import { VideoStateService } from '../shared/video-state.service';
     ]
 })
 export class CategoryListComponent implements AfterViewInit {
-    @ViewChild(PagerComponent) pager: PagerComponent;
+    @ViewChild(NgbPagination) pager: NgbPagination;
     @ViewChild(ThumbnailListComponent) thumbnailList: ThumbnailListComponent;
     year: number = -1;
     categories: Array<ICategory> = [];
@@ -75,11 +76,10 @@ export class CategoryListComponent implements AfterViewInit {
         );
 
         this.thumbnailList.setItemList(thumbnails);
-        this.pager.setPageCount(Math.ceil(thumbnails.length / this.thumbnailList.itemsPerPage));
     }
 
-    onChangePage(pageIndex: number): void {
-        this.thumbnailList.setPageDisplayedIndex(pageIndex);
+    onChangePage(page: number): void {
+        this.thumbnailList.setPageDisplayedIndex(page - 1);
     }
 
     onThumbnailSelected(item: SelectedThumbnail): void {
@@ -90,7 +90,6 @@ export class CategoryListComponent implements AfterViewInit {
     }
 
     private updatePager() {
-        this.pager.setPageCount(this.pager.calcPageCount(this.thumbnailList.itemList.length, this.thumbnailList.itemsPerPage));
-        this.pager.setActivePage(this.thumbnailList.pageDisplayedIndex);
+        this.pager.page = this.thumbnailList.pageDisplayedIndex + 1;
     }
 }

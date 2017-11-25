@@ -1,7 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
-
-import { PreferenceDialogComponent } from './preference-dialog/preference-dialog.component';
-import { VideoStateService } from './shared/video-state.service';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-root',
@@ -9,15 +6,5 @@ import { VideoStateService } from './shared/video-state.service';
     styleUrls: [ './app.component.css' ]
 })
 export class AppComponent {
-    @ViewChild(PreferenceDialogComponent) preferenceDialog: PreferenceDialogComponent;
 
-    constructor(private _stateService: VideoStateService) {
-        this._stateService.showPreferencesEventEmitter.subscribe(
-            (val: any) => this.showPreferencesDialog()
-        );
-    }
-
-    showPreferencesDialog(): void {
-        this.preferenceDialog.show();
-    }
 }

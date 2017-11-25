@@ -7,7 +7,6 @@ import { Config } from './config.model';
 @Injectable()
 export class VideoStateService {
     private static KEY_CONFIG = 'videoConfig';
-    showPreferencesEventEmitter: EventEmitter<any> = new EventEmitter<any>();
     configUpdatedEventEmitter: EventEmitter<Config> = new EventEmitter<Config>();
     config: Config;
     lastCategoryIndex: number;
@@ -20,9 +19,5 @@ export class VideoStateService {
     saveConfig(): void {
         this._storageService.set(VideoStateService.KEY_CONFIG, this.config);
         this.configUpdatedEventEmitter.next(this.config);
-    }
-
-    showPreferencesDialog(): void {
-        this.showPreferencesEventEmitter.next(null);
     }
 }

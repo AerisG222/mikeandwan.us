@@ -1,9 +1,11 @@
-<div *ngFor="let row of displayedRows; let rowIndex = index" class="row thumbnail-list-row">
-    <div *ngFor="let item of row; let itemIndex = index" class="col-sm-3 col-lg-2 text-center" [ngClass]="{active: activeItem == item || hoverItem == item }">
-        <div class="thumbnail" (click)="selectItem(item, rowIndex, itemIndex)">
-            <img [src]="item.imageUrl" [ngStyle]="{height: item.imageHeight + 'px', width: item.imageWidth + 'px'}" />
+<div *ngFor="let row of displayedRows; let rowIndex = index">
+    <div class="card-deck mb-3">
+        <div class="card" *ngFor="let item of row" (click)="selectItem(item, rowIndex, itemIndex)" [ngClass]="{active: activeItem == item || hoverItem == item }">
+            <img class="card-img-top" [src]="item.imageUrl" [ngStyle]="{height: item.imageHeight + 'px', width: item.imageWidth + 'px'}" />
             <app-svg-icon *ngIf="item.icon" [klass]="'icon badge'" [icon]="item.icon"></app-svg-icon>
+            <div class="card-body p-2 text-center">
+                <a *ngIf="item.title" (click)="selectItem(item, rowIndex, itemIndex)" (mouseover)="hoverItem = item" (mouseout)="hoverItem = null">{{item.title}}</a>
+            </div>
         </div>
-        <a *ngIf="item.title" (click)="selectItem(item, rowIndex, itemIndex)" (mouseover)="hoverItem = item" (mouseout)="hoverItem = null">{{item.title}}</a>
     </div>
 </div>

@@ -15,23 +15,23 @@
     	<div class="row toolbar hidden-xs">
             <div class="left col-sm-4">
                 <div class="btn-group">
-            		<button type="button" class="btn btn-default btn-xs" (click)="toggleComments()" [ngClass]="{active: showComments}" title="comments"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Comment"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="toggleRatings()" [ngClass]="{active: showRatings}" title="ratings"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Star"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="toggleExif()" [ngClass]="{active: showExif}" title="exif"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.InfoCircle"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="rotate(-1)" title="rotate counter-clockwise"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.RotateLeft"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="rotate(1)" title="rotate clockwise"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.RotateRight"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="toggleHistogram()" [ngClass]="{active: showHistogram}" [hidden]="!showHistogramButton" title="histogram"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.BarChart"></app-svg-icon></button>
-                    <button type="button" class="btn btn-default btn-xs" (click)="toggleFullscreen()" title="full screen"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Expand"></app-svg-icon></button>
-                    <button type="button" class="btn btn-default btn-xs" (click)="toggleHelp()" title="help"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Keyboard"></app-svg-icon></button>
-                    <button type="button" class="btn btn-default btn-xs" [hidden]="!supportCssFilters" (click)="toggleEffects()" [ngClass]="{active: showEffects}" title="effects"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Adjust"></app-svg-icon></button>
+            		<button type="button" class="btn btn-primary btn-xs" (click)="toggleComments()" [ngClass]="{active: showComments}" title="comments"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Comment"></app-svg-icon></button>
+            		<button type="button" class="btn btn-primary btn-xs" (click)="toggleRatings()" [ngClass]="{active: showRatings}" title="ratings"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Star"></app-svg-icon></button>
+            		<button type="button" class="btn btn-primary btn-xs" (click)="toggleExif()" [ngClass]="{active: showExif}" title="exif"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.InfoCircle"></app-svg-icon></button>
+            		<button type="button" class="btn btn-primary btn-xs" (click)="rotate(-1)" title="rotate counter-clockwise"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.RotateLeft"></app-svg-icon></button>
+            		<button type="button" class="btn btn-primary btn-xs" (click)="rotate(1)" title="rotate clockwise"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.RotateRight"></app-svg-icon></button>
+            		<button type="button" class="btn btn-primary btn-xs" (click)="toggleHistogram()" [ngClass]="{active: showHistogram}" [hidden]="!showHistogramButton" title="histogram"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.BarChart"></app-svg-icon></button>
+                    <button type="button" class="btn btn-primary btn-xs" (click)="toggleFullscreen()" title="full screen"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Expand"></app-svg-icon></button>
+                    <button type="button" class="btn btn-primary btn-xs" (click)="toggleHelp()" title="help"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Keyboard"></app-svg-icon></button>
+                    <button type="button" class="btn btn-primary btn-xs" [hidden]="!supportCssFilters" (click)="toggleEffects()" [ngClass]="{active: showEffects}" title="effects"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Adjust"></app-svg-icon></button>
                 </div>
             </div>
             <div class="text-center col-sm-4">
                 <div class="btn-group">
-            		<button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.smInfo)" title="small (email)"><app-svg-icon [klass]="'icon icon-bright icon-sm vcenter'" [icon]="svgIcon.Image"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.mdInfo)" title="medium (email)"><app-svg-icon [klass]="'icon icon-bright icon-md vcenter'" [icon]="svgIcon.Image"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.lgInfo)" title="large (prints)"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Image"></app-svg-icon></button>
-                    <button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.prtInfo)" title="large/untouched (prints)"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Image"></app-svg-icon></button>
+            		<button type="button" class="btn btn-primary btn-xs" (click)="showDownload(photo.smInfo)" title="small (email)"><app-svg-icon [klass]="'icon icon-bright icon-sm vcenter'" [icon]="svgIcon.Image"></app-svg-icon></button>
+            		<button type="button" class="btn btn-primary btn-xs" (click)="showDownload(photo.mdInfo)" title="medium (email)"><app-svg-icon [klass]="'icon icon-bright icon-md vcenter'" [icon]="svgIcon.Image"></app-svg-icon></button>
+            		<button type="button" class="btn btn-primary btn-xs" (click)="showDownload(photo.lgInfo)" title="large (prints)"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Image"></app-svg-icon></button>
+                    <button type="button" class="btn btn-primary btn-xs" (click)="showDownload(photo.prtInfo)" title="large/untouched (prints)"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Image"></app-svg-icon></button>
                 </div>
             </div>
             <div class="right col-sm-4">
@@ -50,6 +50,3 @@
         </div>
     </div>
 </div>
-
-<app-help-dialog></app-help-dialog>
-<app-save-dialog></app-save-dialog>

@@ -1,6 +1,6 @@
 <div class="row" [@fadeInOut]="'in'" *ngIf="displayedVideo">
-    <div class="col-sm-12">
-        <video class="center-block" autoplay="false" [ngStyle]="{height: displayedVideo.height + 'px', width: displayedVideo.width + 'px'}" controls>
+    <div class="col">
+        <video class="center-block d-flex justify-content-center" autoplay="false" [ngStyle]="{height: displayedVideo.height + 'px', width: displayedVideo.width + 'px'}" controls>
             <source [src]="displayedVideo.path" type="video/mp4" />
             Your browser does not support the <code>video</code> element.
         </video>
@@ -8,8 +8,12 @@
 </div>
 
 <div class="row" [@fadeInOut]="'in'">
-    <div class="col-sm-12">
-        <maw-pager (pageSelected)="onChangePage($event)"></maw-pager>
-        <maw-thumbnail-list (selected)="onThumbnailSelected($event)"></maw-thumbnail-list>
+    <div class="col">
+        <div class="row">
+            <div class="col mt-2">
+                <ngb-pagination [collectionSize]="t.itemList.length" [pageSize]="t.itemsPerPage" [size]="'sm'" (pageChange)="onChangePage($event)" #p></ngb-pagination>
+            </div>
+        </div>
+        <maw-thumbnail-list (selected)="onThumbnailSelected($event)" #t></maw-thumbnail-list>
     </div>
 </div>

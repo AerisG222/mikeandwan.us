@@ -1,12 +1,26 @@
-<maw-dialog [title]="title" (buttonClick)="execute($event)">
+<div class="modal-header">
+    <h4 class="modal-title">Preferences</h4>
+    <button type="button" class="close" aria-label="Close" (click)="cancel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
     <form>
         <div class="row">
-            <div class="col-sm-3">
-                <label for="prefsWide">Large Movies?</label>
+            <div class="col">
+                <label for="prefsWide" class="col-form-label">Large Movies?</label>
             </div>
-            <div class="col-sm-2">
-                <input id="prefsWide" type="checkbox" [(ngModel)]="form.preferLarge" name="preferLarge" />
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" id="prefsWide" type="checkbox" [(ngModel)]="form.preferLarge" name="preferLarge" />
+                    </label>
+                </div>
             </div>
         </div>
     </form>
-</maw-dialog>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="cancel()">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+</div>

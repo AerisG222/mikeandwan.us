@@ -241,6 +241,13 @@ namespace MawMvcApp.Controllers
 			if(ModelState.IsValid)
 			{
 				var user = await _userMgr.FindByEmailAsync(model.Email);
+
+				// legacy users might not have the security stamp set.  if so, set it here, as a non-null security stamp is requilred for this to work
+				if(string.IsNullOrEmpty(user.SecurityStamp))
+				{
+					await _userMgr.UpdateSecurityStampAsync(user);
+				}
+
 				var code = await _userMgr.GeneratePasswordResetTokenAsync(user);
 				var callbackUrl = Url.Action("ResetPassword", "Account", new { user.Email, code }, Request.Scheme);
 

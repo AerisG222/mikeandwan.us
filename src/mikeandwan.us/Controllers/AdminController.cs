@@ -20,11 +20,12 @@ using MawMvcApp.ViewModels.Email;
 using MawMvcApp.ViewModels.Navigation;
 using Mvc.RenderViewToString;
 
+
 namespace MawMvcApp.Controllers
 {
 	[Authorize(MawConstants.POLICY_ADMIN_SITE)]
 	[Route("admin")]
-    public class AdminController 
+    public class AdminController
         : MawBaseController<AdminController>
     {
         readonly IUserRepository _repo;
@@ -36,12 +37,12 @@ namespace MawMvcApp.Controllers
 		readonly RazorViewToStringRenderer _razorRenderer;
 
 
-		public AdminController(ILogger<AdminController> log, 
-							   IOptions<EmailConfig> emailOpts, 
-							   IUserRepository userRepository,  
-		                       UserManager<MawUser> userManager, 
-							   RoleManager<MawRole> roleManager, 
-							   IBlogService blogService, 
+		public AdminController(ILogger<AdminController> log,
+							   IOptions<EmailConfig> emailOpts,
+							   IUserRepository userRepository,
+		                       UserManager<MawUser> userManager,
+							   RoleManager<MawRole> roleManager,
+							   IBlogService blogService,
 							   IEmailService emailService,
 							   RazorViewToStringRenderer razorRenderer)
 			: base(log)
@@ -50,7 +51,7 @@ namespace MawMvcApp.Controllers
 			{
 				throw new ArgumentNullException(nameof(emailOpts));
 			}
-			
+
 			_emailConfig = emailOpts.Value;
             _repo = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
 			_userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
@@ -68,8 +69,8 @@ namespace MawMvcApp.Controllers
 
             return View();
         }
-		
-		
+
+
 		[HttpGet("manage-users")]
 		public async Task<ActionResult> ManageUsers()
 		{
@@ -77,7 +78,7 @@ namespace MawMvcApp.Controllers
 
 			var result = await _repo.GetUsersToManageAsync();
 
-			var model = result.Select(x => new ManageUserModel 
+			var model = result.Select(x => new ManageUserModel
 			{
 				Username = x.Username,
 				FirstName = x.FirstName,
@@ -87,8 +88,8 @@ namespace MawMvcApp.Controllers
 
             return View(model);
 		}
-		
-		
+
+
 		[HttpGet("manage-roles")]
 		public async Task<ActionResult> ManageRoles()
 		{
@@ -96,17 +97,17 @@ namespace MawMvcApp.Controllers
 
 			return View(await _repo.GetAllRoleNamesAsync());
 		}
-		
-		
+
+
 		[HttpGet("create-user")]
 		public ActionResult CreateUser()
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
-			
+
             return View(new CreateUserModel());
 		}
-		
-		
+
+
 		[HttpPost("create-user")]
         [ValidateAntiForgeryToken]
 		public async Task<ActionResult> CreateUser(CreateUserModel model)
@@ -115,7 +116,7 @@ namespace MawMvcApp.Controllers
 
 			if(ModelState.IsValid)
 			{
-				var user = new MawUser 
+				var user = new MawUser
 				{
 					Username = model.Username,
 					FirstName = model.FirstName,
@@ -125,11 +126,11 @@ namespace MawMvcApp.Controllers
 
 				var crypto = new Crypto();
 				var password = crypto.GeneratePassword(12);
-				
+
 				try
 				{
 					model.Result = await _userMgr.CreateAsync(user, password);
-					
+
 					if(model.Result == IdentityResult.Success)
 					{
 						var emailModel = new CreateUserEmailModel
@@ -141,7 +142,7 @@ namespace MawMvcApp.Controllers
 						};
 
 						var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/CreateUser.cshtml", emailModel).ConfigureAwait(false);
-						
+
 						await _emailSvc.SendHtmlAsync(model.Email, _emailConfig.User, "Account Created for mikeandwan.us", body).ConfigureAwait(false);
 					}
 				}
@@ -155,28 +156,28 @@ namespace MawMvcApp.Controllers
 			{
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("delete-user/{id}")]
 		public ActionResult DeleteUser(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
-			
+
 			if(string.IsNullOrEmpty(id))
 			{
 				RedirectToAction(nameof(Index));
 			}
-			
+
 			var model = new DeleteUserModel();
 			model.Username = id;
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpPost("delete-user/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteUser(DeleteUserModel model, IFormCollection collection)
@@ -184,11 +185,11 @@ namespace MawMvcApp.Controllers
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
 			if(ModelState.IsValid)
-			{			
+			{
 				if(collection.Any(x => string.Equals(x.Key, "delete", StringComparison.OrdinalIgnoreCase)))
 				{
 					var user = await _userMgr.FindByNameAsync(model.Username);
-	
+
 					try
 					{
 						model.Result = await _userMgr.DeleteAsync(user);
@@ -207,29 +208,29 @@ namespace MawMvcApp.Controllers
 			{
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("create-role")]
 		public ActionResult CreateRole()
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
-			
+
 			return View(new CreateRoleModel());
 		}
-		
-		
+
+
 		[HttpPost("create-role")]
         [ValidateAntiForgeryToken]
 		public async Task<ActionResult> CreateRole(CreateRoleModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
-			
+
 			if(ModelState.IsValid)
 			{
-				var role = new MawRole 
+				var role = new MawRole
 				{
 					Name = model.Name,
 					Description = model.Description
@@ -241,16 +242,16 @@ namespace MawMvcApp.Controllers
 			{
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("delete-role/{id}")]
 		public ActionResult DeleteRole(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
-			
+
 			if(string.IsNullOrEmpty(id))
 			{
 				return RedirectToAction(nameof(Index));
@@ -258,11 +259,11 @@ namespace MawMvcApp.Controllers
 
 			var model = new DeleteRoleModel();
 			model.Role = id;
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpPost("delete-role/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteRole(DeleteRoleModel model, IFormCollection collection)
@@ -286,24 +287,24 @@ namespace MawMvcApp.Controllers
 			{
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("edit-profile/{id}")]
 		public async Task<ActionResult> EditProfile(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
-			
+
 			if(string.IsNullOrEmpty(id))
 			{
 				return RedirectToAction(nameof(Index));
 			}
-			
+
             var user = await _userMgr.FindByNameAsync(id);
 
-			var model = new EditProfileModel 
+			var model = new EditProfileModel
 			{
 				Username = user.Username,
 				FirstName = user.FirstName,
@@ -320,8 +321,8 @@ namespace MawMvcApp.Controllers
 				return RedirectToAction(nameof(Index));
 			}
 		}
-		
-		
+
+
 		[HttpPost("edit-profile/{id}")]
         [ValidateAntiForgeryToken]
 		public async Task<ActionResult> EditProfile(EditProfileModel model)
@@ -331,6 +332,11 @@ namespace MawMvcApp.Controllers
 			if(ModelState.IsValid)
 			{
 				var user = await _userMgr.FindByNameAsync(model.Username);
+
+				if(string.IsNullOrEmpty(user.SecurityStamp))
+				{
+					await _userMgr.UpdateSecurityStampAsync(user);
+				}
 
 				user.Email = model.Email;
 				user.FirstName = model.FirstName;
@@ -342,16 +348,16 @@ namespace MawMvcApp.Controllers
 			{
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("manage-roles-for-user/{id}")]
 		public async Task<ActionResult> ManageRolesForUser(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
-			
+
 			if(string.IsNullOrEmpty(id))
 			{
 				return RedirectToAction(nameof(Index));
@@ -364,11 +370,11 @@ namespace MawMvcApp.Controllers
 			model.Username = id;
             model.AllRoles.AddRange(await _repo.GetAllRoleNamesAsync());
             model.GrantedRoles.AddRange(userRoles);
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpPost("manage-roles-for-user/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ManageRolesForUser(IFormCollection collection)
@@ -432,29 +438,29 @@ namespace MawMvcApp.Controllers
 
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("edit-role-members/{id}")]
 		public async Task<ActionResult> EditRoleMembers(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
-			
+
 			if(string.IsNullOrEmpty(id))
 			{
 				RedirectToAction(nameof(Index));
 			}
-			
+
 			var model = new EditRoleMembersModel();
-			
+
 			model.Role = id;
 
 			model.Members = (await _userMgr.GetUsersInRoleAsync(model.Role)).Select(x => x.Username);
             model.AllUsers = await _repo.GetAllUsernamesAsync();
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpPost("edit-role-members/{id}")]
         [ValidateAntiForgeryToken]
 		public async Task<ActionResult> EditRoleMembers(EditRoleMembersModel model)
@@ -481,7 +487,7 @@ namespace MawMvcApp.Controllers
 						errs.AddRange(result.Errors);
 					}
 				}
-				
+
 				foreach(var oldMember in toRemove)
 				{
 					_log.LogInformation(string.Format("removing {0} from {1}", oldMember.Username, model.Role));
@@ -511,29 +517,29 @@ namespace MawMvcApp.Controllers
 
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("create-blog-post")]
 		public ActionResult CreateBlogPost()
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
-			
+
 			var post = new BlogPostModel();
 			var date = DateTime.Now;
-			
+
 			post.Title = date.ToString("MMMM dd, yyyy");
 			post.PublishDate = date;
-			
+
 			return View(post);
 		}
-		
-		
+
+
 		[HttpPost("create-blog-post")]
         [ValidateAntiForgeryToken]
 		public async Task<ActionResult> CreateBlogPost(BlogPostModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
-			
+
 			if (ModelState.IsValid)
 			{
 				if(model.Behavior == BlogPostAction.Preview)
@@ -549,9 +555,9 @@ namespace MawMvcApp.Controllers
 						Description = model.Description,
 						PublishDate = model.PublishDate
 					};
-					
+
 					await _blogSvc.AddPostAsync(post);
-					
+
 					model.Success = true;
 				}
 			}
@@ -559,7 +565,7 @@ namespace MawMvcApp.Controllers
 			{
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
 
@@ -568,7 +574,7 @@ namespace MawMvcApp.Controllers
 		public ActionResult ShowRequestDetails()
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
-			
+
 			return View(HttpContext);
 		}
     }

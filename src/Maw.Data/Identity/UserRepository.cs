@@ -103,8 +103,7 @@ namespace Maw.Data.Identity
 			return RunAsync(async conn => {
 				var result = await conn.ExecuteAsync(
 					@"UPDATE maw.user
-					     SET hashed_password = @hashedPassword,
-						     salt = NULL
+					     SET hashed_password = @hashedPassword
 					   WHERE username = @username",
 					new { hashedPassword = user.HashedPassword, username = user.Username.ToLower() }
 				).ConfigureAwait(false);
@@ -156,13 +155,12 @@ namespace Maw.Data.Identity
 							 work_phone = @workPhone,
 							 hashed_password = @hashedPassword,
 							 security_stamp = @securityStamp,
-							 salt = @salt,
 							 enable_github_auth = @enableGithubAuth,
 							 enable_google_auth = @enableGoogleAuth,
 							 enable_microsoft_auth = @enableMicrosoftAuth,
 							 enable_twitter_auth = @enableTwitterAuth
 					   WHERE username = @username",
-					new { 
+					new {
 						firstName = updatedUser.FirstName,
 						lastName = updatedUser.LastName,
 						email = updatedUser.Email?.ToLower(),
@@ -182,7 +180,6 @@ namespace Maw.Data.Identity
 						workPhone = updatedUser.WorkPhone,
 						hashedPassword = updatedUser.HashedPassword,
 						securityStamp = updatedUser.SecurityStamp,
-						salt = updatedUser.Salt,
 						enableGithubAuth = updatedUser.IsGithubAuthEnabled,
 						enableGoogleAuth = updatedUser.IsGoogleAuthEnabled,
 						enableMicrosoftAuth = updatedUser.IsMicrosoftAuthEnabled,
@@ -281,13 +278,11 @@ namespace Maw.Data.Identity
 				throw new ArgumentNullException(nameof(user));
 			}
 
-			// password and salt are for legacy login module, so we null these out as they are no longer needed
 			return RunAsync(async conn => {
 				var result = await conn.ExecuteAsync(
 					@"INSERT INTO maw.user
 				           (
 				    	     username,
-				    		 salt,
 				    		 hashed_password,
 				    		 first_name,
 				    		 last_name,
@@ -298,7 +293,6 @@ namespace Maw.Data.Identity
 				      VALUES
 				           (
 				    		 @username,
-				    		 @salt,
 				    		 @hashedPassword,
 				    		 @firstName,
 				    		 @lastName,
@@ -308,7 +302,6 @@ namespace Maw.Data.Identity
 				    	   );",
 				    new {
 				    	username = user.Username.ToLower(),
-				    	salt = (string)null,
 				    	hashedPassword = user.HashedPassword,
 				    	firstName = user.FirstName,
 				    	lastName = user.LastName,
@@ -364,7 +357,7 @@ namespace Maw.Data.Identity
 
 			return RunAsync(async conn => {
 				var users = await conn.QueryAsync<MawUser, State, Country, MawUser>(
-					$@"SELECT u.*, 
+					$@"SELECT u.*,
 						      u.company_name AS company,
 							  u.enable_github_auth AS is_github_auth_enabled,
 							  u.enable_google_auth AS is_google_auth_enabled,
@@ -382,7 +375,7 @@ namespace Maw.Data.Identity
 										                  WHERE name = @role
 													  )
 									);",
-					(user, state, country) => { 
+					(user, state, country) => {
 							user.State = state?.Code;
 							user.Country = country?.Code;
 							return user;
@@ -419,9 +412,9 @@ namespace Maw.Data.Identity
 							 @name,
 							 @description
 						   );",
-					new { 
-						name = roleName.ToLower(), 
-						description = description 
+					new {
+						name = roleName.ToLower(),
+						description = description
 					}
 				).ConfigureAwait(false);
 
@@ -487,7 +480,7 @@ namespace Maw.Data.Identity
 							 (SELECT id FROM maw.user WHERE username = @username),
 							 (SELECT id FROM maw.role WHERE name = @role)
 						   );",
-					new { 
+					new {
 						username = username.ToLower(),
 						role = roleName.ToLower()
 					}
@@ -581,7 +574,7 @@ namespace Maw.Data.Identity
 		{
 			return RunAsync(async conn => {
 				var userResult = await conn.QueryAsync<MawUser, State, Country, MawUser>(
-						$@"SELECT u.*, 
+						$@"SELECT u.*,
 						          u.company_name AS company,
 								  u.enable_github_auth AS is_github_auth_enabled,
 								  u.enable_google_auth AS is_google_auth_enabled,
@@ -593,7 +586,7 @@ namespace Maw.Data.Identity
 							LEFT OUTER JOIN maw.state s ON s.id = u.state_id
 							LEFT OUTER JOIN maw.country c ON c.id = u.country_id
 						WHERE u.{whereField} = @whereValue;",
-						(user, state, country) => { 
+						(user, state, country) => {
 							user.State = state?.Code;
 							user.Country = country?.Code;
 							return user;
@@ -684,7 +677,7 @@ namespace Maw.Data.Identity
 						 @loginAreaId,
 						 @attemptTime
 					   );",
-				new { 
+				new {
 					userId = userId,
 					username = usernameOrEmail,
 					loginActivityTypeId = loginActivityTypeId,

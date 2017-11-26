@@ -6,14 +6,13 @@ using System.Security.Claims;
 
 namespace Maw.Domain.Identity
 {
-    public class MawUser 
+    public class MawUser
 		: ClaimsIdentity
     {
         const string CLAIM_TYPE_COMPANY = "http://mikeandwan.us/claimTypes/company";
         const string CLAIM_TYPE_POSITION = "http://mikeandwan.us/claimTypes/position";
         const string CLAIM_TYPE_WORK_EMAIL = "http://mikeandwan.us/claimTypes/workemail";
         const string CLAIM_TYPE_ADDRESS2 = "http://mikeandwan.us/claimTypes/address2";
-		const string CLAIM_TYPE_SALT = "http://mikeandwan.us/claimTypes/salt";
 		const string CLAIM_TYPE_USERID = "http://mikeandwan.us/claimTypes/userid";
 		const string CLAIM_TYPE_SECURITY_STAMP = "http://mikeandwan.us/claimTypes/security_stamp";
         const string CLAIM_TYPE_ENABLE_GITHUB_AUTH = "http://mikeandwan.us/claimTypes/enable_github_auth";
@@ -22,22 +21,22 @@ namespace Maw.Domain.Identity
         const string CLAIM_TYPE_ENABLE_TWITTER_AUTH = "http://mikeandwan.us/claimTypes/enable_twitter_auth";
 
 
-		public short Id 
-		{ 
-			get 
-			{ 
-				var id = GetSingleClaim(CLAIM_TYPE_USERID); 
+		public short Id
+		{
+			get
+			{
+				var id = GetSingleClaim(CLAIM_TYPE_USERID);
 
 				return id == null ?(short) 0 : short.Parse(id);
-			} 
-			set 
-			{ 
+			}
+			set
+			{
 				SetSingleClaim(CLAIM_TYPE_USERID, value.ToString());
 			}
 		}
 
 
-		public string Username 
+		public string Username
 		{
 			get { return GetSingleClaim(ClaimTypes.Name); }
 			set { SetSingleClaim(ClaimTypes.Name, value); }
@@ -51,21 +50,14 @@ namespace Maw.Domain.Identity
 		}
 
 
-		public string Salt 
-		{
-			get { return GetSingleClaim(CLAIM_TYPE_SALT); }
-			set { SetSingleClaim(CLAIM_TYPE_SALT, value); }
-		}
-
-
-		public string HashedPassword 
+		public string HashedPassword
 		{
 			get { return GetSingleClaim(ClaimTypes.Hash); }
 			set { SetSingleClaim(ClaimTypes.Hash, value); }
 		}
 
 
-        public string FirstName 
+        public string FirstName
         {
             get { return GetSingleClaim(ClaimTypes.GivenName); }
 			set { SetSingleClaim(ClaimTypes.GivenName, value); }
@@ -81,8 +73,8 @@ namespace Maw.Domain.Identity
 
         public DateTime? DateOfBirth
         {
-            get 
-            { 
+            get
+            {
                 var dob = GetSingleClaim(ClaimTypes.DateOfBirth);
 
 				return string.IsNullOrEmpty(dob) ? (DateTime?)null : DateTime.Parse(dob);

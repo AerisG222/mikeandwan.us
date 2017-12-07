@@ -9,6 +9,7 @@ import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
 import { PhotoDataService } from './photo-data.service';
 import { CategoryBreadcrumb } from './category-breadcrumb.model';
 import { RouteMode } from './route-mode.model';
+import { ICategory } from './icategory.model';
 
 @Injectable()
 export class PhotoNavigationService {
@@ -156,7 +157,8 @@ export class PhotoNavigationService {
         this.gotoDestination(dest.linkParamArray, this.getModeBreadcrumbs(dest, mode));
     }
 
-    gotoCategoryPhotoList(dest: CategoryBreadcrumb): void {
+    gotoCategoryPhotoList(category: ICategory): void {
+        const dest = new CategoryBreadcrumb(category.name, [ '/year', category.year, category.id ], category);
         const bcs = this.getCategoryListBreadcrumbs(dest);
 
         this.gotoDestination(dest.linkParamArray, bcs);

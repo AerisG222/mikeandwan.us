@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { trigger, query, useAnimation, stagger, state, style, animate, transition } from '@angular/animations';
 
 import { fadeAnimation } from '../shared/animation';
@@ -13,28 +13,19 @@ import { SvgIcon } from '../svg-icon/svg-icon.enum';
     styleUrls: [ './thumbnail-list.component.css' ]
 })
 export class ThumbnailListComponent {
+    @Input() itemsPerPage = 3;
+
     svgIcon = SvgIcon;
-    rowsPerPage = 3;
-    itemsPerRow = 6;
     pageDisplayedIndex = 0;
     itemSelectedIndex = -1;
     itemList: Array<ThumbnailInfo> = [];
-    displayedRows: Array<Array<ThumbnailInfo>> = [];
     activeItem: ThumbnailInfo = null;
     hoverItem: ThumbnailInfo = null;
     itemsPerPageUpdated = new EventEmitter<number>();
     @Output() selected = new EventEmitter<SelectedThumbnail>();
 
-    constructor(private _responsiveService: ResponsiveService) {
+    constructor() {
         this.updateItemsPerRow();
-
-        this._responsiveService.onBreakpointChange.subscribe((breakpoint: string) => {
-            this.handleResize(breakpoint);
-        });
-    }
-
-    get itemsPerPage(): number {
-        return this.itemsPerRow * this.rowsPerPage;
     }
 
     handleResize(newsize: string): void {
@@ -102,24 +93,6 @@ export class ThumbnailListComponent {
             const endPosition = Math.min(rowStartIndex + this.itemsPerRow, this.itemList.length);
 
             this.displayedRows.push(this.itemList.slice(rowStartIndex, endPosition));
-        }
-    }
-
-    private updateItemsPerRow(): void {
-        const origItemsPerPage = this.itemsPerPage;
-
-        if (this._responsiveService._currBp === ResponsiveService.BP_LG) {
-            this.itemsPerRow = 6;
-        } else {
-            this.itemsPerRow = 4;
-        }
-
-        if (origItemsPerPage !== this.itemsPerPage) {
-            // reset page displayed index to best match where the user left off
-            const targetIndex = origItemsPerPage * this.pageDisplayedIndex;
-            this.pageDisplayedIndex = Math.floor(targetIndex / this.itemsPerPage);
-
-            this.itemsPerPageUpdated.next(null);
         }
     }
 }

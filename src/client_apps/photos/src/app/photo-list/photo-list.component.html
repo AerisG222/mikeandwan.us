@@ -5,8 +5,8 @@
 <div [@fadeInOut]="'in'">
     <div class="row">
         <div class="col mt-2">
-            <ngb-pagination [collectionSize]="t.itemList.length" [pageSize]="t.itemsPerPage" [size]="'sm'" (pageChange)="onChangePage($event)" #p></ngb-pagination>
+            <ngb-pagination [collectionSize]="context?.photos.length" [pageSize]="cardsPerPage" [size]="'sm'" (pageChange)="onChangePage($event)"></ngb-pagination>
         </div>
     </div>
-    <maw-thumbnail-list (selected)="onThumbnailSelected($event)" #t></maw-thumbnail-list>
+    <app-photo-card-grid [cardsPerPage]="cardsPerPage" [photoList]="context?.photos" [page]="page" (photoSelected)="onPhotoSelected($event)"></app-photo-card-grid>
 </div>

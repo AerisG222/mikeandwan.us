@@ -28,8 +28,6 @@ export class CategoryLinkComponent {
     }
 
     gotoCategory(cat: ICategory): void {
-        const b = new CategoryBreadcrumb(cat.name, [ '/year', cat.year, cat.id ], cat);
-
-        this._navService.gotoCategoryPhotoList(b);
+        this._navService.gotoCategoryPhotoList(cat);
     }
 }

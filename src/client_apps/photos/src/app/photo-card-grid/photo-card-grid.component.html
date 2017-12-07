@@ -1,0 +1,5 @@
+<div class="row equal-height">
+  <div class="col-lg-2 col-md-3 mb-3" *ngFor="let photo of photoList | slice: (page - 1) * cardsPerPage : page * cardsPerPage">
+      <app-photo-card [photo]="photo.photo" (click)="selectPhoto(photo)"></app-photo-card>
+  </div>
+</div>

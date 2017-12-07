@@ -1,0 +1,9 @@
+<div class="card">
+    <div class="d-flex justify-content-center">
+        <img class="card-img-top" [src]="category.teaserPhotoInfo.path" [ngStyle]="{height: category.teaserPhotoInfo.height + 'px', width: category.teaserPhotoInfo.width + 'px'}" />
+    </div>
+    <app-svg-icon *ngIf="category.hasGpsData" [klass]="'icon badge'"></app-svg-icon>
+    <div class="card-body p-2 text-center">
+        <span >{{category.name}}</span>
+    </div>
+</div>

@@ -12,7 +12,7 @@ import { PhotoStateService } from '../shared/photo-state.service';
 export class PreferenceDialogComponent {
     form = {
         displayMode: null,
-        rowCount: null,
+        thumbnailsPerPage: null,
         slideshowInterval: null
     };
 
@@ -24,7 +24,7 @@ export class PreferenceDialogComponent {
     save(): void {
         this._stateService.config.displayMode = parseInt(this.form.displayMode, 10);
         this._stateService.config.slideshowIntervalSeconds = parseInt(this.form.slideshowInterval, 10);
-        this._stateService.config.rowsPerPage = parseInt(this.form.rowCount, 10);
+        this._stateService.config.thumbnailsPerPage = parseInt(this.form.thumbnailsPerPage, 10);
         this._stateService.saveConfig();
 
         this.cancel();  // leverage this function to perform our cleanup
@@ -32,7 +32,7 @@ export class PreferenceDialogComponent {
 
     updateFormValues(): void {
         this.form.displayMode = this._stateService.config.displayMode.toString();
-        this.form.rowCount = this._stateService.config.rowsPerPage.toString();
+        this.form.thumbnailsPerPage = this._stateService.config.thumbnailsPerPage.toString();
         this.form.slideshowInterval = this._stateService.config.slideshowIntervalSeconds.toString();
     }
 

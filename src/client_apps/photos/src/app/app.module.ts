@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { BreadcrumbListComponent } from '../ng_maw/breadcrumb-list/breadcrumb-list.component';
-import { ThumbnailListComponent } from '../ng_maw/thumbnail-list/thumbnail-list.component';
 import { BreadcrumbService } from '../ng_maw/shared/breadcrumb.service';
 import { LocalStorageService } from '../ng_maw/shared/local-storage.service';
 import { ResponsiveService } from '../ng_maw/shared/responsive.service';
@@ -37,6 +36,10 @@ import { PhotoSourceFactory } from './shared/photo-source-factory.model';
 import { PhotoStateService } from './shared/photo-state.service';
 import { PhotoNavigationService } from './shared/photo-navigation.service';
 import { RouteMode } from './shared/route-mode.model';
+import { CategoryCardGridComponent } from './category-card-grid/category-card-grid.component';
+import { CategoryCardComponent } from './category-card/category-card.component';
+import { PhotoCardComponent } from './photo-card/photo-card.component';
+import { PhotoCardGridComponent } from './photo-card-grid/photo-card-grid.component';
 
 // TODO: the odd constants for data below are to satisfy an AOT requirement - is there a better way?
 //  SEE: https://github.com/angular/angular/issues/10789
@@ -61,7 +64,8 @@ import { RouteMode } from './shared/route-mode.model';
         AppComponent,
         BreadcrumbListComponent,
         SvgIconComponent,
-        ThumbnailListComponent,
+        CategoryCardComponent,
+        CategoryCardGridComponent,
         CategoryLinkComponent,
         CategoryListComponent,
         CommentViewComponent,
@@ -73,6 +77,8 @@ import { RouteMode } from './shared/route-mode.model';
         HelpDialogComponent,
         MapViewComponent,
         ModeComponent,
+        PhotoCardComponent,
+        PhotoCardGridComponent,
         PhotoDialogComponent,
         PhotoListComponent,
         PhotoViewComponent,

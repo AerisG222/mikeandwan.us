@@ -3,6 +3,6 @@ export class Config {
     static DISPLAY_MODE_POPUP = 2;
 
     displayMode: number = Config.DISPLAY_MODE_INLINE;
-    rowsPerPage = 3;
+    thumbnailsPerPage = 24;
     slideshowIntervalSeconds = 3;
 }

@@ -1,11 +1,10 @@
-import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { trigger, state, style, transition, useAnimation } from '@angular/animations';
 
 import { NgbModal, NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 
 import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
-import { PagerComponent } from '../../ng_maw/pager/pager.component';
 import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
 import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
 import { ResponsiveService } from '../../ng_maw/shared';
@@ -36,15 +35,16 @@ import { PhotoDialogComponent } from '../photo-dialog/photo-dialog.component';
     ]
 })
 export class PhotoListComponent implements AfterViewInit, OnDestroy {
-    @ViewChild(NgbPagination) pager: NgbPagination;
-    @ViewChild(ThumbnailListComponent) thumbnailList: ThumbnailListComponent;
     private _modeInfo: RouteMode = null;
     private _photoSource: PhotoSource = null;
     showMapView = false;
     showPhotoView = false;
     context: PhotoListContext;
+    page = 1;
+    cardsPerPage: number;
 
-    constructor(private _modalService: NgbModal,
+    constructor(private _changeDetectorRef: ChangeDetectorRef,
+                private _modalService: NgbModal,
                 private _dataService: PhotoDataService,
                 private _stateService: PhotoStateService,
                 private _responsiveService: ResponsiveService,
@@ -60,6 +60,8 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
+        this.setCardsPerPage(this._stateService.config);
+
         this._responsiveService.onBreakpointChange.subscribe((breakpoint: string) => {
             if (this._responsiveService._currBp === ResponsiveService.BP_XS) {
                 this.showMapView = false;
@@ -72,18 +74,13 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
             }
         });
 
-        this.thumbnailList.setRowCountPerPage(this._stateService.config.rowsPerPage);
-
-        this.thumbnailList.itemsPerPageUpdated.subscribe((x: any) => {
-            this.updatePager();
-        });
-
         this._stateService.showPreferencesEventEmitter.subscribe((x: any) => {
             this.context.terminateSlideshow();
         });
 
         this._stateService.configUpdatedEventEmitter.subscribe((config: Config) => {
-            this.onConfigChange(config);
+            this.setCardsPerPage(config);
+            this.setPhotoView(config);
         });
 
         this._stateService.toggleMapsEventEmitter.subscribe((showMaps: boolean) => {
@@ -97,28 +94,23 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
                 if (this._modeInfo === RouteMode.Random) {
                     this.context = new RandomPhotoListContext(photos, this._modeInfo, this._stateService, this._photoSource);
 
+                    /*
                     (<RandomPhotoListContext>this.context).photoAddedEventEmitter.subscribe((photo: Photo) => {
                         const thumb = new PhotoThumbnailInfo(photo.photo.xsInfo.path,
                             photo.photo.xsInfo.height,
                             photo.photo.xsInfo.width,
                             photo);
                         this.thumbnailList.addItem(thumb);
-                        this.updatePager();
                     });
+                    */
                 } else {
                     this.context = new PhotoListContext(photos, this._modeInfo, this._stateService);
                 }
 
                 this.context.photoUpdated.subscribe((idx: number) => this.onPhotoUpdated(idx));
-
-                const thumbs = photos.map(x => new PhotoThumbnailInfo(x.photo.xsInfo.path,
-                    x.photo.xsInfo.height,
-                    x.photo.xsInfo.width,
-                    x));
-
-                this.thumbnailList.setItemList(thumbs);
-                this.updatePager();
             });
+
+        this._changeDetectorRef.detectChanges();
     }
 
     ngOnDestroy(): void {
@@ -126,16 +118,12 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
         this.context.terminateSlideshow();
     }
 
-    onChangePage(page: number): void {
-        this.thumbnailList.setPageDisplayedIndex(page - 1);
-    }
-
-    onThumbnailSelected(item: SelectedThumbnail): void {
+    onPhotoSelected(item: SelectedThumbnail): void {
         this.context.moveTo(item.index);
     }
 
     onPhotoUpdated(index: number): void {
-        this.thumbnailList.setItemSelectedIndex(index);
+        // this.thumbnailList.setItemSelectedIndex(index);
 
         if (!this.showPhotoView && !this.showMapView) {
             const modal = this._modalService.open(PhotoDialogComponent);
@@ -143,17 +131,23 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-    onConfigChange(config: Config): void {
-        this.showPhotoView = config.displayMode === Config.DISPLAY_MODE_INLINE;
-        this.thumbnailList.setRowCountPerPage(config.rowsPerPage);
-    }
-
     onToggleMapsView(showMap: boolean): void {
         this.showMapView = showMap;
         this.showPhotoView = !showMap;
     }
 
-    private updatePager() {
-        this.pager.page = this.thumbnailList.pageDisplayedIndex + 1;
+    onChangePage(page: number) {
+        if (page >= 1) {
+            this.page = page;
+        }
+    }
+
+    setCardsPerPage(config: Config): void {
+        this.page = 1;
+        this.cardsPerPage = config.thumbnailsPerPage;
+    }
+
+    setPhotoView(config: Config): void {
+        this.showPhotoView = config.displayMode === Config.DISPLAY_MODE_INLINE;
     }
 }

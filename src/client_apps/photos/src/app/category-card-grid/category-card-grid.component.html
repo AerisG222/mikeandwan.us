@@ -1,0 +1,5 @@
+<div class="row equal-height">
+    <div class="col-lg-2 col-md-3 mb-3" *ngFor="let category of categoryList | slice: (page - 1) * cardsPerPage : page * cardsPerPage">
+        <app-category-card [category]="category" (click)="selectCategory(category)"></app-category-card>
+    </div>
+</div>

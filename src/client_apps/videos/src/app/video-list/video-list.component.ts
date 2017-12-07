@@ -29,8 +29,8 @@ import { VideoThumbnailInfo } from '../shared/video-thumbnail-info.model';
     ]
 })
 export class VideoListComponent implements OnInit, AfterViewInit {
-    @ViewChild(NgbPagination) pager: NgbPagination;
-    @ViewChild(ThumbnailListComponent) thumbnailList: ThumbnailListComponent;
+    cardsPerPage = 24;
+    page = 1;
     categoryId: number = null;
     year: number = null;
     currentVideo: IVideo = null;
@@ -57,12 +57,6 @@ export class VideoListComponent implements OnInit, AfterViewInit {
             this.year = parseInt(params['year'], 10);
             this.categoryId = parseInt(params['category'], 10);
 
-            this.thumbnailList.setRowCountPerPage(2);
-
-            this.thumbnailList.itemsPerPageUpdated.subscribe((x: any) => {
-                this.updatePager();
-            });
-
             this._changeDetectionRef.detectChanges();
 
             // for some reason this component is not raising the event bound in the
@@ -73,36 +67,25 @@ export class VideoListComponent implements OnInit, AfterViewInit {
 
             this._videoDataService.getVideosForCategory(this.categoryId)
                 .subscribe(
-                    (data: Array<IVideo>) => this.setVideos(data),
+                    (videos: Array<IVideo>) => {
+                        this.videoList = videos;
+                    },
                     (err: any) => console.error('there was an error: ' + err)
                 );
         });
     }
 
     onChangePage(page: number): void {
-        this.thumbnailList.setPageDisplayedIndex(page - 1);
-    }
-
-    onThumbnailSelected(item: SelectedThumbnail): void {
-        if (item.index >= 0 && this.videoList.length > item.index) {
-            const vid: IVideo = (<VideoThumbnailInfo>item.thumbnail).video;
-            this.currentVideo = vid;
-            this.updateVideo();
+        if (page >= 1) {
+            this.page = page;
         }
     }
 
-    setVideos(videos: Array<IVideo>): void {
-        this.videoList = videos;
-
-        const thumbnails: Array<VideoThumbnailInfo> = videos.map((vid: IVideo) =>
-            new VideoThumbnailInfo(vid.thumbnailVideo.path,
-                this._sizeService.getThumbHeight(vid.thumbnailVideo.width, vid.thumbnailVideo.height),
-                this._sizeService.getThumbWidth(vid.thumbnailVideo.width, vid.thumbnailVideo.height),
-                vid
-            )
-        );
-
-        this.thumbnailList.setItemList(thumbnails);
+    onVideoSelected(video: IVideo): void {
+        if (video !== null) {
+            this.currentVideo = video;
+            this.updateVideo();
+        }
     }
 
     updateVideo(): void {
@@ -117,9 +100,5 @@ export class VideoListComponent implements OnInit, AfterViewInit {
             el.load();
             el.play();
         }, 0, false);
-    }
-
-    private updatePager() {
-        this.pager.page = this.thumbnailList.pageDisplayedIndex + 1;
     }
 }

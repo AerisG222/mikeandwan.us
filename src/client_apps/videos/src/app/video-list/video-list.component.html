@@ -11,9 +11,9 @@
     <div class="col">
         <div class="row">
             <div class="col mt-2">
-                <ngb-pagination [collectionSize]="t.itemList.length" [pageSize]="t.itemsPerPage" [size]="'sm'" (pageChange)="onChangePage($event)" #p></ngb-pagination>
+                <ngb-pagination [collectionSize]="videoList.length" [pageSize]="cardsPerPage" [size]="'sm'" (pageChange)="onChangePage($event)" #p></ngb-pagination>
             </div>
         </div>
-        <maw-thumbnail-list (selected)="onThumbnailSelected($event)" #t></maw-thumbnail-list>
+        <app-video-card-grid [cardsPerPage]="cardsPerPage" [videoList]="videoList" [page]="page" (videoSelected)="onVideoSelected($event)"></app-video-card-grid>
     </div>
 </div>

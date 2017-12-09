@@ -1,3 +1,24 @@
+:host:hover, 
+:host.active {
+    border-color: #52575c;
+    cursor: pointer;
+}
+
+:host:hover .category_name,
+:host.active .category_name {
+    text-decoration: underline;
+    color: #fff;
+}
+
+:host img {
+    opacity: 0.6;
+}
+
+:host:hover img,
+:host.active img {
+    opacity: 1;
+}
+
 .imgtop {
     min-height: 160px;
 }

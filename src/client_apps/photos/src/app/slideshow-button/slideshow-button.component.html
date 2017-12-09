@@ -1,4 +1,1 @@
-<button type="button" class="btn btn-primary btn-xs" (click)="context.toggleSlideshow()" [ngClass]="{active: context.isSlideshowPlaying}">
-    <app-svg-icon *ngIf="!context.isSlideshowPlaying" [klass]="'icon vcenter clickable'" [icon]="svgIcon.Play"></app-svg-icon>
-    <app-svg-icon *ngIf="context.isSlideshowPlaying" [klass]="'icon vcenter clickable'" [icon]="svgIcon.Stop"></app-svg-icon>
-</button>
+<app-toolbar-button [icon]="svgIcon" [isActive]="context.isSlideshowPlaying" [tooltip]="tooltip" (click)="context.toggleSlideshow()"></app-toolbar-button>

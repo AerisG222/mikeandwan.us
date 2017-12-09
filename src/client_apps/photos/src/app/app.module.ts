@@ -40,6 +40,7 @@ import { CategoryCardGridComponent } from './category-card-grid/category-card-gr
 import { CategoryCardComponent } from './category-card/category-card.component';
 import { PhotoCardComponent } from './photo-card/photo-card.component';
 import { PhotoCardGridComponent } from './photo-card-grid/photo-card-grid.component';
+import { ToolbarButtonComponent } from './toolbar-button/toolbar-button.component';
 
 // TODO: the odd constants for data below are to satisfy an AOT requirement - is there a better way?
 //  SEE: https://github.com/angular/angular/issues/10789
@@ -85,7 +86,8 @@ import { PhotoCardGridComponent } from './photo-card-grid/photo-card-grid.compon
         PreferenceDialogComponent,
         RatingViewComponent,
         SaveDialogComponent,
-        SlideshowButtonComponent
+        SlideshowButtonComponent,
+        ToolbarButtonComponent
     ],
     providers: [
         BreadcrumbService,

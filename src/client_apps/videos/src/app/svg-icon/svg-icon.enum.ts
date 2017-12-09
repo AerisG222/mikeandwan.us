@@ -1,0 +1,28 @@
+export enum SvgIcon {
+    Adjust,
+    Android,
+    ArrowCircleLeft,
+    ArrowCircleRight,
+    ArrowLeft,
+    ArrowRight,
+    BarChart,
+    Close,
+    Comment,
+    Download,
+    Expand,
+    Home,
+    Image,
+    InfoCircle,
+    Keyboard,
+    MapMarker,
+    PieChart,
+    Play,
+    Rating,
+    Repeat, RotateRight,  // alias
+    RotateLeft,
+    Star,
+    StarO,
+    Stop,
+    TimesCircle,
+    Wrench
+}

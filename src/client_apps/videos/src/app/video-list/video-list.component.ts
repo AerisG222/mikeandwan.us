@@ -4,8 +4,7 @@ import { state, style, transition, trigger, useAnimation } from '@angular/animat
 
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 
-import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
-
+import { fadeIn, fadeOut } from '../shared/animation';
 import { IVideo } from '../shared/ivideo.model';
 import { IVideoInfo } from '../shared/ivideo-info.model';
 import { SizeService } from '../shared/size.service';

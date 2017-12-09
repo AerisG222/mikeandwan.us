@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
-
 import { PreferenceDialogComponent } from '../preference-dialog/preference-dialog.component';
+import { SvgIcon } from '../svg-icon/svg-icon.enum';
 
 @Component({
     selector: 'app-header',

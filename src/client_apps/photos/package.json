@@ -25,6 +25,7 @@
     "core-js": "^2.5.2",
     "mousetrap": "^1.6.1",
     "rxjs": "^5.5.5",
+    "three": "^0.88.0",
     "zone.js": "^0.8.18"
   },
   "devDependencies": {

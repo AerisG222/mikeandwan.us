@@ -4,11 +4,8 @@ import { animate, state, style, transition, trigger, useAnimation } from '@angul
 
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 
-import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
-import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
-import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
-import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
-
+import { fadeIn, fadeOut } from '../shared/animation';
+import { SvgIcon } from '../svg-icon/svg-icon.enum';
 import { Config, ModeRouteInfo, PhotoNavigationService, PhotoStateService, ICategory, PhotoDataService } from '../shared';
 
 @Component({

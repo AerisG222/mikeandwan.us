@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
+import { SvgIcon } from '../svg-icon/svg-icon.enum';
 
 @Component({
     selector: 'app-help-dialog',

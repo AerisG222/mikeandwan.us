@@ -1,28 +1,32 @@
 import { Component, Input, ElementRef, OnInit } from '@angular/core';
 
+import { Scene, PerspectiveCamera, WebGLRenderer, DirectionalLight, Object3D, FlatShading,
+         Vector3, FontLoader, TextGeometry, Mesh, MeshPhongMaterial, Quaternion
+       } from 'three';
+
 @Component({
-    selector: 'maw-three-dlink',
+    selector: 'app-three-dlink',
     templateUrl: './three-dlink.component.html',
     styleUrls: [ './three-dlink.component.css' ]
 })
 export class ThreeDLinkComponent implements OnInit {
     private _el: HTMLElement = null;
-    private _counter: number = 0;
+    private _counter = 0;
     @Input() url: string = null;
     @Input() width: number = null;
     @Input() height: number = null;
     showLink = Modernizr.webgl;
-    scene: THREE.Scene = null;
-    camera: THREE.PerspectiveCamera = null;
-    renderer: THREE.WebGLRenderer = null;
-    directionalLight1: THREE.DirectionalLight = null;
-    directionalLight2: THREE.DirectionalLight = null;
-    threeFrame: THREE.Object3D = null;
-    threeUnitVector: THREE.Vector3 = null;
-    dashFrame: THREE.Object3D = null;
-    dashUnitVector: THREE.Vector3 = null;
-    dFrame: THREE.Object3D = null;
-    dUnitVector: THREE.Vector3 = null;
+    scene: Scene = null;
+    camera: PerspectiveCamera = null;
+    renderer: WebGLRenderer = null;
+    directionalLight1: DirectionalLight = null;
+    directionalLight2: DirectionalLight = null;
+    threeFrame: Object3D = null;
+    threeUnitVector: Vector3 = null;
+    dashFrame: Object3D = null;
+    dashUnitVector: Vector3 = null;
+    dFrame: Object3D = null;
+    dUnitVector: Vector3 = null;
 
     constructor(el: ElementRef) {
         this._el = el.nativeElement;
@@ -30,9 +34,9 @@ export class ThreeDLinkComponent implements OnInit {
 
     ngOnInit(): void {
         if (this.showLink) {
-            this.scene = new THREE.Scene();
-            this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 50);
-            this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            this.scene = new Scene();
+            this.camera = new PerspectiveCamera(75, this.width / this.height, 0.1, 50);
+            this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
 
             this.renderer.setSize(this.width, this.height);
             this.renderer.setClearColor(0x000000, 0);
@@ -45,10 +49,10 @@ export class ThreeDLinkComponent implements OnInit {
     }
 
     prepareScene(): void {
-        let loader = new THREE.FontLoader();
+        const loader = new FontLoader();
 
         loader.load('/js/libs/fonts/open_sans_bold.typeface.js', response => {
-            let threeGeometry = new THREE.TextGeometry('3', {
+            const threeGeometry = new TextGeometry('3', {
                 font: response,
                 size: 60,
                 curveSegments: 48,
@@ -61,7 +65,7 @@ export class ThreeDLinkComponent implements OnInit {
             // threeGeometry.weight: 'bold',
             // threeGeometry.style: 'normal',
 
-            let dashGeometry = new THREE.TextGeometry('-', {
+            const dashGeometry = new TextGeometry('-', {
                 font: response,
                 size: 60,
                 curveSegments: 48,
@@ -74,7 +78,7 @@ export class ThreeDLinkComponent implements OnInit {
             // dashGeometry.weight: 'bold',
             // dashGeometry.style: 'normal',
 
-            let dGeometry = new THREE.TextGeometry('D', {
+            const dGeometry = new TextGeometry('D', {
                 font: response,
                 size: 60,
                 curveSegments: 48,
@@ -87,26 +91,26 @@ export class ThreeDLinkComponent implements OnInit {
             // dGeometry.weight: 'bold',
             // dGeometry.style: 'normal',
 
-            let material = new THREE.MeshPhongMaterial({
+            const material = new MeshPhongMaterial({
                 color: 0xcccccc,
                 specular: 0xffffff,
                 shininess: 40,
                 shading:
-                THREE.FlatShading
+                FlatShading
             });
 
-            let threeText = new THREE.Mesh(threeGeometry, material);
-            let dashText = new THREE.Mesh(dashGeometry, material);
-            let dText = new THREE.Mesh(dGeometry, material);
+            const threeText = new Mesh(threeGeometry, material);
+            const dashText = new Mesh(dashGeometry, material);
+            const dText = new Mesh(dGeometry, material);
 
             // position the characters so the middle is at the origin
             threeText.position.set(-12, -12, -4);
             dashText.position.set(-12, -9, -2);
             dText.position.set(-12, -12, -4);
 
-            this.threeFrame = new THREE.Object3D();
-            this.dashFrame = new THREE.Object3D();
-            this.dFrame = new THREE.Object3D();
+            this.threeFrame = new Object3D();
+            this.dashFrame = new Object3D();
+            this.dFrame = new Object3D();
 
             this.threeFrame.add(threeText);
             this.dashFrame.add(dashText);
@@ -116,15 +120,15 @@ export class ThreeDLinkComponent implements OnInit {
             this.dashFrame.position.set(8, 0, -2);
             this.dFrame.position.set(20, 0, -4);
 
-            this.directionalLight1 = new THREE.DirectionalLight(0xcccccc, 0.4);
+            this.directionalLight1 = new DirectionalLight(0xcccccc, 0.4);
             this.directionalLight1.position.set(8, 10, 18);
 
-            this.directionalLight2 = new THREE.DirectionalLight(0xcccccc, 0.4);
+            this.directionalLight2 = new DirectionalLight(0xcccccc, 0.4);
             this.directionalLight2.position.set(-16, 16, 30);
 
-            this.threeUnitVector = new THREE.Vector3(1, 0, 0);
-            this.dashUnitVector = new THREE.Vector3(1, 0, 0);
-            this.dUnitVector = new THREE.Vector3(0, 1, 0);
+            this.threeUnitVector = new Vector3(1, 0, 0);
+            this.dashUnitVector = new Vector3(1, 0, 0);
+            this.dUnitVector = new Vector3(0, 1, 0);
 
             this.scene.add(this.directionalLight1);
             this.scene.add(this.directionalLight2);
@@ -146,11 +150,11 @@ export class ThreeDLinkComponent implements OnInit {
 
         this._counter += 0.05;
 
-        let angle = Math.sin(this._counter) / 2.0;
+        const angle = Math.sin(this._counter) / 2.0;
 
-        let threeQuaternion = new THREE.Quaternion().setFromAxisAngle(this.threeUnitVector, angle);
-        let dashQuaternion = new THREE.Quaternion().setFromAxisAngle(this.dashUnitVector, this._counter);
-        let dQuaternion = new THREE.Quaternion().setFromAxisAngle(this.dUnitVector, angle);
+        const threeQuaternion = new Quaternion().setFromAxisAngle(this.threeUnitVector, angle);
+        const dashQuaternion = new Quaternion().setFromAxisAngle(this.dashUnitVector, this._counter);
+        const dQuaternion = new Quaternion().setFromAxisAngle(this.dUnitVector, angle);
 
         this.threeFrame.rotation.setFromQuaternion(threeQuaternion, 'XYZ');
         this.dashFrame.rotation.setFromQuaternion(dashQuaternion, 'XYZ');

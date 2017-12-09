@@ -7,7 +7,7 @@ import { BreadcrumbService } from '../shared/breadcrumb.service';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
 
 @Component({
-    selector: 'maw-breadcrumb-list',
+    selector: 'app-breadcrumb-list',
     templateUrl: './breadcrumb-list.component.html',
     styleUrls: [ './breadcrumb-list.component.css' ],
     animations: [

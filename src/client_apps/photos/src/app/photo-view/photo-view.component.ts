@@ -5,9 +5,8 @@ import * as Mousetrap from 'mousetrap';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { ResponsiveService } from '../../ng_maw/shared/responsive.service';
-import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
-
+import { ResponsiveService } from '../shared/responsive.service';
+import { SvgIcon } from '../svg-icon/svg-icon.enum';
 import { PhotoNavigationService } from '../shared/photo-navigation.service';
 import { PhotoStateService } from '../shared/photo-state.service';
 import { IPhoto } from '../shared/iphoto.model';

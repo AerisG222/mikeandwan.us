@@ -4,16 +4,12 @@ import { trigger, state, style, transition, useAnimation } from '@angular/animat
 
 import { NgbModal, NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 
-import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
-import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
-import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
-import { ResponsiveService } from '../../ng_maw/shared';
-
+import { fadeIn, fadeOut } from '../shared/animation';
+import { ResponsiveService } from '../shared';
 import { Config } from '../shared/config.model';
 import { ModeRouteInfo } from '../shared/mode-route-info.model';
 import { PhotoStateService } from '../shared/photo-state.service';
 import { PhotoDataService } from '../shared/photo-data.service';
-import { PhotoThumbnailInfo } from '../shared/photo-thumbnail-info.model';
 import { PhotoSource } from '../shared/photo-source.model';
 import { PhotoSourceFactory } from '../shared/photo-source-factory.model';
 import { PhotoListContext } from '../shared/photo-list-context.model';

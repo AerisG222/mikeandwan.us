@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
-import { ResponsiveService } from '../../ng_maw/shared';
-
+import { ResponsiveService } from '../shared';
 import { IPhoto } from '../shared/iphoto.model';
 
 @Component({

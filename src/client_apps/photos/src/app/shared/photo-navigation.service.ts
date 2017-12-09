@@ -3,9 +3,8 @@ import { Observer } from 'rxjs/Observer';
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
-import { BreadcrumbService } from '../../ng_maw/shared/breadcrumb.service';
-import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
-
+import { BreadcrumbService } from '../shared/breadcrumb.service';
+import { Breadcrumb } from '../shared/breadcrumb.model';
 import { PhotoDataService } from './photo-data.service';
 import { CategoryBreadcrumb } from './category-breadcrumb.model';
 import { RouteMode } from './route-mode.model';

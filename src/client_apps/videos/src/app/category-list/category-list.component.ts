@@ -7,7 +7,6 @@ import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
 
 import { ICategory } from '../shared/icategory.model';
-import { CategoryThumbnailInfo } from '../shared/category-thumbnail-info.model';
 import { VideoNavigationService } from '../shared/video-navigation.service';
 import { SizeService } from '../shared/size.service';
 import { VideoDataService } from '../shared/video-data.service';

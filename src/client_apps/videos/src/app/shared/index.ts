@@ -1,4 +1,3 @@
-export * from './category-thumbnail-info.model';
 export * from './config.model';
 export * from './icategory.model';
 export * from './ivideo.model';
@@ -7,4 +6,3 @@ export * from './size.service';
 export * from './video-data.service';
 export * from './video-navigation.service';
 export * from './video-state.service';
-export * from './video-thumbnail-info.model';

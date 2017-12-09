@@ -5,8 +5,6 @@ import { state, style, transition, trigger, useAnimation } from '@angular/animat
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 
 import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
-import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
-import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
 
 import { IVideo } from '../shared/ivideo.model';
 import { IVideoInfo } from '../shared/ivideo-info.model';
@@ -14,7 +12,6 @@ import { SizeService } from '../shared/size.service';
 import { VideoDataService } from '../shared/video-data.service';
 import { VideoNavigationService } from '../shared/video-navigation.service';
 import { VideoStateService } from '../shared/video-state.service';
-import { VideoThumbnailInfo } from '../shared/video-thumbnail-info.model';
 
 @Component({
     selector: 'app-video-list',

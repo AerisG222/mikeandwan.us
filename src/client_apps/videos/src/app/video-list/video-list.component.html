@@ -1,6 +1,6 @@
 <div class="row" [@fadeInOut]="'in'" *ngIf="displayedVideo">
-    <div class="col">
-        <video class="center-block d-flex justify-content-center" autoplay="false" [ngStyle]="{height: displayedVideo.height + 'px', width: displayedVideo.width + 'px'}" controls>
+    <div class="col d-flex justify-content-center">
+        <video class="center-block" autoplay="false" [ngStyle]="{height: displayedVideo.height + 'px', width: displayedVideo.width + 'px'}" controls>
             <source [src]="displayedVideo.path" type="video/mp4" />
             Your browser does not support the <code>video</code> element.
         </video>

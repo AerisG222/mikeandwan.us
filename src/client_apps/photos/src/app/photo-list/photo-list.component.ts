@@ -118,8 +118,8 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
         this.context.terminateSlideshow();
     }
 
-    onPhotoSelected(item: SelectedThumbnail): void {
-        this.context.moveTo(item.index);
+    onPhotoSelected(photo: Photo): void {
+        this.context.moveToPhoto(photo);
     }
 
     onPhotoUpdated(index: number): void {

@@ -10,10 +10,10 @@ export class PhotoCardGridComponent {
     @Input() photoList: Array<Photo>;
     @Input() cardsPerPage: number;
     @Input() page: number;
-    @Input() activeItem: Photo;
+    @Input() activePhoto: Photo;
     @Output() photoSelected = new EventEmitter<Photo>();
 
-    selectPhoto(item: Photo) {
-        this.photoSelected.emit(item);
+    selectPhoto(photo: Photo) {
+        this.photoSelected.emit(photo);
     }
 }

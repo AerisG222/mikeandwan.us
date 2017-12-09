@@ -8,6 +8,7 @@ import { IPhoto } from '../shared/iphoto.model';
     styleUrls: ['./photo-card.component.css']
 })
 export class PhotoCardComponent {
-    @HostBinding('class') classes = 'card';
+    @HostBinding('class.card') cardClass = true;
+    @HostBinding('class.active') @Input() active = false;
     @Input() photo: IPhoto;
 }

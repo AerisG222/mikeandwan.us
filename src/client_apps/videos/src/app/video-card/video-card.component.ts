@@ -8,6 +8,7 @@ import { IVideo } from '../shared/ivideo.model';
     styleUrls: ['./video-card.component.css']
 })
 export class VideoCardComponent {
-    @HostBinding('class') classes = 'card';
+    @HostBinding('class.card') cardClass = true;
+    @HostBinding('class.active') @Input() active = false;
     @Input() video: IVideo;
 }

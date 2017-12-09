@@ -10,10 +10,10 @@ export class VideoCardGridComponent {
     @Input() videoList: Array<IVideo>;
     @Input() cardsPerPage: number;
     @Input() page: number;
-    @Input() activeItem: IVideo;
+    @Input() activeVideo: IVideo;
     @Output() videoSelected = new EventEmitter<IVideo>();
 
-    selectVideo(item: IVideo) {
-        this.videoSelected.emit(item);
+    selectVideo(video: IVideo) {
+        this.videoSelected.emit(video);
     }
 }

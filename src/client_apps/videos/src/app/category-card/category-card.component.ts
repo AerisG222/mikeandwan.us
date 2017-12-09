@@ -8,6 +8,6 @@ import { ICategory } from '../shared/icategory.model';
     styleUrls: ['./category-card.component.css']
 })
 export class CategoryCardComponent {
-    @HostBinding('class') classes = 'card';
+    @HostBinding('class.card') cardClass = true;
     @Input() category: ICategory;
 }

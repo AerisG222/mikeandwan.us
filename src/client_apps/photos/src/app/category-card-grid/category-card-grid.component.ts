@@ -11,7 +11,6 @@ export class CategoryCardGridComponent {
     @Input() categoryList: Array<ICategory>;
     @Input() cardsPerPage: number;
     @Input() page: number;
-    @Input() activeItem: ICategory;
     @Output() categorySelected = new EventEmitter<ICategory>();
 
     selectCategory(item: ICategory) {

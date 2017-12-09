@@ -8,5 +8,5 @@
             <ngb-pagination [collectionSize]="context?.photos.length" [pageSize]="cardsPerPage" [size]="'sm'" (pageChange)="onChangePage($event)"></ngb-pagination>
         </div>
     </div>
-    <app-photo-card-grid [cardsPerPage]="cardsPerPage" [photoList]="context?.photos" [page]="page" (photoSelected)="onPhotoSelected($event)"></app-photo-card-grid>
+    <app-photo-card-grid [cardsPerPage]="cardsPerPage" [photoList]="context?.photos" [page]="page" [activePhoto]="context?.current?.photo" (photoSelected)="onPhotoSelected($event)"></app-photo-card-grid>
 </div>

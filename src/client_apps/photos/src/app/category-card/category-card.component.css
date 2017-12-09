@@ -1,11 +1,9 @@
-:host:hover, 
-:host.active {
+:host:hover {
     border-color: #52575c;
     cursor: pointer;
 }
 
-:host:hover .category_name,
-:host.active .category_name {
+:host:hover .category_name {
     text-decoration: underline;
     color: #fff;
 }
@@ -14,8 +12,7 @@
     opacity: 0.6;
 }
 
-:host:hover img,
-:host.active img {
+:host:hover img {
     opacity: 1;
 }
 

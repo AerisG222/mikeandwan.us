@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostBinding } from '@angular/core';
 
 import { ICategory } from '../shared/icategory.model';
 
@@ -8,5 +8,6 @@ import { ICategory } from '../shared/icategory.model';
     styleUrls: ['./category-card.component.css']
 })
 export class CategoryCardComponent {
+    @HostBinding('class') classes = 'card';
     @Input() category: ICategory;
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostBinding } from '@angular/core';
 
 import { IVideo } from '../shared/ivideo.model';
 
@@ -8,5 +8,6 @@ import { IVideo } from '../shared/ivideo.model';
     styleUrls: ['./video-card.component.css']
 })
 export class VideoCardComponent {
+    @HostBinding('class') classes = 'card';
     @Input() video: IVideo;
 }

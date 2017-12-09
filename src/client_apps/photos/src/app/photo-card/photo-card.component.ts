@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostBinding } from '@angular/core';
 
 import { IPhoto } from '../shared/iphoto.model';
 
@@ -8,5 +8,6 @@ import { IPhoto } from '../shared/iphoto.model';
     styleUrls: ['./photo-card.component.css']
 })
 export class PhotoCardComponent {
+    @HostBinding('class') classes = 'card';
     @Input() photo: IPhoto;
 }

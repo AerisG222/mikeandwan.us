@@ -3,7 +3,7 @@ import { Scene, PerspectiveCamera, Renderer, Mesh, AmbientLight, Fog, WebGLRende
          DoubleSide, RepeatWrapping
        } from 'three';
 
-import { Stats } from 'stats.js';
+import * as Stats from 'stats.js';
 
 export class CubeDemo {
     scene: Scene;

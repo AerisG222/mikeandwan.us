@@ -3,7 +3,7 @@ import { Scene, PerspectiveCamera, Renderer, Mesh, Object3D, AmbientLight, SpotL
          FontLoader, MeshPhongMaterial, MeshBasicMaterial
        } from 'three';
 
-import { Stats } from 'stats.js';
+import * as Stats from 'stats.js';
 
 export class TextDemo {
     scene: Scene;

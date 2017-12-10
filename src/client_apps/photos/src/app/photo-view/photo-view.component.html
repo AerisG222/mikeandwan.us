@@ -8,8 +8,8 @@
     	<div class="row main-image" [ngClass]="{hide_main_image_border: category}">
             <div class="col-12 vcenter text-center">
         		<img [src]="getPhotoPath()" [ngClass]="rotationClassArray[context.current.rotationClassIndex]" [ngStyle]="{'max-width': rotationContainmentMaxWidth, 'max-height': rotationContainmentMaxHeight}" />
-        		<a class="prev" [hidden]="!context.hasPrevious" (click)="context.movePrevious()"><app-svg-icon [klass]="'icon icon-lg'" [icon]="svgIcon.ArrowCircleLeft"></app-svg-icon></a>
-        		<a class="next" [hidden]="!context.hasNext" (click)="context.moveNext()"><app-svg-icon [klass]="'icon icon-lg'" [icon]="svgIcon.ArrowCircleRight"></app-svg-icon></a>
+        		<a class="prev" [hidden]="!context.hasPrevious" (click)="context.movePrevious()"><app-svg-icon [klass]="'icon icon-xxl'" [icon]="svgIcon.ArrowCircleLeft"></app-svg-icon></a>
+        		<a class="next" [hidden]="!context.hasNext" (click)="context.moveNext()"><app-svg-icon [klass]="'icon icon-xxl'" [icon]="svgIcon.ArrowCircleRight"></app-svg-icon></a>
             </div>
     	</div>
     	<div class="row toolbar hidden-xs">
@@ -28,10 +28,10 @@
             </div>
             <div class="col px-0 d-flex justify-content-center">
                 <div class="btn-group">
-            		<app-toolbar-button [icon]="svgIcon.Image" [tooltip]="'small (email)'" (click)="showDownload(photo.smInfo)"></app-toolbar-button>
-            		<app-toolbar-button [icon]="svgIcon.Image" [tooltip]="'medium (email)'" (click)="showDownload(photo.mdInfo)"></app-toolbar-button>
-            		<app-toolbar-button [icon]="svgIcon.Image" [tooltip]="'large (prints)'" (click)="showDownload(photo.lgInfo)"></app-toolbar-button>
-                    <app-toolbar-button [icon]="svgIcon.Image" [tooltip]="'large/untouched (prints)'" (click)="showDownload(photo.prtInfo)"></app-toolbar-button>
+            		<app-toolbar-button [icon]="svgIcon.Image" [iconSize]="'icon-sm'" [tooltip]="'small (email)'" (click)="showDownload(photo.smInfo)"></app-toolbar-button>
+            		<app-toolbar-button [icon]="svgIcon.Image" [iconSize]="'icon-md'" [tooltip]="'medium (email)'" (click)="showDownload(photo.mdInfo)"></app-toolbar-button>
+            		<app-toolbar-button [icon]="svgIcon.Image" [iconSize]="'icon-lg'" [tooltip]="'large (prints)'" (click)="showDownload(photo.lgInfo)"></app-toolbar-button>
+                    <app-toolbar-button [icon]="svgIcon.Image" [iconSize]="'icon-lg'" [tooltip]="'large/untouched (prints)'" (click)="showDownload(photo.prtInfo)"></app-toolbar-button>
                 </div>
             </div>
             <div class="col px-0 d-flex justify-content-end">

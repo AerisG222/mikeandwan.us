@@ -1,20 +1,22 @@
-<ul class="nav nav-tabs">
-    <li class="active"><a href="#exif" data-toggle="tab">Exif</a></li>
-    <li><a href="#maker" data-toggle="tab">Maker</a></li>
-    <li><a href="#composite" data-toggle="tab">Composite</a></li>
-    <li><a href="#processing" data-toggle="tab">Processing Info</a></li>
-</ul>
-<div class="tab-content">
-    <div class="tab-pane active" id="exif">
-        <app-exif-table [data]="exifInfo?.exifList"></app-exif-table>
-    </div>
-    <div class="tab-pane" id="maker">
-        <app-exif-table [data]="exifInfo?.makerList"></app-exif-table>
-    </div>
-    <div class="tab-pane" id="composite">
-        <app-exif-table [data]="exifInfo?.compositeList"></app-exif-table>
-    </div>
-    <div class="tab-pane" id="processing">
-        <app-exif-table [data]="exifInfo?.processingList"></app-exif-table>
-    </div>
-</div>
+<ngb-tabset>
+    <ngb-tab title="Exif">
+        <ng-template ngbTabContent>
+            <app-exif-table [data]="exifInfo?.exifList"></app-exif-table>
+        </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Maker">
+        <ng-template ngbTabContent>
+            <app-exif-table [data]="exifInfo?.makerList"></app-exif-table>
+        </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Composite">
+        <ng-template ngbTabContent>
+            <app-exif-table [data]="exifInfo?.compositeList"></app-exif-table>
+        </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Processing Info">
+        <ng-template ngbTabContent>
+            <app-exif-table [data]="exifInfo?.processingList"></app-exif-table>
+        </ng-template>
+    </ngb-tab>
+</ngb-tabset>

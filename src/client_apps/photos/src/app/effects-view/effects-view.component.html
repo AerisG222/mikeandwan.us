@@ -1,58 +1,73 @@
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-lg-2 col-6">
         <label for="grayscale">Grayscale</label>
         <span>({{filters.grayscale}}%)</span>
-        <span [hidden]="filters.grayscale == 0" style="width:11px;">&nbsp;</span>
-        <app-svg-icon [hidden]="filters.grayscale == 0" [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.grayscale = 0; onChange();"></app-svg-icon>
-        <input type="range" name="grayscale" #grayscale min="0" max="100" [value]="filters.grayscale" (input)="filters.grayscale = grayscale.value; onChange();" /> 
     </div>
-    <div class="col-sm-6">
-        <label for="brightness">Brightness</label> 
+    <div class="col-lg-4 col-6">
+            <app-svg-icon [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.grayscale = 0; onChange();"></app-svg-icon>
+            <input type="range" name="grayscale" #grayscale min="0" max="100" [value]="filters.grayscale" (input)="filters.grayscale = grayscale.value; onChange();" />
+    </div>
+
+    <div class="col-lg-2 col-6">
+        <label for="brightness">Brightness</label>
         <span>({{filters.brightness}}%)</span>
-        <span [hidden]="filters.brightness == 100" style="width:11px;">&nbsp;</span>
-        <app-svg-icon [hidden]="filters.brightness == 100" [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.brightness = 100; onChange();"></app-svg-icon>
-        <input type="range" name="brightness" #brightness min="0" max="1000" [value]="filters.brightness" (input)="filters.brightness = brightness.value; onChange();" /> 
     </div>
-    <div class="col-sm-6">
+    <div class="col-lg-4 col-6">
+        <app-svg-icon [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.brightness = 100; onChange();"></app-svg-icon>
+        <input type="range" name="brightness" #brightness min="0" max="1000" [value]="filters.brightness" (input)="filters.brightness = brightness.value; onChange();" />
+    </div>
+
+    <div class="col-lg-2 col-6">
         <label for="sepia">Sepia</label>
         <span>({{filters.sepia}}%)</span>
-        <span [hidden]="filters.sepia == 0" style="width:11px;">&nbsp;</span>
-        <app-svg-icon [hidden]="filters.sepia == 0" [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.sepia = 0; onChange();"></app-svg-icon>
-        <input type="range" name="sepia" #sepia min="0" max="100" [value]="filters.sepia" (input)="filters.sepia = sepia.value; onChange();" /> 
     </div>
-    <div class="col-sm-6">
-        <label for="saturate">Saturate</label> 
+    <div class="col-lg-4 col-6">
+        <app-svg-icon [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.sepia = 0; onChange();"></app-svg-icon>
+        <input type="range" name="sepia" #sepia min="0" max="100" [value]="filters.sepia" (input)="filters.sepia = sepia.value; onChange();" />
+    </div>
+
+    <div class="col-lg-2 col-6">
+        <label for="saturate">Saturate</label>
         <span>({{filters.saturate}}%)</span>
-        <span [hidden]="filters.saturate == 100" style="width:11px;">&nbsp;</span>
-        <app-svg-icon [hidden]="filters.saturate == 100" [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.saturate = 100; onChange();"></app-svg-icon>
+    </div>
+    <div class="col-lg-4 col-6">
+        <app-svg-icon [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.saturate = 100; onChange();"></app-svg-icon>
         <input type="range" name="saturate" #saturate min="0" max="1000" [value]="filters.saturate" (input)="filters.saturate = saturate.value; onChange();" />
     </div>
-    <div class="col-sm-6">
-        <label for="blur">Blur</label> 
+
+    <div class="col-lg-2 col-6">
+        <label for="blur">Blur</label>
         <span>({{filters.blur}}px)</span>
-        <span [hidden]="filters.blur == 0" style="width:11px;">&nbsp;</span>
-        <app-svg-icon [hidden]="filters.blur == 0" [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.blur = 0; onChange();"></app-svg-icon>
-        <input type="range" name="blur" #blur step="0.1" min="0" max="10" [value]="filters.blur" (input)="filters.blur = blur.value; onChange();" /> 
     </div>
-    <div class="col-sm-6">
-        <label for="contrast">Contrast</label> 
+    <div class="col-lg-4 col-6">
+            <app-svg-icon [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.blur = 0; onChange();"></app-svg-icon>
+            <input type="range" name="blur" #blur step="0.1" min="0" max="10" [value]="filters.blur" (input)="filters.blur = blur.value; onChange();" />
+    </div>
+
+    <div class="col-lg-2 col-6">
+        <label for="contrast">Contrast</label>
         <span>({{filters.contrast}}%)</span>
-        <span [hidden]="filters.contrast == 100" style="width:11px;">&nbsp;</span>
-        <app-svg-icon [hidden]="filters.contrast == 100" [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.contrast = 100; onChange();"></app-svg-icon>
-        <input type="range" name="contrast" #contrast min="0" max="1000" [value]="filters.contrast" (input)="filters.contrast = contrast.value; onChange();" /> 
     </div>
-    <div class="col-sm-6">
-        <label for="hue">Hue-Rotate</label> 
+    <div class="col-lg-4 col-6">
+        <app-svg-icon [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.contrast = 100; onChange();"></app-svg-icon>
+        <input type="range" name="contrast" #contrast min="0" max="1000" [value]="filters.contrast" (input)="filters.contrast = contrast.value; onChange();" />
+    </div>
+
+    <div class="col-lg-2 col-6">
+        <label for="hue">Hue-Rotate</label>
         <span>({{filters.hue}}&deg;)</span>
-        <span [hidden]="filters.hue == 0" style="width:11px;">&nbsp;</span>
-        <app-svg-icon [hidden]="filters.hue == 0" [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.hue = 0; onChange();"></app-svg-icon>
-        <input type="range" name="hue" #hue min="0" max="360" [value]="filters.hue" (input)="filters.hue = hue.value; onChange();" /> 
     </div>
-    <div class="col-sm-6">
-        <label for="invert">Invert</label> 
+    <div class="col-lg-4 col-6">
+        <app-svg-icon [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.hue = 0; onChange();"></app-svg-icon>
+        <input type="range" name="hue" #hue min="0" max="360" [value]="filters.hue" (input)="filters.hue = hue.value; onChange();" />
+    </div>
+
+    <div class="col-lg-2 col-6">
+        <label for="invert">Invert</label>
         <span>({{filters.invert}}%)</span>
-        <span [hidden]="filters.invert == 0" style="width:11px;">&nbsp;</span>
-        <app-svg-icon [hidden]="filters.invert == 0" [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.invert = 0; onChange();"></app-svg-icon>
-        <input type="range" name="invert" #invert min="0" max="100" [value]="filters.invert" (input)="filters.invert = invert.value; onChange();" /> 
+    </div>
+    <div class="col-lg-4 col-6">
+        <app-svg-icon [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="filters.invert = 0; onChange();"></app-svg-icon>
+        <input type="range" name="invert" #invert min="0" max="100" [value]="filters.invert" (input)="filters.invert = invert.value; onChange();" />
     </div>
 </div>

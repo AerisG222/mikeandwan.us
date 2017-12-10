@@ -13,7 +13,7 @@
             </div>
     	</div>
     	<div class="row toolbar hidden-xs">
-            <div class="left col-sm-4">
+            <div class="col px-0">
                 <div class="btn-group">
                     <app-toolbar-button [icon]="svgIcon.Comment" [isActive]="showComments" [tooltip]="'comments'" (click)="toggleComments()"></app-toolbar-button>
                     <app-toolbar-button [icon]="svgIcon.Star" [isActive]="showRatings" [tooltip]="'ratings'" (click)="toggleRatings()"></app-toolbar-button>
@@ -26,7 +26,7 @@
                     <app-toolbar-button [hidden]="!supportCssFilters" [icon]="svgIcon.Adjust" [isActive]="showEffects" [tooltip]="'effects'" (click)="toggleEffects()"></app-toolbar-button>
                 </div>
             </div>
-            <div class="text-center col-sm-4">
+            <div class="col px-0 d-flex justify-content-center">
                 <div class="btn-group">
             		<app-toolbar-button [icon]="svgIcon.Image" [tooltip]="'small (email)'" (click)="showDownload(photo.smInfo)"></app-toolbar-button>
             		<app-toolbar-button [icon]="svgIcon.Image" [tooltip]="'medium (email)'" (click)="showDownload(photo.mdInfo)"></app-toolbar-button>
@@ -34,8 +34,8 @@
                     <app-toolbar-button [icon]="svgIcon.Image" [tooltip]="'large/untouched (prints)'" (click)="showDownload(photo.prtInfo)"></app-toolbar-button>
                 </div>
             </div>
-            <div class="right col-sm-4">
-                <div class="btn-group pull-right">
+            <div class="col px-0 d-flex justify-content-end">
+                <div class="btn-group">
                     <app-slideshow-button [context]="context"></app-slideshow-button>
                 </div>
             </div>

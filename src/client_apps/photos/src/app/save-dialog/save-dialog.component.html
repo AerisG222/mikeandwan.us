@@ -1,11 +1,13 @@
 <div class="modal-header">
-		<h4 class="modal-title">{{title}}</h4>
-		<button type="button" class="close" aria-label="Close" (click)="close()">
-		  <span aria-hidden="true">&times;</span>
-		</button>
-	</div>
+    <h4 class="modal-title">{{title}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 <div class="modal-body">
-	<img [src]="photoInfo?.path" class="img-responsive" />
+	<div class="d-flex justify-content-center">
+	    <img [src]="photoInfo?.path" class="img-responsive mx-auto" />
+	</div>
 	<p>To save, right click on the image and choose "Save Image As..."</p>
 </div>
 <div class="modal-footer">

@@ -1,16 +1,16 @@
 <div class="row header">
-    <div class="col-sm-8">
-        <span class="h4">PHOTOS:</span>
-        <app-breadcrumb-list></app-breadcrumb-list>
-    </div>
-    <div class="col-sm-4 hidden-xs text-right">
-        <div class="btn-group">
-            <a target="_blank" class="btn btn-primary btn-sm" *ngIf="downloadUrl" [href]="downloadUrl"><span style="margin-right:6px;">Download</span><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Download"></app-svg-icon></a>
-            <button type="button" class="btn btn-primary btn-sm" *ngIf="showRegularButton" (click)="toggleMapView()"><span style="margin-right:6px;">Regular View</span><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Home"></app-svg-icon></button>
-            <button type="button" class="btn btn-primary btn-sm" *ngIf="showMapButton" (click)="toggleMapView()"><span style="margin-right:6px;">Map View</span><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.MapMarker"></app-svg-icon></button>
-            <button type="button" class="btn btn-primary btn-sm" (click)="clickConfig()"><span style="margin-right:6px;">Settings</span><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Wrench"></app-svg-icon></button>
-            <button type="button" class="btn btn-primary btn-sm" title="Interactive Statistics" (click)="clickStats()"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.PieChart"></app-svg-icon></button>
-            <button type="button" class="btn btn-primary btn-sm" title="Get Android App" (click)="clickAndroid()"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Android"></app-svg-icon></button>
+    <div class="col d-flex justify-content-between align-items-end">
+        <div>
+            <span class="h4">PHOTOS:</span>
+            <app-breadcrumb-list></app-breadcrumb-list>
         </div>
+        <div class="btn-group">
+                <a target="_blank" class="btn btn-primary btn-sm" *ngIf="downloadUrl" [href]="downloadUrl"><span style="margin-right:6px;">Download</span><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Download"></app-svg-icon></a>
+                <button type="button" class="btn btn-primary btn-sm" *ngIf="showRegularButton" (click)="toggleMapView()"><span style="margin-right:6px;">Regular View</span><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Home"></app-svg-icon></button>
+                <button type="button" class="btn btn-primary btn-sm" *ngIf="showMapButton" (click)="toggleMapView()"><span style="margin-right:6px;">Map View</span><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.MapMarker"></app-svg-icon></button>
+                <button type="button" class="btn btn-primary btn-sm" (click)="clickConfig()"><span style="margin-right:6px;">Settings</span><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Wrench"></app-svg-icon></button>
+                <button type="button" class="btn btn-primary btn-sm" title="Interactive Statistics" (click)="clickStats()"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.PieChart"></app-svg-icon></button>
+                <button type="button" class="btn btn-primary btn-sm" title="Get Android App" (click)="clickAndroid()"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Android"></app-svg-icon></button>
+            </div>
     </div>
 </div>

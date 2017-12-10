@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { PointLight, SphereGeometry, Mesh, MeshBasicMaterial } from 'three';
 
 import { ArgumentNullError } from '../models/argument-null-error';
 import { DisposalService } from '../services/disposal-service';
@@ -12,7 +12,7 @@ export class PointLightController implements IController, IDisposable {
     private static readonly COLORS = [ 0xff3333, 0x33ff33, 0x3333ff ];
 
     private _isDisposed = false;
-    private _lights: Array<THREE.PointLight> = [];
+    private _lights: Array<PointLight> = [];
     private _maxX: number;
     private _minX: number;
     private _visualsEnabled = false;
@@ -42,13 +42,13 @@ export class PointLightController implements IController, IDisposable {
     }
 
     init(): void {
-        let sphere = new THREE.SphereGeometry( 4, 16, 8 );
+        let sphere = new SphereGeometry( 4, 16, 8 );
 
         for (let i = 0; i < PointLightController.NUM_LIGHTS; i++) {
             let color = PointLightController.COLORS[i];
-            let light = new THREE.PointLight(color, 1, 100);
+            let light = new PointLight(color, 1, 100);
 
-            light.add(new THREE.Mesh(sphere, new THREE.MeshBasicMaterial( { color: color } )));
+            light.add(new Mesh(sphere, new MeshBasicMaterial( { color: color } )));
 
             light.userData = {
                 speed: Math.random() * 2 + 2,
@@ -114,7 +114,7 @@ export class PointLightController implements IController, IDisposable {
         }
     }
 
-    private updateLight(light: THREE.PointLight): void {
+    private updateLight(light: PointLight): void {
         light.position.x += light.userData.direction * light.userData.speed;
 
         if (light.position.x > this._maxX) {

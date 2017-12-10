@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Group, Mesh, PlaneGeometry, MeshPhongMaterial, DoubleSide } from 'three';
 
 import { ArgumentNullError } from '../models/argument-null-error';
 import { DisposalService } from '../services/disposal-service';
@@ -7,9 +7,9 @@ import { IDisposable } from '../models/idisposable';
 import { IVisual } from './ivisual';
 import { StateService } from '../services/state-service';
 
-export class PhotoBackgroundVisual extends THREE.Object3D implements IDisposable, IVisual {
+export class PhotoBackgroundVisual extends Group implements IDisposable, IVisual {
     private _isDisposed = false;
-    private _photoMesh: THREE.Mesh = null;
+    private _photoMesh: Mesh = null;
 
     constructor(private _stateService: StateService,
                 private _disposalService: DisposalService,
@@ -39,7 +39,7 @@ export class PhotoBackgroundVisual extends THREE.Object3D implements IDisposable
     }
 
     dispose(): void {
-        if(this._isDisposed) {
+        if (this._isDisposed) {
             return;
         }
 
@@ -53,9 +53,9 @@ export class PhotoBackgroundVisual extends THREE.Object3D implements IDisposable
     private createBackground(): void {
         let bounds = this._frustrumCalculator.calculateBounds(this._stateService.visualContext.camera, this._z);
 
-        let plane = new THREE.PlaneGeometry(bounds.x, bounds.y);
-        let material = new THREE.MeshPhongMaterial({ color: '#000000', transparent: true, opacity: 0.88, side: THREE.DoubleSide });
-        this._photoMesh = new THREE.Mesh(plane, material);
+        let plane = new PlaneGeometry(bounds.x, bounds.y);
+        let material = new MeshPhongMaterial({ color: '#000000', transparent: true, opacity: 0.88, side: DoubleSide });
+        this._photoMesh = new Mesh(plane, material);
 
         this._photoMesh.position.z = this._z;
         this._photoMesh.position.y = bounds.y / 2;

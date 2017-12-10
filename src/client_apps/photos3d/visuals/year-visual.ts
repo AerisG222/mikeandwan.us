@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Group } from 'three';
 
 import { ArgumentNullError } from '../models/argument-null-error';
 import { Category } from '../models/category';
@@ -6,7 +6,7 @@ import { DisposalService } from '../services/disposal-service';
 import { IDisposable } from '../models/idisposable';
 import { IVisual } from './ivisual';
 
-export class YearVisual extends THREE.Object3D implements IDisposable, IVisual {
+export class YearVisual extends Group implements IDisposable, IVisual {
     private _isDisposed = false;
 
     private _categoryList: Array<Category>;

@@ -1,16 +1,20 @@
-import * as THREE from 'three';
-import * as Stats from 'stats.js';
+import { Scene, PerspectiveCamera, Renderer, Mesh, Object3D, AmbientLight, SpotLight, Font, Fog, WebGLRenderer,
+         AxisHelper, DirectionalLight, TextureLoader, PlaneGeometry, TextGeometry, RepeatWrapping, DoubleSide,
+         FontLoader, MeshPhongMaterial, MeshBasicMaterial
+       } from 'three';
+
+import { Stats } from 'stats.js';
 
 export class TextDemo {
-    scene: THREE.Scene;
-    camera: THREE.PerspectiveCamera;
-    renderer: THREE.Renderer;
-    textMesh: THREE.Mesh;
-    textPivot: THREE.Object3D;
-    ambientLight: THREE.AmbientLight;
-    spotLight: THREE.SpotLight;
+    scene: Scene;
+    camera: PerspectiveCamera;
+    renderer: Renderer;
+    textMesh: Mesh;
+    textPivot: Object3D;
+    ambientLight: AmbientLight;
+    spotLight: SpotLight;
     stats: Stats;
-    font: THREE.Font;
+    font: Font;
     rotationAngle: number;
     animate = false;
     loaderCount = 0;
@@ -22,11 +26,11 @@ export class TextDemo {
 
     private prepareScene() {
         // scene
-        this.scene = new THREE.Scene();
-        this.scene.fog = new THREE.Fog(0x449999, 400, 1000);
+        this.scene = new Scene();
+        this.scene.fog = new Fog(0x449999, 400, 1000);
 
         // renderer
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
 
@@ -35,37 +39,37 @@ export class TextDemo {
         document.body.appendChild(this.stats.dom);
 
         // axis helper
-        let axisHelper = new THREE.AxisHelper(100);
+        let axisHelper = new AxisHelper(100);
         this.scene.add(axisHelper);
 
         // camera
-        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.camera.position.set(0, 140, 400);
         this.camera.lookAt(this.scene.position);
 
         // ambient light
-        this.ambientLight = new THREE.AmbientLight(0x404040);
+        this.ambientLight = new AmbientLight(0x404040);
         this.scene.add(this.ambientLight);
 
-        let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        let directionalLight = new DirectionalLight(0xffffff, 0.5);
         directionalLight.position.set(0, 1, 0);
         this.scene.add(directionalLight);
 
         // spot light
-        this.spotLight = new THREE.SpotLight(0xffffff);
+        this.spotLight = new SpotLight(0xffffff);
         this.spotLight.position.set(-60, 200, 100);
         this.spotLight.castShadow = true;
         this.scene.add(this.spotLight);
 
         // floor
-        let textureLoader = new THREE.TextureLoader();
+        let textureLoader = new TextureLoader();
         textureLoader.load('/img/webgl/floor_texture.jpg', texture => {
-            let floorPlane = new THREE.PlaneGeometry(1000, 1000);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
+            let floorPlane = new PlaneGeometry(1000, 1000);
+            texture.wrapS = RepeatWrapping;
+            texture.wrapT = RepeatWrapping;
             texture.repeat.set(24, 24);
-            let floorMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
-            let floor = new THREE.Mesh(floorPlane, floorMaterial);
+            let floorMaterial = new MeshBasicMaterial({ map: texture, side: DoubleSide });
+            let floor = new Mesh(floorPlane, floorMaterial);
             floor.position.y = -30;
             floor.rotation.x = (Math.PI / 2) - 0.2;
             this.scene.add(floor);
@@ -82,10 +86,10 @@ export class TextDemo {
     }
 
     private prepareText() {
-        let loader = new THREE.FontLoader();
+        let loader = new FontLoader();
 
         loader.load('/js/libs/fonts/open_sans_bold.json', response => {
-            let textGeometry = new THREE.TextGeometry('WebGL', {
+            let textGeometry = new TextGeometry('WebGL', {
                 font: response,
                 size: 60,
                 curveSegments: 48,
@@ -95,7 +99,7 @@ export class TextDemo {
                 bevelSize: 0
             });
 
-            let textMaterial = new THREE.MeshPhongMaterial({
+            let textMaterial = new MeshPhongMaterial({
                 color: 0x006051,
                 specular: 0xffffff,
                 shininess: 50
@@ -104,12 +108,12 @@ export class TextDemo {
             textGeometry.computeBoundingBox();
             let textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
 
-            this.textMesh = new THREE.Mesh(textGeometry, textMaterial);
+            this.textMesh = new Mesh(textGeometry, textMaterial);
             this.textMesh.position.set(-0.5 * textWidth, 30, 10);
             this.scene.add(this.textMesh);
 
             // pivot
-            this.textPivot = new THREE.Object3D();
+            this.textPivot = new Object3D();
             this.textPivot.add(this.textMesh);
             this.scene.add(this.textPivot);
 

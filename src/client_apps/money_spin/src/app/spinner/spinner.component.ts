@@ -1,5 +1,8 @@
 import { Component, ElementRef, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
-import * as THREE from 'three';
+
+import { Scene, OrthographicCamera, Renderer, Group, WebGLRenderer, TextureLoader, Texture,
+         PlaneGeometry, Mesh, MeshBasicMaterial, DoubleSide, Math as _Math
+       } from 'three';
 
 import { BoardSector } from '../board-sector.model';
 
@@ -28,11 +31,11 @@ export class SpinnerComponent implements OnInit, OnDestroy {
     private static MIN_TOP_SPEED_TIME_MS = 511;
     private static MAX_ADDITIONAL_TOP_SPEED_TIME_MS = 1511;
     _el: HTMLDivElement;
-    _scene: THREE.Scene;
-    _camera: THREE.OrthographicCamera;
-    _renderer: THREE.Renderer;
-    _board: THREE.Group;
-    _arrow: THREE.Group;
+    _scene: Scene;
+    _camera: OrthographicCamera;
+    _renderer: Renderer;
+    _board: Group;
+    _arrow: Group;
     _arrowSpeed = 0;
     _speedDropoff = 0;
     _slowDown = true;
@@ -62,36 +65,36 @@ export class SpinnerComponent implements OnInit, OnDestroy {
 
     prepareScene(): void {
         // scene
-        this._scene = new THREE.Scene();
+        this._scene = new Scene();
 
         // renderer
-        this._renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this._renderer = new WebGLRenderer({ antialias: true, alpha: true });
         this._renderer.setSize(640, 498);
         this._el.appendChild(this._renderer.domElement);
 
         // camera
-        this._camera = new THREE.OrthographicCamera(320, -320, 250, -250, 0.1, 1000);
+        this._camera = new OrthographicCamera(320, -320, 250, -250, 0.1, 1000);
         this._camera.position.set(0, 0, -10);
         this._camera.lookAt(this._scene.position);
         this._scene.add(this._camera);
 
-        this._board = new THREE.Group();
+        this._board = new Group();
         this._scene.add(this._board);
 
-        this._arrow = new THREE.Group();
+        this._arrow = new Group();
         this._scene.add(this._arrow);
 
-        const loader = new THREE.TextureLoader();
-        loader.load('/img/games/money_spin/board.png', (texture: THREE.Texture) => {
-            const geometry = new THREE.PlaneGeometry(640, 498);
-            const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
-            const mesh = new THREE.Mesh(geometry, material);
+        const loader = new TextureLoader();
+        loader.load('/img/games/money_spin/board.png', (texture: Texture) => {
+            const geometry = new PlaneGeometry(640, 498);
+            const material = new MeshBasicMaterial({ map: texture, side: DoubleSide });
+            const mesh = new Mesh(geometry, material);
             this._board.add(mesh);
         });
-        loader.load('/img/games/money_spin/arrow.png', (texture: THREE.Texture) => {
-            const geometry = new THREE.PlaneGeometry(240, 200);
-            const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
-            const mesh = new THREE.Mesh(geometry, material);
+        loader.load('/img/games/money_spin/arrow.png', (texture: Texture) => {
+            const geometry = new PlaneGeometry(240, 200);
+            const material = new MeshBasicMaterial({ map: texture, side: DoubleSide, transparent: true });
+            const mesh = new Mesh(geometry, material);
             this._arrow.add(mesh);
             this._arrow.position.z = -1;
         });
@@ -125,7 +128,7 @@ export class SpinnerComponent implements OnInit, OnDestroy {
 
                 if (this._arrowSpeed <= 0) {
                     this._arrowSpeed = 0;
-                    const deg = THREE.Math.radToDeg(this._arrow.rotation.z);
+                    const deg = _Math.radToDeg(this._arrow.rotation.z);
                     this.spinCompleted.next(this.getScore(deg));
                 }
             }

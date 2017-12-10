@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import * as THREE from 'three';
+import { Intersection, Vector3, Raycaster } from 'three';
 
 import { IDisposable } from './idisposable';
 import { IMouseClickReceiver } from '../visuals/imouse-click-reciever';
@@ -99,20 +99,20 @@ export class MouseWatcher implements IDisposable {
         }
     }
 
-    private getIntersects(evt: MouseEvent): Array<THREE.Intersection> {
+    private getIntersects(evt: MouseEvent): Array<Intersection> {
         let x = ( evt.clientX / window.innerWidth ) * 2 - 1;
         let y = - ( evt.clientY / window.innerHeight ) * 2 + 1;
-        let vector = new THREE.Vector3(x, y, 0.5);
+        let vector = new Vector3(x, y, 0.5);
 
         vector.unproject(this._ctx.camera);
 
-        let ray = new THREE.Raycaster(this._ctx.camera.position, vector.sub(this._ctx.camera.position).normalize());
+        let ray = new Raycaster(this._ctx.camera.position, vector.sub(this._ctx.camera.position).normalize());
 
         // create an array containing all objects in the scene with which the ray intersects, though
         // filter the list to just objects that care about this to optimize perf
         let intersects = ray
             .intersectObjects(this._ctx.scene.children, true)
-            .filter(i => i.object.parent != null); // we currently expect events to be targeted to our custom classes that extend Object3D
+            .filter(i => i.object.parent != null); // we currently expect events to be targeted to our custom classes that extend Group
 
         return intersects;
     }

@@ -1,12 +1,16 @@
-import * as THREE from 'three';
-import * as Stats from 'stats.js';
+import { Scene, PerspectiveCamera, Renderer, Mesh, AmbientLight, Fog, WebGLRenderer, DirectionalLight,
+         AxisHelper, TextureLoader, BoxGeometry, MeshBasicMaterial, MeshPhongMaterial, PlaneGeometry,
+         DoubleSide, RepeatWrapping
+       } from 'three';
+
+import { Stats } from 'stats.js';
 
 export class CubeDemo {
-    scene: THREE.Scene;
-    camera: THREE.PerspectiveCamera;
-    renderer: THREE.Renderer;
-    cube: THREE.Mesh;
-    ambientLight: THREE.AmbientLight;
+    scene: Scene;
+    camera: PerspectiveCamera;
+    renderer: Renderer;
+    cube: Mesh;
+    ambientLight: AmbientLight;
     stats: Stats;
     loadCounter = 0;
 
@@ -17,13 +21,13 @@ export class CubeDemo {
 
     private prepareScene() {
         // this.scene
-        this.scene = new THREE.Scene();
+        this.scene = new Scene();
 
         // fog
-        this.scene.fog = new THREE.Fog(0x9999ff, 400, 1000);
+        this.scene.fog = new Fog(0x9999ff, 400, 1000);
 
         // renderer
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
 
@@ -32,30 +36,30 @@ export class CubeDemo {
         document.body.appendChild(this.stats.dom);
 
         // camera
-        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.camera.position.set(0, 150, 400);
         this.camera.lookAt(this.scene.position);
 
         // ambient light
-        this.ambientLight = new THREE.AmbientLight(0x404040);
+        this.ambientLight = new AmbientLight(0x404040);
         this.scene.add(this.ambientLight);
 
         // directional light
-        let directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
+        let directionalLight = new DirectionalLight(0xffffff, 0.9);
         directionalLight.position.set(-1, 1, 1);
         directionalLight.castShadow = true;
         this.scene.add(directionalLight);
 
         // axis helper
-        let axisHelper = new THREE.AxisHelper(100);
+        let axisHelper = new AxisHelper(100);
         this.scene.add(axisHelper);
 
         // cube
-        let textureLoader = new THREE.TextureLoader();
+        let textureLoader = new TextureLoader();
         textureLoader.load('/images/2013/alyssas_first_snowman/xs/DSC_9960.jpg', texture => {
-            let geometry = new THREE.BoxGeometry(50, 50, 50);
-            let material = new THREE.MeshPhongMaterial({ color: 0xffffff, map: texture });
-            this.cube = new THREE.Mesh(geometry, material);
+            let geometry = new BoxGeometry(50, 50, 50);
+            let material = new MeshPhongMaterial({ color: 0xffffff, map: texture });
+            this.cube = new Mesh(geometry, material);
             this.cube.position.set(0, 70, 180);
             this.scene.add(this.cube);
 
@@ -66,12 +70,12 @@ export class CubeDemo {
 
         // floor
         textureLoader.load('/img/webgl/floor_texture.jpg', texture => {
-            let floorPlane = new THREE.PlaneGeometry(1000, 1000);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
+            let floorPlane = new PlaneGeometry(1000, 1000);
+            texture.wrapS = RepeatWrapping;
+            texture.wrapT = RepeatWrapping;
             texture.repeat.set(9, 9);
-            let floorMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide }); //
-            let floor = new THREE.Mesh(floorPlane, floorMaterial);
+            let floorMaterial = new MeshBasicMaterial({ map: texture, side: DoubleSide }); //
+            let floor = new Mesh(floorPlane, floorMaterial);
             floor.position.y = -30;
             floor.rotation.x = (Math.PI / 2) - .3;
             this.scene.add(floor);

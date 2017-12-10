@@ -2,9 +2,12 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/throttleTime';
-import * as THREE from 'three';
-import * as TWEEN from 'tween.js';
-import * as Mousetrap from 'mousetrap';
+
+import { AxisHelper, Clock, Scene, WebGLRenderer, PerspectiveCamera, Vector3, AmbientLight, DirectionalLight } from 'three';
+
+import { Tween } from 'tween.js';
+
+import { Mousetrap } from 'mousetrap';
 
 import { BackgroundController } from './controllers/background-controller';
 import { CategoryListController } from './controllers/category-list-controller';
@@ -22,12 +25,12 @@ import { StatusBarController } from './controllers/status-bar-controller';
 import { VisualContext } from './models/visual-context';
 
 export class Photos3D {
-    private _axisHelper: THREE.AxisHelper;
+    private _axisHelper: AxisHelper;
     private _bg: IController;
     private _blurSubscription: Subscription;
     private _categorySelectedSubscription: Subscription;
     private _catList: CategoryListController;
-    private _clock = new THREE.Clock();
+    private _clock = new Clock();
     private _dataService = new DataService();
     private _dialogSubscription: Subscription;
     private _disposalService = new DisposalService();
@@ -176,7 +179,7 @@ export class Photos3D {
 
     private toggleAxisHelper() {
         if (this._axisHelper == null) {
-            this._axisHelper = new THREE.AxisHelper(500);
+            this._axisHelper = new AxisHelper(500);
             this._ctx.scene.add(this._axisHelper);
         } else {
             this.removeAxisHelper();
@@ -212,20 +215,20 @@ export class Photos3D {
     }
 
     private prepareScene() {
-        this._ctx.scene = new THREE.Scene();
+        this._ctx.scene = new Scene();
 
-        this._ctx.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this._ctx.renderer = new WebGLRenderer({ antialias: true, alpha: true });
         this._ctx.renderer.setSize(this._ctx.width, this._ctx.height);
         document.body.appendChild(this._ctx.renderer.domElement);
 
-        this._ctx.camera = new THREE.PerspectiveCamera(45, this._ctx.width / this._ctx.height, 0.1, 2000);
+        this._ctx.camera = new PerspectiveCamera(45, this._ctx.width / this._ctx.height, 0.1, 2000);
         this._ctx.camera.position.set(0, 200, 1000);
-        this._ctx.camera.lookAt(new THREE.Vector3(0, 200, 0));
+        this._ctx.camera.lookAt(new Vector3(0, 200, 0));
 
-        this._ctx.ambient = new THREE.AmbientLight(0x404040);
+        this._ctx.ambient = new AmbientLight(0x404040);
         this._ctx.scene.add(this._ctx.ambient);
 
-        this._ctx.sun = new THREE.DirectionalLight(0xffffff, 0.9);
+        this._ctx.sun = new DirectionalLight(0xffffff, 0.9);
         this._ctx.sun.position.set(-1, 1, 1);
         this._ctx.sun.castShadow = true;
         this._ctx.scene.add(this._ctx.sun);
@@ -267,7 +270,7 @@ export class Photos3D {
         this._photoList.render(clockDelta, elapsed);
         this._pointLights.render(clockDelta, elapsed);
 
-        TWEEN.update();
+        Tween.update();
     }
 
     private unload(evt: Event) {
@@ -305,7 +308,7 @@ export class Photos3D {
         Mousetrap.unbind('p');
         Mousetrap.unbind('?');
 
-        TWEEN.removeAll();
+        Tween.removeAll();
 
         this.removeAxisHelper();
 

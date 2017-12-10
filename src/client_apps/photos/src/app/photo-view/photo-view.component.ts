@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild, AfterViewInit, OnDestroy, OnChanges, NgZone } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
-import * as Mousetrap from 'mousetrap';
+import { Mousetrap } from 'mousetrap';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 

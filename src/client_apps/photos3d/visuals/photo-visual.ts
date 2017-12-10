@@ -1,4 +1,4 @@
-import { ObjeGroupct3D, TextureLoader, Mesh, Texture, LinearFilter, PlaneGeometry, MeshBasicMaterial, DoubleSide } from 'three';
+import { Group, TextureLoader, Mesh, Texture, LinearFilter, PlaneGeometry, MeshBasicMaterial, DoubleSide } from 'three';
 
 import { ArgumentNullError } from '../models/argument-null-error';
 import { DisposalService } from '../services/disposal-service';

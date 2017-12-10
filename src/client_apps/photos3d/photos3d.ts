@@ -5,7 +5,7 @@ import 'rxjs/add/operator/throttleTime';
 
 import { AxisHelper, Clock, Scene, WebGLRenderer, PerspectiveCamera, Vector3, AmbientLight, DirectionalLight } from 'three';
 
-import { Tween } from 'tween.js';
+import * as TWEEN from 'tween.js';
 
 import { Mousetrap } from 'mousetrap';
 
@@ -270,7 +270,7 @@ export class Photos3D {
         this._photoList.render(clockDelta, elapsed);
         this._pointLights.render(clockDelta, elapsed);
 
-        Tween.update();
+        TWEEN.update();
     }
 
     private unload(evt: Event) {
@@ -308,7 +308,7 @@ export class Photos3D {
         Mousetrap.unbind('p');
         Mousetrap.unbind('?');
 
-        Tween.removeAll();
+        TWEEN.removeAll();
 
         this.removeAxisHelper();
 

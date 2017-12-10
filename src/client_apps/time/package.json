@@ -8,6 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "dev_watch": "ng build --extract-css --vendor-chunk=false --watch",
     "dev_build": "ng build --extract-css --vendor-chunk=false && ng lint",
     "prod_build": "ng build --aot --vendor-chunk=false --target production --environment prod"
   },

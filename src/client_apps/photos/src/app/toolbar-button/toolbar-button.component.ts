@@ -11,9 +11,4 @@ export class ToolbarButtonComponent {
     @Input() tooltip: string;
     @Input() isActive = false;
     @Input() icon: SvgIcon;
-    @Output() click = new EventEmitter<boolean>();
-
-    onClick() {
-        this.click.emit(true);
-    }
 }

@@ -23,7 +23,7 @@
     "@angular/platform-browser-dynamic": "^5.1.0",
     "@angular/router": "^5.1.0",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.7",
-    "core-js": "^2.5.2",
+    "core-js": "^2.5.3",
     "mousetrap": "^1.6.1",
     "rxjs": "^5.5.5",
     "three": "^0.88.0",
@@ -35,8 +35,8 @@
     "@types/googlemaps": "^3.30.0",
     "@types/jasmine": "2.8.2",
     "@types/modernizr": "^3.5.1",
-    "@types/node": "~8.0.57",
-    "codelyzer": "~4.0.1",
+    "@types/node": "~8.0.58",
+    "codelyzer": "~4.0.2",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~1.7.1",
@@ -46,8 +46,8 @@
     "karma-jasmine": "~1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.2.1",
-    "ts-node": "~3.3.0",
+    "ts-node": "~4.0.1",
     "tslint": "~5.8.0",
-    "typescript": "2.4.2"
+    "typescript": "2.5.3"
   }
 }

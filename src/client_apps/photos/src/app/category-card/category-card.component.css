@@ -1,4 +1,5 @@
 :host:hover {
+    background-color: #1c1e22;
     border-color: #52575c;
     cursor: pointer;
 }
@@ -14,8 +15,4 @@
 
 :host:hover img {
     opacity: 1;
-}
-
-.imgtop {
-    min-height: 120px;
 }

@@ -1,7 +1,7 @@
-<div class="imgtop d-flex align-items-center justify-content-center">
-    <img class="card-img-top" [src]="category.teaserPhotoInfo.path" [ngStyle]="{height: category.teaserPhotoInfo.height + 'px', width: category.teaserPhotoInfo.width + 'px'}" />
-</div>
-<app-svg-icon *ngIf="category.hasGpsData" [klass]="'icon badge'"></app-svg-icon>
-<div class="card-body p-2 text-center">
+<div class="card-body p-0 text-center">
+    <img class="d-block mb-1 mx-auto img-fluid" [src]="category.teaserPhotoInfo.path" />
     <span class="category_name">{{category.name}}</span>
+</div>
+<div class="card-footer">
+    <app-svg-icon *ngIf="category.hasGpsData" [klass]="'icon badge'"></app-svg-icon>
 </div>

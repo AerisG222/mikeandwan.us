@@ -1,5 +1,6 @@
 :host:hover,
 :host.active {
+    background-color: #1c1e22;
     border-color: #52575c;
     cursor: pointer;
 }

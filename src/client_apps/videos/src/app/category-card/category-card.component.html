@@ -1,6 +1,4 @@
-<div class="imgtop d-flex justify-content-center">
-    <img class="card-img-top" [src]="category.teaserThumbnail.path" [ngStyle]="{height: category.teaserThumbnail.height + 'px', width: category.teaserThumbnail.width + 'px'}" />
-</div>
-<div class="card-body p-2 text-center">
+<div class="card-body text-center">
+    <img class="d-block mb-1 mx-auto img-fluid" [src]="category.teaserThumbnail.path" />
     <span class="category_name">{{category.name}}</span>
 </div>

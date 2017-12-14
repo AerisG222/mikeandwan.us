@@ -2,6 +2,6 @@
     <img class="d-block mb-1 mx-auto img-fluid" [src]="category.teaserPhotoInfo.path" />
     <span class="category_name">{{category.name}}</span>
 </div>
-<div class="card-footer">
-    <app-svg-icon *ngIf="category.hasGpsData" [klass]="'icon badge'"></app-svg-icon>
+<div class="card-footer p-0 d-flex justify-content-end">
+    <app-svg-icon *ngIf="category.hasGpsData" [icon]="svgIcon.MapMarker" [klass]="'icon badge'"></app-svg-icon>
 </div>

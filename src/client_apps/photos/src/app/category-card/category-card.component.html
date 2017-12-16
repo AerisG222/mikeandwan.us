@@ -1,6 +1,6 @@
 <div class="card-body p-0 text-center">
     <img class="d-block mb-1 mx-auto img-fluid" [src]="category.teaserPhotoInfo.path" />
-    <span class="category_name">{{category.name}}</span>
+    <p class="category_name px-2">{{category.name}}</p>
 </div>
 <div class="card-footer p-0 d-flex justify-content-end">
     <app-svg-icon *ngIf="category.hasGpsData" [icon]="svgIcon.MapMarker" [klass]="'icon badge'"></app-svg-icon>

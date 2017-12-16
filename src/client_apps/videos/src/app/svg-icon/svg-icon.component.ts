@@ -11,7 +11,6 @@ import { SvgIcon } from './svg-icon.enum';
 export class SvgIconComponent {
   private _icon: SvgIcon;
   private _class: string;
-  private _style: string;
 
   public viewbox: string;
   public d: string;
@@ -31,14 +30,6 @@ export class SvgIconComponent {
 
   get klass(): string {
     return this._class;
-  }
-
-  @Input() set style(theStyle: string) {
-    this._class = theStyle;
-  }
-
-  get style(): string {
-    return this._style;
   }
 
   private update(): void {

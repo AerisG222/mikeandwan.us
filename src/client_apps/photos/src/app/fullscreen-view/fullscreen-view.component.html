@@ -1,10 +1,10 @@
 <div class="fullscreen">
     <img [src]="context.current.photo.lgInfo.path" />
-    <div>
-        <div [hidden]="context.isCategoryMode" class="pull-left">
+    <div class="row no-gutters">
+        <div [hidden]="context.isCategoryMode" class="col px-0">
             <app-category-link [category]="context.current.category"></app-category-link>
         </div>
-        <div class="pull-right">
+        <div class="col px-0 d-flex justify-content-end">
             <button type="button" class="btn btn-primary btn-sm" (click)="context.movePrevious()"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.ArrowLeft"></app-svg-icon></button>
             <app-slideshow-button [context]="context"></app-slideshow-button>
             <button type="button" class="btn btn-primary btn-sm" (click)="context.moveNext()"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.ArrowRight"></app-svg-icon></button>

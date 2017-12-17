@@ -8,8 +8,8 @@
     	<div class="row main-image" [ngClass]="{hide_main_image_border: category}">
             <div class="col-12 vcenter text-center">
         		<img [src]="getPhotoPath()" [ngClass]="rotationClassArray[context.current.rotationClassIndex]" [ngStyle]="{'max-width': rotationContainmentMaxWidth, 'max-height': rotationContainmentMaxHeight}" />
-        		<a class="prev" [hidden]="!context.hasPrevious" (click)="context.movePrevious()"><app-svg-icon [klass]="'icon icon-xxl'" [icon]="svgIcon.ArrowCircleLeft"></app-svg-icon></a>
-        		<a class="next" [hidden]="!context.hasNext" (click)="context.moveNext()"><app-svg-icon [klass]="'icon icon-xxl'" [icon]="svgIcon.ArrowCircleRight"></app-svg-icon></a>
+        		<a class="prev" [hidden]="!context.hasPrevious" (click)="context.movePrevious()"><app-svg-icon [klass]="'icon-xl'" [icon]="svgIcon.ArrowCircleLeft"></app-svg-icon></a>
+        		<a class="next" [hidden]="!context.hasNext" (click)="context.moveNext()"><app-svg-icon [klass]="'icon-xl'" [icon]="svgIcon.ArrowCircleRight"></app-svg-icon></a>
             </div>
     	</div>
     	<div class="row toolbar hidden-xs">

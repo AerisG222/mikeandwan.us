@@ -18,7 +18,7 @@ h1 {
 }
 
 footer {
-    margin-top: 80px;
+    margin-top: 60px;
     background: none repeat scroll 0 0 #1c1e22;
     padding: 20px 0 40px;
     color: #777;
@@ -26,17 +26,6 @@ footer {
 
 button {
     cursor: pointer;
-}
-
-.ext_auth {
-    & a {
-        margin-top: 8px;
-        display: block;
-    }
-
-    & .icon {
-        margin-right: 8px;
-    }
 }
 
 .banner {
@@ -70,6 +59,18 @@ button {
     }
 }
 
+.hover-bright:hover {
+    cursor: pointer;
+
+    & a {
+        color: #fff;
+    }
+
+    & svg {
+        fill: #fff;
+    }
+}
+
 .navbar-brand {
     font-family: Tangerine;
     font-size: 2.4rem;
@@ -100,7 +101,7 @@ button {
         }
     }
 
-    .icon:hover {
+    a:hover svg {
         fill: #fff;
     }
 }
@@ -110,37 +111,37 @@ button {
 }
 
 .social {
+    font-size: 2rem;
     margin: 24px;
 
     a {
         margin: 0 12px;
     }
-
-    &.icon {
-        margin: 0;
-        height: 2.4rem;
-    }
 }
 
-.icon {
-    fill: #c8c8c8;
-    height: 1rem;
+/* https://blog.prototypr.io/align-svg-icons-to-text-and-say-goodbye-to-font-icons-d44b3d7b26b4 */
+.svg-icon {
+    display: inline-flex;
+    align-self: center;
+    position: relative;
+    height: 1em;
+    width: 1em;
 
-    &.bright {
-        fill: #fff;
+    & svg {
+        fill: #c8c8c8;
+        height: 1em;
+        width: 1em;
+    }
+
+    &.svg-baseline svg {
+        bottom: -0.125em;
+        position: absolute;
     }
 
     &.hp-feature {
-        height: 7rem;
-    }
-
-    &.caret {
-        height: 0.4rem;
-        margin-bottom: 4px;
+        font-size: 7rem;
     }
 }
-
-.icon-dialog-close { height: 1.4em; }
 
 .list-group-item {
     color: #c8c8c8;

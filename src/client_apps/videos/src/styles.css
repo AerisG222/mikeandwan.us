@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-a, .clickable { cursor: pointer; }
+a { cursor: pointer; }
 
 /* begin responsive card
    https://github.com/twbs/bootstrap/issues/20321 */

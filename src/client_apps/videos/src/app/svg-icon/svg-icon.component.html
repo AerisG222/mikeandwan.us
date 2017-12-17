@@ -1,3 +1,5 @@
-<svg *ngIf="d" [attr.class]="klass" [attr.viewBox]="viewbox">
-    <path [attr.d]="d"></path>
-</svg>
+<span *ngIf="d" [attr.class]="klass">
+    <svg  [attr.viewBox]="viewbox">
+        <path [attr.d]="d"></path>
+    </svg>
+</span>

@@ -1,6 +1,6 @@
-.icon-xxl { height: 3em; }
-.icon-xl { height: 2em; }
-.icon-lg { height: 1em; }
-.icon-md { height: 0.8em; }
-.icon-sm { height: 0.6em; }
-.icon-xs { height: 0.4em; }
+.icon-xxl { font-size: 3em; }
+.icon-xl { font-size: 2em; }
+.icon-lg { font-size: 1em; }
+.icon-md { font-size: 0.8em; }
+.icon-sm { font-size: 0.6em; }
+.icon-xs { font-size: 0.4em; }

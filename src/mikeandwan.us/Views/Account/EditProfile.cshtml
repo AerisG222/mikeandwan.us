@@ -174,33 +174,49 @@
             To use this successfully, you <strong>must</strong> ensure that the email address on the social platform matches the
             email address for your mikeandwan.us account.  If this is not the case, <strong>please do not enable this option</strong>.
         </p>
-        <div class="offset-sm-3 col-sm-9">
-            <label>
-                <input type="checkbox" asp-for="EnableGithubAuth" /> <svg-icon icon="Github" class="icon"></svg-icon> GitHub
-            </label>
+        <div class="form-row">
+            <div class="offset-sm-3 col-sm-9">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" asp-for="EnableGithubAuth" /> <svg-icon icon="Github" class="ml-2"></svg-icon> GitHub
+                    </label>
+                </div>
+            </div>
         </div>
-        <div class="offset-sm-3 col-sm-9">
-            <label>
-                <input type="checkbox" asp-for="EnableGoogleAuth" /> <svg-icon icon="GooglePlus" class="icon"></svg-icon> Google
-            </label>
+        <div class="form-row">
+            <div class="offset-sm-3 col-sm-9">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" asp-for="EnableGoogleAuth" /> <svg-icon icon="GooglePlus" class="ml-2"></svg-icon> Google
+                    </label>
+                </div>
+            </div>
         </div>
-        <div class="offset-sm-3 col-sm-9">
-            <label>
-                <input type="checkbox" asp-for="EnableMicrosoftAuth" /> <svg-icon icon="Windows" class="icon"></svg-icon> Microsoft
-            </label>
+        <div class="form-row">
+            <div class="offset-sm-3 col-sm-9">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" asp-for="EnableMicrosoftAuth" /> <svg-icon icon="Windows" class="ml-2"></svg-icon> Microsoft
+                    </label>
+                </div>
+            </div>
         </div>
-        <div class="offset-sm-3 col-sm-9">
-            <label>
-                <input type="checkbox" asp-for="EnableTwitterAuth" /> <svg-icon icon="Twitter" class="icon"></svg-icon> Twitter
-            </label>
+        <div class="form-row">
+            <div class="offset-sm-3 col-sm-9">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" asp-for="EnableTwitterAuth" /> <svg-icon icon="Twitter" class="ml-2"></svg-icon> Twitter
+                    </label>
+                </div>
+            </div>
         </div>
     </fieldset>
 
     <br />
 
-    <div class="form-group">
+    <div class="form-row">
         <div class="offset-sm-3 col-sm-2">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Update Profile</button>
         </div>
     </div>
 </form>

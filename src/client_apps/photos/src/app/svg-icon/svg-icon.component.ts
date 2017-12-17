@@ -10,7 +10,7 @@ import { SvgIcon } from './svg-icon.enum';
 })
 export class SvgIconComponent {
   private _icon: SvgIcon;
-  private _class: string;
+  private _class = 'svg-icon svg-baseline';
 
   public viewbox: string;
   public d: string;
@@ -25,7 +25,7 @@ export class SvgIconComponent {
   }
 
   @Input() set klass(theClass: string) {
-    this._class = theClass;
+    this._class = `svg-icon svg-baseline ${theClass}`;
   }
 
   get klass(): string {

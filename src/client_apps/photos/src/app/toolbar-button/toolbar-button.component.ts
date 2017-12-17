@@ -12,8 +12,4 @@ export class ToolbarButtonComponent {
     @Input() isActive = false;
     @Input() icon: SvgIcon;
     @Input() iconSize = 'icon-lg';
-
-    get iconClass(): string {
-        return `icon icon-bright vcenter ${this.iconSize}`;
-    }
 }

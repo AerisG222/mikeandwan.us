@@ -6,24 +6,24 @@
 </div>
 <div class="modal-body">
     <form>
-        <div class="row">
+        <div class="form-group row">
             <div class="col">
                 <label for="prefsDisplayMode" class="col-form-label">Photo Display Mode</label>
             </div>
             <div class="col">
-                <select id="prefsDisplayMode" class="form-control" [(ngModel)]="form.displayMode" name="displayMode">
+                <select class="custom-select w-100" id="prefsDisplayMode" [(ngModel)]="form.displayMode" name="displayMode">
                     <option value="1">Inline View</option>
                     <option value="2">Popup (optimized for small screens)</option>
                 </select>
             </div>
         </div>
 
-        <div class="row">
+        <div class="form-group row">
             <div class="col">
                 <label for="prefsThumbnailsPerPage" class="col-form-label">Thumbnails Per Page</label>
             </div>
             <div class="col">
-                <select id="prefsThumbnailsPerPage" class="form-control" [(ngModel)]="form.thumbnailsPerPage" name="thumbnailsPerPage">
+                <select class="custom-select w-100" id="prefsThumbnailsPerPage" [(ngModel)]="form.thumbnailsPerPage" name="thumbnailsPerPage">
                     <option>12</option>
                     <option>24</option>
                     <option>36</option>
@@ -33,12 +33,12 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="form-group row">
             <div class="col">
                 <label for="prefsSlideshowInterval" class="col-form-label">Slideshow Interval</label>
             </div>
             <div class="col">
-                <select id="prefsSlideshowInterval" class="form-control" [(ngModel)]="form.slideshowInterval" name="slideshowInterval">
+                <select class="custom-select w-100" id="prefsSlideshowInterval" [(ngModel)]="form.slideshowInterval" name="slideshowInterval">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>

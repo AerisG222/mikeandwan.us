@@ -133,7 +133,7 @@
         <div class="form-row">
             <label asp-for="State" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
-                <select class="form-control" asp-for="State" asp-items="(IEnumerable<SelectListItem>)ViewBag.States"></select>
+                <select class="custom-select w-100" asp-for="State" asp-items="(IEnumerable<SelectListItem>)ViewBag.States"></select>
                 <span asp-validation-for="State" class="form-text"></span>
             </div>
     	</div>
@@ -149,7 +149,7 @@
         <div class="form-row">
             <label asp-for="Country" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-6">
-                <select class="form-control" asp-for="Country" asp-items="(IEnumerable<SelectListItem>)ViewBag.Countries"></select>
+                <select class="custom-select w-100" asp-for="Country" asp-items="(IEnumerable<SelectListItem>)ViewBag.Countries"></select>
                 <span asp-validation-for="Country" class="form-text"></span>
             </div>
     	</div>

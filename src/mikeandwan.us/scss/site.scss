@@ -87,6 +87,7 @@ button {
 
     .navbar-nav {
         .nav-link {
+            padding-bottom: .8rem;
             color: #c8c8c8;
 
             &:hover,
@@ -145,6 +146,10 @@ button {
 
 .list-group-item {
     color: #c8c8c8;
+
+    &:hover {
+        color: #fff;
+    }
 }
 
 @include media-breakpoint-up(lg) {

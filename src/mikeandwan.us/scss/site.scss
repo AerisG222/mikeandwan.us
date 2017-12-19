@@ -1,27 +1,25 @@
-$input-btn-padding-y:   0.5rem !default;
+$enable-gradients:      true;
+$input-btn-padding-y:   0.5rem;
 
 @import "bootswatch/dist/slate/variables";
 @import "bootstrap/scss/bootstrap";
 @import "bootswatch/dist/slate/bootswatch";
 
-// hopefully can get rid of this in future
 pre {
-    background-color: #f8f9fa;
-    padding: 0 1rem;
+    background-color: $code-bg;
+    padding: 0 0.5rem;
 }
-//
 
 h1 {
     padding-bottom: 9px;
     margin: 40px 0 20px;
-    border-bottom: 1px solid #1c1e22;
+    border-bottom: 1px solid $table-border-color;
 }
 
 footer {
     margin-top: 60px;
-    background: none repeat scroll 0 0 #1c1e22;
+    background: none repeat scroll 0 0 $table-border-color;
     padding: 20px 0 40px;
-    color: #777;
 }
 
 button {
@@ -35,25 +33,25 @@ button {
     background-attachment: fixed;
     height: 120px;
     margin-bottom: 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+    border-bottom: 1px solid $table-border-color;
 
     .navbar {
-        background: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(0, 0, 0, 0.6);
+        background: $table-border-color;
+        border: 1px solid $table-border-color;
         border-width: 0 0 1px;
         margin: 0 -15px;
     }
 
     .dropdown-menu {
-        background: rgba(0, 0, 0, 0.4);
+        background: $table-border-color;
 
         a {
             display: block;
-            color: #c8c8c8;
+            color: $body-color;
 
             &:hover {
-                background: rgba(0, 0, 0, 0.4);
-                color: #fff;
+                background: $table-border-color;
+                color: $link-color;
             }
         }
     }
@@ -63,11 +61,11 @@ button {
     cursor: pointer;
 
     & a {
-        color: #fff;
+        color: $link-color;
     }
 
     & svg {
-        fill: #fff;
+        fill: $link-color;
     }
 }
 
@@ -81,29 +79,29 @@ button {
 
 .navbar-dark {
     .navbar-brand {
-        color: #c8c8c8;
+        color: $body-color;
         line-height: 1rem;
     }
 
     .navbar-nav {
         .nav-link {
             padding-bottom: .8rem;
-            color: #c8c8c8;
+            color: $body-color;
 
             &:hover,
             &:focus {
-                color: #fff;
-                background: rgba(0, 0, 0, 0.4);
+                color: $link-color;
+                background: $navbar-light-disabled-color;
             }
 
             &:last-child {
-                border-right: 1px solid rgba(255, 255, 255, 0.1);
+                border-right: 1px solid $navbar-dark-toggler-border-color;
             }
         }
     }
 
     a:hover svg {
-        fill: #fff;
+        fill: $link-color;
     }
 }
 
@@ -129,7 +127,7 @@ button {
     width: 1em;
 
     & svg {
-        fill: #c8c8c8;
+        fill: $body-color;
         height: 1em;
         width: 1em;
     }
@@ -145,10 +143,10 @@ button {
 }
 
 .list-group-item {
-    color: #c8c8c8;
+    color: $body-color;
 
     &:hover {
-        color: #fff;
+        color: $link-color;
     }
 }
 

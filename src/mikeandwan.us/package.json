@@ -10,9 +10,9 @@
     "popper.js": "^1.12.6"
   },
   "devDependencies": {
-    "node-sass": "^4.5.3",
-    "stylelint": "^8.2.0",
-    "stylelint-config-standard": "^17.0.0"
+    "node-sass": "^4.7.2",
+    "stylelint": "^8.4.0",
+    "stylelint-config-standard": "^18.0.0"
   },
   "scripts": {
     "sass": "npm run sass:lint & npm run sass:site & npm run sass:games",

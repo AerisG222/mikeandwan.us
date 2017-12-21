@@ -23,6 +23,9 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 		public bool ValidationAttempted { get; set; }
 		
 		[BindNever]
+		public bool HasErrors { get; set; }
+		
+		[BindNever]
 		public bool AreErrors 
 		{ 
 			get

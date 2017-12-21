@@ -13,6 +13,13 @@
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "url-encode" })
 }
 
+@if(Model.HasErrors) {
+    <p maw-alert-type="Danger">
+        Please correct the errors below:
+    </p>
+    <div class="text-danger" asp-validation-summary="All"></div>
+}
+
 <p>This page allows you to encode and decode values suitable for a querystring.</p>
 
 <form asp-controller="tools" asp-action="urlencode" method="post" autocomplete="off" role="form">
@@ -20,7 +27,7 @@
 	<div class="form-group">
         <label asp-for="DecodedString" class="col-form-label"></label>
         <textarea asp-for="DecodedString" rows="8" class="form-control" autofocus=""></textarea>
-        <span asp-validation-for="DecodedString" class="form-text"></span>
+        @*<span asp-validation-for="DecodedString" class="form-text"></span>*@
 	</div>
 
     <div class="form-group">
@@ -33,7 +40,7 @@
     <div class="form-group">
         <label asp-for="EncodedString" class="col-form-label"></label>
         <textarea asp-for="EncodedString" rows="8" class="form-control"></textarea>
-        <span asp-validation-for="EncodedString" class="form-text"></span>
+        @*<span asp-validation-for="EncodedString" class="form-text"></span>*@
 	</div>
 
     <div class="form-group">

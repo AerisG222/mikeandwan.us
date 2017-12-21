@@ -12,6 +12,13 @@
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "xml-validate" })
 }
 
+@if(Model.HasErrors) {
+    <p maw-alert-type="Danger">
+        Please correct the errors below:
+    </p>
+    <div class="text-danger" asp-validation-summary="All"></div>
+}
+
 <p>
 	This page allows you to validate the contents of an XML document, to make sure it is
 	well formed, and optionally, that it adheres to the supplied DTD / XSD.
@@ -21,12 +28,12 @@
 	<div class="form-group">
 		<label asp-for="XmlSource" class="col-form-label"></label>
 		<textarea asp-for="XmlSource" rows="8" class="form-control" autofocus=""></textarea>
-		<span asp-validation-for="XmlSource" class="form-text"></span>
+		@*<span asp-validation-for="XmlSource" class="form-text"></span>*@
 	</div>
     <div class="form-group">
 		<label asp-for="SchemaOrDtdSource" class="col-form-label"></label>
 		<textarea asp-for="SchemaOrDtdSource" rows="8" class="form-control"></textarea>
-		<span asp-validation-for="SchemaOrDtdSource" class="form-text"></span>
+		@*<span asp-validation-for="SchemaOrDtdSource" class="form-text"></span>*@
 	</div>
 
     <div class="form-group">

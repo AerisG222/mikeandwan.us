@@ -13,6 +13,13 @@
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-regex" })
 }
 
+@if(Model.HasErrors) {
+    <p maw-alert-type="Danger">
+        Please correct the errors below:
+    </p>
+    <div class="text-danger" asp-validation-summary="All"></div>
+}
+
 <p>
  This tool will demonstrate if the input string results in a match based
  on the supplied regex.  Please note that both the sample text and regex
@@ -23,13 +30,13 @@
 	<div class="form-group">
         <label asp-for="Pattern" class="col-form-label"></label>
         <textarea asp-for="Pattern" rows="2" class="form-control" autofocus=""></textarea>
-        <span asp-validation-for="Pattern" class="form-text"></span>
+        @*<span asp-validation-for="Pattern" class="form-text"></span>*@
     </div>
 
     <div class="form-group">
         <label asp-for="Input" class="col-form-label"></label>
         <textarea asp-for="Input" rows="4" class="form-control" autofocus=""></textarea>
-        <span asp-validation-for="Input" class="form-text"></span>
+        @*<span asp-validation-for="Input" class="form-text"></span>*@
 	</div>
 
     <div class="row">

@@ -12,6 +12,13 @@
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "random-bytes" })
 }
 
+@if(Model.HasErrors) {
+    <p maw-alert-type="Danger">
+        Please correct the errors below:
+    </p>
+    <div class="text-danger" asp-validation-summary="All"></div>
+}
+
 <p>
 This page allows you to generate a list of random bytes.  I've created this after wanting a more random
 sequence of bytes than manually typing these in, primarily for use in the machinekey section of the
@@ -27,7 +34,7 @@ result in a good random value.
         <div class="row">
             <div class="col-sm-4">
                 <input asp-for="Size" class="form-control" autofocus="" />
-                <span asp-validation-for="Size" class="form-text"></span>
+                @*<span asp-validation-for="Size" class="form-text"></span>*@
             </div>
         </div>
 	</div>

@@ -238,6 +238,8 @@ namespace MawMvcApp.Controllers
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 
+			model.WasEmailAttempted = true;
+
 			if(ModelState.IsValid)
 			{
 				var user = await _userMgr.FindByEmailAsync(model.Email);
@@ -258,7 +260,7 @@ namespace MawMvcApp.Controllers
                 
 				await _emailService.SendHtmlAsync(user.Email, _contactConfig.To, "Reset Password for mikeandwan.us", body).ConfigureAwait(false);
 
-				model.WasEmailAttempted = true;
+				model.WasSuccessful = true;
 
 				return View(model);
 			}

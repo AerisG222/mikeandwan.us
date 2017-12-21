@@ -124,7 +124,7 @@ namespace MawMvcApp.Controllers
 				};
 
 				var crypto = new Crypto();
-				var password = crypto.GeneratePassword(12);
+				var password = crypto.GeneratePassword(12);model.Result = IdentityResult.Failed();
 				
 				try
 				{
@@ -153,6 +153,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.Result = IdentityResult.Failed();
 				LogValidationErrors();
 			}
 			
@@ -205,6 +206,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.Result = IdentityResult.Failed();
 				LogValidationErrors();
 			}
 			
@@ -239,6 +241,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.Result = IdentityResult.Failed();
 				LogValidationErrors();
 			}
 			
@@ -284,6 +287,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.Result = IdentityResult.Failed();
 				LogValidationErrors();
 			}
 			
@@ -340,6 +344,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.Result = IdentityResult.Failed();
 				LogValidationErrors();
 			}
 			
@@ -504,6 +509,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.Result = IdentityResult.Failed();
 				LogValidationErrors();
 			}
 
@@ -542,6 +548,8 @@ namespace MawMvcApp.Controllers
 				}
 				if (model.Behavior == BlogPostAction.Save)
 				{
+					model.WasAttempted = true;
+
 					var post = new Post()
 					{
 						BlogId = 1,
@@ -557,6 +565,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.WasAttempted = true;
 				LogValidationErrors();
 			}
 			

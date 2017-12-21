@@ -12,13 +12,20 @@
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "date-diff" })
 }
 
+@if(Model.HasErrors) {
+    <p maw-alert-type="Danger">
+        Please correct the errors below:
+    </p>
+    <div class="text-danger" asp-validation-summary="All"></div>
+}
+
 <form asp-controller="tools" asp-action="datediff" method="post" autocomplete="off" role="form">
 	<div class="form-group">
         <label asp-for="StartDate" class="col-form-label"></label>
         <div class="row">
             <div class="col-sm-5">
                 <input asp-for="StartDate" class="form-control" autofocus="" />
-                <span asp-validation-for="StartDate" class="form-text"></span>
+                @*<span asp-validation-for="StartDate" class="form-text"></span>*@
             </div>
         </div>
 	</div>
@@ -28,7 +35,7 @@
         <div class="row">
             <div class="col-sm-5">
                 <input asp-for="EndDate" class="form-control" />
-                <span asp-validation-for="EndDate" class="form-text"></span>
+                @*<span asp-validation-for="EndDate" class="form-text"></span>*@
             </div>
         </div>
 	</div>

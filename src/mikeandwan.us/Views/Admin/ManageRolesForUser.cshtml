@@ -24,7 +24,11 @@
 				@foreach(string role in Model.AllRoles) {
 					<tr>
 						<td>@role</td>
-						<td class="d-flex justify-content-center"><input type="checkbox" name="role" value="@role" @if(Model.GrantedRoles.Contains(@role)) { <text>CHECKED</text> } /></td>
+						<td>
+							<div class="d-flex justify-content-center">
+								<input class="form-check-input" type="checkbox" name="role" value="@role" @if(Model.GrantedRoles.Contains(@role)) { <text>CHECKED</text> } />
+							</div>
+						</td>
 					</tr>
 				}
 				</tbody>

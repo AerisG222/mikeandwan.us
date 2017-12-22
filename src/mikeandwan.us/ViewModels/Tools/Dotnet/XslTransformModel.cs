@@ -31,6 +31,9 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 		public string TransformResult { get; set; }
 		
 		[BindNever]
+		public bool HasErrors { get; set; }
+		
+		[BindNever]
 		public bool AreErrors 
 		{ 
 			get

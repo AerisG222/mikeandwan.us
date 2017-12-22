@@ -45,6 +45,8 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 		[Display(Name = "Single Line")]
 		public bool OptionSingleLine { get; set; }
 		
+		[BindNever]
+		public bool HasErrors { get; set; }
 		
 		[BindNever]
 		public MatchCollection RegexMatches { get; set; }

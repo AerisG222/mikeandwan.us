@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 
 namespace MawMvcApp.ViewModels.Tools.Dotnet
@@ -19,6 +20,8 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 		
 		public EncodeMode Mode { get; set; }
 
+		[BindNever]
+		public bool HasErrors { get; set; }
 		
 		public IEnumerable<ValidationResult> Validate (ValidationContext validationContext)
 		{

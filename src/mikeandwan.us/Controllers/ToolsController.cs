@@ -67,6 +67,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.HasErrors = true;
 				LogValidationErrors();
 			}
 			
@@ -148,6 +149,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.HasErrors = true;
 				LogValidationErrors();
 			}
 			
@@ -253,6 +255,7 @@ namespace MawMvcApp.Controllers
 			
 			if(!ModelState.IsValid)
 			{
+				dd.HasErrors = true;
 				LogValidationErrors();
 			}
 			
@@ -326,6 +329,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.HasErrors = true;
 				LogValidationErrors();
 			}
 			
@@ -366,6 +370,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.HasErrors = true;
 				LogValidationErrors();
 			}
 			
@@ -394,6 +399,7 @@ namespace MawMvcApp.Controllers
             }
 			else
 			{
+				model.HasErrors = true;
 				LogValidationErrors();
 			}
 
@@ -422,6 +428,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.HasErrors = true;
 				LogValidationErrors();
 			}
 			
@@ -450,6 +457,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.HasErrors = true;
 				LogValidationErrors();
 			}
 			
@@ -478,6 +486,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.HasErrors = true;
 				LogValidationErrors();
 			}
 			
@@ -506,6 +515,7 @@ namespace MawMvcApp.Controllers
 			}
 			else
 			{
+				model.HasErrors = true;
 				LogValidationErrors();
 			}
 			

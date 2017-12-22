@@ -12,6 +12,13 @@
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "general", Item = "roll-the-dice" })
 }
 
+@if(Model.HasErrors) {
+    <p maw-alert-type="Danger">
+        Please correct the errors below:
+    </p>
+    <div class="text-danger" asp-validation-summary="All"></div>
+}
+
 <p>
 It always seems the folks I hang out with tend to be indecisive about choosing things.  This occurs almost
 all the time when it comes to determining where to go for lunch or dinner.  Typically, many are options are
@@ -30,7 +37,7 @@ In an effort to facilitate decisions, this tool allows you to <i>roll the dice</
 		<div class="row">
 			<div class="col-sm-4">
 				<input asp-for="NumberOfSides" class="form-control" autofocus="" />
-				<span asp-validation-for="NumberOfSides" class="form-text"></span>
+				@*<span asp-validation-for="NumberOfSides" class="form-text"></span>*@
 			</div>
 		</div>
     </div>
@@ -42,7 +49,7 @@ In an effort to facilitate decisions, this tool allows you to <i>roll the dice</
 		<div class="row">
 			<div class="col-sm-4">
 				<input asp-for="NumberOfThrows" class="form-control" />
-				<span asp-validation-for="NumberOfThrows" class="form-text"></span>
+				@*<span asp-validation-for="NumberOfThrows" class="form-text"></span>*@
 			</div>
 		</div>
 	</div>

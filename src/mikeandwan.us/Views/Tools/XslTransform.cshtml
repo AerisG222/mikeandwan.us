@@ -12,6 +12,13 @@
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "xsl-transform" })
 }
 
+@if(Model.HasErrors) {
+    <p maw-alert-type="Danger">
+        Please correct the errors below:
+    </p>
+    <div class="text-danger" asp-validation-summary="All"></div>
+}
+
 <p>
 	This page allows you to view the output of an XSL Transform when applied to an XML document.
 </p>
@@ -20,12 +27,12 @@
     <div class="form-group">
 		<label asp-for="XmlSource" class="col-form-label"></label>
 		<textarea asp-for="XmlSource" rows="10" class="form-control" autofocus=""></textarea>
-		<span asp-validation-for="XmlSource" class="form-text"></span>
+		@*<span asp-validation-for="XmlSource" class="form-text"></span>*@
 	</div>
 	<div class="form-group">
 		<label asp-for="XsltSource" class="col-form-label"></label>
 		<textarea asp-for="XsltSource" rows="10" class="form-control"></textarea>
-		<span asp-validation-for="XsltSource" class="form-text"></span>
+		@*<span asp-validation-for="XsltSource" class="form-text"></span>*@
 	</div>
 
     <div class="form-group">

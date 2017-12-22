@@ -20,8 +20,8 @@ This page allows you to convert between different GPS coordinate representations
 @if(!Html.ViewData.ModelState.IsValid) {
     <div class="alert alert-danger">
         Please fix the errors listed below:
-        <div asp-validation-summary="All"></div>
     </div>
+    <div class="text-danger" asp-validation-summary="All"></div>
 }
 
 <form asp-controller="tools" asp-action="gpsconversion" method="post" autocomplete="off" role="form">

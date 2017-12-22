@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Maw.Domain.Utilities;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 
 namespace MawMvcApp.ViewModels.Tools.Dotnet
@@ -19,6 +20,8 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 		[Display(Name = "Random Bytes (base64)")]
 		public string RandomBytesBase64 { get; private set; }
 		
+		[BindNever]
+		public bool HasErrors { get; set;}
 		
 		public void GenerateRandomness()
 		{

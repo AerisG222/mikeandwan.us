@@ -10,19 +10,20 @@
     <div class="col-sm-5">
         @if(Model.WasAttempted) {
             <p maw-alert-type="Danger">There was an error logging in.  Please try again.</p>
+            <div class="text-danger" asp-validation-summary="All"></div>
         }
 
         <form asp-controller="account" asp-action="login" asp-route-returnurl="@ViewBag.ReturnUrl" method="post" autocomplete="off" role="form">
             <div class="form-group mb-4">
                 <label asp-for="Username"></label>
                 <input asp-for="Username" class="form-control" autofocus="" />
-                <span asp-validation-for="Username" class="form-text"></span>
+                @*<span asp-validation-for="Username" class="form-text"></span>*@
             </div>
 
             <div class="form-group mb-4">
                 <label asp-for="Password"></label>
                 <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="form-text"></span>
+                @*<span asp-validation-for="Password" class="form-text"></span>*@
             </div>
 
             <div class="form-group mb-4 row">

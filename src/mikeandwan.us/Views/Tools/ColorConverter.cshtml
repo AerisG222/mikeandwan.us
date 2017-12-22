@@ -13,6 +13,18 @@
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "color-converter" })
 }
 
+@if(Model.HasErrors) {
+    <p maw-alert-type="Danger">
+        @if(Model.ErrorMessage != null) {
+            <text>Model.ErrorMessage</text>
+        }
+        else {
+            <text>Please correct the errors below:</text>
+        }
+    </p>
+    <div class="text-danger" asp-validation-summary="All"></div>
+}
+
 <p>This page allows you to translate between different color code formats.</p>
 
 @if(!string.IsNullOrEmpty(Model.HexColorCode)) {
@@ -30,7 +42,7 @@
             <div class="form-group">
                 <label asp-for="HexColorCode" class="col-form-label"></label>
                 <input asp-for="HexColorCode" class="form-control" autofocus="" />
-                <span asp-validation-for="HexColorCode" class="form-text"></span>
+                @*<span asp-validation-for="HexColorCode" class="form-text"></span>*@
             </div>
 
             <div class="form-group">
@@ -45,19 +57,19 @@
             <div class="form-group">
                 <label asp-for="RedComponent" class="col-form-label"></label>
                 <input asp-for="RedComponent" class="form-control" />
-                <span asp-validation-for="RedComponent" class="form-text"></span>
+                @*<span asp-validation-for="RedComponent" class="form-text"></span>*@
             </div>
 
             <div class="form-group">
                 <label asp-for="GreenComponent" class="col-form-label"></label>
                 <input asp-for="GreenComponent" class="form-control" />
-                <span asp-validation-for="GreenComponent" class="form-text"></span>
+                @*<span asp-validation-for="GreenComponent" class="form-text"></span>*@
             </div>
 
             <div class="form-group">
                 <label asp-for="BlueComponent" class="col-form-label"></label>
                 <input asp-for="BlueComponent" class="form-control" />
-                <span asp-validation-for="BlueComponent" class="form-text"></span>
+                @*<span asp-validation-for="BlueComponent" class="form-text"></span>*@
             </div>
 
             <div class="form-group">

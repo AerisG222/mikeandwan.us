@@ -16,20 +16,15 @@ namespace Maw.Domain.Email
 		readonly ILogger _log;
 
 
-		public EmailService(ILoggerFactory loggerFactory, IOptions<EmailConfig> config)
+		public EmailService(ILogger<EmailService> log, IOptions<EmailConfig> config)
 		{
-			if(loggerFactory == null)
-			{
-				throw new ArgumentNullException(nameof(loggerFactory));
-			}
-
 			if(config == null)
 			{
 				throw new ArgumentNullException(nameof(config));
 			}
 
 			_config = config.Value;
-			_log = loggerFactory.CreateLogger<EmailService>();
+			_log = log ?? throw new ArgumentNullException(nameof(log));
 		}
 
 

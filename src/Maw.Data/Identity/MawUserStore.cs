@@ -18,15 +18,10 @@ namespace Maw.Data.Identity
 
 
 		#region ctor
-        public MawUserStore(IUserRepository repo, ILoggerFactory loggerFactory)
+        public MawUserStore(IUserRepository repo, ILogger<MawUserStore> log)
         {
-			if(loggerFactory == null)
-			{
-				throw new ArgumentNullException(nameof(loggerFactory));
-			}
-
             _repo = repo ?? throw new ArgumentNullException(nameof(repo));
-			_log = loggerFactory.CreateLogger<MawUserStore>();
+			_log = log ?? throw new ArgumentNullException(nameof(log));
         }
 		#endregion
 

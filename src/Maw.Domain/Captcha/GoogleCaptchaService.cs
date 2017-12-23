@@ -18,20 +18,15 @@ namespace Maw.Domain.Captcha
 		readonly ILogger _log;
 
 
-		public GoogleCaptchaService(IOptions<GoogleCaptchaConfig> config, ILoggerFactory loggerFactory)
+		public GoogleCaptchaService(IOptions<GoogleCaptchaConfig> config, ILogger<GoogleCaptchaService> log)
 		{
 			if(config == null)
 			{
 				throw new ArgumentNullException(nameof(config));
 			}
 
-			if(loggerFactory == null)
-			{
-				throw new ArgumentNullException(nameof(loggerFactory));
-			}
-
 			_config = config.Value;
-			_log = loggerFactory.CreateLogger<GoogleCaptchaService>();
+			_log = log ?? throw new ArgumentNullException(nameof(log));
 		}
 
 

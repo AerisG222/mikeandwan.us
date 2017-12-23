@@ -1,6 +1,6 @@
 namespace Maw.Domain.Email
 {
-	public class EmailConfig
+	public class SmtpEmailConfig
 	{
 		public string Server { get; set; }
 		public int Port { get; set; }

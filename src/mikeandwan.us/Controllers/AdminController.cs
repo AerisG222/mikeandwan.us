@@ -29,7 +29,6 @@ namespace MawMvcApp.Controllers
         : MawBaseController<AdminController>
     {
         readonly IUserRepository _repo;
-		readonly EmailConfig _emailConfig;
 		readonly UserManager<MawUser> _userMgr;
 		readonly RoleManager<MawRole> _roleMgr;
 		readonly IBlogService _blogSvc;
@@ -38,7 +37,6 @@ namespace MawMvcApp.Controllers
 
 
 		public AdminController(ILogger<AdminController> log,
-							   IOptions<EmailConfig> emailOpts,
 							   IUserRepository userRepository,
 		                       UserManager<MawUser> userManager,
 							   RoleManager<MawRole> roleManager,
@@ -47,12 +45,6 @@ namespace MawMvcApp.Controllers
 							   RazorViewToStringRenderer razorRenderer)
 			: base(log)
         {
-			if(emailOpts == null)
-			{
-				throw new ArgumentNullException(nameof(emailOpts));
-			}
-
-			_emailConfig = emailOpts.Value;
             _repo = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
 			_userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
 			_roleMgr = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
@@ -144,7 +136,7 @@ namespace MawMvcApp.Controllers
 
 						var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/CreateUser.cshtml", emailModel).ConfigureAwait(false);
 
-						await _emailSvc.SendHtmlAsync(model.Email, _emailConfig.User, "Account Created for mikeandwan.us", body).ConfigureAwait(false);
+						await _emailSvc.SendHtmlAsync(model.Email, _emailSvc.FromAddress, "Account Created for mikeandwan.us", body).ConfigureAwait(false);
 					}
 				}
 				catch(Exception ex)

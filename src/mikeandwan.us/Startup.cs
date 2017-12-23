@@ -58,7 +58,7 @@ namespace MawMvcApp
         {
             services
                 .Configure<ContactConfig>(_config.GetSection("ContactUs"))
-                .Configure<EmailConfig>(_config.GetSection("Email"))
+                .Configure<GmailApiEmailConfig>(_config.GetSection("Gmail"))
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
                 .Configure<GoogleCaptchaConfig>(_config.GetSection("GoogleRecaptcha"))
                 .Configure<IdentityOptions>(opts =>

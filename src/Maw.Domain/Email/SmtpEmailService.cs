@@ -9,14 +9,17 @@ using MimeKit;
 
 namespace Maw.Domain.Email
 {
-	public class EmailService
+	public class SmtpEmailService
 	    : IEmailService
 	{
-		readonly EmailConfig _config;
+		readonly SmtpEmailConfig _config;
 		readonly ILogger _log;
 
 
-		public EmailService(ILogger<EmailService> log, IOptions<EmailConfig> config)
+		public string FromAddress => _config.User;
+
+
+		public SmtpEmailService(ILogger<SmtpEmailService> log, IOptions<SmtpEmailConfig> config)
 		{
 			if(config == null)
 			{
@@ -63,8 +66,7 @@ namespace Maw.Domain.Email
 				msg.Subject = subject;
 				msg.Body = builder.ToMessageBody();
                 
-                // TODO: consider using oauth2/cert and not require this to be configured as a 'less secure app'
-                //       http://stackoverflow.com/questions/33496290/how-to-send-email-by-using-mailkit
+                // http://stackoverflow.com/questions/33496290/how-to-send-email-by-using-mailkit
                 await smtp.ConnectAsync(_config.Server, _config.Port, SecureSocketOptions.StartTls).ConfigureAwait(false);
                 await smtp.AuthenticateAsync(_config.User, _config.Password).ConfigureAwait(false);
 				await smtp.SendAsync(msg).ConfigureAwait(false);

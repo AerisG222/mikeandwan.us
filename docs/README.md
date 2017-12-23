@@ -263,6 +263,24 @@ to allow for the certs to be verified:
 6. this should now work!
 
 
+## GMail API
+
+As an alternative to SMTP above, we can leverage Google REST APIs to interface with GMail to send mails.  For this, we need to setup
+a service account.  Necessary details for this configuration can be found [here](https://developers.google.com/identity/protocols/OAuth2ServiceAccount).
+
+The basic steps are as follows:
+
+    1. create a new Service Account, saving the credential json file securely, and enabling Domain Wide Delegation
+    2. configure the service account to enable the Gmail Send API through the [Admin Console](https://admin.google.com/AdminHome)
+        - Security / Advanced / Manage API Client Access
+        - Add API Scope: https://www.googleapis.com/auth/gmail.send
+    3. copy the credentials json file to the service account homedir on the server, and make sure only that user has access
+    4. add environment variable named `GOOGLE_APPLICATION_CREDENTIALS` to point to the location of the json credential file downloaded in step 1
+
+The benefit of the API rather than SMTP is that it is much more performant in my tests so far, and more secure as we could disable 'Less secure apps'
+for the user.
+
+
 ## Notes for copying assets for dev
 
 ```

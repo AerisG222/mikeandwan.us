@@ -20,7 +20,8 @@ namespace Maw.Domain
                 .AddScoped<IPhotoService, PhotoService>()
                 .AddScoped<IVideoService, VideoService>()
                 .AddScoped<ICaptchaService, GoogleCaptchaService>()
-                .AddScoped<IEmailService, EmailService>()
+                //.AddScoped<IEmailService, SmtpEmailService>()
+                .AddScoped<IEmailService, GmailApiEmailService>()
                 .AddScoped<ILoginService, LoginService>();
 
             return services;

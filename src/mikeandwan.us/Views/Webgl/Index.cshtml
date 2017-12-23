@@ -1,11 +1,11 @@
-@{ 
-    ViewBag.Title = "webgl"; 
+@{
+    ViewBag.Title = "webgl";
 }
 
-@Html.Partial("_PageHeader", "WebGL")
+<h1>WebGL</h1>
 
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col">
         <p>
             I've always had a fascination with computer graphics.  Over the years I've dabbled in OpenGL and
             3D tools like Blender but never got to a point where I was any good at it.  I hope to change that
@@ -16,12 +16,12 @@
             WebGL more approachable.
         </p>
     </div>
-    <div class="col-sm-6">
-        <div class="panel panel-default">
-		    <div class="panel-heading">
-		        <h3 class="panel-title">Demos</h3>
+    <div class="col">
+        <div class="card mb-4">
+		    <div class="card-header">
+		        <strong class="card-title">Demos</strong>
 		    </div>
-		    <div class="list-group">
+		    <div class="list-group list-group-flush">
 	            <a class="list-group-item" asp-controller="webgl" asp-action="cube">Rotating Cube</a>
 	            <a class="list-group-item" asp-controller="webgl" asp-action="text">Rotating Text</a>
 		    </div>

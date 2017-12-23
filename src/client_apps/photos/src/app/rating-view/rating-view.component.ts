@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { IPhoto } from '../shared/iphoto.model';
 import { PhotoDataService } from '../shared/photo-data.service';
+import { SvgIcon } from '../svg-icon/svg-icon.enum';
 
 @Component({
     selector: 'app-rating-view',
@@ -9,6 +10,7 @@ import { PhotoDataService } from '../shared/photo-data.service';
     styleUrls: [ './rating-view.component.css' ]
 })
 export class RatingViewComponent {
+    svgIcon = SvgIcon;
     averageRating = -1;
     userRating = -1;
     private _photo: IPhoto;

@@ -1,10 +1,10 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "reference | .net guidelines | member design"; 
+    ViewBag.Title = "reference | .net guidelines | member design";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", ".Net Framework Design Guidelines")
+    <h1>.Net Framework Design Guidelines</h1>
 }
 
 @section sidebar {
@@ -13,8 +13,7 @@
 
 <h2>Member Design</h2>
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover table-condensed">
+<table class="table table-responsive table-striped table-hover table-sm">
   	<tbody>
 	    <tr><td>Do</td><td>Try to use descriptive parameter names to indicate the default used by shorter overloads.</td></tr>
 	    <tr><td>Avoid</td><td>Arbitrarily varying parameter names in overloads.</td></tr>
@@ -116,4 +115,3 @@
 	    <tr><td>Do</td><td>Follow common pointer-related conventions when designing members with pointers.</td></tr>
 	</tbody>
 </table>
-</div>   

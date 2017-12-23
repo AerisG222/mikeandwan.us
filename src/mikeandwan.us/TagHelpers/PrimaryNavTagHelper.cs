@@ -25,65 +25,65 @@ namespace MawMvcApp.TagHelpers
 		const string RouteValuesDictionaryName = "maw-all-route-data";
 		const string RouteValuesPrefix = "maw-route-";
 		readonly IHtmlGenerator _htmlGenerator;
-		
-		
+
+
 		[HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }
-		
-		
-		[HtmlAttributeName(ControllerAttributeName)]	
+
+
+		[HtmlAttributeName(ControllerAttributeName)]
 		public string Controller { get; set; }
-		
-		
-		[HtmlAttributeName(ActionAttributeName)]	
+
+
+		[HtmlAttributeName(ActionAttributeName)]
 		public string Action { get; set; }
-		
-		
-		[HtmlAttributeName(LinkTextAttributeName)]	
+
+
+		[HtmlAttributeName(LinkTextAttributeName)]
 		public string LinkText { get; set; }
-				
-		
-		[HtmlAttributeName(IsActiveAttributeName)]	
+
+
+		[HtmlAttributeName(IsActiveAttributeName)]
 		public bool IsActive { get; set; }
-		
-		
+
+
 		[HtmlAttributeName(RouteValuesDictionaryName, DictionaryAttributePrefix = RouteValuesPrefix)]
         public IDictionary<string, string> RouteValues { get; set; } =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-			
-		
+
+
 		public PrimaryNavTagHelper(IHtmlGenerator htmlGenerator)
 		{
 			if(htmlGenerator == null)
 			{
 				throw new ArgumentNullException(nameof(htmlGenerator));
 			}
-			
+
 			_htmlGenerator = htmlGenerator;
 		}
-		
-		
+
+
 		public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
 		{
 			if(LinkText == null)
 			{
 				LinkText = string.Empty;
 			}
-			
+
 			if(IsActive)
 			{
-                output.Attributes.Add("class", "active");
+                output.Attributes.Merge("class", "active");
 			}
-			
+
 			var routeValues = RouteValues.ToDictionary(
                     kvp => kvp.Key,
                     kvp => (object)kvp.Value,
                     StringComparer.OrdinalIgnoreCase);
-					
+
 			var action = Action.Replace("-", string.Empty);
-			var anchor = _htmlGenerator.GenerateActionLink(ViewContext, LinkText, action, Controller, null, null, null, routeValues, null);
-			
+			var anchor = _htmlGenerator.GenerateActionLink(ViewContext, LinkText, action, Controller, null, null, null, routeValues, new { @class = "nav-link px-3" });
+
 			anchor.InnerHtml.AppendHtml(await output.GetChildContentAsync());
 			output.Content.AppendHtml(anchor);
 		}

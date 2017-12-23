@@ -12,14 +12,14 @@
 	@await RenderSectionAsync("scripts_head", required: false)
 }
 
-@Html.Partial("_TopNav")
+@Html.Partial("_TopNav", true)
 
 <div class="container">
     <article class="row">
-        <div class="col-sm-push-9 col-sm-3">
+        <div class="col-sm-3 pr-0 order-2 mt-5">
             @await RenderSectionAsync("sidebar")
         </div>
-        <div class="col-sm-pull-3 col-sm-9">
+        <div class="col-sm-9 pl-0 order-1">
             @await RenderSectionAsync("header")
 	        @RenderBody()
         </div>

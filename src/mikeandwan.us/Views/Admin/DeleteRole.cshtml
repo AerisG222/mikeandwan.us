@@ -2,21 +2,19 @@
 @model DeleteRoleModel
 @{ ViewBag.Title = "admin | delete role"; }
 
-@Html.Partial("_PageHeader", "Delete Role")
+<h1>Delete Role</h1>
 
 @Html.Partial("_identityResult", new IdentityResultModel("role", Model.Result))
 
 @if(Model.Result == null || !Model.Result.Succeeded) {
 	<p>Are you sure you would like to delete the role <strong>@Model.Role</strong>?</p>
 
-	<form asp-controller="admin" asp-action="deleterole" method="post" class="form-horizontal" autocomplete="off" role="form">
+	<form asp-controller="admin" asp-action="deleterole" method="post" autocomplete="off" role="form">
 		<input asp-for="Role" type="hidden" />
 
 	    <div class="form-group">
-	        <div class="col-sm-offset-3 col-sm-2">
-	            <button type="submit" name="delete" class="btn btn-default">Yes</button>
-	            <button type="submit" class="btn btn-default">No</button>
-	        </div>
+			<button type="submit" name="delete" class="btn btn-primary">Yes</button>
+			<button type="submit" class="btn btn-primary">No</button>
 	    </div>
 	</form>
 }

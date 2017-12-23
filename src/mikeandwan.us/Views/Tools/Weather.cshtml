@@ -1,18 +1,18 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "tools | weather"; 
+    ViewBag.Title = "tools | weather";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", "Local Weather")
+    <h1>Local Weather</h1>
 }
 
 @section sidebar {
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "general", Item = "weather" })
 }
 
-<a href="http://www.accuweather.com/en/us/boston-ma/02108/current-weather/348735" class="aw-widget-legal">
+<a href="https://www.accuweather.com/en/us/boston-ma/02108/current-weather/348735" class="aw-widget-legal">
 <!--
-By accessing and/or using this code snippet, you agree to AccuWeather’s terms and conditions (in English) which can be found at http://www.accuweather.com/en/free-weather-widgets/terms and AccuWeather’s Privacy Statement (in English) which can be found at http://www.accuweather.com/en/privacy.
+By accessing and/or using this code snippet, you agree to AccuWeather’s terms and conditions (in English) which can be found at https://www.accuweather.com/en/free-weather-widgets/terms and AccuWeather’s Privacy Statement (in English) which can be found at https://www.accuweather.com/en/privacy.
 -->
-</a><div id="awtd1430476965074" class="aw-widget-36hour"  data-locationkey="" data-unit="f" data-language="en-us" data-useip="true" data-uid="awtd1430476965074" data-editlocation="true"></div><script src="http://oap.accuweather.com/launch.js"></script>
+</a><div id="awtd1430476965074" class="aw-widget-36hour"  data-locationkey="" data-unit="f" data-language="en-us" data-useip="true" data-uid="awtd1430476965074" data-editlocation="true"></div><script src="https://oap.accuweather.com/launch.js"></script>

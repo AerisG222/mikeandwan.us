@@ -12,11 +12,11 @@
 	@await RenderSectionAsync("scripts_head", required: false)
 }
 
-@Html.Partial("_TopNav")
+@Html.Partial("_TopNav", true)
 
 <div class="container">
     <article class="row">
-        <div class="col-xs-12">
+        <div class="col-12 px-0">
 	        @RenderBody()
         </div>
     </article>

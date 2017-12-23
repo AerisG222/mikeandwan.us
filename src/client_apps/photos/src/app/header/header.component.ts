@@ -1,9 +1,11 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 
-import { BreadcrumbListComponent } from '../../ng_maw/breadcrumb-list/breadcrumb-list.component';
-import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
-import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { BreadcrumbListComponent } from '../breadcrumb-list/breadcrumb-list.component';
+import { Breadcrumb } from '../shared/breadcrumb.model';
+import { SvgIcon } from '../svg-icon/svg-icon.enum';
+import { PreferenceDialogComponent } from '../preference-dialog/preference-dialog.component';
 import { PhotoNavigationService } from '../shared/photo-navigation.service';
 import { PhotoStateService } from '../shared/photo-state.service';
 import { CategoryBreadcrumb } from '../shared/category-breadcrumb.model';
@@ -20,7 +22,8 @@ export class HeaderComponent implements AfterViewInit {
     showMapButton = false;
     showRegularButton = false;
 
-    constructor(private _navService: PhotoNavigationService,
+    constructor(private _modal: NgbModal,
+                private _navService: PhotoNavigationService,
                 private _stateService: PhotoStateService) {
 
     }
@@ -44,7 +47,7 @@ export class HeaderComponent implements AfterViewInit {
     }
 
     clickConfig(): void {
-        this._stateService.showPreferencesDialog();
+        const modalRef = this._modal.open(PreferenceDialogComponent);
     }
 
     clickStats(): void {

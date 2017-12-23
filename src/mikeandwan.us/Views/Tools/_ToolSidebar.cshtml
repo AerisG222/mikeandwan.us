@@ -1,51 +1,19 @@
 ﻿@model SidebarModel
 
 @{
-    var generalPanelClass = "panel";
-    var generalGroupClass = "list-group collapse";
-
-    var networkingPanelClass = "panel";
-    var networkingGroupClass = "list-group collapse";
-
-    var binaryClockPanelClass = "panel";
-    var binaryClockGroupClass = "list-group collapse";
-
-    var learningPanelClass = "panel";
-    var learningGroupClass = "list-group collapse";
-
-    var dotnetPanelClass = "panel";
-    var dotnetGroupClass = "list-group collapse";
-
-    switch(Model.Group.ToLower()) {
-        case "general":
-            generalPanelClass += " panel-default";
-            generalGroupClass += " in";
-            break;
-        case "networking":
-            networkingPanelClass += " panel-default";
-            networkingGroupClass += " in";
-            break;
-        case "binaryclock":
-            binaryClockPanelClass += " panel-default";
-            binaryClockGroupClass += " in";
-            break;
-        case "learning":
-            learningPanelClass += " panel-default";
-            learningGroupClass += " in";
-            break;
-        case "dotnet":
-            dotnetPanelClass += " panel-default";
-            dotnetGroupClass += " in";
-            break;
-    }
+    var generalClass = string.Equals(Model.Group, "general", StringComparison.OrdinalIgnoreCase) ? "show" : "collapse";
+    var networkingClass = string.Equals(Model.Group, "networking", StringComparison.OrdinalIgnoreCase) ? "show" : "collapse";
+    var binaryClockClass = string.Equals(Model.Group, "binaryclock", StringComparison.OrdinalIgnoreCase) ? "show" : "collapse";
+    var learningClass = string.Equals(Model.Group, "learning", StringComparison.OrdinalIgnoreCase) ? "show" : "collapse";
+    var dotnetClass = string.Equals(Model.Group, "dotnet", StringComparison.OrdinalIgnoreCase) ? "show" : "collapse";
 }
 
-<div class="panel-group" id="accordion">
-    <div class="@generalPanelClass">
-        <div class="panel-heading">
-            <a data-toggle="collapse" data-parent="#accordion" href="#general">General</a>
-        </div>
-        <div id="general" class="@generalGroupClass">
+<div class="card mb-2">
+    <div class="card-header">
+        <a data-toggle="collapse" data-parent="#accordion" href="#general">General</a>
+    </div>
+    <div id="general" class="@generalClass">
+        <div class="list-group list-group-flush">
             <a asp-controller="tools" asp-action="RollTheDice" maw-active="@string.Equals(Model.Item, "roll-the-dice", StringComparison.OrdinalIgnoreCase)">Roll the Dice</a>
             <a asp-controller="tools" asp-action="GoogleMaps" maw-active="@string.Equals(Model.Item, "google-maps", StringComparison.OrdinalIgnoreCase)">Google Maps</a>
             <a asp-controller="tools" asp-action="WeekendCountdown" maw-active="@string.Equals(Model.Item, "weekend-countdown", StringComparison.OrdinalIgnoreCase)">Weekend Countdown</a>
@@ -55,30 +23,36 @@
             <a asp-controller="tools" asp-action="GuidGen" maw-active="@string.Equals(Model.Item, "guid-gen", StringComparison.OrdinalIgnoreCase)">GUID Generator</a>
         </div>
     </div>
-    <div class="@networkingPanelClass">
-        <div class="panel-heading">
-            <a data-toggle="collapse" data-parent="#accordion" href="#networking">Networking</a>
-        </div>
-        <div id="networking" class="@networkingGroupClass">
+</div>
+<div class="card mb-2">
+    <div class="card-header">
+        <a data-toggle="collapse" data-parent="#accordion" href="#networking">Networking</a>
+    </div>
+    <div id="networking" class="@networkingClass">
+        <div class="list-group list-group-flush">
             <a asp-controller="tools" asp-action="NetworkingBandwidth" maw-active="@string.Equals(Model.Item, "networking-bandwidth", StringComparison.OrdinalIgnoreCase)">Bandwidth Calculator</a>
             <a asp-controller="tools" asp-action="NetworkingFileSize" maw-active="@string.Equals(Model.Item, "networking-file-size", StringComparison.OrdinalIgnoreCase)">File Size</a>
             <a asp-controller="tools" asp-action="NetworkingTime" maw-active="@string.Equals(Model.Item, "networking-time", StringComparison.OrdinalIgnoreCase)">Time</a>
         </div>
     </div>
-    <div class="@binaryClockPanelClass">
-        <div class="panel-heading">
-            <a data-toggle="collapse" data-parent="#accordion" href="#binaryClock">Binary Clock</a>
-        </div>
-        <div id="binaryClock" class="@binaryClockGroupClass">
+</div>
+<div class="card mb-2">
+    <div class="card-header">
+        <a data-toggle="collapse" data-parent="#accordion" href="#binaryClock">Binary Clock</a>
+    </div>
+    <div id="binaryClock" class="@binaryClockClass">
+        <div class="list-group list-group-flush">
             <a asp-controller="tools" asp-action="BinaryClock" maw-active="@string.Equals(Model.Item, "binary-clock", StringComparison.OrdinalIgnoreCase)">Binary Clock</a>
             <a asp-controller="tools" asp-action="BinaryClockAbout" maw-active="@string.Equals(Model.Item, "binary-clock-about", StringComparison.OrdinalIgnoreCase)">About Binary Clock</a>
         </div>
     </div>
-    <div class="@dotnetPanelClass">
-        <div class="panel-heading">
-            <a data-toggle="collapse" data-parent="#accordion" href="#dotnet">.Net</a>
-        </div>
-        <div id="dotnet" class="@dotnetGroupClass">
+</div>
+<div class="card mb-2">
+    <div class="card-header">
+        <a data-toggle="collapse" data-parent="#accordion" href="#dotnet">.Net</a>
+    </div>
+    <div id="dotnet" class="@dotnetClass">
+        <div class="list-group list-group-flush">
             <a asp-controller="tools" asp-action="DotnetRegex" maw-active="@string.Equals(Model.Item, "dotnet-regex", StringComparison.OrdinalIgnoreCase)">Regular Expressions</a>
             <a asp-controller="tools" asp-action="DotnetFormattingDates" maw-active="@string.Equals(Model.Item, "dotnet-formatting-dates", StringComparison.OrdinalIgnoreCase)">Date Formatting</a>
             <a asp-controller="tools" asp-action="DotnetFormattingNumbers" maw-active="@string.Equals(Model.Item, "dotnet-formatting-numbers", StringComparison.OrdinalIgnoreCase)">Number Formatting</a>
@@ -94,11 +68,13 @@
             <a asp-controller="tools" asp-action="XslTransform" maw-active="@string.Equals(Model.Item, "xsl-transform", StringComparison.OrdinalIgnoreCase)">XSL Transform</a>
         </div>
     </div>
-    <div class="@learningPanelClass">
-        <div class="panel-heading">
-            <a data-toggle="collapse" data-parent="#accordion" href="#learning">Learning</a>
-        </div>
-        <div id="learning" class="@learningGroupClass">
+</div>
+<div class="card mb-2">
+    <div class="card-header">
+        <a data-toggle="collapse" data-parent="#accordion" href="#learning">Learning</a>
+    </div>
+    <div id="learning" class="@learningClass">
+        <div class="list-group list-group-flush">
             <a asp-controller="tools" asp-action="Learning" maw-active="@string.Equals(Model.Item, "learning", StringComparison.OrdinalIgnoreCase)">Letters and Numbers</a>
         </div>
     </div>

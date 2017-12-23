@@ -1,19 +1,18 @@
 @model MawMvcApp.ViewModels.Tools.Dotnet.PathsModel
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "tools | .net path methods"; 
+    ViewBag.Title = "tools | .net path methods";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", "Path Related API Examples")
+    <h1>Path Related API Examples</h1>
 }
 
 @section sidebar {
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "paths" })
 }
 
-<div class="table-responsive">
-<table class="table table-striped table-hover table-condensed">
+<table class="table table-responsive table-striped table-hover table-sm">
 	<thead>
 		<tr>
 	        <th>API Call</th>
@@ -21,14 +20,13 @@
 	    </tr>
     </thead>
     <tbody>
-    
+
 	@foreach(var item in Model.Paths) {
 		<tr>
 			<td>@item[0]</td>
 			<td>@item[1]</td>
-		</tr>	
+		</tr>
 	}
-	
+
 	</tbody>
 </table>
-</div>   

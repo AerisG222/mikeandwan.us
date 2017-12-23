@@ -19,6 +19,9 @@ namespace MawMvcApp.ViewModels.Admin
 		
 		[BindNever]
 		public bool Success { get; set; }
+
+		[BindNever]
+		public bool WasAttempted { get; set; }
 		
 		[BindNever]
 		public bool Preview { get; set; }

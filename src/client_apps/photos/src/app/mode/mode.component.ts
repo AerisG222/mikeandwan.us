@@ -3,9 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { animate, state, style, transition, trigger, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
-import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
-
+import { fadeIn, fadeOut } from '../shared/animation';
+import { Breadcrumb } from '../shared/breadcrumb.model';
 import { PhotoStateService } from '../shared/photo-state.service';
 import { PhotoNavigationService } from '../shared/photo-navigation.service';
 import { ModeRouteInfo } from '../shared/mode-route-info.model';

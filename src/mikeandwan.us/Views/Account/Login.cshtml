@@ -1,52 +1,51 @@
 @model MawMvcApp.ViewModels.Account.LoginModel
-@{ 
+@{
 	Layout = "_Layout";
-	ViewBag.Title = "account | login"; 
+	ViewBag.Title = "account | login";
 }
 
-@Html.Partial("_PageHeader", "Login")
+<h1>Login</h1>
 
 <div class="row">
     <div class="col-sm-5">
         @if(Model.WasAttempted) {
             <p maw-alert-type="Danger">There was an error logging in.  Please try again.</p>
+            <div class="text-danger" asp-validation-summary="All"></div>
         }
 
         <form asp-controller="account" asp-action="login" asp-route-returnurl="@ViewBag.ReturnUrl" method="post" autocomplete="off" role="form">
-            <div class="form-group" maw-for="@Model.Username">
+            <div class="form-group mb-4">
                 <label asp-for="Username"></label>
                 <input asp-for="Username" class="form-control" autofocus="" />
-                <span asp-validation-for="Username" class="help-block"></span>
+                @*<span asp-validation-for="Username" class="form-text"></span>*@
             </div>
 
-            <div class="form-group" maw-for="@Model.Password">
+            <div class="form-group mb-4">
                 <label asp-for="Password"></label>
                 <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="help-block"></span>
+                @*<span asp-validation-for="Password" class="form-text"></span>*@
             </div>
 
-            <div class="row">
+            <div class="form-group mb-4 row">
                 <div class="col-sm-5">
-                    <button type="submit" class="btn btn-default">Submit</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
-                <div class="col-sm-5 col-sm-offset-2">
-                    <a asp-controller="account" asp-action="forgotpassword" class="pull-right">Forgot Password?</a>
+                <div class="col-sm-5 offset-sm-2 d-flex justify-content-end">
+                    <a asp-controller="account" asp-action="forgotpassword">Forgot Password?</a>
                 </div>
             </div>
         </form>
     </div>
-    <div class="col-sm-5 col-sm-offset-2">
+    <div class="col-sm-5 offset-sm-2">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-12">
                 <strong>or, login with an external account if you have opted-in:</strong>
             </div>
-        </div>
-        <div class="row">
-        @foreach(var scheme in Model.ExternalSchemes) {
-            <div class="col-sm-6 ext_auth">
-                <a href="/account/external-login?provider=@scheme.ExternalAuth.Name" class="btn btn-default">@if(scheme.Icon != null) {<svg-icon class="icon" icon="@((SvgIcon)scheme.Icon)"></svg-icon> }@scheme.ExternalAuth.DisplayName</a>
-            </div>
-        }
+            @foreach(var scheme in Model.ExternalSchemes) {
+                <div class="col-sm-6 mt-2">
+                    <a href="/account/external-login?provider=@scheme.ExternalAuth.Name" class="btn btn-primary d-block">@if(scheme.Icon != null) {<svg-icon class="mr-2" icon="@((SvgIcon)scheme.Icon)"></svg-icon> }@scheme.ExternalAuth.DisplayName</a>
+                </div>
+            }
         </div>
     </div>
 </div>

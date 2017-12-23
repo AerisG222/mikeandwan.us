@@ -1,0 +1,26 @@
+{
+  "name": "mikeandwan.us",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^4.0.0-beta.2",
+    "bootswatch": "^4.0.0-beta.2",
+    "jquery": "^1.9.1",
+    "popper.js": "^1.12.6"
+  },
+  "devDependencies": {
+    "node-sass": "^4.7.2",
+    "stylelint": "^8.4.0",
+    "stylelint-config-standard": "^18.0.0"
+  },
+  "scripts": {
+    "sass": "npm run sass:lint & npm run sass:site & npm run sass:games",
+    "sass:lint": "stylelint scss/*.scss --syntax scss & exit 0",
+    "sass:site": "node-sass --output wwwroot/css --include-path node_modules scss/site.scss",
+    "sass:games": "node-sass --output wwwroot/css --include-path node_modules scss/games.scss",
+    "sass:watch": "node-sass --watch --output wwwroot/css --include-path node_modules scss/site.scss"
+  },
+  "author": "",
+  "license": "MIT"
+}

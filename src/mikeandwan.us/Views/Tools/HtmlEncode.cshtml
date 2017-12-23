@@ -1,49 +1,48 @@
 @model MawMvcApp.ViewModels.Tools.Dotnet.HtmlEncodeDecodeModel
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "tools | html encoder / decoder"; 
+    ViewBag.Title = "tools | html encoder / decoder";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", "HTML Encoder / Decoder")
+    <h1>HTML Encoder / Decoder</h1>
 }
 
 @section sidebar {
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "html-encode" })
 }
 
+@if(Model.HasErrors) {
+    <p maw-alert-type="Danger">
+        Please correct the errors below:
+    </p>
+    <div class="text-danger" asp-validation-summary="All"></div>
+}
+
 <p>This page allows you to encode and decode values suitable for HTML content.</p>
 
-<form asp-controller="tools" asp-action="htmlencode" method="post" class="form-horizontal" autocomplete="off" role="form">
+<form asp-controller="tools" asp-action="htmlencode" method="post" autocomplete="off" role="form">
 	<input type="hidden" asp-for="Mode" value="Encode" />
-	<div class="form-group" maw-for="@Model.DecodedString">
-        <label asp-for="DecodedString" class="col-sm-3 control-label"></label>
-        <div class="col-sm-9">
-            <textarea asp-for="DecodedString" rows="8" class="form-control" autofocus=""></textarea>
-            <span asp-validation-for="DecodedString" class="help-block"></span>
-        </div>
+	<div class="form-group">
+        <label asp-for="DecodedString" class="col-form-label"></label>
+        <textarea asp-for="DecodedString" rows="8" class="form-control" autofocus=""></textarea>
+        @*<span asp-validation-for="DecodedString" class="form-text"></span>*@
 	</div>
 
     <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-2">
-            <button type="submit" class="btn btn-default">Encode</button>
-        </div>
+        <button type="submit" class="btn btn-primary">Encode</button>
     </div>
 </form>
 
-<form asp-controller="tools" asp-action="htmlencode" method="post" class="form-horizontal" autocomplete="off" role="form">
+<form asp-controller="tools" asp-action="htmlencode" method="post" autocomplete="off" role="form">
 	<input type="hidden" asp-for="Mode" value="Decode" />
-    <div class="form-group" maw-for="@Model.EncodedString">
-        <label asp-for="EncodedString" class="col-sm-3 control-label"></label>
-        <div class="col-sm-9">
-            <textarea asp-for="EncodedString" rows="8" class="form-control"></textarea>
-            <span asp-validation-for="EncodedString" class="help-block"></span>
-        </div>
-	</div>
-	
     <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-2">
-            <button type="submit" class="btn btn-default">Decode</button>
-        </div>
+        <label asp-for="EncodedString" class="col-form-label"></label>
+        <textarea asp-for="EncodedString" rows="8" class="form-control"></textarea>
+        @*<span asp-validation-for="EncodedString" class="form-text"></span>*@
+	</div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Decode</button>
     </div>
 </form>

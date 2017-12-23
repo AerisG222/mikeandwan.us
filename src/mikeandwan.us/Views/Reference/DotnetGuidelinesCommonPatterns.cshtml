@@ -1,10 +1,10 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "reference | .net guidelines | common patterns"; 
+    ViewBag.Title = "reference | .net guidelines | common patterns";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", ".Net Framework Design Guidelines")
+    <h1>.Net Framework Design Guidelines</h1>
 }
 
 @section sidebar {
@@ -13,8 +13,7 @@
 
 <h2>Common Design Patterns</h2>
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover table-condensed">
+<table class="table table-responsive table-striped table-hover table-sm">
   	<tbody>
 	    <tr><td>Consider</td><td>Providing aggregate components for commonly used feature areas.</td></tr>
 	    <tr><td>Do</td><td>Model high-level concepts (physical objects) rather than system-level tasks with aggregate components.</td></tr>
@@ -84,4 +83,3 @@
 	    <tr><td>Do Not</td><td>Return error codes to indicate timeout expiration.</td></tr>
     </tbody>
 </table>
-</div>

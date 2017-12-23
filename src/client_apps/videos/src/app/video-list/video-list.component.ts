@@ -2,18 +2,15 @@ import { Component, ViewChild, ChangeDetectorRef, AfterViewInit, OnInit } from '
 import { ActivatedRoute } from '@angular/router';
 import { state, style, transition, trigger, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
-import { PagerComponent } from '../../ng_maw/pager/pager.component';
-import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
-import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
+import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 
+import { fadeIn, fadeOut } from '../shared/animation';
 import { IVideo } from '../shared/ivideo.model';
 import { IVideoInfo } from '../shared/ivideo-info.model';
 import { SizeService } from '../shared/size.service';
 import { VideoDataService } from '../shared/video-data.service';
 import { VideoNavigationService } from '../shared/video-navigation.service';
 import { VideoStateService } from '../shared/video-state.service';
-import { VideoThumbnailInfo } from '../shared/video-thumbnail-info.model';
 
 @Component({
     selector: 'app-video-list',
@@ -28,8 +25,8 @@ import { VideoThumbnailInfo } from '../shared/video-thumbnail-info.model';
     ]
 })
 export class VideoListComponent implements OnInit, AfterViewInit {
-    @ViewChild(PagerComponent) pager: PagerComponent;
-    @ViewChild(ThumbnailListComponent) thumbnailList: ThumbnailListComponent;
+    cardsPerPage = 24;
+    page = 1;
     categoryId: number = null;
     year: number = null;
     currentVideo: IVideo = null;
@@ -56,12 +53,6 @@ export class VideoListComponent implements OnInit, AfterViewInit {
             this.year = parseInt(params['year'], 10);
             this.categoryId = parseInt(params['category'], 10);
 
-            this.thumbnailList.setRowCountPerPage(2);
-
-            this.thumbnailList.itemsPerPageUpdated.subscribe((x: any) => {
-                this.updatePager();
-            });
-
             this._changeDetectionRef.detectChanges();
 
             // for some reason this component is not raising the event bound in the
@@ -72,37 +63,25 @@ export class VideoListComponent implements OnInit, AfterViewInit {
 
             this._videoDataService.getVideosForCategory(this.categoryId)
                 .subscribe(
-                    (data: Array<IVideo>) => this.setVideos(data),
+                    (videos: Array<IVideo>) => {
+                        this.videoList = videos;
+                    },
                     (err: any) => console.error('there was an error: ' + err)
                 );
         });
     }
 
-    onChangePage(pageIndex: number): void {
-        this.thumbnailList.setPageDisplayedIndex(pageIndex);
-    }
-
-    onThumbnailSelected(item: SelectedThumbnail): void {
-        if (item.index >= 0 && this.videoList.length > item.index) {
-            const vid: IVideo = (<VideoThumbnailInfo>item.thumbnail).video;
-            this.currentVideo = vid;
-            this.updateVideo();
+    onChangePage(page: number): void {
+        if (page >= 1) {
+            this.page = page;
         }
     }
 
-    setVideos(videos: Array<IVideo>): void {
-        this.videoList = videos;
-
-        const thumbnails: Array<VideoThumbnailInfo> = videos.map((vid: IVideo) =>
-            new VideoThumbnailInfo(vid.thumbnailVideo.path,
-                this._sizeService.getThumbHeight(vid.thumbnailVideo.width, vid.thumbnailVideo.height),
-                this._sizeService.getThumbWidth(vid.thumbnailVideo.width, vid.thumbnailVideo.height),
-                vid
-            )
-        );
-
-        this.thumbnailList.setItemList(thumbnails);
-        this.pager.setPageCount(Math.ceil(thumbnails.length / this.thumbnailList.itemsPerPage));
+    onVideoSelected(video: IVideo): void {
+        if (video !== null) {
+            this.currentVideo = video;
+            this.updateVideo();
+        }
     }
 
     updateVideo(): void {
@@ -117,10 +96,5 @@ export class VideoListComponent implements OnInit, AfterViewInit {
             el.load();
             el.play();
         }, 0, false);
-    }
-
-    private updatePager() {
-        this.pager.setPageCount(this.pager.calcPageCount(this.thumbnailList.itemList.length, this.thumbnailList.itemsPerPage));
-        this.pager.setActivePage(this.thumbnailList.pageDisplayedIndex);
     }
 }

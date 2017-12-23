@@ -1,6 +1,7 @@
 import { List } from 'linqts';
 import { Subscription } from 'rxjs/Subscription';
-import * as THREE from 'three';
+
+import { Vector3 } from 'three';
 
 import { ArgumentNullError } from '../models/argument-null-error';
 import { ArrowNextPreviousVisual } from '../visuals/arrow-next-previous-visual';
@@ -222,7 +223,7 @@ export class CategoryListController implements IController, IDisposable {
                                                             this._disposalService,
                                                             cat,
                                                             layout.hexagon,
-                                                            new THREE.Vector3(lp.center.x,
+                                                            new Vector3(lp.center.x,
                                                                               lp.center.y,
                                                                               this._maxDepth),
                                                             this.getOffscreenPosition(),
@@ -241,14 +242,14 @@ export class CategoryListController implements IController, IDisposable {
         return year;
     }
 
-    private getOffscreenPosition(): THREE.Vector3 {
+    private getOffscreenPosition(): Vector3 {
         let min = -3000;
         let fullLength = 2 * Math.abs(min);
         let x = min + (Math.random() * fullLength);
         let y = min + (Math.random() * fullLength);
         let z = Math.random() * 2000 + (1000 + this._ctx.camera.position.z);
 
-        return new THREE.Vector3(x, y, z);
+        return new Vector3(x, y, z);
     }
 
     private generateColor(): number {

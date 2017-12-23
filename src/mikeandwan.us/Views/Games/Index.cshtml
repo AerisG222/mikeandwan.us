@@ -1,10 +1,25 @@
-﻿@{ 
-   ViewBag.Title = "games"; 
+﻿@{
+   ViewBag.Title = "games";
 }
 
-@Html.Partial("_PageHeader", "Games")
+<h1>Games</h1>
 
-<ul>
-    <li><a asp-controller="games" asp-action="memory">Memory (in a half shell)</a></li>
-    <li><a asp-controller="games" asp-action="moneyspin">Money Spin</a></li>
-</ul>
+<div class="row">
+    <div class="col">
+        <p>
+            Our daughter enjoys playing and creating games.  Here are a couple games that she came up with.  Hopefully
+            more will be added in the future that she designs and builds herself!
+        </p>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+		        <strong class="card-title">Play</strong>
+		    </div>
+            <div class="list-group list-group-flush">
+	            <a class="list-group-item" asp-controller="games" asp-action="memory">Memory (in a half shell)</a>
+                <a class="list-group-item" asp-controller="games" asp-action="moneyspin">Money Spin</a>
+	        </div>
+		</div>
+    </div>
+</div>

@@ -1,4 +1,8 @@
 <div [@fadeInOut]="'in'">
-    <maw-pager (pageSelected)="onChangePage($event)"></maw-pager>
-    <maw-thumbnail-list (selected)="onThumbnailSelected($event)"></maw-thumbnail-list>
+    <div class="row">
+        <div class="col mt-3">
+            <ngb-pagination [collectionSize]="categoryList.length" [pageSize]="cardsPerPage" [size]="'sm'" (pageChange)="onChangePage($event)"></ngb-pagination>
+        </div>
+    </div>
+    <app-category-card-grid [cardsPerPage]="cardsPerPage" [categoryList]="categoryList" [page]="page" (categorySelected)="onCategorySelected($event)"></app-category-card-grid>
 </div>

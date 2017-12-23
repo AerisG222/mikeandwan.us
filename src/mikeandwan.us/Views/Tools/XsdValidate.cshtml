@@ -1,33 +1,36 @@
 @model MawMvcApp.ViewModels.Tools.Dotnet.XsdValidateModel
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "tools | xsd validator"; 
+    ViewBag.Title = "tools | xsd validator";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", "XSD Validator")
+    <h1>XSD Validator</h1>
 }
 
 @section sidebar {
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "xsd-validate" })
 }
 
+@if(Model.HasErrors) {
+    <p maw-alert-type="Danger">
+        Please correct the errors below:
+    </p>
+    <div class="text-danger" asp-validation-summary="All"></div>
+}
+
 <p>
 	This page allows you to validate an XML Schema document.
 </p>
 
-<form asp-controller="tools" asp-action="xsdvalidate" method="post" class="form-horizontal" autocomplete="off" role="form">
-    <div class="form-group" maw-for="@Model.XmlSchemaSource">
-		<label asp-for="XmlSchemaSource" class="col-sm-3 control-label"></label>
-        <div class="col-sm-9">
-			<textarea asp-for="XmlSchemaSource" rows="10" class="form-control" autofocus=""></textarea>
-			<span asp-validation-for="XmlSchemaSource" class="help-block"></span>
-        </div>
+<form asp-controller="tools" asp-action="xsdvalidate" method="post" autocomplete="off" role="form">
+    <div class="form-group">
+		<label asp-for="XmlSchemaSource" class="col-form-label"></label>
+		<textarea asp-for="XmlSchemaSource" rows="10" class="form-control" autofocus=""></textarea>
+		@*<span asp-validation-for="XmlSchemaSource" class="form-text"></span>*@
 	</div>
     <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-2">
-            <button type="submit" class="btn btn-default">Validate</button>
-        </div>
+		<button type="submit" class="btn btn-primary">Validate</button>
     </div>
 </form>
 
@@ -41,6 +44,8 @@
 	}
 	else {
 		<p>Your XML Schema is invalid.  The following outlines the errors encountered:</p>
-		<pre>@Model.ValidationErrors</pre>
+		<pre><code>
+@Model.ValidationErrors
+		</code></pre>
 	}
 }

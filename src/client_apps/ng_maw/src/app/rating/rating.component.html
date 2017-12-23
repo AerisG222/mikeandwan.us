@@ -1,5 +1,0 @@
-<div>
-    <span *ngIf="!editable" style="width: 12px; margin-left: 0; display: inline-block;">&nbsp;</span>
-    <app-svg-icon *ngIf="editable" [klass]="'icon vcenter clickable'" [icon]="svgIcon.TimesCircle" (click)="onRate(0)" (mouseleave)="setHover(-1)" (mouseenter)="setHover(0)"></app-svg-icon>
-    <app-svg-icon *ngFor="let rating of ratingRange; let idx = index" [klass]="'icon vcenter'" [icon]="ratingIcons[idx]" [ngClass]="{clickable: editable}" (mouseleave)="setHover(-1)" (mouseover)="setHover(rating)" (click)="onRate(rating)"></app-svg-icon>
-</div>

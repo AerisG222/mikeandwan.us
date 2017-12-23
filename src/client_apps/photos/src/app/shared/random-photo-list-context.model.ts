@@ -7,7 +7,7 @@ import { Photo } from './photo.model';
 import { RandomPhotoSource } from './random-photo-source.model';
 
 export class RandomPhotoListContext extends PhotoListContext {
-    photoAddedEventEmitter = new EventEmitter<Photo>();
+    // photoAddedEventEmitter = new EventEmitter<Photo>();
 
     constructor(photos: Array<Photo>,
                 routeMode: RouteMode,
@@ -23,7 +23,7 @@ export class RandomPhotoListContext extends PhotoListContext {
     moveNext(): void {
         this._photoSource.getPhotos().subscribe((photos: Array<Photo>) => {
             this.photos.push(photos[0]);
-            this.photoAddedEventEmitter.next(photos[0]);
+            // this.photoAddedEventEmitter.next(photos[0]);
             super.moveNext();
         });
     }

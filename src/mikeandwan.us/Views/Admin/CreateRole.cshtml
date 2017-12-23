@@ -2,31 +2,35 @@
 @model CreateRoleModel
 @{ ViewBag.Title = "admin | create role"; }
 
-@Html.Partial("_PageHeader", "Create Role")
+<h1>Create Role</h1>
 
 @Html.Partial("_identityResult", new IdentityResultModel("role", Model.Result))
 
 @if(Model.Result == null || !Model.Result.Succeeded) {
-	<form asp-controller="admin" asp-action="createrole" method="post" class="form-horizontal" autocomplete="off" role="form">
-		<div class="form-group" maw-for="@Model.Name">
-			<label asp-for="Name" class="col-sm-3 control-label"></label>
-	        <div class="col-sm-3">
-				<input asp-for="Name" class="form-control" autofocus="" />
-				<span asp-validation-for="Name" class="help-block"></span>
-	        </div>
+	<form asp-controller="admin" asp-action="createrole" method="post" autocomplete="off" role="form">
+		<div class="form-group">
+			<label asp-for="Name" class="col-form-label"></label>
+
+			<div class="row">
+				<div class="col-sm-5">
+					<input asp-for="Name" class="form-control" autofocus="" />
+					@*<span asp-validation-for="Name" class="form-text"></span>*@
+				</div>
+			</div>
 		</div>
-	    <div class="form-group" maw-for="@Model.Description">
-			<label asp-for="Description" class="col-sm-3 control-label"></label>
-	        <div class="col-sm-3">
-				<input asp-for="Description" class="form-control" />
-				<span asp-validation-for="Description" class="help-block"></span>
-	        </div>
-		</div>
-		
 	    <div class="form-group">
-	        <div class="col-sm-offset-3 col-sm-2">
-	            <button type="submit" class="btn btn-default">Submit</button>
-	        </div>
+			<label asp-for="Description" class="col-form-label"></label>
+
+			<div class="row">
+				<div class="col-sm-5">
+					<input asp-for="Description" class="form-control" />
+					@*<span asp-validation-for="Description" class="form-text"></span>*@
+				</div>
+			</div>
+		</div>
+
+	    <div class="form-group">
+			<button type="submit" class="btn btn-primary">Submit</button>
 	    </div>
 	</form>
 }

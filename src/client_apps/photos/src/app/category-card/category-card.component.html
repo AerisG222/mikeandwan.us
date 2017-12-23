@@ -1,0 +1,9 @@
+<div class="card-body p-0 d-flex align-items-start flex-column">
+    <img class="d-block mx-auto mb-auto img-fluid rounded-top" [src]="category.teaserPhotoInfo.path" />
+    <p class="category_name px-2 mb-1 text-center mx-auto">{{category.name}}</p>
+</div>
+<!-- hide the maps callout now, perhaps add it back if we show when categories have ratings and/or comments
+<div *ngIf="'false'" class="card-footer p-0 d-flex justify-content-end">
+    <app-svg-icon *ngIf="category.hasGpsData" [icon]="svgIcon.MapMarker" [klass]="'badge mr-2'"></app-svg-icon>
+</div>
+-->

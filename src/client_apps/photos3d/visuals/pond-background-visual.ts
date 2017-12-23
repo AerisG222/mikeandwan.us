@@ -1,4 +1,6 @@
-import * as THREE from 'three';
+import { Group, Mesh, Texture, PlaneGeometry, LinearFilter, MirroredRepeatWrapping, MeshBasicMaterial,
+         DoubleSide, ShaderMaterial
+       } from 'three';
 
 import { ArgumentNullError } from '../models/argument-null-error';
 import { DisposalService } from '../services/disposal-service';
@@ -7,7 +9,7 @@ import { IVisual } from './ivisual';
 import { TextureLoader } from '../services/texture-loader';
 import { VisualContext } from '../models/visual-context';
 
-export class PondBackgroundVisual extends THREE.Object3D implements IDisposable, IVisual {
+export class PondBackgroundVisual extends Group implements IDisposable, IVisual {
     private static readonly TEXTURE_WATER = 'water.jpg';
     private static readonly TEXTURE_TREES = 'trees_blur20.jpg';
     private static readonly TEXTURE_NOISE = 'noise.png';
@@ -15,8 +17,8 @@ export class PondBackgroundVisual extends THREE.Object3D implements IDisposable,
     private _horizontalRepeat = 2;
     private _isDisposed = false;
     private _textureLoader = new TextureLoader();
-    private _treeMesh: THREE.Mesh;
-    private _waterMesh: THREE.Mesh;
+    private _treeMesh: Mesh;
+    private _waterMesh: Mesh;
     private _waterUniform: any = null;
 
     constructor(private _disposalService: DisposalService,
@@ -92,10 +94,10 @@ export class PondBackgroundVisual extends THREE.Object3D implements IDisposable,
         ]);
     }
 
-    private updateTextures(texturePromises: Array<Promise<THREE.Texture>>) {
+    private updateTextures(texturePromises: Array<Promise<Texture>>) {
         Promise.all(texturePromises).then(textures => {
-            let waterTexture: THREE.Texture = null;
-            let noiseTexture: THREE.Texture = null;
+            let waterTexture: Texture = null;
+            let noiseTexture: Texture = null;
 
             for (let texture of textures) {
                 if (texture.name.indexOf(PondBackgroundVisual.TEXTURE_NOISE) > 0) {
@@ -113,44 +115,44 @@ export class PondBackgroundVisual extends THREE.Object3D implements IDisposable,
         });
     }
 
-    private updateTrees(texture: THREE.Texture) {
+    private updateTrees(texture: Texture) {
         if (this._treeMesh != null) {
             this.remove(this._treeMesh);
         }
 
-        let treeGeometry = new THREE.PlaneGeometry(texture.image.width * this._horizontalRepeat, texture.image.height);
-        this._treeMesh = new THREE.Mesh(treeGeometry);
+        let treeGeometry = new PlaneGeometry(texture.image.width * this._horizontalRepeat, texture.image.height);
+        this._treeMesh = new Mesh(treeGeometry);
         this._treeMesh.position.y = texture.image.height / 2;
 
-        texture.minFilter = THREE.LinearFilter;
+        texture.minFilter = LinearFilter;
         texture.repeat.set(this._horizontalRepeat, 1);
-        texture.wrapS = THREE.MirroredRepeatWrapping;
+        texture.wrapS = MirroredRepeatWrapping;
 
-        this._treeMesh.material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+        this._treeMesh.material = new MeshBasicMaterial({ map: texture, side: DoubleSide });
 
         this.add(this._treeMesh);
     }
 
-    private updateWater(waterTexture: THREE.Texture, noiseTexture: THREE.Texture) {
+    private updateWater(waterTexture: Texture, noiseTexture: Texture) {
         if (this._waterMesh != null) {
             this.remove(this._waterMesh);
         }
 
-        let waterGeometry = new THREE.PlaneGeometry(waterTexture.image.width * this._horizontalRepeat, waterTexture.image.height);
-        this._waterMesh = new THREE.Mesh(waterGeometry);
+        let waterGeometry = new PlaneGeometry(waterTexture.image.width * this._horizontalRepeat, waterTexture.image.height);
+        this._waterMesh = new Mesh(waterGeometry);
         this._waterMesh.scale.y = -1;
         this._waterMesh.rotation.x = (Math.PI / 2);
         this._waterMesh.position.z = waterTexture.image.height / 2;
 
-        waterTexture.minFilter = THREE.LinearFilter;
+        waterTexture.minFilter = LinearFilter;
         waterTexture.repeat.set(this._horizontalRepeat, 1);
-        waterTexture.wrapT = THREE.MirroredRepeatWrapping;
-        waterTexture.wrapS = THREE.MirroredRepeatWrapping;
+        waterTexture.wrapT = MirroredRepeatWrapping;
+        waterTexture.wrapS = MirroredRepeatWrapping;
 
-        noiseTexture.minFilter = THREE.LinearFilter;
+        noiseTexture.minFilter = LinearFilter;
         noiseTexture.repeat.set(2, 1);
-        noiseTexture.wrapT = THREE.MirroredRepeatWrapping;
-        noiseTexture.wrapS = THREE.MirroredRepeatWrapping;
+        noiseTexture.wrapT = MirroredRepeatWrapping;
+        noiseTexture.wrapS = MirroredRepeatWrapping;
 
         this._waterUniform = {
             baseTexture: 	{ type: 't', value: waterTexture },
@@ -161,13 +163,13 @@ export class PondBackgroundVisual extends THREE.Object3D implements IDisposable,
             time: 			{ type: 'f', value: 1.0 }
         };
 
-        let waterMaterial = new THREE.ShaderMaterial({
+        let waterMaterial = new ShaderMaterial({
             uniforms: this._waterUniform,
             vertexShader:   document.getElementById( 'waterVertexShader'   ).textContent,
             fragmentShader: document.getElementById( 'waterFragmentShader' ).textContent
         });
 
-        waterMaterial.side = THREE.DoubleSide;
+        waterMaterial.side = DoubleSide;
 
         this._waterMesh.material = waterMaterial;
 

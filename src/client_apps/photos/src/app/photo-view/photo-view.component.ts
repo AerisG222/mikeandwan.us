@@ -1,10 +1,12 @@
 import { Component, Input, ViewChild, AfterViewInit, OnDestroy, OnChanges, NgZone } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+
 import * as Mousetrap from 'mousetrap';
 
-import { ResponsiveService } from '../../ng_maw/shared/responsive.service';
-import { SvgIcon } from '../../ng_maw/svg-icon/svg-icon.enum';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
+import { ResponsiveService } from '../shared/responsive.service';
+import { SvgIcon } from '../svg-icon/svg-icon.enum';
 import { PhotoNavigationService } from '../shared/photo-navigation.service';
 import { PhotoStateService } from '../shared/photo-state.service';
 import { IPhoto } from '../shared/iphoto.model';
@@ -33,6 +35,7 @@ import { SaveDialogComponent } from '../save-dialog/save-dialog.component';
 })
 export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     private _containerBox: ContainerBox = null;
+    private _helpModal: NgbModalRef = null;
     svgIcon = SvgIcon;
     showHistogramButton = true;
     showComments = false;
@@ -45,8 +48,6 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     rotationClassArray = ['', 'rotate_90', 'rotate_180', 'rotate_270'];
     rotationContainmentMaxWidth = '';
     rotationContainmentMaxHeight = '';
-    @ViewChild(HelpDialogComponent) private _helpDialog: HelpDialogComponent;
-    @ViewChild(SaveDialogComponent) private _saveDialog: SaveDialogComponent;
     @Input() context: PhotoListContext;
     @Input() showCategoryLink = false;
 
@@ -67,6 +68,7 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     constructor(private _zone: NgZone,
+                private _modal: NgbModal,
                 private _stateService: PhotoStateService,
                 private _navService: PhotoNavigationService,
                 private _responsiveService: ResponsiveService) {
@@ -157,7 +159,12 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     toggleHelp(): void {
-        this._helpDialog.toggle();
+        if (this._helpModal === null) {
+            this._helpModal = this._modal.open(HelpDialogComponent);
+        } else {
+            this._helpModal.dismiss();
+            this._helpModal = null;
+        }
     }
 
     rotate(direction: number): void {
@@ -182,8 +189,8 @@ export class PhotoViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     showDownload(photoInfo: IPhotoInfo): void {
-        this._saveDialog.photoInfo = photoInfo;
-        this._saveDialog.show();
+        const modal = this._modal.open(SaveDialogComponent);
+        modal.componentInstance.photoInfo = photoInfo;
     }
 
     getPhotoPath(): string {

@@ -2,45 +2,49 @@
 @model EditProfileModel
 @{ ViewBag.Title = "admin | edit profile"; }
 
-@Html.Partial("_PageHeader", "Edit User Profile")
+<h1>Edit User Profile</h1>
 
 @Html.Partial("_identityResult", new IdentityResultModel("user profile", Model.Result))
 
-<p>Please update the basic profile data for this user below, and then submit the changes.</p>
+<p>Please update the basic profile data for <strong>@Model.Username</strong> below, and then submit the changes.</p>
 
-<form asp-controller="admin" asp-action="editprofile" method="post" class="form-horizontal" autocomplete="off" role="form">
+<form asp-controller="admin" asp-action="editprofile" method="post" autocomplete="off" role="form">
 	<input asp-for="Username" type="hidden" />
-	<div class="form-group">
-		<label asp-for="Username" class="col-sm-3 control-label"></label>
-		<div class="col-sm-5">
-			<label class="control-label">@Model.Username</label>
+
+    <div class="form-group">
+		<label asp-for="FirstName" class="col-form-label"></label>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<input asp-for="FirstName" class="form-control" autofocus="" />
+				@*<span asp-validation-for="FirstName" class="form-text"></span>*@
+			</div>
 		</div>
 	</div>
-    <div class="form-group" maw-for="@Model.FirstName">
-		<label asp-for="FirstName" class="col-sm-3 control-label"></label>
-        <div class="col-sm-5">
-			<input asp-for="FirstName" class="form-control" autofocus="" />
-			<span asp-validation-for="FirstName" class="help-block"></span>
-        </div>
-	</div>
-    <div class="form-group" maw-for="@Model.LastName">
-		<label asp-for="LastName" class="col-sm-3 control-label"></label>
-        <div class="col-sm-5">
-			<input asp-for="LastName" class="form-control" />
-			<span asp-validation-for="LastName" class="help-block"></span>
-        </div>
-	</div>
-    <div class="form-group" maw-for="@Model.Email">
-		<label asp-for="Email" class="col-sm-3 control-label"></label>
-        <div class="col-sm-5">
-			<input asp-for="Email" class="form-control" />
-			<span asp-validation-for="Email" class="help-block"></span>
-        </div>
-	</div>
-	
+
     <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-2">
-            <button type="submit" class="btn btn-default">Submit</button>
-        </div>
+		<label asp-for="LastName" class="col-form-label"></label>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<input asp-for="LastName" class="form-control" />
+				@*<span asp-validation-for="LastName" class="form-text"></span>*@
+			</div>
+		</div>
+	</div>
+
+    <div class="form-group">
+		<label asp-for="Email" class="col-form-label"></label>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<input asp-for="Email" class="form-control" />
+				@*<span asp-validation-for="Email" class="form-text"></span>*@
+			</div>
+		</div>
+	</div>
+
+    <div class="form-group">
+		<button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>

@@ -1,10 +1,10 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "reference | .net guidelines | exceptions"; 
+    ViewBag.Title = "reference | .net guidelines | exceptions";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", ".Net Framework Design Guidelines")
+    <h1>.Net Framework Design Guidelines</h1>
 }
 
 @section sidebar {
@@ -13,8 +13,7 @@
 
 <h2>Exceptions</h2>
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover table-condensed">
+<table class="table table-responsive table-striped table-hover table-sm">
   	<tbody>
 	    <tr><td>Do Not</td><td>Return error codes.</td></tr>
 	    <tr><td>Do</td><td>Report execution failures by throwing exceptions.</td></tr>
@@ -77,4 +76,3 @@
 	    <tr><td>Do</td><td>Provide an exception-throwing member for each member using the Try-Parse Pattern.</td></tr>
 	</tbody>
 </table>
-</div>   

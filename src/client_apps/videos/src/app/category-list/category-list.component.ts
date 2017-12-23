@@ -2,17 +2,15 @@ import { Component, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular
 import { ActivatedRoute } from '@angular/router';
 import { trigger, state, style, transition, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../../ng_maw/shared/animation';
-import { PagerComponent } from '../../ng_maw/pager/pager.component';
-import { ThumbnailListComponent } from '../../ng_maw/thumbnail-list/thumbnail-list.component';
-import { SelectedThumbnail } from '../../ng_maw/thumbnail-list/selected-thumbnail.model';
+import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 
+import { fadeIn, fadeOut } from '../shared/animation';
 import { ICategory } from '../shared/icategory.model';
-import { CategoryThumbnailInfo } from '../shared/category-thumbnail-info.model';
 import { VideoNavigationService } from '../shared/video-navigation.service';
 import { SizeService } from '../shared/size.service';
 import { VideoDataService } from '../shared/video-data.service';
 import { VideoStateService } from '../shared/video-state.service';
+import { Config } from '../shared/config.model';
 
 @Component({
     selector: 'app-category-list',
@@ -27,10 +25,10 @@ import { VideoStateService } from '../shared/video-state.service';
     ]
 })
 export class CategoryListComponent implements AfterViewInit {
-    @ViewChild(PagerComponent) pager: PagerComponent;
-    @ViewChild(ThumbnailListComponent) thumbnailList: ThumbnailListComponent;
     year = -1;
-    categories: Array<ICategory> = [];
+    page = 1;
+    categoryList: Array<ICategory> = [];
+    cardsPerPage = 24;
 
     constructor(private _sizeService: SizeService,
                 private _dataService: VideoDataService,
@@ -45,15 +43,11 @@ export class CategoryListComponent implements AfterViewInit {
         this._activatedRoute.params.subscribe(params => {
             this.year = parseInt(params['year'], 10);
 
-            this.thumbnailList.setRowCountPerPage(2);
-
-            this.thumbnailList.itemsPerPageUpdated.subscribe((x: any) => {
-                this.updatePager();
-            });
-
             this._dataService.getCategoriesForYear(this.year)
                 .subscribe(
-                    (data: Array<ICategory>) => this.setCategories(data),
+                    (categories: Array<ICategory>) => {
+                        this.categoryList = categories;
+                    },
                     (err: any) => console.error(`there was an error: ${err}`)
                 );
 
@@ -61,36 +55,15 @@ export class CategoryListComponent implements AfterViewInit {
         });
     }
 
-    setCategories(categories: Array<ICategory>): void {
-        this.categories = categories;
-
-        const thumbnails: Array<CategoryThumbnailInfo> = categories.map((cat: ICategory) =>
-            new CategoryThumbnailInfo(cat.teaserThumbnail.path,
-                this._sizeService.getThumbHeight(cat.teaserThumbnail.width, cat.teaserThumbnail.height),
-                this._sizeService.getThumbWidth(cat.teaserThumbnail.width, cat.teaserThumbnail.height),
-                cat,
-                cat.name,
-                null
-            )
-        );
-
-        this.thumbnailList.setItemList(thumbnails);
-        this.pager.setPageCount(Math.ceil(thumbnails.length / this.thumbnailList.itemsPerPage));
-    }
-
-    onChangePage(pageIndex: number): void {
-        this.thumbnailList.setPageDisplayedIndex(pageIndex);
-    }
-
-    onThumbnailSelected(item: SelectedThumbnail): void {
-        if (item.index >= 0 && this.categories.length > item.index) {
-            const cat: ICategory = (<CategoryThumbnailInfo>item.thumbnail).category;
-            this._navService.gotoVideoList(cat.year, cat);
+    onChangePage(page: number): void {
+        if (page >= 1) {
+            this.page = page;
         }
     }
 
-    private updatePager() {
-        this.pager.setPageCount(this.pager.calcPageCount(this.thumbnailList.itemList.length, this.thumbnailList.itemsPerPage));
-        this.pager.setActivePage(this.thumbnailList.pageDisplayedIndex);
+    onCategorySelected(category: ICategory): void {
+        if (category !== null) {
+            this._navService.gotoVideoList(category.year, category);
+        }
     }
 }

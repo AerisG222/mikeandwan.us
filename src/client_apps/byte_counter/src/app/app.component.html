@@ -1,23 +1,26 @@
-<form class="form-horizontal">
+<form>
 	<div class="form-group">
-		<label class="col-sm-3 control-label">Text to Count</label>
-		<div class="col-sm-9">
-			<textarea #value rows="5" class="form-control" autofocus></textarea>
-		</div>
+		<label class="col-form-label">Text to Count</label>
+		<textarea #value rows="12" class="form-control" autofocus></textarea>
 	</div>
 
 	<div class="form-group">
-		<div class="col-sm-offset-3 col-sm-4">
-			<button type="button" class="btn btn-default" (click)="calculate(value.value)">Count</button>
-			<button type="button" class="btn btn-default" (click)="value.value = ''; calculate(value.value);">Clear</button>
-		</div>
+		<button type="button" class="btn btn-primary" (click)="calculate(value.value)">Count</button>
+		<button type="button" class="btn btn-primary" (click)="value.value = ''; calculate(value.value);">Clear</button>
 	</div>
 </form>
 
-<p>
-	Bytes: {{bCount}}
-	<br/>
-	Kilobytes: {{kbCount | number: '1.2-2'}}
-	<br/>
-	Megabytes: {{mbCount | number: '1.4-4'}}
-</p>
+<table class="table table-striped table-hover table-sm">
+	<tr>
+		<td>Bytes</td>
+		<td>{{bCount}}</td>
+	</tr>
+	<tr>
+		<td>Kilobytes</td>
+		<td>{{kbCount | number: '1.2-2'}}</td>
+	</tr>
+	<tr>
+		<td>Megabytes</td>
+		<td>{{mbCount | number: '1.4-4'}}</td>
+	</tr>
+</table>

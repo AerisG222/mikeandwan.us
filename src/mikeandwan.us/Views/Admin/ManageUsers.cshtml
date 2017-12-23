@@ -2,10 +2,9 @@
 @model IEnumerable<ManageUserModel>
 @{ ViewBag.Title = "admin | manage users"; }
 
-@Html.Partial("_PageHeader", "Manage Users")
+<h1>Manage Users</h1>
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover table-condensed">
+<table class="table table-responsive table-striped table-hover table-sm">
 	<thead>
 		<tr>
 			<th>Username</th>
@@ -24,9 +23,8 @@
             <td>@user.LastLoginDate</td>
 			<td><a asp-controller="admin" asp-action="editprofile" asp-route-id="@user.Username">Edit</a></td>
 			<td><a asp-controller="admin" asp-action="managerolesforuser" asp-route-id="@user.Username">Edit</a></td>
-			<td><a asp-controller="admin" asp-action="deleteuser" asp-route-id="@user.Username">Delete</a></td>	
+			<td><a asp-controller="admin" asp-action="deleteuser" asp-route-id="@user.Username">Delete</a></td>
 		</tr>
 	}
 	</tbody>
 </table>
-</div>   

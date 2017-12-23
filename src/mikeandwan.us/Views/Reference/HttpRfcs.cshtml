@@ -1,10 +1,10 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "reference | http rfcs"; 
+    ViewBag.Title = "reference | http rfcs";
 }
 
-@section header { 
-    @Html.Partial("_PageHeader", "HTTP Related RFCs")
+@section header {
+    <h1>HTTP Related RFCs</h1>
 }
 
 @section sidebar {
@@ -13,8 +13,7 @@
 
 <p>This page provides a list of HTTP related RFCs.</p>
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover table-condensed">
+<table class="table table-responsive table-striped table-hover table-sm">
 	<thead>
     	<tr><th>Number</th><th>Title</th></tr>
     </thead>
@@ -46,4 +45,3 @@
 	  	<tr><td><a href="http://www.ietf.org/rfc/rfc3310.txt">3310</a></td><td>Hypertext Transfer Protocol (HTTP) Digest Authentication Using Authentication and Key Agreement (AKA)</td></tr>
 	</tbody>
 </table>
-</div>

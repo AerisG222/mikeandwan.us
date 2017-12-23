@@ -13,6 +13,9 @@ namespace MawMvcApp.ViewModels.Account
 
 		[BindNever]
 		public bool WasEmailAttempted { get; set; }
+
+		[BindNever]
+		public bool WasSuccessful { get; set; }
 	}
 }
 

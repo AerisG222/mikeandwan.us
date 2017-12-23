@@ -1,55 +1,52 @@
 <div class="row">
-    <div class="col-xs-12">
+    <div class="col-12">
         <div *ngIf="!context.isCategoryMode" class="row">
-            <div class="col-xs-12">
+            <div class="col-12">
                 <app-category-link [category]="category"></app-category-link>
             </div>
         </div>
     	<div class="row main-image" [ngClass]="{hide_main_image_border: category}">
-            <div class="col-xs-12 vcenter text-center">
+            <div class="col-12 vcenter text-center">
         		<img [src]="getPhotoPath()" [ngClass]="rotationClassArray[context.current.rotationClassIndex]" [ngStyle]="{'max-width': rotationContainmentMaxWidth, 'max-height': rotationContainmentMaxHeight}" />
-        		<a class="prev" [hidden]="!context.hasPrevious" (click)="context.movePrevious()"><app-svg-icon [klass]="'icon icon-lg'" [icon]="svgIcon.ArrowCircleLeft"></app-svg-icon></a>
-        		<a class="next" [hidden]="!context.hasNext" (click)="context.moveNext()"><app-svg-icon [klass]="'icon icon-lg'" [icon]="svgIcon.ArrowCircleRight"></app-svg-icon></a>
+        		<a class="prev" [hidden]="!context.hasPrevious" (click)="context.movePrevious()"><app-svg-icon [klass]="'icon-xl'" [icon]="svgIcon.ArrowCircleLeft"></app-svg-icon></a>
+        		<a class="next" [hidden]="!context.hasNext" (click)="context.moveNext()"><app-svg-icon [klass]="'icon-xl'" [icon]="svgIcon.ArrowCircleRight"></app-svg-icon></a>
             </div>
     	</div>
     	<div class="row toolbar hidden-xs">
-            <div class="left col-sm-4">
+            <div class="col px-0">
                 <div class="btn-group">
-            		<button type="button" class="btn btn-default btn-xs" (click)="toggleComments()" [ngClass]="{active: showComments}" title="comments"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Comment"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="toggleRatings()" [ngClass]="{active: showRatings}" title="ratings"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Star"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="toggleExif()" [ngClass]="{active: showExif}" title="exif"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.InfoCircle"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="rotate(-1)" title="rotate counter-clockwise"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.RotateLeft"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="rotate(1)" title="rotate clockwise"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.RotateRight"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="toggleHistogram()" [ngClass]="{active: showHistogram}" [hidden]="!showHistogramButton" title="histogram"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.BarChart"></app-svg-icon></button>
-                    <button type="button" class="btn btn-default btn-xs" (click)="toggleFullscreen()" title="full screen"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Expand"></app-svg-icon></button>
-                    <button type="button" class="btn btn-default btn-xs" (click)="toggleHelp()" title="help"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Keyboard"></app-svg-icon></button>
-                    <button type="button" class="btn btn-default btn-xs" [hidden]="!supportCssFilters" (click)="toggleEffects()" [ngClass]="{active: showEffects}" title="effects"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Adjust"></app-svg-icon></button>
+                    <app-toolbar-button [icon]="svgIcon.Comment" [isActive]="showComments" [tooltip]="'comments'" (click)="toggleComments()"></app-toolbar-button>
+                    <app-toolbar-button [icon]="svgIcon.Star" [isActive]="showRatings" [tooltip]="'ratings'" (click)="toggleRatings()"></app-toolbar-button>
+                    <app-toolbar-button [icon]="svgIcon.InfoCircle" [isActive]="showExif" [tooltip]="'exif'" (click)="toggleExif()"></app-toolbar-button>
+                    <app-toolbar-button [icon]="svgIcon.RotateLeft" [tooltip]="'rotate counter-clockwise'" (click)="rotate(-1)"></app-toolbar-button>
+                    <app-toolbar-button [icon]="svgIcon.RotateRight" [tooltip]="'rotate clockwise'" (click)="rotate(1)"></app-toolbar-button>
+                    <app-toolbar-button [hidden]="!showHistogramButton" [icon]="svgIcon.BarChart" [isActive]="showHistogram" [tooltip]="'histogram'" (click)="toggleHistogram()"></app-toolbar-button>
+                    <app-toolbar-button [icon]="svgIcon.Expand" [tooltip]="'full screen'" (click)="toggleFullscreen()"></app-toolbar-button>
+                    <app-toolbar-button [icon]="svgIcon.Keyboard" [tooltip]="'help'" (click)="toggleHelp()"></app-toolbar-button>
+                    <app-toolbar-button [hidden]="!supportCssFilters" [icon]="svgIcon.Adjust" [isActive]="showEffects" [tooltip]="'effects'" (click)="toggleEffects()"></app-toolbar-button>
                 </div>
             </div>
-            <div class="text-center col-sm-4">
+            <div class="col px-0 d-flex justify-content-center">
                 <div class="btn-group">
-            		<button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.smInfo)" title="small (email)"><app-svg-icon [klass]="'icon icon-bright icon-sm vcenter'" [icon]="svgIcon.Image"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.mdInfo)" title="medium (email)"><app-svg-icon [klass]="'icon icon-bright icon-md vcenter'" [icon]="svgIcon.Image"></app-svg-icon></button>
-            		<button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.lgInfo)" title="large (prints)"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Image"></app-svg-icon></button>
-                    <button type="button" class="btn btn-default btn-xs" (click)="showDownload(photo.prtInfo)" title="large/untouched (prints)"><app-svg-icon [klass]="'icon icon-bright vcenter'" [icon]="svgIcon.Image"></app-svg-icon></button>
+            		<app-toolbar-button [icon]="svgIcon.Image" [iconSize]="'icon-sm'" [tooltip]="'small (email)'" (click)="showDownload(photo.smInfo)"></app-toolbar-button>
+            		<app-toolbar-button [icon]="svgIcon.Image" [iconSize]="'icon-md'" [tooltip]="'medium (email)'" (click)="showDownload(photo.mdInfo)"></app-toolbar-button>
+            		<app-toolbar-button [icon]="svgIcon.Image" [iconSize]="'icon-lg'" [tooltip]="'large (prints)'" (click)="showDownload(photo.lgInfo)"></app-toolbar-button>
+                    <app-toolbar-button [icon]="svgIcon.Image" [iconSize]="'icon-lg'" [tooltip]="'large/untouched (prints)'" (click)="showDownload(photo.prtInfo)"></app-toolbar-button>
                 </div>
             </div>
-            <div class="right col-sm-4">
-                <div class="btn-group pull-right">
-                    <app-slideshow-button [context]="context" title="start/stop slideshow"></app-slideshow-button>
+            <div class="col px-0 d-flex justify-content-end">
+                <div class="btn-group">
+                    <app-slideshow-button [context]="context"></app-slideshow-button>
                 </div>
             </div>
     	</div>
 
         <div class="row">
-        	<div class="col-sm-12 hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showComments"><app-comment-view [photo]="photo"></app-comment-view></div>
-        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showRatings"><app-rating-view [photo]="photo"></app-rating-view></div>
-        	<div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info exif" [@fadeInOut]="'in'" *ngIf="showExif"><app-exif-view [photo]="context?.current"></app-exif-view></div>
-            <div class="col-sm-offset-2 col-sm-8 hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showEffects"><app-effects-view [photo]="context?.current" (update)="onFiltersUpdated($event)"></app-effects-view></div>
-            <div class="col-sm-offset-2 col-sm-8 photo-info" [@fadeInOut]="'in'" *ngIf="showFullscreen"><app-fullscreen-view [context]="context"></app-fullscreen-view></div>
+        	<div class="col hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showComments"><app-comment-view [photo]="photo"></app-comment-view></div>
+        	<div class="col hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showRatings"><app-rating-view [photo]="photo"></app-rating-view></div>
+        	<div class="col hidden-xs photo-info exif" [@fadeInOut]="'in'" *ngIf="showExif"><app-exif-view [photo]="context?.current"></app-exif-view></div>
+            <div class="col hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showEffects"><app-effects-view [photo]="context?.current" (update)="onFiltersUpdated($event)"></app-effects-view></div>
+            <div [@fadeInOut]="'in'" *ngIf="showFullscreen"><app-fullscreen-view [context]="context"></app-fullscreen-view></div>
         </div>
     </div>
 </div>
-
-<app-help-dialog></app-help-dialog>
-<app-save-dialog></app-save-dialog>

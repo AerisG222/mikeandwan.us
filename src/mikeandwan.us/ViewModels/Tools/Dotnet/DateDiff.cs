@@ -20,6 +20,9 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 		public DateTime EndDate { get; set; }
 		
 		[BindNever]
+		public bool HasErrors { get; set;}
+		
+		[BindNever]
 		public bool ShowResults { get; set; }
 		
 		[BindNever]

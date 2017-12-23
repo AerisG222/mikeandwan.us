@@ -25,6 +25,9 @@ namespace MawMvcApp.ViewModels.Tools
         public ColorConversionMode ConversionMode { get; set; }
         
         [BindNever]
+        public bool HasErrors { get; set; }
+        
+        [BindNever]
         public string ErrorMessage { get; set; }
 
         [BindNever]

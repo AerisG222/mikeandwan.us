@@ -1,4 +1,17 @@
-NG_APPS=( "bandwidth" "binary_clock" "byte_counter" "filesize" "googlemaps" "learning" "memory" "money_spin" "ng_maw" "photos" "time" "videos" "weekend_countdown" )
+NG_APPS=(
+    "bandwidth"
+    "binary_clock"
+    "byte_counter"
+    "filesize"
+    "googlemaps"
+    "learning"
+    "memory"
+    "money_spin"
+    "photos"
+    "time"
+    "videos"
+    "weekend_countdown"
+)
 CLI_VERSION='@angular/cli@latest'
 
 update_ngcli_global() {

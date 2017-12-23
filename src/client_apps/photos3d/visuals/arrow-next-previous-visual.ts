@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import * as THREE from 'three';
+
+import { Group } from 'three';
 
 import { ArgumentNullError } from '../models/argument-null-error';
 import { ArrowVisual } from './arrow-visual';
@@ -10,7 +11,7 @@ import { IDisposable } from '../models/idisposable';
 import { IVisual } from './ivisual';
 import { VisualContext } from '../models/visual-context';
 
-export class ArrowNextPreviousVisual extends THREE.Object3D implements IDisposable, IVisual {
+export class ArrowNextPreviousVisual extends Group implements IDisposable, IVisual {
     private _isDisposed = false;
 
     private _boundsHeight: number;
@@ -63,7 +64,7 @@ export class ArrowNextPreviousVisual extends THREE.Object3D implements IDisposab
     }
 
     render(clockDelta: number, elapsed: number): void {
-        if(this._isDisposed) {
+        if (this._isDisposed) {
             return;
         }
 
@@ -77,7 +78,7 @@ export class ArrowNextPreviousVisual extends THREE.Object3D implements IDisposab
     }
 
     dispose(): void {
-        if(this._isDisposed) {
+        if (this._isDisposed) {
             return;
         }
 
@@ -91,13 +92,13 @@ export class ArrowNextPreviousVisual extends THREE.Object3D implements IDisposab
     }
 
     showNext(doShow: boolean): void {
-        if(doShow === this._nextArrowDisplayed) {
+        if (doShow === this._nextArrowDisplayed) {
             return;
         }
 
         this._nextArrowDisplayed = doShow;
 
-        if(doShow) {
+        if (doShow) {
             this.add(this._nextArrow);
         } else {
             this.remove(this._nextArrow);
@@ -105,13 +106,13 @@ export class ArrowNextPreviousVisual extends THREE.Object3D implements IDisposab
     }
 
     showPrevious(doShow: boolean): void {
-        if(doShow === this._prevArrowDisplayed) {
+        if (doShow === this._prevArrowDisplayed) {
             return;
         }
 
         this._prevArrowDisplayed = doShow;
 
-        if(doShow) {
+        if (doShow) {
             this.add(this._prevArrow);
         } else {
             this.remove(this._prevArrow);

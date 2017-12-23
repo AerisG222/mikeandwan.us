@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Vector2 } from 'three';
 
 export class Hexagon {
     private static readonly AREA_MULTIPLIER = 3 * Math.sqrt(3) / 2;
@@ -26,16 +26,16 @@ export class Hexagon {
         return Hexagon.AREA_MULTIPLIER * Math.pow(this._edgeLength, 2);
     }
 
-    generatePoints(): Array<THREE.Vector2> {
-        let points: Array<THREE.Vector2> = [];
+    generatePoints(): Array<Vector2> {
+        let points: Array<Vector2> = [];
 
-        points.push(new THREE.Vector2(-this._halfEdgeLength, this._halfHeight));
-        points.push(new THREE.Vector2(-this._edgeLength, 0));
-        points.push(new THREE.Vector2(-this._halfEdgeLength, -this._halfHeight));
-        points.push(new THREE.Vector2(this._halfEdgeLength, -this._halfHeight));
-        points.push(new THREE.Vector2(this._edgeLength, 0));
-        points.push(new THREE.Vector2(this._halfEdgeLength, this._halfHeight));
-        points.push(new THREE.Vector2(-this._halfEdgeLength, this._halfHeight));
+        points.push(new Vector2(-this._halfEdgeLength, this._halfHeight));
+        points.push(new Vector2(-this._edgeLength, 0));
+        points.push(new Vector2(-this._halfEdgeLength, -this._halfHeight));
+        points.push(new Vector2(this._halfEdgeLength, -this._halfHeight));
+        points.push(new Vector2(this._edgeLength, 0));
+        points.push(new Vector2(this._halfEdgeLength, this._halfHeight));
+        points.push(new Vector2(-this._halfEdgeLength, this._halfHeight));
 
         return points;
     }

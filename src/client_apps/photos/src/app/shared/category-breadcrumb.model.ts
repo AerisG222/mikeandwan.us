@@ -1,5 +1,4 @@
-import { Breadcrumb } from '../../ng_maw/shared/breadcrumb.model';
-
+import { Breadcrumb } from '../shared/breadcrumb.model';
 import { ICategory } from './icategory.model';
 
 export class CategoryBreadcrumb extends Breadcrumb {

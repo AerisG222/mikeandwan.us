@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Group } from 'three';
 
 import { IDisposable } from '../models/idisposable';
 
@@ -13,7 +13,7 @@ export class DisposalService {
             (obj as IDisposable).dispose();
         }
 
-        if (obj instanceof THREE.Object3D) {
+        if (obj instanceof Group) {
             for (let i = 0; i < obj.children.length; i++) {
                 this.dispose(obj.children[i]);
             }

@@ -1,10 +1,10 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "reference | .net guidelines | naming"; 
+    ViewBag.Title = "reference | .net guidelines | naming";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", ".Net Framework Design Guidelines")
+    <h1>.Net Framework Design Guidelines</h1>
 }
 
 @section sidebar {
@@ -13,8 +13,7 @@
 
 <h2>Naming Guidelines</h2>
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover table-condensed">
+<table class="table table-responsive table-striped table-hover table-sm">
   	<tbody>
 	    <tr><td>Do</td><td>Use PascalCasing for namespace, type, and member names consisting of multiple words.</td></tr>
 	    <tr><td>Do</td><td>Use camelCasing for parameter names.</td></tr>
@@ -91,4 +90,3 @@
 	    <tr><td>Do</td><td>Use naming conventions for naming exception messages as indicated on page 65.</td></tr>
 	</tbody>
 </table>
-</div>   

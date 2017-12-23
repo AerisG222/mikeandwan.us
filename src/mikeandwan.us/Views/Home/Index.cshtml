@@ -1,60 +1,68 @@
-@{ 
+@{
    Layout = "_LayoutHome";
-   ViewBag.Title = "home"; 
+   ViewBag.Title = "home";
 }
 
-<div class="banner">
-   @Html.Partial("_TopNav")
+<div class="banner container-fluid">
+   @Html.Partial("_TopNav", false)
 </div>
 
 <div class="container">
     <div class="row">
         @if(Context.User.Identity.IsAuthenticated) {
-            <div class="col-sm-offset-2 col-sm-2 spotlight">
-                <p class="text-center">
-                    <a asp-controller="photos" asp-action="index"><svg-icon icon="Camera" class="icon-hp-feature"></svg-icon></a>
-                </p>
-                <p class="text-center">
-                    <a class="h2" asp-controller="photos" asp-action="index">Photos</a>
-                </p>
+            <div class="offset-sm-2 col-sm-2">
+                <div class="hover-bright">
+                    <p class="text-center">
+                        <a asp-controller="photos" asp-action="index"><svg-icon icon="Camera" class="hp-feature"></svg-icon></a>
+                    </p>
+                    <p class="text-center">
+                        <a class="h2" asp-controller="photos" asp-action="index">Photos</a>
+                    </p>
+                </div>
                 <p class="text-center">
                     <span>Checkout the latest photos!</span>
                 </p>
             </div>
         }
         else {
-            <div class="col-sm-offset-2 col-sm-2 spotlight">
-                <p class="text-center">
-                    <a asp-controller="account" asp-action="login"><svg-icon icon="Person" class="icon-hp-feature"></svg-icon></a>
-                </p>
-                <p class="text-center">
-                    <a class="h2" asp-controller="account" asp-action="login">Login</a>
-                </p>
+            <div class="offset-sm-2 col-sm-2">
+                <div class="hover-bright">
+                    <p class="text-center">
+                        <a asp-controller="account" asp-action="login"><svg-icon icon="Person" class="hp-feature"></svg-icon></a>
+                    </p>
+                    <p class="text-center">
+                        <a class="h2" asp-controller="account" asp-action="login">Login</a>
+                    </p>
+                </div>
                 <p class="text-center">
                     <span>View the latest photos and videos!</span>
                 </p>
             </div>
         }
 
-        <div class="col-sm-offset-1 col-sm-2 spotlight">
-            <p class="text-center">
-                <a asp-controller="tools" asp-action="index"><svg-icon icon="Wrench" class="icon-hp-feature"></svg-icon></a>
-            </p>
-            <p class="text-center">
-                <a class="h2" asp-controller="tools" asp-action="index">Tools</a>
-            </p>
+        <div class="offset-sm-1 col-sm-2">
+            <div class="hover-bright">
+                <p class="text-center">
+                    <a asp-controller="tools" asp-action="index"><svg-icon icon="Wrench" class="hp-feature"></svg-icon></a>
+                </p>
+                <p class="text-center">
+                    <a class="h2" asp-controller="tools" asp-action="index">Tools</a>
+                </p>
+            </div>
             <p class="text-center">
                 <span>Utilities that periodically come in handy</span>
             </p>
         </div>
 
-        <div class="col-sm-offset-1 col-sm-2 spotlight">
-            <p class="text-center">
-                <a asp-controller="about" asp-action="news"><svg-icon icon="Flag" class="icon-hp-feature"></svg-icon></a>
-            </p>
-            <p class="text-center">
-                <a class="h2" asp-controller="about" asp-action="news">News</a>
-            </p>
+        <div class="offset-sm-1 col-sm-2">
+            <div class="hover-bright">
+                <p class="text-center">
+                    <a asp-controller="about" asp-action="news"><svg-icon icon="Flag" class="hp-feature"></svg-icon></a>
+                </p>
+                <p class="text-center">
+                    <a class="h2" asp-controller="about" asp-action="news">News</a>
+                </p>
+            </div>
             <p class="text-center">
                 <span>See what's been happening on this website</span>
             </p>

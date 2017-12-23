@@ -1,6 +1,6 @@
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "learning"; 
+    ViewBag.Title = "learning";
 }
 
 @section custom_head {
@@ -19,7 +19,7 @@
 }
 
 @section header {
-    @Html.Partial("_PageHeader", "Learning")
+    <h1>Learning</h1>
 }
 
 @section sidebar {
@@ -33,6 +33,10 @@
     angular js, before a re-write of the more complicated picture application.
 </p>
 
-<section class="learning_char">
-    <app-root>Loading...</app-root>
+<section>
+    <div class="row">
+        <div class="col-sm-4 offset-sm-4">
+            <app-root>Loading...</app-root>
+        </div>
+    </div>
 </section>

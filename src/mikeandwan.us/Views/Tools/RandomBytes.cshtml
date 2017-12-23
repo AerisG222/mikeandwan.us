@@ -1,56 +1,57 @@
 @model MawMvcApp.ViewModels.Tools.Dotnet.RandomBytesModel
-@{ 
+@{
     Layout = "_LayoutSidebar";
-    ViewBag.Title = "tools | random bytes"; 
+    ViewBag.Title = "tools | random bytes";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", "Random Bytes")
+    <h1>Random Bytes</h1>
 }
 
 @section sidebar {
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "random-bytes" })
 }
 
+@if(Model.HasErrors) {
+    <p maw-alert-type="Danger">
+        Please correct the errors below:
+    </p>
+    <div class="text-danger" asp-validation-summary="All"></div>
+}
+
 <p>
 This page allows you to generate a list of random bytes.  I've created this after wanting a more random
 sequence of bytes than manually typing these in, primarily for use in the machinekey section of the
-web.config for this site.  Additionally, this uses a cryptographic random number generator, so it should 
+web.config for this site.  Additionally, this uses a cryptographic random number generator, so it should
 result in a good random value.
 </p>
 
-<form asp-controller="tools" asp-action="randombytes" method="post" class="form-horizontal" autocomplete="off" role="form">
-	<div class="form-group" maw-for="@Model.Size">
-        <label asp-for="Size" class="col-sm-3 control-label"></label>
-        <div class="col-sm-6">
-            <input asp-for="Size" class="form-control" autofocus="" />
-            <span asp-validation-for="Size" class="help-block"></span>
+<form asp-controller="tools" asp-action="randombytes" method="post" autocomplete="off" role="form">
+	<div class="form-group">
+        <div class="row">
+            <label asp-for="Size" class="col col-form-label"></label>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <input asp-for="Size" class="form-control" autofocus="" />
+                @*<span asp-validation-for="Size" class="form-text"></span>*@
+            </div>
         </div>
 	</div>
-	
+
     <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-2">
-            <button  type="submit" class="btn btn-default">Submit</button>
-        </div>
+        <button  type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>
 
 @if(!string.IsNullOrEmpty(Model.RandomBytes)) {
     <h2>Results</h2>
-    <div class="row">
-        <div class="col-sm-3">
-            @Html.LabelFor(m => m.RandomBytes)
-        </div>
-        <div class="col-sm-9">
-            @Html.TextAreaFor(m => m.RandomBytes, 5, 0, new { @class = "form-control" })
-        </div>
+    <div class="form-group">
+        <label asp-for="RandomBytes" class="col-form-label"></label>
+        <textarea asp-for="RandomBytes" rows="5" class="form-control" autofocus=""></textarea>
     </div>
-    <div class="row">
-        <div class="col-sm-3">
-            @Html.LabelFor(m => m.RandomBytesBase64)
-        </div>
-        <div class="col-sm-9">
-            @Html.TextAreaFor(m => m.RandomBytesBase64, 5, 0, new { @class = "form-control" })
-        </div>
+    <div class="form-group">
+        <label asp-for="RandomBytesBase64" class="col-form-label"></label>
+        <textarea asp-for="RandomBytesBase64" rows="5" class="form-control" autofocus=""></textarea>
     </div>
 }

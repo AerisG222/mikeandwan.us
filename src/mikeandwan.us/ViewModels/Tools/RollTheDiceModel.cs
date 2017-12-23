@@ -25,6 +25,9 @@ namespace MawMvcApp.ViewModels.Tools
 		public int[] ThrowCounts { get; private set; }
 
 		[BindNever]
+		public bool HasErrors { get; set; }
+		
+		[BindNever]
 		public IEnumerable<int> WinnerList
 		{
 			get

@@ -1,10 +1,9 @@
 @{
-    ViewBag.Title = "photos 3d"; 
+    ViewBag.Title = "photos 3d";
     Layout = "_LayoutMinimal";
 }
 
 @section custom_head {
-    @Html.Partial("_css_Bootstrap")
     @Html.Partial("_css_site")
     <style>
         body { margin: 0; padding: 0; }
@@ -120,7 +119,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="helpClose" type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+                <button id="helpClose" type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -129,14 +128,14 @@
 @* http://stemkoski.github.io/Three.js/Shader-Animate.html *@
 <script id="waterVertexShader" type="x-shader/x-vertex">
 varying vec2 vUv;
-void main() 
-{ 
+void main()
+{
     vUv = uv;
     gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 }
 </script>
 
-<script id="waterFragmentShader" type="x-shader/x-vertex"> 
+<script id="waterFragmentShader" type="x-shader/x-vertex">
 uniform sampler2D baseTexture;
 uniform float baseSpeed;
 uniform sampler2D noiseTexture;
@@ -145,18 +144,17 @@ uniform float alpha;
 uniform float time;
 
 varying vec2 vUv;
-void main() 
+void main()
 {
-	vec2 uvTimeShift = vUv + vec2( -0.7, 1.5 ) * time * baseSpeed;	
+	vec2 uvTimeShift = vUv + vec2( -0.7, 1.5 ) * time * baseSpeed;
 	vec4 noiseGeneratorTimeShift = texture2D( noiseTexture, uvTimeShift );
 	vec2 uvNoiseTimeShift = vUv + noiseScale * vec2( noiseGeneratorTimeShift.r, noiseGeneratorTimeShift.b );
 	vec4 baseColor = texture2D( baseTexture, uvNoiseTimeShift );
 
 	baseColor.a = alpha;
 	gl_FragColor = baseColor;
-}  
+}
 </script>
-@Html.Partial("_js_Bootstrap")
 <script src="/js/photos3d/main.bundle.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function(event) {

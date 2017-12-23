@@ -1,20 +1,20 @@
 @using MawMvcApp.ViewComponents
 @model AccountStatusViewModel
 
-<ul class="nav navbar-nav navbar-right">
+<ul class="navbar-nav">
     @if(Model.IsAuthenticated) {
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><svg-icon icon="Person" class="icon"></svg-icon><svg-icon icon="CaretDown" class="icon icon-caret"></svg-icon></a>
-            <ul class="dropdown-menu">
-                <li><a asp-controller="account" asp-action="changepassword">change password</a></li>
-                <li><a asp-controller="account" asp-action="editprofile">edit profile</a></li>
-                <li><a asp-controller="account" asp-action="logout">logout</a></li>
-            </ul>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"><svg-icon icon="Person"></svg-icon></a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" asp-controller="account" asp-action="changepassword">change password</a>
+                <a class="dropdown-item" asp-controller="account" asp-action="editprofile">edit profile</a>
+                <a class="dropdown-item" asp-controller="account" asp-action="logout">logout</a>
+            </div>
         </li>
     }
     else {
-        <li><a asp-controller="account" asp-action="login"><svg-icon icon="Person" class="icon"></svg-icon></a></li>
+        <li class="nav-item"><a asp-controller="account" asp-action="login" class="nav-link px-3"><svg-icon icon="Person"></svg-icon></a></li>
     }
 
-	<li><a asp-controller="about" asp-action="contact"><svg-icon icon="Envelope" class="icon"></svg-icon></a></li>
+	<li class="nav-item"><a asp-controller="about" asp-action="contact" class="nav-link px-3"><svg-icon icon="Envelope"></svg-icon></a></li>
 </ul>

@@ -1,16 +1,16 @@
-@{ 
-    ViewBag.Title = "tools"; 
+@{
+    ViewBag.Title = "tools";
 }
 
-@Html.Partial("_PageHeader", "Tools")
+<h1>Tools</h1>
 
 <div class="row">
-    <div class="col-xs-4">
-        <div class="panel panel-default">
-		    <div class="panel-heading">
-		        <h3 class="panel-title">General</h3>
+    <div class="col">
+        <div class="card mb-4">
+		    <div class="card-header">
+		        <strong class="card-title">General</strong>
 		    </div>
-	        <div class="list-group">
+	        <div class="list-group list-group-flush">
 	            <a class="list-group-item" asp-controller="tools" asp-action="rollthedice">Roll the Dice</a>
 	            <a class="list-group-item" asp-controller="tools" asp-action="googlemaps">Google Maps</a>
 	            <a class="list-group-item" asp-controller="tools" asp-action="weekendcountdown">Weekend Countdown</a>
@@ -21,43 +21,43 @@
 	        </div>
 		</div>
     </div>
-    <div class="col-xs-4">
-        <div class="panel panel-default">
-		    <div class="panel-heading">
-		        <h3 class="panel-title">Networking</h3>
+    <div class="col">
+        <div class="card mb-4">
+		    <div class="card-header">
+		        <strong class="card-title">Networking</strong>
 		    </div>
-		    <div class="list-group">
+		    <div class="list-group list-group-flush">
 	            <a class="list-group-item" asp-controller="tools" asp-action="networkingbandwidth">Bandwidth Calculator</a>
 	            <a class="list-group-item" asp-controller="tools" asp-action="networkingfilesize">File Size</a>
 	            <a class="list-group-item" asp-controller="tools" asp-action="networkingtime">Time</a>
 		    </div>
 		</div>
-        
-        <div class="panel panel-default">
-		    <div class="panel-heading">
-		        <h3 class="panel-title">Binary Clock</h3>
+
+        <div class="card mb-4">
+		    <div class="card-header">
+		        <strong class="card-title">Binary Clock</strong>
 		    </div>
-		    <div class="list-group">
+		    <div class="list-group list-group-flush">
 	            <a class="list-group-item" asp-controller="tools" asp-action="binaryclock">Binary Clock</a>
                 <a class="list-group-item" asp-controller="tools" asp-action="binaryclockabout">About Binary Clock</a>
 		    </div>
 		</div>
-        
-        <div class="panel panel-default">
-		    <div class="panel-heading">
-		        <h3 class="panel-title">Learning</h3>
+
+        <div class="card mb-4">
+		    <div class="card-header">
+		        <strong class="card-title">Learning</strong>
 		    </div>
-		    <div class="list-group">
+		    <div class="list-group list-group-flush">
 		        <a class="list-group-item" asp-controller="tools" asp-action="learning">Letters and Numbers</a>
 		    </div>
 		</div>
     </div>
-    <div class="col-xs-4">
-        <div class="panel panel-default">
-		    <div class="panel-heading">
-		        <h3 class="panel-title">.Net</h3>
+    <div class="col">
+        <div class="card mb-4">
+		    <div class="card-header">
+		        <strong class="card-title">.Net</strong>
 		    </div>
-		    <div class="list-group">
+		    <div class="list-group list-group-flush">
 	            <a class="list-group-item" asp-controller="tools" asp-action="dotnetregex">Regular Expressions</a>
 	            <a class="list-group-item" asp-controller="tools" asp-action="dotnetformattingdates">Date Formatting</a>
 	            <a class="list-group-item" asp-controller="tools" asp-action="dotnetformattingnumbers">Number Formatting</a>

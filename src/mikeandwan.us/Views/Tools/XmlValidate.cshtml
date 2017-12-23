@@ -1,15 +1,22 @@
 @model MawMvcApp.ViewModels.Tools.Dotnet.XmlValidateModel
-@{ 
+@{
     Layout = "_LayoutSidebar";
     ViewBag.Title = "tools | xml validator";
 }
 
 @section header {
-    @Html.Partial("_PageHeader", "XML Validator")
+    <h1>XML Validator</h1>
 }
 
 @section sidebar {
     @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "xml-validate" })
+}
+
+@if(Model.HasErrors) {
+    <p maw-alert-type="Danger">
+        Please correct the errors below:
+    </p>
+    <div class="text-danger" asp-validation-summary="All"></div>
 }
 
 <p>
@@ -17,26 +24,20 @@
 	well formed, and optionally, that it adheres to the supplied DTD / XSD.
 </p>
 
-<form asp-controller="tools" asp-action="xmlvalidate" method="post" class="form-horizontal" autocomplete="off" role="form">
-	<div class="form-group" maw-for="@Model.XmlSource">
-		<label asp-for="XmlSource" class="col-sm-3 control-label"></label>
-        <div class="col-sm-9">
-			<textarea asp-for="XmlSource" rows="8" class="form-control" autofocus=""></textarea>
-			<span asp-validation-for="XmlSource" class="help-block"></span>
-        </div>
+<form asp-controller="tools" asp-action="xmlvalidate" method="post" autocomplete="off" role="form">
+	<div class="form-group">
+		<label asp-for="XmlSource" class="col-form-label"></label>
+		<textarea asp-for="XmlSource" rows="8" class="form-control" autofocus=""></textarea>
+		@*<span asp-validation-for="XmlSource" class="form-text"></span>*@
 	</div>
-    <div class="form-group" maw-for="@Model.SchemaOrDtdSource">
-		<label asp-for="SchemaOrDtdSource" class="col-sm-3 control-label"></label>
-        <div class="col-sm-9">
-			<textarea asp-for="SchemaOrDtdSource" rows="8" class="form-control"></textarea>
-			<span asp-validation-for="SchemaOrDtdSource" class="help-block"></span>
-        </div>
-	</div>
-	
     <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-2">
-            <button type="submit" class="btn btn-default">Validate</button>
-        </div>
+		<label asp-for="SchemaOrDtdSource" class="col-form-label"></label>
+		<textarea asp-for="SchemaOrDtdSource" rows="8" class="form-control"></textarea>
+		@*<span asp-validation-for="SchemaOrDtdSource" class="form-text"></span>*@
+	</div>
+
+    <div class="form-group">
+		<button type="submit" class="btn btn-primary">Validate</button>
     </div>
 </form>
 
@@ -50,6 +51,8 @@
 	}
 	else {
 		<p>Your XML document is not well formed.  The following outlines the errors encountered:</p>
-		<pre>@Model.ValidationErrors</pre>
+		<pre><code>
+@Model.ValidationErrors
+		</code></pre>
 	}
 }

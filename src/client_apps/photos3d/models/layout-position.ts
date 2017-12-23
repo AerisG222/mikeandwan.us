@@ -1,6 +1,6 @@
-import * as THREE from 'three';
+import { Vector2 } from 'three';
 
 export class LayoutPosition {
-    center: THREE.Vector2;
+    center: Vector2;
     index: number;
 }

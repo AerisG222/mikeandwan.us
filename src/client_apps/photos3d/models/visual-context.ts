@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Scene, PerspectiveCamera, WebGLRenderer, DirectionalLight, AmbientLight } from 'three';
 
 import { ArgumentNullError } from './argument-null-error';
 import { DisposalService } from '../services/disposal-service';
@@ -8,11 +8,11 @@ export class VisualContext implements IDisposable {
     private _isDisposed = false;
 
     constructor(private _disposalService: DisposalService,
-                private _scene?: THREE.Scene,
-                private _camera?: THREE.PerspectiveCamera,
-                private _renderer?: THREE.WebGLRenderer,
-                private _sun?: THREE.DirectionalLight,
-                private _ambient?: THREE.AmbientLight) {
+                private _scene?: Scene,
+                private _camera?: PerspectiveCamera,
+                private _renderer?: WebGLRenderer,
+                private _sun?: DirectionalLight,
+                private _ambient?: AmbientLight) {
         if (_disposalService == null) {
             throw new ArgumentNullError('_disposalService');
         }
@@ -22,7 +22,7 @@ export class VisualContext implements IDisposable {
         return this._scene;
     }
 
-    set scene(scene: THREE.Scene) {
+    set scene(scene: Scene) {
         if (scene == null) {
             throw new ArgumentNullError('scene');
         }
@@ -34,7 +34,7 @@ export class VisualContext implements IDisposable {
         return this._camera;
     }
 
-    set camera(camera: THREE.PerspectiveCamera) {
+    set camera(camera: PerspectiveCamera) {
         if (camera == null) {
             throw new ArgumentNullError('camera');
         }
@@ -46,7 +46,7 @@ export class VisualContext implements IDisposable {
         return this._renderer;
     }
 
-    set renderer(renderer: THREE.WebGLRenderer) {
+    set renderer(renderer: WebGLRenderer) {
         if (renderer == null) {
             throw new ArgumentNullError('renderer');
         }
@@ -58,7 +58,7 @@ export class VisualContext implements IDisposable {
         return this._sun;
     }
 
-    set sun(sun: THREE.DirectionalLight) {
+    set sun(sun: DirectionalLight) {
         if (sun == null) {
             throw new ArgumentNullError('sun');
         }
@@ -70,7 +70,7 @@ export class VisualContext implements IDisposable {
         return this._ambient;
     }
 
-    set ambient(ambient: THREE.AmbientLight) {
+    set ambient(ambient: AmbientLight) {
         if (ambient == null) {
             throw new ArgumentNullError('ambient');
         }

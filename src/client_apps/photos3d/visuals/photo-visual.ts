@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Group, TextureLoader, Mesh, Texture, LinearFilter, PlaneGeometry, MeshBasicMaterial, DoubleSide } from 'three';
 
 import { ArgumentNullError } from '../models/argument-null-error';
 import { DisposalService } from '../services/disposal-service';
@@ -9,15 +9,15 @@ import { ScaleCalculator } from '../services/scale-calculator';
 import { StateService } from '../services/state-service';
 import { VisualContext } from '../models/visual-context';
 
-export class PhotoVisual extends THREE.Object3D implements IDisposable, IVisual {
-    private static readonly loader = new THREE.TextureLoader();
+export class PhotoVisual extends Group implements IDisposable, IVisual {
+    private static readonly loader = new TextureLoader();
 
     private _isDisposed = false;
     private _rotateOutDirection = 0;
 
     private _ctx: VisualContext;
-    private _mesh: THREE.Mesh;
-    private _rotationAnchor: THREE.Object3D;
+    private _mesh: Mesh;
+    private _rotationAnchor: Group;
 
     constructor(private _photo: IPhoto,
                 private _stateService: StateService,
@@ -46,7 +46,7 @@ export class PhotoVisual extends THREE.Object3D implements IDisposable, IVisual 
 
         this._ctx = this._stateService.visualContext;
 
-        this._rotationAnchor = new THREE.Object3D();
+        this._rotationAnchor = new Group();
         this.add(this._rotationAnchor);
     }
 
@@ -101,13 +101,13 @@ export class PhotoVisual extends THREE.Object3D implements IDisposable, IVisual 
         return this._photo.lgImage.path;
     }
 
-    private createPhoto(texture: THREE.Texture): void {
-        texture.minFilter = THREE.LinearFilter;
+    private createPhoto(texture: Texture): void {
+        texture.minFilter = LinearFilter;
 
         let dimensions = this._scaleCalculator.scale(this._width, this._height, texture.image.width, texture.image.height);
-        let plane = new THREE.PlaneGeometry(dimensions.x, dimensions.y);
-        let material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
-        this._mesh = new THREE.Mesh(plane, material);
+        let plane = new PlaneGeometry(dimensions.x, dimensions.y);
+        let material = new MeshBasicMaterial({ map: texture, side: DoubleSide });
+        this._mesh = new Mesh(plane, material);
 
         this._mesh.position.y = dimensions.y / 2;
         this._mesh.position.z = this._z;

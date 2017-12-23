@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Vector2 } from 'three';
 
 import { CategoryLayout } from '../models/category-layout';
 import { Hexagon } from '../models/hexagon';
@@ -42,7 +42,7 @@ export class CategoryLayoutCalculator {
 
             for (let j = 0; j < maxCols; j++) {
                 let pos = new LayoutPosition();
-                pos.center = new THREE.Vector2(x, y);
+                pos.center = new Vector2(x, y);
                 pos.index = currIdx++;
 
                 x += horizontalCenterToCenterDistance;

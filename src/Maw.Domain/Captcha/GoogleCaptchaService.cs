@@ -34,7 +34,7 @@ namespace Maw.Domain.Captcha
 		{
 			get
 			{
-				return _config.RecaptchaSiteKey;
+				return _config.SiteKey;
 			}
 		}
 
@@ -48,7 +48,7 @@ namespace Maw.Domain.Captcha
 
 			var parameters = new List<KeyValuePair<string, string>>();
 
-			parameters.Add(new KeyValuePair<string, string>("secret", _config.RecaptchaSecretKey));
+			parameters.Add(new KeyValuePair<string, string>("secret", _config.SecretKey));
 			parameters.Add(new KeyValuePair<string, string>("response", recaptchaResponse));
 			
 			using(var client = new HttpClient())

@@ -82,7 +82,7 @@ namespace MawMvcApp.Controllers
 						
 			if(ModelState.IsValid)
 			{
-				model.IsHuman = true; //await _captchaService.VerifyAsync(collection["g-recaptcha-response"]);
+				model.IsHuman = await _captchaService.VerifyAsync(collection["g-recaptcha-response"]);
 
 				if(!model.IsHuman)
 				{

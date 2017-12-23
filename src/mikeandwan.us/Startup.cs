@@ -37,7 +37,6 @@ using Mvc.RenderViewToString;
 namespace MawMvcApp
 {
     // TODO: googlemaps add async defer back and handle callback when it loads
-    // TODO: add official github auth again
     // TODO: issue JWT tokens for android app / apis
     // TODO: re-evaluate inline validtion errors once html5 validtion is in place (see: https://github.com/aspnet/Mvc/issues/7035)
     public class Startup

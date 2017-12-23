@@ -7,7 +7,7 @@ import { AxisHelper, Clock, Scene, WebGLRenderer, PerspectiveCamera, Vector3, Am
 
 import * as TWEEN from 'tween.js';
 
-import { Mousetrap } from 'mousetrap';
+import * as Mousetrap from 'mousetrap';
 
 import { BackgroundController } from './controllers/background-controller';
 import { CategoryListController } from './controllers/category-list-controller';

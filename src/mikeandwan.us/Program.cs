@@ -50,7 +50,7 @@ namespace MawMvcApp
                         {
                             opts.Listen(IPAddress.Loopback, 5000);
                             opts.Listen(IPAddress.Loopback, 5001, listenOptions => {
-                                listenOptions.UseHttps("test_certs/testcert.pfx", "TestCertificate");
+                                listenOptions.UseHttps("test_cert/testcert.pfx", "Test");
                             });
                         }
                         else if(isStaging)

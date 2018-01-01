@@ -60,14 +60,14 @@ namespace MawMvcApp
                         else
                         {
                             opts.UseSystemd();
-                            opts.ListenUnixSocket("/var/run/mikeandwan.us/kestrel.sock");
+                            opts.ListenUnixSocket("/var/run/mikeandwan.us/www.sock");
                             opts.Listen(IPAddress.Loopback, 5000);
                         }
                     })
                 .ConfigureAppConfiguration((context, builder) =>
                     {
                         builder.AddJsonFile("config.json");
-                        builder.AddEnvironmentVariables("MAW_");
+                        builder.AddEnvironmentVariables("MAW_WWW_");
                     })
                 .CaptureStartupErrors(true)
                 .UseStartup<Startup>()

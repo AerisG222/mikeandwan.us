@@ -11,6 +11,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="2.0.0-*" />
+    <PackageReference Include="IdentityModel" Version="2.16.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.0-alpha9-00206" />
     <PackageReference Include="NMagickWand" Version="0.5.1" />

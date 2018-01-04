@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Maw.Domain.Identity;
 using Maw.Domain;
+using MawAuth.Services;
 
 
 namespace MawAuth
@@ -62,7 +63,8 @@ namespace MawAuth
                     .AddInMemoryApiResources(Config.GetApiResources())
                     .AddInMemoryClients(Config.GetClients())
                     .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                    .AddAspNetIdentity<MawUser>();
+                    .AddAspNetIdentity<MawUser>()
+                    .AddProfileService<IdentityServerProfileService>();
 
             if (_env.IsDevelopment())
             {

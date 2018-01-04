@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using IdentityModel;
 
 
 namespace Maw.Domain.Identity
@@ -9,44 +10,32 @@ namespace Maw.Domain.Identity
     public class MawUser
 		: ClaimsIdentity
     {
-        const string CLAIM_TYPE_COMPANY = "http://mikeandwan.us/claimTypes/company";
-        const string CLAIM_TYPE_POSITION = "http://mikeandwan.us/claimTypes/position";
-        const string CLAIM_TYPE_WORK_EMAIL = "http://mikeandwan.us/claimTypes/workemail";
-        const string CLAIM_TYPE_ADDRESS2 = "http://mikeandwan.us/claimTypes/address2";
-		const string CLAIM_TYPE_USERID = "http://mikeandwan.us/claimTypes/userid";
-		const string CLAIM_TYPE_SECURITY_STAMP = "http://mikeandwan.us/claimTypes/security_stamp";
-        const string CLAIM_TYPE_ENABLE_GITHUB_AUTH = "http://mikeandwan.us/claimTypes/enable_github_auth";
-        const string CLAIM_TYPE_ENABLE_GOOGLE_AUTH = "http://mikeandwan.us/claimTypes/enable_google_auth";
-        const string CLAIM_TYPE_ENABLE_MICROSOFT_AUTH = "http://mikeandwan.us/claimTypes/enable_microsoft_auth";
-        const string CLAIM_TYPE_ENABLE_TWITTER_AUTH = "http://mikeandwan.us/claimTypes/enable_twitter_auth";
-
-
 		public short Id
 		{
 			get
 			{
-				var id = GetSingleClaim(CLAIM_TYPE_USERID);
+				var id = GetSingleClaim(MawClaimTypes.UserId);
 
 				return id == null ?(short) 0 : short.Parse(id);
 			}
 			set
 			{
-				SetSingleClaim(CLAIM_TYPE_USERID, value.ToString());
+				SetSingleClaim(MawClaimTypes.UserId, value.ToString());
 			}
 		}
 
 
 		public string Username
 		{
-			get { return GetSingleClaim(ClaimTypes.Name); }
-			set { SetSingleClaim(ClaimTypes.Name, value); }
+			get { return GetSingleClaim(JwtClaimTypes.Name); }
+			set { SetSingleClaim(JwtClaimTypes.Name, value); }
 		}
 
 
 		public string Email
 		{
-			get { return GetSingleClaim("email"); }
-			set { SetSingleClaim("email", value); }
+			get { return GetSingleClaim(JwtClaimTypes.Email); }
+			set { SetSingleClaim(JwtClaimTypes.Email, value); }
 		}
 
 
@@ -59,15 +48,15 @@ namespace Maw.Domain.Identity
 
         public string FirstName
         {
-            get { return GetSingleClaim("given_name"); }
-			set { SetSingleClaim("given_name", value); }
+            get { return GetSingleClaim(JwtClaimTypes.GivenName); }
+			set { SetSingleClaim(JwtClaimTypes.GivenName, value); }
         }
 
 
         public string LastName
         {
-            get { return GetSingleClaim("family_name"); }
-			set { SetSingleClaim("family_name", value); }
+            get { return GetSingleClaim(JwtClaimTypes.FamilyName); }
+			set { SetSingleClaim(JwtClaimTypes.FamilyName, value); }
         }
 
 
@@ -75,32 +64,32 @@ namespace Maw.Domain.Identity
         {
             get
             {
-                var dob = GetSingleClaim(ClaimTypes.DateOfBirth);
+                var dob = GetSingleClaim(JwtClaimTypes.BirthDate);
 
 				return string.IsNullOrEmpty(dob) ? (DateTime?)null : DateTime.Parse(dob);
             }
-            set { SetSingleClaim(ClaimTypes.DateOfBirth, value.ToString()); }
+            set { SetSingleClaim(JwtClaimTypes.BirthDate, value.ToString()); }
         }
 
 
         public string Company
         {
-            get { return GetSingleClaim(CLAIM_TYPE_COMPANY); }
-            set { SetSingleClaim(CLAIM_TYPE_COMPANY, value); }
+            get { return GetSingleClaim(MawClaimTypes.Company); }
+            set { SetSingleClaim(MawClaimTypes.Company, value); }
         }
 
 
         public string Position
         {
-            get { return GetSingleClaim(CLAIM_TYPE_POSITION); }
-            set { SetSingleClaim(CLAIM_TYPE_POSITION, value); }
+            get { return GetSingleClaim(MawClaimTypes.Position); }
+            set { SetSingleClaim(MawClaimTypes.Position, value); }
         }
 
 
         public string WorkEmail
         {
-            get { return GetSingleClaim(CLAIM_TYPE_WORK_EMAIL); }
-            set { SetSingleClaim(CLAIM_TYPE_WORK_EMAIL, value); }
+            get { return GetSingleClaim(MawClaimTypes.WorkEmail); }
+            set { SetSingleClaim(MawClaimTypes.WorkEmail, value); }
         }
 
 
@@ -127,15 +116,15 @@ namespace Maw.Domain.Identity
 
         public string Address1
         {
-            get { return GetSingleClaim(ClaimTypes.StreetAddress); }
-            set { SetSingleClaim(ClaimTypes.StreetAddress, value); }
+            get { return GetSingleClaim(MawClaimTypes.Address1); }
+            set { SetSingleClaim(MawClaimTypes.Address1, value); }
         }
 
 
         public string Address2
         {
-            get { return GetSingleClaim(CLAIM_TYPE_ADDRESS2); }
-            set { SetSingleClaim(CLAIM_TYPE_ADDRESS2, value); }
+            get { return GetSingleClaim(MawClaimTypes.Address2); }
+            set { SetSingleClaim(MawClaimTypes.Address2, value); }
         }
 
 
@@ -169,61 +158,57 @@ namespace Maw.Domain.Identity
 
         public string Website
         {
-            get { return GetSingleClaim(ClaimTypes.Webpage); }
-            set { SetSingleClaim(ClaimTypes.Webpage, value); }
+            get { return GetSingleClaim(JwtClaimTypes.WebSite); }
+            set { SetSingleClaim(JwtClaimTypes.WebSite, value); }
         }
 
 
-		public string SecurityStamp
-		{
-			get { return GetSingleClaim(CLAIM_TYPE_SECURITY_STAMP); }
-			set { SetSingleClaim(CLAIM_TYPE_SECURITY_STAMP, value); }
-		}
+		public string SecurityStamp { get; set; }
 
 
         public bool IsGithubAuthEnabled
         {
-            get { return bool.Parse(GetSingleClaim(CLAIM_TYPE_ENABLE_GITHUB_AUTH)); }
-            set { SetSingleClaim(CLAIM_TYPE_ENABLE_GITHUB_AUTH, value.ToString()); }
+            get { return bool.Parse(GetSingleClaim(MawClaimTypes.EnableGithubAuth)); }
+            set { SetSingleClaim(MawClaimTypes.EnableGithubAuth, value.ToString()); }
         }
 
 
         public bool IsGoogleAuthEnabled
         {
-            get { return bool.Parse(GetSingleClaim(CLAIM_TYPE_ENABLE_GOOGLE_AUTH)); }
-            set { SetSingleClaim(CLAIM_TYPE_ENABLE_GOOGLE_AUTH, value.ToString()); }
+            get { return bool.Parse(GetSingleClaim(MawClaimTypes.EnableGoogleAuth)); }
+            set { SetSingleClaim(MawClaimTypes.EnableGoogleAuth, value.ToString()); }
         }
 
 
         public bool IsMicrosoftAuthEnabled
         {
-            get { return bool.Parse(GetSingleClaim(CLAIM_TYPE_ENABLE_MICROSOFT_AUTH)); }
-            set { SetSingleClaim(CLAIM_TYPE_ENABLE_MICROSOFT_AUTH, value.ToString()); }
+            get { return bool.Parse(GetSingleClaim(MawClaimTypes.EnableMicrosoftAuth)); }
+            set { SetSingleClaim(MawClaimTypes.EnableMicrosoftAuth, value.ToString()); }
         }
 
 
         public bool IsTwitterAuthEnabled
         {
-            get { return bool.Parse(GetSingleClaim(CLAIM_TYPE_ENABLE_TWITTER_AUTH)); }
-            set { SetSingleClaim(CLAIM_TYPE_ENABLE_TWITTER_AUTH, value.ToString()); }
+            get { return bool.Parse(GetSingleClaim(MawClaimTypes.EnableTwitterAuth)); }
+            set { SetSingleClaim(MawClaimTypes.EnableTwitterAuth, value.ToString()); }
         }
 
 
 		public void AddRole(string role)
 		{
-			AddClaim(new Claim(ClaimTypes.Role, role));
+			AddClaim(new Claim(JwtClaimTypes.Role, role));
 		}
 
 
 		public void RemoveRole(string role)
 		{
-			RemoveClaim(new Claim(ClaimTypes.Role, role));
+			RemoveClaim(new Claim(JwtClaimTypes.Role, role));
 		}
 
 
 		public IEnumerable<string> GetRoles()
 		{
-			return FindAll(ClaimTypes.Role).Select(x => x.Value);
+			return FindAll(JwtClaimTypes.Role).Select(x => x.Value);
 		}
 
 

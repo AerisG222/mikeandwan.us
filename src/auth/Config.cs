@@ -26,10 +26,8 @@ namespace MawAuth
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResources.Address(),
                 new IdentityResources.Email(),
-                new IdentityResources.Phone(),
-                new IdentityResource("roles", "Roles", new[] { JwtClaimTypes.Role })
+                new IdentityResource("roles", "mikeandwan.us Roles", new[] { JwtClaimTypes.Role }),
             };
         }
 
@@ -61,6 +59,7 @@ namespace MawAuth
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
 
                         // apis
                         "admin",
@@ -69,7 +68,6 @@ namespace MawAuth
                         "video",
 
                         // identity resources
-                        "email",
                         "roles"
                     },
                     AllowOfflineAccess = true

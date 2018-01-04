@@ -136,6 +136,8 @@ namespace MawMvcApp
 
                     opts.ClaimActions.Add(new RoleClaimAction());
 
+                    //opts.ClaimActions.MapUniqueJsonKey("family_name", "family_name");
+
                     /* alternative to RoleClaimAction above
                     // https://stackoverflow.com/questions/46038509/unable-to-retrieve-claims-in-net-core-2-0
                     opts.Events = new OpenIdConnectEvents()

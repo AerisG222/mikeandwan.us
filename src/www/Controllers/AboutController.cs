@@ -12,7 +12,8 @@ using MawMvcApp.ViewModels.About;
 using MawMvcApp.ViewModels.Navigation;
 using MawMvcApp.ViewModels.Email;
 using Mvc.RenderViewToString;
-
+using Microsoft.AspNetCore.Authorization;
+using IdentityModel.Client;
 
 namespace MawMvcApp.Controllers
 {
@@ -26,10 +27,10 @@ namespace MawMvcApp.Controllers
 		readonly IEmailService _emailService;
 		readonly RazorViewToStringRenderer _razorRenderer;
 
-		public AboutController(ILogger<AboutController> log, 
+		public AboutController(ILogger<AboutController> log,
 							   IOptions<ContactConfig> contactOpts,
 							   IBlogService blogService,
-							   ICaptchaService captchaService, 
+							   ICaptchaService captchaService,
 							   IEmailService emailService,
 							   RazorViewToStringRenderer razorRenderer)
 			: base(log)
@@ -48,27 +49,33 @@ namespace MawMvcApp.Controllers
         }
 
 
+		[Authorize]
 		[HttpGet("")]
         public ActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.About;
 
+			foreach(var c in User?.Claims)
+			{
+				_log.LogInformation($"{c.Type}: {c.Value}");
+			}
+
             return View();
         }
-		
-		
+
+
 		[HttpGet("contact")]
 		public ActionResult Contact()
 		{
 			ViewBag.NavigationZone = NavigationZone.About;
-			
+
             var model = new ContactModel();
 			model.RecaptchaSiteKey = _captchaService.SiteKey;
 
 			return View(model);
 		}
-		
-		
+
+
 		[HttpPost("contact")]
 		[ValidateAntiForgeryToken]
         public async Task<ActionResult> Contact(IFormCollection collection)
@@ -79,7 +86,7 @@ namespace MawMvcApp.Controllers
 			await TryUpdateModelAsync<ContactModel>(model);
 			model.RecaptchaSiteKey = _captchaService.SiteKey;
 			model.SubmitAttempted = true;
-						
+
 			if(ModelState.IsValid)
 			{
 				model.IsHuman = await _captchaService.VerifyAsync(collection["g-recaptcha-response"]);
@@ -108,13 +115,13 @@ namespace MawMvcApp.Controllers
 						var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ContactUs.cshtml", emailModel).ConfigureAwait(false);
 
 						await _emailService.SendHtmlAsync(to, from, subject, body).ConfigureAwait(false);
-					
+
 						model.SubmitSuccess = true;
 					}
 					catch(Exception ex)
 					{
 						_log.LogError("There was an error sending an email: " + ex.Message, ex);
-					
+
 						model.SubmitSuccess = false;
 					}
 				}
@@ -123,7 +130,7 @@ namespace MawMvcApp.Controllers
 			{
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
 

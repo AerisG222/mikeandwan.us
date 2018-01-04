@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -32,7 +33,11 @@ using Maw.Domain.Photos;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
 using Mvc.RenderViewToString;
-
+using System.IdentityModel.Tokens.Jwt;
+using IdentityModel;
+using System.Security.Claims;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MawMvcApp
 {
@@ -56,22 +61,28 @@ namespace MawMvcApp
 
         public void ConfigureServices(IServiceCollection services)
         {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             services
                 .Configure<ContactConfig>(_config.GetSection("ContactUs"))
                 .Configure<GmailApiEmailConfig>(_config.GetSection("Gmail"))
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
                 .Configure<GoogleCaptchaConfig>(_config.GetSection("GoogleRecaptcha"))
+                /*
                 .Configure<IdentityOptions>(opts =>
                     {
                         opts.Password.RequiredLength = 8;
                         opts.Password.RequiredUniqueChars = 6;
                     })
+                */
                 .AddLogging()
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
                 .AddTransient<RazorViewToStringRenderer>()
                 .AddSingleton<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
                 .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
+
+                /*
                 .AddIdentity<MawUser, MawRole>()
                     .AddDefaultTokenProviders()
                     .Services
@@ -87,7 +98,65 @@ namespace MawMvcApp
                         opts.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                     }
                 })
-                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                */
+
+                .AddAuthentication(opts => {
+                    opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    opts.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts => {
+                    opts.AccessDeniedPath = "/account/access-denied";
+                })
+                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opts => {
+                    opts.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    opts.Authority = "http://localhost:5010";
+                    opts.RequireHttpsMetadata = false;
+
+                    opts.ClientId = "www.mikeandwan.us";
+                    opts.ClientSecret = "secret";
+                    opts.ResponseType = "code id_token";
+
+                    opts.SaveTokens = true;
+                    opts.GetClaimsFromUserInfoEndpoint = true;
+
+                    // core
+                    opts.Scope.Add("openid");
+                    opts.Scope.Add("profile");
+                    opts.Scope.Add("offline_access");
+
+                    // apis
+                    opts.Scope.Add("admin");
+                    opts.Scope.Add("blog");
+                    opts.Scope.Add("photo");
+                    opts.Scope.Add("video");
+
+                    // identity resources
+                    opts.Scope.Add("roles");
+                    opts.Scope.Add("email");
+
+                    opts.ClaimActions.Add(new RoleClaimAction());
+
+                    /* alternative to RoleClaimAction above
+                    // https://stackoverflow.com/questions/46038509/unable-to-retrieve-claims-in-net-core-2-0
+                    opts.Events = new OpenIdConnectEvents()
+                    {
+                        OnUserInformationReceived = (context) =>
+                        {
+                            ClaimsIdentity claimsId = context.Principal.Identity as ClaimsIdentity;
+
+                            var roles = context.User.Children().FirstOrDefault(j => j.Path == JwtClaimTypes.Role).Values().ToList();
+                            claimsId.AddClaims(roles.Select(r => new Claim(JwtClaimTypes.Role, r.Value<String>())));
+
+                            return Task.FromResult(0);
+                        }
+                    };
+                    */
+
+                    opts.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
+                    opts.TokenValidationParameters.RoleClaimType = JwtClaimTypes.Role;
+                })
+
+                /*
                 .AddGitHub(opts =>
                     {
                         opts.ClientId = _config["GitHub:ClientId"];
@@ -95,7 +164,7 @@ namespace MawMvcApp
                         opts.SaveTokens = true;
                         opts.Scope.Add("user:email");
                     })
-                .AddGoogle(opts => 
+                .AddGoogle(opts =>
                     {
                         opts.ClientId = _config["GooglePlus:ClientId"];
                         opts.ClientSecret = _config["GooglePlus:ClientSecret"];
@@ -114,7 +183,9 @@ namespace MawMvcApp
                         opts.RetrieveUserDetails = true;
                         opts.SaveTokens = true;
                     })
+                */
                 .Services
+
                 .AddAuthorization(opts =>
                     {
                         opts.AddPolicy(MawConstants.POLICY_VIEW_PHOTOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());
@@ -122,7 +193,7 @@ namespace MawMvcApp
                         opts.AddPolicy(MawConstants.POLICY_ADMIN_SITE, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_ADMIN).Build());
                     })
                 .AddMvc();
-                
+
                 if(_env.IsDevelopment())
                 {
                     services.AddMiniProfiler();

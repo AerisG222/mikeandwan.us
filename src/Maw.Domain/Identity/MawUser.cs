@@ -45,8 +45,8 @@ namespace Maw.Domain.Identity
 
 		public string Email
 		{
-			get { return GetSingleClaim(ClaimTypes.Email); }
-			set { SetSingleClaim(ClaimTypes.Email, value); }
+			get { return GetSingleClaim("email"); }
+			set { SetSingleClaim("email", value); }
 		}
 
 
@@ -59,15 +59,15 @@ namespace Maw.Domain.Identity
 
         public string FirstName
         {
-            get { return GetSingleClaim(ClaimTypes.GivenName); }
-			set { SetSingleClaim(ClaimTypes.GivenName, value); }
+            get { return GetSingleClaim("given_name"); }
+			set { SetSingleClaim("given_name", value); }
         }
 
 
         public string LastName
         {
-            get { return GetSingleClaim(ClaimTypes.Surname); }
-			set { SetSingleClaim(ClaimTypes.Surname, value); }
+            get { return GetSingleClaim("family_name"); }
+			set { SetSingleClaim("family_name", value); }
         }
 
 

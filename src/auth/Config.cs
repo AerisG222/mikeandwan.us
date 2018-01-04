@@ -1,6 +1,7 @@
-using IdentityServer4.Models;
 using System.Collections.Generic;
-
+using IdentityServer4.Models;
+using IdentityServer4;
+using IdentityModel;
 
 namespace MawAuth
 {
@@ -19,6 +20,20 @@ namespace MawAuth
         }
 
 
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
+                new IdentityResources.Address(),
+                new IdentityResources.Email(),
+                new IdentityResources.Phone(),
+                new IdentityResource("roles", "Roles", new[] { JwtClaimTypes.Role })
+            };
+        }
+
+
         // clients want to access resources (aka scopes)
         public static IEnumerable<Client> GetClients()
         {
@@ -27,13 +42,37 @@ namespace MawAuth
                 new Client
                 {
                     ClientId = "www.mikeandwan.us",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientName = "www.mikeandwan.us",
+                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                    RequireConsent = false,
 
-                    ClientSecrets = 
+                    ClientSecrets =
                     {
                         new Secret("secret".Sha256())
                     },
-                    AllowedScopes = { "admin", "blog", "photo", "profile", "video" }
+
+                    // where to redirect to after login
+                    RedirectUris = { "http://localhost:5000/signin-oidc" },
+
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = { "http://localhost:5000/signout-callback-oidc" },
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+
+                        // apis
+                        "admin",
+                        "blog",
+                        "photo",
+                        "video",
+
+                        // identity resources
+                        "email",
+                        "roles"
+                    },
+                    AllowOfflineAccess = true
                 }
             };
         }

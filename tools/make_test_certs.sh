@@ -84,15 +84,15 @@ clean_cert() {
     fi
 
     # Untrust the certificate for SSL
-    certutil -d "${NSSDB}" -D -n "NSS Certificate DB:maw:${project}"
+    #certutil -d "${NSSDB}" -D -n "NSS Certificate DB:maw:${project}"
 
     # Untrust a self-signed server certificate
-    certutil -d "${NSSDB}" -D -n "maw:${project}"
+    #certutil -d "${NSSDB}" -D -n "maw:${project}"
 }
 
 if [ "${CLEAN}" == 'y' ]; then
     # Untrust our ca
-    certutil -d "${NSSDB}" -D -n "maw_ca"
+    #certutil -d "${NSSDB}" -D -n "maw_ca"
 
     if [ -d "${CADIR}" ]; then
         rm -rf "${CADIR}"
@@ -123,7 +123,7 @@ else
     echo 'sudo + publish CA to make it available machine-wide...'
     sudo cp "${CA_CRT}" /usr/share/pki/ca-trust-source/anchors/
     sudo update-ca-trust
-    
+
     for I in "${PROJECTS[@]}"
     do
         gen_cert "${I}"

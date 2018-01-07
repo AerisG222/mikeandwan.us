@@ -7,6 +7,7 @@ CLEAN=$1
 SCRIPT=`realpath "${BASH_SOURCE}"`
 ROOT="${SCRIPT%/*/*}"
 CONF_PATH="${ROOT}/tools/cert.conf"
+EXT_PATH="${ROOT}/tools/cert.ext"
 CERTDIR="certs"
 CADIR="${ROOT}/${CERTDIR}"
 CA_KEY="${CADIR}/ca.key"
@@ -56,10 +57,10 @@ gen_cert() {
     openssl genrsa -out "${certkey}" 2048
 
     # Generate the certificate signing request
-    openssl req -config "${CONF_PATH}" -sha256 -new -nodes -key "${certkey}" -out "${certreq}"
+    openssl req -sha256 -days 3650 -new -nodes -config "${CONF_PATH}" -key "${certkey}" -out "${certreq}"
 
     # Sign the request with your root key
-    openssl x509 -sha256 -req -in "${certreq}" -CA "${CA_CRT}" -CAkey "${CA_KEY}" -CAcreateserial -extensions v3_req -out "${certcrt}" -days 7300
+    openssl x509 -sha256 -days 3650 -req -extfile "${EXT_PATH}" -in "${certreq}" -CA "${CA_CRT}" -CAkey "${CA_KEY}" -CAcreateserial -out "${certcrt}"
 
     # Check your homework:
     openssl verify -CAfile "${CA_CRT}" "${certcrt}"
@@ -113,8 +114,8 @@ else
     echo ' creating certificate authority'
     echo ' when asked for the Common Name, do NOT use localhost'
     echo '*********************************************************'
-    #openssl genrsa -aes256 -out "${CA_KEY}" 2048
-    #openssl req -new -x509 -days 7300 -key "${CA_KEY}" -sha256 -extensions v3_ca -out "${CA_CRT}"
+    openssl genrsa -aes256 -out "${CA_KEY}" 2048
+    openssl req -new -x509 -days 3650 -key "${CA_KEY}" -sha256 -extensions v3_ca -out "${CA_CRT}"
 
     # Trust our ca
     #certutil -d "${NSSDB}" -A -t "c,," -n "maw_ca" -i "${CA_CRT}"

@@ -6,7 +6,7 @@ project.lock.json
 **/bin/*
 **/obj/*
 
-**/test_cert/*
+**/certs/*
 
 **/.svn/*
 

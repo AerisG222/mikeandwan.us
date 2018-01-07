@@ -69,10 +69,10 @@ gen_cert() {
     openssl pkcs12 -export -out "${certpfx}" -inkey "${certkey}" -in "${certcrt}"
 
     # Trust the certificate for SSL
-    pk12util -d "${NSSDB}" -i "${certpfx}"
+    #pk12util -d "${NSSDB}" -i "${certpfx}"
 
     # Trust a self-signed server certificate
-    certutil -d "${NSSDB}" -A -t "P,," -n "maw:${project}" -i "${certcrt}"
+    #certutil -d "${NSSDB}" -A -t "P,," -n "maw:${project}" -i "${certcrt}"
 }
 
 clean_cert() {
@@ -120,6 +120,10 @@ else
     # Trust our ca
     #certutil -d "${NSSDB}" -A -t "c,," -n "maw_ca" -i "${CA_CRT}"
 
+    echo 'sudo + publish CA to make it available machine-wide...'
+    sudo cp "${CA_CRT}" /usr/share/pki/ca-trust-source/anchors/
+    sudo update-ca-trust
+    
     for I in "${PROJECTS[@]}"
     do
         gen_cert "${I}"

@@ -29,10 +29,10 @@ namespace MawApi
             services.AddMvcCore()
                 .AddAuthorization()
                 .AddJsonFormatters();
-                
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(opts => {
-                    opts.Authority = "http://localhost:5010";
+                    opts.Authority = "http://localhost:5000";
                     opts.RequireHttpsMetadata = false;
 
                     opts.ApiName = "admin";

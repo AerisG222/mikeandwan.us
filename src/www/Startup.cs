@@ -4,11 +4,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,7 +17,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
-using AspNet.Security.OAuth.GitHub;
 using Newtonsoft.Json.Linq;
 using NMagickWand;
 using Maw.Data;
@@ -38,6 +34,7 @@ using IdentityModel;
 using System.Security.Claims;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace MawMvcApp
 {
@@ -68,48 +65,29 @@ namespace MawMvcApp
                 .Configure<GmailApiEmailConfig>(_config.GetSection("Gmail"))
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
                 .Configure<GoogleCaptchaConfig>(_config.GetSection("GoogleRecaptcha"))
-                /*
-                .Configure<IdentityOptions>(opts =>
-                    {
-                        opts.Password.RequiredLength = 8;
-                        opts.Password.RequiredUniqueChars = 6;
-                    })
-                */
                 .AddLogging()
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
                 .AddTransient<RazorViewToStringRenderer>()
                 .AddSingleton<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
                 .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
-
-                /*
-                .AddIdentity<MawUser, MawRole>()
-                    .AddDefaultTokenProviders()
-                    .Services
-                .ConfigureApplicationCookie(opts => {
-                    opts.AccessDeniedPath = "/account/access-denied";
-                    opts.Cookie.Name = "maw_auth";
-                    opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
-                    opts.LoginPath = "/account/login";
-                    opts.LogoutPath = "/account/logout";
-
-                    if(_env.IsStaging())
-                    {
-                        opts.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-                    }
-                })
-                */
-
                 .AddAuthentication(opts => {
                     opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     opts.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts => {
                     opts.AccessDeniedPath = "/account/access-denied";
+                    opts.LogoutPath = "/account/logout";
+                    opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+
+                    if(_env.IsStaging())
+                    {
+                        opts.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                    }
                 })
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opts => {
                     opts.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    opts.Authority = "http://localhost:5010";
+                    opts.Authority = "https://localhost:5001";
                     opts.RequireHttpsMetadata = false;
 
                     opts.ClientId = "www.mikeandwan.us";
@@ -157,37 +135,7 @@ namespace MawMvcApp
                     opts.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
                     opts.TokenValidationParameters.RoleClaimType = JwtClaimTypes.Role;
                 })
-
-                /*
-                .AddGitHub(opts =>
-                    {
-                        opts.ClientId = _config["GitHub:ClientId"];
-                        opts.ClientSecret = _config["GitHub:ClientSecret"];
-                        opts.SaveTokens = true;
-                        opts.Scope.Add("user:email");
-                    })
-                .AddGoogle(opts =>
-                    {
-                        opts.ClientId = _config["GooglePlus:ClientId"];
-                        opts.ClientSecret = _config["GooglePlus:ClientSecret"];
-                        opts.SaveTokens = true;
-                    })
-                .AddMicrosoftAccount(opts =>
-                    {
-                        opts.ClientId = _config["Microsoft:ApplicationId"];
-                        opts.ClientSecret = _config["Microsoft:Secret"];
-                        opts.SaveTokens = true;
-                    })
-                .AddTwitter(opts =>
-                    {
-                        opts.ConsumerKey = _config["Twitter:ConsumerKey"];
-                        opts.ConsumerSecret = _config["Twitter:ConsumerSecret"];
-                        opts.RetrieveUserDetails = true;
-                        opts.SaveTokens = true;
-                    })
-                */
                 .Services
-
                 .AddAuthorization(opts =>
                     {
                         opts.AddPolicy(MawConstants.POLICY_VIEW_PHOTOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());

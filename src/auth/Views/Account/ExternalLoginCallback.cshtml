@@ -1,0 +1,16 @@
+@{ ViewBag.Title = "external authentication error"; }
+
+<h1>External Authentication Error</h1>
+
+<div class="row">
+    <div class="col-sm-12">
+        <p maw-alert-type="Danger">
+            Sorry, there was an error trying to authenticate you with the external service.  Please
+            make sure you first enable the external authentication service in your user profile.
+        </p>
+        <br/>
+        <p>
+            Please try to <a asp-action="Login">login</a> again.
+        </p>
+    </div>
+</div>

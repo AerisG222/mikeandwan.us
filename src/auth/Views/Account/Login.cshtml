@@ -1,3 +1,4 @@
+@using MawMvcApp.TagHelpers
 @model MawMvcApp.ViewModels.Account.LoginModel
 @{
 	//Layout = "_Layout";
@@ -13,7 +14,8 @@
             <div class="text-danger" asp-validation-summary="All"></div>
         }
 
-        <form asp-controller="account" asp-action="login" asp-route-returnurl="@ViewBag.ReturnUrl" method="post" autocomplete="off" role="form">
+        <form asp-controller="account" asp-action="login" method="post" autocomplete="off" role="form">
+            <input type="hidden" asp-for="ReturnUrl" />
             <div class="form-group mb-4">
                 <label asp-for="Username"></label>
                 <input asp-for="Username" class="form-control" autofocus="" />
@@ -36,7 +38,6 @@
             </div>
         </form>
     </div>
-    @*
     <div class="col-sm-5 offset-sm-2">
         <div class="row">
             <div class="col-12">
@@ -44,10 +45,17 @@
             </div>
             @foreach(var scheme in Model.ExternalSchemes) {
                 <div class="col-sm-6 mt-2">
-                    <a href="/account/external-login?provider=@scheme.ExternalAuth.Name" class="btn btn-primary d-block">@if(scheme.Icon != null) {<svg-icon class="mr-2" icon="@((SvgIcon)scheme.Icon)"></svg-icon> }@scheme.ExternalAuth.DisplayName</a>
+                    <a class="btn btn-primary d-block"
+                        asp-action="ExternalLogin"
+                        asp-route-provider="@scheme.ExternalAuth.Name"
+                        asp-route-returnUrl="@Model.ReturnUrl">
+                        @if(scheme.Icon != null) {
+                            <svg-icon class="mr-2" icon="@((SvgIcon)scheme.Icon)"></svg-icon>
+                        }
+                        @scheme.ExternalAuth.DisplayName
+                    </a>
                 </div>
             }
         </div>
     </div>
-    *@
 </div>

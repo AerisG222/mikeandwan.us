@@ -48,20 +48,20 @@ namespace MawMvcApp
                     {
                         if(isDevelopment)
                         {
-                            opts.Listen(IPAddress.Loopback, 5000);
-                            opts.Listen(IPAddress.Loopback, 5001, listenOptions => {
-                                listenOptions.UseHttps("test_cert/testcert.pfx", "Test");
+                            opts.Listen(IPAddress.Loopback, 5020);
+                            opts.Listen(IPAddress.Loopback, 5021, listenOptions => {
+                                listenOptions.UseHttps("certs/www.pfx", "test");
                             });
                         }
                         else if(isStaging)
                         {
-                            opts.Listen(IPAddress.Loopback, 5000);
+                            opts.Listen(IPAddress.Loopback, 5020);
                         }
                         else
                         {
                             opts.UseSystemd();
                             opts.ListenUnixSocket("/var/run/mikeandwan.us/www.sock");
-                            opts.Listen(IPAddress.Loopback, 5000);
+                            opts.Listen(IPAddress.Loopback, 5020);
                         }
                     })
                 .ConfigureAppConfiguration((context, builder) =>

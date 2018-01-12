@@ -17,6 +17,8 @@ using MawMvcApp.ViewModels.Account;
 //using MawMvcApp.ViewModels.Email;
 //using MawMvcApp.ViewModels.Navigation;
 using SignInRes = Microsoft.AspNetCore.Identity.SignInResult;
+using Microsoft.AspNetCore.Authentication;
+using IdentityServer4.Services;
 //using Mvc.RenderViewToString;
 
 
@@ -28,18 +30,21 @@ namespace MawMvcApp.Controllers
 //        : MawBaseController<AccountController>
     {
 		const byte LOGIN_AREA_FORM = 1;
+		const string LoginProviderKey = "LoginProvider";
 
 		readonly ILogger<AccountController> _log;
+		readonly IIdentityServerInteractionService _interaction;
         readonly IUserRepository _repo;
 //		readonly ContactConfig _contactConfig;
 		readonly SignInManager<MawUser> _signInManager;
 		readonly UserManager<MawUser> _userMgr;
-		readonly IEmailService _emailService;
+		//readonly IEmailService _emailService;
 		readonly ILoginService _loginService;
 //		readonly RazorViewToStringRenderer _razorRenderer;
 
 
 		public AccountController(ILogger<AccountController> log,
+								 IIdentityServerInteractionService interaction,
 //								 IOptions<ContactConfig> contactOpts,
 								 IUserRepository userRepository,
 			                     SignInManager<MawUser> signInManager,
@@ -50,6 +55,7 @@ namespace MawMvcApp.Controllers
 //			: base(log)
         {
 			_log = log ?? throw new ArgumentNullException(nameof(log));
+			_interaction = interaction ?? throw new ArgumentNullException(nameof(interaction));
 //			_contactConfig = contactOpts.Value;
             _repo = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
@@ -61,20 +67,21 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("login")]
-		public async Task<ActionResult> Login(string returnUrl = null)
+		public async Task<ActionResult> Login(string returnUrl)
 		{
 			//ViewBag.NavigationZone = NavigationZone.Account;
-			ViewBag.ReturnUrl = returnUrl;
+			//ViewBag.ReturnUrl = returnUrl;
 
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
 
-			var vm = new LoginModel();
-			//{
-			//	ExternalSchemes = await GetExternalLoginSchemes()
-			//};
+			var vm = new LoginModel()
+			{
+				ReturnUrl = returnUrl,
+				ExternalSchemes = await GetExternalLoginSchemes()
+			};
 
 			return View(vm);
 		}
@@ -82,10 +89,10 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("login")]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Login(LoginModel model, string returnUrl = null)
+		public async Task<IActionResult> Login(LoginModel model)
         {
 			//ViewBag.NavigationZone = NavigationZone.Account;
-			ViewBag.ReturnUrl = returnUrl;
+			//ViewBag.ReturnUrl = returnUrl;
 
 			//model.ExternalSchemes = await GetExternalLoginSchemes();
 			model.WasAttempted = true;
@@ -103,7 +110,7 @@ namespace MawMvcApp.Controllers
 
 			if(result == SignInRes.Success)
 			{
-				return RedirectToLocal(returnUrl);
+				return RedirectToLocal(model.ReturnUrl);
 
 				/*
 				if(string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
@@ -123,45 +130,53 @@ namespace MawMvcApp.Controllers
         }
 
 
-		/*
-
 		[HttpGet("external-login")]
-		public async Task<ActionResult> ExternalLogin(string provider, string returnUrl = null)
+		public async Task<ActionResult> ExternalLogin(string provider, string returnUrl)
 		{
-			var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
+			//var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
 
-			if(!schemes.Any(x => string.Equals(x.Name, provider, StringComparison.OrdinalIgnoreCase)))
+			//if(!schemes.Any(x => string.Equals(x.Name, provider, StringComparison.OrdinalIgnoreCase)))
+			//{
+			//	_log.LogError($"Invalid external authentication scheme specified: {provider}");
+			//	return RedirectToAction(nameof(Login));
+			//}
+
+			//var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { ReturnUrl = returnUrl });
+            //var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
+			var props = new AuthenticationProperties()
 			{
-				_log.LogError($"Invalid external authentication scheme specified: {provider}");
-				return RedirectToAction(nameof(Login));
-			}
+				RedirectUri = Url.Action(nameof(ExternalLoginCallback)),
+				Items =
+                {
+					{ "returnUrl", returnUrl },
+					{ "scheme", provider },
+				}
+			};
 
-			var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { ReturnUrl = returnUrl });
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-
-        	return Challenge(properties, provider);
+        	return Challenge(props, provider);
 		}
 
 
 		[HttpGet("external-login-callback")]
-		public async Task<ActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+		public async Task<ActionResult> ExternalLoginCallback()
 		{
-			ViewBag.NavigationZone = NavigationZone.Account;
+			//ViewBag.NavigationZone = NavigationZone.Account;
 
-			if(!string.IsNullOrEmpty(remoteError))
-			{
-				_log.LogError($"Unable to authenticate externally: {remoteError}");
-				return View();
-			}
+			var result = await HttpContext.AuthenticateAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);
+			var items = result?.Properties?.Items;
 
-			var extLoginInfo = await _signInManager.GetExternalLoginInfoAsync();
+			//var extLoginInfo = await _signInManager.GetExternalLoginInfoAsync();
 
-			if(extLoginInfo == null)
+			if(result?.Succeeded != true || items == null || !items.ContainsKey("scheme"))
 			{
 				_log.LogError("Unable to obtain external login info");
 				return View();
 			}
 
+			var provider = items["scheme"];
+
+			/*
 			var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
 
 			if(!schemes.Any(x => string.Equals(x.Name, extLoginInfo.LoginProvider, StringComparison.OrdinalIgnoreCase)))
@@ -169,12 +184,13 @@ namespace MawMvcApp.Controllers
 				_log.LogError($"External provider {extLoginInfo.LoginProvider} is not supported");
 				return View();
 			}
+			*/
 
-			var email = extLoginInfo.Principal?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email);
+			var email = result.Principal?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email);
 
 			if(email == null)
 			{
-				_log.LogError($"Unable to obtain email from External Authentication Provider {extLoginInfo.LoginProvider}");
+				_log.LogError($"Unable to obtain email from External Authentication Provider {provider}");
 				return View();
 			}
 
@@ -182,35 +198,37 @@ namespace MawMvcApp.Controllers
 
             if (user != null)
             {
-				if(user.IsExternalAuthEnabled(extLoginInfo.LoginProvider))
+				if(user.IsExternalAuthEnabled(provider))
 				{
-					// clear out the external cookie
-					await _signInManager.SignOutAsync();
-
 					// now sign in the local user
 					await _signInManager.SignInAsync(user, false);
-					await _loginService.LogExternalLoginAttemptAsync(email.Value, extLoginInfo.LoginProvider, true);
+					await _loginService.LogExternalLoginAttemptAsync(email.Value, provider, true);
 
-					_log.LogInformation($"User {user.Username} logged in with {extLoginInfo.LoginProvider} provider.");
+					// delete temporary cookie used during external authentication
+					await HttpContext.SignOutAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);
 
-					if(string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
+					_log.LogInformation($"User {user.Username} logged in with {provider} provider.");
+
+					// validate return URL and redirect back to authorization endpoint or a local page
+					var returnUrl = result.Properties.Items["returnUrl"];
+
+					if (_interaction.IsValidReturnUrl(returnUrl) || Url.IsLocalUrl(returnUrl))
 					{
-						return RedirectToAction("Index", "Home");
+						return Redirect(returnUrl);
 					}
-
-					return Redirect(returnUrl);
 				}
 				else
 				{
-					_log.LogError($"User {user.Username} unable to login with {extLoginInfo.LoginProvider} as they have not yet opted-in for this provider.");
+					_log.LogError($"User {user.Username} unable to login with {provider} as they have not yet opted-in for this provider.");
 				}
             }
 
-			await _loginService.LogExternalLoginAttemptAsync(email.Value, extLoginInfo.LoginProvider, false);
+			await _loginService.LogExternalLoginAttemptAsync(email.Value, provider, false);
 
 			return View();
 		}
 
+/*
 
 		[Authorize]
 		[HttpGet("access-denied")]
@@ -494,7 +512,7 @@ namespace MawMvcApp.Controllers
                 Text = x.Name
             });
 		}
-
+		*/
 
 		async Task<IEnumerable<ExternalLoginScheme>> GetExternalLoginSchemes()
 		{
@@ -513,7 +531,6 @@ namespace MawMvcApp.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
-		*/
 
 
 		IActionResult RedirectToLocal(string returnUrl)

@@ -50,10 +50,10 @@ namespace MawAuth
                     },
 
                     // where to redirect to after login
-                    RedirectUris = { "http://localhost:5000/signin-oidc" },
+                    RedirectUris = { "https://localhost:5021/signin-oidc" },
 
                     // where to redirect to after logout
-                    PostLogoutRedirectUris = { "http://localhost:5000/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { "https://localhost:5021/signout-callback-oidc" },
 
                     AllowedScopes = new List<string>
                     {

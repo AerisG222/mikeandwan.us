@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Maw.Domain.Identity;
 using Maw.Domain;
 using MawAuth.Services;
+using IdentityServer4;
 
 
 namespace MawAuth
@@ -45,7 +46,6 @@ namespace MawAuth
                     .Services
                 .ConfigureApplicationCookie(opts => {
                     opts.AccessDeniedPath = "/account/access-denied";
-                    //opts.Cookie.Name = "maw_auth";
                     opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
                     opts.LoginPath = "/account/login";
                     opts.LogoutPath = "/account/logout";
@@ -55,7 +55,33 @@ namespace MawAuth
                         opts.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                     }
                 })
-                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddGitHub(opts =>
+                    {
+                        opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                        opts.ClientId = _config["GitHub:ClientId"];
+                        opts.ClientSecret = _config["GitHub:ClientSecret"];
+                        opts.Scope.Add("user:email");
+                    })
+                .AddGoogle(opts =>
+                    {
+                        opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                        opts.ClientId = _config["GooglePlus:ClientId"];
+                        opts.ClientSecret = _config["GooglePlus:ClientSecret"];
+                    })
+                .AddMicrosoftAccount(opts =>
+                    {
+                        opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                        opts.ClientId = _config["Microsoft:ApplicationId"];
+                        opts.ClientSecret = _config["Microsoft:Secret"];
+                    })
+                .AddTwitter(opts =>
+                    {
+                        opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                        opts.ConsumerKey = _config["Twitter:ConsumerKey"];
+                        opts.ConsumerSecret = _config["Twitter:ConsumerSecret"];
+                        opts.RetrieveUserDetails = true;
+                    });
 
             var idsrv = services
                 .AddIdentityServer()

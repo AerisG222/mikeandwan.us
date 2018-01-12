@@ -1,0 +1,29 @@
+$input-btn-padding-y:   0.5rem;
+
+@import "bootswatch/dist/slate/variables";
+@import "bootstrap/scss/bootstrap";
+@import "bootswatch/dist/slate/bootswatch";
+
+/* https://blog.prototypr.io/align-svg-icons-to-text-and-say-goodbye-to-font-icons-d44b3d7b26b4 */
+.svg-icon {
+    display: inline-flex;
+    align-self: center;
+    position: relative;
+    height: 1em;
+    width: 1em;
+
+    & svg {
+        fill: $body-color;
+        height: 1em;
+        width: 1em;
+    }
+
+    &.svg-baseline svg {
+        bottom: -0.125em;
+        position: absolute;
+    }
+
+    &.hp-feature {
+        font-size: 7rem;
+    }
+}

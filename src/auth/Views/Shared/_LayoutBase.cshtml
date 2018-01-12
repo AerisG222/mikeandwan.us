@@ -1,0 +1,15 @@
+@{ Layout = "_LayoutMinimal"; }
+
+@section custom_head {
+	@await RenderSectionAsync("custom_head", required: false)
+	@Html.Partial("_Favicons")
+	<meta name="theme-color" content="#272b30">
+	@Html.Partial("_css_site")
+	@await RenderSectionAsync("stylesheets", required: false)
+	@await RenderSectionAsync("scripts_head", required: false)
+}
+
+@RenderBody()
+
+@Html.Partial("_js_Bootstrap")
+@await RenderSectionAsync("scripts_footer", required: false)

@@ -67,7 +67,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("login")]
-		public async Task<ActionResult> Login(string returnUrl)
+		public async Task<IActionResult> Login(string returnUrl)
 		{
 			//ViewBag.NavigationZone = NavigationZone.Account;
 			//ViewBag.ReturnUrl = returnUrl;
@@ -131,7 +131,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("external-login")]
-		public async Task<ActionResult> ExternalLogin(string provider, string returnUrl)
+		public async Task<IActionResult> ExternalLogin(string provider, string returnUrl)
 		{
 			//var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
 
@@ -159,7 +159,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("external-login-callback")]
-		public async Task<ActionResult> ExternalLoginCallback()
+		public async Task<IActionResult> ExternalLoginCallback()
 		{
 			//ViewBag.NavigationZone = NavigationZone.Account;
 
@@ -232,7 +232,7 @@ namespace MawMvcApp.Controllers
 
 		[Authorize]
 		[HttpGet("access-denied")]
-		public ActionResult AccessDenied()
+		public IActionResult AccessDenied()
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 
@@ -242,7 +242,7 @@ namespace MawMvcApp.Controllers
 
 		[Authorize]
 		[HttpGet("logout")]
-		public async Task<ActionResult> Logout()
+		public async Task<IActionResult> Logout()
 		{
 			await _signInManager.SignOutAsync();
 
@@ -251,7 +251,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("forgot-password")]
-		public ActionResult ForgotPassword()
+		public IActionResult ForgotPassword()
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 
@@ -261,7 +261,7 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("forgot-password")]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> ForgotPassword(ForgotPasswordModel model)
+		public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 
@@ -308,7 +308,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("reset-password")]
-		public async Task<ActionResult> ResetPassword(string code)
+		public async Task<IActionResult> ResetPassword(string code)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 
@@ -323,7 +323,7 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("reset-password")]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> ResetPassword(ResetPasswordModel model)
+		public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 			model.ResetAttempted = true;
@@ -355,7 +355,7 @@ namespace MawMvcApp.Controllers
 
 		[Authorize]
 		[HttpGet("edit-profile")]
-		public async Task<ActionResult> EditProfile()
+		public async Task<IActionResult> EditProfile()
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 
@@ -397,7 +397,7 @@ namespace MawMvcApp.Controllers
 		[HttpPost("edit-profile")]
 		[Authorize]
         [ValidateAntiForgeryToken]
-		public async Task<ActionResult> EditProfile(ProfileModel model)
+		public async Task<IActionResult> EditProfile(ProfileModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 			ViewBag.States = await GetStateSelectListItemsAsync();
@@ -447,7 +447,7 @@ namespace MawMvcApp.Controllers
 
 		[Authorize]
 		[HttpGet("change-password")]
-		public ActionResult ChangePassword()
+		public IActionResult ChangePassword()
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 
@@ -460,7 +460,7 @@ namespace MawMvcApp.Controllers
 		[HttpPost("change-password")]
 		[Authorize]
         [ValidateAntiForgeryToken]
-		public async Task<ActionResult> ChangePassword(ChangePasswordModel model)
+		public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 			model.ChangeAttempted = true;

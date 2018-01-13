@@ -17,7 +17,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("")]
-        public ActionResult Index()
+        public IActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.Games;
             return View ();
@@ -25,15 +25,15 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("memory/{*extra}")]
-		public ActionResult Memory()
+		public IActionResult Memory()
 		{
 			ViewBag.NavigationZone = NavigationZone.Games;
 			return View();
 		}
-        
-        
+
+
         [HttpGet("money-spin/{*extra}")]
-		public ActionResult MoneySpin()
+		public IActionResult MoneySpin()
 		{
 			ViewBag.NavigationZone = NavigationZone.Games;
 			return View();

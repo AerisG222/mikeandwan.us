@@ -39,7 +39,7 @@ namespace MawMvcApp.Controllers
 
         [HttpGet("{*extra}")]
         [TypeFilter(typeof(ApiAntiforgeryActionFilter))]
-        public ActionResult Index()
+        public IActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.Videos;
 
@@ -48,7 +48,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("GetMobileCategoryThumbnail/{id:int}")]
-        public async Task<ActionResult> GetMobileCategoryThumbnail(short id)
+        public async Task<IActionResult> GetMobileCategoryThumbnail(short id)
         {
             var category = await _svc.GetCategoryAsync(id, User.IsInRole(MawConstants.ROLE_ADMIN));
 
@@ -57,7 +57,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("GetMobileVideoThumbnail/{id:int}")]
-        public async Task<ActionResult> GetMobileVideoThumbnail(short id)
+        public async Task<IActionResult> GetMobileVideoThumbnail(short id)
         {
             var video = await _svc.GetVideoAsync(id, User.IsInRole (MawConstants.ROLE_ADMIN));
 
@@ -65,7 +65,7 @@ namespace MawMvcApp.Controllers
         }
 
 
-        ActionResult GetScaledImage(string path)
+        IActionResult GetScaledImage(string path)
         {
             var croppedImageStream = _imageCropper.CropImage(path, MOBILE_THUMB_SIZE);
 

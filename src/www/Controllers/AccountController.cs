@@ -23,11 +23,11 @@ using Mvc.RenderViewToString;
 namespace MawMvcApp.Controllers
 {
 	[Route("account")]
-    public class AccountController 
+    public class AccountController
         : MawBaseController<AccountController>
     {
 		const byte LOGIN_AREA_FORM = 1;
-		
+
         readonly IUserRepository _repo;
 		readonly ContactConfig _contactConfig;
 		readonly SignInManager<MawUser> _signInManager;
@@ -37,11 +37,11 @@ namespace MawMvcApp.Controllers
 		readonly RazorViewToStringRenderer _razorRenderer;
 
 
-		public AccountController(ILogger<AccountController> log, 
-								 IOptions<ContactConfig> contactOpts, 
-								 IUserRepository userRepository, 
-			                     SignInManager<MawUser> signInManager, 
-								 UserManager<MawUser> userManager, 
+		public AccountController(ILogger<AccountController> log,
+								 IOptions<ContactConfig> contactOpts,
+								 IUserRepository userRepository,
+			                     SignInManager<MawUser> signInManager,
+								 UserManager<MawUser> userManager,
 								 IEmailService emailService,
 								 ILoginService loginService,
 								 RazorViewToStringRenderer razorRenderer)
@@ -56,9 +56,9 @@ namespace MawMvcApp.Controllers
 			_razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
         }
 
-		
+
 		[HttpGet("login")]
-		public async Task<ActionResult> Login(string returnUrl = null)
+		public async Task<IActionResult> Login(string returnUrl = null)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 			ViewBag.ReturnUrl = returnUrl;
@@ -76,28 +76,28 @@ namespace MawMvcApp.Controllers
 			return View(vm);
 		}
 
-		
+
 		[HttpPost("login")]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Login(LoginModel model, string returnUrl = null)
+		public async Task<IActionResult> Login(LoginModel model, string returnUrl = null)
         {
 			ViewBag.NavigationZone = NavigationZone.Account;
 			ViewBag.ReturnUrl = returnUrl;
-			
+
 			model.ExternalSchemes = await GetExternalLoginSchemes();
 			model.WasAttempted = true;
 
             if(!ModelState.IsValid)
             {
 				LogValidationErrors();
-				
+
                 return View(model);
             }
 
 			var result = await _loginService.AuthenticateAsync(model.Username, model.Password, LOGIN_AREA_FORM);
-			
+
 			_log.LogInformation("Login complete");
-			
+
 			if(result == SignInRes.Success)
 			{
 				if(string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
@@ -111,13 +111,13 @@ namespace MawMvcApp.Controllers
 			{
 				ModelState.AddModelError("Error", "Sorry, a user was not found with this username/password combination");
 			}
-			
+
             return View(model);
         }
-		
+
 
 		[HttpGet("external-login")]
-		public async Task<ActionResult> ExternalLogin(string provider, string returnUrl = null)
+		public async Task<IActionResult> ExternalLogin(string provider, string returnUrl = null)
 		{
 			var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
 
@@ -131,14 +131,14 @@ namespace MawMvcApp.Controllers
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 
         	return Challenge(properties, provider);
-		} 
+		}
 
 
 		[HttpGet("external-login-callback")]
-		public async Task<ActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+		public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
-			
+
 			if(!string.IsNullOrEmpty(remoteError))
 			{
 				_log.LogError($"Unable to authenticate externally: {remoteError}");
@@ -181,14 +181,14 @@ namespace MawMvcApp.Controllers
 					// now sign in the local user
 					await _signInManager.SignInAsync(user, false);
 					await _loginService.LogExternalLoginAttemptAsync(email.Value, extLoginInfo.LoginProvider, true);
-					
+
 					_log.LogInformation($"User {user.Username} logged in with {extLoginInfo.LoginProvider} provider.");
-					
+
 					if(string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
 					{
 						return RedirectToAction("Index", "Home");
 					}
-					
+
 					return Redirect(returnUrl);
 				}
 				else
@@ -202,29 +202,29 @@ namespace MawMvcApp.Controllers
 			return View();
 		}
 
-		
+
 		[Authorize]
 		[HttpGet("access-denied")]
-		public ActionResult AccessDenied()
+		public IActionResult AccessDenied()
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[Authorize]
 		[HttpGet("logout")]
-		public async Task<ActionResult> Logout()
+		public async Task<IActionResult> Logout()
 		{
 			await _signInManager.SignOutAsync();
-			
+
 			return RedirectToAction("Index", "Home");
 		}
-		
+
 
 		[HttpGet("forgot-password")]
-		public ActionResult ForgotPassword()
+		public IActionResult ForgotPassword()
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 
@@ -234,7 +234,7 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("forgot-password")]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> ForgotPassword(ForgotPasswordModel model)
+		public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 
@@ -264,7 +264,7 @@ namespace MawMvcApp.Controllers
 					};
 
 				var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ResetPassword.cshtml", emailModel).ConfigureAwait(false);
-                
+
 				await _emailService.SendHtmlAsync(user.Email, _contactConfig.To, "Reset Password for mikeandwan.us", body).ConfigureAwait(false);
 
 				model.WasSuccessful = true;
@@ -281,7 +281,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("reset-password")]
-		public async Task<ActionResult> ResetPassword(string code)
+		public async Task<IActionResult> ResetPassword(string code)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 
@@ -296,7 +296,7 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("reset-password")]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> ResetPassword(ResetPasswordModel model)
+		public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 			model.ResetAttempted = true;
@@ -313,7 +313,7 @@ namespace MawMvcApp.Controllers
 				else
 				{
 					_log.LogWarning(result.ToString());
-					
+
 					AddErrors(result);
 				}
 			}
@@ -328,16 +328,16 @@ namespace MawMvcApp.Controllers
 
 		[Authorize]
 		[HttpGet("edit-profile")]
-		public async Task<ActionResult> EditProfile()
+		public async Task<IActionResult> EditProfile()
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
-		    
+
 			ViewBag.States = await GetStateSelectListItemsAsync();
 			ViewBag.Countries = await GetCountrySelectListItemsAsync();
 
 			var user = await _userMgr.FindByNameAsync(User.Identity.Name);
 
-			var model = new ProfileModel 
+			var model = new ProfileModel
 			{
 				Username = user.Username,
 				FirstName = user.FirstName,
@@ -366,11 +366,11 @@ namespace MawMvcApp.Controllers
 			return View(model);
 		}
 
-		
+
 		[HttpPost("edit-profile")]
 		[Authorize]
         [ValidateAntiForgeryToken]
-		public async Task<ActionResult> EditProfile(ProfileModel model)
+		public async Task<IActionResult> EditProfile(ProfileModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 			ViewBag.States = await GetStateSelectListItemsAsync();
@@ -378,7 +378,7 @@ namespace MawMvcApp.Controllers
 
 			model.WasAttempted = true;
             model.Username = User.Identity.Name;
-			
+
 			if(ModelState.IsValid)
 			{
 				var user = await _userMgr.FindByNameAsync(User.Identity.Name);
@@ -413,27 +413,27 @@ namespace MawMvcApp.Controllers
 			{
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
 
-		
+
 		[Authorize]
 		[HttpGet("change-password")]
-		public ActionResult ChangePassword()
+		public IActionResult ChangePassword()
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
-			
+
 			var m = new ChangePasswordModel();
-			
+
 			return View(m);
 		}
-		
-		
+
+
 		[HttpPost("change-password")]
 		[Authorize]
         [ValidateAntiForgeryToken]
-		public async Task<ActionResult> ChangePassword(ChangePasswordModel model)
+		public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 			model.ChangeAttempted = true;
@@ -450,7 +450,7 @@ namespace MawMvcApp.Controllers
                 else
                 {
 					_log.LogWarning(result.ToString());
-					
+
 					AddErrors(result);
                 }
 			}
@@ -458,30 +458,30 @@ namespace MawMvcApp.Controllers
 			{
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
 
-		
+
 		async Task<IEnumerable<SelectListItem>> GetStateSelectListItemsAsync()
 		{
 			var states = await _repo.GetStatesAsync();
-				
-			return states.Select(x => new SelectListItem 
+
+			return states.Select(x => new SelectListItem
 			{
-                Value = x.Code, 
+                Value = x.Code,
                 Text = x.Name
             });
 		}
-		
+
 
 		async Task<IEnumerable<SelectListItem>> GetCountrySelectListItemsAsync()
 		{
 			var countries = await _repo.GetCountriesAsync();
-				
-			return countries.Select(x => new SelectListItem 
+
+			return countries.Select(x => new SelectListItem
 			{
-                Value = x.Code, 
+                Value = x.Code,
                 Text = x.Name
             });
 		}

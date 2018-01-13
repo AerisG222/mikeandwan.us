@@ -6,7 +6,7 @@ using MawMvcApp.ViewModels.Navigation;
 namespace MawMvcApp.Controllers
 {
 	[Route("reference")]
-    public class ReferenceController 
+    public class ReferenceController
         : MawBaseController<ReferenceController>
     {
 		public ReferenceController(ILogger<ReferenceController> log)
@@ -17,151 +17,151 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("")]
-        public ActionResult Index()
+        public IActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
             return View();
         }
-		
-		
+
+
 		[HttpGet("html-colors")]
-		public ActionResult HtmlColors()
+		public IActionResult HtmlColors()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("html-doctypes")]
-		public ActionResult HtmlDoctypes()
+		public IActionResult HtmlDoctypes()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("html-entities")]
-		public ActionResult HtmlEntities()
+		public IActionResult HtmlEntities()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("http-status-codes")]
-		public ActionResult HttpStatusCodes()
+		public IActionResult HttpStatusCodes()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("http-rfcs")]
-		public ActionResult HttpRfcs()
+		public IActionResult HttpRfcs()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("networking-ports")]
-		public ActionResult NetworkingPorts()
+		public IActionResult NetworkingPorts()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("dotnet-guidelines-fundamentals")]
-		public ActionResult DotnetGuidelinesFundamentals()
+		public IActionResult DotnetGuidelinesFundamentals()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("dotnet-guidelines-naming")]
-		public ActionResult DotnetGuidelinesNaming()
+		public IActionResult DotnetGuidelinesNaming()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("dotnet-guidelines-type-design")]
-		public ActionResult DotnetGuidelinesTypeDesign()
+		public IActionResult DotnetGuidelinesTypeDesign()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("dotnet-guidelines-member-design")]
-		public ActionResult DotnetGuidelinesMemberDesign()
+		public IActionResult DotnetGuidelinesMemberDesign()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("dotnet-guidelines-design-for-extensibility")]
-		public ActionResult DotnetGuidelinesDesignForExtensibility()
+		public IActionResult DotnetGuidelinesDesignForExtensibility()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("dotnet-guidelines-exceptions")]
-		public ActionResult DotnetGuidelinesExceptions()
+		public IActionResult DotnetGuidelinesExceptions()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("dotnet-guidelines-usage-guidelines")]
-		public ActionResult DotnetGuidelinesUsageGuidelines()
+		public IActionResult DotnetGuidelinesUsageGuidelines()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
+
 		[HttpGet("dotnet-guidelines-common-patterns")]
-		public ActionResult DotnetGuidelinesCommonPatterns()
+		public IActionResult DotnetGuidelinesCommonPatterns()
 		{
 			ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
 			return View();
 		}
-		
+
 		[HttpGet("aspnet5")]
-        public ActionResult Aspnet5()
+        public IActionResult Aspnet5()
         {
             ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
             return View();
         }
-		
+
 		[HttpGet("angular2")]
-        public ActionResult Angular2()
+        public IActionResult Angular2()
         {
             ViewBag.NavigationZone = NavigationZone.Reference;
-			
+
             return View();
         }
     }

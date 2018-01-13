@@ -18,7 +18,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("")]
-		public ActionResult Index()
+		public IActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.None;
 

@@ -6,7 +6,7 @@ using MawMvcApp.ViewModels.Navigation;
 namespace MawMvcApp.Controllers
 {
     [Route("webgl")]
-    public class WebglController 
+    public class WebglController
 		: MawBaseController<WebglController>
     {
 		public WebglController(ILogger<WebglController> log)
@@ -17,23 +17,23 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("")]
-        public ActionResult Index()
+        public IActionResult Index()
         {
             ViewBag.NavigationZone = NavigationZone.Webgl;
             return View();
         }
-        
-        
+
+
         [HttpGet("cube")]
-        public ActionResult Cube()
+        public IActionResult Cube()
         {
             ViewBag.NavigationZone = NavigationZone.Webgl;
             return View();
         }
-        
-        
+
+
         [HttpGet("text")]
-        public ActionResult Text()
+        public IActionResult Text()
         {
             ViewBag.NavigationZone = NavigationZone.Webgl;
             return View();

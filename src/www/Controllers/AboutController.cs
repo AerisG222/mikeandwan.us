@@ -51,7 +51,7 @@ namespace MawMvcApp.Controllers
 
 		[Authorize]
 		[HttpGet("")]
-        public ActionResult Index()
+        public IActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.About;
 
@@ -65,7 +65,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("contact")]
-		public ActionResult Contact()
+		public IActionResult Contact()
 		{
 			ViewBag.NavigationZone = NavigationZone.About;
 
@@ -78,7 +78,7 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("contact")]
 		[ValidateAntiForgeryToken]
-        public async Task<ActionResult> Contact(IFormCollection collection)
+        public async Task<IActionResult> Contact(IFormCollection collection)
 		{
 			ViewBag.NavigationZone = NavigationZone.About;
 
@@ -136,7 +136,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("news")]
-        public async Task<ActionResult> News()
+        public async Task<IActionResult> News()
         {
 			ViewBag.NavigationZone = NavigationZone.About;
 			var blogs = await _blogService.GetLatestPostsAsync(MawConstants.MAW_BLOG_ID, 10);

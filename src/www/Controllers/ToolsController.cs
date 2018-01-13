@@ -12,13 +12,13 @@ using MawMvcApp.ViewModels.Tools.Dotnet;
 namespace MawMvcApp.Controllers
 {
 	[Route("tools")]
-    public class ToolsController 
+    public class ToolsController
         : MawBaseController<ToolsController>
     {
 		IFileProvider _fileProvider { get; set; }
 
 
-		public ToolsController(ILogger<ToolsController> log, 
+		public ToolsController(ILogger<ToolsController> log,
 							   IHostingEnvironment env)
 			: base(log)
         {
@@ -32,35 +32,35 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("")]
-        public ActionResult Index()
+        public IActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
             return View();
         }
-		
-		
+
+
 		[HttpGet("roll-the-dice")]
-		public ActionResult RollTheDice()
+		public IActionResult RollTheDice()
         {
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
-			var model = new RollTheDiceModel 
-			{ 
-				NumberOfThrows = 10, 
-				NumberOfSides = 6 
+
+			var model = new RollTheDiceModel
+			{
+				NumberOfThrows = 10,
+				NumberOfSides = 6
 			};
-				
+
             return View(model);
         }
-		
-		
+
+
 		[HttpPost("roll-the-dice")]
 		[ValidateAntiForgeryToken]
-		public ActionResult RollTheDice(RollTheDiceModel model)
+		public IActionResult RollTheDice(RollTheDiceModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			if(ModelState.IsValid)
 			{
 				model.ThrowDice();
@@ -70,79 +70,79 @@ namespace MawMvcApp.Controllers
 				model.HasErrors = true;
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("google-maps")]
-		public ActionResult GoogleMaps()
+		public IActionResult GoogleMaps()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("binary-clock-about")]
-		public ActionResult BinaryClockAbout()
+		public IActionResult BinaryClockAbout()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("binary-clock")]
-		public ActionResult BinaryClock()
+		public IActionResult BinaryClock()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("dotnet-formatting-dates")]
-		public ActionResult DotnetFormattingDates()
+		public IActionResult DotnetFormattingDates()
 		{
 			var mgr = new FormatExampleManager();
             var date = new DateTime(1977, 10, 3, 3, 24, 46, 789, DateTimeKind.Local);
-			
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 			ViewBag.ExampleDate = date;
-			
+
 			return View(mgr.GetDateFormatExamples(date));
 		}
-		
-		
+
+
 		[HttpGet("dotnet-formatting-numbers")]
-		public ActionResult DotnetFormattingNumbers()
+		public IActionResult DotnetFormattingNumbers()
 		{
 			var mgr = new FormatExampleManager();
 			double value = 1234.125678;
-			
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 			ViewBag.ExampleDate = value;
-			
+
 			return View(mgr.GetNumberFormatExamples(value));
 		}
-		
-		
+
+
 		[HttpGet("dotnet-regex")]
-		public ActionResult DotnetRegex()
+		public IActionResult DotnetRegex()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View(new RegexViewModel());
 		}
-		
-		
+
+
 		[HttpPost("dotnet-regex")]
 		[ValidateAntiForgeryToken]
-		public ActionResult DotnetRegex(RegexViewModel model)
+		public IActionResult DotnetRegex(RegexViewModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			if(ModelState.IsValid)
 			{
 				model.Execute();
@@ -152,132 +152,132 @@ namespace MawMvcApp.Controllers
 				model.HasErrors = true;
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("networking-bandwidth")]
-		public ActionResult NetworkingBandwidth()
+		public IActionResult NetworkingBandwidth()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("networking-file-size")]
-		public ActionResult NetworkingFileSize()
+		public IActionResult NetworkingFileSize()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("networking-time")]
-		public ActionResult NetworkingTime()
+		public IActionResult NetworkingTime()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("weekend-countdown")]
-		public ActionResult WeekendCountdown()
+		public IActionResult WeekendCountdown()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("weather")]
-		public ActionResult Weather()
+		public IActionResult Weather()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("browser-hell")]
-		public ActionResult BrowserHell()
+		public IActionResult BrowserHell()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
             var model = new BrowserHellModel();
             var fi = _fileProvider.GetFileInfo("img/tools/browser_hell.jpg");
 
             if(fi.Exists)
             {
                 ViewBag.ImageColors = model.GetColorArray(fi.PhysicalPath);
-			
+
 			    return View();
             }
 
             return NotFound();
 		}
-		
-		
+
+
 		[HttpGet("byte-counter")]
-		public ActionResult ByteCounter()
+		public IActionResult ByteCounter()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("date-diff")]
-		public ActionResult DateDiff()
+		public IActionResult DateDiff()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
-            var model = new DateDiff 
-			{ 
-				StartDate = DateTime.Now.AddYears(-1), 
-				EndDate = DateTime.Now 
+
+            var model = new DateDiff
+			{
+				StartDate = DateTime.Now.AddYears(-1),
+				EndDate = DateTime.Now
 			};
 
 			return View(model);
 		}
-		
-		
+
+
 		[HttpPost("date-diff")]
 		[ValidateAntiForgeryToken]
-		public ActionResult DateDiff(DateDiff dd)
+		public IActionResult DateDiff(DateDiff dd)
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			dd.ShowResults = ModelState.IsValid;
-			
+
 			if(!ModelState.IsValid)
 			{
 				dd.HasErrors = true;
 				LogValidationErrors();
 			}
-			
+
 			return View(dd);
 		}
-		
-		
+
+
 		[HttpGet("gps-conversion")]
-		public ActionResult GpsConversion()
+		public IActionResult GpsConversion()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
 			return View(new GpsConversionModel());
 		}
-		
-		
+
+
 		[HttpPost("gps-conversion")]
 		[ValidateAntiForgeryToken]
-		public ActionResult GpsConversion(GpsConversionModel model)
+		public IActionResult GpsConversion(GpsConversionModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			if(ModelState.IsValid)
 			{
 				model.Convert();
@@ -286,36 +286,36 @@ namespace MawMvcApp.Controllers
 			{
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("guid-gen")]
-		public ActionResult GuidGen()
+		public IActionResult GuidGen()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
 			ViewBag.Guid = Guid.NewGuid().ToString();
-			
+
 			return View();
 		}
-		
-		
+
+
 		[HttpGet("html-encode")]
-		public ActionResult HtmlEncode()
+		public IActionResult HtmlEncode()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View(new HtmlEncodeDecodeModel());
 		}
-		
-		
+
+
 		[HttpPost("html-encode")]
 		[ValidateAntiForgeryToken]
-		public ActionResult HtmlEncode(HtmlEncodeDecodeModel model)
+		public IActionResult HtmlEncode(HtmlEncodeDecodeModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			if(ModelState.IsValid)
 			{
 				if(model.Mode == EncodeMode.Decode)
@@ -332,38 +332,38 @@ namespace MawMvcApp.Controllers
 				model.HasErrors = true;
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("paths")]
-		public ActionResult Paths()
+		public IActionResult Paths()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			var model = new PathsModel();
 			model.PreparePaths();
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("random-bytes")]
-		public ActionResult RandomBytes()
+		public IActionResult RandomBytes()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View(new RandomBytesModel());
 		}
-		
-		
+
+
 		[HttpPost("random-bytes")]
 		[ValidateAntiForgeryToken]
-		public ActionResult RandomBytes(RandomBytesModel model)
+		public IActionResult RandomBytes(RandomBytesModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			if(ModelState.IsValid)
 			{
 				model.GenerateRandomness();
@@ -373,13 +373,13 @@ namespace MawMvcApp.Controllers
 				model.HasErrors = true;
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
-		
+
 
         [HttpGet("color-converter")]
-        public ActionResult ColorConverter()
+        public IActionResult ColorConverter()
         {
             ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -389,7 +389,7 @@ namespace MawMvcApp.Controllers
 
         [HttpPost("color-converter")]
 		[ValidateAntiForgeryToken]
-        public ActionResult ColorConverter(ColorConverterModel model)
+        public IActionResult ColorConverter(ColorConverterModel model)
         {
             ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -406,22 +406,22 @@ namespace MawMvcApp.Controllers
             return View(model);
         }
 
-		
+
 		[HttpGet("url-encode")]
-		public ActionResult UrlEncode()
+		public IActionResult UrlEncode()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View(new UrlEncodeModel());
 		}
-		
-		
+
+
 		[HttpPost("url-encode")]
 		[ValidateAntiForgeryToken]
-		public ActionResult UrlEncode(UrlEncodeModel model)
+		public IActionResult UrlEncode(UrlEncodeModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			if(ModelState.IsValid)
 			{
 				model.PerformCoding();
@@ -431,26 +431,26 @@ namespace MawMvcApp.Controllers
 				model.HasErrors = true;
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
-		
+
 
 		[HttpGet("xml-validate")]
-		public ActionResult XmlValidate()
+		public IActionResult XmlValidate()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View(new XmlValidateModel());
 		}
-		
-		
+
+
 		[HttpPost("xml-validate")]
 		[ValidateAntiForgeryToken]
-		public ActionResult XmlValidate(XmlValidateModel model)
+		public IActionResult XmlValidate(XmlValidateModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			if(ModelState.IsValid)
 			{
 				model.ValidateXml();
@@ -460,26 +460,26 @@ namespace MawMvcApp.Controllers
 				model.HasErrors = true;
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("xsd-validate")]
-		public ActionResult XsdValidate()
+		public IActionResult XsdValidate()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View(new XsdValidateModel());
 		}
-		
-		
+
+
 		[HttpPost("xsd-validate")]
 		[ValidateAntiForgeryToken]
-		public ActionResult XsdValidate(XsdValidateModel model)
+		public IActionResult XsdValidate(XsdValidateModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			if(ModelState.IsValid)
 			{
 				model.ValidateSchema();
@@ -489,26 +489,26 @@ namespace MawMvcApp.Controllers
 				model.HasErrors = true;
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
-		
-		
+
+
 		[HttpGet("xsl-transform")]
-		public ActionResult XslTransform()
+		public IActionResult XslTransform()
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			return View(new XslTransformModel());
 		}
-		
-		
+
+
 		[HttpPost("xsl-transform")]
 		[ValidateAntiForgeryToken]
-		public ActionResult XslTransform(XslTransformModel model)
+		public IActionResult XslTransform(XslTransformModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
-			
+
 			if(ModelState.IsValid)
 			{
 				model.ExecuteTransform();
@@ -518,13 +518,13 @@ namespace MawMvcApp.Controllers
 				model.HasErrors = true;
 				LogValidationErrors();
 			}
-			
+
 			return View(model);
 		}
 
 
         [HttpGet("learning")]
-        public ActionResult Learning()
+        public IActionResult Learning()
         {
             ViewBag.NavigationZone = NavigationZone.Tools;
 

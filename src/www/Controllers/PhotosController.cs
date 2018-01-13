@@ -45,7 +45,7 @@ namespace MawMvcApp.Controllers
 
         [HttpGet("{*extra}")]
         [TypeFilter(typeof(ApiAntiforgeryActionFilter))]
-        public ActionResult Index()
+        public IActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.Photos;
 
@@ -55,7 +55,7 @@ namespace MawMvcApp.Controllers
 
         [HttpGet("3d/{*extra}")]
         [TypeFilter(typeof(ApiAntiforgeryActionFilter))]
-        public ActionResult ThreeD()
+        public IActionResult ThreeD()
         {
             ViewBag.NavigationZone = NavigationZone.Photos;
 
@@ -64,7 +64,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("stats")]
-        public ActionResult Stats()
+        public IActionResult Stats()
         {
             ViewBag.NavigationZone = NavigationZone.Photos;
 
@@ -73,7 +73,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("GetMobileThumbnail/{id:int}")]
-        public async Task<ActionResult> GetMobileThumbnail(short id)
+        public async Task<IActionResult> GetMobileThumbnail(short id)
 		{
             var category = await _svc.GetCategoryAsync(id, User.IsInRole(MawConstants.ROLE_ADMIN));
 			var thumbInfo = category.TeaserPhotoInfo;
@@ -89,7 +89,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("download-category/{id:int}")]
-        public async Task<ActionResult> DownloadCategory(short id)
+        public async Task<IActionResult> DownloadCategory(short id)
         {
             var photos = await _svc.GetPhotosForCategoryAsync(id, User.IsInRole(MawConstants.ROLE_ADMIN));
             var stream = _photoZipper.Zip(photos);

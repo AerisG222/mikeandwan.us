@@ -55,7 +55,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("")]
-        public ActionResult Index()
+        public IActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -64,7 +64,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("manage-users")]
-		public async Task<ActionResult> ManageUsers()
+		public async Task<IActionResult> ManageUsers()
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -83,7 +83,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("manage-roles")]
-		public async Task<ActionResult> ManageRoles()
+		public async Task<IActionResult> ManageRoles()
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -92,7 +92,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("create-user")]
-		public ActionResult CreateUser()
+		public IActionResult CreateUser()
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -102,7 +102,7 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("create-user")]
         [ValidateAntiForgeryToken]
-		public async Task<ActionResult> CreateUser(CreateUserModel model)
+		public async Task<IActionResult> CreateUser(CreateUserModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -119,7 +119,7 @@ namespace MawMvcApp.Controllers
 				var crypto = new Crypto();
 				var password = crypto.GeneratePassword(12);
 				model.Result = IdentityResult.Failed();
-				
+
 				try
 				{
 					model.Result = await _userMgr.CreateAsync(user, password);
@@ -156,7 +156,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("delete-user/{id}")]
-		public ActionResult DeleteUser(string id)
+		public IActionResult DeleteUser(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -174,7 +174,7 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("delete-user/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteUser(DeleteUserModel model, IFormCollection collection)
+        public async Task<IActionResult> DeleteUser(DeleteUserModel model, IFormCollection collection)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -209,7 +209,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("create-role")]
-		public ActionResult CreateRole()
+		public IActionResult CreateRole()
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -219,7 +219,7 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("create-role")]
         [ValidateAntiForgeryToken]
-		public async Task<ActionResult> CreateRole(CreateRoleModel model)
+		public async Task<IActionResult> CreateRole(CreateRoleModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -244,7 +244,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("delete-role/{id}")]
-		public ActionResult DeleteRole(string id)
+		public IActionResult DeleteRole(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -262,7 +262,7 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("delete-role/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteRole(DeleteRoleModel model, IFormCollection collection)
+        public async Task<IActionResult> DeleteRole(DeleteRoleModel model, IFormCollection collection)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -290,7 +290,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("edit-profile/{id}")]
-		public async Task<ActionResult> EditProfile(string id)
+		public async Task<IActionResult> EditProfile(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -322,7 +322,7 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("edit-profile/{id}")]
         [ValidateAntiForgeryToken]
-		public async Task<ActionResult> EditProfile(EditProfileModel model)
+		public async Task<IActionResult> EditProfile(EditProfileModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -352,7 +352,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("manage-roles-for-user/{id}")]
-		public async Task<ActionResult> ManageRolesForUser(string id)
+		public async Task<IActionResult> ManageRolesForUser(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -375,7 +375,7 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("manage-roles-for-user/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ManageRolesForUser(IFormCollection collection)
+        public async Task<IActionResult> ManageRolesForUser(IFormCollection collection)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -439,7 +439,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("edit-role-members/{id}")]
-		public async Task<ActionResult> EditRoleMembers(string id)
+		public async Task<IActionResult> EditRoleMembers(string id)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -461,7 +461,7 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("edit-role-members/{id}")]
         [ValidateAntiForgeryToken]
-		public async Task<ActionResult> EditRoleMembers(EditRoleMembersModel model)
+		public async Task<IActionResult> EditRoleMembers(EditRoleMembersModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -519,7 +519,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("create-blog-post")]
-		public ActionResult CreateBlogPost()
+		public IActionResult CreateBlogPost()
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -535,7 +535,7 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("create-blog-post")]
         [ValidateAntiForgeryToken]
-		public async Task<ActionResult> CreateBlogPost(BlogPostModel model)
+		public async Task<IActionResult> CreateBlogPost(BlogPostModel model)
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
@@ -573,7 +573,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("show-request-details")]
-		public ActionResult ShowRequestDetails()
+		public IActionResult ShowRequestDetails()
 		{
 			ViewBag.NavigationZone = NavigationZone.Administration;
 

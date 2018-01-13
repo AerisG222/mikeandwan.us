@@ -11,15 +11,15 @@ using SignInRes = Microsoft.AspNetCore.Identity.SignInResult;
 namespace MawMvcApp.Controllers
 {
 	[Route("api/account")]
-    public class AccountApiController 
+    public class AccountApiController
         : MawBaseController<AccountApiController>
     {
 		const byte LOGIN_AREA_API = 2;
-		
+
 		readonly ILoginService _loginService;
 
 
-		public AccountApiController(ILogger<AccountApiController> log, 
+		public AccountApiController(ILogger<AccountApiController> log,
 									ILoginService loginService)
 			: base(log)
         {
@@ -31,14 +31,14 @@ namespace MawMvcApp.Controllers
         public async Task<bool> Login(LoginModel model)
         {
 			var result = await _loginService.AuthenticateAsync(model.Username, model.Password, LOGIN_AREA_API);
-						
+
 			return result == SignInRes.Success;
         }
 
 
 		[HttpGet("get-xsrf-token")]
 		[TypeFilter(typeof(ApiAntiforgeryActionFilter))]
-		public ActionResult GetXsrfToken() {
+		public IActionResult GetXsrfToken() {
 			return Ok();
 		}
     }

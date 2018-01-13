@@ -16,7 +16,8 @@ using MawMvcApp.ViewModels.Account;
 using MawMvcApp.ViewModels.Email;
 using MawMvcApp.ViewModels.Navigation;
 using Mvc.RenderViewToString;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace MawMvcApp.Controllers
 {
@@ -77,9 +78,10 @@ namespace MawMvcApp.Controllers
 		[HttpGet("logout")]
 		public IActionResult Logout()
 		{
-			//await _signInManager.SignOutAsync();
-
-			return RedirectToAction("Index", "Home");
+			return new SignOutResult(new[] {
+				CookieAuthenticationDefaults.AuthenticationScheme,
+				OpenIdConnectDefaults.AuthenticationScheme
+			});
 		}
 
 

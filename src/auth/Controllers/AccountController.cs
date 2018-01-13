@@ -228,6 +228,16 @@ namespace MawMvcApp.Controllers
 			return View();
 		}
 
+
+		[HttpGet("logout")]
+		public async Task<IActionResult> Logout(string logoutId)
+		{
+			var logout = await _interaction.GetLogoutContextAsync(logoutId);
+
+			await _signInManager.SignOutAsync();
+
+			return Redirect(logout.PostLogoutRedirectUri);
+		}
 /*
 
 		[Authorize]
@@ -237,16 +247,6 @@ namespace MawMvcApp.Controllers
 			ViewBag.NavigationZone = NavigationZone.Account;
 
 			return View();
-		}
-
-
-		[Authorize]
-		[HttpGet("logout")]
-		public async Task<IActionResult> Logout()
-		{
-			await _signInManager.SignOutAsync();
-
-			return RedirectToAction("Index", "Home");
 		}
 
 

@@ -12,8 +12,7 @@ using MawMvcApp.ViewModels.About;
 using MawMvcApp.ViewModels.Navigation;
 using MawMvcApp.ViewModels.Email;
 using Mvc.RenderViewToString;
-using Microsoft.AspNetCore.Authorization;
-using IdentityModel.Client;
+
 
 namespace MawMvcApp.Controllers
 {
@@ -49,7 +48,6 @@ namespace MawMvcApp.Controllers
         }
 
 
-		[Authorize]
 		[HttpGet("")]
         public IActionResult Index()
         {

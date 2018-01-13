@@ -12,14 +12,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Email;
 using Maw.Domain.Identity;
-//using MawMvcApp.ViewModels.About;
 using MawMvcApp.ViewModels.Account;
-//using MawMvcApp.ViewModels.Email;
-//using MawMvcApp.ViewModels.Navigation;
 using SignInRes = Microsoft.AspNetCore.Identity.SignInResult;
 using Microsoft.AspNetCore.Authentication;
 using IdentityServer4.Services;
-//using Mvc.RenderViewToString;
 
 
 namespace MawMvcApp.Controllers
@@ -27,7 +23,6 @@ namespace MawMvcApp.Controllers
 	[Route("account")]
     public class AccountController
 		: Controller
-//        : MawBaseController<AccountController>
     {
 		const byte LOGIN_AREA_FORM = 1;
 		const string LoginProviderKey = "LoginProvider";
@@ -35,48 +30,30 @@ namespace MawMvcApp.Controllers
 		readonly ILogger<AccountController> _log;
 		readonly IIdentityServerInteractionService _interaction;
         readonly IUserRepository _repo;
-//		readonly ContactConfig _contactConfig;
 		readonly SignInManager<MawUser> _signInManager;
 		readonly UserManager<MawUser> _userMgr;
-		//readonly IEmailService _emailService;
 		readonly ILoginService _loginService;
-//		readonly RazorViewToStringRenderer _razorRenderer;
 
 
 		public AccountController(ILogger<AccountController> log,
 								 IIdentityServerInteractionService interaction,
-//								 IOptions<ContactConfig> contactOpts,
 								 IUserRepository userRepository,
 			                     SignInManager<MawUser> signInManager,
 								 UserManager<MawUser> userManager,
-//								 IEmailService emailService,
 								 ILoginService loginService)
-//								 RazorViewToStringRenderer razorRenderer)
-//			: base(log)
         {
 			_log = log ?? throw new ArgumentNullException(nameof(log));
 			_interaction = interaction ?? throw new ArgumentNullException(nameof(interaction));
-//			_contactConfig = contactOpts.Value;
             _repo = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
 			_userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
-//			_emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
 			_loginService = loginService ?? throw new ArgumentNullException(nameof(loginService));
-//			_razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
         }
 
 
 		[HttpGet("login")]
 		public async Task<IActionResult> Login(string returnUrl)
 		{
-			//ViewBag.NavigationZone = NavigationZone.Account;
-			//ViewBag.ReturnUrl = returnUrl;
-
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    return RedirectToAction("Index", "Home");
-            //}
-
 			var vm = new LoginModel()
 			{
 				ReturnUrl = returnUrl,
@@ -91,10 +68,6 @@ namespace MawMvcApp.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Login(LoginModel model)
         {
-			//ViewBag.NavigationZone = NavigationZone.Account;
-			//ViewBag.ReturnUrl = returnUrl;
-
-			//model.ExternalSchemes = await GetExternalLoginSchemes();
 			model.WasAttempted = true;
 
             if(!ModelState.IsValid)
@@ -111,15 +84,6 @@ namespace MawMvcApp.Controllers
 			if(result == SignInRes.Success)
 			{
 				return RedirectToLocal(model.ReturnUrl);
-
-				/*
-				if(string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
-				{
-                    return RedirectToAction("Index", "Home");
-				}
-
-				return Redirect(returnUrl);
-				*/
 			}
 			else
 			{
@@ -133,17 +97,6 @@ namespace MawMvcApp.Controllers
 		[HttpGet("external-login")]
 		public IActionResult ExternalLogin(string provider, string returnUrl)
 		{
-			//var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
-
-			//if(!schemes.Any(x => string.Equals(x.Name, provider, StringComparison.OrdinalIgnoreCase)))
-			//{
-			//	_log.LogError($"Invalid external authentication scheme specified: {provider}");
-			//	return RedirectToAction(nameof(Login));
-			//}
-
-			//var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { ReturnUrl = returnUrl });
-            //var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-
 			var props = new AuthenticationProperties()
 			{
 				RedirectUri = Url.Action(nameof(ExternalLoginCallback)),
@@ -161,12 +114,8 @@ namespace MawMvcApp.Controllers
 		[HttpGet("external-login-callback")]
 		public async Task<IActionResult> ExternalLoginCallback()
 		{
-			//ViewBag.NavigationZone = NavigationZone.Account;
-
 			var result = await HttpContext.AuthenticateAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);
 			var items = result?.Properties?.Items;
-
-			//var extLoginInfo = await _signInManager.GetExternalLoginInfoAsync();
 
 			if(result?.Succeeded != true || items == null || !items.ContainsKey("scheme"))
 			{
@@ -175,17 +124,6 @@ namespace MawMvcApp.Controllers
 			}
 
 			var provider = items["scheme"];
-
-			/*
-			var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
-
-			if(!schemes.Any(x => string.Equals(x.Name, extLoginInfo.LoginProvider, StringComparison.OrdinalIgnoreCase)))
-			{
-				_log.LogError($"External provider {extLoginInfo.LoginProvider} is not supported");
-				return View();
-			}
-			*/
-
 			var email = result.Principal?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email);
 
 			if(email == null)

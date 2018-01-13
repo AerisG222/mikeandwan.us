@@ -5,7 +5,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
@@ -16,7 +15,6 @@ using MawMvcApp.ViewModels.About;
 using MawMvcApp.ViewModels.Account;
 using MawMvcApp.ViewModels.Email;
 using MawMvcApp.ViewModels.Navigation;
-using SignInRes = Microsoft.AspNetCore.Identity.SignInResult;
 using Mvc.RenderViewToString;
 
 
@@ -30,35 +28,26 @@ namespace MawMvcApp.Controllers
 
         readonly IUserRepository _repo;
 		readonly ContactConfig _contactConfig;
-		readonly SignInManager<MawUser> _signInManager;
-		readonly UserManager<MawUser> _userMgr;
 		readonly IEmailService _emailService;
-		readonly ILoginService _loginService;
 		readonly RazorViewToStringRenderer _razorRenderer;
 
 
 		public AccountController(ILogger<AccountController> log,
 								 IOptions<ContactConfig> contactOpts,
 								 IUserRepository userRepository,
-			                     SignInManager<MawUser> signInManager,
-								 UserManager<MawUser> userManager,
 								 IEmailService emailService,
-								 ILoginService loginService,
 								 RazorViewToStringRenderer razorRenderer)
 			: base(log)
         {
 			_contactConfig = contactOpts.Value;
             _repo = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
-            _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
-			_userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
 			_emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
-			_loginService = loginService ?? throw new ArgumentNullException(nameof(loginService));
 			_razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
         }
 
 
 		[HttpGet("login")]
-		public async Task<IActionResult> Login(string returnUrl = null)
+		public IActionResult Login(string returnUrl = null)
 		{
 			ViewBag.NavigationZone = NavigationZone.Account;
 			ViewBag.ReturnUrl = returnUrl;
@@ -68,138 +57,9 @@ namespace MawMvcApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-			var vm = new LoginModel
-			{
-				ExternalSchemes = await GetExternalLoginSchemes()
-			};
+			var vm = new LoginModel();
 
 			return View(vm);
-		}
-
-
-		[HttpPost("login")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Login(LoginModel model, string returnUrl = null)
-        {
-			ViewBag.NavigationZone = NavigationZone.Account;
-			ViewBag.ReturnUrl = returnUrl;
-
-			model.ExternalSchemes = await GetExternalLoginSchemes();
-			model.WasAttempted = true;
-
-            if(!ModelState.IsValid)
-            {
-				LogValidationErrors();
-
-                return View(model);
-            }
-
-			var result = await _loginService.AuthenticateAsync(model.Username, model.Password, LOGIN_AREA_FORM);
-
-			_log.LogInformation("Login complete");
-
-			if(result == SignInRes.Success)
-			{
-				if(string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
-				{
-                    return RedirectToAction("Index", "Home");
-				}
-
-				return Redirect(returnUrl);
-			}
-			else
-			{
-				ModelState.AddModelError("Error", "Sorry, a user was not found with this username/password combination");
-			}
-
-            return View(model);
-        }
-
-
-		[HttpGet("external-login")]
-		public async Task<IActionResult> ExternalLogin(string provider, string returnUrl = null)
-		{
-			var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
-
-			if(!schemes.Any(x => string.Equals(x.Name, provider, StringComparison.OrdinalIgnoreCase)))
-			{
-				_log.LogError($"Invalid external authentication scheme specified: {provider}");
-				return RedirectToAction(nameof(Login));
-			}
-
-			var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { ReturnUrl = returnUrl });
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-
-        	return Challenge(properties, provider);
-		}
-
-
-		[HttpGet("external-login-callback")]
-		public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
-		{
-			ViewBag.NavigationZone = NavigationZone.Account;
-
-			if(!string.IsNullOrEmpty(remoteError))
-			{
-				_log.LogError($"Unable to authenticate externally: {remoteError}");
-				return View();
-			}
-
-			var extLoginInfo = await _signInManager.GetExternalLoginInfoAsync();
-
-			if(extLoginInfo == null)
-			{
-				_log.LogError("Unable to obtain external login info");
-				return View();
-			}
-
-			var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
-
-			if(!schemes.Any(x => string.Equals(x.Name, extLoginInfo.LoginProvider, StringComparison.OrdinalIgnoreCase)))
-			{
-				_log.LogError($"External provider {extLoginInfo.LoginProvider} is not supported");
-				return View();
-			}
-
-			var email = extLoginInfo.Principal?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email);
-
-			if(email == null)
-			{
-				_log.LogError($"Unable to obtain email from External Authentication Provider {extLoginInfo.LoginProvider}");
-				return View();
-			}
-
-			var user = await _userMgr.FindByEmailAsync(email.Value);
-
-            if (user != null)
-            {
-				if(user.IsExternalAuthEnabled(extLoginInfo.LoginProvider))
-				{
-					// clear out the external cookie
-					await _signInManager.SignOutAsync();
-
-					// now sign in the local user
-					await _signInManager.SignInAsync(user, false);
-					await _loginService.LogExternalLoginAttemptAsync(email.Value, extLoginInfo.LoginProvider, true);
-
-					_log.LogInformation($"User {user.Username} logged in with {extLoginInfo.LoginProvider} provider.");
-
-					if(string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
-					{
-						return RedirectToAction("Index", "Home");
-					}
-
-					return Redirect(returnUrl);
-				}
-				else
-				{
-					_log.LogError($"User {user.Username} unable to login with {extLoginInfo.LoginProvider} as they have not yet opted-in for this provider.");
-				}
-            }
-
-			await _loginService.LogExternalLoginAttemptAsync(email.Value, extLoginInfo.LoginProvider, false);
-
-			return View();
 		}
 
 
@@ -215,9 +75,9 @@ namespace MawMvcApp.Controllers
 
 		[Authorize]
 		[HttpGet("logout")]
-		public async Task<IActionResult> Logout()
+		public IActionResult Logout()
 		{
-			await _signInManager.SignOutAsync();
+			//await _signInManager.SignOutAsync();
 
 			return RedirectToAction("Index", "Home");
 		}
@@ -231,7 +91,7 @@ namespace MawMvcApp.Controllers
 			return View(new ForgotPasswordModel());
 		}
 
-
+/*
 		[HttpPost("forgot-password")]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
@@ -461,7 +321,7 @@ namespace MawMvcApp.Controllers
 
 			return View(model);
 		}
-
+*/
 
 		async Task<IEnumerable<SelectListItem>> GetStateSelectListItemsAsync()
 		{
@@ -485,24 +345,5 @@ namespace MawMvcApp.Controllers
                 Text = x.Name
             });
 		}
-
-
-		async Task<IEnumerable<ExternalLoginScheme>> GetExternalLoginSchemes()
-		{
-			var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
-
-			return schemes
-				.Select(x => new ExternalLoginScheme(x))
-				.OrderBy(x => x.ExternalAuth.DisplayName);
-		}
-
-
-		void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-        }
     }
 }

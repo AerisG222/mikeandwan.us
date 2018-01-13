@@ -47,20 +47,15 @@ namespace MawMvcApp.Controllers
         }
 
 
+		[Authorize]
 		[HttpGet("login")]
-		public IActionResult Login(string returnUrl = null)
+		public IActionResult Login()
 		{
-			ViewBag.NavigationZone = NavigationZone.Account;
-			ViewBag.ReturnUrl = returnUrl;
-
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-			var vm = new LoginModel();
-
-			return View(vm);
+			// q: why is the login method marked with the authorize attribute?
+			// a: because i am lazy.  this will trigger the oidc authentication flow
+			//    without any additional code.  if we get in this method then the user
+			//    is logged in, and we can just go to the homepage
+			return LocalRedirect("/");
 		}
 
 

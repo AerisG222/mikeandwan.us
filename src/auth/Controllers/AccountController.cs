@@ -131,7 +131,7 @@ namespace MawMvcApp.Controllers
 
 
 		[HttpGet("external-login")]
-		public async Task<IActionResult> ExternalLogin(string provider, string returnUrl)
+		public IActionResult ExternalLogin(string provider, string returnUrl)
 		{
 			//var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
 

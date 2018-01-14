@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="../Maw.Data/Maw.Data.csproj" />
     <ProjectReference Include="../Maw.Domain/Maw.Domain.csproj" />
+    <ProjectReference Include="..\Maw.Security\Maw.Security.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />

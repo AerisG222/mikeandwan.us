@@ -34,6 +34,7 @@ using IdentityModel;
 using System.Security.Claims;
 using System.Linq;
 using System.Threading.Tasks;
+using Maw.Security;
 
 
 namespace MawMvcApp
@@ -138,9 +139,7 @@ namespace MawMvcApp
                 .Services
                 .AddAuthorization(opts =>
                     {
-                        opts.AddPolicy(MawConstants.POLICY_VIEW_PHOTOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());
-                        opts.AddPolicy(MawConstants.POLICY_VIEW_VIDEOS, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_FRIEND, MawConstants.ROLE_ADMIN).Build());
-                        opts.AddPolicy(MawConstants.POLICY_ADMIN_SITE, new AuthorizationPolicyBuilder().RequireRole(MawConstants.ROLE_ADMIN).Build());
+                        MawPolicyBuilder.AddMawPolicies(opts);
                     })
                 .AddMvc();
 

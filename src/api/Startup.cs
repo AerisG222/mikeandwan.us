@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Maw.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,11 +33,16 @@ namespace MawApi
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(opts => {
-                    opts.Authority = "http://localhost:5000";
+                    opts.Authority = "https://localhost:5001";
                     opts.RequireHttpsMetadata = false;
 
                     opts.ApiName = "admin";
-                });
+                })
+                .Services
+                .AddAuthorization(opts =>
+                    {
+                        MawPolicyBuilder.AddMawPolicies(opts);
+                    });
         }
 
 

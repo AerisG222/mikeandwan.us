@@ -3,13 +3,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
-[Route("identity")]
-[Authorize]
-public class IdentityController : ControllerBase
+namespace MawApi.Controllers
 {
-    [HttpGet]
-    public IActionResult Get()
+    [Route("identity")]
+    [Authorize]
+    public class IdentityController : ControllerBase
     {
-        return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
+        }
     }
 }

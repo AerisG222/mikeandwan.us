@@ -3,30 +3,29 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Identity;
-using MawMvcApp.Filters;
-using MawMvcApp.ViewModels.Account;
+//using MawMvcApp.ViewModels.Account;
 using SignInRes = Microsoft.AspNetCore.Identity.SignInResult;
+using Maw.Security;
+using Maw.Security.Filters;
 
 
 namespace MawMvcApp.Controllers
 {
-	[Route("api/account")]
-    public class AccountApiController
-        : MawBaseController<AccountApiController>
+	[Route("account")]
+    public class AccountController
+        : ControllerBase
     {
 		const byte LOGIN_AREA_API = 2;
 
 		readonly ILoginService _loginService;
 
 
-		public AccountApiController(ILogger<AccountApiController> log,
-									ILoginService loginService)
-			: base(log)
+		public AccountController(ILoginService loginService)
         {
 			_loginService = loginService ?? throw new ArgumentNullException(nameof(loginService));
         }
 
-
+		/*
         [HttpPost("login")]
         public async Task<bool> Login(LoginModel model)
         {
@@ -34,7 +33,7 @@ namespace MawMvcApp.Controllers
 
 			return result == SignInRes.Success;
         }
-
+		*/
 
 		[HttpGet("get-xsrf-token")]
 		[TypeFilter(typeof(ApiAntiforgeryActionFilter))]

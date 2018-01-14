@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
 
 
-namespace MawMvcApp.Filters
+namespace Maw.Security.Filters
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public class ApiAntiforgeryActionFilter

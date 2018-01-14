@@ -5,31 +5,22 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Videos;
-using MawMvcApp.ViewModels;
+using MawApi.ViewModels;
+using Maw.Security;
+using Maw.Security.Filters;
 
 
-namespace MawMvcApp.Controllers
+namespace MawApi.Controllers
 {
-	[Authorize(MawConstants.POLICY_VIEW_VIDEOS)]
-    [Route("api/videos")]
-    public class VideosApiController 
-        : MawBaseController<VideosApiController>
+	[Authorize(Policy.ViewVideos)]
+    [Route("videos")]
+    public class VideosController
+        : ControllerBase
     {
         readonly IVideoService _svc;
 
 
-        bool IsAdmin
-        {
-            get
-            {
-                return User.IsInRole(MawConstants.ROLE_ADMIN);
-            }
-        }
-
-
-		public VideosApiController(ILogger<VideosApiController> log, 
-                                   IVideoService videoService)
-			: base(log)
+		public VideosController(IVideoService videoService)
         {
 			_svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
         }
@@ -38,21 +29,21 @@ namespace MawMvcApp.Controllers
         [HttpGet("getYears")]
         public async Task<IEnumerable<short>> GetYears()
         {
-            return await _svc.GetYearsAsync(IsAdmin);
+            return await _svc.GetYearsAsync(Role.IsAdmin(User));
         }
 
 
         [HttpGet("getCategoriesForYear/{year:int}")]
         public async Task<IEnumerable<Category>> GetCategoriesForYear(short year)
         {
-            return await _svc.GetCategoriesAsync(year, IsAdmin);
+            return await _svc.GetCategoriesAsync(year, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getVideosByCategory/{categoryId:int}")]
         public async Task<IEnumerable<Video>> GetVideosByCategory(short categoryId)
         {
-            return await _svc.GetVideosInCategoryAsync(categoryId, IsAdmin);
+            return await _svc.GetVideosInCategoryAsync(categoryId, Role.IsAdmin(User));
         }
     }
 }

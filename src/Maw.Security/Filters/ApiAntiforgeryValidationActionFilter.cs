@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Antiforgery;
 
 
-namespace MawMvcApp.Filters
+namespace Maw.Security.Filters
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class ApiAntiforgeryValidationActionFilter 
+    public class ApiAntiforgeryValidationActionFilter
         : ActionFilterAttribute
     {
         readonly IAntiforgery _antiforgery;

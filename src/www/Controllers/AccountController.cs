@@ -19,6 +19,7 @@ using Mvc.RenderViewToString;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
+
 namespace MawMvcApp.Controllers
 {
 	[Route("account")]

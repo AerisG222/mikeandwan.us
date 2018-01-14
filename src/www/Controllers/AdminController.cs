@@ -19,11 +19,12 @@ using MawMvcApp.ViewModels.Admin;
 using MawMvcApp.ViewModels.Email;
 using MawMvcApp.ViewModels.Navigation;
 using Mvc.RenderViewToString;
+using Maw.Security;
 
 
 namespace MawMvcApp.Controllers
 {
-	[Authorize(MawConstants.POLICY_ADMIN_SITE)]
+	[Authorize(Policy.AdminSite)]
 	[Route("admin")]
     public class AdminController
         : MawBaseController<AdminController>

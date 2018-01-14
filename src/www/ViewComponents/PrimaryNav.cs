@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.Navigation;
-
+using Maw.Security;
 
 namespace MawMvcApp.ViewComponents
 {
@@ -31,9 +31,9 @@ namespace MawMvcApp.ViewComponents
 
             model.ActiveNavigationZone = activeZone;
 
-            model.AuthorizedForPhotos = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawConstants.POLICY_VIEW_PHOTOS)).Succeeded;
-            model.AuthorizedForVideos = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawConstants.POLICY_VIEW_VIDEOS)).Succeeded;
-            model.AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawConstants.POLICY_ADMIN_SITE)).Succeeded;
+            model.AuthorizedForPhotos = (await _authzService.AuthorizeAsync(HttpContext.User, null, Policy.ViewPhotos)).Succeeded;
+            model.AuthorizedForVideos = (await _authzService.AuthorizeAsync(HttpContext.User, null, Policy.ViewVideos)).Succeeded;
+            model.AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, Policy.AdminSite)).Succeeded;
 
             return View(model);
         }

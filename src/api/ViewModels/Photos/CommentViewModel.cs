@@ -1,4 +1,4 @@
-namespace MawMvcApp.ViewModels.Photos
+namespace MawApi.ViewModels.Photos
 {
 	public class CommentViewModel
 	{

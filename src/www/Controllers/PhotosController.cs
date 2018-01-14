@@ -7,14 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Photos;
-using MawMvcApp.Filters;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.Navigation;
+using Maw.Security;
+using Maw.Security.Filters;
 
 
 namespace MawMvcApp.Controllers
 {
-	[Authorize(MawConstants.POLICY_VIEW_PHOTOS)]
+	[Authorize(Policy.ViewPhotos)]
     [Route("photos")]
     public class PhotosController
         : MawBaseController<PhotosController>
@@ -75,7 +76,7 @@ namespace MawMvcApp.Controllers
         [HttpGet("GetMobileThumbnail/{id:int}")]
         public async Task<IActionResult> GetMobileThumbnail(short id)
 		{
-            var category = await _svc.GetCategoryAsync(id, User.IsInRole(MawConstants.ROLE_ADMIN));
+            var category = await _svc.GetCategoryAsync(id, Role.IsAdmin(User));
 			var thumbInfo = category.TeaserPhotoInfo;
             var croppedImageStream = _imageCropper.CropImage(thumbInfo.Path, MOBILE_THUMB_SIZE);
 
@@ -91,7 +92,7 @@ namespace MawMvcApp.Controllers
         [HttpGet("download-category/{id:int}")]
         public async Task<IActionResult> DownloadCategory(short id)
         {
-            var photos = await _svc.GetPhotosForCategoryAsync(id, User.IsInRole(MawConstants.ROLE_ADMIN));
+            var photos = await _svc.GetPhotosForCategoryAsync(id, Role.IsAdmin(User));
             var stream = _photoZipper.Zip(photos);
 
             if(stream == null)

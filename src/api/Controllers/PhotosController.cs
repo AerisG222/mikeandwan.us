@@ -6,34 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Photos;
 using Maw.Domain.Photos.ThreeD;
-using MawMvcApp.ViewModels;
-using MawMvcApp.ViewModels.Photos;
-using MawMvcApp.ViewModels.Photos.Stats;
-using MawMvcApp.Filters;
+using MawApi.ViewModels;
+using MawApi.ViewModels.Photos;
+using MawApi.ViewModels.Photos.Stats;
+using Maw.Security;
+using Maw.Security.Filters;
 
 
-namespace MawMvcApp.Controllers
+namespace MawApi.Controllers
 {
-    [Authorize(MawConstants.POLICY_VIEW_PHOTOS)]
-    [Route("api/photos")]
-    public class PhotoApiController
-        : MawBaseController<PhotoApiController>
+    [Authorize(Policy.ViewPhotos)]
+    [Route("photos")]
+    public class PhotosController
+        : ControllerBase
     {
         readonly IPhotoService _svc;
 
 
-        bool IsAdmin
-        {
-            get
-            {
-                return User.IsInRole(MawConstants.ROLE_ADMIN);
-            }
-        }
-
-
-        public PhotoApiController(ILogger<PhotoApiController> log,
-                                  IPhotoService photoService)
-            : base(log)
+        public PhotosController(IPhotoService photoService)
         {
             _svc = photoService ?? throw new ArgumentNullException(nameof(photoService));
         }
@@ -49,84 +39,84 @@ namespace MawMvcApp.Controllers
         [HttpGet("getCategory/{categoryId:int}")]
         public async Task<Category> GetCategory(short categoryId)
         {
-            return await _svc.GetCategoryAsync(categoryId, IsAdmin);
+            return await _svc.GetCategoryAsync(categoryId, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getRandomPhoto")]
         public async Task<PhotoAndCategory> GetRandomPhoto()
         {
-            return await _svc.GetRandomPhotoAsync(IsAdmin);
+            return await _svc.GetRandomPhotoAsync(Role.IsAdmin(User));
         }
 
 
         [HttpGet("getRecentCategories/{sinceId:int}")]
         public async Task<IEnumerable<Category>> GetRecentCategories(short sinceId)
         {
-            return await _svc.GetRecentCategoriesAsync(sinceId, IsAdmin);
+            return await _svc.GetRecentCategoriesAsync(sinceId, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getCategoryCount")]
         public async Task<int> GetCategoryCount()
         {
-            return await _svc.GetCategoryCountAsync(IsAdmin);
+            return await _svc.GetCategoryCountAsync(Role.IsAdmin(User));
         }
 
 
         [HttpGet("getCategoriesForYear/{year:int}")]
         public async Task<IEnumerable<Category>> GetCategoriesForYear(short year)
         {
-            return await _svc.GetCategoriesForYearAsync(year, IsAdmin);
+            return await _svc.GetCategoriesForYearAsync(year, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosByCategory/{categoryId:int}")]
         public async Task<IEnumerable<Photo>> GetPhotosByCategory(short categoryId)
         {
-            return await _svc.GetPhotosForCategoryAsync(categoryId, IsAdmin);
+            return await _svc.GetPhotosForCategoryAsync(categoryId, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosByCommentDate/{newestFirst:alpha}")]
         public async Task<IEnumerable<Photo>> GetPhotosByCommentDate(bool newestFirst)
         {
-            return await _svc.GetPhotosByCommentDateAsync(newestFirst, IsAdmin);
+            return await _svc.GetPhotosByCommentDateAsync(newestFirst, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosByUserCommentDate/{newestFirst:alpha}")]
         public async Task<IEnumerable<Photo>> GetPhotosByUserCommentDate(bool newestFirst)
         {
-            return await _svc.GetPhotosByUserCommentDateAsync(User.Identity.Name, newestFirst, IsAdmin);
+            return await _svc.GetPhotosByUserCommentDateAsync(User.Identity.Name, newestFirst, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosByCommentCount/{greatestFirst:alpha}")]
         public async Task<IEnumerable<Photo>> GetPhotosByCommentCount(bool greatestFirst)
         {
-            return await _svc.GetPhotosByCommentCountAsync(greatestFirst, IsAdmin);
+            return await _svc.GetPhotosByCommentCountAsync(greatestFirst, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosByAverageRating/{highestFirst:alpha}")]
         public async Task<IEnumerable<Photo>> GetPhotosByAverageRating(bool highestFirst)
         {
-            return await _svc.GetPhotosByAverageUserRatingAsync(highestFirst, IsAdmin);
+            return await _svc.GetPhotosByAverageUserRatingAsync(highestFirst, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosByUserRating/{highestFirst:alpha}")]
         public async Task<IEnumerable<Photo>> GetPhotosByUserRating(bool highestFirst)
         {
-            return await _svc.GetPhotosByUserRatingAsync(User.Identity.Name, highestFirst, IsAdmin);
+            return await _svc.GetPhotosByUserRatingAsync(User.Identity.Name, highestFirst, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotoExifData/{photoId:int}")]
         public async Task<Detail> GetPhotoExifData(int photoId)
         {
-            return await _svc.GetDetailForPhotoAsync(photoId, IsAdmin);
+            return await _svc.GetDetailForPhotoAsync(photoId, Role.IsAdmin(User));
         }
 
 
@@ -177,35 +167,35 @@ namespace MawMvcApp.Controllers
         [HttpGet("getPhotosAndCategoriesByCommentDate/{newestFirst:alpha}")]
         public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentDate(bool newestFirst)
         {
-            return await _svc.GetPhotosAndCategoriesByCommentDateAsync(newestFirst, IsAdmin);
+            return await _svc.GetPhotosAndCategoriesByCommentDateAsync(newestFirst, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosAndCategoriesByUserCommentDate/{newestFirst:alpha}")]
         public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserCommentDate(bool newestFirst)
         {
-            return await _svc.GetPhotosAndCategoriesByUserCommentDateAsync(User.Identity.Name, newestFirst, IsAdmin);
+            return await _svc.GetPhotosAndCategoriesByUserCommentDateAsync(User.Identity.Name, newestFirst, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosAndCategoriesByCommentCount/{greatestFirst:alpha}")]
         public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentCount(bool greatestFirst)
         {
-            return await _svc.GetPhotosAndCategoriesByCommentCountAsync(greatestFirst, IsAdmin);
+            return await _svc.GetPhotosAndCategoriesByCommentCountAsync(greatestFirst, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosAndCategoriesByAverageRating/{highestFirst:alpha}")]
         public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByAverageRating(bool highestFirst)
         {
-            return await _svc.GetPhotosAndCategoriesByAverageUserRatingAsync(highestFirst, IsAdmin);
+            return await _svc.GetPhotosAndCategoriesByAverageUserRatingAsync(highestFirst, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosAndCategoriesByUserRating/{highestFirst:alpha}")]
         public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserRating(bool highestFirst)
         {
-            return await _svc.GetPhotosAndCategoriesByUserRatingAsync(User.Identity.Name, highestFirst, IsAdmin);
+            return await _svc.GetPhotosAndCategoriesByUserRatingAsync(User.Identity.Name, highestFirst, Role.IsAdmin(User));
         }
 
 
@@ -215,17 +205,17 @@ namespace MawMvcApp.Controllers
             short year = 0;
             YearStats currYearStat = null;
             var yearStats = new List<YearStats>();
-            var stats = await _svc.GetStats(IsAdmin);
-            
+            var stats = await _svc.GetStats(Role.IsAdmin(User));
+
             foreach(var stat in stats)
             {
                 if(year != stat.Year)
                 {
                     year = stat.Year;
 
-                    currYearStat = new YearStats 
-                    { 
-                        Year = year 
+                    currYearStat = new YearStats
+                    {
+                        Year = year
                     };
 
                     yearStats.Add(currYearStat);

@@ -1,4 +1,4 @@
-namespace MawMvcApp.ViewModels.Photos.Stats
+namespace MawApi.ViewModels.Photos.Stats
 {
 	public class CategoryStats
 	{

@@ -6,15 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Videos;
 using Maw.Domain.Photos;
-using MawMvcApp.Filters;
 using MawMvcApp.ViewModels.Navigation;
 using MawMvcApp.ViewModels;
 using NMagickWand;
+using Maw.Security;
+using Maw.Security.Filters;
 
 
 namespace MawMvcApp.Controllers
 {
-	[Authorize(MawConstants.POLICY_VIEW_VIDEOS)]
+	[Authorize(Policy.ViewVideos)]
     [Route("videos")]
     public class VideosController
         : MawBaseController<VideosController>
@@ -50,7 +51,7 @@ namespace MawMvcApp.Controllers
         [HttpGet("GetMobileCategoryThumbnail/{id:int}")]
         public async Task<IActionResult> GetMobileCategoryThumbnail(short id)
         {
-            var category = await _svc.GetCategoryAsync(id, User.IsInRole(MawConstants.ROLE_ADMIN));
+            var category = await _svc.GetCategoryAsync(id, Role.IsAdmin(User));
 
             return GetScaledImage(category.TeaserThumbnail.Path);
         }
@@ -59,7 +60,7 @@ namespace MawMvcApp.Controllers
         [HttpGet("GetMobileVideoThumbnail/{id:int}")]
         public async Task<IActionResult> GetMobileVideoThumbnail(short id)
         {
-            var video = await _svc.GetVideoAsync(id, User.IsInRole (MawConstants.ROLE_ADMIN));
+            var video = await _svc.GetVideoAsync(id, Role.IsAdmin(User));
 
             return GetScaledImage(video.ThumbnailVideo.Path);
         }

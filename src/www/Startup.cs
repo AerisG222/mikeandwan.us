@@ -104,10 +104,7 @@ namespace MawMvcApp
                     opts.Scope.Add("offline_access");
 
                     // apis
-                    opts.Scope.Add("admin");
-                    opts.Scope.Add("blog");
-                    opts.Scope.Add("photo");
-                    opts.Scope.Add("video");
+                    opts.Scope.Add("maw_api");
 
                     // identity resources
                     opts.Scope.Add(JwtClaimTypes.Role);

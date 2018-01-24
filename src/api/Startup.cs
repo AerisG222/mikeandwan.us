@@ -43,7 +43,7 @@ namespace MawApi
                         opts.Authority = "https://localhost:5001";
                         opts.RequireHttpsMetadata = false;
 
-                        opts.ApiName = "video";
+                        opts.ApiName = "maw_api";
 
                         opts.NameClaimType = JwtClaimTypes.Name;
                         opts.RoleClaimType = JwtClaimTypes.Role;

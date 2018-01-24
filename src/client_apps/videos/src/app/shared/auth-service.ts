@@ -19,7 +19,7 @@ export class AuthService {
             client_id: 'maw_videos',
             redirect_uri: 'https://localhost:5021/videos/signin-oidc',
             response_type: 'id_token token',
-            scope: 'openid video role',
+            scope: 'openid maw_api role',
             loadUserInfo: true,
             post_logout_redirect_uri : 'https://localhost:5021/'
         };

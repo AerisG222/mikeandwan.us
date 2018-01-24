@@ -12,10 +12,9 @@ namespace MawAuth
         {
             return new List<ApiResource>
             {
-                new ApiResource("admin", "Administration API"),
-                new ApiResource("blog", "Blog API"),
-                new ApiResource("photo", "Photo API"),
-                new ApiResource("video", "Video API", new [] { JwtClaimTypes.Name, JwtClaimTypes.Role })
+                new ApiResource("maw_api",
+                                "APIs to access photo and video data within mikeandwan.us",
+                                new [] { JwtClaimTypes.Name, JwtClaimTypes.Role })
             };
         }
 
@@ -62,7 +61,38 @@ namespace MawAuth
                         IdentityServerConstants.StandardScopes.OpenId,
 
                         // apis
-                        "video",
+                        "maw_api",
+
+                        // identity resources
+                        JwtClaimTypes.Role
+                    }
+                },
+                new Client
+                {
+                    ClientId = "maw_photos",
+                    ClientName = "mikeandwan.us Photo Application",
+                    RequireConsent = false,
+                    //AccessTokenLifetime = 600, // 10 minutes, default 60 minutes
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris = new List<string>
+                    {
+                        "https://localhost:5021/photos/signin-oidc"
+                    },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        "https://localhost:5021/"
+                    },
+                    AllowedCorsOrigins = new List<string>
+                    {
+                        "https://localhost:5021"
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+
+                        // apis
+                        "maw_api",
 
                         // identity resources
                         JwtClaimTypes.Role
@@ -93,10 +123,7 @@ namespace MawAuth
                         IdentityServerConstants.StandardScopes.Email,
 
                         // apis
-                        "admin",
-                        "blog",
-                        "photo",
-                        "video",
+                        "maw_api",
 
                         // identity resources
                         JwtClaimTypes.Role

@@ -12,10 +12,10 @@ namespace MawAuth
         {
             return new List<ApiResource>
             {
-                new ApiResource("admin", "Administration APIs"),
-                new ApiResource("blog", "Blog APIs"),
-                new ApiResource("photo", "Photo APIs"),
-                new ApiResource("video", "Video APIs")
+                new ApiResource("admin", "Administration API"),
+                new ApiResource("blog", "Blog API"),
+                new ApiResource("photo", "Photo API"),
+                new ApiResource("video", "Video API", new [] { JwtClaimTypes.Name, JwtClaimTypes.Role })
             };
         }
 
@@ -27,7 +27,7 @@ namespace MawAuth
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
-                new IdentityResource("roles", "mikeandwan.us Roles", new[] { JwtClaimTypes.Role }),
+                new IdentityResource(JwtClaimTypes.Role, "mikeandwan.us Roles", new[] { JwtClaimTypes.Role }),
             };
         }
 
@@ -37,6 +37,37 @@ namespace MawAuth
         {
             return new List<Client>
             {
+                new Client
+                {
+                    ClientId = "maw_videos",
+                    ClientName = "mikeandwan.us Video Application",
+                    RequireConsent = false,
+                    //AccessTokenLifetime = 600, // 10 minutes, default 60 minutes
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris = new List<string>
+                    {
+                        "https://localhost:5021/videos/signin-oidc"
+                    },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        "https://localhost:5021/"
+                    },
+                    AllowedCorsOrigins = new List<string>
+                    {
+                        "https://localhost:5021"
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+
+                        // apis
+                        "video",
+
+                        // identity resources
+                        JwtClaimTypes.Role
+                    }
+                },
                 new Client
                 {
                     ClientId = "www.mikeandwan.us",
@@ -68,7 +99,7 @@ namespace MawAuth
                         "video",
 
                         // identity resources
-                        "roles"
+                        JwtClaimTypes.Role
                     },
                     AllowOfflineAccess = true
                 }

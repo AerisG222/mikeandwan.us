@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Maw.Security.Filters
 {
+    // TODO: this can go away once we only use bearer auth as there is no cookie that will automatically be sent / provide access
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public class ApiAntiforgeryActionFilter
         : ActionFilterAttribute

@@ -3,10 +3,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
+import { AuthService } from './shared/auth-service';
+import { AuthInterceptor } from './shared/auth-interceptor';
 import { BreadcrumbListComponent } from './breadcrumb-list/breadcrumb-list.component';
 import { BreadcrumbService } from './shared/breadcrumb.service';
 import { CategoryCardComponent } from './category-card/category-card.component';
@@ -24,6 +27,7 @@ import { VideoCardGridComponent } from './video-card-grid/video-card-grid.compon
 import { VideoDataService } from './shared/video-data.service';
 import { VideoNavigationService } from './shared/video-navigation.service';
 import { VideoStateService } from './shared/video-state.service';
+import { SignInComponent } from './sign-in/sign-in.component';
 
 @NgModule({
     imports: [
@@ -32,6 +36,7 @@ import { VideoStateService } from './shared/video-state.service';
         HttpClientModule,
         NgbModule.forRoot(),
         RouterModule.forRoot([
+            { path: 'signin-oidc',     component: SignInComponent },
             { path: '',                component: YearListComponent },
             { path: ':year',           component: CategoryListComponent },
             { path: ':year/:category', component: VideoListComponent },
@@ -50,7 +55,8 @@ import { VideoStateService } from './shared/video-state.service';
         VideoCardComponent,
         VideoCardGridComponent,
         VideoListComponent,
-        YearListComponent
+        YearListComponent,
+        SignInComponent
     ],
     providers: [
         BreadcrumbService,
@@ -58,7 +64,13 @@ import { VideoStateService } from './shared/video-state.service';
         SizeService,
         VideoDataService,
         VideoNavigationService,
-        VideoStateService
+        VideoStateService,
+        AuthService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        }
     ],
     entryComponents: [
         PreferenceDialogComponent

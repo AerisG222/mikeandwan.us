@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityModel;
+using Maw.Data;
+using Maw.Domain;
 using Maw.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -27,29 +30,43 @@ namespace MawApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvcCore()
-                .AddAuthorization()
-                .AddJsonFormatters();
+            services
+                .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
+                .AddMawDataServices(_config["Environment:DbConnectionString"])
+                .AddMawDomainServices()
+                .AddMvcCore()
+                    .AddAuthorization()
+                    .AddJsonFormatters()
+                    .Services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddIdentityServerAuthentication(opts => {
+                        opts.Authority = "https://localhost:5001";
+                        opts.RequireHttpsMetadata = false;
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddIdentityServerAuthentication(opts => {
-                    opts.Authority = "https://localhost:5001";
-                    opts.RequireHttpsMetadata = false;
+                        opts.ApiName = "video";
 
-                    opts.ApiName = "admin";
-                })
-                .Services
-                .AddAuthorization(opts =>
-                    {
+                        opts.NameClaimType = JwtClaimTypes.Name;
+                        opts.RoleClaimType = JwtClaimTypes.Role;
+                    })
+                    .Services
+                .AddAuthorization(opts => {
                         MawPolicyBuilder.AddMawPolicies(opts);
+                    })
+                .AddCors(opts => {
+                    // this defines a CORS policy called "default"
+                    opts.AddPolicy("default", policy => {
+                        policy.WithOrigins("https://localhost:5021")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
                     });
+                });
         }
 
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors("default");
             app.UseAuthentication();
-
             app.UseMvc();
         }
     }

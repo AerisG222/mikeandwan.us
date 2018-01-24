@@ -26,7 +26,7 @@ export class VideoNavigationService {
             const parts = snapshot.url.toLowerCase().split('/').filter(el => el.length !== 0);
             const crumbs = [];
 
-            if (parts.length > 0) {
+            if (parts.length > 0 && !parts[0].startsWith('signin-oidc')) {
                 crumbs.push(new Breadcrumb(parts[0], [ '/' ]));
 
                 if (parts.length > 1) {

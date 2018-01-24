@@ -12,17 +12,28 @@ export class VideoDataService {
     }
 
     getYears(): Observable<Array<number>> {
+        const url = this.getAbsoluteUrl('videos/getYears');
+
         return this._http
-            .get<Array<number>>('/api/videos/getYears');
+            .get<Array<number>>(url);
     }
 
     getCategoriesForYear(year: number): Observable<Array<ICategory>> {
+        const url = this.getAbsoluteUrl(`videos/getCategoriesForYear/${year}`);
+
         return this._http
-            .get<Array<ICategory>>(`/api/videos/getCategoriesForYear/${year}`);
+            .get<Array<ICategory>>(url);
     }
 
     getVideosForCategory(categoryId: number): Observable<Array<IVideo>> {
+        const url = this.getAbsoluteUrl(`videos/getVideosByCategory/${categoryId}`);
+
         return this._http
-            .get<Array<IVideo>>(`/api/videos/getVideosByCategory/${categoryId}`);
+            .get<Array<IVideo>>(url);
+    }
+
+
+    getAbsoluteUrl(relativeUrl: string) {
+        return `https://localhost:5011/${relativeUrl}`;
     }
 }

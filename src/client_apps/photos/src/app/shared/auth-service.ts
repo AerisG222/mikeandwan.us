@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { tap, shareReplay } from 'rxjs/operators';
 import 'rxjs/add/observable/from';
 
-import * as moment from 'moment';
 import * as Oidc from 'oidc-client';
 
 @Injectable()

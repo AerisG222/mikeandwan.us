@@ -5,10 +5,14 @@ import { IPhoto } from '../models/iphoto';
 //       makes it easier to spot real errors introduced in the code.  once tsc understands this,
 //       remove the casts below.
 export class DataService {
+    readonly API_BASE_URL = 'https://localhost:5011';
+
     reqOpts = { method: 'get', credentials: 'include' };
 
     getCategories(): Promise<Array<ICategory>> {
-        return (<any>window).fetch('/api/photos/getAllCategories3D', this.reqOpts)
+        const url = `${this.API_BASE_URL}/photos/getAllCategories3D`;
+
+        return (<any>window).fetch(url, this.reqOpts)
             .then(this.status)
             .then(this.json)
             .then(data => data)
@@ -18,7 +22,9 @@ export class DataService {
     }
 
     getPhotos(categoryId: number): Promise<Array<IPhoto>> {
-        return (<any>window).fetch(`/api/photos/getPhotos3D/${categoryId}`, this.reqOpts)
+        const url = `${this.API_BASE_URL}/photos/getPhotos3D/${categoryId}`;
+
+        return (<any>window).fetch(url, this.reqOpts)
             .then(this.status)
             .then(this.json)
             .then(data => data)

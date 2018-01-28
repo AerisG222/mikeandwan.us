@@ -4,6 +4,8 @@
 import * as d3 from 'd3';
 
 export class PhotoStats {
+    readonly API_BASE_URL = 'https://localhost:5011';
+
     width = 960;
     height = 700;
     totalCount = 0;
@@ -221,7 +223,9 @@ export class PhotoStats {
         this.updatePhotoCount(0);
         this.initSunburst();
 
-        d3.json('/api/photos/getStats', (error, root: any) => {
+        const url = `${this.API_BASE_URL}/photos/getStats`;
+
+        d3.json(url, (error, root: any) => {
             if (error) throw error;
 
             root = { name: 'All Photos', categoryStats: root };

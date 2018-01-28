@@ -64,7 +64,7 @@ namespace MawMvcApp.Controllers
         }
 
 
-        [HttpGet("stats")]
+        [HttpGet("stats/{*extra}")]
         public IActionResult Stats()
         {
             ViewBag.NavigationZone = NavigationZone.Photos;

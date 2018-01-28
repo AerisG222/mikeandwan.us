@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
+import { AuthService } from './shared/auth-service';
+import { AuthInterceptor } from './shared/auth-interceptor';
 import { BreadcrumbListComponent } from './breadcrumb-list/breadcrumb-list.component';
 import { BreadcrumbService } from './shared/breadcrumb.service';
 import { CategoryLinkComponent } from './category-link/category-link.component';
@@ -40,6 +42,7 @@ import { CategoryCardComponent } from './category-card/category-card.component';
 import { PhotoCardComponent } from './photo-card/photo-card.component';
 import { PhotoCardGridComponent } from './photo-card-grid/photo-card-grid.component';
 import { ToolbarButtonComponent } from './toolbar-button/toolbar-button.component';
+import { SignInComponent } from './sign-in/sign-in.component';
 
 // TODO: the odd constants for data below are to satisfy an AOT requirement - is there a better way?
 //  SEE: https://github.com/angular/angular/issues/10789
@@ -51,6 +54,7 @@ import { ToolbarButtonComponent } from './toolbar-button/toolbar-button.componen
         NgbModule.forRoot(),
         RouterModule.forRoot([
             { path: '',                     component: ModeComponent,         data: { animation: 'home' } },
+            { path: 'signin-oidc',          component: SignInComponent },
             { path: 'random',               component: PhotoListComponent,    data: { animation: 'random', mode: RouteMode.Random } },
             { path: 'year/:year',           component: CategoryListComponent, data: { animation: 'years' } },
             { path: 'year/:year/:category', component: PhotoListComponent,    data: { animation: 'categories', mode: RouteMode.Category } },
@@ -86,7 +90,8 @@ import { ToolbarButtonComponent } from './toolbar-button/toolbar-button.componen
         RatingViewComponent,
         SaveDialogComponent,
         SlideshowButtonComponent,
-        ToolbarButtonComponent
+        ToolbarButtonComponent,
+        SignInComponent
     ],
     providers: [
         BreadcrumbService,
@@ -95,7 +100,13 @@ import { ToolbarButtonComponent } from './toolbar-button/toolbar-button.componen
         PhotoDataService,
         PhotoSourceFactory,
         PhotoStateService,
-        PhotoNavigationService
+        PhotoNavigationService,
+        AuthService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        }
     ],
     entryComponents: [
         HelpDialogComponent,

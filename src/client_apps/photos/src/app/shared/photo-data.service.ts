@@ -18,74 +18,102 @@ export class PhotoDataService {
     }
 
     getRandomPhoto(): Observable<IPhotoAndCategory> {
+        const url = this.getAbsoluteUrl('photos/getRandomPhoto');
+
         return this._http
-            .get<IPhotoAndCategory>('/api/photos/getRandomPhoto');
+            .get<IPhotoAndCategory>(url);
     }
 
     getYears(): Observable<Array<number>> {
+        const url = this.getAbsoluteUrl('photos/getPhotoYears');
+
         return this._http
-            .get<Array<number>>('/api/photos/getPhotoYears');
+            .get<Array<number>>(url);
     }
 
     getCategory(categoryId: number): Observable<ICategory> {
+        const url = this.getAbsoluteUrl(`photos/getCategory/${categoryId}`);
+
         return this._http
-            .get<ICategory>(`/api/photos/getCategory/${categoryId}`);
+            .get<ICategory>(url);
     }
 
     getCategoriesForYear(year: number): Observable<Array<ICategory>> {
+        const url = this.getAbsoluteUrl(`photos/getCategoriesForYear/${year}`);
+
         return this._http
-            .get<Array<ICategory>>(`/api/photos/getCategoriesForYear/${year}`);
+            .get<Array<ICategory>>(url);
     }
 
     getPhotosByCategory(categoryId: number): Observable<Array<IPhoto>> {
+        const url = this.getAbsoluteUrl(`photos/getPhotosByCategory/${categoryId}`);
+
         return this._http
-            .get<Array<IPhoto>>(`/api/photos/getPhotosByCategory/${categoryId}`);
+            .get<Array<IPhoto>>(url);
     }
 
     getPhotosByCommentDate(newestFirst: boolean): Observable<Array<IPhotoAndCategory>> {
+        const url = this.getAbsoluteUrl(`photos/getPhotosAndCategoriesByCommentDate/${newestFirst}`);
+
         return this._http
-            .get<Array<IPhotoAndCategory>>(`/api/photos/getPhotosAndCategoriesByCommentDate/${newestFirst}`);
+            .get<Array<IPhotoAndCategory>>(url);
     }
 
     getPhotosByUserCommentDate(newestFirst: boolean): Observable<Array<IPhotoAndCategory>> {
+        const url = this.getAbsoluteUrl(`photos/getPhotosAndCategoriesByUserCommentDate/${newestFirst}`);
+
         return this._http
-            .get<Array<IPhotoAndCategory>>(`/api/photos/getPhotosAndCategoriesByUserCommentDate/${newestFirst}`);
+            .get<Array<IPhotoAndCategory>>(url);
     }
 
     getPhotosByCommentCount(greatestFirst: boolean): Observable<Array<IPhotoAndCategory>> {
+        const url = this.getAbsoluteUrl(`photos/getPhotosAndCategoriesByCommentCount/${greatestFirst}`);
+
         return this._http
-            .get<Array<IPhotoAndCategory>>(`/api/photos/getPhotosAndCategoriesByCommentCount/${greatestFirst}`);
+            .get<Array<IPhotoAndCategory>>(url);
     }
 
     getPhotosByAverageRating(highestFirst: boolean): Observable<Array<IPhotoAndCategory>> {
+        const url = this.getAbsoluteUrl(`photos/getPhotosAndCategoriesByAverageRating/${highestFirst}`);
+
         return this._http
-            .get<Array<IPhotoAndCategory>>(`/api/photos/getPhotosAndCategoriesByAverageRating/${highestFirst}`);
+            .get<Array<IPhotoAndCategory>>(url);
     }
 
     getPhotosByUserRating(highestFirst: boolean): Observable<Array<IPhotoAndCategory>> {
+        const url = this.getAbsoluteUrl(`photos/getPhotosAndCategoriesByUserRating/${highestFirst}`);
+
         return this._http
-            .get<Array<IPhotoAndCategory>>(`/api/photos/getPhotosAndCategoriesByUserRating/${highestFirst}`);
+            .get<Array<IPhotoAndCategory>>(url);
     }
 
     getPhotoExifData(photoId: number): Observable<IExifDetail> {
+        const url = this.getAbsoluteUrl(`photos/getPhotoExifData/${photoId}`);
+
         return this._http
-            .get<IExifDetail>(`/api/photos/getPhotoExifData/${photoId}`);
+            .get<IExifDetail>(url);
     }
 
     getPhotoRatingData(photoId: number): Observable<IRating> {
+        const url = this.getAbsoluteUrl(`photos/getRatingForPhoto/${photoId}`);
+
         return this._http
-            .get<IRating>(`/api/photos/getRatingForPhoto/${photoId}`);
+            .get<IRating>(url);
     }
 
     ratePhoto(photoId: number, rating: number): Observable<number> {
+        const url = this.getAbsoluteUrl('photos/ratePhoto');
+
         return this._http
-            .post<number>('/api/photos/ratePhoto', { photoId: photoId, rating: rating });
+            .post<number>(url, { photoId: photoId, rating: rating });
     }
 
     getCommentsForPhoto(photoId: number): Observable<Array<IComment>> {
+        const url = this.getAbsoluteUrl(`photos/getCommentsForPhoto/${photoId}`);
+
         return Observable.create((observer: Observer<Array<IComment>>) => {
             this._http
-                .get<Array<IComment>>(`/api/photos/getCommentsForPhoto/${photoId}`)
+                .get<Array<IComment>>(url)
                 .subscribe(comments => {
                     // deal with dates
                     const c = comments.map((x: IComment) => {
@@ -100,7 +128,13 @@ export class PhotoDataService {
     }
 
     addCommentForPhoto(photoId: number, comment: string): Observable<any> {
+        const url = this.getAbsoluteUrl('photos/addCommentForPhoto');
+
         return this._http
-            .post('/api/photos/addCommentForPhoto', { photoId: photoId, comment: comment });
+            .post(url, { photoId: photoId, comment: comment });
+    }
+
+    getAbsoluteUrl(relativeUrl: string) {
+        return `https://localhost:5011/${relativeUrl}`;
     }
 }

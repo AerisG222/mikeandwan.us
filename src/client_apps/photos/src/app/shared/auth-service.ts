@@ -9,15 +9,15 @@ import * as Oidc from 'oidc-client';
 
 @Injectable()
 export class AuthService {
-    private readonly TOKEN_NAME = 'maw_videos_token';
+    private readonly TOKEN_NAME = 'maw_photos_token';
     private _mgr: Oidc.UserManager;
 
     constructor() {
         // TODO: config and/or manager to come from di
         const config = {
             authority: 'https://localhost:5001',
-            client_id: 'maw_videos',
-            redirect_uri: 'https://localhost:5021/videos/signin-oidc',
+            client_id: 'maw_photos',
+            redirect_uri: 'https://localhost:5021/photos/signin-oidc',
             response_type: 'id_token token',
             scope: 'openid maw_api role',
             loadUserInfo: true,
@@ -60,11 +60,7 @@ export class AuthService {
     getToken() {
         const usr = this.getUser();
 
-        if (usr == null || usr.expired) {
-            return null;
-        }
-
-        return usr.access_token;
+        return usr === null ? null : usr.access_token;
     }
 
     private getUser(): Oidc.User {

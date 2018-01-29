@@ -3,9 +3,12 @@
 //    http://jsfiddle.net/Hq4ef/
 import * as d3 from 'd3';
 
+import { AuthService } from './auth-service';
+
 export class PhotoStats {
     readonly API_BASE_URL = 'https://localhost:5011';
 
+    private _authService = new AuthService();
     width = 960;
     height = 700;
     totalCount = 0;
@@ -211,11 +214,13 @@ export class PhotoStats {
             })
             .selectAll('path')
             .attrTween('d', d => {
-                return () => { return this.arc(d); } 
+                return () => { return this.arc(d); }
             });
     }
 
     run(): void {
+        this._authService.initSession();
+
         let partition = d3.partition();
 
         this.initBreadcrumbTrail();
@@ -225,7 +230,9 @@ export class PhotoStats {
 
         const url = `${this.API_BASE_URL}/photos/getStats`;
 
-        d3.json(url, (error, root: any) => {
+        d3.json(url)
+          .header('Authorization', `Bearer ${this._authService.getToken()}`)
+          .get((error, root: any) => {
             if (error) throw error;
 
             root = { name: 'All Photos', categoryStats: root };

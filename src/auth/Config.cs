@@ -100,6 +100,37 @@ namespace MawAuth
                 },
                 new Client
                 {
+                    ClientId = "maw_photo_stats",
+                    ClientName = "mikeandwan.us Photo Stats Application",
+                    RequireConsent = false,
+                    //AccessTokenLifetime = 600, // 10 minutes, default 60 minutes
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris = new List<string>
+                    {
+                        "https://localhost:5021/photos/stats/signin-oidc"
+                    },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        "https://localhost:5021/"
+                    },
+                    AllowedCorsOrigins = new List<string>
+                    {
+                        "https://localhost:5021"
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+
+                        // apis
+                        "maw_api",
+
+                        // identity resources
+                        JwtClaimTypes.Role
+                    }
+                },
+                new Client
+                {
                     ClientId = "www.mikeandwan.us",
                     ClientName = "www.mikeandwan.us",
                     AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,

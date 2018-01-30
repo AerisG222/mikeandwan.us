@@ -9,6 +9,7 @@ import * as TWEEN from 'tween.js';
 
 import * as Mousetrap from 'mousetrap';
 
+import { AuthService } from './services/auth-service';
 import { BackgroundController } from './controllers/background-controller';
 import { CategoryListController } from './controllers/category-list-controller';
 import { DataService } from './services/data-service';
@@ -25,13 +26,14 @@ import { StatusBarController } from './controllers/status-bar-controller';
 import { VisualContext } from './models/visual-context';
 
 export class Photos3D {
+    private _authService = new AuthService();
     private _axisHelper: AxisHelper;
     private _bg: IController;
     private _blurSubscription: Subscription;
     private _categorySelectedSubscription: Subscription;
     private _catList: CategoryListController;
     private _clock = new Clock();
-    private _dataService = new DataService();
+    private _dataService = new DataService(this._authService);
     private _dialogSubscription: Subscription;
     private _disposalService = new DisposalService();
     private _focusSubscription: Subscription;
@@ -53,6 +55,8 @@ export class Photos3D {
     run() {
         // ensure scrollbars do not appear
         document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+
+        this._authService.initSession();
 
         this._mouseWatcher = new MouseWatcher(this._ctx);
 

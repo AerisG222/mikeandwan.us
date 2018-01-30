@@ -1,7 +1,7 @@
 import * as Oidc from 'oidc-client';
 
 export class AuthService {
-    readonly TOKEN_NAME = "maw_photo_stats_token";
+    readonly TOKEN_NAME = 'maw_photo_stats_token';
 
     private _mgr: Oidc.UserManager;
 

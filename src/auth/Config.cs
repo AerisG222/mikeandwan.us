@@ -191,6 +191,31 @@ namespace MawAuth
                         JwtClaimTypes.Role
                     },
                     AllowOfflineAccess = true
+                },
+                new Client
+                {
+                    ClientId = "maw_photos_android",
+                    ClientName = "MaW Photos - Android",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequireConsent = false,
+                    RequireClientSecret = false,
+                    RequirePkce = true,
+
+                    // where to redirect to after login
+                    RedirectUris = { "us.mikeandwan.photos:/signin-oidc" },
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Email,
+
+                        // apis
+                        "maw_api",
+
+                        // identity resources
+                        JwtClaimTypes.Role
+                    },
+                    AllowOfflineAccess = true
                 }
             };
         }

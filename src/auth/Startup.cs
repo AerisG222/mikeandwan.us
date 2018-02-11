@@ -84,7 +84,14 @@ namespace MawAuth
                     });
 
             var idsrv = services
-                .AddIdentityServer()
+                .AddIdentityServer(opts =>
+                    {
+                        if (_env.IsDevelopment())
+                        {
+                            // we need to set this for dev otherwise the issuer becomes 10.0.2.2 when testing the android app
+                            opts.IssuerUri = "https://localhost:5001";
+                        }
+                    })
                     .AddInMemoryPersistedGrants()
                     .AddInMemoryApiResources(Config.GetApiResources())
                     .AddInMemoryClients(Config.GetClients())

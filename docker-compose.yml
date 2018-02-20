@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  auth:
+    image: maw/auth
+    build:
+      context: .
+      dockerfile: src/auth/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT
+      - MAW_AUTH_Environment__DbConnectionString
+      - MAW_AUTH_GooglePlus__ClientId
+      - MAW_AUTH_GooglePlus__ClientSecret
+      - MAW_AUTH_Twitter__ConsumerKey
+      - MAW_AUTH_Twitter__ConsumerSecret
+      - MAW_AUTH_Microsoft__ApplicationId
+      - MAW_AUTH_Microsoft__Secret
+      - MAW_AUTH_GitHub__ClientId
+      - MAW_AUTH_GitHub__ClientSecret
+
+  api:
+    image: maw/api
+    build:
+      context: .
+      dockerfile: src/api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT
+      - MAW_API_Environment__DbConnectionString
+
+  www:
+    image: maw/www
+    build:
+      context: .
+      dockerfile: src/www/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT
+      - MAW_WWW_Environment__DbConnectionString
+      - MAW_WWW_Email__User
+      - MAW_WWW_Email__Password
+      - MAW_WWW_GoogleRecaptcha__SiteKey
+      - MAW_WWW_GoogleRecaptcha__SecretKey

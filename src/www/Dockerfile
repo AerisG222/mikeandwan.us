@@ -1,6 +1,10 @@
 # https://github.com/dotnet/dotnet-docker-samples/blob/master/aspnetapp/Dockerfile
 # https://andrewlock.net/optimising-asp-net-core-apps-in-docker-avoiding-manually-copying-csproj-files/
 FROM microsoft/aspnetcore AS base
+RUN apt-get update && \
+    apt-get install -y imagemagick && \
+    rm -rf /var/lib/apt/lists/*
+RUN ln -s /usr/lib/x86_64-linux-gnu/libMagickWand-6.Q16.so.3 /usr/lib/x86_64-linux-gnu/libMagickWand-6.Q16.so
 WORKDIR /app
 EXPOSE 5000
 EXPOSE 5001

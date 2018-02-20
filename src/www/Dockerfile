@@ -6,8 +6,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 RUN ln -s /usr/lib/x86_64-linux-gnu/libMagickWand-6.Q16.so.3 /usr/lib/x86_64-linux-gnu/libMagickWand-6.Q16.so
 WORKDIR /app
-EXPOSE 5000
-EXPOSE 5001
+EXPOSE 5021
 
 
 # copy sln/csproj first for restore, which allows docker to cache results provided these

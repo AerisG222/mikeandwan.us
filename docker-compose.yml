@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: src/auth/Dockerfile
+    ports:
+      - "5001:5001"
     environment:
       - ASPNETCORE_ENVIRONMENT
       - MAW_AUTH_Environment__DbConnectionString
@@ -23,6 +25,8 @@ services:
     build:
       context: .
       dockerfile: src/api/Dockerfile
+    ports:
+      - "5011:5011"
     environment:
       - ASPNETCORE_ENVIRONMENT
       - MAW_API_Environment__DbConnectionString
@@ -32,6 +36,8 @@ services:
     build:
       context: .
       dockerfile: src/www/Dockerfile
+    ports:
+      - "5021:5021"
     environment:
       - ASPNETCORE_ENVIRONMENT
       - MAW_WWW_Environment__DbConnectionString

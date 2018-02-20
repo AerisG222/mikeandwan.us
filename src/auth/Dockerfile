@@ -2,7 +2,6 @@
 # https://andrewlock.net/optimising-asp-net-core-apps-in-docker-avoiding-manually-copying-csproj-files/
 FROM microsoft/aspnetcore AS base
 WORKDIR /app
-EXPOSE 5000
 EXPOSE 5001
 
 

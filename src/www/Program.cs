@@ -48,7 +48,6 @@ namespace MawMvcApp
                     {
                         if(isDevelopment)
                         {
-                            opts.Listen(IPAddress.Loopback, 5020);
                             opts.Listen(IPAddress.Loopback, 5021, listenOptions => {
                                 listenOptions.UseHttps("certs/www.pfx", "test");
                             });

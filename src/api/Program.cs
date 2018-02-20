@@ -49,7 +49,6 @@ namespace MawApi
                     {
                         if(isDevelopment)
                         {
-                            opts.Listen(IPAddress.Loopback, 5010);
                             opts.Listen(IPAddress.Loopback, 5011, listenOptions => {
                                 listenOptions.UseHttps("certs/api.pfx", "test");
                             });

@@ -51,7 +51,6 @@ namespace MawAuth
                     {
                         if(isDevelopment)
                         {
-                            opts.Listen(IPAddress.Loopback, 5000);
                             opts.Listen(IPAddress.Loopback, 5001, listenOptions => {
                                 listenOptions.UseHttps("certs/auth.pfx", "test");
                             });

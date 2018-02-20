@@ -25,7 +25,8 @@ but will try to get this well organized below to make it easy to follow.
 7. Ensure network is connected properly (`ifconfig -a`)
 8. Ensure /etc/resolv.conf is configured right (should have search and nameserver set right)
 9. Optimize networking - edit /etc/sysctl.conf
-    - followed document at [nixCraft Guide](http://www.cyberciti.biz/tips/linux-unix-bsd-nginx-webserver-security.html)
+    - [nixCraft Guide - Nginx Hardening](http://www.cyberciti.biz/tips/linux-unix-bsd-nginx-webserver-security.html)
+    - [nixCraft Guide - Congestion Control](https://www.cyberciti.biz/cloud-computing/increase-your-linux-server-internet-speed-with-tcp-bbr-congestion-control/)
 10. Update firewall to allow http/https
     ```
     firewall-cmd --zone=FedoraServer --list-allow

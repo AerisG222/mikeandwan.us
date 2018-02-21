@@ -3,6 +3,7 @@ version: '3'
 services:
   auth:
     image: maw/auth
+    network_mode: "host"
     build:
       context: .
       dockerfile: src/auth/Dockerfile
@@ -22,6 +23,7 @@ services:
 
   api:
     image: maw/api
+    network_mode: "host"
     build:
       context: .
       dockerfile: src/api/Dockerfile
@@ -33,6 +35,7 @@ services:
 
   www:
     image: maw/www
+    network_mode: "host"
     build:
       context: .
       dockerfile: src/www/Dockerfile
@@ -45,3 +48,4 @@ services:
       - MAW_WWW_Email__Password
       - MAW_WWW_GoogleRecaptcha__SiteKey
       - MAW_WWW_GoogleRecaptcha__SecretKey
+    

@@ -4,11 +4,11 @@ FROM microsoft/aspnetcore AS base
 WORKDIR /app
 EXPOSE 5001
 
-
-# copy sln/csproj first for restore, which allows docker to cache results provided these
-# files are not changed
+# build env is ordered to try and maximize caching for faster builds
 FROM microsoft/aspnetcore-build AS build-env
 WORKDIR /build
+
+# copy sln/csproj first for restore
 COPY mikeandwan.us.sln                    mikeandwan.us.sln
 COPY src/api/api.csproj                   src/api/api.csproj
 COPY src/auth/auth.csproj                 src/auth/auth.csproj
@@ -18,8 +18,15 @@ COPY src/Maw.Security/Maw.Security.csproj src/Maw.Security/Maw.Security.csproj
 COPY src/www/www.csproj                   src/www/www.csproj
 RUN dotnet restore
 
+# compile the css
+WORKDIR /build/src/auth
+COPY src/auth/package.json .
+RUN npm install
+COPY src/auth/scss/ scss/
+RUN npm run sass:site
 
-# copy everything else and build
+# copy site and build
+WORKDIR /build
 COPY . .
 RUN dotnet build --no-restore -c Release -o out /build/src/auth/auth.csproj
 RUN dotnet publish /build/src/auth/auth.csproj --no-restore -c Release -o out

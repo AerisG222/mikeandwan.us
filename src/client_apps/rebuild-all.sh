@@ -12,7 +12,7 @@ APPS=(
     "photos3d"
     "time"
     "videos"
-    "webgl_cube" 
+    "webgl_cube"
     "webgl_text"
     "weekend_countdown"
 )

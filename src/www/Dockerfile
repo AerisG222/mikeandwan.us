@@ -11,6 +11,9 @@ EXPOSE 5021
 
 # build env is ordered to try and maximize caching for faster builds
 FROM microsoft/aspnetcore-build AS build-env
+RUN apt-get update && \
+    apt-get install -y rsync && \
+    rm -rf /var/lib/apt/lists/*
 WORKDIR /build
 
 # copy sln/csproj first for restore
@@ -23,8 +26,9 @@ COPY src/Maw.Security/Maw.Security.csproj src/Maw.Security/Maw.Security.csproj
 COPY src/www/www.csproj                   src/www/www.csproj
 RUN dotnet restore
 
-# install the ng cli
+# install npm tools
 RUN npm install -g '@angular/cli@latest'
+RUN npm install -g 'clean-css-cli@latest'
 
 # copy all the app package.jsons and shell scripts, then install the libs
 COPY src/client_apps/bandwidth/package.json src/client_apps/bandwidth/package.json
@@ -60,10 +64,10 @@ COPY src/www/scss/ scss/
 RUN npm run sass:site && \
     npm run sass:games
 
-# copy site and build
+# copy site, publish static assets,  and update code to reference these static assets
 WORKDIR /build/
 COPY . .
-RUN ./docker-publish-js-apps.sh
+RUN bash -c ./docker-publish-assets.sh
 RUN dotnet build --no-restore -c Release -o out /build/src/www/www.csproj
 RUN dotnet publish /build/src/www/www.csproj --no-restore -c Release -o out
 

@@ -13,5 +13,4 @@
 tools
 docs
 *.md
-*.sh
 src/maw_database_pg

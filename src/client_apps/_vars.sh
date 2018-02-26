@@ -17,21 +17,6 @@ APPS=(
     "weekend_countdown"
 )
 
-NG_APPS=(
-    "bandwidth"
-    "binary_clock"
-    "byte_counter"
-    "filesize"
-    "googlemaps"
-    "learning"
-    "memory"
-    "money_spin"
-    "photos"
-    "time"
-    "videos"
-    "weekend_countdown"
-)
-
 NG_CLI_VERSION='@angular/cli@latest'
 
 

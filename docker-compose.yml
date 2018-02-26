@@ -10,7 +10,7 @@ services:
     ports:
       - "5001:5001"
     environment:
-      - ASPNETCORE_ENVIRONMENT
+      - ASPNETCORE_ENVIRONMENT=production
       - MAW_AUTH_Environment__DbConnectionString
       - MAW_AUTH_GooglePlus__ClientId
       - MAW_AUTH_GooglePlus__ClientSecret
@@ -30,7 +30,7 @@ services:
     ports:
       - "5011:5011"
     environment:
-      - ASPNETCORE_ENVIRONMENT
+      - ASPNETCORE_ENVIRONMENT=production
       - MAW_API_Environment__DbConnectionString
 
   www:
@@ -42,10 +42,10 @@ services:
     ports:
       - "5021:5021"
     environment:
-      - ASPNETCORE_ENVIRONMENT
+      - ASPNETCORE_ENVIRONMENT=production
       - MAW_WWW_Environment__DbConnectionString
       - MAW_WWW_Email__User
       - MAW_WWW_Email__Password
       - MAW_WWW_GoogleRecaptcha__SiteKey
       - MAW_WWW_GoogleRecaptcha__SecretKey
-    
+

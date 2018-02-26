@@ -49,22 +49,10 @@ namespace MawAuth
                     })
                 .UseKestrel(opts =>
                     {
-                        if(isDevelopment)
-                        {
-                            opts.Listen(IPAddress.Loopback, 5001, listenOptions => {
+                        opts.Listen(IPAddress.Loopback, 5001, listenOptions =>
+                            {
                                 listenOptions.UseHttps("certs/auth.pfx", "test");
                             });
-                        }
-                        else if(isStaging)
-                        {
-                            opts.Listen(IPAddress.Loopback, 5000);
-                        }
-                        else
-                        {
-                            opts.UseSystemd();
-                            opts.ListenUnixSocket("/var/run/mikeandwan.us/auth.sock");
-                            opts.Listen(IPAddress.Loopback, 5000);
-                        }
                     })
                 .ConfigureAppConfiguration((context, builder) =>
                     {

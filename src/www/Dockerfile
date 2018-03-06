@@ -27,8 +27,8 @@ COPY src/www/www.csproj                   src/www/www.csproj
 RUN dotnet restore
 
 # install npm tools
-RUN npm install -g '@angular/cli@latest'
 RUN npm install -g 'clean-css-cli@latest'
+RUN npm install -g '@angular/cli@latest'
 
 # copy all the app package.jsons and shell scripts, then install the libs
 COPY src/client_apps/bandwidth/package.json src/client_apps/bandwidth/package.json
@@ -67,7 +67,7 @@ RUN npm run sass:site && \
 # copy site, publish static assets,  and update code to reference these static assets
 WORKDIR /build/
 COPY . .
-RUN bash -c ./docker-publish-assets.sh
+RUN bash -c ./docker-publish-www-assets.sh
 RUN dotnet build --no-restore -c Release -o out /build/src/www/www.csproj
 RUN dotnet publish /build/src/www/www.csproj --no-restore -c Release -o out
 

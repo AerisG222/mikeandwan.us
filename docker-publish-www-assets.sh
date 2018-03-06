@@ -1,5 +1,5 @@
 source src/client_apps/_vars.sh
-source _vars.sh
+source _vars.sh www
 
 # remove css / js libs that are replaced with cdns in prod
 rm -r "${SRC_WWW}/wwwroot/css/libs"

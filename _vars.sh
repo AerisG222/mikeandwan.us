@@ -1,5 +1,6 @@
+SITE=$1
 SRC_ROOT="/build/src"
-SRC_WWW="${SRC_ROOT}/www"
+SRC_WWW="${SRC_ROOT}/${SITE}"
 DEBUG=n
 
 
@@ -66,7 +67,7 @@ minify_css() {
     local MIN="${SRC_WWW}/wwwroot/css/${FILE}.min.css"
 
     cleancss -o "${MIN}" "${ORIG}"
-    
+
     local MD5="$(md5sum ${MIN} |cut -c 1-8)"
     local MD5FILE="${SRC_WWW}/wwwroot/css/${FILE}.min.${MD5}.css"
     local MD5URL="/css/${FILE}.min.${MD5}.css"

@@ -6,6 +6,9 @@ EXPOSE 5001
 
 # build env is ordered to try and maximize caching for faster builds
 FROM microsoft/aspnetcore-build AS build-env
+RUN apt-get update && \
+    apt-get install -y rsync && \
+    rm -rf /var/lib/apt/lists/*
 WORKDIR /build
 
 # copy sln/csproj first for restore
@@ -18,6 +21,9 @@ COPY src/Maw.Security/Maw.Security.csproj src/Maw.Security/Maw.Security.csproj
 COPY src/www/www.csproj                   src/www/www.csproj
 RUN dotnet restore
 
+# install npm tools
+RUN npm install -g 'clean-css-cli@latest'
+
 # compile the css
 WORKDIR /build/src/auth
 COPY src/auth/package.json .
@@ -28,6 +34,7 @@ RUN npm run sass:site
 # copy site and build
 WORKDIR /build
 COPY . .
+RUN bash -c ./docker-publish-auth-assets.sh
 RUN dotnet build --no-restore -c Release -o out /build/src/auth/auth.csproj
 RUN dotnet publish /build/src/auth/auth.csproj --no-restore -c Release -o out
 

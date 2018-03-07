@@ -1,7 +1,7 @@
 # Server Configuration
 
 This document tries to walk through the steps required to get this website up and running.  This is
-currently a mix and match of other notes I had been keeping about setting up the production server, 
+currently a mix and match of other notes I had been keeping about setting up the production server,
 but will try to get this well organized below to make it easy to follow.
 
 
@@ -15,7 +15,7 @@ but will try to get this well organized below to make it easy to follow.
         ```
         BOOTPROTO=none
         IPADDR0=192.168.1.xxx  (replace xxx)
-        PREFIX0=24 
+        PREFIX0=24
         GATEWAY0=192.168.1.1
         DNS0=192.168.1.1
         ```
@@ -48,7 +48,7 @@ but will try to get this well organized below to make it easy to follow.
         server=dynamicdns.park-your-domain.com,         \
         login=YOUR_LOGIN,                               \
         password=YOUR_PASSWORD                          \
-        www,@,aeris
+        www,@,api,auth
         ```
     - start and enable ddclient
         ```
@@ -71,7 +71,7 @@ but will try to get this well organized below to make it easy to follow.
         - https://help.github.com/articles/generating-an-ssh-key/
 13. Install tool to limit brute force attacks
     - [Reference Guide](http://www.cyberciti.biz/faq/rhel-linux-block-ssh-dictionary-brute-force-attacks/)
-    - `dnf install denyhosts` 
+    - `dnf install denyhosts`
     - edit /etc/hosts.allow - ensure workstation can access server
         ```
         sshd: 192.168.1.12
@@ -80,7 +80,7 @@ but will try to get this well organized below to make it easy to follow.
         ```
         systemctl start denyhosts.service
         systemctl enable denyhosts.service
-        ``` 
+        ```
 14. Add service account
     - `useradd -m -r svc_www_maw`
 15. Update group associations
@@ -124,16 +124,16 @@ but will try to get this well organized below to make it easy to follow.
     # 3: create temp index to support following case insensitive lookups
     CREATE INDEX photo_upper_lg_path ON photo.photo (UPPER(lg_path));
     CREATE INDEX photo_src_path ON photo.photo (src_path);
-    
+
     # 4: apply all sql updates to database (all glacier sql files are in the root, so skip those - need to do in this order so src_path is properly set first):
     find . -mindepth 2 -type f -execdir psql -d maw_website -f {} \;
-    
+
     # 5: apply glacier backup updates to database:
     find . -maxdepth 1 -type f -execdir psql -d maw_website -f {} \;
-    
+
     # 6: confirm all photos have backup info
     select count(1) from photo.photo where aws_archive_id is null;
-    
+
     # 7: drop temp index
     DROP INDEX photo.photo_upper_lg_path;
     DROP INDEX photo.photo_src_path;
@@ -189,7 +189,7 @@ output to STDOUT and include it in the log / journal.
 1. Create /etc/nginx/certs and prepare cert related files for nginx
     - copy the cert from thawte to this directory (mikeandwan.us.pem)
     - get the intermediary and root CA certificates from thawte
-        - if you arent sure which certs to download, run the following command and look for the issuer details, 
+        - if you arent sure which certs to download, run the following command and look for the issuer details,
           then find this cert on the issuer's site
           `openssl x509 -in mikeandwan.us.pem -text`
     - `cat mikeandwan.us.pem thawte.dv_ssl_ca_g2.pem thawte.root.pem > mikeandwan.us.bundle.pem`

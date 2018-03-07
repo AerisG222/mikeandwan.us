@@ -155,6 +155,13 @@ but will try to get this well organized below to make it easy to follow.
     sudo systemctl start nginx.service
     sudo systemctl enable nginx.service
     ```
+4. `sudo dnf install certbot-nginx`
+    - `certbot certonly -d mikeandwan.us -d www.mikeandwan.us --nginx`
+    - `certbot certonly -d api.mikeandwan.us --nginx`
+    - `certbot certonly -d auth.mikeandwan.us --nginx`
+5. configure certbot to run 2 times a day to update if needed (via systemd)
+    - [service](systemd/certbot-renew.service)
+    - [timer](systemd/certbot-renew.timer)
 
 ## Systemd
 

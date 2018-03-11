@@ -49,3 +49,14 @@ services:
       - MAW_WWW_GoogleRecaptcha__SiteKey
       - MAW_WWW_GoogleRecaptcha__SecretKey
 
+  nginx:
+    image: maw/nginx
+    network_mode: "host"
+    build:
+      context: .
+      dockerfile: src/nginx/Dockerfile
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt

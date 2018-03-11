@@ -11,19 +11,14 @@ first appeared at this domain in 2003.  This site serves a number of purposes:
   - Allows me to play with different technologies
 
 ## Current Status
-Over the past year or two, I have been porting my MVC5 site to .Net Core.  A first release
-of this is now available on my site, and is being served with beta7 of the new ASP.NET stack.
-Since that release, I have undertaken a lot of additional changes that are still in process:
 
-  - Keep updating with latest ASP.Net Core bits (now on RC2)
-  - Porting angularjs apps to anglar 2 (much of this is still in flux)
-  - Decided to migrate from mysql to postgres (been thinking of this for a while, and had better EFCore support than mysql)
-  - Working on updating tools used to feed the site - in particular reworking the photo
-    resize tool to try and improve the generated files for the website
-
-My hope is shortly after .Net RTM and Angular 2 RTM, this codebase will be in good shape,
-and a new version of the site will be published.  I intend to keep this site current as
-things are updated, but am looking forward to a little break once this release is shipped ;).
+As of late 2017 / early 2018, I have been working on a significant re-architecture from the original monolithic site.  This work
+primiarily involves separating out the public facing site, the api, and the authentication components into their own discrete
+projects.  I also spent quite a bit of time investigating Docker, and setting things up for Docker build, but at this time,
+I am abandoning this approach, and will plan on hosting the different services on the primary host.  While I am interested
+in getting more exposure to Docker, I am spending too much time trying to get this all to work, and would rather invest my time
+in just wrapping up the latest updates.  As such, I am keeping the current docker assets in the project for reference, or if I return
+to this at a later point, but do not expect to update these until then.
 
 ## Motivation
 
@@ -33,6 +28,6 @@ this useful, or run across ideas for improvement, I would appreciate hearing fro
 the Issues section of github - thanks!
 
 ## License
+
 mikeandwan.us is licensed under the MIT license, see LICENSE.md for more
 information.
-

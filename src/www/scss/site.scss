@@ -1,12 +1,12 @@
-$input-btn-padding-y:   0.5rem;
+$input-btn-padding-y: 0.5rem !default;
 
 @import "bootswatch/dist/slate/variables";
 @import "bootstrap/scss/bootstrap";
 @import "bootswatch/dist/slate/bootswatch";
 
 pre {
-    background-color: $code-bg;
     padding: 0 0.5rem;
+    background-color: $code-bg;
 }
 
 h1 {
@@ -16,9 +16,9 @@ h1 {
 }
 
 footer {
+    padding: 20px 0 40px;
     margin-top: 60px;
     background: none repeat scroll 0 0 $table-border-color;
-    padding: 20px 0 40px;
 }
 
 button {
@@ -26,19 +26,19 @@ button {
 }
 
 .banner {
-    background-image: url('/img/banner_xs.jpg');
-    background-repeat: no-repeat;
-    background-position: top;
-    background-attachment: fixed;
     height: 120px;
     margin-bottom: 10px;
+    background-image: url("/img/banner_xs.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: top;
     border-bottom: 1px solid $table-border-color;
 
     .navbar {
+        margin: 0 -15px;
         background: $table-border-color;
         border: 1px solid $table-border-color;
         border-width: 0 0 1px;
-        margin: 0 -15px;
     }
 
     .dropdown-menu {
@@ -49,8 +49,8 @@ button {
             color: $body-color;
 
             &:hover {
-                background: $table-border-color;
                 color: $link-color;
+                background: $table-border-color;
             }
         }
     }
@@ -69,17 +69,17 @@ button {
 }
 
 .navbar-brand {
-    font-family: Tangerine;
-    font-size: 2.4rem;
     padding: 0;
     margin-right: 1rem;
+    font-family: Tangerine, cursive;
+    font-size: 2.4rem;
     border-right: 0;
 }
 
 .navbar-dark {
     .navbar-brand {
-        color: $body-color;
         line-height: 1rem;
+        color: $body-color;
     }
 
     .navbar-nav {
@@ -109,8 +109,8 @@ button {
 }
 
 .social {
-    font-size: 2rem;
     margin: 24px;
+    font-size: 2rem;
 
     a {
         margin: 0 12px;
@@ -119,21 +119,21 @@ button {
 
 /* https://blog.prototypr.io/align-svg-icons-to-text-and-say-goodbye-to-font-icons-d44b3d7b26b4 */
 .svg-icon {
+    position: relative;
     display: inline-flex;
     align-self: center;
-    position: relative;
-    height: 1em;
     width: 1em;
+    height: 1em;
 
     & svg {
-        fill: $body-color;
-        height: 1em;
         width: 1em;
+        height: 1em;
+        fill: $body-color;
     }
 
     &.svg-baseline svg {
-        bottom: -0.125em;
         position: absolute;
+        bottom: -0.125em;
     }
 
     &.hp-feature {
@@ -157,24 +157,24 @@ button {
 
 @include media-breakpoint-up(lg) {
     .banner {
-        background-image: url('/img/banner_sm.jpg');
         height: 300px;
         margin-bottom: 30px;
+        background-image: url("/img/banner_sm.jpg");
     }
 }
 
 @include media-breakpoint-up(xl) {
     .banner {
-        background-image: url('/img/banner_lg.jpg');
         height: 340px;
         margin-bottom: 40px;
+        background-image: url("/img/banner_lg.jpg");
     }
 }
 
 @media (min-width: 2000px) {
     .banner {
-        background-image: url('/img/banner_xl.jpg');
         height: 460px;
         margin-bottom: 60px;
+        background-image: url("/img/banner_xl.jpg");
     }
 }

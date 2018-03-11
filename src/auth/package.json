@@ -4,15 +4,18 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "bootstrap": "4.0.0-beta.2",
-    "bootswatch": "4.0.0-beta.2",
-    "jquery": "^1.9.1",
-    "popper.js": "^1.12.6"
+    "bootstrap": "4.0.0",
+    "bootswatch": "4.0.0",
+    "jquery": "3.3.1",
+    "popper.js": "1.12.9"
   },
   "devDependencies": {
-    "node-sass": "^4.7.2",
-    "stylelint": "^8.4.0",
-    "stylelint-config-standard": "^18.0.0"
+    "node-sass": "4.7.2",
+    "stylelint": "9.1.1",
+    "stylelint-config-recommended-scss": "3.1.0",
+    "stylelint-config-standard": "18.2.0",
+    "stylelint-order": "0.8.1",
+    "stylelint-scss": "2.5.0"
   },
   "scripts": {
     "sass": "npm run sass:lint & npm run sass:site",

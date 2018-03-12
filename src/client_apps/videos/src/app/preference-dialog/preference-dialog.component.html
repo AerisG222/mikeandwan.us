@@ -6,15 +6,11 @@
 </div>
 <div class="modal-body">
     <form>
-        <div class="row">
+        <div class="form-group row">
+            <label for="prefsWide" class="col col-form-label">Large Movies?</label>
             <div class="col">
-                <label for="prefsWide" class="col-form-label">Large Movies?</label>
-            </div>
-            <div class="col">
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label">
-                        <input class="form-check-input" id="prefsWide" type="checkbox" [(ngModel)]="form.preferLarge" name="preferLarge" />
-                    </label>
+                <div class="form-check pt-2">
+                    <input class="form-check-input" id="prefsWide" type="checkbox" [(ngModel)]="form.preferLarge" name="preferLarge" />
                 </div>
             </div>
         </div>

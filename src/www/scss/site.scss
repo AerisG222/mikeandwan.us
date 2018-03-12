@@ -6,7 +6,7 @@ $input-btn-padding-y: 0.5rem !default;
 
 pre {
     padding: 0 0.5rem;
-    background-color: $code-bg;
+    background-color: #fff;
 }
 
 h1 {
@@ -154,6 +154,7 @@ button {
     -moz-appearance: none;
     -webkit-appearance: none;
 }
+
 
 @include media-breakpoint-up(lg) {
     .banner {

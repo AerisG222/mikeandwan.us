@@ -4,6 +4,18 @@ $input-btn-padding-y: 0.5rem !default;
 @import "bootstrap/scss/bootstrap";
 @import "bootswatch/dist/slate/bootswatch";
 
+.banner {
+    height: 120px;
+    margin-bottom: 10px;
+    font-family: Tangerine, cursive;
+    font-size: 2.4rem;
+    background-image: url("/img/banner.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: top;
+    border-bottom: 1px solid $table-border-color;
+}
+
 /* https://blog.prototypr.io/align-svg-icons-to-text-and-say-goodbye-to-font-icons-d44b3d7b26b4 */
 .svg-icon {
     position: relative;
@@ -25,5 +37,13 @@ $input-btn-padding-y: 0.5rem !default;
 
     &.hp-feature {
         font-size: 7rem;
+    }
+}
+
+@media (min-width: 2000px) {
+    .banner {
+        height: 240px;
+        margin-bottom: 10px;
+        background-image: url("/img/banner_xl.jpg");
     }
 }

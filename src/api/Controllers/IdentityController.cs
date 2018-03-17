@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MawApi.Controllers
 {
-    [Route("identity")]
+    [ApiController]
     [Authorize]
+    [Route("identity")]
     public class IdentityController : ControllerBase
     {
         [HttpGet]

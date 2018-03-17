@@ -7,11 +7,14 @@ using Microsoft.Extensions.Logging;
 using Maw.Domain.Videos;
 using MawApi.ViewModels;
 using Maw.Security;
-using Maw.Security.Filters;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 
 namespace MawApi.Controllers
 {
+    [ApiController]
+    [Authorize]
 	[Authorize(Policy.ViewVideos)]
     [Route("videos")]
     public class VideosController
@@ -34,16 +37,30 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getCategoriesForYear/{year:int}")]
-        public async Task<IEnumerable<Category>> GetCategoriesForYear(short year)
+        public async Task<ActionResult<Category[]>> GetCategoriesForYear(short year)
         {
-            return await _svc.GetCategoriesAsync(year, Role.IsAdmin(User));
+            var cats = await _svc.GetCategoriesAsync(year, Role.IsAdmin(User));
+
+            if(cats == null || cats.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return cats.ToArray();
         }
 
 
         [HttpGet("getVideosByCategory/{categoryId:int}")]
-        public async Task<IEnumerable<Video>> GetVideosByCategory(short categoryId)
+        public async Task<ActionResult<Video[]>> GetVideosByCategory(short categoryId)
         {
-            return await _svc.GetVideosInCategoryAsync(categoryId, Role.IsAdmin(User));
+            var vids = await _svc.GetVideosInCategoryAsync(categoryId, Role.IsAdmin(User));
+
+            if(vids == null || vids.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return vids.ToArray();
         }
     }
 }

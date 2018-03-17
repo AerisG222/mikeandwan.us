@@ -10,11 +10,14 @@ using MawApi.ViewModels;
 using MawApi.ViewModels.Photos;
 using MawApi.ViewModels.Photos.Stats;
 using Maw.Security;
-using Maw.Security.Filters;
+using System.Linq;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace MawApi.Controllers
 {
+    [ApiController]
+    [Authorize]
     [Authorize(Policy.ViewPhotos)]
     [Route("photos")]
     public class PhotosController
@@ -37,9 +40,16 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getCategory/{categoryId:int}")]
-        public async Task<Category> GetCategory(short categoryId)
+        public async Task<ActionResult<Category>> GetCategory(short categoryId)
         {
-            return await _svc.GetCategoryAsync(categoryId, Role.IsAdmin(User));
+            var cat = await _svc.GetCategoryAsync(categoryId, Role.IsAdmin(User));
+
+            if(cat == null)
+            {
+                return NotFound();
+            }
+
+            return cat;
         }
 
 
@@ -65,16 +75,30 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getCategoriesForYear/{year:int}")]
-        public async Task<IEnumerable<Category>> GetCategoriesForYear(short year)
+        public async Task<ActionResult<Category[]>> GetCategoriesForYear(short year)
         {
-            return await _svc.GetCategoriesForYearAsync(year, Role.IsAdmin(User));
+            var cats = await _svc.GetCategoriesForYearAsync(year, Role.IsAdmin(User));
+
+            if(cats == null || cats.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return cats.ToArray();
         }
 
 
         [HttpGet("getPhotosByCategory/{categoryId:int}")]
-        public async Task<IEnumerable<Photo>> GetPhotosByCategory(short categoryId)
+        public async Task<ActionResult<Photo[]>> GetPhotosByCategory(short categoryId)
         {
-            return await _svc.GetPhotosForCategoryAsync(categoryId, Role.IsAdmin(User));
+            var photos = await _svc.GetPhotosForCategoryAsync(categoryId, Role.IsAdmin(User));
+
+            if(photos == null || photos.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return photos.ToArray();
         }
 
 
@@ -114,9 +138,16 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotoExifData/{photoId:int}")]
-        public async Task<Detail> GetPhotoExifData(int photoId)
+        public async Task<ActionResult<Detail>> GetPhotoExifData(int photoId)
         {
-            return await _svc.GetDetailForPhotoAsync(photoId, Role.IsAdmin(User));
+            var data = await _svc.GetDetailForPhotoAsync(photoId, Role.IsAdmin(User));
+
+            if(data == null)
+            {
+                return NotFound();
+            }
+
+            return data;
         }
 
 
@@ -128,22 +159,27 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getRatingForPhoto/{id:int}")]
-        public async Task<Rating> GetRatingForPhoto(int id)
+        public async Task<ActionResult<Rating>> GetRatingForPhoto(int id)
         {
-            return await _svc.GetRatingsAsync(id, User.Identity.Name);
+            var rating = await _svc.GetRatingsAsync(id, User.Identity.Name);
+
+            if(rating == null)
+            {
+                return NotFound();
+            }
+
+            return rating;
         }
 
 
         [HttpPost("ratePhoto")]
-        [TypeFilter(typeof(ApiAntiforgeryValidationActionFilter))]
-        public async Task<float?> RatePhoto([FromBody]UserPhotoRating userRating)
+        public async Task<float?> RatePhoto([FromBody] [Required] UserPhotoRating userRating)
         {
             if(userRating.Rating < 1)
             {
                 return await _svc.RemovePhotoRatingAsync(userRating.PhotoId, User.Identity.Name);
             }
-
-            if(userRating.Rating <= 5)
+            else if(userRating.Rating <= 5)
             {
                 return await _svc.SavePhotoRatingAsync(userRating.PhotoId, User.Identity.Name, userRating.Rating);
             }
@@ -155,8 +191,7 @@ namespace MawApi.Controllers
 
 
         [HttpPost("addCommentForPhoto")]
-        [TypeFilter(typeof(ApiAntiforgeryValidationActionFilter))]
-        public async Task<bool> AddCommentForPhoto([FromBody]CommentViewModel comment)
+        public async Task<bool> AddCommentForPhoto([FromBody] [Required] CommentViewModel comment)
         {
             int result = await _svc.InsertPhotoCommentAsync(comment.PhotoId, User.Identity.Name, comment.Comment);
 
@@ -241,9 +276,16 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotos3D/{categoryId:int}")]
-        public async Task<IEnumerable<Photo3D>> GetPhotos3D(int categoryId)
+        public async Task<ActionResult<Photo3D[]>> GetPhotos3D(int categoryId)
         {
-            return await _svc.GetPhotos3D(categoryId);
+            var photos = await _svc.GetPhotos3D(categoryId);
+
+            if(photos == null)
+            {
+                return NotFound();
+            }
+
+            return photos.ToArray();
         }
     }
 }

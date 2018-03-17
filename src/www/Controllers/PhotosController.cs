@@ -10,7 +10,6 @@ using Maw.Domain.Photos;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.Navigation;
 using Maw.Security;
-using Maw.Security.Filters;
 
 
 namespace MawMvcApp.Controllers
@@ -45,7 +44,6 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("{*extra}")]
-        [TypeFilter(typeof(ApiAntiforgeryActionFilter))]
         public IActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.Photos;
@@ -55,7 +53,6 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("3d/{*extra}")]
-        [TypeFilter(typeof(ApiAntiforgeryActionFilter))]
         public IActionResult ThreeD()
         {
             ViewBag.NavigationZone = NavigationZone.Photos;

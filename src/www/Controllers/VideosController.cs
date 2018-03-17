@@ -10,7 +10,6 @@ using MawMvcApp.ViewModels.Navigation;
 using MawMvcApp.ViewModels;
 using NMagickWand;
 using Maw.Security;
-using Maw.Security.Filters;
 
 
 namespace MawMvcApp.Controllers
@@ -39,7 +38,6 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("{*extra}")]
-        [TypeFilter(typeof(ApiAntiforgeryActionFilter))]
         public IActionResult Index()
         {
 			ViewBag.NavigationZone = NavigationZone.Videos;

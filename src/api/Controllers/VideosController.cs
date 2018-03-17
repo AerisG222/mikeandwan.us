@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Videos;
-using MawApi.ViewModels;
+using MawApi.Models;
 using Maw.Security;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;

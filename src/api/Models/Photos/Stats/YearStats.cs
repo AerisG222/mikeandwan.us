@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 
 
-namespace MawApi.ViewModels.Photos.Stats
+namespace MawApi.Models.Photos.Stats
 {
 	public class YearStats
 	{

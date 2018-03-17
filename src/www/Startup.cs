@@ -138,7 +138,8 @@ namespace MawMvcApp
                     {
                         MawPolicyBuilder.AddMawPolicies(opts);
                     })
-                .AddMvc();
+                .AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
                 if(_env.IsDevelopment())
                 {

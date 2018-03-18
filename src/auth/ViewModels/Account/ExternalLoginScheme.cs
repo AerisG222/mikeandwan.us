@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Maw.TagHelpers;
 
 
-namespace MawMvcApp.ViewModels.Account
+namespace MawAuth.ViewModels.Account
 {
     public class ExternalLoginScheme
     {

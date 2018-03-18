@@ -12,13 +12,13 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Email;
 using Maw.Domain.Identity;
-using MawMvcApp.ViewModels.Account;
+using MawAuth.ViewModels.Account;
 using SignInRes = Microsoft.AspNetCore.Identity.SignInResult;
 using Microsoft.AspNetCore.Authentication;
 using IdentityServer4.Services;
 
 
-namespace MawMvcApp.Controllers
+namespace MawAuth.Controllers
 {
 	[Route("account")]
     public class AccountController

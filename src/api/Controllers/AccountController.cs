@@ -6,7 +6,7 @@ using Maw.Domain.Identity;
 using Maw.Security;
 
 
-namespace MawMvcApp.Controllers
+namespace MawApi.Controllers
 {
 	[ApiController]
 	[Route("account")]

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 
-namespace MawMvcApp.TagHelpers
+namespace Maw.TagHelpers
 {
 	[HtmlTargetElement("li", Attributes = ControllerAttributeName)]
 	[HtmlTargetElement("li", Attributes = ActionAttributeName)]

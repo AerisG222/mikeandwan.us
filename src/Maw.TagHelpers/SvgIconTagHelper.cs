@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 
-namespace MawMvcApp.TagHelpers
+namespace Maw.TagHelpers
 {
     // icons pulled from source files at https://leungwensen.github.io/svg-icon/#awesome
     [HtmlTargetElementAttribute("svg-icon")]

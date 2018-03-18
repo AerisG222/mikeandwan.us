@@ -1,6 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Authentication;
-using MawMvcApp.TagHelpers;
+using Maw.TagHelpers;
 
 
 namespace MawMvcApp.ViewModels.Account

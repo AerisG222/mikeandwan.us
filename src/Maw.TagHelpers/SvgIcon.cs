@@ -1,4 +1,4 @@
-namespace MawMvcApp.TagHelpers
+namespace Maw.TagHelpers
 {
     public enum SvgIcon
     {

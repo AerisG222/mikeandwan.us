@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 
-namespace MawMvcApp.TagHelpers
+namespace Maw.TagHelpers
 {
     public static class TagHelperAttributeListExtensions
     {

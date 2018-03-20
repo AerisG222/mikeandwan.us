@@ -16,7 +16,11 @@
 
 <div class="container">
     <article class="row">
-        <div class="col-12 px-0">
+        <div class="col-12 col-md-3 pr-md-0 order-2 mt-5">
+            @await RenderSectionAsync("sidebar")
+        </div>
+        <div class="col-12 col-md-9 pl-md-0 order-1">
+            @await RenderSectionAsync("header")
 	        @RenderBody()
         </div>
     </article>

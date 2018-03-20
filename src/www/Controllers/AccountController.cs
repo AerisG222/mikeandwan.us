@@ -81,109 +81,7 @@ namespace MawMvcApp.Controllers
 		}
 
 
-		[HttpGet("forgot-password")]
-		public IActionResult ForgotPassword()
-		{
-			ViewBag.NavigationZone = NavigationZone.Account;
-
-			return View(new ForgotPasswordModel());
-		}
-
-/*
-		[HttpPost("forgot-password")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
-		{
-			ViewBag.NavigationZone = NavigationZone.Account;
-
-			model.WasEmailAttempted = true;
-
-			if(ModelState.IsValid)
-			{
-				var user = await _userMgr.FindByEmailAsync(model.Email);
-
-				// legacy users might not have the security stamp set.  if so, set it here, as a non-null security stamp is requilred for this to work
-				if(string.IsNullOrEmpty(user.SecurityStamp))
-				{
-					await _userMgr.UpdateSecurityStampAsync(user);
-				}
-
-				var code = await _userMgr.GeneratePasswordResetTokenAsync(user);
-				var callbackUrl = Url.Action("ResetPassword", "Account", new { user.Email, code }, Request.Scheme);
-
-                _log.LogInformation($"user: {user.Name}");
-                _log.LogInformation($"code: {code}");
-                _log.LogInformation($"reset url: {callbackUrl}");
-
-				var emailModel = new ResetPasswordEmailModel
-					{
-						Title = "Reset Password",
-						CallbackUrl = callbackUrl
-					};
-
-				var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ResetPassword.cshtml", emailModel).ConfigureAwait(false);
-
-				await _emailService.SendHtmlAsync(user.Email, _contactConfig.To, "Reset Password for mikeandwan.us", body).ConfigureAwait(false);
-
-				model.WasSuccessful = true;
-
-				return View(model);
-			}
-			else
-			{
-				LogValidationErrors();
-			}
-
-			return View(model);
-		}
-
-
-		[HttpGet("reset-password")]
-		public async Task<IActionResult> ResetPassword(string code)
-		{
-			ViewBag.NavigationZone = NavigationZone.Account;
-
-			var model = new ResetPasswordModel();
-
-			await TryUpdateModelAsync<ResetPasswordModel>(model, string.Empty, x =>  x.Email, x => x.Code);
-			ModelState.Clear();
-
-			return View(model);
-		}
-
-
-		[HttpPost("reset-password")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
-		{
-			ViewBag.NavigationZone = NavigationZone.Account;
-			model.ResetAttempted = true;
-
-			if(ModelState.IsValid)
-			{
-				var user = await _repo.GetUserByEmailAsync(model.Email);
-				var result = await _userMgr.ResetPasswordAsync(user, model.Code, model.NewPassword);
-
-				if(result.Succeeded)
-				{
-					model.WasReset = true;
-				}
-				else
-				{
-					_log.LogWarning(result.ToString());
-
-					AddErrors(result);
-				}
-			}
-			else
-			{
-				LogValidationErrors();
-			}
-
-			return View(model);
-		}
-
-
+		/*
 		[Authorize]
 		[HttpGet("edit-profile")]
 		public async Task<IActionResult> EditProfile()
@@ -274,52 +172,8 @@ namespace MawMvcApp.Controllers
 
 			return View(model);
 		}
+		*/
 
-
-		[Authorize]
-		[HttpGet("change-password")]
-		public IActionResult ChangePassword()
-		{
-			ViewBag.NavigationZone = NavigationZone.Account;
-
-			var m = new ChangePasswordModel();
-
-			return View(m);
-		}
-
-
-		[HttpPost("change-password")]
-		[Authorize]
-        [ValidateAntiForgeryToken]
-		public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
-		{
-			ViewBag.NavigationZone = NavigationZone.Account;
-			model.ChangeAttempted = true;
-
-			if(ModelState.IsValid)
-			{
-				var user = await _repo.GetUserAsync(User.Identity.Name);
-				var result = await _userMgr.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
-
-				if (result.Succeeded)
-				{
-					model.ChangeSucceeded = true;
-				}
-                else
-                {
-					_log.LogWarning(result.ToString());
-
-					AddErrors(result);
-                }
-			}
-			else
-			{
-				LogValidationErrors();
-			}
-
-			return View(model);
-		}
-*/
 
 		async Task<IEnumerable<SelectListItem>> GetStateSelectListItemsAsync()
 		{

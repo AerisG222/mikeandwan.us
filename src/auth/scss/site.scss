@@ -5,7 +5,7 @@ $input-btn-padding-y: 0.5rem !default;
 @import "bootswatch/dist/slate/bootswatch";
 
 .banner {
-    height: 120px;
+    height: 60px;
     margin-bottom: 10px;
     font-family: Tangerine, cursive;
     font-size: 2.4rem;
@@ -14,6 +14,12 @@ $input-btn-padding-y: 0.5rem !default;
     background-attachment: fixed;
     background-position: top;
     border-bottom: 1px solid $table-border-color;
+}
+
+footer {
+    padding: 40px 0 40px;
+    margin-top: 80px;
+    background: none repeat scroll 0 0 $table-border-color;
 }
 
 /* https://blog.prototypr.io/align-svg-icons-to-text-and-say-goodbye-to-font-icons-d44b3d7b26b4 */
@@ -43,7 +49,14 @@ $input-btn-padding-y: 0.5rem !default;
 @media (min-width: 2000px) {
     .banner {
         height: 240px;
-        margin-bottom: 10px;
+        margin-bottom: 40px;
         background-image: url("/img/banner_xl.jpg");
+    }
+}
+
+@media (min-width: 768px) {
+    .banner {
+        height: 120px;
+        margin-bottom: 20px;
     }
 }

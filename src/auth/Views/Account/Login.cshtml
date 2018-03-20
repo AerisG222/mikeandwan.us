@@ -1,4 +1,4 @@
-@model MawMvcApp.ViewModels.Account.LoginModel
+@model MawAuth.ViewModels.Account.LoginModel
 @{
 	//Layout = "_Layout";
 	ViewBag.Title = "account | login";
@@ -7,7 +7,7 @@
 <h1>Login</h1>
 
 <div class="row">
-    <div class="col-sm-5">
+    <div class="col-lg-5 col-12">
         @if(Model.WasAttempted) {
             <p maw-alert-type="Danger">There was an error logging in.  Please try again.</p>
             <div class="text-danger" asp-validation-summary="All"></div>
@@ -37,7 +37,7 @@
             </div>
         </form>
     </div>
-    <div class="col-sm-5 offset-sm-2">
+    <div class="col-lg-5 offset-lg-2 col-12">
         <div class="row">
             <div class="col-12">
                 <strong>or, login with an external account if you have opted-in:</strong>

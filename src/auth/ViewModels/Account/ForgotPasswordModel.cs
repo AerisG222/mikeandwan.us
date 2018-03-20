@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 
-namespace MawMvcApp.ViewModels.Account
+namespace MawAuth.ViewModels.Account
 {
 	public class ForgotPasswordModel
 	{

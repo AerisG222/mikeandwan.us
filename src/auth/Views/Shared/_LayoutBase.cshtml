@@ -12,6 +12,14 @@
 
 @RenderBody()
 
+<footer class="container-fluid">
+	<div class="row copyright">
+		<div class="col-12 text-center">
+			<span>copyright &copy; @(DateTime.Now.Year) mike morano | all rights reserved</span>
+		</div>
+	</div>
+</footer>
+
 @Html.Partial("_js_Jquery")
 @Html.Partial("_js_Bootstrap")
 @await RenderSectionAsync("scripts_footer", required: false)

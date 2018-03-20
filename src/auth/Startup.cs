@@ -15,6 +15,7 @@ using Maw.Domain;
 using MawAuth.Services;
 using IdentityServer4;
 using Microsoft.AspNetCore.Mvc;
+using Mvc.RenderViewToString;
 
 namespace MawAuth
 {
@@ -41,6 +42,7 @@ namespace MawAuth
                     })
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
+                .AddTransient<RazorViewToStringRenderer>()
                 .AddIdentity<MawUser, MawRole>()
                     .AddDefaultTokenProviders()
                     .Services

@@ -1,18 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 
-namespace MawMvcApp.ViewModels.Account
+namespace MawAuth.ViewModels.Account
 {
-	public class ResetPasswordModel
+	public class ChangePasswordModel
 	{
-		[Required(ErrorMessage = "Please enter your email address")]
-		[EmailAddress(ErrorMessage = "Please enter a valid email address")]
-		[DataType(DataType.EmailAddress)]
-		public string Email { get; set; }
-
-		[Required(ErrorMessage = "Please enter the code from the email")]
-		public string Code { get; set; }
+		[Required(ErrorMessage = "Please enter your current password")]
+		[Display(Name = "Current Password")]
+		[DataType(DataType.Password)]
+		public string CurrentPassword { get; set; }
 
 		[Required(ErrorMessage = "Please enter your new password")]
 		[Display(Name = "New Password")]
@@ -26,10 +24,10 @@ namespace MawMvcApp.ViewModels.Account
 		public string ConfirmPassword { get; set; }
 
 		[BindNever]
-		public bool ResetAttempted { get; set; }
+		public bool ChangeAttempted { get; set; }
 
 		[BindNever]
-		public bool WasReset { get; set; }
+		public bool ChangeSucceeded { get; set; }
 	}
 }
 

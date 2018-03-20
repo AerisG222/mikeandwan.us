@@ -107,7 +107,7 @@ namespace Maw.TagHelpers
                     throw new ArgumentOutOfRangeException();
             }
 
-            output.Content.AppendHtml($"<svg viewBox=\"{v}\"><path d=\"{d}\" /></svg>");
+            output.Content.AppendHtml($"<svg viewBox=\"{v}\" width=\"24\" height=\"24\"><path d=\"{d}\" /></svg>");
 		}
     }
 }

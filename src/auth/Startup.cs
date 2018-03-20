@@ -117,6 +117,10 @@ namespace MawAuth
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/error/");
+            }
 
             app.UseStaticFiles();
             app.UseIdentityServer();

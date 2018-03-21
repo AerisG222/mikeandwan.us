@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 
-namespace MawMvcApp.ViewModels.Admin
+namespace MawAuth.ViewModels.Admin
 {
 	public class EditRoleMembersModel
 	{
@@ -13,7 +13,7 @@ namespace MawMvcApp.ViewModels.Admin
         public IEnumerable<string> AllUsers { get; set; }
         public IEnumerable<string> Members { get; set; }
         public IEnumerable<string> NewMembers { get; set; }
-        
+
         [BindNever]
 		public IdentityResult Result { get; set; }
 

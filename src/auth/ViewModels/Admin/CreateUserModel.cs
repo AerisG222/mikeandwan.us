@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 
-namespace MawMvcApp.ViewModels.Admin
+namespace MawAuth.ViewModels.Admin
 {
 	public class CreateUserModel
 	{
@@ -14,7 +14,7 @@ namespace MawMvcApp.ViewModels.Admin
 		[Required(ErrorMessage = "Please enter the first name")]
 		[Display(Name = "First Name")]
 		public string FirstName { get; set; }
-		
+
 		[Required(ErrorMessage = "Please enter the last name")]
 		[Display(Name = "Last Name")]
 		public string LastName { get; set; }

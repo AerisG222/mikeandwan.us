@@ -32,6 +32,7 @@
     <ProjectReference Include="..\Maw.Data\Maw.Data.csproj" />
     <ProjectReference Include="..\Maw.TagHelpers\Maw.TagHelpers.csproj" />
     <ProjectReference Include="..\Mvc.RenderViewToString\Mvc.RenderViewToString.csproj" />
+    <ProjectReference Include="..\Maw.Security\Maw.Security.csproj" />
   </ItemGroup>
 
   <ItemGroup>

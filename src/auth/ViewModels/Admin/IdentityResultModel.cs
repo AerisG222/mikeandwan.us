@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
 
-namespace MawMvcApp.ViewModels.Admin
+namespace MawAuth.ViewModels.Admin
 {
 	public class IdentityResultModel
 	{

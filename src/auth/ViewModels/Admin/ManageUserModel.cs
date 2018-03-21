@@ -1,7 +1,7 @@
 using System;
 
 
-namespace MawMvcApp.ViewModels.Admin
+namespace MawAuth.ViewModels.Admin
 {
     public class ManageUserModel
     {

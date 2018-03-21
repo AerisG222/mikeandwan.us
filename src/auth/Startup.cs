@@ -16,6 +16,7 @@ using MawAuth.Services;
 using IdentityServer4;
 using Microsoft.AspNetCore.Mvc;
 using Mvc.RenderViewToString;
+using Maw.Security;
 
 namespace MawAuth
 {
@@ -106,7 +107,12 @@ namespace MawAuth
                 idsrv.AddDeveloperSigningCredential();
             }
 
-            services.AddMvc()
+            services
+                .AddAuthorization(opts =>
+                    {
+                        MawPolicyBuilder.AddMawPolicies(opts);
+                    })
+                .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

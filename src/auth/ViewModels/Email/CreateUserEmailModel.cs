@@ -1,4 +1,4 @@
-namespace MawMvcApp.ViewModels.Email
+namespace MawAuth.ViewModels.Email
 {
     public class CreateUserEmailModel
         : BaseEmailModel

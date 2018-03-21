@@ -35,7 +35,7 @@ namespace MawAuth
                                 .AddFilter("Microsoft", LogLevel.Warning)
                                 .AddFilter("System", LogLevel.Warning)
                                 .AddFilter("Maw", LogLevel.Debug)
-                                .AddFilter("MawMvcApp", LogLevel.Debug);
+                                .AddFilter("MawAuth", LogLevel.Debug);
                         }
                         else
                         {
@@ -44,7 +44,7 @@ namespace MawAuth
                                 .AddFilter("Microsoft", LogLevel.Warning)
                                 .AddFilter("System", LogLevel.Warning)
                                 .AddFilter("Maw", LogLevel.Information)
-                                .AddFilter("MawMvcApp", LogLevel.Information);
+                                .AddFilter("MawAuth", LogLevel.Information);
                         }
                     })
                 .UseKestrel(opts =>

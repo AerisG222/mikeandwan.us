@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 
-namespace MawMvcApp.Controllers
+namespace MawAuth.Controllers
 {
 	[Route("error")]
 	public class ErrorController

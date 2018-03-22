@@ -1,0 +1,24 @@
+﻿@inject Microsoft.AspNetCore.Authorization.IAuthorizationService _authzService
+
+<nav class="navbar navbar-dark bg-primary navbar-expand-sm mb-3">
+    <div class="container d-flex">
+        <a class="navbar-brand" href="https://www.mikeandwan.us">mikeandwan.us</a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse-head" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbar-collapse-head">
+            <ul class="navbar-nav">
+                @if((await _authzService.AuthorizeAsync(ViewContext.HttpContext.User, null, Maw.Security.Policy.AdminSite)).Succeeded) {
+                    <li class="nav-item">
+                        <a asp-action="Index" asp-controller="Admin" class="nav-link px-3"><svg-icon icon="Cog"></svg-icon></a>
+                    </li>
+                }
+
+                <li class="nav-item">
+                    <a asp-controller="about" asp-action="contact" class="nav-link px-3"><svg-icon icon="Envelope"></svg-icon></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

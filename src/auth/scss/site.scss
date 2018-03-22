@@ -4,16 +4,40 @@ $input-btn-padding-y: 0.5rem !default;
 @import "bootstrap/scss/bootstrap";
 @import "bootswatch/dist/slate/bootswatch";
 
-.banner {
-    height: 60px;
-    margin-bottom: 10px;
+.navbar-brand {
+    padding: 0;
+    margin-right: 1rem;
     font-family: Tangerine, cursive;
     font-size: 2.4rem;
-    background-image: url("/img/banner.jpg");
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: top;
-    border-bottom: 1px solid $table-border-color;
+    border-right: 0;
+}
+
+.navbar-dark {
+    .navbar-brand {
+        line-height: 1rem;
+        color: $body-color;
+    }
+
+    .navbar-nav {
+        .nav-link {
+            padding-bottom: 0.8rem;
+            color: $body-color;
+
+            &:hover,
+            &:focus {
+                color: $link-color;
+                background: $navbar-light-disabled-color;
+            }
+
+            &:last-child {
+                border-right: 1px solid $navbar-dark-toggler-border-color;
+            }
+        }
+    }
+
+    a:hover svg {
+        fill: $link-color;
+    }
 }
 
 footer {
@@ -43,20 +67,5 @@ footer {
 
     &.hp-feature {
         font-size: 7rem;
-    }
-}
-
-@media (min-width: 2000px) {
-    .banner {
-        height: 240px;
-        margin-bottom: 40px;
-        background-image: url("/img/banner_xl.jpg");
-    }
-}
-
-@media (min-width: 768px) {
-    .banner {
-        height: 120px;
-        margin-bottom: 20px;
     }
 }

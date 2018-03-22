@@ -22,7 +22,7 @@
 }
 
 @section sidebar {
-    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "byte-counter" })
+    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "byte-counter" })
 }
 
 <p>

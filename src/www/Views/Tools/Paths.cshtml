@@ -9,7 +9,7 @@
 }
 
 @section sidebar {
-    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "paths" })
+    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "paths" })
 }
 
 <table class="table table-responsive table-striped table-hover table-sm">

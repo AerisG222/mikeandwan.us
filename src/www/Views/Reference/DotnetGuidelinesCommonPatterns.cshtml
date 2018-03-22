@@ -8,7 +8,7 @@
 }
 
 @section sidebar {
-    @Html.Partial("_ReferenceSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-guidelines-common-patterns" })
+    @await Html.PartialAsync("_ReferenceSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-guidelines-common-patterns" })
 }
 
 <h2>Common Design Patterns</h2>

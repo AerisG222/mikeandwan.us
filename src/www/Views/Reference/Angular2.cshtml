@@ -4,7 +4,7 @@
 }
 
 @section custom_head {
-    @Html.Partial("_css_Reveal")
+    @await Html.PartialAsync("_css_Reveal")
 }
 
 <div class="reveal">
@@ -309,7 +309,7 @@ export class MyApp {
     </div>
 </div>
 
-@Html.Partial("_js_Reveal")
+@await Html.PartialAsync("_js_Reveal")
 <script>
     document.addEventListener('DOMContentLoaded', function(event) {
         // Full list of configuration options available at:

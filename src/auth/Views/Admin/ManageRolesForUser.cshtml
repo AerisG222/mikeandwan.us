@@ -4,7 +4,7 @@
 
 <h1>Edit Role Membership</h1>
 
-@Html.Partial("_identityResult", new IdentityResultModel("user role assignments", Model.Result))
+@await Html.PartialAsync("_identityResult", new IdentityResultModel("user role assignments", Model.Result))
 
 <p>Select what roles <strong>@Model.Username</strong> should belong to.</p>
 

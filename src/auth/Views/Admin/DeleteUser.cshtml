@@ -4,7 +4,7 @@
 
 <h1>Delete User</h1>
 
-@Html.Partial("_identityResult", new IdentityResultModel("user", Model.Result))
+@await Html.PartialAsync("_identityResult", new IdentityResultModel("user", Model.Result))
 
 @if(Model.Result == null || !Model.Result.Succeeded) {
 	<p>Are you sure you would like to delete user <strong>@Model.Username</strong>?</p>

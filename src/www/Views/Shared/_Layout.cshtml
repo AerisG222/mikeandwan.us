@@ -12,7 +12,7 @@
 	@await RenderSectionAsync("scripts_head", required: false)
 }
 
-@Html.Partial("_TopNav", true)
+@await Html.PartialAsync("_TopNav", true)
 
 <div class="container">
     <article class="row">

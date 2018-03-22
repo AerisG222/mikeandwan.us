@@ -8,7 +8,7 @@
 }
 
 @section sidebar {
-    @Html.Partial("_ReferenceSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-guidelines-design-for-extensibility" })
+    @await Html.PartialAsync("_ReferenceSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-guidelines-design-for-extensibility" })
 }
 
 <h2>Designing For Extensibility</h2>

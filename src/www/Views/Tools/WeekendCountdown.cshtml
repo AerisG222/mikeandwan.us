@@ -22,7 +22,7 @@
 }
 
 @section sidebar {
-    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "general", Item = "weekend-countdown" })
+    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "general", Item = "weekend-countdown" })
 }
 
 <section>

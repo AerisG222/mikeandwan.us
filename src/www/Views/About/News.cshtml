@@ -9,7 +9,7 @@
 }
 
 @section sidebar {
-    @Html.Partial("_AboutSidebar", "news")
+    @await Html.PartialAsync("_AboutSidebar", "news")
 }
 
 @foreach(var post in Model) {

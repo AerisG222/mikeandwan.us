@@ -4,7 +4,7 @@
 
 <h1>Edit User Profile</h1>
 
-@Html.Partial("_identityResult", new IdentityResultModel("user profile", Model.Result))
+@await Html.PartialAsync("_identityResult", new IdentityResultModel("user profile", Model.Result))
 
 <p>Please update the basic profile data for <strong>@Model.Username</strong> below, and then submit the changes.</p>
 

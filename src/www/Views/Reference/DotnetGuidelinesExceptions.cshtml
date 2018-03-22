@@ -8,7 +8,7 @@
 }
 
 @section sidebar {
-    @Html.Partial("_ReferenceSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-guidelines-exceptions" })
+    @await Html.PartialAsync("_ReferenceSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-guidelines-exceptions" })
 }
 
 <h2>Exceptions</h2>

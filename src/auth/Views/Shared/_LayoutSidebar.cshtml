@@ -12,7 +12,7 @@
 	@await RenderSectionAsync("scripts_head", required: false)
 }
 
-@Html.Partial("_banner")
+@await Html.PartialAsync("_banner")
 
 <div class="container">
     <article class="row">

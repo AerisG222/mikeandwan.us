@@ -9,7 +9,7 @@
 }
 
 @section sidebar {
-    @Html.Partial("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "html-encode" })
+    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "html-encode" })
 }
 
 @if(Model.HasErrors) {

@@ -5,7 +5,7 @@
 
 <h1>Create User</h1>
 
-@Html.Partial("_identityResult", new IdentityResultModel("user", Model.Result))
+@await Html.PartialAsync("_identityResult", new IdentityResultModel("user", Model.Result))
 
 @if(Model.Result == null || !Model.Result.Succeeded) {
 	<form asp-controller="admin" asp-action="createuser" method="post" autocomplete="off" role="form">

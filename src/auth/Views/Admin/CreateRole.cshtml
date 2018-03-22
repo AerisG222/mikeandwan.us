@@ -2,11 +2,11 @@
 @model CreateRoleModel
 @{ ViewBag.Title = "admin | create role"; }
 
-@Html.Partial("_backToAdminHome")
+@await Html.PartialAsync("_backToAdminHome")
 
 <h1>Create Role</h1>
 
-@Html.Partial("_identityResult", new IdentityResultModel("role", Model.Result))
+@await Html.PartialAsync("_identityResult", new IdentityResultModel("role", Model.Result))
 
 @if(Model.Result == null || !Model.Result.Succeeded) {
 	<form asp-controller="admin" asp-action="createrole" method="post" autocomplete="off" role="form">

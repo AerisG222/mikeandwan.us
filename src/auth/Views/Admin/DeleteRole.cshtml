@@ -4,7 +4,7 @@
 
 <h1>Delete Role</h1>
 
-@Html.Partial("_identityResult", new IdentityResultModel("role", Model.Result))
+@await Html.PartialAsync("_identityResult", new IdentityResultModel("role", Model.Result))
 
 @if(Model.Result == null || !Model.Result.Succeeded) {
 	<p>Are you sure you would like to delete the role <strong>@Model.Role</strong>?</p>

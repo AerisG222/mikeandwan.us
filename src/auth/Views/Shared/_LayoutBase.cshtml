@@ -10,6 +10,8 @@
 	@await RenderSectionAsync("scripts_head", required: false)
 }
 
+@await Html.PartialAsync("_TopNav")
+
 @RenderBody()
 
 <footer class="container-fluid">

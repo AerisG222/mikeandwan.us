@@ -11,7 +11,7 @@ namespace Maw.TagHelpers
 		: TagHelper
 	{
 		const string AttributeName = "maw-www-url";
-        static readonly Uri LocalBaseUri = new Uri("https://localhost:5001/");
+        static readonly Uri LocalBaseUri = new Uri("https://localhost:5021/");
         static readonly Uri ProductionBaseUri = new Uri("https://www.mikeandwan.us/");
 
 

@@ -113,24 +113,6 @@ namespace MawMvcApp
 
                     opts.ClaimActions.Add(new RoleClaimAction());
 
-                    //opts.ClaimActions.MapUniqueJsonKey("family_name", "family_name");
-
-                    /* alternative to RoleClaimAction above
-                    // https://stackoverflow.com/questions/46038509/unable-to-retrieve-claims-in-net-core-2-0
-                    opts.Events = new OpenIdConnectEvents()
-                    {
-                        OnUserInformationReceived = (context) =>
-                        {
-                            ClaimsIdentity claimsId = context.Principal.Identity as ClaimsIdentity;
-
-                            var roles = context.User.Children().FirstOrDefault(j => j.Path == JwtClaimTypes.Role).Values().ToList();
-                            claimsId.AddClaims(roles.Select(r => new Claim(JwtClaimTypes.Role, r.Value<String>())));
-
-                            return Task.FromResult(0);
-                        }
-                    };
-                    */
-
                     opts.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
                     opts.TokenValidationParameters.RoleClaimType = JwtClaimTypes.Role;
                 })
@@ -167,18 +149,6 @@ namespace MawMvcApp
                     {
                         ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
                     })
-                /*
-                .UseCookiePolicy(new CookiePolicyOptions
-                    {
-                        // note: using the forwarded middleware allowed the auth ticket to be marked secure.  however, the antiforgery
-                        //       only seems to be set when the antiforgery option is configured with RequireSsl = true.  The policy
-                        //       below ensures that all cookies are forced to match the request
-                        //       [HttpOnly will interfere with custom XSRF API filters]
-
-                        //HttpOnly = HttpOnlyPolicy.Always,
-                        Secure = CookieSecurePolicy.SameAsRequest
-                    })
-                */
                 .UseAuthentication()
                 .UseStaticFiles()
                 .UseMvc();

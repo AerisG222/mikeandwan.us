@@ -88,7 +88,6 @@ namespace MawMvcApp
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opts => {
                     opts.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     opts.Authority = "https://localhost:5001";
-                    opts.RequireHttpsMetadata = false;
 
                     opts.ClientId = "www.mikeandwan.us";
                     opts.ClientSecret = "secret";

@@ -43,7 +43,6 @@ namespace MawApi
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddIdentityServerAuthentication(opts => {
                         opts.Authority = "https://localhost:5001";
-                        opts.RequireHttpsMetadata = false;
 
                         opts.ApiName = "maw_api";
 

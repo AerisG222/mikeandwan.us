@@ -31,6 +31,12 @@ namespace MawApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var authConfig = new AuthConfig();
+            var corsConfig = new CorsConfig();
+
+            _config.GetSection("AuthConfig").Bind(authConfig);
+            _config.GetSection("CorsConfig").Bind(corsConfig);
+
             services
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
@@ -42,7 +48,7 @@ namespace MawApi
                     .Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddIdentityServerAuthentication(opts => {
-                        opts.Authority = "https://localhost:5001";
+                        opts.Authority = authConfig.AuthorizationUrl;
 
                         opts.ApiName = "maw_api";
 
@@ -56,7 +62,7 @@ namespace MawApi
                 .AddCors(opts => {
                     // this defines a CORS policy called "default"
                     opts.AddPolicy("default", policy => {
-                        policy.WithOrigins("https://localhost:5021")
+                        policy.WithOrigins(corsConfig.SiteUrl)
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });

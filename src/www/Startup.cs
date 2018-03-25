@@ -60,6 +60,9 @@ namespace MawMvcApp
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+            var authConfig = new AuthConfig();
+            _config.GetSection("AuthConfig").Bind(authConfig);
+
             services
                 .Configure<ContactConfig>(_config.GetSection("ContactUs"))
                 .Configure<GmailApiEmailConfig>(_config.GetSection("Gmail"))
@@ -87,10 +90,10 @@ namespace MawMvcApp
                 })
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opts => {
                     opts.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    opts.Authority = "https://localhost:5001";
+                    opts.Authority = authConfig.AuthorizationUrl;
 
-                    opts.ClientId = "www.mikeandwan.us";
-                    opts.ClientSecret = "secret";
+                    opts.ClientId = authConfig.ClientId;
+                    opts.ClientSecret = authConfig.Secret;
                     opts.ResponseType = "code id_token";
 
                     opts.SaveTokens = true;

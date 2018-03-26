@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { UserManager, UserManagerSettings, User } from 'oidc-client';
 import { Observable } from 'rxjs/Observable';
 import { tap, shareReplay } from 'rxjs/operators';
@@ -13,15 +14,14 @@ export class AuthService {
     private _user: User;
 
     constructor() {
-        // TODO: config and/or manager to come from di
         const config = {
-            authority: 'https://localhost:5001',
+            authority: environment.authUrl,
             client_id: 'maw_videos',
-            redirect_uri: 'https://localhost:5021/videos/signin-oidc',
+            redirect_uri: `${environment.wwwUrl}/videos/signin-oidc`,
             response_type: 'id_token token',
             scope: 'openid maw_api role',
             loadUserInfo: true,
-            post_logout_redirect_uri: 'https://localhost:5021/'
+            post_logout_redirect_uri: `${environment.wwwUrl}/`
         };
 
         this._mgr = new UserManager(config);

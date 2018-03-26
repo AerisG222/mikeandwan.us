@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/auth-service';
 import { PhotoNavigationService } from '../shared/photo-navigation.service';
 
@@ -7,15 +7,16 @@ import { PhotoNavigationService } from '../shared/photo-navigation.service';
     templateUrl: './sign-in.component.html',
     styleUrls: ['./sign-in.component.css']
 })
-export class SignInComponent {
+export class SignInComponent implements OnInit {
 
-    constructor(auth: AuthService,
-                navService: PhotoNavigationService) {
-        auth.completeLogin()
-            .subscribe(user => {
-                if (user) {
-                    navService.gotoModeList();
-                }
-            });
+    constructor(private _authService: AuthService,
+                private _navService: PhotoNavigationService) {
+
+    }
+
+    ngOnInit() {
+        this._authService.completeAuthentication().then(() => {
+            this._navService.gotoModeList();
+        });
     }
 }

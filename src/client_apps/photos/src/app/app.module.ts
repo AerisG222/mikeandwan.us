@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { AuthService } from './shared/auth-service';
+import { AuthGuardService } from './shared/auth-guard.service';
 import { AuthInterceptor } from './shared/auth-interceptor';
 import { BreadcrumbListComponent } from './breadcrumb-list/breadcrumb-list.component';
 import { BreadcrumbService } from './shared/breadcrumb.service';
@@ -53,14 +54,21 @@ import { SignInComponent } from './sign-in/sign-in.component';
         HttpClientModule,
         NgbModule.forRoot(),
         RouterModule.forRoot([
-            { path: '',                     component: ModeComponent,         data: { animation: 'home' } },
+            // tslint:disable-next-line:max-line-length
+            { path: '',                     component: ModeComponent,         canActivate: [AuthGuardService], data: { animation: 'home' } },
             { path: 'signin-oidc',          component: SignInComponent },
-            { path: 'random',               component: PhotoListComponent,    data: { animation: 'random', mode: RouteMode.Random } },
-            { path: 'year/:year',           component: CategoryListComponent, data: { animation: 'years' } },
-            { path: 'year/:year/:category', component: PhotoListComponent,    data: { animation: 'categories', mode: RouteMode.Category } },
-            { path: 'comment/:type/:order', component: PhotoListComponent,    data: { animation: 'comments', mode: RouteMode.Comment } },
-            { path: 'rating/:type/:order',  component: PhotoListComponent,    data: { animation: 'rating', mode: RouteMode.Rating } },
-            { path: ':mode',                component: ModeComponent,         data: { animation: 'mode' } },
+            // tslint:disable-next-line:max-line-length
+            { path: 'random',               component: PhotoListComponent,    canActivate: [AuthGuardService], data: { animation: 'random', mode: RouteMode.Random } },
+            // tslint:disable-next-line:max-line-length
+            { path: 'year/:year',           component: CategoryListComponent, canActivate: [AuthGuardService], data: { animation: 'years' } },
+            // tslint:disable-next-line:max-line-length
+            { path: 'year/:year/:category', component: PhotoListComponent,    canActivate: [AuthGuardService], data: { animation: 'categories', mode: RouteMode.Category } },
+            // tslint:disable-next-line:max-line-length
+            { path: 'comment/:type/:order', component: PhotoListComponent,    canActivate: [AuthGuardService], data: { animation: 'comments', mode: RouteMode.Comment } },
+            // tslint:disable-next-line:max-line-length
+            { path: 'rating/:type/:order',  component: PhotoListComponent,    canActivate: [AuthGuardService], data: { animation: 'rating', mode: RouteMode.Rating } },
+            // tslint:disable-next-line:max-line-length
+            { path: ':mode',                component: ModeComponent,         canActivate: [AuthGuardService], data: { animation: 'mode' } },
             { path: '**',                   redirectTo: '/' }
         ])
     ],
@@ -102,6 +110,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
         PhotoStateService,
         PhotoNavigationService,
         AuthService,
+        AuthGuardService,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,

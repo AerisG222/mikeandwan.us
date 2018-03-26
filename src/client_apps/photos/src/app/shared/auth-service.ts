@@ -1,105 +1,50 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { tap, shareReplay } from 'rxjs/operators';
-import 'rxjs/add/observable/from';
+import { environment } from '../../environments/environment';
+import { UserManager, UserManagerSettings, User } from 'oidc-client';
 
-import * as Oidc from 'oidc-client';
 
 @Injectable()
 export class AuthService {
-    private readonly TOKEN_NAME = 'maw_photos_token';
-    private _mgr: Oidc.UserManager;
+    private _mgr: UserManager;
+    private _user: User;
 
     constructor() {
-        // TODO: config and/or manager to come from di
         const config = {
-            authority: 'https://localhost:5001',
+            authority: environment.authUrl,
             client_id: 'maw_photos',
-            redirect_uri: 'https://localhost:5021/photos/signin-oidc',
+            redirect_uri: `${environment.wwwUrl}/photos/signin-oidc`,
             response_type: 'id_token token',
             scope: 'openid maw_api role',
             loadUserInfo: true,
-            post_logout_redirect_uri : 'https://localhost:5021/'
+            post_logout_redirect_uri: `${environment.wwwUrl}/`
         };
 
-        this._mgr = new Oidc.UserManager(config);
-    }
+        this._mgr = new UserManager(config);
 
-    login() {
-        this._mgr.signinRedirect();
-    }
-
-    completeLogin(): Observable<boolean> {
-        return Observable.create(observer => {
-            this._mgr
-                .signinRedirectCallback()
-                .then(user => {
-                    this.setUser(user);
-
-                    observer.next(true);
-                    observer.complete();
-                }, x => {
-                    observer.next(false);
-                    observer.complete();
-                });
+        this._mgr.getUser().then(user => {
+            this._user = user;
         });
     }
 
-    logout() {
-        localStorage.removeItem(this.TOKEN_NAME);
-
-        this._mgr.signoutRedirect();
+    isLoggedIn(): boolean {
+        return this._user != null && !this._user.expired;
     }
 
-    isLoggedIn() {
-        return this.getToken() != null;
+    getClaims(): any {
+        return this._user.profile;
     }
 
-    getToken() {
-        const usr = this.getUser();
-
-        return usr === null ? null : usr.access_token;
+    getAuthorizationHeaderValue(): string {
+        return `${this._user.token_type} ${this._user.access_token}`;
     }
 
-    private getUser(): Oidc.User {
-        const json = localStorage.getItem(this.TOKEN_NAME);
-
-        if (json) {
-            const usr = <Oidc.User>JSON.parse(json);
-
-            if (usr == null) {
-                return null;
-            }
-
-            if (this.isExpired(usr)) {
-                this.setUser(null);
-                return null;
-            }
-
-            return usr;
-        }
-
-        return null;
+    startAuthentication(): Promise<void> {
+        return this._mgr.signinRedirect();
     }
 
-    // while the true Oidc.User has an expired property, we rehydrate this from JSON,
-    // so do not actually have a true instance and expired is a property, not a field
-    // https://github.com/IdentityModel/oidc-client-js/blob/dev/src/User.js
-    private isExpired(user: Oidc.User) {
-        const now = Date.now() / 1000;
-        const expiresIn = user.expires_at - now;
-
-        if (expiresIn !== undefined) {
-            return expiresIn <= 0;
-        }
-    }
-
-    private setUser(user: Oidc.User) {
-        if (user == null) {
-            localStorage.removeItem(this.TOKEN_NAME);
-        } else {
-            localStorage.setItem(this.TOKEN_NAME, JSON.stringify(user));
-        }
+    completeAuthentication(): Promise<void> {
+        return this._mgr.signinRedirectCallback().then(user => {
+            this._user = user;
+        });
     }
 }

@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserManager, UserManagerSettings, User } from 'oidc-client';
-import { Observable } from 'rxjs/Observable';
-import { tap, shareReplay } from 'rxjs/operators';
-import 'rxjs/add/observable/from';
-
 
 @Injectable()
 export class AuthService {
-    private readonly TOKEN_NAME = 'maw_videos_token';
     private _mgr: UserManager;
     private _user: User;
 

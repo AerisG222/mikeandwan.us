@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { AuthGuardService } from './shared/auth-guard.service';
 import { AppComponent } from './app.component';
 import { AuthService } from './shared/auth-service';
 import { AuthInterceptor } from './shared/auth-interceptor';
@@ -35,10 +36,10 @@ import { SignInComponent } from './sign-in/sign-in.component';
         HttpClientModule,
         NgbModule.forRoot(),
         RouterModule.forRoot([
-            { path: '',                component: YearListComponent },
+            { path: '',                component: YearListComponent,     canActivate: [AuthGuardService] },
             { path: 'signin-oidc',     component: SignInComponent },
-            { path: ':year',           component: CategoryListComponent },
-            { path: ':year/:category', component: VideoListComponent },
+            { path: ':year',           component: CategoryListComponent, canActivate: [AuthGuardService] },
+            { path: ':year/:category', component: VideoListComponent,    canActivate: [AuthGuardService] },
             { path: '**',              redirectTo: '/' },
         ])
     ],
@@ -65,6 +66,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
         VideoNavigationService,
         VideoStateService,
         AuthService,
+        AuthGuardService,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,

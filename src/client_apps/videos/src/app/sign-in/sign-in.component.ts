@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/auth-service';
 import { VideoNavigationService } from '../shared/video-navigation.service';
 
@@ -7,15 +7,16 @@ import { VideoNavigationService } from '../shared/video-navigation.service';
     templateUrl: './sign-in.component.html',
     styleUrls: ['./sign-in.component.css']
 })
-export class SignInComponent {
+export class SignInComponent implements OnInit {
 
-    constructor(auth: AuthService,
-                navService: VideoNavigationService) {
-        auth.completeLogin()
-            .subscribe(user => {
-                if (user) {
-                    navService.gotoYearList();
-                }
-            });
+    constructor(private _authService: AuthService,
+                private _navService: VideoNavigationService) {
+
+    }
+
+    ngOnInit() {
+        this._authService.completeAuthentication().then(() => {
+            this._navService.gotoYearList();
+        });
     }
 }

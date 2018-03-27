@@ -5,8 +5,10 @@ import * as d3 from 'd3';
 
 import { AuthService } from './auth-service';
 
+declare var __API_URL__: string;
+
 export class PhotoStats {
-    readonly API_BASE_URL = 'https://localhost:5011';
+    private readonly API_BASE_URL = __API_URL__;
 
     private _authService = new AuthService();
     width = 960;

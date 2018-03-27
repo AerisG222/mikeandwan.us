@@ -1,20 +1,22 @@
+import { AuthConfig } from './auth-config';
 import * as Oidc from 'oidc-client';
+
+declare var __AUTH_CONFIG__: AuthConfig;
 
 export class AuthService {
     readonly TOKEN_NAME = 'maw_photo_stats_token';
-
+    private readonly _authConfig : AuthConfig = __AUTH_CONFIG__;
     private _mgr: Oidc.UserManager;
-
 
     constructor() {
         const config = {
-            authority: 'https://localhost:5001',
+            authority: this._authConfig.authUrl,
             client_id: 'maw_photo_stats',
-            redirect_uri: 'https://localhost:5021/photos/stats/signin-oidc',
+            redirect_uri: `${this._authConfig.wwwUrl}/photos/stats/signin-oidc`,
             response_type: 'id_token token',
             scope: 'openid maw_api role',
             loadUserInfo: true,
-            post_logout_redirect_uri : 'https://localhost:5021/'
+            post_logout_redirect_uri : `${this._authConfig.wwwUrl}/`
         };
 
         this._mgr = new Oidc.UserManager(config);

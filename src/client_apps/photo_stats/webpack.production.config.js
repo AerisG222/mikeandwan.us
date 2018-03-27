@@ -17,6 +17,14 @@ module.exports = {
         ]
     },
     plugins: [
+        new webpack.DefinePlugin({
+            __IS_PRODUCTION__: JSON.stringify(true),
+            __API_URL__: JSON.stringify('https://api.mikeandwan.us'),
+            __AUTH_CONFIG__: JSON.stringify({
+                authUrl: 'https://auth.mikeandwan.us',
+                wwwUrl: 'https://www.mikeandwan.us'
+            })
+        }),
         new webpack.LoaderOptionsPlugin({
             minimize: true,
             debug: true,

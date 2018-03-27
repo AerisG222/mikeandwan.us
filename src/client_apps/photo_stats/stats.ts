@@ -24,7 +24,7 @@ export class PhotoStats {
 
     x = d3.scaleLinear().range([0, 2 * Math.PI]);
     y = d3.scaleSqrt().range([0, this.radius]);
-    colors = d3.scaleOrdinal(d3.schemeCategory20);
+    colors = d3.scaleOrdinal(d3.schemeCategory10);
 
     arc = d3.arc()
         .startAngle((d: any) => Math.max(0, Math.min(2 * Math.PI, this.x(d.x0))))
@@ -229,12 +229,9 @@ export class PhotoStats {
         this.initSunburst();
 
         const url = `${this.API_BASE_URL}/photos/getStats`;
+        const headers = new Headers( { 'Authorization': `Bearer ${this._authService.getToken()}` } );
 
-        d3.json(url)
-          .header('Authorization', `Bearer ${this._authService.getToken()}`)
-          .get((error, root: any) => {
-            if (error) throw error;
-
+        d3.json(url, { headers: headers }).then((root) => {
             root = { name: 'All Photos', categoryStats: root };
             root = d3.hierarchy(root, this.statChildren);
 

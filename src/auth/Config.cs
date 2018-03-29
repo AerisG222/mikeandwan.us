@@ -2,13 +2,26 @@ using System.Collections.Generic;
 using IdentityServer4.Models;
 using IdentityServer4;
 using IdentityModel;
+using System;
+
 
 namespace MawAuth
 {
     public class Config
     {
+        readonly string _wwwUrl;
+        readonly string _wwwSecret;
+
+
+        public Config(string wwwUrl, string wwwSecret)
+        {
+            _wwwUrl = wwwUrl ?? throw new ArgumentNullException(nameof(wwwUrl));
+            _wwwSecret = wwwSecret ?? throw new ArgumentNullException(nameof(wwwSecret));
+        }
+
+        
         // scopes define the API resources in your system
-        public static IEnumerable<ApiResource> GetApiResources()
+        public IEnumerable<ApiResource> GetApiResources()
         {
             return new List<ApiResource>
             {
@@ -19,7 +32,7 @@ namespace MawAuth
         }
 
 
-        public static IEnumerable<IdentityResource> GetIdentityResources()
+        public IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource>
             {
@@ -32,7 +45,7 @@ namespace MawAuth
 
 
         // clients want to access resources (aka scopes)
-        public static IEnumerable<Client> GetClients()
+        public IEnumerable<Client> GetClients()
         {
             return new List<Client>
             {
@@ -46,15 +59,15 @@ namespace MawAuth
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {
-                        "https://localhost:5021/videos/signin-oidc"
+                        $"{_wwwUrl}/videos/signin-oidc"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "https://localhost:5021/"
+                        $"{_wwwUrl}/"
                     },
                     AllowedCorsOrigins = new List<string>
                     {
-                        "https://localhost:5021"
+                        _wwwUrl
                     },
                     AllowedScopes = new List<string>
                     {
@@ -77,15 +90,15 @@ namespace MawAuth
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {
-                        "https://localhost:5021/photos/signin-oidc"
+                        $"{_wwwUrl}/photos/signin-oidc"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "https://localhost:5021/"
+                        $"{_wwwUrl}/"
                     },
                     AllowedCorsOrigins = new List<string>
                     {
-                        "https://localhost:5021"
+                        _wwwUrl
                     },
                     AllowedScopes = new List<string>
                     {
@@ -108,15 +121,15 @@ namespace MawAuth
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {
-                        "https://localhost:5021/photos/stats/signin-oidc"
+                        $"{_wwwUrl}/photos/stats/signin-oidc"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "https://localhost:5021/"
+                        $"{_wwwUrl}/"
                     },
                     AllowedCorsOrigins = new List<string>
                     {
-                        "https://localhost:5021"
+                        _wwwUrl
                     },
                     AllowedScopes = new List<string>
                     {
@@ -139,15 +152,15 @@ namespace MawAuth
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {
-                        "https://localhost:5021/photos/3d/signin-oidc"
+                        $"{_wwwUrl}/photos/3d/signin-oidc"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "https://localhost:5021/"
+                        $"{_wwwUrl}/"
                     },
                     AllowedCorsOrigins = new List<string>
                     {
-                        "https://localhost:5021"
+                        _wwwUrl
                     },
                     AllowedScopes = new List<string>
                     {
@@ -169,14 +182,14 @@ namespace MawAuth
 
                     ClientSecrets =
                     {
-                        new Secret("secret".Sha256())
+                        new Secret(_wwwSecret.Sha256())
                     },
 
                     // where to redirect to after login
-                    RedirectUris = { "https://localhost:5021/signin-oidc" },
+                    RedirectUris = { $"{_wwwUrl}/signin-oidc" },
 
                     // where to redirect to after logout
-                    PostLogoutRedirectUris = { "https://localhost:5021/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { $"{_wwwUrl}/signout-callback-oidc" },
 
                     AllowedScopes = new List<string>
                     {

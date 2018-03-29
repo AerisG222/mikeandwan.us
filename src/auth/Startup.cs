@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mvc.RenderViewToString;
 using Maw.Security;
 
+
 namespace MawAuth
 {
     public class Startup
@@ -86,19 +87,18 @@ namespace MawAuth
                         opts.RetrieveUserDetails = true;
                     });
 
+            var config = new Config(_config["Environment:WwwUrl"], _config["Environment:WwwClientSecret"]);
+
             var idsrv = services
                 .AddIdentityServer(opts =>
                     {
-                        if (_env.IsDevelopment())
-                        {
-                            // we need to set this for dev otherwise the issuer becomes 10.0.2.2 when testing the android app
-                            opts.IssuerUri = "https://localhost:5001";
-                        }
+                        // we need to set this especially for dev otherwise the issuer becomes 10.0.2.2 when testing the android app
+                        opts.IssuerUri = _config["Environment:AuthUrl"];
                     })
                     .AddInMemoryPersistedGrants()
-                    .AddInMemoryApiResources(Config.GetApiResources())
-                    .AddInMemoryClients(Config.GetClients())
-                    .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                    .AddInMemoryApiResources(config.GetApiResources())
+                    .AddInMemoryClients(config.GetClients())
+                    .AddInMemoryIdentityResources(config.GetIdentityResources())
                     .AddAspNetIdentity<MawUser>()
                     .AddProfileService<IdentityServerProfileService>();
 

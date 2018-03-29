@@ -2,11 +2,13 @@ import { AuthService } from './auth-service';
 import { ICategory } from '../models/icategory';
 import { IPhoto } from '../models/iphoto';
 
+declare var __API_URL__: string;
+
 // TODO: fetch not currently understood by tsc, so we wrap window as any to avoid errors, which
 //       makes it easier to spot real errors introduced in the code.  once tsc understands this,
 //       remove the casts below.
 export class DataService {
-    readonly API_BASE_URL = 'https://localhost:5011';
+    private readonly API_BASE_URL = __API_URL__;
 
     constructor(private _authService) {
 
@@ -39,7 +41,7 @@ export class DataService {
     private getRequestOptions() {
         const headers = new Headers();
 
-        headers.set('Authorization', `Bearer ${this._authService.getToken()}`);
+        headers.set('Authorization', this._authService.getAuthorizationHeaderValue());
 
         return {
             method: 'get',

@@ -1,4 +1,4 @@
-var webpack = require('webpack');
+const webpack = require('webpack');
 
 module.exports = {
     mode: 'development',
@@ -12,9 +12,8 @@ module.exports = {
         extensions: ['.webpack.js', '.web.js', '.ts', '.js']
     },
     module: {
-        rules: [ {
-            test: /\.ts$/,
-            use: 'ts-loader' }
+        rules: [
+            { test: /\.ts$/, use: 'ts-loader' }
         ]
     },
     plugins: [

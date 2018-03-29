@@ -125,6 +125,8 @@
     </div>
 </div>
 
+@await Html.PartialAsync("_js_Jquery")
+
 @* http://stemkoski.github.io/Three.js/Shader-Animate.html *@
 <script id="waterVertexShader" type="x-shader/x-vertex">
 varying vec2 vUv;
@@ -159,6 +161,6 @@ void main()
 <script>
     document.addEventListener('DOMContentLoaded', function(event) {
         let app = new Photos.Photos3D();
-        app.run();
+        app.runAsync();
     });
 </script>

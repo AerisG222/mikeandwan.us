@@ -14,7 +14,7 @@ export class ArrowVisual extends Group implements IDisposable, IMouseClickReceiv
     static readonly SPEED_OFF = 0.02;
     static readonly SPEED_ON = 0.1;
 
-    private _clickSubject = new Subject();
+    private _clickSubject = new Subject<boolean>();
     private _isDisposed = false;
     private _mesh: Mesh;
     private _rotateSpeed = ArrowVisual.SPEED_OFF;

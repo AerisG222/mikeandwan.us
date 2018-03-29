@@ -52,11 +52,11 @@ export class Photos3D {
     private _ctx = new VisualContext(this._disposalService);
     private _stateService = new StateService(this._ctx);
 
-    run() {
+    async runAsync() {
         // ensure scrollbars do not appear
         document.getElementsByTagName('body')[0].style.overflow = 'hidden';
 
-        this._authService.initSession();
+        await this._authService.initSessionAsync();
 
         this._mouseWatcher = new MouseWatcher(this._ctx);
 

@@ -12,7 +12,12 @@
     "rootDir": ".",
     "sourceMap": true,
     "target": "es5",
-    "inlineSources": true
+    "inlineSources": true,
+    "lib": [
+      "dom",
+      "es5",
+      "es6"
+    ]
   },
   "files": [
     "stats.ts"

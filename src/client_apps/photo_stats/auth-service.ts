@@ -1,12 +1,12 @@
 import { AuthConfig } from './auth-config';
-import * as Oidc from 'oidc-client';
+import { UserManager, UserManagerSettings, User } from 'oidc-client';
 
 declare var __AUTH_CONFIG__: AuthConfig;
 
 export class AuthService {
-    readonly TOKEN_NAME = 'maw_photo_stats_token';
     private readonly _authConfig : AuthConfig = __AUTH_CONFIG__;
-    private _mgr: Oidc.UserManager;
+    private _mgr: UserManager;
+    private _user: User;
 
     constructor() {
         const config = {
@@ -19,90 +19,39 @@ export class AuthService {
             post_logout_redirect_uri : `${this._authConfig.wwwUrl}/`
         };
 
-        this._mgr = new Oidc.UserManager(config);
+        this._mgr = new UserManager(config);
     }
 
-    initSession() {
+    async initSessionAsync(): Promise<void> {
+        this._user = await this._mgr.getUser();
+
         if (!this.isLoggedIn()) {
             if(document.location.pathname.indexOf('signin-oidc') > 0) {
-                this.completeLogin()
-                    .then(x => {
-                        window.location.href = '/photos/stats';
-                    });
+                await this.completeAuthenticationAsync();
+                window.location.href = '/photos/stats';
             } else {
-                this.login();
+                this.startAuthenticationAsync();
             }
         }
     }
 
-    login() {
-        this._mgr.signinRedirect();
+    isLoggedIn(): boolean {
+        return this._user != null && !this._user.expired;
     }
 
-    completeLogin(): Promise<boolean> {
-        return this._mgr
-                .signinRedirectCallback()
-                .then(user => {
-                    this.setUser(user);
-
-                    return true;
-                }, x => false);
+    getClaims(): any {
+        return this._user.profile;
     }
 
-    logout() {
-        localStorage.removeItem(this.TOKEN_NAME);
-
-        this._mgr.signoutRedirect();
+    getAuthorizationHeaderValue(): string {
+        return `${this._user.token_type} ${this._user.access_token}`;
     }
 
-    isLoggedIn() {
-        return this.getToken() != null;
+    async startAuthenticationAsync(): Promise<void> {
+        await this._mgr.signinRedirect();
     }
 
-    getToken() {
-        const usr = this.getUser();
-
-        return usr === null ? null : usr.access_token;
-    }
-
-    private getUser(): Oidc.User {
-        const json = localStorage.getItem(this.TOKEN_NAME);
-
-        if (json) {
-            const usr = <Oidc.User>JSON.parse(json);
-
-            if (usr == null) {
-                return null;
-            }
-
-            if (this.isExpired(usr)) {
-                this.setUser(null);
-                return null;
-            }
-
-            return usr;
-        }
-
-        return null;
-    }
-
-    // while the true Oidc.User has an expired property, we rehydrate this from JSON,
-    // so do not actually have a true instance and expired is a property, not a field
-    // https://github.com/IdentityModel/oidc-client-js/blob/dev/src/User.js
-    private isExpired(user: Oidc.User) {
-        const now = Date.now() / 1000;
-        const expiresIn = user.expires_at - now;
-
-        if (expiresIn !== undefined) {
-            return expiresIn <= 0;
-        }
-    }
-
-    private setUser(user: Oidc.User) {
-        if (user == null) {
-            localStorage.removeItem(this.TOKEN_NAME);
-        } else {
-            localStorage.setItem(this.TOKEN_NAME, JSON.stringify(user));
-        }
+    async completeAuthenticationAsync(): Promise<void> {
+        this._user = await this._mgr.signinRedirectCallback();
     }
 }

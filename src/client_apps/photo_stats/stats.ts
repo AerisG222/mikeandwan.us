@@ -220,8 +220,8 @@ export class PhotoStats {
             });
     }
 
-    run(): void {
-        this._authService.initSession();
+    async runAsync(): Promise<void> {
+        await this._authService.initSessionAsync();
 
         let partition = d3.partition();
 
@@ -231,7 +231,7 @@ export class PhotoStats {
         this.initSunburst();
 
         const url = `${this.API_BASE_URL}/photos/getStats`;
-        const headers = new Headers( { 'Authorization': `Bearer ${this._authService.getToken()}` } );
+        const headers = new Headers({ 'Authorization': this._authService.getAuthorizationHeaderValue() });
 
         d3.json(url, { headers: headers }).then((root) => {
             root = { name: 'All Photos', categoryStats: root };

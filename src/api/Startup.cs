@@ -63,6 +63,7 @@ namespace MawApi
                     // this defines a CORS policy called "default"
                     opts.AddPolicy("default", policy => {
                         policy.WithOrigins(corsConfig.SiteUrl)
+                            .AllowCredentials()
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });

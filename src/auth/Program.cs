@@ -56,6 +56,9 @@ namespace MawAuth
                             });
                     })
                 .CaptureStartupErrors(true)
+                .UseDefaultServiceProvider((context, options) => {
+                    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
+                })
                 .UseStartup<Startup>()
                 .Build()
                 .Run();

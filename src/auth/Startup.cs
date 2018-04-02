@@ -17,6 +17,7 @@ using IdentityServer4;
 using Microsoft.AspNetCore.Mvc;
 using Mvc.RenderViewToString;
 using Maw.Security;
+using MawAuth.Models;
 
 
 namespace MawAuth

@@ -5,7 +5,7 @@ using IdentityModel;
 using System;
 
 
-namespace MawAuth
+namespace MawAuth.Models
 {
     public class Config
     {
@@ -19,7 +19,7 @@ namespace MawAuth
             _wwwSecret = wwwSecret ?? throw new ArgumentNullException(nameof(wwwSecret));
         }
 
-        
+
         // scopes define the API resources in your system
         public IEnumerable<ApiResource> GetApiResources()
         {

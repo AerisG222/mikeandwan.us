@@ -36,8 +36,15 @@ install_ngcli_global() {
 
 install_libs() {
     cd "${1}"
-    rm -rf node_modules
-    npm install
+
+    if [ -e 'package-lock.json' ]
+    then
+        npm ci
+    else
+        rm -rf node_modules
+        npm install
+    fi
+
     cd ..
 }
 

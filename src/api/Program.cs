@@ -17,17 +17,16 @@ namespace MawApi
         public static void Main(string[] args)
         {
             var host = new WebHostBuilder();
-            var isDevelopment = false;
-            var isStaging = false;
 
             host
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .ConfigureAppConfiguration((context, builder) =>
+                    {
+                        builder.AddEnvironmentVariables("MAW_API_");
+                    })
                 .ConfigureLogging((context, factory) =>
                     {
-                        isDevelopment = context.HostingEnvironment.IsDevelopment();
-                        isStaging = context.HostingEnvironment.IsStaging();
-
-                        if(isDevelopment)
+                        if(context.HostingEnvironment.IsDevelopment())
                         {
                             factory
                                 .AddConsole()
@@ -48,14 +47,12 @@ namespace MawApi
                     })
                 .UseKestrel(opts =>
                     {
+                        var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
+
                         opts.Listen(IPAddress.Loopback, 5011, listenOptions =>
                             {
-                                listenOptions.UseHttps("certs/api.pfx", "test");
+                                listenOptions.UseHttps(config["KestrelPfxFile"], config["KestrelPfxPwd"]);
                             });
-                    })
-                .ConfigureAppConfiguration((context, builder) =>
-                    {
-                        builder.AddEnvironmentVariables("MAW_API_");
                     })
                 .CaptureStartupErrors(true)
                 .UseStartup<Startup>()

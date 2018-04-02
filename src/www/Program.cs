@@ -15,17 +15,17 @@ namespace MawMvcApp
         public static void Main(string[] args)
         {
             var host = new WebHostBuilder();
-            var isDevelopment = false;
-            var isStaging = false;
 
             host
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .ConfigureAppConfiguration((context, builder) =>
+                    {
+                        builder.AddJsonFile("config.json");
+                        builder.AddEnvironmentVariables("MAW_WWW_");
+                    })
                 .ConfigureLogging((context, factory) =>
                     {
-                        isDevelopment = context.HostingEnvironment.IsDevelopment();
-                        isStaging = context.HostingEnvironment.IsStaging();
-
-                        if(isDevelopment)
+                        if(context.HostingEnvironment.IsDevelopment())
                         {
                             factory
                                 .AddConsole()
@@ -48,13 +48,10 @@ namespace MawMvcApp
                     {
                         opts.Listen(IPAddress.Loopback, 5021, listenOptions =>
                             {
-                                listenOptions.UseHttps("certs/www.pfx", "test");
+                                var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
+
+                                listenOptions.UseHttps(config["KestrelPfxFile"], config["KestrelPfxPwd"]);
                             });
-                    })
-                .ConfigureAppConfiguration((context, builder) =>
-                    {
-                        builder.AddJsonFile("config.json");
-                        builder.AddEnvironmentVariables("MAW_WWW_");
                     })
                 .CaptureStartupErrors(true)
                 .UseStartup<Startup>()

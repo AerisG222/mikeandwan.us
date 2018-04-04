@@ -5,6 +5,12 @@
 
 IS_PROD="$1"
 DATE=`date -Idate`
+CA_TTL_DAYS=1825  # 5yrs
+CA_REGEN_THRESHOLD=180  # > CERT_TTL_DAYS to ensure the CA always lives longer than issued certs
+CERT_TTL_DAYS=120  # certs should rotate every 90 days
+CERT_REGEN_THRESHOLD=30
+CA_SUBJ="/C=US/ST=Massachusetts/L=Boston/O=mikeandwan.us/OU=IT/CN=maw_ca"  # CN must *not* be localhost
+CERT_SUBJ="/C=US/ST=Massachusetts/L=Boston/O=mikeandwan.us/OU=IT/CN=localhost"  # CN *must* be localhost
 SCRIPT=`realpath "${BASH_SOURCE}"`
 SCRIPT_DIR="${SCRIPT%/*}"
 CONF_PATH="${SCRIPT_DIR}/cert.conf"
@@ -30,101 +36,197 @@ else
 fi
 
 CA_DIR="${CERT_ROOT}/ca"
-CA_KEY="${CA_DIR}/ca_${DATE}.key"
-CA_CRT="${CA_DIR}/ca_${DATE}.crt"
+CA_KEY="${CA_DIR}/ca.key"
+CA_KEY_PWD="${CA_KEY}.pwd"
+CA_CRT="${CA_DIR}/ca.crt"
+CA_CRT_PWD="${CA_CRT}.pwd"
 # NSSDB="sql:${HOME}/.pki/nssdb"
 
 PROJECTS=(
     "api"
     "auth"
+    "signing"
     "www"
 )
 
 echo "This script will create a CA and certs for auth (HTTPS + Signing), api, and www endpoints."
 echo "These are to be used by Kestrel and IdentityServer, whereas LetsEncrypt is used on the public"
-echo "facing endpoints (in production)."
+echo "facing endpoints on nginx (in production)."
 echo ''
 echo "Certs will be created at the following root directory: ${CERT_ROOT}."
 echo ''
 read -rsp $'Press enter to continue, or CTL-C to exit...\n'
 
+will_expire_soon() {
+    local cert="$1"
+    local threshold="$2"
+    local secs_in_day=86400
+    local threshold_secs=$(expr $threshold \* $secs_in_day)
+
+    if [ -e "${cert}" ]
+    then
+        echo `openssl x509 -in "${cert}" -checkend "${threshold_secs}" |grep -c "will expire"`
+    else
+        echo "1"
+    fi
+}
+
+gen_pwd() {
+    openssl rand -base64 32
+}
+
 gen_cert() {
-    local project=$1
+    local project="$1"
     local certdir="${CERT_ROOT}/${project}"
     local certkey="${certdir}/${project}_${DATE}.key"
     local certreq="${certdir}/${project}_${DATE}.csr"
     local certcrt="${certdir}/${project}_${DATE}.crt"
     local certpfx="${certdir}/${project}_${DATE}.pfx"
-    local activepfx="${certdir}/${project}.pfx"
-
-    echo ''
-    echo ''
-    echo '*********************************************************'
-    echo " creating certificate for -[${project}]-"
-    echo ' when asked for the Common Name, USE localhost'
-    echo '*********************************************************'
+    local certkeypwd="${certkey}.pwd"
+    local certpfxpwd="${certpfx}.pwd"
+    local activecrt="${certdir}/${project}.crt" # used by this script
+    local activepfx="${certdir}/${project}.pfx" # used by server
+    local activekey="${certdir}/${project}.key"
+    local activekeypwd="${activekey}.pwd"
+    local activepfxpwd="${activepfx}.pwd"
 
     if [ ! -d "${certdir}" ]
     then
         mkdir -p "${certdir}"
     fi
 
-    # Generate the domain key:
-    openssl genrsa -out "${certkey}" 2048
+    local cert_expiring=$(will_expire_soon "${activecrt}" "${CERT_REGEN_THRESHOLD}")
 
-    # Generate the certificate signing request
-    openssl req -sha256 -days 400 -new -nodes -config "${CONF_PATH}" -key "${certkey}" -out "${certreq}"
-
-    # Sign the request with your root key
-    openssl x509 -sha256 -days 400 -req -extfile "${EXT_PATH}" -in "${certreq}" -CA "${CA_CRT}" -CAkey "${CA_KEY}" -CAcreateserial -out "${certcrt}"
-
-    # Check your homework:
-    openssl verify -CAfile "${CA_CRT}" "${certcrt}"
-
-    # Make pfx for kestrel
-    openssl pkcs12 -export -out "${certpfx}" -inkey "${certkey}" -in "${certcrt}"
-
-    # create symlink to new cert in order to activate
-    if [ -e "${activepfx}" ]
+    if [ "${cert_expiring}" = "0" ]
     then
-        rm "${activepfx}"
+        echo "* cert for ${project} is not expiring soon, it will not be generated."
+        echo ''
+    else
+        echo '*********************************************************'
+        echo "* creating certificate for -[${project}]-"
+        echo '*********************************************************'
+        echo ''
+
+        # create password for the keyfile
+        PASSWORD=$(gen_pwd)
+        echo "${PASSWORD}" > "${certkeypwd}"
+
+        # create password for the cert
+        PASSWORD=$(gen_pwd)
+        echo "${PASSWORD}" > "${certpfxpwd}"
+
+        PASSWORD=
+
+        # Generate the domain key:
+        openssl genrsa -passout "file:${certkeypwd}" -out "${certkey}" 2048
+
+        # Generate the certificate signing request
+        openssl req -sha256 -days "${CERT_TTL_DAYS}" -subj "${CERT_SUBJ}" -new -nodes -config "${CONF_PATH}" -key "${certkey}" -passin "file:${certkeypwd}" -out "${certreq}"
+
+        # Sign the request with your root key
+        openssl x509 -sha256 -days "${CERT_TTL_DAYS}" -req -extfile "${EXT_PATH}" -in "${certreq}" -CA "${CA_CRT}" -CAkey "${CA_KEY}" -passin "file:${CA_KEY_PWD}" -CAcreateserial -out "${certcrt}"
+
+        # Check your homework:
+        openssl verify -CAfile "${CA_CRT}" "${certcrt}"
+
+        # Make pfx for kestrel
+        openssl pkcs12 -export -out "${certpfx}" -inkey "${certkey}" -in "${certcrt}" -passin "file:${certkeypwd}" -passout "file:${certpfxpwd}"
+
+        # create symlink to new cert to make it available to services
+        if [ -e "${activepfx}" ]
+        then
+            rm "${activepfx}"
+            rm "${activecrt}"
+            rm "${activekey}"
+            rm "${activekeypwd}"
+            rm "${activepfxpwd}"
+        fi
+
+        ln -s "${certkey}" "${activekey}"
+        ln -s "${certkeypwd}" "${activekeypwd}"
+        ln -s "${certcrt}" "${activecrt}"
+        ln -s "${certpfx}" "${activepfx}"
+        ln -s "${certpfxpwd}" "${activepfxpwd}"
+
+        # Trust the certificate for SSL
+        # pk12util -d "${NSSDB}" -i "${certpfx}"
+
+        # Trust a self-signed server certificate
+        # certutil -d "${NSSDB}" -A -t "P,," -n "maw:${project}" -i "${certcrt}"
     fi
-
-    ln -s "${certpfx}" "${activepfx}"
-
-    # Trust the certificate for SSL
-    # pk12util -d "${NSSDB}" -i "${certpfx}"
-
-    # Trust a self-signed server certificate
-    # certutil -d "${NSSDB}" -A -t "P,," -n "maw:${project}" -i "${certcrt}"
 }
 
+# *************************************
+# ROOT CA
+# *************************************
 if [ ! -d "${CA_DIR}" ]; then
     mkdir -p "${CA_DIR}"
 fi
 
-# Generate the root (GIVE IT A PASSWORD IF YOU'RE NOT AUTOMATING SIGNING!):
-echo ''
-echo ''
-echo '*********************************************************'
-echo ' creating certificate authority'
-echo ' when asked for the Common Name, do NOT use localhost'
-echo '*********************************************************'
-openssl genrsa -aes256 -out "${CA_KEY}" 2048
-openssl req -new -x509 -days 400 -key "${CA_KEY}" -sha256 -extensions v3_ca -out "${CA_CRT}"
+CA_CERT_EXPIRING=$(will_expire_soon "${CA_CRT}" "${CA_REGEN_THRESHOLD}")
 
-# Trust our ca
-# certutil -d "${NSSDB}" -A -t "c,," -n "maw_ca" -i "${CA_CRT}"
-
-if [ $EUID -ne 0 ]
+if [ "${CA_CERT_EXPIRING}" = "0" ]
 then
-    echo 'You will be prompted for your password to publish the new CA'
-    echo 'to make it available machine-wide via sudo...'
+    echo '* CA cert is not expiring soon, it will not be generated.'
+    echo ''
+else
+    CA_KEY_NEW="${CA_DIR}/ca_${DATE}.key"
+    CA_KEY_PWD_NEW="${CA_KEY_NEW}.pwd"
+    CA_CRT_NEW="${CA_DIR}/ca_${DATE}.crt"
+    CA_CRT_PWD_NEW="${CA_CRT_NEW}.pwd"
+
+    echo '*********************************************************'
+    echo '* creating certificate authority'
+    echo '*********************************************************'
+    echo ''
+
+    # create password for the keyfile
+    PASSWORD=$(gen_pwd)
+    echo "${PASSWORD}" > "${CA_KEY_PWD_NEW}"
+
+    # create password for the cert
+    PASSWORD=$(gen_pwd)
+    echo "${PASSWORD}" > "${CA_CRT_PWD_NEW}"
+
+    PASSWORD=
+
+    # create CA key
+    openssl genrsa -aes256 -passout "file:${CA_KEY_PWD_NEW}" -out "${CA_KEY_NEW}" 2048
+
+    # create CA cert
+    openssl req -new -x509 -days "${CA_TTL_DAYS}" -key "${CA_KEY_NEW}" -subj "${CA_SUBJ}" -passin "file:${CA_KEY_PWD_NEW}" -passout "file:${CA_CRT_PWD_NEW}" -sha256 -extensions v3_ca -out "${CA_CRT_NEW}"
+
+    # update symlink to point at current
+    if [ -e "${CA_CRT}" ]
+    then
+        rm "${CA_KEY}"
+        rm "${CA_CRT}"
+        rm "${CA_KEY_PWD}"
+        rm "${CA_CRT_PWD}"
+    fi
+
+    ln -s "${CA_KEY_NEW}" "${CA_KEY}"
+    ln -s "${CA_KEY_PWD_NEW}" "${CA_KEY_PWD}"
+    ln -s "${CA_CRT_NEW}" "${CA_CRT}"
+    ln -s "${CA_CRT_PWD_NEW}" "${CA_CRT_PWD}"
+
+    # Trust our ca
+    # certutil -d "${NSSDB}" -A -t "c,," -n "maw_ca" -i "${CA_CRT}"
+
+    if [ $EUID -ne 0 ]
+    then
+        echo 'You will be prompted for your password to publish the new CA'
+        echo 'to make it available machine-wide via sudo...'
+        echo ''
+    fi
+
+    sudo cp "${CA_CRT_NEW}" /usr/share/pki/ca-trust-source/anchors/
+    sudo update-ca-trust
 fi
 
-sudo cp "${CA_CRT}" /usr/share/pki/ca-trust-source/anchors/
-sudo update-ca-trust
-
+# *************************************
+# PROJECT CERTS
+# *************************************
 for I in "${PROJECTS[@]}"
 do
     gen_cert "${I}"

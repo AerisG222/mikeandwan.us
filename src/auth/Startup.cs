@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mvc.RenderViewToString;
 using Maw.Security;
 using MawAuth.Models;
+using IdentityServer4.Stores;
 
 
 namespace MawAuth
@@ -37,6 +38,8 @@ namespace MawAuth
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var config = new Config(_config["Environment:WwwUrl"], _config["Environment:WwwClientSecret"]);
+
             services
                 .Configure<IdentityOptions>(opts =>
                     {
@@ -46,6 +49,8 @@ namespace MawAuth
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
                 .AddTransient<RazorViewToStringRenderer>()
+                .AddSingleton<ISigningCredentialStore>(new MawSigningCredentialStore(_config["SigningCertDir"]))
+                .AddSingleton<IValidationKeysStore>(new MawValidationKeysStore(_config["SigningCertDir"]))
                 .AddIdentity<MawUser, MawRole>()
                     .AddDefaultTokenProviders()
                     .Services
@@ -86,11 +91,8 @@ namespace MawAuth
                         opts.ConsumerKey = _config["Twitter:ConsumerKey"];
                         opts.ConsumerSecret = _config["Twitter:ConsumerSecret"];
                         opts.RetrieveUserDetails = true;
-                    });
-
-            var config = new Config(_config["Environment:WwwUrl"], _config["Environment:WwwClientSecret"]);
-
-            var idsrv = services
+                    })
+                    .Services
                 .AddIdentityServer(opts =>
                     {
                         // we need to set this especially for dev otherwise the issuer becomes 10.0.2.2 when testing the android app
@@ -101,14 +103,8 @@ namespace MawAuth
                     .AddInMemoryClients(config.GetClients())
                     .AddInMemoryIdentityResources(config.GetIdentityResources())
                     .AddAspNetIdentity<MawUser>()
-                    .AddProfileService<IdentityServerProfileService>();
-
-            if (_env.IsDevelopment())
-            {
-                idsrv.AddDeveloperSigningCredential();
-            }
-
-            services
+                    .AddProfileService<IdentityServerProfileService>()
+                    .Services
                 .AddAuthorization(opts =>
                     {
                         MawPolicyBuilder.AddMawPolicies(opts);

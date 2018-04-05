@@ -48,10 +48,11 @@ namespace MawApi
                 .UseKestrel(opts =>
                     {
                         var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
+                        var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
 
                         opts.Listen(IPAddress.Loopback, 5011, listenOptions =>
                             {
-                                listenOptions.UseHttps(config["KestrelPfxFile"], config["KestrelPfxPwd"]);
+                                listenOptions.UseHttps(config["KestrelPfxFile"], pwd);
                             });
                     })
                 .CaptureStartupErrors(true)

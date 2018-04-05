@@ -51,8 +51,9 @@ namespace MawAuth
                         opts.Listen(IPAddress.Loopback, 5001, listenOptions =>
                             {
                                 var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
+                                var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
 
-                                listenOptions.UseHttps(config["KestrelPfxFile"], config["KestrelPfxPwd"]);
+                                listenOptions.UseHttps(config["KestrelPfxFile"], pwd);
                             });
                     })
                 .CaptureStartupErrors(true)

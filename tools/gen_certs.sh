@@ -99,9 +99,11 @@ gen_cert() {
 
     if [ "${cert_expiring}" = "0" ]
     then
+        echo ''
         echo "* cert for ${project} is not expiring soon, it will not be generated."
         echo ''
     else
+        echo ''
         echo '*********************************************************'
         echo "* creating certificate for -[${project}]-"
         echo '*********************************************************'

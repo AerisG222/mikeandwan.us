@@ -1,0 +1,76 @@
+﻿@{ 
+    ViewBag.Title = "custom shader"; 
+    Layout = "_LayoutMinimal";
+}
+
+@section custom_head {
+    @Html.Partial("_css_Bootstrap")
+    @Html.Partial("_css_site")
+    <style>
+        #container { margin-left: auto; margin-right: auto; }
+    </style>
+}
+
+<div id="container">
+
+</div>
+
+<!-- REFERENCES -->
+<!--
+    https://aerotwist.com/tutorials/an-introduction-to-shaders-part-1/
+    https://threejs.org/examples/webgl_buffergeometry_custom_attributes_particles.html
+-->
+
+<script type="x-shader/x-vertex" id="vertexshader">
+    // switch on high precision floats
+    #ifdef GL_ES
+    precision highp float;
+    #endif
+    
+    attribute float displacement;
+    attribute vec3 colors;
+
+    varying vec3 vNormal;
+    varying vec3 vColor;
+
+    void main()
+    {
+        vColor = colors;
+        vNormal = normal;
+
+        vec3 newPosition = position + normal * vec3(displacement);
+
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition,1.0);
+    }
+</script>
+
+<script type="x-shader/x-fragment" id="fragmentshader">
+    #ifdef GL_ES
+    precision highp float;
+    #endif
+    
+    uniform vec3 color;
+
+    varying vec3 vNormal;
+    varying vec3 vColor;
+
+    void main()
+    {
+        vec3 light = vec3(0.5, 0.2, 1.0);
+
+        light = normalize(light);
+
+        float dProd = max(0.0, dot(vNormal, light));
+
+        gl_FragColor = vec4(vColor, 1.0);
+        // gl_FragColor = gl_FragColor * vec4(dProd, dProd, dProd, 1.0);
+    }
+</script>
+
+<script src="/js/webgl_shader/main.bundle.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function(event) {
+        var demo = new WebGLDemo.ShaderDemo();
+        demo.run();
+    });
+</script>

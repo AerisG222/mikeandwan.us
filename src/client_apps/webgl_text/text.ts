@@ -1,5 +1,5 @@
 import { Scene, PerspectiveCamera, Renderer, Mesh, Object3D, AmbientLight, SpotLight, Font, Fog, WebGLRenderer,
-         AxisHelper, DirectionalLight, TextureLoader, PlaneGeometry, TextGeometry, RepeatWrapping, DoubleSide,
+         AxesHelper, DirectionalLight, TextureLoader, PlaneGeometry, TextGeometry, RepeatWrapping, DoubleSide,
          FontLoader, MeshPhongMaterial, MeshBasicMaterial
        } from 'three';
 
@@ -39,7 +39,7 @@ export class TextDemo {
         document.body.appendChild(this.stats.dom);
 
         // axis helper
-        let axisHelper = new AxisHelper(100);
+        let axisHelper = new AxesHelper(100);
         this.scene.add(axisHelper);
 
         // camera

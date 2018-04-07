@@ -1,5 +1,5 @@
 import { Scene, PerspectiveCamera, Renderer, Mesh, AmbientLight, Fog, WebGLRenderer, DirectionalLight,
-         AxisHelper, TextureLoader, BoxGeometry, MeshBasicMaterial, MeshPhongMaterial, PlaneGeometry,
+         AxesHelper, TextureLoader, BoxGeometry, MeshBasicMaterial, MeshPhongMaterial, PlaneGeometry,
          DoubleSide, RepeatWrapping
        } from 'three';
 
@@ -51,7 +51,7 @@ export class CubeDemo {
         this.scene.add(directionalLight);
 
         // axis helper
-        let axisHelper = new AxisHelper(100);
+        let axisHelper = new AxesHelper(100);
         this.scene.add(axisHelper);
 
         // cube

@@ -13,6 +13,7 @@ APPS=(
     "time"
     "videos"
     "webgl_cube"
+    "webgl_shader"
     "webgl_text"
     "weekend_countdown"
 )

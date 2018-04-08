@@ -81,6 +81,14 @@ namespace MawMvcApp.Controllers
 		}
 
 
+		[Authorize]
+		[HttpGet("spa-silent-signin")]
+		public IActionResult SpaSilentSignin()
+		{
+			return View();
+		}
+
+
 		/*
 		[Authorize]
 		[HttpGet("edit-profile")]

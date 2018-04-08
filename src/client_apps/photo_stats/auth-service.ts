@@ -10,6 +10,8 @@ export class AuthService {
 
     constructor() {
         const config = {
+            automaticSilentRenew: true,
+            silent_redirect_uri: `${this._authConfig.wwwUrl}/account/spa-silent-signin`,
             authority: this._authConfig.authUrl,
             client_id: 'maw_photo_stats',
             redirect_uri: `${this._authConfig.wwwUrl}/photos/stats/signin-oidc`,
@@ -53,5 +55,11 @@ export class AuthService {
 
     async completeAuthenticationAsync(): Promise<void> {
         this._user = await this._mgr.signinRedirectCallback();
+    }
+
+    attemptSilentSignin(): Promise<void> {
+        return this._mgr.signinSilent().then(user => {
+            this._user = user;
+        });
     }
 }

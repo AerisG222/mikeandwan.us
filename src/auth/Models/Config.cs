@@ -59,7 +59,8 @@ namespace MawAuth.Models
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {
-                        $"{_wwwUrl}/videos/signin-oidc"
+                        $"{_wwwUrl}/videos/signin-oidc",
+                        $"{_wwwUrl}/account/spa-silent-signin"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
@@ -90,7 +91,8 @@ namespace MawAuth.Models
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {
-                        $"{_wwwUrl}/photos/signin-oidc"
+                        $"{_wwwUrl}/photos/signin-oidc",
+                        $"{_wwwUrl}/account/spa-silent-signin"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
@@ -121,7 +123,8 @@ namespace MawAuth.Models
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {
-                        $"{_wwwUrl}/photos/stats/signin-oidc"
+                        $"{_wwwUrl}/photos/stats/signin-oidc",
+                        $"{_wwwUrl}/account/spa-silent-signin"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
@@ -152,7 +155,8 @@ namespace MawAuth.Models
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {
-                        $"{_wwwUrl}/photos/3d/signin-oidc"
+                        $"{_wwwUrl}/photos/3d/signin-oidc",
+                        $"{_wwwUrl}/account/spa-silent-signin"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {

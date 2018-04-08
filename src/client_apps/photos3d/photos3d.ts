@@ -56,7 +56,11 @@ export class Photos3D {
         // ensure scrollbars do not appear
         document.getElementsByTagName('body')[0].style.overflow = 'hidden';
 
-        await this._authService.initSessionAsync();
+        await this._authService.attemptSilentSignin();
+
+        if (!this._authService.isLoggedIn()) {
+            await this._authService.initSessionAsync();
+        }
 
         this._mouseWatcher = new MouseWatcher(this._ctx);
 

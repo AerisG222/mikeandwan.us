@@ -221,7 +221,11 @@ export class PhotoStats {
     }
 
     async runAsync(): Promise<void> {
-        await this._authService.initSessionAsync();
+        await this._authService.attemptSilentSignin();
+
+        if (!this._authService.isLoggedIn()) {
+            await this._authService.initSessionAsync();
+        }
 
         let partition = d3.partition();
 

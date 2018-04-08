@@ -14,7 +14,20 @@ export class AuthGuardService implements CanActivate {
             return true;
         }
 
-        this._authService.startAuthentication();
-        return false;
+        return new Promise((resolve) => {
+            this._authService.attemptSilentSignin()
+                .then(() => {
+                    if (this._authService.isLoggedIn()) {
+                        resolve(true);
+                    } else {
+                        this._authService.startAuthentication();
+                        resolve(false);
+                    }
+                })
+                .catch(() => {
+                    this._authService.startAuthentication();
+                    resolve(false);
+                });
+        });
     }
 }

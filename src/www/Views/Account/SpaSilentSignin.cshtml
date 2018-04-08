@@ -1,0 +1,10 @@
+@{ Layout = "_LayoutMinimal"; }
+
+@await Html.PartialAsync("_js_SpaSilentSignin")
+
+<script>
+    new Oidc.UserManager().signinSilentCallback()
+        .catch((err) => {
+            console.log(err);
+        });
+</script>

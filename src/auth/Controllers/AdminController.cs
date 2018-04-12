@@ -35,6 +35,7 @@ namespace MawAuth.Controllers
 		readonly IBlogService _blogSvc;
 		readonly IEmailService _emailSvc;
 		readonly RazorViewToStringRenderer _razorRenderer;
+		readonly IPasswordValidator<MawUser> _pwdValidator;
 
 
 		public AdminController(ILogger<AdminController> log,
@@ -43,7 +44,8 @@ namespace MawAuth.Controllers
 							   RoleManager<MawRole> roleManager,
 							   IBlogService blogService,
 							   IEmailService emailService,
-							   RazorViewToStringRenderer razorRenderer)
+							   RazorViewToStringRenderer razorRenderer,
+							   IPasswordValidator<MawUser> passwordValidator)
         {
 			_log = log ?? throw new ArgumentNullException(nameof(log));
             _repo = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
@@ -52,6 +54,7 @@ namespace MawAuth.Controllers
 			_blogSvc = blogService ?? throw new ArgumentNullException(nameof(blogService));
 			_emailSvc = emailService ?? throw new ArgumentNullException(nameof(emailService));
 			_razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
+			_pwdValidator = passwordValidator ?? throw new ArgumentNullException(nameof(passwordValidator));
         }
 
 
@@ -72,6 +75,7 @@ namespace MawAuth.Controllers
 				Username = x.Username,
 				FirstName = x.FirstName,
 				LastName = x.LastName,
+				Email = x.Email,
 				LastLoginDate = x.LastLoginDate
 			});
 
@@ -107,8 +111,8 @@ namespace MawAuth.Controllers
 					Email = model.Email
 				};
 
-				var crypto = new Crypto();
-				var password = crypto.GeneratePassword(12);
+				var password = await GeneratePassword();
+				
 				model.Result = IdentityResult.Failed();
 
 				try
@@ -132,7 +136,7 @@ namespace MawAuth.Controllers
 				}
 				catch(Exception ex)
 				{
-					_log.LogError("error creating user", ex);
+					_log.LogError(ex, "error creating user");
 					model.Result = IdentityResult.Failed(new IdentityError { Description = ex.Message });
 				}
 			}
@@ -178,7 +182,7 @@ namespace MawAuth.Controllers
 					}
 					catch(Exception ex)
 					{
-						_log.LogError("there was an error deleting the user", ex);
+						_log.LogError(ex, "there was an error deleting the user");
 					}
 				}
 				else {
@@ -493,6 +497,25 @@ namespace MawAuth.Controllers
 			{
 				_log.LogWarning(err.ErrorMessage);
 			}
+		}
+
+
+		async Task<string> GeneratePassword()
+		{
+			// limit to 100 tries
+			for(int i = 0; i < 100; i++)
+			{
+				var crypto = new Crypto();
+				var password = crypto.GeneratePassword(12);
+				var isValid = await _pwdValidator.ValidateAsync(_userMgr, null, password);
+
+				if(isValid == IdentityResult.Success)
+				{
+					return password;
+				}
+			}
+
+			throw new InvalidOperationException();
 		}
     }
 }

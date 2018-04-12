@@ -8,7 +8,8 @@
 	<thead>
 		<tr>
 			<th>Username</th>
-            <th>Name</th>
+            <th>Email</th>
+			<th>Name</th>
             <th>Last Login</th>
 			<th>Profile</th>
 			<th>Roles</th>
@@ -19,6 +20,7 @@
 	@foreach(var user in Model) {
 		<tr>
 			<td>@user.Username</td>
+			<td>@user.Email</td>
             <td>@user.FirstName @user.LastName</td>
             <td>@user.LastLoginDate</td>
 			<td><a asp-controller="admin" asp-action="editprofile" asp-route-id="@user.Username">Edit</a></td>

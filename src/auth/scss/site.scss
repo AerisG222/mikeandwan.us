@@ -1,43 +1,47 @@
-$input-btn-padding-y: 0.5rem !default;
-
-@import "bootswatch/dist/slate/variables";
+@import "vars";
 @import "bootstrap/scss/bootstrap";
-@import "bootswatch/dist/slate/bootswatch";
+
+.navbar .container {
+    padding-right: 0;
+    padding-left: 0;
+}
 
 .navbar-brand {
-    padding: 0;
-    margin-right: 1rem;
     font-family: Tangerine, cursive;
     font-size: 2.4rem;
-    border-right: 0;
+    line-height: 1rem;
 }
 
 .navbar-dark {
     .navbar-brand {
-        line-height: 1rem;
         color: $body-color;
-    }
 
-    .navbar-nav {
-        .nav-link {
-            padding-bottom: 0.8rem;
-            color: $body-color;
-
-            &:hover,
-            &:focus {
-                color: $link-color;
-                background: $navbar-light-disabled-color;
-            }
-
-            &:last-child {
-                border-right: 1px solid $navbar-dark-toggler-border-color;
-            }
+        &:hover,
+        &:focus {
+            color: $link-hover-color;
         }
     }
+}
 
-    a:hover svg {
-        fill: $link-color;
+.navbar-nav {
+    .nav-link {
+        padding-bottom: 0.8rem;
+        color: $body-color;
+
+        &:hover,
+        &:focus {
+            color: $link-color;
+            background: $navbar-light-disabled-color;
+        }
+
+        &:last-child {
+            border-right: 1px solid $navbar-dark-toggler-border-color;
+        }
     }
+}
+
+a:hover svg {
+    fill: $link-color;
 }
 
 footer {

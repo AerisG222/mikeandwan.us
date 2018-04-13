@@ -111,7 +111,8 @@ namespace MawMvcApp
                     opts.Scope.Add(JwtClaimTypes.Role);
                     opts.Scope.Add("email");
 
-                    opts.ClaimActions.Add(new RoleClaimAction());
+                    // https://github.com/IdentityServer/IdentityServer4/issues/1786
+                    opts.ClaimActions.MapJsonKey("role", "role", "role");
 
                     opts.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
                     opts.TokenValidationParameters.RoleClaimType = JwtClaimTypes.Role;

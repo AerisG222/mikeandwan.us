@@ -1,3 +1,4 @@
+@model bool
 @{
    Layout = "_LayoutHome";
    ViewBag.Title = "home";
@@ -9,7 +10,7 @@
 
 <div class="container">
     <div class="row">
-        @if(Context.User.Identity.IsAuthenticated) {
+        @if(@Model) {
             <div class="offset-sm-2 col-sm-2">
                 <div class="hover-bright">
                     <p class="text-center">
@@ -20,7 +21,22 @@
                     </p>
                 </div>
                 <p class="text-center">
-                    <span>Checkout the latest photos!</span>
+                    <span>Checkout the latest photos</span>
+                </p>
+            </div>
+        }
+        else if(Context.User.Identity.IsAuthenticated) {
+            <div class="offset-sm-2 col-sm-2">
+                <div class="hover-bright">
+                    <p class="text-center">
+                        <a maw-auth-url="/account/edit-profile"><svg-icon icon="Person" class="hp-feature"></svg-icon></a>
+                    </p>
+                    <p class="text-center">
+                        <a class="h2" maw-auth-url="/account/edit-profile">Edit Profile</a>
+                    </p>
+                </div>
+                <p class="text-center">
+                    <span>Manage your account profile</span>
                 </p>
             </div>
         }
@@ -35,7 +51,7 @@
                     </p>
                 </div>
                 <p class="text-center">
-                    <span>View the latest photos and videos!</span>
+                    <span>Login to view the latest photos and videos</span>
                 </p>
             </div>
         }

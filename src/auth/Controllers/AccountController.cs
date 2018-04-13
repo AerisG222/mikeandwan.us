@@ -78,6 +78,7 @@ namespace MawAuth.Controllers
 		public async Task<IActionResult> Login(LoginModel model)
         {
 			model.WasAttempted = true;
+			model.ExternalSchemes = await GetExternalLoginSchemes();
 
             if(!ModelState.IsValid)
             {
@@ -332,31 +333,7 @@ namespace MawAuth.Controllers
 		}
 
 
-		async Task<IEnumerable<SelectListItem>> GetStateSelectListItemsAsync()
-		{
-			var states = await _repo.GetStatesAsync();
-
-			return states.Select(x => new SelectListItem
-			{
-                Value = x.Code,
-                Text = x.Name
-            });
-		}
-
-
-		async Task<IEnumerable<SelectListItem>> GetCountrySelectListItemsAsync()
-		{
-			var countries = await _repo.GetCountriesAsync();
-
-			return countries.Select(x => new SelectListItem
-			{
-                Value = x.Code,
-                Text = x.Name
-            });
-		}
-
-/*
-
+		/*
 		[Authorize]
 		[HttpGet("access-denied")]
 		public IActionResult AccessDenied()
@@ -365,13 +342,13 @@ namespace MawAuth.Controllers
 
 			return View();
 		}
+		*/
+
 
 		[Authorize]
 		[HttpGet("edit-profile")]
 		public async Task<IActionResult> EditProfile()
 		{
-			ViewBag.NavigationZone = NavigationZone.Account;
-
 			ViewBag.States = await GetStateSelectListItemsAsync();
 			ViewBag.Countries = await GetCountrySelectListItemsAsync();
 
@@ -412,7 +389,6 @@ namespace MawAuth.Controllers
         [ValidateAntiForgeryToken]
 		public async Task<IActionResult> EditProfile(ProfileModel model)
 		{
-			ViewBag.NavigationZone = NavigationZone.Account;
 			ViewBag.States = await GetStateSelectListItemsAsync();
 			ViewBag.Countries = await GetCountrySelectListItemsAsync();
 
@@ -456,7 +432,30 @@ namespace MawAuth.Controllers
 
 			return View(model);
 		}
-		*/
+
+
+		async Task<IEnumerable<SelectListItem>> GetStateSelectListItemsAsync()
+		{
+			var states = await _repo.GetStatesAsync();
+
+			return states.Select(x => new SelectListItem
+			{
+                Value = x.Code,
+                Text = x.Name
+            });
+		}
+
+
+		async Task<IEnumerable<SelectListItem>> GetCountrySelectListItemsAsync()
+		{
+			var countries = await _repo.GetCountriesAsync();
+
+			return countries.Select(x => new SelectListItem
+			{
+                Value = x.Code,
+                Text = x.Name
+            });
+		}
 
 
 		async Task<IEnumerable<ExternalLoginScheme>> GetExternalLoginSchemes()

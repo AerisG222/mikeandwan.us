@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 
-namespace MawMvcApp.ViewModels.Account
+namespace MawAuth.ViewModels.Account
 {
 	public class ProfileModel
 	{

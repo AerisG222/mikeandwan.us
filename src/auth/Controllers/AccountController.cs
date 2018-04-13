@@ -333,16 +333,12 @@ namespace MawAuth.Controllers
 		}
 
 
-		/*
 		[Authorize]
 		[HttpGet("access-denied")]
 		public IActionResult AccessDenied()
 		{
-			ViewBag.NavigationZone = NavigationZone.Account;
-
 			return View();
 		}
-		*/
 
 
 		[Authorize]

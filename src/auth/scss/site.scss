@@ -1,12 +1,11 @@
-@import "vars";
-@import "bootstrap/scss/bootstrap";
+$input-btn-padding-y: 0.5rem !default;
 
-.navbar .container {
-    padding-right: 0;
-    padding-left: 0;
-}
+@import "bootswatch/dist/slate/variables";
+@import "bootstrap/scss/bootstrap";
+@import "bootswatch/dist/slate/bootswatch";
 
 .navbar-brand {
+    margin-right: 1rem;
     font-family: Tangerine, cursive;
     font-size: 2.4rem;
     line-height: 1rem;
@@ -14,7 +13,10 @@
 
 .navbar-dark {
     .navbar-brand {
+        padding-right: 0;
+        padding-left: 0;
         color: $body-color;
+        border-right: none;
 
         &:hover,
         &:focus {
@@ -47,7 +49,7 @@ a:hover svg {
 footer {
     padding: 40px 0 40px;
     margin-top: 80px;
-    background: none repeat scroll 0 0 $table-border-color;
+    background: none repeat scroll 0 0 rgb(28, 30, 34);
 }
 
 /* https://blog.prototypr.io/align-svg-icons-to-text-and-say-goodbye-to-font-icons-d44b3d7b26b4 */

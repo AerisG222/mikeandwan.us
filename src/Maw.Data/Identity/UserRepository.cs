@@ -236,6 +236,7 @@ namespace Maw.Data.Identity
 					         username,
 							 first_name,
 							 last_name,
+							 email,
 							 (SELECT MAX(attempt_time)
 							    FROM maw.login_history lh
 							   WHERE lh.user_id = u.id
@@ -330,6 +331,16 @@ namespace Maw.Data.Identity
 
 				await conn.ExecuteAsync(
 					@"DELETE FROM maw.user_role
+					   WHERE user_id = (SELECT id
+					                      FROM maw.user
+										 WHERE username = @username
+									   );",
+					new { username = username }
+				);
+
+				await conn.ExecuteAsync(
+					@"UPDATE maw.login_history
+					     SET user_id = NULL
 					   WHERE user_id = (SELECT id
 					                      FROM maw.user
 										 WHERE username = @username

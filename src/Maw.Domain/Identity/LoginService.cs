@@ -45,7 +45,7 @@ namespace Maw.Domain.Identity
 			}
 			catch(Exception ex)
 			{
-				_log.LogWarning(string.Concat("Unable to authenticate user [", username, "].", ex));
+				_log.LogWarning(ex, string.Concat("Unable to authenticate user [", username, "]."));
 			}
 			
 			return SignInResult.Failed;

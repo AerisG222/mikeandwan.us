@@ -19,7 +19,7 @@ using Mvc.RenderViewToString;
 using Maw.Security;
 using MawAuth.Models;
 using IdentityServer4.Stores;
-
+using Maw.Domain.Email;
 
 namespace MawAuth
 {
@@ -46,6 +46,7 @@ namespace MawAuth
                         opts.Password.RequiredLength = 8;
                         opts.Password.RequiredUniqueChars = 6;
                     })
+                .Configure<GmailApiEmailConfig>(_config.GetSection("Gmail"))
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
                 .AddTransient<RazorViewToStringRenderer>()

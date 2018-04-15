@@ -19,10 +19,10 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             __IS_PRODUCTION__: JSON.stringify(false),
-            __API_URL__: JSON.stringify('https://localhost:5011'),
+            __API_URL__: JSON.stringify('https://apidev.mikeandwan.us:5011'),
             __AUTH_CONFIG__: JSON.stringify({
-                authUrl: 'https://localhost:5001',
-                wwwUrl: 'https://localhost:5021'
+                authUrl: 'https://authdev.mikeandwan.us:5001',
+                wwwUrl: 'https://wwwdev.mikeandwan.us:5021'
             })
         })
     ]

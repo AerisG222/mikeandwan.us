@@ -5,6 +5,7 @@
 
 export const environment = {
   production: false,
-  authUrl: 'https://localhost:5001',
-  wwwUrl: 'https://localhost:5021'
+  authUrl: 'https://authdev.mikeandwan.us:5001',
+  apiUrl: 'https://apidev.mikeandwan.us:5011',
+  wwwUrl: 'https://wwwdev.mikeandwan.us:5021'
 };

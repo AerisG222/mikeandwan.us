@@ -10,6 +10,7 @@ import { IExifDetail } from './iexif-detail.model';
 import { IRating } from './irating.model';
 import { IComment } from './icomment.model';
 import { IPhotoAndCategory } from './iphoto-and-category.model';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class PhotoDataService {
@@ -135,6 +136,6 @@ export class PhotoDataService {
     }
 
     getAbsoluteUrl(relativeUrl: string) {
-        return `https://localhost:5011/${relativeUrl}`;
+        return `${environment.apiUrl}/${relativeUrl}`;
     }
 }

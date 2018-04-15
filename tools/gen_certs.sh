@@ -9,12 +9,10 @@ CA_TTL_DAYS=1825  # 5yrs
 CA_REGEN_THRESHOLD=180  # > CERT_TTL_DAYS to ensure the CA always lives longer than issued certs
 CERT_TTL_DAYS=120  # certs should rotate every 90 days
 CERT_REGEN_THRESHOLD=30
-CA_SUBJ="/C=US/ST=Massachusetts/L=Boston/O=mikeandwan.us/OU=IT/CN=maw_ca"  # CN must *not* be localhost
-CERT_SUBJ="/C=US/ST=Massachusetts/L=Boston/O=mikeandwan.us/OU=IT/CN=localhost"  # CN *must* be localhost
+CA_SUBJ="/C=US/ST=Massachusetts/L=Boston/O=mikeandwan.us/OU=IT/CN=maw_ca"
+CERT_SUBJ="/C=US/ST=Massachusetts/L=Boston/O=mikeandwan.us/OU=IT/CN="
 SCRIPT=`realpath "${BASH_SOURCE}"`
 SCRIPT_DIR="${SCRIPT%/*}"
-CONF_PATH="${SCRIPT_DIR}/cert.conf"
-EXT_PATH="${SCRIPT_DIR}/cert.ext"
 
 if [ "${IS_PROD}" == 'y' ]
 then
@@ -123,10 +121,11 @@ gen_cert() {
         openssl genrsa -passout "file:${certkeypwd}" -out "${certkey}" 2048
 
         # Generate the certificate signing request
-        openssl req -sha256 -days "${CERT_TTL_DAYS}" -subj "${CERT_SUBJ}" -new -nodes -config "${CONF_PATH}" -key "${certkey}" -passin "file:${certkeypwd}" -out "${certreq}"
+        subj="${CERT_SUBJ}${project}dev.mikeandwan.us"
+        openssl req -sha256 -days "${CERT_TTL_DAYS}" -subj "${subj}" -new -nodes -config "${SCRIPT_DIR}/cert_cfg/${project}.conf" -key "${certkey}" -passin "file:${certkeypwd}" -out "${certreq}"
 
         # Sign the request with your root key
-        openssl x509 -sha256 -days "${CERT_TTL_DAYS}" -req -extfile "${EXT_PATH}" -in "${certreq}" -CA "${CA_CRT}" -CAkey "${CA_KEY}" -passin "file:${CA_KEY_PWD}" -CAcreateserial -out "${certcrt}"
+        openssl x509 -sha256 -days "${CERT_TTL_DAYS}" -req -extfile "${SCRIPT_DIR}/cert_cfg/${project}.ext" -in "${certreq}" -CA "${CA_CRT}" -CAkey "${CA_KEY}" -passin "file:${CA_KEY_PWD}" -CAcreateserial -out "${certcrt}"
 
         # Check your homework:
         openssl verify -CAfile "${CA_CRT}" "${certcrt}"

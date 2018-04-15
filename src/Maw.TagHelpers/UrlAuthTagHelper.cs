@@ -11,7 +11,7 @@ namespace Maw.TagHelpers
 		: TagHelper
 	{
 		const string AttributeName = "maw-auth-url";
-        static readonly Uri LocalBaseUri = new Uri("https://localhost:5001/");
+        static readonly Uri LocalBaseUri = new Uri("https://authdev.mikeandwan.us:5001/");
         static readonly Uri ProductionBaseUri = new Uri("https://auth.mikeandwan.us/");
 
 
@@ -28,7 +28,7 @@ namespace Maw.TagHelpers
             Uri dest = null;
 			var req = ViewContext.HttpContext.Request.Host;
 
-            if(string.Equals(req.Host, "localhost", StringComparison.OrdinalIgnoreCase))
+            if(req.Host.IndexOf("dev", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 dest = new Uri(LocalBaseUri, Url);
             }

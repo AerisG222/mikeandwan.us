@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { ICategory } from './icategory.model';
 import { IVideo } from './ivideo.model';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class VideoDataService {
@@ -34,6 +35,6 @@ export class VideoDataService {
 
 
     getAbsoluteUrl(relativeUrl: string) {
-        return `https://localhost:5011/${relativeUrl}`;
+        return `${environment.apiUrl}/${relativeUrl}`;
     }
 }

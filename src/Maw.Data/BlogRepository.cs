@@ -100,7 +100,7 @@ namespace Maw.Data
 
 				if(result != 1)
 				{
-					throw new Exception("Did not save blog pos!");
+					throw new Exception("Did not save blog post!");
 				}
 			});
 		}

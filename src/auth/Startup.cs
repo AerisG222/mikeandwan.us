@@ -49,9 +49,8 @@ namespace MawAuth
                 .Configure<GmailApiEmailConfig>(_config.GetSection("Gmail"))
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
+                .AddMawIdentityServerServices(_config["Environment:IdsrvDbConnectionString"], _config["SigningCertDir"])
                 .AddTransient<RazorViewToStringRenderer>()
-                .AddSingleton<ISigningCredentialStore>(new MawSigningCredentialStore(_config["SigningCertDir"]))
-                .AddSingleton<IValidationKeysStore>(new MawValidationKeysStore(_config["SigningCertDir"]))
                 .AddIdentity<MawUser, MawRole>()
                     .AddDefaultTokenProviders()
                     .Services
@@ -99,7 +98,6 @@ namespace MawAuth
                         // we need to set this especially for dev otherwise the issuer becomes 10.0.2.2 when testing the android app
                         opts.IssuerUri = _config["Environment:AuthUrl"];
                     })
-                    .AddInMemoryPersistedGrants()
                     .AddInMemoryApiResources(config.GetApiResources())
                     .AddInMemoryClients(config.GetClients())
                     .AddInMemoryIdentityResources(config.GetIdentityResources())

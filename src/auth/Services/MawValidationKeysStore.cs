@@ -6,7 +6,7 @@ using IdentityServer4.Stores;
 using Microsoft.IdentityModel.Tokens;
 
 
-namespace MawAuth.Models
+namespace MawAuth.Services
 {
     public class MawValidationKeysStore
         : IValidationKeysStore

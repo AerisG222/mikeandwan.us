@@ -22,9 +22,11 @@
 
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="2.0.0-rc2-final" />
+    <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="IdentityServer4" Version="2.2.0" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0-preview2-final" />
+    <PackageReference Include="Npgsql" Version="3.2.7" />
   </ItemGroup>
 
   <ItemGroup>

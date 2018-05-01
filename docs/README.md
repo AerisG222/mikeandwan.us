@@ -247,6 +247,13 @@ output to STDOUT and include it in the log / journal.
 7. `sudo systemctl start postgresql.service`
 8. `sudo rm -rf /opt/dotnet`  (preview versions were causing issues for me)
 9. Follow instructions on installing for Fedora 24: [fedora 24 instructions](https://www.microsoft.com/net/core#linuxfedora)
+10. SE Linux updates
+    - nginx would not start, run `systmctl status nginx.service` to see what is going on
+    - In the latest case, I saw an AVC denial for the /var/log/nginx/error.log
+    - Ran `grep nginx /var/log/audit/audit.log | audit2allow -M nginx`, which said to run the following:
+      - `semodule -i nginx.pp`, which then allowed nginx to start
+11. Postgres updates
+    - `postgresql-setup --upgrade`
 
 
 ## GMail SSL/TLS updates

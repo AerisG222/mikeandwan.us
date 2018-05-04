@@ -17,8 +17,6 @@ CLI_VERSION='@angular/cli@latest'
 update_ngcli_global() {
     # global update
     sudo npm uninstall -g @angular/cli
-    sudo npm cache clean
-    sudo npm cache verify
     sudo npm install -g ${CLI_VERSION}
 }
 
@@ -26,10 +24,10 @@ update_ngcli() {
     cd "${1}"
 
     # clean and install new cli
-    rm -rf node_modules dist
     npm install --save-dev ${CLI_VERSION}
-    npm install
-
+    ng update @angular/cli
+    ng update @angular/core
+    
     cd ..
 }
 

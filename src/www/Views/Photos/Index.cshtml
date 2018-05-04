@@ -7,15 +7,15 @@
 }
 
 @section stylesheets {
-    <link rel="stylesheet" href="/js/photos/styles.bundle.css" />
+    <link rel="stylesheet" href="/js/photos/styles.css" />
 }
 
 @section scripts_footer {
 	@await Html.PartialAsync("_js_GoogleMaps")
     @await Html.PartialAsync("_js_Pixastic")
-    <script type="text/javascript" src="/js/photos/inline.bundle.js"></script>
-    <script type="text/javascript" src="/js/photos/polyfills.bundle.js"></script>
-    <script type="text/javascript" src="/js/photos/main.bundle.js"></script>
+    <script type="text/javascript" src="/js/photos/runtime.js"></script>
+    <script type="text/javascript" src="/js/photos/polyfills.js"></script>
+    <script type="text/javascript" src="/js/photos/main.js"></script>
 }
 
 <app-root>Loading...</app-root>

@@ -4,11 +4,11 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "ts-loader": "^4.1.0",
-    "tslint": "^5.9.1",
-    "typescript": "^2.8.1",
-    "webpack": "^4.5.0",
-    "webpack-cli": "^2.0.14"
+    "ts-loader": "^4.2.0",
+    "tslint": "^5.10.0",
+    "typescript": "^2.8.3",
+    "webpack": "^4.7.0",
+    "webpack-cli": "^2.1.2"
   },
   "scripts": {
     "dev_build": "rm -rf dist && webpack",
@@ -16,6 +16,6 @@
   },
   "dependencies": {
     "stats.js": "^0.17.0",
-    "three": "^0.91.0"
+    "three": "^0.92.0"
   }
 }

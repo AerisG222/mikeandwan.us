@@ -4,17 +4,17 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "ts-loader": "^4.1.0",
-    "typescript": "^2.8.1",
-    "webpack": "^4.5.0",
-    "webpack-cli": "^2.0.14"
+    "ts-loader": "^4.2.0",
+    "typescript": "^2.8.3",
+    "webpack": "^4.7.0",
+    "webpack-cli": "^2.1.2"
   },
   "scripts": {
     "dev_build": "rm -rf dist && webpack",
     "prod_build": "rm -rf dist && webpack -p --config ./webpack.production.config.js"
   },
   "dependencies": {
-    "d3": "5.0.0",
+    "d3": "5.1.0",
     "oidc-client": "1.4.1"
   }
 }

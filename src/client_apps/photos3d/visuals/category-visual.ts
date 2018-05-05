@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { Group, TextureLoader, Mesh, MeshLambertMaterial, DoubleSide, Vector3, Vector2,
          Shape, Path, ExtrudeGeometry, LinearFilter, Geometry, Texture

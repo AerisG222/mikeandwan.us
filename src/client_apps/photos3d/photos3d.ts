@@ -1,7 +1,7 @@
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/operator/throttleTime';
+
+import { fromEvent as observableFromEvent, Observable, Subscription } from 'rxjs';
+
+
 
 import { AxisHelper, Clock, Scene, WebGLRenderer, PerspectiveCamera, Vector3, AmbientLight, DirectionalLight } from 'three';
 
@@ -72,20 +72,16 @@ export class Photos3D {
         this._help = new HelpController(this._stateService);
         this._help.init();
 
-        this._resizeSubscription = Observable
-            .fromEvent<UIEvent>(window, 'resize')
+        this._resizeSubscription = observableFromEvent<UIEvent>(window, 'resize')
             .subscribe(evt => this.onResize(evt));
 
-        this._unloadSubscription = Observable
-            .fromEvent<Event>(window, 'unload')
+        this._unloadSubscription = observableFromEvent<Event>(window, 'unload')
             .subscribe(evt => this.unload(evt));
 
-        this._blurSubscription = Observable
-            .fromEvent<Event>(window, 'blur')
+        this._blurSubscription = observableFromEvent<Event>(window, 'blur')
             .subscribe(evt => this.onBlur(evt));
 
-        this._focusSubscription = Observable
-            .fromEvent<Event>(window, 'focus')
+        this._focusSubscription = observableFromEvent<Event>(window, 'focus')
             .subscribe(evt => this.onFocus(evt));
 
         this._categorySelectedSubscription = this._stateService.categorySelectedObservable.subscribe(x => { this.enterPhotoListMode(); });

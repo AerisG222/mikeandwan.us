@@ -1,5 +1,4 @@
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
+import { Observable, Observer } from 'rxjs';
 import { zip } from 'rxjs/operators';
 
 import { PhotoSource } from './photo-source.model';

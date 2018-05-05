@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { Photo } from './photo.model';
 import { PhotoDataService } from './photo-data.service';

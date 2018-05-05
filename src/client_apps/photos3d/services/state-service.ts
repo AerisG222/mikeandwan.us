@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 import { ActiveStatus } from '../models/active-status';
 import { ArgumentNullError } from '../models/argument-null-error';

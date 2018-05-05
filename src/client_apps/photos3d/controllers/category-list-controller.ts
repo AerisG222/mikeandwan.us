@@ -1,5 +1,5 @@
 import { List } from 'linqts';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { Vector3 } from 'three';
 

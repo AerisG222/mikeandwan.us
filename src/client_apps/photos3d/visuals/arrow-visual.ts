@@ -1,5 +1,4 @@
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import { Subject, Observable } from 'rxjs';
 
 import { Group, Mesh, Box3, ConeGeometry, MeshPhongMaterial } from 'three';
 

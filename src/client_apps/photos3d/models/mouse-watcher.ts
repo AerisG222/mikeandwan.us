@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+
+import { fromEvent as observableFromEvent, Observable, Subscription } from 'rxjs';
 import { Intersection, Vector3, Raycaster } from 'three';
 
 import { IDisposable } from './idisposable';
@@ -35,14 +35,12 @@ export class MouseWatcher implements IDisposable {
 
     private startWatching(): void {
         if (this._mouseoverSubscription == null) {
-            this._mouseoverSubscription = Observable
-                .fromEvent<MouseEvent>(document, 'mousemove')
+            this._mouseoverSubscription = observableFromEvent<MouseEvent>(document, 'mousemove')
                 .subscribe(evt => this.onMouseMove(evt));
         }
 
         if (this._mouseclickSubscription == null) {
-            this._mouseclickSubscription = Observable
-                .fromEvent<MouseEvent>(document, 'click')
+            this._mouseclickSubscription = observableFromEvent<MouseEvent>(document, 'click')
                 .subscribe(evt => this.onMouseClick(evt));
         }
     }

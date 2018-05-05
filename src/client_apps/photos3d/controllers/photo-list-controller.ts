@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { ArgumentNullError } from '../models/argument-null-error';
 import { ArrowNextPreviousVisual } from '../visuals/arrow-next-previous-visual';

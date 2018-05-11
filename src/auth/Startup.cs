@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Maw.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Maw.Domain.Identity;
-using Maw.Domain;
-using MawAuth.Services;
 using IdentityServer4;
-using Microsoft.AspNetCore.Mvc;
+using IdentityServer4.Stores;
 using Mvc.RenderViewToString;
+using Maw.Data;
+using Maw.Domain;
+using Maw.Domain.Email;
+using Maw.Domain.Identity;
 using Maw.Security;
 using MawAuth.Models;
-using IdentityServer4.Stores;
-using Maw.Domain.Email;
+using MawAuth.Services;
+
 
 namespace MawAuth
 {

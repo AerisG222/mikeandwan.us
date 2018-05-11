@@ -1,4 +1,5 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -17,6 +18,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
+using IdentityModel;
+using Mvc.RenderViewToString;
 using Newtonsoft.Json.Linq;
 using NMagickWand;
 using Maw.Data;
@@ -26,15 +29,9 @@ using Maw.Domain.Captcha;
 using Maw.Domain.Email;
 using Maw.Domain.Identity;
 using Maw.Domain.Photos;
+using Maw.Security;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
-using Mvc.RenderViewToString;
-using System.IdentityModel.Tokens.Jwt;
-using IdentityModel;
-using System.Security.Claims;
-using System.Linq;
-using System.Threading.Tasks;
-using Maw.Security;
 
 
 namespace MawMvcApp

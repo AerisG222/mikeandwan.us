@@ -3,7 +3,7 @@ Description=Run maw_us_certrenew twice a day
 
 [Timer]
 OnCalendar=0/12:00:00
-RandomizeDelaySec=1h
+RandomizedDelaySec=1h
 Persistent=true
 
 [Install]

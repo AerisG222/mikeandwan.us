@@ -162,6 +162,9 @@ but will try to get this well organized below to make it easy to follow.
 5. configure certbot to run 2 times a day to update if needed (via systemd)
     - [service](systemd/certbot-renew.service)
     - [timer](systemd/certbot-renew.timer)
+6. You might need to configure SE Linux rules:
+    - reference: https://docs-old.fedoraproject.org/en-US/Fedora/12/html/Security-Enhanced_Linux/sect-Security-Enhanced_Linux-Fixing_Problems-Allowing_Access_audit2allow.html
+    - `grep cert_t /var/log/audit/audit.log | audit2allow -M maw_us_certwatch`
 
 ## Systemd
 

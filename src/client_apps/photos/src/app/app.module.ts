@@ -44,6 +44,7 @@ import { PhotoCardComponent } from './photo-card/photo-card.component';
 import { PhotoCardGridComponent } from './photo-card-grid/photo-card-grid.component';
 import { ToolbarButtonComponent } from './toolbar-button/toolbar-button.component';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { ThreeDLinkComponent } from './three-dlink/three-dlink.component';
 
 // TODO: the odd constants for data below are to satisfy an AOT requirement - is there a better way?
 //  SEE: https://github.com/angular/angular/issues/10789
@@ -99,7 +100,8 @@ import { SignInComponent } from './sign-in/sign-in.component';
         SaveDialogComponent,
         SlideshowButtonComponent,
         ToolbarButtonComponent,
-        SignInComponent
+        SignInComponent,
+        ThreeDLinkComponent
     ],
     providers: [
         BreadcrumbService,

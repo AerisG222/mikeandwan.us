@@ -24,18 +24,6 @@ module.exports = {
                 authUrl: 'https://auth.mikeandwan.us',
                 wwwUrl: 'https://www.mikeandwan.us'
             })
-        }),
-        new webpack.LoaderOptionsPlugin({
-            minimize: true,
-            debug: true,
-            minimize: true
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            mangle: { screw_ie8 : true },
-            compress: { screw_ie8: true },
-            output: { comments: false },
-            sourceMap: true,
-            sourceMap: true
         })
     ]
 }

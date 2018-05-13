@@ -15,6 +15,9 @@ SITES=(
     "www"
 )
 
+# load js apps array
+source "${SRC_ROOT}/client_apps/_vars.sh"
+
 copy_app() {
     local APP=$1
     local SITE_ROOT=$2
@@ -65,7 +68,7 @@ ensure_dir() {
 publish_client_apps() {
     SITE_ROOT=$1
 
-    for APP in ${JSAPPS[@]}; do
+    for APP in ${APPS[@]}; do
         ensure_dir "${APP}" "${SITE_ROOT}"
         copy_app "${APP}" "${SITE_ROOT}"
         update_refs "${APP}" "${SITE_ROOT}"

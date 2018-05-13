@@ -4,43 +4,30 @@ SSH_USERNAME=mmorano
 MEDIA_ROOT=/srv/www/website_assets
 PROJECT_ROOT=/home/mmorano/git/mikeandwan.us
 SRC_ROOT="${PROJECT_ROOT}/src"
-SRC_WWW="${SRC_ROOT}/mikeandwan.us"
 BUILD_ROOT="${PROJECT_ROOT}/build"
-BUILD_WWW="${BUILD_ROOT}/mikeandwan.us"
 DIST_ROOT="${PROJECT_ROOT}/dist"
 DEBUG=n
 WD=$( pwd )
 
-JSAPPS=( 
-    "bandwidth"
-    "binary_clock"
-    "byte_counter"
-    "filesize"
-    "googlemaps"
-    "learning"
-    "memory"
-    "money_spin"
-    "photo_stats"
-    "photos"
-    "photos3d"
-    "time"
-    "videos"
-    "webgl_cube"
-    "webgl_text"
-    "weekend_countdown"
+SITES=(
+    "api"
+    "auth"
+    "www"
 )
 
 copy_app() {
     local APP=$1
+    local SITE_ROOT=$2
 
     # https://silentorbit.com/notes/2013/08/rsync-by-extension/
-    rsync -ah --include '*/' --include '*.js' --include '*.css' --exclude '*' "${SRC_ROOT}/client_apps/${APP}/dist/" "${BUILD_WWW}/wwwroot/js/${APP}"
+    rsync -ah --include '*/' --include '*.js' --include '*.css' --exclude '*' "${SRC_ROOT}/client_apps/${APP}/dist/" "${SITE_ROOT}/wwwroot/js/${APP}"
 }
 
 update_refs() {
     local APP=$1
+    local SITE_ROOT=$2
 
-    for JS in $( find "${BUILD_WWW}/wwwroot/js/${APP}" -name '*.js' -o -name '*.css' ); do
+    for JS in $( find "${SITE_ROOT}/wwwroot/js/${APP}" -name '*.js' -o -name '*.css' ); do
         local NEWFILENAME=$( basename "$JS" )
         local EXTENSION="${NEWFILENAME##*.}"
         local ORIGFILENAME="${NEWFILENAME%%.*}"
@@ -62,23 +49,26 @@ update_refs() {
             echo ''
         fi
 
-        find "${BUILD_WWW}" -type f -name "*.cshtml" -exec sed -i "s#${ORIGURL}#${NEWURL}#g" {} +
+        find "${SITE_ROOT}" -type f -name "*.cshtml" -exec sed -i "s#${ORIGURL}#${NEWURL}#g" {} +
     done
 }
 
 ensure_dir() {
     local APP=$1
+    local SITE_ROOT=$2
 
-    if [ ! -d "${BUILD_WWW}/wwwroot/js/${APP}" ]; then
-        mkdir "${BUILD_WWW}/wwwroot/js/${APP}"
+    if [ ! -d "${SITE_ROOT}/wwwroot/js/${APP}" ]; then
+        mkdir "${SITE_ROOT}/wwwroot/js/${APP}"
     fi
 }
 
 publish_client_apps() {
+    SITE_ROOT=$1
+
     for APP in ${JSAPPS[@]}; do
-        ensure_dir "${APP}"
-        copy_app "${APP}"
-        update_refs "${APP}"
+        ensure_dir "${APP}" "${SITE_ROOT}"
+        copy_app "${APP}" "${SITE_ROOT}"
+        update_refs "${APP}" "${SITE_ROOT}"
     done
 }
 
@@ -105,25 +95,58 @@ unlink_media() {
 }
 
 minify_css() {
-    local FILE=$1
-    local ORIG="${BUILD_WWW}/wwwroot/css/${FILE}.css"
+    local SITE=$1
+    local SITE_ROOT="${BUILD_ROOT}/${SITE}"
+
+    for FILE in $( find "${SITE_ROOT}/wwwroot/css" -name '*.css' )
+    do
+        # kill path from file
+        FILE="${FILE##*/}"
+
+        # kill extension from file
+        FILE="${FILE%.css}"
+
+        minify_css_file "${SITE_ROOT}" "${FILE}"
+    done
+}
+
+minify_css_file() {
+    local SITE_ROOT=$1
+    local FILE=$2
+    local ORIG="${SITE_ROOT}/wwwroot/css/${FILE}.css"
     local ORIGURL="/css/${FILE}.css"
-    local MIN="${BUILD_WWW}/wwwroot/css/${FILE}.min.css"
+    local MIN="${SITE_ROOT}/wwwroot/css/${FILE}.min.css"
 
     cleancss -o "${MIN}" "${ORIG}"
-    
+
     local MD5="$(md5sum ${MIN} |cut -c 1-8)"
-    local MD5FILE="${BUILD_WWW}/wwwroot/css/${FILE}.min.${MD5}.css"
+    local MD5FILE="${SITE_ROOT}/wwwroot/css/${FILE}.min.${MD5}.css"
     local MD5URL="/css/${FILE}.min.${MD5}.css"
 
     mv "${MIN}" "${MD5FILE}"
     rm "${ORIG}"
 
-    find "${BUILD_WWW}" -type f -name "*.cshtml" -exec sed -i "s#${ORIGURL}#${MD5URL}#g" {} +
+    find "${SITE_ROOT}" -type f -name "*.cshtml" -exec sed -i "s#${ORIGURL}#${MD5URL}#g" {} +
+}
+
+build_sass() {
+    local SITE=$1
+
+    cd "${SRC_ROOT}/${SITE}"
+
+    npm ci
+    npm run sass
 }
 
 echo '***************************************'
-echo '** STEP 1: build client applications **'
+echo '** STEP 1: build css                 **'
+echo '***************************************'
+build_sass "auth"
+build_sass "www"
+cd "${WD}"
+
+echo '***************************************'
+echo '** STEP 2: build client applications **'
 echo '***************************************'
 DO_BUILD_CLIENT=n
 read -e -r -p "Build Client Apps? [y/N] " DO_BUILD_CLIENT
@@ -135,7 +158,7 @@ fi
 
 echo ''
 echo '**************************************'
-echo '** STEP 2: prepare production build **'
+echo '** STEP 3: prepare production build **'
 echo '**************************************'
 if [ -d "${DIST_ROOT}" ]; then
     rm -rf "${DIST_ROOT}"
@@ -150,29 +173,46 @@ mkdir "${BUILD_ROOT}"
 # remove dev links, otherwise these are copied during publish
 unlink_media "${SRC_WWW}/wwwroot"
 
-# copy the src dirs for building 
+# copy the src dirs for building
 # (so we can update views w/ js references to cache bust js filenames)
 cp -r "${SRC_ROOT}/Maw.Data" "${BUILD_ROOT}/Maw.Data"
 cp -r "${SRC_ROOT}/Maw.Domain" "${BUILD_ROOT}/Maw.Domain"
-cp -r "${SRC_WWW}" "${BUILD_WWW}"
+cp -r "${SRC_ROOT}/Maw.Security" "${BUILD_ROOT}/Maw.Security"
+cp -r "${SRC_ROOT}/Maw.TagHelpers" "${BUILD_ROOT}/Maw.TagHelpers"
+cp -r "${SRC_ROOT}/Mvc.RenderViewToString" "${BUILD_ROOT}/Mvc.RenderViewToString"
+
+for SITE in "${SITES[@]}"
+do
+    cp -r "${SRC_ROOT}/${SITE}" "${BUILD_ROOT}/${SITE}"
+done
 
 # remove css / js libs that are replaced with cdns in prod
-rm -r "${BUILD_WWW}/wwwroot/css/libs"
-rm -r "${BUILD_WWW}/wwwroot/js/libs/bootstrap"
-rm -r "${BUILD_WWW}/wwwroot/js/libs/highlight"
-rm -r "${BUILD_WWW}/wwwroot/js/libs/jquery"
-rm -r "${BUILD_WWW}/wwwroot/js/libs/reveal"
-rm -r "${BUILD_WWW}/wwwroot/js/libs/webshim"
+rm -r "${BUILD_ROOT}/auth/wwwroot/js/libs/bootstrap"
 
-minify_css 'site'
-minify_css 'games'
+rm -r "${BUILD_ROOT}/www/wwwroot/css/libs"
+rm -r "${BUILD_ROOT}/www/wwwroot/js/libs/bootstrap"
+rm -r "${BUILD_ROOT}/www/wwwroot/js/libs/highlight"
+rm -r "${BUILD_ROOT}/www/wwwroot/js/libs/jquery"
+rm -r "${BUILD_ROOT}/www/wwwroot/js/libs/popper"
+rm -r "${BUILD_ROOT}/www/wwwroot/js/libs/reveal"
 
-cd "${BUILD_WWW}"
+# minify css
+minify_css "auth"
+minify_css "www"
 
-publish_client_apps
+# publish client apps to www
+cd "${BUILD_ROOT}/www"
 
-dotnet publish -f netcoreapp2.0 -o "${DIST_ROOT}" -c Release
-rm -rf "${BUILD_ROOT}"
+publish_client_apps "${BUILD_ROOT}/www"
+
+# create production build
+for SITE in "${SITES[@]}"
+do
+    cd "${BUILD_ROOT}/${SITE}"
+    dotnet publish -f netcoreapp2.1 -o "${DIST_ROOT}/${SITE}" -c Release
+done
+
+#rm -rf "${BUILD_ROOT}"
 
 # add the media links for testing
 link_media "${DIST_ROOT}/wwwroot"
@@ -181,8 +221,8 @@ echo ''
 echo '**************************************************************'
 echo '** STEP 3: go to localhost:5000 to test - hit CTL-C to quit **'
 echo '**************************************************************'
-cd "${DIST_ROOT}"
-( ASPNETCORE_ENVIRONMENT=staging dotnet "mikeandwan.us.dll" ) 
+cd "${DIST_ROOT}/www"
+( ASPNETCORE_ENVIRONMENT=staging dotnet "maw_www.dll" )
 
 # cleanup
 unlink_media "${DIST_ROOT}/wwwroot"
@@ -208,10 +248,10 @@ if [ "${DO_DEPLOY}" = "y" ]; then
 
         sudo chown -R root:root /srv/www/_staging
         sudo restorecon -R /srv/www/_staging
-        
+
         sudo systemctl stop nginx.service
         sudo systemctl stop maw_us.service
-        
+
         if [ -d /srv/www/mikeandwan.us ]; then
             if [ -d /srv/www/mikeandwan.us_old ]; then
                 sudo rm -rf /srv/www/mikeandwan.us_old

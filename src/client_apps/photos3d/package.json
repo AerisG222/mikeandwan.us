@@ -6,6 +6,7 @@
   "description": "3D photo viewing application for www.mikeandwan.us",
   "devDependencies": {
     "@types/bootstrap": "^4.1.0",
+    "@types/three": "^0.91.13",
     "rxjs": "^6.1.0",
     "ts-loader": "^4.2.0",
     "tslint": "^5.10.0",

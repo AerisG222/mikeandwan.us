@@ -3,7 +3,7 @@ import { fromEvent as observableFromEvent, Observable, Subscription } from 'rxjs
 
 
 
-import { AxisHelper, Clock, Scene, WebGLRenderer, PerspectiveCamera, Vector3, AmbientLight, DirectionalLight } from 'three';
+import { AxesHelper, Clock, Scene, WebGLRenderer, PerspectiveCamera, Vector3, AmbientLight, DirectionalLight } from 'three';
 
 import * as TWEEN from 'tween.js';
 
@@ -27,7 +27,7 @@ import { VisualContext } from './models/visual-context';
 
 export class Photos3D {
     private _authService = new AuthService();
-    private _axisHelper: AxisHelper;
+    private _axisHelper: AxesHelper;
     private _bg: IController;
     private _blurSubscription: Subscription;
     private _categorySelectedSubscription: Subscription;
@@ -183,7 +183,7 @@ export class Photos3D {
 
     private toggleAxisHelper() {
         if (this._axisHelper == null) {
-            this._axisHelper = new AxisHelper(500);
+            this._axisHelper = new AxesHelper(500);
             this._ctx.scene.add(this._axisHelper);
         } else {
             this.removeAxisHelper();

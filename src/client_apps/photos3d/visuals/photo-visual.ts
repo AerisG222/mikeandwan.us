@@ -51,7 +51,7 @@ export class PhotoVisual extends Group implements IDisposable, IVisual {
     }
 
     get isHidden() {
-        return this._isDisposed || this._mesh == null || this._mesh.material.opacity <= 0.0;
+        return this._isDisposed || this._mesh == null || this._mesh.material[0].opacity <= 0.0;
     }
 
     init() {
@@ -67,7 +67,7 @@ export class PhotoVisual extends Group implements IDisposable, IVisual {
 
         if (this._rotateOutDirection !== 0.0) {
             this._mesh.position.z -= 2;
-            this._mesh.material.opacity -= 0.02;
+            this._mesh.material[0].opacity -= 0.02;
 
             this._rotationAnchor.rotateY(this._rotateOutDirection * Math.PI / 100);
         }

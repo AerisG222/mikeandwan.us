@@ -215,14 +215,14 @@ do
     dotnet publish -f netcoreapp2.1 -o "${DIST_ROOT}/${SITE}" -c Release
 done
 
-#rm -rf "${BUILD_ROOT}"
+rm -rf "${BUILD_ROOT}"
 
 # add the media links for testing
 link_media "${DIST_ROOT}/wwwroot"
 
 echo ''
 echo '**************************************************************'
-echo '** STEP 3: go to https://wwwdev.mikeandwan.us:5021 to test  **'
+echo '** STEP 4: go to https://wwwdev.mikeandwan.us:5021 to test  **'
 echo '**************************************************************'
 PIDS=()
 for SITE in "${SITES[@]}"
@@ -239,13 +239,12 @@ do
     kill ${PID}
 done
 
-
 # cleanup
 unlink_media "${DIST_ROOT}/wwwroot"
 
 echo ''
 echo '********************'
-echo '** STEP 4: deploy **'
+echo '** STEP 5: deploy **'
 echo '********************'
 echo 'Would you like to deploy to production? [y/n]'
 read DO_DEPLOY
@@ -255,6 +254,12 @@ if [ "${DO_DEPLOY}" = "y" ]; then
 
     ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
         echo \"These commands will be run on: \$( uname -n )\"
+
+        SITES=(
+            \"api\"
+            \"auth\"
+            \"www\"
+        )
 
         if [ -d /srv/www/_staging ]; then
             sudo rm -rf /srv/www/_staging
@@ -268,15 +273,18 @@ if [ "${DO_DEPLOY}" = "y" ]; then
         sudo systemctl stop nginx.service
         sudo systemctl stop maw_us.service
 
-        if [ -d /srv/www/mikeandwan.us ]; then
-            if [ -d /srv/www/mikeandwan.us_old ]; then
-                sudo rm -rf /srv/www/mikeandwan.us_old
+        for SITE in \"${SITES[@]}\"
+        do
+            if [ -d \"/srv/www/maw_${SITE}\" ]; then
+                if [ -d \"/srv/www/maw_${SITE}.old\" ]; then
+                    sudo rm -rf \"/srv/www/maw_${SITE}.old\"
+                fi
+
+                sudo mv \"/srv/www/maw_${SITE}\" \"/srv/www/maw_${SITE}.old\"
             fi
 
-            sudo mv /srv/www/mikeandwan.us /srv/www/mikeandwan.us_old
-        fi
-
-        sudo mv /srv/www/_staging /srv/www/mikeandwan.us
+            sudo mv \"/srv/www/_staging/${SITE}\" \"/srv/www/maw_${SITE}\"
+        done
 
         sudo systemctl start maw_us.service
         sudo systemctl start nginx.service

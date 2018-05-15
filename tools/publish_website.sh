@@ -222,10 +222,23 @@ link_media "${DIST_ROOT}/wwwroot"
 
 echo ''
 echo '**************************************************************'
-echo '** STEP 3: go to localhost:5000 to test - hit CTL-C to quit **'
+echo '** STEP 3: go to https://wwwdev.mikeandwan.us:5021 to test  **'
 echo '**************************************************************'
-cd "${DIST_ROOT}/www"
-( ASPNETCORE_ENVIRONMENT=staging dotnet "maw_www.dll" )
+PIDS=()
+for SITE in "${SITES[@]}"
+do
+    cd "${DIST_ROOT}/${SITE}"
+    ASPNETCORE_ENVIRONMENT=staging dotnet "maw_${SITE}.dll" &
+    PIDS[${#PIDS[@]}]=$!
+done
+
+read -n1 -r -p "Press any key to continue." xxkeyxx
+
+for PID in "${PIDS[@]}"
+do
+    kill ${PID}
+done
+
 
 # cleanup
 unlink_media "${DIST_ROOT}/wwwroot"

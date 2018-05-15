@@ -4,13 +4,14 @@
 import * as d3 from 'd3';
 
 import { AuthService } from './auth-service';
+import { Config } from './config';
 
 declare var __API_URL__: string;
 
 export class PhotoStats {
-    private readonly API_BASE_URL = __API_URL__;
+    private readonly _config = new Config();
 
-    private _authService = new AuthService();
+    private _authService = new AuthService(this._config);
     width = 960;
     height = 700;
     totalCount = 0;
@@ -234,7 +235,7 @@ export class PhotoStats {
         this.updatePhotoCount(0);
         this.initSunburst();
 
-        const url = `${this.API_BASE_URL}/photos/getStats`;
+        const url = `${this._config.apiUrl}/photos/getStats`;
         const headers = new Headers({ 'Authorization': this._authService.getAuthorizationHeaderValue() });
 
         d3.json(url, { headers: headers }).then((root) => {

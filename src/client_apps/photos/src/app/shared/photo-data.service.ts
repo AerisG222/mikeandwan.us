@@ -9,11 +9,12 @@ import { IExifDetail } from './iexif-detail.model';
 import { IRating } from './irating.model';
 import { IComment } from './icomment.model';
 import { IPhotoAndCategory } from './iphoto-and-category.model';
-import { environment } from '../../environments/environment';
+import { EnvironmentConfig } from './environment-config';
 
 @Injectable()
 export class PhotoDataService {
-    constructor(private _http: HttpClient) {
+    constructor(private _http: HttpClient,
+                private _cfg: EnvironmentConfig) {
 
     }
 
@@ -135,6 +136,6 @@ export class PhotoDataService {
     }
 
     getAbsoluteUrl(relativeUrl: string) {
-        return `${environment.apiUrl}/${relativeUrl}`;
+        return `${this._cfg.apiUrl}/${relativeUrl}`;
     }
 }

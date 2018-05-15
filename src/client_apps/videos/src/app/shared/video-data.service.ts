@@ -4,11 +4,12 @@ import { HttpClient } from '@angular/common/http';
 
 import { ICategory } from './icategory.model';
 import { IVideo } from './ivideo.model';
-import { environment } from '../../environments/environment';
+import { EnvironmentConfig } from './environment-config';
 
 @Injectable()
 export class VideoDataService {
-    constructor(private _http: HttpClient) {
+    constructor(private _http: HttpClient,
+                private _cfg: EnvironmentConfig) {
 
     }
 
@@ -35,6 +36,6 @@ export class VideoDataService {
 
 
     getAbsoluteUrl(relativeUrl: string) {
-        return `${environment.apiUrl}/${relativeUrl}`;
+        return `${this._cfg.apiUrl}/${relativeUrl}`;
     }
 }

@@ -24,16 +24,18 @@ import { ScaleCalculator } from './services/scale-calculator';
 import { StateService } from './services/state-service';
 import { StatusBarController } from './controllers/status-bar-controller';
 import { VisualContext } from './models/visual-context';
+import { Config } from './config';
 
 export class Photos3D {
-    private _authService = new AuthService();
+    private readonly _config = new Config();
+    private _authService = new AuthService(this._config);
     private _axisHelper: AxesHelper;
     private _bg: IController;
     private _blurSubscription: Subscription;
     private _categorySelectedSubscription: Subscription;
     private _catList: CategoryListController;
     private _clock = new Clock();
-    private _dataService = new DataService(this._authService);
+    private _dataService = new DataService(this._authService, this._config);
     private _dialogSubscription: Subscription;
     private _disposalService = new DisposalService();
     private _focusSubscription: Subscription;

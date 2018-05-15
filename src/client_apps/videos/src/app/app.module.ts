@@ -28,6 +28,7 @@ import { VideoDataService } from './shared/video-data.service';
 import { VideoNavigationService } from './shared/video-navigation.service';
 import { VideoStateService } from './shared/video-state.service';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { EnvironmentConfig } from './shared/environment-config';
 
 @NgModule({
     imports: [
@@ -67,6 +68,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
         VideoStateService,
         AuthService,
         AuthGuardService,
+        EnvironmentConfig,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,

@@ -1,24 +1,21 @@
-import { AuthConfig } from './auth-config';
+import { Config } from './config';
 import { UserManager, UserManagerSettings, User } from 'oidc-client';
 
-declare var __AUTH_CONFIG__: AuthConfig;
-
 export class AuthService {
-    private readonly _authConfig : AuthConfig = __AUTH_CONFIG__;
     private _mgr: UserManager;
     private _user: User;
 
-    constructor() {
+    constructor(cfg: Config) {
         const config = {
             automaticSilentRenew: true,
-            silent_redirect_uri: `${this._authConfig.wwwUrl}/account/spa-silent-signin`,
-            authority: this._authConfig.authUrl,
+            silent_redirect_uri: `${cfg.wwwUrl}/account/spa-silent-signin`,
+            authority: cfg.authUrl,
             client_id: 'maw_photo_stats',
-            redirect_uri: `${this._authConfig.wwwUrl}/photos/stats/signin-oidc`,
+            redirect_uri: `${cfg.wwwUrl}/photos/stats/signin-oidc`,
             response_type: 'id_token token',
             scope: 'openid maw_api role',
             loadUserInfo: true,
-            post_logout_redirect_uri : `${this._authConfig.wwwUrl}/`
+            post_logout_redirect_uri : `${cfg.wwwUrl}/`
         };
 
         this._mgr = new UserManager(config);

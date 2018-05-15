@@ -15,15 +15,5 @@ module.exports = {
         rules: [
             { test: /\.ts$/, use: 'ts-loader' }
         ]
-    },
-    plugins: [
-        new webpack.DefinePlugin({
-            __IS_PRODUCTION__: JSON.stringify(true),
-            __API_URL__: JSON.stringify('https://api.mikeandwan.us'),
-            __AUTH_CONFIG__: JSON.stringify({
-                authUrl: 'https://auth.mikeandwan.us',
-                wwwUrl: 'https://www.mikeandwan.us'
-            })
-        })
-    ]
+    }
 }

@@ -45,6 +45,8 @@ import { PhotoCardGridComponent } from './photo-card-grid/photo-card-grid.compon
 import { ToolbarButtonComponent } from './toolbar-button/toolbar-button.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ThreeDLinkComponent } from './three-dlink/three-dlink.component';
+import { EnvironmentConfig } from './shared/environment-config';
+
 
 // TODO: the odd constants for data below are to satisfy an AOT requirement - is there a better way?
 //  SEE: https://github.com/angular/angular/issues/10789
@@ -113,6 +115,7 @@ import { ThreeDLinkComponent } from './three-dlink/three-dlink.component';
         PhotoNavigationService,
         AuthService,
         AuthGuardService,
+        EnvironmentConfig,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,

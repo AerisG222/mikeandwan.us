@@ -1,21 +1,19 @@
+import { Config } from '../config';
 import { AuthService } from './auth-service';
 import { ICategory } from '../models/icategory';
 import { IPhoto } from '../models/iphoto';
-
-declare var __API_URL__: string;
 
 // TODO: fetch not currently understood by tsc, so we wrap window as any to avoid errors, which
 //       makes it easier to spot real errors introduced in the code.  once tsc understands this,
 //       remove the casts below.
 export class DataService {
-    private readonly API_BASE_URL = __API_URL__;
-
-    constructor(private _authService) {
+    constructor(private _authService: AuthService,
+                private _config: Config) {
 
     }
 
     getCategories(): Promise<Array<ICategory>> {
-        const url = `${this.API_BASE_URL}/photos/getAllCategories3D`;
+        const url = `${this._config.apiUrl}/photos/getAllCategories3D`;
 
         return (<any>window).fetch(url, this.getRequestOptions())
             .then(this.status)
@@ -27,7 +25,7 @@ export class DataService {
     }
 
     getPhotos(categoryId: number): Promise<Array<IPhoto>> {
-        const url = `${this.API_BASE_URL}/photos/getPhotos3D/${categoryId}`;
+        const url = `${this._config.apiUrl}/photos/getPhotos3D/${categoryId}`;
 
         return (<any>window).fetch(url, this.getRequestOptions())
             .then(this.status)

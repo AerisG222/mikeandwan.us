@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { EnvironmentConfig } from './environment-config';
 import { UserManager, UserManagerSettings, User } from 'oidc-client';
 
 
@@ -8,17 +8,17 @@ export class AuthService {
     private _mgr: UserManager;
     private _user: User;
 
-    constructor() {
+    constructor(cfg: EnvironmentConfig) {
         const config = {
             automaticSilentRenew: true,
-            silent_redirect_uri: `${environment.wwwUrl}/account/spa-silent-signin`,
-            authority: environment.authUrl,
+            silent_redirect_uri: `${cfg.wwwUrl}/account/spa-silent-signin`,
+            authority: cfg.authUrl,
             client_id: 'maw_photos',
-            redirect_uri: `${environment.wwwUrl}/photos/signin-oidc`,
+            redirect_uri: `${cfg.wwwUrl}/photos/signin-oidc`,
             response_type: 'id_token token',
             scope: 'openid maw_api role',
             loadUserInfo: true,
-            post_logout_redirect_uri: `${environment.wwwUrl}/`
+            post_logout_redirect_uri: `${cfg.wwwUrl}/`
         };
 
         this._mgr = new UserManager(config);

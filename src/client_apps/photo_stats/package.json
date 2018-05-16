@@ -7,11 +7,14 @@
     "ts-loader": "^4.2.0",
     "typescript": "^2.8.3",
     "webpack": "^4.7.0",
-    "webpack-cli": "^2.1.2"
+    "webpack-bundle-analyzer": "^2.12.0",
+    "webpack-cli": "^2.1.2",
+    "webpack-stats-plugin": "^0.2.1"
   },
   "scripts": {
-    "dev_build": "rm -rf dist && webpack",
-    "prod_build": "rm -rf dist && webpack -p --config ./webpack.production.config.js"
+    "dev_build": "rm -rf dist && mkdir dist && webpack",
+    "prod_build": "rm -rf dist && mkdir dist && webpack -p --config ./webpack.production.config.js",
+    "bundle-report": "webpack-bundle-analyzer dist/stats.json"
   },
   "dependencies": {
     "d3": "5.1.0",

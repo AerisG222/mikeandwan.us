@@ -9,8 +9,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "dev_watch": "ng build --extract-css --vendor-chunk=false --watch",
-    "dev_build": "ng build --extract-css --vendor-chunk=false && ng lint",
-    "prod_build": "ng build --aot --vendor-chunk=false --prod"
+    "dev_build": "ng build --extract-css --vendor-chunk=false --stats-json && ng lint",
+    "prod_build": "ng build --aot --vendor-chunk=false --prod --stats-json",
+    "bundle-report": "webpack-bundle-analyzer dist/stats.json"
   },
   "private": true,
   "dependencies": {
@@ -47,6 +48,7 @@
     "protractor": "~5.3.1",
     "ts-node": "~6.0.2",
     "tslint": "~5.10.0",
-    "typescript": "2.7.2"
+    "typescript": "2.7.2",
+    "webpack-bundle-analyzer": "^2.12.0"
   }
 }

@@ -1,5 +1,6 @@
 const webpack = require('webpack');
-
+const StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
+ 
 module.exports = {
     mode: 'development',
     entry: './stats.ts',
@@ -15,5 +16,11 @@ module.exports = {
         rules: [
             { test: /\.ts$/, use: 'ts-loader' }
         ]
-    }
+    },
+    plugins: [
+        new StatsWriterPlugin({
+            filename: "stats.json",
+            fields: null
+        })
+    ]
 }

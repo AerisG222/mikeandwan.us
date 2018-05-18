@@ -89,7 +89,7 @@ but will try to get this well organized below to make it easy to follow.
         - add nginx as a member of svc_www_maw
 16. Install remaining dependencies
     - `sudo dnf install imagemagick-devel`
-
+17. Download [gdrive](https://github.com/prasmussen/gdrive) that can be used to upload period db backups to Google Drive
 
 ## PostgreSQL
 
@@ -194,19 +194,38 @@ This will ensure that the backend application server (Kestrel / your website)
 runs at system startup.  Also, if the process dies, this will restart the process.  Depending
 on whether you want Nginx to connect to kestrel via TCP or Unix sockets will drive some of the
 decisions below, which are called out separately.  Systemd will also collect
-output to STDOUT and include it in the log / journal.
+output to STDOUT and include it in the log / journal.  To test the calendar specifications, in
+the timer files, you can use the following: `systemd-analyze calendar "*-*-* 23:40:00"`
 
 1. Copy the configs under cfg/systemd
 2. Start and enable the webapps to start at boot
     ```
     sudo systemctl start maw_auth.service
     sudo systemctl enable maw_auth.service
-    
+
     sudo systemctl start maw_api.service
     sudo systemctl enable maw_api.service
 
     sudo systemctl start maw_www.service
     sudo systemctl enable maw_www.service
+
+    sudo systemctl start gdrive_idsrv.timer
+    sudo systemctl enable gdrive_idsrv.timer
+
+    sudo systemctl start gdrive_maw_website.timer
+    sudo systemctl enable gdrive_maw_website.timer
+
+    sudo systemctl start pg_vacuum.timer
+    sudo systemctl enable pg_vacuum.timer
+
+    sudo systemctl start pgdump_cleanup.timer
+    sudo systemctl enable pgdump_cleanup.timer
+
+    sudo systemctl start pgdump_idsrv.timer
+    sudo systemctl enable pgdump_idsrv.timer
+
+    sudo systemctl start pgdump_maw_website.timer
+    sudo systemctl enable pgdump_maw_website.timer
     ```
 3. Update SELinux for unix sockets
     - The process will fail when trying to use unix sockets due to SELinux preventing the connection from nginx to the kestrel unix socket.
@@ -219,13 +238,6 @@ output to STDOUT and include it in the log / journal.
             mv kestrel* /usr/share/selinux/targeted/
             semodule -i /usr/share/selinux/targeted/kestrel.pp
             ```
-
-
-## Scheduled Maintenance
-
-1. Download [gdrive](https://github.com/prasmussen/gdrive) that can be used to upload period db backups to Google Drive
-2. Configure routine maintenance (db backups)
-    - Run `crontab -e` and enter the following [tasks](crontab/crontab.conf)
 
 
 ## Upgrade Fedora

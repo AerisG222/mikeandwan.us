@@ -1,0 +1,9 @@
+[Unit]
+Description=Remove old Postgres database backups
+
+[Service]
+Type=oneshot
+# delete files older than 5d, but not the first of the month, which we will retain
+ExecStart=/usr/bin/find /home/mmorano/db_backups/* -type f -mtime +5 -not -iname *01.dump -delete
+User=mmorano
+Group=mmorano

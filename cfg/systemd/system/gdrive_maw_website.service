@@ -1,0 +1,8 @@
+[Unit]
+Description=Backup Postgres database (maw_website) for mikeandwan.us to Google Drive
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "/home/mmorano/bin/gdrive-2.1.0/gdrive-linux-x64 upload /home/mmorano/db_backups/maw_website.`date +\%Y\%m\%d`.dump"
+User=mmorano
+Group=mmorano

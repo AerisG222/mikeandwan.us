@@ -155,16 +155,39 @@ but will try to get this well organized below to make it easy to follow.
     sudo systemctl start nginx.service
     sudo systemctl enable nginx.service
     ```
-4. `sudo dnf install certbot-nginx`
+4. Copy the nginx configuration files from the src directory, and put on the server under /etc/nginx
+5. Add the sites to nginx:
+    - `ln -s /etc/nginx/sites-available/maw_api.conf /etc/nginx/conf.d/maw_api.conf`
+    - `ln -s /etc/nginx/sites-available/maw_auth.conf /etc/nginx/conf.d/maw_auth.conf`
+    - `ln -s /etc/nginx/sites-available/maw_www.conf /etc/nginx/conf.d/maw_www.conf`
+6. `sudo dnf install certbot-nginx`
     - `certbot certonly -d mikeandwan.us -d www.mikeandwan.us --nginx`
     - `certbot certonly -d api.mikeandwan.us --nginx`
     - `certbot certonly -d auth.mikeandwan.us --nginx`
-5. configure certbot to run 2 times a day to update if needed (via systemd)
+7. configure certbot to run 2 times a day to update if needed (via systemd)
     - [service](systemd/certbot-renew.service)
     - [timer](systemd/certbot-renew.timer)
-6. You might need to configure SE Linux rules:
+8. You might need to configure SE Linux rules:
     - reference: https://docs-old.fedoraproject.org/en-US/Fedora/12/html/Security-Enhanced_Linux/sect-Security-Enhanced_Linux-Fixing_Problems-Allowing_Access_audit2allow.html
     - `grep cert_t /var/log/audit/audit.log | audit2allow -M maw_us_certwatch`
+9. Deploy site to server by using tools/publish_website.sh
+10. Now update selinux to allow nginx to access the wwwroot directory (labels might not have been copied)
+    ```
+    restorecon -Rv /srv/www/mikeandwan.us/wwwroot/
+    restorecon -Rv /etc/nginx/certs
+    restorecon -Rv /etc/nginx/sites-available
+    ```
+11. Deploy assets to server, then update SELinux labels
+    - `restorecon -Rv /srv/www/website_assets/`
+12. Prepare log directory
+    ```
+    mkdir /var/log/nginx/mikeandwan.us
+    chmod g+rx /var/log/nginx
+    chown nginx:nginx /var/log/nginx/mikeandwan.us
+    chmod g+rwx /var/log/nginx/mikeandwan.us
+    ```
+13. Reference: [https://docs.asp.net/en/latest/publishing/linuxproduction.html](ASP.Net Linux Production)
+
 
 ## Systemd
 
@@ -192,42 +215,6 @@ output to STDOUT and include it in the log / journal.
             mv kestrel* /usr/share/selinux/targeted/
             semodule -i /usr/share/selinux/targeted/kestrel.pp
             ```
-
-
-## Website
-
-1. Create /etc/nginx/certs and prepare cert related files for nginx
-    - copy the cert from thawte to this directory (mikeandwan.us.pem)
-    - get the intermediary and root CA certificates from thawte
-        - if you arent sure which certs to download, run the following command and look for the issuer details,
-          then find this cert on the issuer's site
-          `openssl x509 -in mikeandwan.us.pem -text`
-    - `cat mikeandwan.us.pem thawte.dv_ssl_ca_g2.pem thawte.root.pem > mikeandwan.us.bundle.pem`
-    - `cat thawte.root.pem thawte123.sha2.intermediate.pem > thawte.bundle.pem`
-    - `openssl dhparam -out mikeandwan.us.dhparam.pem 2048`
-2. Create [/etc/nginx/maw_ssl.conf](nginx/maw_ssl.conf)
-3. Create /etc/nginx/sites-available and copy in [mikeandwan.us.conf](nginx/mikeandwan.us.conf)
-    - Comment/Uncomment the proxy_pass line based on whether you are using TCP or Unix Sockets to communicate with Kestrel
-4. Update [/etc/nginx/mime.types](nginx/mime.types)
-5. Add this site to nginx
-    - `ln -s /etc/nginx/sites-available/mikeandwan.us.conf /etc/nginx/conf.d/mikeandwan.us.conf`
-6. Deploy site to server by using tools/publish_website.sh
-7. Now update selinux to allow nginx to access the wwwroot directory (labels might not have been copied)
-    ```
-    restorecon -Rv /srv/www/mikeandwan.us/wwwroot/
-    restorecon -Rv /etc/nginx/certs
-    restorecon -Rv /etc/nginx/sites-available
-    ```
-8. Deploy assets to server, then update SELinux labels
-    - `restorecon -Rv /srv/www/website_assets/`
-9. Prepare log directory
-    ```
-    mkdir /var/log/nginx/mikeandwan.us
-    chmod g+rx /var/log/nginx
-    chown nginx:nginx /var/log/nginx/mikeandwan.us
-    chmod g+rwx /var/log/nginx/mikeandwan.us
-    ```
-10. Reference: [https://docs.asp.net/en/latest/publishing/linuxproduction.html](ASP.Net Linux Production)
 
 
 ## Scheduled Maintenance

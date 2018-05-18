@@ -165,8 +165,7 @@ but will try to get this well organized below to make it easy to follow.
     - `certbot certonly -d api.mikeandwan.us --nginx`
     - `certbot certonly -d auth.mikeandwan.us --nginx`
 7. configure certbot to run 2 times a day to update if needed (via systemd)
-    - [service](systemd/certbot-renew.service)
-    - [timer](systemd/certbot-renew.timer)
+    - configuration is available under cfg/systemd
 8. You might need to configure SE Linux rules:
     - reference: https://docs-old.fedoraproject.org/en-US/Fedora/12/html/Security-Enhanced_Linux/sect-Security-Enhanced_Linux-Fixing_Problems-Allowing_Access_audit2allow.html
     - `grep cert_t /var/log/audit/audit.log | audit2allow -M maw_us_certwatch`
@@ -197,12 +196,17 @@ on whether you want Nginx to connect to kestrel via TCP or Unix sockets will dri
 decisions below, which are called out separately.  Systemd will also collect
 output to STDOUT and include it in the log / journal.
 
-1. Create service unit file
-    - Create [/etc/systemd/maw_us.service](systemd/maw_us.service)
-2. Start and enable the webapp to start at boot
+1. Copy the configs under cfg/systemd
+2. Start and enable the webapps to start at boot
     ```
-    sudo systemctl start maw_us.service
-    sudo systemctl enable maw_us.service
+    sudo systemctl start maw_auth.service
+    sudo systemctl enable maw_auth.service
+    
+    sudo systemctl start maw_api.service
+    sudo systemctl enable maw_api.service
+
+    sudo systemctl start maw_www.service
+    sudo systemctl enable maw_www.service
     ```
 3. Update SELinux for unix sockets
     - The process will fail when trying to use unix sockets due to SELinux preventing the connection from nginx to the kestrel unix socket.

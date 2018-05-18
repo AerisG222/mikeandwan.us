@@ -1,0 +1,18 @@
+[Unit]
+Description=mikeandwan.us web api
+
+[Service]
+EnvironmentFile=/etc/systemd/system/maw_api.env
+WorkingDirectory=/srv/www/maw_api
+ExecStart=/usr/share/dotnet/dotnet maw_api.dll
+RuntimeDirectory=maw_api
+RuntimeDirectoryMode=0775
+Restart=always
+RestartSec=10
+SyslogIdentifier=maw
+User=svc_www_maw
+Group=svc_www_maw
+UMask=002
+
+[Install]
+WantedBy=multi-user.target

@@ -2,10 +2,10 @@
 Description=mikeandwan.us web application
 
 [Service]
-EnvironmentFile=/etc/systemd/system/maw_us.env
-WorkingDirectory=/srv/www/mikeandwan.us
-ExecStart=/usr/share/dotnet/dotnet mikeandwan.us.dll
-RuntimeDirectory=mikeandwan.us
+EnvironmentFile=/etc/systemd/system/maw_www.env
+WorkingDirectory=/srv/www/maw_www
+ExecStart=/usr/share/dotnet/dotnet maw_www.dll
+RuntimeDirectory=maw_www
 RuntimeDirectoryMode=0775
 Restart=always
 RestartSec=10

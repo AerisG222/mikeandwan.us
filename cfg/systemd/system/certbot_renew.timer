@@ -1,5 +1,5 @@
 [Unit]
-Description=Run maw_us_certrenew twice a day
+Description=Run certbot_renew twice a day
 
 [Timer]
 OnCalendar=0/12:00:00

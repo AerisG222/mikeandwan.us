@@ -1,8 +1,13 @@
 @using Microsoft.AspNetCore.Mvc
 @model MawAuth.ViewModels.Account.ProfileModel
-@{ ViewBag.Title = "account | edit profile"; }
+@{
+    Layout = "_LayoutAuth";
+    ViewBag.Title = "account | edit profile";
+}
 
-<h1>Manage Your Profile</h1>
+@section body_head {
+	<strong>Manage Your Profile</strong>
+}
 
 @if(Model.WasAttempted) {
     if(Model.WasUpdated) {
@@ -122,50 +127,43 @@
     <fieldset>
     	<legend>Social Logins</legend>
         <p>
-            If you have an account with one of the following systems, you can enable your account to use that
-            system for logging in.  This might allow you to skip entering a username and password if you are already
-            logged in to that system.
+            If you have an account with one of the following providers, you can enable your account to use that
+            provider to login to mikeandwan.us.
         </p>
         <p maw-alert-type="Info">
             To use this successfully, you <strong>must</strong> ensure that the email address on the social platform matches the
             email address for your mikeandwan.us account.  If this is not the case, <strong>please do not enable this option</strong>.
         </p>
         <div class="form-row">
-            <div class="form-group col">
+            <div class="form-group col-sm-6">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" asp-for="EnableGithubAuth" />
                     <label class="form-check-label" asp-for="EnableGithubAuth">
-                        <svg-icon icon="Github" class="ml-2"></svg-icon> GitHub
+                        <svg-icon icon="Github" class="ml-2 mr-1"></svg-icon> GitHub
                     </label>
                 </div>
             </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col">
+            <div class="form-group col-sm-6">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" asp-for="EnableGoogleAuth" />
                     <label class="form-check-label" asp-for="EnableGoogleAuth">
-                        <svg-icon icon="GooglePlus" class="ml-2"></svg-icon> Google
+                        <svg-icon icon="GooglePlus" class="ml-2 mr-1"></svg-icon> Google
                     </label>
                 </div>
             </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col">
+            <div class="form-group col-sm-6">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" asp-for="EnableMicrosoftAuth" />
                     <label class="form-check-label" asp-for="EnableMicrosoftAuth">
-                        <svg-icon icon="Windows" class="ml-2"></svg-icon> Microsoft
+                        <svg-icon icon="Windows" class="ml-2 mr-1"></svg-icon> Microsoft
                     </label>
                 </div>
             </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col">
+            <div class="form-group col-sm-6">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" asp-for="EnableTwitterAuth" />
                     <label class="form-check-label" asp-for="EnableTwitterAuth">
-                        <svg-icon icon="Twitter" class="ml-2"></svg-icon> Twitter
+                        <svg-icon icon="Twitter" class="ml-2 mr-1"></svg-icon> Twitter
                     </label>
                 </div>
             </div>
@@ -173,8 +171,8 @@
     </fieldset>
 
     <div class="form-row">
-        <div class="form-group col-sm-3">
-            <button type="submit" class="btn btn-primary">Update Profile</button>
+        <div class="form-group col-12">
+            <button type="submit" class="btn btn-primary btn-block">Update Profile</button>
         </div>
     </div>
 </form>

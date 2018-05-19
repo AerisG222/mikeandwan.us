@@ -1,7 +1,12 @@
-@{ ViewBag.Title = "error"; }
+@{
+    Layout = "_LayoutAuth";
+    ViewBag.Title = "error";
+}
 
-<h1>Error</h1>
+@section body_head {
+    <strong>Error</strong>
+}
 
 <p>
-Sorry, there was an error processing your request.  Please try again.
+    Sorry, there was an error processing your request.  Please try again.
 </p>

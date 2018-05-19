@@ -333,7 +333,6 @@ namespace MawAuth.Controllers
 		}
 
 
-		[Authorize]
 		[HttpGet("access-denied")]
 		public IActionResult AccessDenied()
 		{

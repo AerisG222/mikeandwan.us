@@ -20,6 +20,7 @@ namespace Maw.TagHelpers
         Steam,
         Trello,
         Twitter,
+        UnlockAlt,
         VideoCamera,
         Windows,
         Wrench

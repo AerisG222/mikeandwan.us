@@ -1,7 +1,7 @@
 @model MawAuth.ViewModels.Account.LoginModel
-@{ 
+@{
     Layout = "_LayoutAuth";
-    ViewBag.Title = "account | login"; 
+    ViewBag.Title = "account | login";
 }
 
 @section body_head {
@@ -9,7 +9,7 @@
 }
 
 @section body_foot {
-    <a asp-controller="account" asp-action="forgotpassword">Forgot Password?</a>
+    <a asp-controller="account" asp-action="forgotpassword"><svg-icon icon="UnlockAlt"></svg-icon></a>
 }
 
 @if(Model.WasAttempted) {
@@ -38,12 +38,12 @@
                     <svg-icon icon="Lock"></svg-icon>
                 </div>
             </div>
-            <input asp-for="Password" class="form-control" placeholder="Password" /> 
+            <input asp-for="Password" class="form-control" placeholder="Password" />
         </div> @*
         <span asp-validation-for="Password" class="form-text"></span>*@
     </div>
 
-    <div class="form-group mb-4 row">
+    <div class="form-group row">
         <div class="col-12">
             <button type="submit" class="btn btn-primary btn-block">Submit</button>
         </div>

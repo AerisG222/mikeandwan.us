@@ -1,16 +1,22 @@
-@{ ViewBag.Title = "external authentication error"; }
+@{
+	Layout = "_LayoutAuth";
+	ViewBag.Title = "account | external authentication error";
+}
 
-<h1>External Authentication Error</h1>
+@section body_head {
+	<strong>External Authentication Error</strong>
+}
+
+@section body_foot {
+    <a asp-action="Login"><svg-icon icon="Person"></svg-icon></a>
+}
 
 <div class="row">
     <div class="col-sm-12">
         <p maw-alert-type="Danger">
-            Sorry, there was an error trying to authenticate you with the external service.  Please
-            make sure you first enable the external authentication service in your user profile.
-        </p>
-        <br/>
-        <p>
-            Please try to <a asp-action="Login">login</a> again.
+            Sorry, there was an error trying to authenticate you with the external service.
+            If you haven't already, you must enable external authentication providers in your
+            user profile after logging in with your username/password.
         </p>
     </div>
 </div>

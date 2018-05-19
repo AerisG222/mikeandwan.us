@@ -4,6 +4,18 @@ $input-btn-padding-y: 0.5rem !default;
 @import "bootstrap/scss/bootstrap";
 @import "bootswatch/dist/slate/bootswatch";
 
+.auth_bg {
+    background-image: url("/img/bg_lg.jpg");
+    background-size: cover;
+}
+
+.auth_banner {
+    margin: 1rem 0 0.5rem;
+    font-family: Tangerine, cursive;
+    font-size: 4rem;
+    text-align: center;
+}
+
 .navbar-brand {
     margin-right: 1rem;
     font-family: Tangerine, cursive;

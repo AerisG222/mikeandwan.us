@@ -1,60 +1,84 @@
 @model MawAuth.ViewModels.Account.LoginModel
-@{
-	//Layout = "_Layout";
-	ViewBag.Title = "account | login";
-}
+@{ Layout = "_LayoutAuth"; ViewBag.Title = "account | login"; }
 
-<h1>Login</h1>
-
-<div class="row">
-    <div class="col-lg-5 col-12">
-        @if(Model.WasAttempted) {
-            <p maw-alert-type="Danger">There was an error logging in.  Please try again.</p>
-            <div class="text-danger" asp-validation-summary="All"></div>
-        }
-
-        <form asp-controller="account" asp-action="login" method="post" autocomplete="off" role="form">
-            <input type="hidden" asp-for="ReturnUrl" />
-            <div class="form-group mb-4">
-                <label asp-for="Username"></label>
-                <input asp-for="Username" class="form-control" autofocus="" />
-                @*<span asp-validation-for="Username" class="form-text"></span>*@
-            </div>
-
-            <div class="form-group mb-4">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" />
-                @*<span asp-validation-for="Password" class="form-text"></span>*@
-            </div>
-
-            <div class="form-group mb-4 row">
-                <div class="col-sm-5">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-                <div class="col-sm-5 offset-sm-2 d-flex justify-content-end">
-                    <a asp-controller="account" asp-action="forgotpassword">Forgot Password?</a>
-                </div>
-            </div>
-        </form>
+<div class="container align-middle">
+    <div class="row">
+        <div class="offset-lg-3 col-lg-6 col-12">
+            <h1 class="auth_banner">mikeandwan.us</h1>
+        </div>
     </div>
-    <div class="col-lg-5 offset-lg-2 col-12">
-        <div class="row">
-            <div class="col-12">
-                <strong>or, login with an external account if you have opted-in:</strong>
-            </div>
-            @foreach(var scheme in Model.ExternalSchemes) {
-                <div class="col-sm-6 mt-2">
-                    <a class="btn btn-primary d-block"
-                        asp-action="ExternalLogin"
-                        asp-route-provider="@scheme.ExternalAuth.Name"
-                        asp-route-returnUrl="@Model.ReturnUrl">
-                        @if(scheme.Icon != null) {
-                            <svg-icon class="mr-2" icon="@((SvgIcon)scheme.Icon)"></svg-icon>
-                        }
-                        @scheme.ExternalAuth.DisplayName
-                    </a>
+    <div class="row">
+        <div class="offset-lg-3 col-lg-6 col-12">
+            <div class="card text-white bg-primary">
+                <div class="card-header">
+                    <strong>Login</strong>
                 </div>
-            }
+                <div class="card-body">
+                    <p class="card-text">
+                        @if(Model.WasAttempted) {
+                            <p maw-alert-type="Danger">There was an error logging in. Please try again.</p>
+                            <div class="text-danger" asp-validation-summary="All"></div>
+                        }
+
+                        <form asp-controller="account" asp-action="login" method="post" autocomplete="off" role="form">
+                            <input type="hidden" asp-for="ReturnUrl" />
+                            <div class="form-group mb-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <svg-icon icon="Person"></svg-icon>
+                                        </div>
+                                    </div>
+                                    <input asp-for="Username" class="form-control" autofocus="" placeholder="Username" />
+                                </div>@*
+                                <span asp-validation-for="Username" class="form-text"></span>*@
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <svg-icon icon="Lock"></svg-icon>
+                                        </div>
+                                    </div>
+                                    <input asp-for="Password" class="form-control" placeholder="Password" /> 
+                                </div> @*
+                                <span asp-validation-for="Password" class="form-text"></span>*@
+                            </div>
+
+                            <div class="form-group mb-4 row">
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <hr/>
+
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                or login with an external provider
+                            </div>
+                        </div>
+                        <div class="row">
+                            @foreach(var scheme in Model.ExternalSchemes) {
+                                <div class="col-sm-6 mt-2">
+                                    <a class="btn btn-primary d-block" asp-action="ExternalLogin" asp-route-provider="@scheme.ExternalAuth.Name" asp-route-returnUrl="@Model.ReturnUrl">
+                                        @if(scheme.Icon != null) {
+                                        <svg-icon class="mr-2" icon="@((SvgIcon)scheme.Icon)"></svg-icon>
+                                        } @scheme.ExternalAuth.DisplayName
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-end">
+                        <a asp-controller="account" asp-action="forgotpassword">Forgot Password?</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

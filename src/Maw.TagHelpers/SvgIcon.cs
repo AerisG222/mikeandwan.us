@@ -14,6 +14,7 @@ namespace Maw.TagHelpers
         GooglePlus,
         GooglePlusSquare,
         LinkedIn,
+        Lock,
         Person,
         Steam,
         Trello,

@@ -7,6 +7,15 @@ $input-btn-padding-y: 0.5rem !default;
 .auth_bg {
     background-image: url("/img/bg_lg.jpg");
     background-size: cover;
+
+    & a {
+        color: $body-color;
+
+        &:hover {
+            color: $link-hover-color;
+            text-decoration: none;
+        }
+    }
 }
 
 .auth_banner {

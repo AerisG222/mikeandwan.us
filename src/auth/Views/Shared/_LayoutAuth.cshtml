@@ -11,7 +11,32 @@
 	@await RenderSectionAsync("scripts_head", required: false)
 }
 
-@RenderBody()
+<div class="container align-middle">
+    <div class="row">
+        <div class="col-12 offset-lg-3 col-lg-6">
+            <h1 class="auth_banner"><a maw-www-url="/about/contact">mikeandwan.us</a></h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 offset-lg-3 col-lg-6">
+            <div class="card text-white bg-primary">
+                <div class="card-header">
+                    @await RenderSectionAsync("body_head")
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        @RenderBody()
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-end">
+                        @await RenderSectionAsync("body_foot", required: false)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @await Html.PartialAsync("_js_Bootstrap")
 @await RenderSectionAsync("scripts_footer", required: false)

@@ -11,7 +11,7 @@ namespace MawAuth.ViewModels.Account
 		[DataType(DataType.EmailAddress)]
 		public string Email { get; set; }
 
-		[Required(ErrorMessage = "Please enter the code from the email")]
+		[Required(ErrorMessage = "Reset code was not accepted.  Please use the link from the reset password email.")]
 		public string Code { get; set; }
 
 		[Required(ErrorMessage = "Please enter your new password")]

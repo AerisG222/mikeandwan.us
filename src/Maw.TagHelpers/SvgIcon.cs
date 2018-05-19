@@ -3,6 +3,7 @@ namespace Maw.TagHelpers
     public enum SvgIcon
     {
         Android,
+        At,
         Bars,
         Camera,
         CaretDown,

@@ -1,22 +1,16 @@
-@{ Layout = "_LayoutAuth"; }
-@{ ViewBag.AuthBg = string.Empty; }
+@{ Layout = "_LayoutMinimal"; }
 
 @section custom_head {
 	@await RenderSectionAsync("custom_head", required: false)
-}
-
-@section stylesheets {
-    @await RenderSectionAsync("stylesheets", required: false)
-}
-
-@section scripts_head {
+	@await Html.PartialAsync("_Favicons")
+	<meta name="theme-color" content="#272b30">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine:bold" />
+	@await Html.PartialAsync("_css_site")
+	@await RenderSectionAsync("stylesheets", required: false)
 	@await RenderSectionAsync("scripts_head", required: false)
 }
 
-@await Html.PartialAsync("_TopNav")
-
 @RenderBody()
 
-@section scripts_footer {
-    @await RenderSectionAsync("scripts_footer", required: false)
-}
+@await Html.PartialAsync("_js_Bootstrap")
+@await RenderSectionAsync("scripts_footer", required: false)

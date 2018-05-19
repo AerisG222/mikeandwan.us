@@ -1,13 +1,14 @@
-@{ Layout = "_LayoutMinimal"; }
-@{ ViewBag.AuthBg = "auth_bg"; }
+@{ Layout = "_LayoutBase"; }
 
 @section custom_head {
 	@await RenderSectionAsync("custom_head", required: false)
-	@await Html.PartialAsync("_Favicons")
-	<meta name="theme-color" content="#272b30">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine:bold" />
-	@await Html.PartialAsync("_css_site")
-	@await RenderSectionAsync("stylesheets", required: false)
+}
+
+@section stylesheets {
+    @await RenderSectionAsync("stylesheets", required: false)
+}
+
+@section scripts_head {
 	@await RenderSectionAsync("scripts_head", required: false)
 }
 
@@ -38,5 +39,10 @@
     </div>
 </div>
 
-@await Html.PartialAsync("_js_Bootstrap")
-@await RenderSectionAsync("scripts_footer", required: false)
+<footer class="text-center">
+    <span>copyright &copy; @(DateTime.Now.Year) mike morano | all rights reserved</span>
+</footer>
+
+@section scripts_footer {
+    @await RenderSectionAsync("scripts_footer", required: false)
+}

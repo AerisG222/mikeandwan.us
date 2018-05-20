@@ -7,5 +7,6 @@ function run_psql_script() {
 
 echo 'altering tables...';
 run_psql_script "tables/maw.login_history.sql";
+run_psql_script "tables/maw.user.sql";
 
 echo "...${DBNAME} updated.";

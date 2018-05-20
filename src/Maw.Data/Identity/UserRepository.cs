@@ -121,38 +121,11 @@ namespace Maw.Data.Identity
 			}
 
 			return RunAsync(async conn => {
-				State state = null;
-				Country country = null;
-
-				if(!string.IsNullOrWhiteSpace(updatedUser.State))
-				{
-					state = await GetStateAsync(conn, updatedUser.State);
-				}
-
-				if(!string.IsNullOrWhiteSpace(updatedUser.Country))
-				{
-					country = await GetCountryAsync(conn, updatedUser.Country);
-				}
-
 				var result = await conn.ExecuteAsync(
 					@"UPDATE maw.user
 					     SET first_name = @firstName,
 						     last_name = @lastName,
 							 email = @email,
-							 website = @website,
-							 date_of_birth = @dateOfBirth,
-							 company_name = @companyName,
-							 position = @position,
-							 work_email = @workEmail,
-							 address_1 = @address1,
-							 address_2 = @address2,
-							 city = @city,
-							 state_id = @stateId,
-							 postal_code = @postalCode,
-							 country_id = @countryId,
-							 home_phone = @homePhone,
-							 mobile_phone = @mobilePhone,
-							 work_phone = @workPhone,
 							 hashed_password = @hashedPassword,
 							 security_stamp = @securityStamp,
 							 enable_github_auth = @enableGithubAuth,
@@ -164,20 +137,6 @@ namespace Maw.Data.Identity
 						firstName = updatedUser.FirstName,
 						lastName = updatedUser.LastName,
 						email = updatedUser.Email?.ToLower(),
-						website = updatedUser.Website,
-						dateOfBirth = updatedUser.DateOfBirth,
-						companyName = updatedUser.Company,
-						position = updatedUser.Position,
-						workEmail = updatedUser.WorkEmail?.ToLower(),
-						address1 = updatedUser.Address1,
-						address2 = updatedUser.Address2,
-						city = updatedUser.City,
-						stateId = state?.Id,
-						postalCode = updatedUser.PostalCode,
-						countryId = country?.Id,
-						homePhone = updatedUser.HomePhone,
-						mobilePhone = updatedUser.MobilePhone,
-						workPhone = updatedUser.WorkPhone,
 						hashedPassword = updatedUser.HashedPassword,
 						securityStamp = updatedUser.SecurityStamp,
 						enableGithubAuth = updatedUser.IsGithubAuthEnabled,
@@ -367,18 +326,13 @@ namespace Maw.Data.Identity
 			}
 
 			return RunAsync(async conn => {
-				var users = await conn.QueryAsync<MawUser, State, Country, MawUser>(
+				var users = await conn.QueryAsync<MawUser>(
 					$@"SELECT u.*,
-						      u.company_name AS company,
 							  u.enable_github_auth AS is_github_auth_enabled,
 							  u.enable_google_auth AS is_google_auth_enabled,
 							  u.enable_microsoft_auth AS is_microsoft_auth_enabled,
-							  u.enable_twitter_auth AS is_twitter_auth_enabled,
-							  s.*,
-							  c.*
+							  u.enable_twitter_auth AS is_twitter_auth_enabled
 						 FROM maw.user u
-						 LEFT OUTER JOIN maw.state s ON s.id = u.state_id
-						 LEFT OUTER JOIN maw.country c ON c.id = u.country_id
 					    WHERE u.id IN (SELECT user_id
 						                 FROM maw.user_role
 								  	    WHERE role_id = (SELECT id
@@ -386,11 +340,6 @@ namespace Maw.Data.Identity
 										                  WHERE name = @role
 													  )
 									);",
-					(user, state, country) => {
-							user.State = state?.Code;
-							user.Country = country?.Code;
-							return user;
-					},
 					new { role = roleName.ToLower() }
 				).ConfigureAwait(false);
 
@@ -584,24 +533,14 @@ namespace Maw.Data.Identity
 		Task<MawUser> GetUserAsync<T>(string whereField, T whereValue)
 		{
 			return RunAsync(async conn => {
-				var userResult = await conn.QueryAsync<MawUser, State, Country, MawUser>(
+				var userResult = await conn.QueryAsync<MawUser>(
 						$@"SELECT u.*,
-						          u.company_name AS company,
 								  u.enable_github_auth AS is_github_auth_enabled,
 								  u.enable_google_auth AS is_google_auth_enabled,
 								  u.enable_microsoft_auth AS is_microsoft_auth_enabled,
-								  u.enable_twitter_auth AS is_twitter_auth_enabled,
-								  s.*,
-								  c.*
+								  u.enable_twitter_auth AS is_twitter_auth_enabled
 							FROM maw.user u
-							LEFT OUTER JOIN maw.state s ON s.id = u.state_id
-							LEFT OUTER JOIN maw.country c ON c.id = u.country_id
 						WHERE u.{whereField} = @whereValue;",
-						(user, state, country) => {
-							user.State = state?.Code;
-							user.Country = country?.Code;
-							return user;
-						},
 						new { whereValue = whereValue }
 					).ConfigureAwait(false);
 

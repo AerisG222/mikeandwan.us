@@ -6,7 +6,7 @@
 }
 
 @section body_head {
-	<strong>Manage Your Profile</strong>
+	<strong>Manage Your Profile (@Model.Username)</strong>
 }
 
 @if(Model.WasAttempted) {
@@ -20,116 +20,29 @@
 }
 
 <form asp-controller="account" asp-action="editprofile" method="post" autocomplete="off" role="form">
-	<fieldset>
-    	<legend>General</legend>
         <div class="row">
             <div class="form-group col-md-6">
-                <label asp-for="Username" class="col-form-label"></label>
-    		    <label class="col-form-label ml-2"><strong>@Model.Username</strong></label>
-            </div>
-    	</div>
-
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label asp-for="FirstName" class="col-form-label"></label>
-                <input asp-for="FirstName" class="form-control" autofocus="" />
+                <input asp-for="FirstName" class="form-control" autofocus="" placeholder="First Name" />
                 @*<span asp-validation-for="FirstName" class="form-text"></span>*@
             </div>
             <div class="form-group col-md-6">
-                <label asp-for="LastName" class="col-form-label"></label>
-                <input asp-for="LastName" class="form-control" />
+                <input asp-for="LastName" class="form-control" placeholder="Last Name" />
                 @*<span asp-validation-for="LastName" class="form-text"></span>*@
             </div>
-            <div class="form-group col-md-6">
-                <label asp-for="DateOfBirth" class="col-form-label"></label>
-    		    <input asp-for="DateOfBirth" class="form-control" />
-                @*<span asp-validation-for="DateOfBirth" class="form-text"></span>*@
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="Company" class="col-form-label"></label>
-    		    <input asp-for="Company" class="form-control" />
-                @*<span asp-validation-for="Company" class="form-text"></span>*@
-        	</div>
-            <div class="form-group col-md-6">
-                <label asp-for="Position" class="col-form-label"></label>
-                <input asp-for="Position" class="form-control" />
-                @*<span asp-validation-for="Position" class="form-text"></span>*@
+            <div class="form-group col-12">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <svg-icon icon="At"></svg-icon>
+                        </div>
+                    </div>
+                    <input asp-for="Email" class="form-control" placeholder="Email" />
+                    @*<span asp-validation-for="Email" class="form-text"></span>*@
+                </div>
             </div>
     	</div>
-	</fieldset>
 
-	<fieldset>
-    	<legend>Address</legend>
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label asp-for="PersonalEmail" class="col-form-label"></label>
-    		    <input asp-for="PersonalEmail" class="form-control" />
-                @*<span asp-validation-for="PersonalEmail" class="form-text"></span>*@
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="WorkEmail" class="col-form-label"></label>
-    		    <input asp-for="WorkEmail" class="form-control" />
-                @*<span asp-validation-for="WorkEmail" class="form-text"></span>*@
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="HomePhone" class="col-form-label"></label>
-    		    <input asp-for="HomePhone" class="form-control" />
-                @*<span asp-validation-for="HomePhone" class="form-text"></span>*@
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="MobilePhone" class="col-form-label"></label>
-    		    <input asp-for="MobilePhone" class="form-control" />
-                @*<span asp-validation-for="MobilePhone" class="form-text"></span>*@
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="WorkPhone" class="col-form-label"></label>
-    		    <input asp-for="WorkPhone" class="form-control" />
-                @*<span asp-validation-for="WorkPhone" class="form-text"></span>*@
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="Address1" class="col-form-label"></label>
-    		    <input asp-for="Address1" class="form-control" />
-                @*<span asp-validation-for="Address1" class="form-text"></span>*@
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="Address2" class="col-form-label"></label>
-    		    <input asp-for="Address2" class="form-control" />
-                @*<span asp-validation-for="Address2" class="form-text"></span>*@
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="City" class="col-form-label"></label>
-    		    <input asp-for="City" class="form-control" />
-                @*<span asp-validation-for="City" class="form-text"></span>*@
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="State" class="col-form-label"></label>
-                <select class="custom-select w-100" asp-for="State" asp-items="(IEnumerable<SelectListItem>)ViewBag.States"></select>
-                @*<span asp-validation-for="State" class="form-text"></span>*@
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="PostalCode" class="col-form-label"></label>
-    		    <input asp-for="PostalCode" class="form-control" />
-                @*<span asp-validation-for="PostalCode" class="form-text"></span>*@
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="Country" class="col-form-label"></label>
-                <select class="custom-select w-100" asp-for="Country" asp-items="(IEnumerable<SelectListItem>)ViewBag.Countries"></select>
-                @*<span asp-validation-for="Country" class="form-text"></span>*@
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="Website" class="col-form-label"></label>
-                <input asp-for="Website" class="form-control" />
-                @*<span asp-validation-for="Website" class="form-text"></span>*@
-            </div>
-    	</div>
-	</fieldset>
-
-    <fieldset>
-    	<legend>Social Logins</legend>
-        <p>
-            If you have an account with one of the following providers, you can enable your account to use that
-            provider to login to mikeandwan.us.
-        </p>
+    	<legend>Enable External Login</legend>
         <p maw-alert-type="Info">
             To use this successfully, you <strong>must</strong> ensure that the email address on the social platform matches the
             email address for your mikeandwan.us account.  If this is not the case, <strong>please do not enable this option</strong>.

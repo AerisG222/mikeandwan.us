@@ -1,0 +1,15 @@
+ALTER TABLE maw.user
+       DROP COLUMN website,
+       DROP COLUMN date_of_birth,
+       DROP COLUMN company_name,
+       DROP COLUMN position,
+       DROP COLUMN work_email,
+       DROP COLUMN address_1,
+       DROP COLUMN address_2,
+       DROP COLUMN city,
+       DROP COLUMN state_id,
+       DROP COLUMN postal_code,
+       DROP COLUMN country_id,
+       DROP COLUMN home_phone,
+       DROP COLUMN mobile_phone,
+       DROP COLUMN work_phone;

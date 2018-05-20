@@ -19,6 +19,10 @@ a {
     &:hover {
         color: $link-hover-color;
         text-decoration: none;
+
+        & svg {
+            fill: $link-color;
+        }
     }
 }
 
@@ -37,48 +41,6 @@ footer {
     font-family: Tangerine, cursive;
     font-size: 4rem;
     text-align: center;
-}
-
-.navbar-brand {
-    margin-right: 1rem;
-    font-family: Tangerine, cursive;
-    font-size: 2.4rem;
-    line-height: 1rem;
-}
-
-.navbar-dark {
-    .navbar-brand {
-        padding-right: 0;
-        padding-left: 0;
-        color: $body-color;
-        border-right: none;
-
-        &:hover,
-        &:focus {
-            color: $link-hover-color;
-        }
-    }
-}
-
-.navbar-nav {
-    .nav-link {
-        padding-bottom: 0.8rem;
-        color: $body-color;
-
-        &:hover,
-        &:focus {
-            color: $link-color;
-            background: $navbar-light-disabled-color;
-        }
-
-        &:last-child {
-            border-right: 1px solid $navbar-dark-toggler-border-color;
-        }
-    }
-}
-
-a:hover svg {
-    fill: $link-color;
 }
 
 /* https://blog.prototypr.io/align-svg-icons-to-text-and-say-goodbye-to-font-icons-d44b3d7b26b4 */

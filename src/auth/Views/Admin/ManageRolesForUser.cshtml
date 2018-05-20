@@ -1,41 +1,47 @@
 @using MawAuth.ViewModels.Admin
 @model ManageRolesForUserModel
-@{ ViewBag.Title = "admin | manage roles for user"; }
+@{
+    Layout = "_LayoutAdmin";
+    ViewBag.Title = "admin | manage roles for user";
+}
 
-<h1>Edit Role Membership</h1>
+@section body_head {
+    <strong>Edit Role Membership (@Model.Username)</strong>
+}
+
+@section body_foot {
+    <a asp-action="Index" asp-controller="Admin"><svg-icon icon="Cog"></svg-icon></a>
+}
 
 @await Html.PartialAsync("_identityResult", new IdentityResultModel("user role assignments", Model.Result))
-
-<p>Select what roles <strong>@Model.Username</strong> should belong to.</p>
 
 <form asp-controller="admin" asp-action="managerolesforuser" method="post" autocomplete="off" role="form">
 	<input asp-for="Username" type="hidden" />
 
-	<div class="row">
-	    <div class="col-sm-6">
-			<table class="table table-responsive table-striped table-hover table-sm">
-				<thead>
-					<tr>
-						<th>Group</th>
-						<th>Member</th>
-					</tr>
-				</thead>
-				<tbody>
-				@foreach(string role in Model.AllRoles) {
-					<tr>
-						<td>@role</td>
-						<td>
-							<div class="d-flex justify-content-center">
-								<input class="form-check-input" type="checkbox" name="role" value="@role" @if(Model.GrantedRoles.Contains(@role)) { <text>CHECKED</text> } />
-							</div>
-						</td>
-					</tr>
-				}
-				</tbody>
-			</table>
-	    </div>
-	</div>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-sm">
+            <thead>
+                <tr>
+                    <th>Group</th>
+                    <th>Member</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach(string role in Model.AllRoles) {
+                <tr>
+                    <td>@role</td>
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <input class="form-check-input" type="checkbox" name="role" value="@role" @if(Model.GrantedRoles.Contains(@role)) { <text>CHECKED</text> } />
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
 	<div class="form-group">
-		<button type="submit" class="btn btn-primary">Submit</button>
+		<button type="submit" class="btn btn-primary btn-block">Save Role Membership</button>
 	</div>
 </form>

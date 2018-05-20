@@ -19,7 +19,7 @@ namespace MawAuth.ViewModels.Admin
 		[Display(Name = "Last Name")]
 		public string LastName { get; set; }
 
-		[Required(ErrorMessage = "Please enter the email")]
+		[Required(ErrorMessage = "Please enter the email address")]
 		[Display(Name = "Email")]
 		[EmailAddress(ErrorMessage = "Please enter a valid email address")]
 		[DataType(DataType.EmailAddress)]

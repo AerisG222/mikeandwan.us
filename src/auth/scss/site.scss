@@ -32,8 +32,8 @@ footer {
     background: none repeat scroll rgba(0, 0, 0, 0.4);
 }
 
-.list-group-item:hover {
-    background-color: $list-group-bg;
+.list-group-item .no-hover {
+    background-color: #fff;
 }
 
 .auth_banner {
@@ -42,7 +42,6 @@ footer {
     font-size: 4rem;
     text-align: center;
 }
-
 
 .navbar-brand {
     margin-right: 1rem;
@@ -85,14 +84,6 @@ footer {
 a:hover svg {
     fill: $link-color;
 }
-
-/*
-footer {
-    padding: 40px 0 40px;
-    margin-top: 80px;
-    background: none repeat scroll 0 0 rgb(28, 30, 34);
-}
-*/
 
 /* https://blog.prototypr.io/align-svg-icons-to-text-and-say-goodbye-to-font-icons-d44b3d7b26b4 */
 .svg-icon {

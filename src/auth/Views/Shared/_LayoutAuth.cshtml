@@ -1,4 +1,10 @@
-@{ Layout = "_LayoutBase"; }
+@{
+    Layout = "_LayoutBase";
+
+    if(ViewBag.width == null) {
+        ViewBag.width = "col-12 offset-lg-3 col-lg-6";
+    }
+}
 
 @section custom_head {
 	@await RenderSectionAsync("custom_head", required: false)
@@ -14,12 +20,12 @@
 
 <div class="container align-middle">
     <div class="row">
-        <div class="col-12 offset-lg-3 col-lg-6">
+        <div class="@ViewBag.width">
             <h1 class="auth_banner"><a maw-www-url="/about/contact">mikeandwan.us</a></h1>
         </div>
     </div>
     <div class="row">
-        <div class="col-12 offset-lg-3 col-lg-6">
+        <div class="@ViewBag.width">
             <div class="card text-white bg-primary">
                 <div class="card-header">
                     @await RenderSectionAsync("body_head")

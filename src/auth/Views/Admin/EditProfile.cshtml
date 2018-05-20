@@ -1,50 +1,46 @@
 @using MawAuth.ViewModels.Admin
 @model EditProfileModel
-@{ ViewBag.Title = "admin | edit profile"; }
+@{
+    Layout = "_LayoutAdmin";
+    ViewBag.Title = "admin | edit profile";
+}
 
-<h1>Edit User Profile</h1>
+@section body_head {
+    <strong>Edit User Profile (@Model.Username)</strong>
+}
+
+@section body_foot {
+    <a asp-action="Index" asp-controller="Admin"><svg-icon icon="Cog"></svg-icon></a>
+}
 
 @await Html.PartialAsync("_identityResult", new IdentityResultModel("user profile", Model.Result))
-
-<p>Please update the basic profile data for <strong>@Model.Username</strong> below, and then submit the changes.</p>
 
 <form asp-controller="admin" asp-action="editprofile" method="post" autocomplete="off" role="form">
 	<input asp-for="Username" type="hidden" />
 
-    <div class="form-group">
-		<label asp-for="FirstName" class="col-form-label"></label>
-
-		<div class="row">
-			<div class="col-sm-6">
-				<input asp-for="FirstName" class="form-control" autofocus="" />
-				@*<span asp-validation-for="FirstName" class="form-text"></span>*@
-			</div>
-		</div>
-	</div>
-
-    <div class="form-group">
-		<label asp-for="LastName" class="col-form-label"></label>
-
-		<div class="row">
-			<div class="col-sm-6">
-				<input asp-for="LastName" class="form-control" />
-				@*<span asp-validation-for="LastName" class="form-text"></span>*@
-			</div>
-		</div>
-	</div>
-
-    <div class="form-group">
-		<label asp-for="Email" class="col-form-label"></label>
-
-		<div class="row">
-			<div class="col-sm-6">
-				<input asp-for="Email" class="form-control" />
-				@*<span asp-validation-for="Email" class="form-text"></span>*@
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <input asp-for="FirstName" class="form-control" autofocus="" placeholder="First Name" />
+            @*<span asp-validation-for="FirstName" class="form-text"></span>*@
+        </div>
+        <div class="form-group col-md-6">
+            <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+            @*<span asp-validation-for="LastName" class="form-text"></span>*@
+        </div>
+        <div class="form-group col-12">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <svg-icon icon="At"></svg-icon>
+                    </div>
+                </div>
+                <input asp-for="Email" class="form-control" placeholder="Email" />
+                @*<span asp-validation-for="Email" class="form-text"></span>*@
+            </div>
+        </div>
+    </div>
 
     <div class="form-group">
-		<button type="submit" class="btn btn-primary">Submit</button>
+		<button type="submit" class="btn btn-primary btn-block">Save Profile</button>
     </div>
 </form>

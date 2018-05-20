@@ -1,20 +1,35 @@
 @using MawAuth.ViewModels.Admin
 @model DeleteRoleModel
-@{ ViewBag.Title = "admin | delete role"; }
+@{
+    Layout = "_LayoutAdmin";
+    ViewBag.Title = "admin | delete role";
+}
 
-<h1>Delete Role</h1>
+@section body_head {
+    <strong>Delete Role (@Model.Role)</strong>
+}
+
+@section body_foot {
+    <a asp-action="Index" asp-controller="Admin"><svg-icon icon="Cog"></svg-icon></a>
+}
 
 @await Html.PartialAsync("_identityResult", new IdentityResultModel("role", Model.Result))
 
 @if(Model.Result == null || !Model.Result.Succeeded) {
-	<p>Are you sure you would like to delete the role <strong>@Model.Role</strong>?</p>
-
 	<form asp-controller="admin" asp-action="deleterole" method="post" autocomplete="off" role="form">
 		<input asp-for="Role" type="hidden" />
 
-	    <div class="form-group">
-			<button type="submit" name="delete" class="btn btn-primary">Yes</button>
-			<button type="submit" class="btn btn-primary">No</button>
-	    </div>
+	    <div class="row">
+            <div class="col">
+                <div class="form-group">
+		        	<button type="submit" name="delete" class="btn btn-primary btn-block">Yes</button>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">No</button>
+                </div>
+            </div>
+        </div>
 	</form>
 }

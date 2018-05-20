@@ -14,6 +14,7 @@ namespace Maw.TagHelpers
         Github,
         GooglePlus,
         GooglePlusSquare,
+        Group,
         LinkedIn,
         Lock,
         Person,

@@ -1,9 +1,14 @@
-@{ ViewBag.Title = "admin"; }
+@{
+    Layout = "_LayoutAdmin";
+    ViewBag.Title = "admin";
+}
 
-<h1>Admin</h1>
+@section body_head {
+    <strong>Admin</strong>
+}
 
 <div class="row">
-	<div class="col-sm-4">
+	<div class="col-sm">
 		<div class="card mb-4">
 		    <div class="card-header">
 		        <strong class="card-title">Manage Users</strong>
@@ -15,7 +20,7 @@
 		</div>
 	</div>
 
-	<div class="col-sm-4">
+	<div class="col-sm">
 		<div class="card mb-4">
 		    <div class="card-header">
 		        <strong class="card-title">Manage Roles</strong>

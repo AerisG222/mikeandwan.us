@@ -1,23 +1,34 @@
 @model IEnumerable<string>
-@{ ViewBag.Title = "admin | manage roles"; }
+@{
+    Layout = "_LayoutAdmin";
+    ViewBag.Title = "admin | manage roles";
+}
 
-<h1>Manage Roles</h1>
+@section body_head {
+    <strong>Manage Roles</strong>
+}
 
-<table class="table table-responsive table-striped table-hover table-sm">
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th>Members</th>
-			<th>Delete</th>
-		</tr>
-	</thead>
-	<tbody>
-	@foreach(string role in Model) {
-		<tr>
-			<td>@role</td>
-			<td><a asp-controller="admin" asp-action="editrolemembers" asp-route-id="@role">Edit</a></td>
-			<td><a asp-controller="admin" asp-action="deleterole" asp-route-id="@role">Delete</a></td>
-		</tr>
-	}
-	</tbody>
-</table>
+@section body_foot {
+    <a asp-action="Index" asp-controller="Admin"><svg-icon icon="Cog"></svg-icon></a>
+}
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-sm">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Members</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach(string role in Model) {
+            <tr>
+                <td>@role</td>
+                <td><a asp-controller="admin" asp-action="editrolemembers" asp-route-id="@role">Edit</a></td>
+                <td><a asp-controller="admin" asp-action="deleterole" asp-route-id="@role">Delete</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

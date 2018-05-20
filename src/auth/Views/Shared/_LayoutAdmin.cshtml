@@ -1,0 +1,29 @@
+@{
+    Layout = "_LayoutAuth";
+}
+
+@section custom_head {
+	@await RenderSectionAsync("custom_head", required: false)
+}
+
+@section stylesheets {
+    @await RenderSectionAsync("stylesheets", required: false)
+}
+
+@section scripts_head {
+	@await RenderSectionAsync("scripts_head", required: false)
+}
+
+@section body_head {
+    @await RenderSectionAsync("body_head", required: true)
+}
+
+@section body_foot {
+    @await RenderSectionAsync("body_foot", required: false)
+}
+
+@RenderBody()
+
+@section scripts_footer {
+	@await RenderSectionAsync("scripts_footer", required: false)
+}

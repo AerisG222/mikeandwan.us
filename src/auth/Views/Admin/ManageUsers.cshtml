@@ -1,32 +1,44 @@
 @using MawAuth.ViewModels.Admin
 @model IEnumerable<ManageUserModel>
-@{ ViewBag.Title = "admin | manage users"; }
+@{
+    Layout = "_LayoutAdmin";
+    ViewBag.Title = "admin | manage users";
+    ViewBag.width = "col-12";
+}
 
-<h1>Manage Users</h1>
+@section body_head {
+    <strong>Manage Users</strong>
+}
 
-<table class="table table-responsive table-striped table-hover table-sm">
-	<thead>
-		<tr>
-			<th>Username</th>
-            <th>Email</th>
-			<th>Name</th>
-            <th>Last Login</th>
-			<th>Profile</th>
-			<th>Roles</th>
-			<th>Delete</th>
-		</tr>
-	</thead>
-	<tbody>
-	@foreach(var user in Model) {
-		<tr>
-			<td>@user.Username</td>
-			<td>@user.Email</td>
-            <td>@user.FirstName @user.LastName</td>
-            <td>@user.LastLoginDate</td>
-			<td><a asp-controller="admin" asp-action="editprofile" asp-route-id="@user.Username">Edit</a></td>
-			<td><a asp-controller="admin" asp-action="managerolesforuser" asp-route-id="@user.Username">Edit</a></td>
-			<td><a asp-controller="admin" asp-action="deleteuser" asp-route-id="@user.Username">Delete</a></td>
-		</tr>
-	}
-	</tbody>
-</table>
+@section body_foot {
+    <a asp-action="Index" asp-controller="Admin"><svg-icon icon="Cog"></svg-icon></a>
+}
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-sm">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Last Login</th>
+                <th>Profile</th>
+                <th>Roles</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach(var user in Model) {
+            <tr>
+                <td>@user.Username</td>
+                <td>@user.Email</td>
+                <td>@user.FirstName @user.LastName</td>
+                <td>@user.LastLoginDate</td>
+                <td><a asp-controller="admin" asp-action="editprofile" asp-route-id="@user.Username">Edit</a></td>
+                <td><a asp-controller="admin" asp-action="managerolesforuser" asp-route-id="@user.Username">Edit</a></td>
+                <td><a asp-controller="admin" asp-action="deleteuser" asp-route-id="@user.Username">Delete</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

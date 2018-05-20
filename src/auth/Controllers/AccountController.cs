@@ -164,6 +164,12 @@ namespace MawAuth.Controllers
 					{
 						return Redirect(returnUrl);
 					}
+                    else
+                    {
+                        // we should have a valid redirect url, but if they login and we don't,
+                        // let them review there profile...
+                        return RedirectToAction(nameof(EditProfile));
+                    }
 				}
 				else
 				{

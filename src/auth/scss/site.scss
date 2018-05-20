@@ -32,6 +32,10 @@ footer {
     background: none repeat scroll rgba(0, 0, 0, 0.4);
 }
 
+.list-group-item:hover {
+    background-color: $list-group-bg;
+}
+
 .auth_banner {
     margin: 1rem 0 0.5rem;
     font-family: Tangerine, cursive;

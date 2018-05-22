@@ -8,8 +8,8 @@
     	<div class="row main-image" [ngClass]="{hide_main_image_border: category}">
             <div class="col-12 vcenter text-center">
         		<img [src]="getPhotoPath()" [ngClass]="rotationClassArray[context.current.rotationClassIndex]" [ngStyle]="{'max-width': rotationContainmentMaxWidth, 'max-height': rotationContainmentMaxHeight}" />
-        		<a class="prev" [hidden]="!context.hasPrevious" (click)="context.movePrevious()"><app-svg-icon [klass]="'icon-xl'" [icon]="svgIcon.ArrowCircleLeft"></app-svg-icon></a>
-        		<a class="next" [hidden]="!context.hasNext" (click)="context.moveNext()"><app-svg-icon [klass]="'icon-xl'" [icon]="svgIcon.ArrowCircleRight"></app-svg-icon></a>
+        		<a class="prev" [hidden]="!context.hasPrevious" (click)="context.movePrevious()" appFocusRemover><app-svg-icon [klass]="'icon-xl'" [icon]="svgIcon.ArrowCircleLeft"></app-svg-icon></a>
+        		<a class="next" [hidden]="!context.hasNext" (click)="context.moveNext()" appFocusRemover><app-svg-icon [klass]="'icon-xl'" [icon]="svgIcon.ArrowCircleRight"></app-svg-icon></a>
             </div>
     	</div>
     	<div class="row toolbar hidden-xs">
@@ -42,9 +42,9 @@
     	</div>
 
         <div class="row">
-        	<div class="col hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showComments"><app-comment-view [photo]="photo"></app-comment-view></div>
-        	<div class="col hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showRatings"><app-rating-view [photo]="photo"></app-rating-view></div>
-        	<div class="col hidden-xs photo-info exif" [@fadeInOut]="'in'" *ngIf="showExif"><app-exif-view [photo]="context?.current"></app-exif-view></div>
+        	  <div class="col hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showComments"><app-comment-view [photo]="photo"></app-comment-view></div>
+        	  <div class="col hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showRatings"><app-rating-view [photo]="photo"></app-rating-view></div>
+        	  <div class="col hidden-xs photo-info exif" [@fadeInOut]="'in'" *ngIf="showExif"><app-exif-view [photo]="context?.current"></app-exif-view></div>
             <div class="col hidden-xs photo-info" [@fadeInOut]="'in'" *ngIf="showEffects"><app-effects-view [photo]="context?.current" (update)="onFiltersUpdated($event)"></app-effects-view></div>
             <div [@fadeInOut]="'in'" *ngIf="showFullscreen"><app-fullscreen-view [context]="context"></app-fullscreen-view></div>
         </div>

@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
+import { FocusRemoverDirective } from './focus-remover.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MapComponent
+    MapComponent,
+    FocusRemoverDirective
   ],
   imports: [
     BrowserModule,

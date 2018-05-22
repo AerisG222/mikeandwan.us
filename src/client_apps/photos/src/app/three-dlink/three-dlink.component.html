@@ -1,3 +1,3 @@
-<span [hidden]="!showLink" (mouseenter)="onMouseenter" (mouseout)="onMouseout">
-    <a [href]="url"><span class="threed" [ngStyle]="{'width': width + 'px', 'height': height + 'px'}"></span></a>
+<span [hidden]="!showLink" (mouseenter)="onMouseenter()" (mouseout)="onMouseout()">
+    <a [href]="url" appFocusRemover><span class="threed" [ngStyle]="{'width': width + 'px', 'height': height + 'px'}"></span></a>
 </span>

@@ -46,6 +46,7 @@ import { ToolbarButtonComponent } from './toolbar-button/toolbar-button.componen
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ThreeDLinkComponent } from './three-dlink/three-dlink.component';
 import { EnvironmentConfig } from './shared/environment-config';
+import { FocusRemoverDirective } from './focus-remover.directive';
 
 
 // TODO: the odd constants for data below are to satisfy an AOT requirement - is there a better way?
@@ -103,7 +104,8 @@ import { EnvironmentConfig } from './shared/environment-config';
         SlideshowButtonComponent,
         ToolbarButtonComponent,
         SignInComponent,
-        ThreeDLinkComponent
+        ThreeDLinkComponent,
+        FocusRemoverDirective
     ],
     providers: [
         BreadcrumbService,

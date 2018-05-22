@@ -1,15 +1,15 @@
 <div class="modal-header">
     <h4 class="modal-title">{{title}}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="close()">
+    <button type="button" class="close" aria-label="Close" (click)="close()" appFocusRemover>
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
 <div class="modal-body">
-	<div class="d-flex justify-content-center">
-	    <img [src]="photoInfo?.path" class="img-responsive mx-auto" />
-	</div>
-	<p>To save, right click on the image and choose "Save Image As..."</p>
+    <div class="d-flex justify-content-center">
+        <img [src]="photoInfo?.path" class="img-responsive mx-auto" />
+    </div>
+    <p>To save, right click on the image and choose "Save Image As..."</p>
 </div>
 <div class="modal-footer">
-	<button type="button" class="btn btn-primary" (click)="close()">Close</button>
+    <button type="button" class="btn btn-primary" (click)="close()" appFocusRemover>Close</button>
 </div>

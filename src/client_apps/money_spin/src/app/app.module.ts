@@ -12,6 +12,7 @@ import { SplashScreenComponent } from './splash-screen/splash-screen.component';
 import { WinnerComponent } from './winner/winner.component';
 import { CanPlayGuard } from './play/can-play-guard';
 import { StateService } from './state.service';
+import { FocusRemoverDirective } from './focus-remover.directive';
 
 @NgModule({
     imports: [
@@ -32,7 +33,8 @@ import { StateService } from './state.service';
         PlayerSelectComponent,
         SpinnerComponent,
         SplashScreenComponent,
-        WinnerComponent
+        WinnerComponent,
+        FocusRemoverDirective
     ],
     providers: [
         CanPlayGuard,

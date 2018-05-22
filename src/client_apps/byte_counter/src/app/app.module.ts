@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
+import { FocusRemoverDirective } from './focus-remover.directive';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FocusRemoverDirective
   ],
   imports: [
     BrowserModule,

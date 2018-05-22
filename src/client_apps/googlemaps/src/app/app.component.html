@@ -9,7 +9,7 @@
     <input type="text" [(ngModel)]="addressToMap" class="form-control" autofocus />
 </div>
 <div class="form-group">
-    <button type="submit" (click)="showAddress()" class="btn btn-primary">Submit</button>
+    <button type="submit" (click)="showAddress()" class="btn btn-primary" appFocusRemover>Submit</button>
 </div>
 
 <app-map #map1 (updated)="map2.syncMap($event)"></app-map>

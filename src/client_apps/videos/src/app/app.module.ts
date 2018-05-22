@@ -29,6 +29,7 @@ import { VideoNavigationService } from './shared/video-navigation.service';
 import { VideoStateService } from './shared/video-state.service';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { EnvironmentConfig } from './shared/environment-config';
+import { FocusRemoverDirective } from './focus-remover.directive';
 
 @NgModule({
     imports: [
@@ -57,7 +58,8 @@ import { EnvironmentConfig } from './shared/environment-config';
         VideoCardGridComponent,
         VideoListComponent,
         YearListComponent,
-        SignInComponent
+        SignInComponent,
+        FocusRemoverDirective
     ],
     providers: [
         BreadcrumbService,

@@ -79,11 +79,6 @@ namespace MawMvcApp
                     opts.AccessDeniedPath = "/account/access-denied";
                     opts.LogoutPath = "/account/logout";
                     opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
-
-                    if(_env.IsStaging())
-                    {
-                        opts.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-                    }
                 })
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opts => {
                     opts.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;

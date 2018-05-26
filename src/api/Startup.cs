@@ -12,6 +12,7 @@ using IdentityModel;
 using Maw.Data;
 using Maw.Domain;
 using Maw.Security;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace MawApi
@@ -45,18 +46,14 @@ namespace MawApi
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                     .Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddIdentityServerAuthentication(opts => {
+                    .AddJwtBearer(opts => {
                         opts.Authority = authConfig.AuthorizationUrl;
-
-                        opts.ApiName = "maw_api";
-
-                        opts.NameClaimType = JwtClaimTypes.Name;
-                        opts.RoleClaimType = JwtClaimTypes.Role;
+                        opts.Audience = "maw_api";
                     })
                     .Services
                 .AddAuthorization(opts => {
-                        MawPolicyBuilder.AddMawPolicies(opts);
-                    })
+                    MawPolicyBuilder.AddMawPolicies(opts);
+                })
                 .AddCors(opts => {
                     // this defines a CORS policy called "default"
                     opts.AddPolicy("default", policy => {

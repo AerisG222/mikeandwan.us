@@ -1,11 +1,17 @@
+:host,
+:host .card-footer,
+:host img {
+    transition: all 200ms ease-in-out;
+}
+
 :host:hover {
     background-color: #1c1e22;
     border-color: #52575c;
     cursor: pointer;
 }
 
-:host:hover .category_name {
-    text-decoration: underline;
+:host:hover .card-footer {
+    background-color: #32383e;
     color: #fff;
 }
 

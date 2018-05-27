@@ -1,3 +1,8 @@
+:host,
+:host img {
+  transition: all 200ms ease-in-out;
+}
+
 :host:hover,
 :host.active {
     background-color: #1c1e22;

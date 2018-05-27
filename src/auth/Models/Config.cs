@@ -218,6 +218,9 @@ namespace MawAuth.Models
                     RequireClientSecret = false,
                     RequirePkce = true,
 
+                    // uncomment to test refresh token scenario in Android emulator
+                    //AccessTokenLifetime = 30,
+
                     // where to redirect to after login
                     RedirectUris = { "us.mikeandwan.photos:/signin-oidc" },
 
@@ -225,6 +228,7 @@ namespace MawAuth.Models
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
 
                         // apis
                         "maw_api",

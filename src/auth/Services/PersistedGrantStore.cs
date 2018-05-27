@@ -62,7 +62,7 @@ namespace MawAuth.Services
 					@"DELETE FROM idsrv.persisted_grant
 					   WHERE subject_id = @subjectId
                          AND client_id = @clientId;",
-					new { 
+					new {
                         subjectId = subjectId,
                         clientId = clientId
                      }
@@ -79,7 +79,7 @@ namespace MawAuth.Services
 					   WHERE subject_id = @subjectId
                          AND client_id = @clientId
                          AND type = @type;",
-					new { 
+					new {
                         subjectId = subjectId,
                         clientId = clientId,
                         type = type
@@ -124,7 +124,15 @@ namespace MawAuth.Services
                                @CreationTime,
                                @Expiration,
                                @Data
-                           );",
+                           )
+                      ON CONFLICT (key)
+                      DO UPDATE
+                            SET type = @Type,
+                                subject_id = @SubjectId,
+                                client_id = @ClientId,
+                                creation_time = @CreationTime,
+                                expiration = @Expiration,
+                                data = @Data;",
 					grant
 				);
 			});

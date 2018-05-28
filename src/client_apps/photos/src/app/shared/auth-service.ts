@@ -16,7 +16,7 @@ export class AuthService {
             client_id: 'maw_photos',
             redirect_uri: `${cfg.wwwUrl}/photos/signin-oidc`,
             response_type: 'id_token token',
-            scope: 'openid maw_api role',
+            scope: 'openid profile maw_api role',
             loadUserInfo: true,
             post_logout_redirect_uri: `${cfg.wwwUrl}/`
         };

@@ -49,6 +49,11 @@ namespace MawApi
                     .AddJwtBearer(opts => {
                         opts.Authority = authConfig.AuthorizationUrl;
                         opts.Audience = "maw_api";
+
+                        opts.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            NameClaimType = "name"
+                        };
                     })
                     .Services
                 .AddAuthorization(opts => {

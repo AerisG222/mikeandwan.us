@@ -105,6 +105,7 @@ namespace MawAuth.Models
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
 
                         // apis
                         "maw_api",
@@ -197,9 +198,9 @@ namespace MawAuth.Models
 
                     AllowedScopes = new List<string>
                     {
+                        IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Email,
 
                         // apis
                         "maw_api",
@@ -226,9 +227,10 @@ namespace MawAuth.Models
 
                     AllowedScopes = new List<string>
                     {
-                        IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
 
                         // apis
                         "maw_api",

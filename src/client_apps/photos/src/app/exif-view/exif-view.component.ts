@@ -82,11 +82,7 @@ export class ExifViewComponent {
         new ExifFormatter(ExifCategory.Composite, 'Lens ID', 'lensId', null),
         new ExifFormatter(ExifCategory.Composite, 'Light Value', 'lightValue', this.fourDecimals),
         new ExifFormatter(ExifCategory.Composite, 'Scale Factor 35 EFL', 'scaleFactor35Efl', null),
-        new ExifFormatter(ExifCategory.Composite, 'Shutter Speed', 'shutterSpeed', null),
-        new ExifFormatter(ExifCategory.Processing, 'Raw Conversion Mode', 'rawConversionMode', null),
-        new ExifFormatter(ExifCategory.Processing, 'Sigmoidal Contrast Adjustment', 'sigmoidalContrastAdjustment', this.fourDecimals),
-        new ExifFormatter(ExifCategory.Processing, 'Saturation Adjustment', 'saturationAdjustment', this.fourDecimals),
-        new ExifFormatter(ExifCategory.Processing, 'Compression Quality', 'compressionQuality', null),
+        new ExifFormatter(ExifCategory.Composite, 'Shutter Speed', 'shutterSpeed', null)
     ];
 
     exifInfo: PhotoExifInfo;
@@ -170,9 +166,6 @@ export class ExifViewComponent {
                             break;
                         case ExifCategory.Composite:
                             exifInfo.compositeList.push(item);
-                            break;
-                        case ExifCategory.Processing:
-                            exifInfo.processingList.push(item);
                             break;
                     }
                 }

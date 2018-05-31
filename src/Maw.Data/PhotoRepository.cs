@@ -18,8 +18,8 @@ namespace Maw.Data
             id,
             name,
             year,
-            (SELECT COUNT(1) 
-               FROM photo.photo p 
+            (SELECT COUNT(1)
+               FROM photo.photo p
               WHERE p.gps_latitude IS NOT NULL
                 AND p.category_id = photo.category.id) > 0 AS has_gps_data,
             teaser_photo_path AS path,
@@ -30,10 +30,10 @@ namespace Maw.Data
             id,
             category_id,
             CASE WHEN gps_latitude_ref_id = 'S' THEN -1.0 * gps_latitude
-                 ELSE gps_latitude 
+                 ELSE gps_latitude
                   END AS latitude,
             CASE WHEN gps_longitude_ref_id = 'W' THEN -1.0 * gps_longitude
-                 ELSE gps_longitude 
+                 ELSE gps_longitude
                   END AS longitude,
             xs_path AS path,
             xs_width AS width,
@@ -70,14 +70,14 @@ namespace Maw.Data
             p.prt_width,
             p.prt_height,
             CASE WHEN p.gps_latitude_ref_id = 'S' THEN -1.0 * p.gps_latitude
-                 ELSE p.gps_latitude 
+                 ELSE p.gps_latitude
                   END AS latitude,
             CASE WHEN p.gps_longitude_ref_id = 'W' THEN -1.0 * p.gps_longitude
-                 ELSE p.gps_longitude 
+                 ELSE p.gps_longitude
                   END AS longitude,
             c.name,
             c.year,
-            (SELECT COUNT(1) 
+            (SELECT COUNT(1)
                FROM photo.photo
               WHERE gps_latitude IS NOT NULL
                 AND category_id = c.id) > 0 AS has_gps_data,
@@ -97,7 +97,7 @@ namespace Maw.Data
         {
             return RunAsync(async conn => {
                 var result = await conn.QueryAsync(
-                    $@"WITH random AS 
+                    $@"WITH random AS
                        (
                             SELECT id
                               FROM photo.photo
@@ -148,7 +148,7 @@ namespace Maw.Data
                         category.TeaserPhotoInfo = photoInfo;
                         return category;
                     },
-                    new { 
+                    new {
                         allowPrivate = allowPrivate ? 1 : 0,
                         year = year
                     },
@@ -183,7 +183,7 @@ namespace Maw.Data
                         category.TeaserPhotoInfo = photoInfo;
                         return category;
                     },
-                    new { 
+                    new {
                         allowPrivate = allowPrivate ? 1 : 0,
                         sinceId = sinceId
                     },
@@ -211,7 +211,7 @@ namespace Maw.Data
 
                         return photo;
                     },
-                    new { 
+                    new {
                         allowPrivate = allowPrivate ? 1 : 0,
                         categoryId = categoryId
                     },
@@ -233,7 +233,7 @@ namespace Maw.Data
                         category.TeaserPhotoInfo = photoInfo;
                         return category;
                     },
-                    new { 
+                    new {
                         allowPrivate = allowPrivate ? 1 : 0,
                         categoryId = categoryId
                     },
@@ -349,11 +349,7 @@ namespace Maw.Data
                              l.name AS lens_id,
                              light_value,
                              scale_factor_35_efl,
-                             shutter_speed,
-                             rcm.name AS raw_conversion_mode,
-                             sigmoidal_contrast_adjustment,
-                             saturation_adjustment,
-                             compression_quality
+                             shutter_speed
                         FROM photo.photo p
                         LEFT OUTER JOIN photo.active_d_lighting adl ON adl.id = p.active_d_lighting_id
                         LEFT OUTER JOIN photo.af_area_mode afam ON afam.id = p.af_area_mode_id
@@ -371,7 +367,7 @@ namespace Maw.Data
                         LEFT OUTER JOIN photo.flash_type ft ON ft.id = p.flash_type_id
                         LEFT OUTER JOIN photo.focus_mode foc ON foc.id = p.focus_mode_id
                         LEFT OUTER JOIN photo.gain_control gc ON gc.id = p.gain_control_id
-                        LEFT OUTER JOIN photo.gps_altitude_ref gpsar ON gpsar.id = p.gps_altitude_ref_id 
+                        LEFT OUTER JOIN photo.gps_altitude_ref gpsar ON gpsar.id = p.gps_altitude_ref_id
                         LEFT OUTER JOIN photo.gps_direction_ref gpsdr ON gpsdr.id = p.gps_direction_ref_id
                         LEFT OUTER JOIN photo.gps_latitude_ref gpslatr ON gpslatr.id = p.gps_latitude_ref_id
                         LEFT OUTER JOIN photo.gps_longitude_ref gpslngr ON gpslngr.id = p.gps_longitude_ref_id
@@ -387,7 +383,6 @@ namespace Maw.Data
                         LEFT OUTER JOIN photo.noise_reduction nr ON nr.id = p.noise_reduction_id
                         LEFT OUTER JOIN photo.orientation o ON o.id = p.orientation_id
                         LEFT OUTER JOIN photo.picture_control_name pcn ON pcn.id = p.picture_control_name_id
-                        LEFT OUTER JOIN photo.raw_conversion_mode rcm ON rcm.id = p.raw_conversion_mode_id
                         LEFT OUTER JOIN photo.saturation s ON s.id = p.saturation_id
                         LEFT OUTER JOIN photo.scene_capture_type sct ON sct.id = p.scene_capture_type_id
                         LEFT OUTER JOIN photo.scene_type st ON st.id = p.scene_type_id
@@ -429,15 +424,15 @@ namespace Maw.Data
 		{
             return RunAsync(conn => {
                 return conn.QuerySingleOrDefaultAsync<Rating>(
-                    @"SELECT (SELECT AVG(score) 
-                                FROM photo.rating 
+                    @"SELECT (SELECT AVG(score)
+                                FROM photo.rating
                                WHERE photo_id = @photoId
                              ) AS average_rating,
                              (SELECT AVG(score)
-                                FROM photo.rating 
+                                FROM photo.rating
                                WHERE photo_id = @photoId
-                                 AND user_id = (SELECT id 
-                                                  FROM maw.user 
+                                 AND user_id = (SELECT id
+                                                  FROM maw.user
                                                  WHERE username = @username
                                                )
                              ) AS user_rating;",
@@ -483,22 +478,22 @@ namespace Maw.Data
         {
             return RunAsync(async conn => {
                 var result = await conn.ExecuteAsync(
-                    @"INSERT INTO photo.rating 
+                    @"INSERT INTO photo.rating
                            (
-                             photo_id, 
+                             photo_id,
                              user_id,
                              score
                            )
-                      VALUES 
+                      VALUES
                            (
-                             @photoId, 
+                             @photoId,
                              (SELECT id
                                 FROM maw.user
                                WHERE username = @username
                              ),
                              @score
                            )
-                        ON CONFLICT (photo_id, user_id) 
+                        ON CONFLICT (photo_id, user_id)
                         DO UPDATE
                        SET score = @score;",
                     new {
@@ -511,8 +506,8 @@ namespace Maw.Data
                 return (await GetRatingsAsync(photoId, username).ConfigureAwait(false))?.AverageRating;
             });
         }
-		
-		
+
+
 		public Task<float?> RemovePhotoRatingAsync(int photoId, string username)
 		{
             return RunAsync(async conn => {
@@ -532,7 +527,7 @@ namespace Maw.Data
                 return (await GetRatingsAsync(photoId, username).ConfigureAwait(false))?.AverageRating;
             });
 		}
-        
+
 
         public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentDateAsync(bool newestFirst, bool allowPrivate)
         {
@@ -541,7 +536,7 @@ namespace Maw.Data
                 var sort = newestFirst ? "DESC" : "ASC";
 
                 var result = await conn.QueryAsync(
-                    $@"WITH comments AS 
+                    $@"WITH comments AS
                        (
                             SELECT photo_id,
                                    {op}(entry_date) AS entry_date
@@ -575,7 +570,7 @@ namespace Maw.Data
                 var sort = newestFirst ? "DESC" : "ASC";
 
                 var result = await conn.QueryAsync(
-                    $@"WITH comments AS 
+                    $@"WITH comments AS
                        (
                             SELECT photo_id,
                                    {op}(entry_date) AS entry_date
@@ -609,7 +604,7 @@ namespace Maw.Data
                 var sort = greatestFirst ? "DESC" : "ASC";
 
                 var result = await conn.QueryAsync(
-                    $@"WITH comments AS 
+                    $@"WITH comments AS
                        (
                             SELECT photo_id,
                                    COUNT(1) AS comment_count
@@ -634,14 +629,14 @@ namespace Maw.Data
             });
         }
 
-		
+
         public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
         {
             return RunAsync(async conn => {
                 var sort = highestFirst ? "DESC" : "ASC";
 
                 var result = await conn.QueryAsync(
-                    $@"WITH ratings AS 
+                    $@"WITH ratings AS
                        (
                             SELECT photo_id,
                                    AVG(score) AS avg_score
@@ -666,14 +661,14 @@ namespace Maw.Data
             });
         }
 
-		
+
 		public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
 		{
             return RunAsync(async conn => {
                 var sort = highestFirst ? "DESC" : "ASC";
 
                 var result = await conn.QueryAsync(
-                    $@"WITH ratings AS 
+                    $@"WITH ratings AS
                        (
                             SELECT photo_id,
                                    AVG(score) AS avg_score
@@ -699,14 +694,14 @@ namespace Maw.Data
                     .Cast<PhotoAndCategory>();
             });
 		}
-        
+
 
         public Task<IEnumerable<CategoryPhotoCount>> GetStats(bool allowPrivate)
         {
             return RunAsync(conn => {
                 return conn.QueryAsync<CategoryPhotoCount>(
-                    @"SELECT year, 
-                             id AS CategoryId, 
+                    @"SELECT year,
+                             id AS CategoryId,
                              name AS CategoryName,
                              (SELECT COUNT(1)
                                 FROM photo.photo
@@ -721,7 +716,7 @@ namespace Maw.Data
             });
         }
 
-        
+
         public Task<IEnumerable<Category3D>> GetAllCategories3D()
         {
             return RunAsync(conn => {
@@ -773,7 +768,7 @@ namespace Maw.Data
                 );
             });
         }
-        
+
 
         PhotoAndCategory BuildPhotoAndCategory(dynamic item)
         {

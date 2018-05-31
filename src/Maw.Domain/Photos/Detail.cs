@@ -44,7 +44,7 @@ namespace Maw.Domain.Photos
         public string SceneType { get; set; }
         public string SensingMethod { get; set; }
         public string Sharpness { get; set; }
-        
+
         // nikon - we must get these as strings, because we will have pictures that are not just for nikon
         //       - as such, we can't use the nikon lookup tables in all cases, so we have to manage these
         //       - as generic lookup tables instead
@@ -73,7 +73,7 @@ namespace Maw.Domain.Photos
         public string VibrationReduction { get; set; }
         public string VignetteControl { get; set; }
         public string WhiteBalance { get; set; }
-        
+
         // composite
         public double? Aperture { get; set; }
         public string AutoFocus { get; set; }
@@ -84,11 +84,5 @@ namespace Maw.Domain.Photos
         public double? LightValue { get; set; }
         public double? ScaleFactor35Efl { get; set; }
         public string ShutterSpeed { get; set; }
-        
-        // processing info
-        public string RawConversionMode { get; set; }
-        public double? SigmoidalContrastAdjustment { get; set; }
-        public double? SaturationAdjustment { get; set; }
-        public short? CompressionQuality { get; set; }
 	}
 }

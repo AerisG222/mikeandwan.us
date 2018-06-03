@@ -237,8 +237,8 @@ the timer files, you can use the following: `systemd-analyze calendar "*-*-* 23:
             audit2allow -i /var/log/audit/audit.log -M kestrel
             mv kestrel* /usr/share/selinux/targeted/
             semodule -i /usr/share/selinux/targeted/kestrel.pp
-            ```
-
+    - `setsebool -P httpd_setrlimit 1`
+    - `setsebool -P httpd_run_stickshift 1`
 
 ## Upgrade Fedora
 

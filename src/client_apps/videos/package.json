@@ -26,7 +26,7 @@
     "@ng-bootstrap/ng-bootstrap": "2.0.0",
     "babel-polyfill": "^6.26.0",
     "core-js": "^2.5.5",
-    "oidc-client": "^1.5.0-beta.3",
+    "oidc-client": "^1.5.0",
     "rxjs": "6.2.0",
     "zone.js": "0.8.26"
   },
@@ -49,6 +49,6 @@
     "ts-node": "~6.0.2",
     "tslint": "~5.10.0",
     "typescript": "2.7.2",
-    "webpack-bundle-analyzer": "^2.12.0"
+    "webpack-bundle-analyzer": "^2.13.1"
   }
 }

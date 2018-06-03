@@ -6,6 +6,7 @@ PROJECT_ROOT=/home/mmorano/git/mikeandwan.us
 SRC_ROOT="${PROJECT_ROOT}/src"
 BUILD_ROOT="${PROJECT_ROOT}/build"
 DIST_ROOT="${PROJECT_ROOT}/dist"
+TOOLS_ROOT="${PROJECT_ROOT}/tools"
 DEBUG=n
 WD=$( pwd )
 
@@ -141,6 +142,7 @@ build_sass() {
     npm run sass
 }
 
+echo ''
 echo '***************************************'
 echo '** STEP 1: build css                 **'
 echo '***************************************'
@@ -148,6 +150,7 @@ build_sass "auth"
 build_sass "www"
 cd "${WD}"
 
+echo ''
 echo '***************************************'
 echo '** STEP 2: build client applications **'
 echo '***************************************'
@@ -218,17 +221,18 @@ done
 rm -rf "${BUILD_ROOT}"
 
 # add the media links for testing
-link_media "${DIST_ROOT}/wwwroot"
+link_media "${DIST_ROOT}/www/wwwroot"
 
 echo ''
 echo '**************************************************************'
 echo '** STEP 4: go to https://wwwdev.mikeandwan.us:5021 to test  **'
 echo '**************************************************************'
 PIDS=()
+
 for SITE in "${SITES[@]}"
 do
     cd "${DIST_ROOT}/${SITE}"
-    ASPNETCORE_ENVIRONMENT=staging dotnet "maw_${SITE}.dll" &
+    ASPNETCORE_ENVIRONMENT=staging dotnet "maw_${SITE}.dll" > "${TOOLS_ROOT}/${SITE}.log" &
     PIDS[${#PIDS[@]}]=$!
 done
 
@@ -240,8 +244,9 @@ do
 done
 
 # cleanup
-unlink_media "${DIST_ROOT}/wwwroot"
+unlink_media "${DIST_ROOT}/www/wwwroot"
 
+echo ''
 echo ''
 echo '********************'
 echo '** STEP 5: deploy **'

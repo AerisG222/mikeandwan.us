@@ -16,3 +16,5 @@ project.lock.json
 
 **/npm-debug.log
 **/yarn-error.log
+
+tools/*.log

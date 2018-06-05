@@ -257,18 +257,14 @@ read DO_DEPLOY
 if [ "${DO_DEPLOY}" = "y" ]; then
     rsync -ah "${DIST_ROOT}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/
 
-    ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
-        echo \"These commands will be run on: \$( uname -n )\"
+    ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" '
+        echo "These commands will be run on: $( uname -n )"
 
-        SITES=(
-            \"api\"
-            \"auth\"
-            \"www\"
+        REMOTE_SITES=(
+            "api"
+            "auth"
+            "www"
         )
-
-        if [ -d /srv/www/_staging ]; then
-            sudo rm -rf /srv/www/_staging
-        fi
 
         sudo mv dist /srv/www/_staging
 
@@ -276,24 +272,32 @@ if [ "${DO_DEPLOY}" = "y" ]; then
         sudo restorecon -R /srv/www/_staging
 
         sudo systemctl stop nginx.service
-        sudo systemctl stop maw_us.service
 
-        for SITE in \"${SITES[@]}\"
+        for REMOTE_SITE in "${REMOTE_SITES[@]}"
         do
-            if [ -d \"/srv/www/maw_${SITE}\" ]; then
-                if [ -d \"/srv/www/maw_${SITE}.old\" ]; then
-                    sudo rm -rf \"/srv/www/maw_${SITE}.old\"
+            echo "deploying site: maw_${REMOTE_SITE}..."
+
+            sudo systemctl stop "maw_${REMOTE_SITE}.service"
+
+            if [ -d "/srv/www/maw_${REMOTE_SITE}" ]; then
+                if [ -d "/srv/www/maw_${REMOTE_SITE}.old" ]; then
+                    sudo rm -rf "/srv/www/maw_${REMOTE_SITE}.old"
                 fi
 
-                sudo mv \"/srv/www/maw_${SITE}\" \"/srv/www/maw_${SITE}.old\"
+                sudo mv "/srv/www/maw_${REMOTE_SITE}" "/srv/www/maw_${REMOTE_SITE}.old"
             fi
 
-            sudo mv \"/srv/www/_staging/${SITE}\" \"/srv/www/maw_${SITE}\"
+            sudo mv "/srv/www/_staging/${REMOTE_SITE}" "/srv/www/maw_${REMOTE_SITE}"
+
+            sudo systemctl start "maw_${REMOTE_SITE}.service"
         done
 
-        sudo systemctl start maw_us.service
+        if [ -d /srv/www/_staging ]; then
+            sudo rm -rf /srv/www/_staging
+        fi
+
         sudo systemctl start nginx.service
-    "
+    '
 fi
 
 echo ''

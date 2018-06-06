@@ -1,8 +1,0 @@
-[Unit]
-Description=Optimize Postgres by performing a vacuum
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/vacuumdb --all --analyze
-User=mmorano
-Group=mmorano

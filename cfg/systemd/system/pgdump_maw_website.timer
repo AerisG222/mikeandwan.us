@@ -1,9 +1,0 @@
-[Unit]
-Description=Run pgdump_maw_website daily
-
-[Timer]
-OnCalendar=*-*-* 23:25:00
-Persistent=true
-
-[Install]
-WantedBy=timers.target

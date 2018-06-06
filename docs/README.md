@@ -208,24 +208,6 @@ the timer files, you can use the following: `systemd-analyze calendar "*-*-* 23:
 
     sudo systemctl start maw_www.service
     sudo systemctl enable maw_www.service
-
-    sudo systemctl start gdrive_idsrv.timer
-    sudo systemctl enable gdrive_idsrv.timer
-
-    sudo systemctl start gdrive_maw_website.timer
-    sudo systemctl enable gdrive_maw_website.timer
-
-    sudo systemctl start pg_vacuum.timer
-    sudo systemctl enable pg_vacuum.timer
-
-    sudo systemctl start pgdump_cleanup.timer
-    sudo systemctl enable pgdump_cleanup.timer
-
-    sudo systemctl start pgdump_idsrv.timer
-    sudo systemctl enable pgdump_idsrv.timer
-
-    sudo systemctl start pgdump_maw_website.timer
-    sudo systemctl enable pgdump_maw_website.timer
     ```
 3. Update SELinux for unix sockets
     - The process will fail when trying to use unix sockets due to SELinux preventing the connection from nginx to the kestrel unix socket.
@@ -239,6 +221,13 @@ the timer files, you can use the following: `systemd-analyze calendar "*-*-* 23:
             semodule -i /usr/share/selinux/targeted/kestrel.pp
     - `setsebool -P httpd_setrlimit 1`
     - `setsebool -P httpd_run_stickshift 1`
+
+## Cron
+
+I originally tried to use systemd for the user level backup jobs for postgres, but ran into permission issues associated with
+writing to files in the homedir.  As such, we reverted to user configured cron job:
+
+    - copy the contents of crontab/crontab.conf into the `crontab -e` editor for the desired user.
 
 ## Upgrade Fedora
 

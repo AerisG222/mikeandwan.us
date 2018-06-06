@@ -1,8 +1,0 @@
-[Unit]
-Description=Backup Postgres database (idsrv) for mikeandwan.us
-
-[Service]
-Type=oneshot
-ExecStart=/bin/bash -c "/usr/bin/pg_dump -Fc idsrv > /home/mmorano/db_backups/idsrv.`date +\%Y\%m\%d`.dump"
-User=mmorano
-Group=mmorano

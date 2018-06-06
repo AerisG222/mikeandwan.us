@@ -1,8 +1,0 @@
-[Unit]
-Description=Backup Postgres database (maw_website) for mikeandwan.us
-
-[Service]
-Type=oneshot
-ExecStart=/bin/bash -c "/usr/bin/pg_dump -Fc maw_website > /home/mmorano/db_backups/maw_website.`date +\%Y\%m\%d`.dump"
-User=mmorano
-Group=mmorano

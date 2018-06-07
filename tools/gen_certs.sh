@@ -13,19 +13,14 @@ CA_SUBJ="/C=US/ST=Massachusetts/L=Boston/O=mikeandwan.us/OU=IT/CN=maw_ca"
 CERT_SUBJ="/C=US/ST=Massachusetts/L=Boston/O=mikeandwan.us/OU=IT/CN="
 SCRIPT=`realpath "${BASH_SOURCE}"`
 SCRIPT_DIR="${SCRIPT%/*}"
+RESTART_SITES="n"
 
 if [ "${IS_PROD}" == 'y' ]
 then
-    if [ $EUID -ne 0 ]
-    then
-        echo 'This script must run with root privleges when configuring production.  Exiting.'
-        exit 1
-    fi
-
     echo 'Environment: PRODUCTION'
     echo ''
 
-    CERT_ROOT="/etc/maw_certs"
+    CERT_ROOT="/home/svc_www_maw/maw_certs"
 else
     echo 'Environment: DEVELOPMENT'
     echo ''
@@ -47,13 +42,16 @@ PROJECTS=(
     "www"
 )
 
-echo "This script will create a CA and certs for auth (HTTPS + Signing), api, and www endpoints."
-echo "These are to be used by Kestrel and IdentityServer, whereas LetsEncrypt is used on the public"
-echo "facing endpoints on nginx (in production)."
-echo ''
-echo "Certs will be created at the following root directory: ${CERT_ROOT}."
-echo ''
-read -rsp $'Press enter to continue, or CTL-C to exit...\n'
+if [ "${IS_PROD}" != 'y' ]
+then
+    echo "This script will create a CA and certs for auth (HTTPS + Signing), api, and www endpoints."
+    echo "These are to be used by Kestrel and IdentityServer, whereas LetsEncrypt is used on the public"
+    echo "facing endpoints on nginx (in production)."
+    echo ''
+    echo "Certs will be created at the following root directory: ${CERT_ROOT}."
+    echo ''
+    read -rsp $'Press enter to continue, or CTL-C to exit...\n'
+fi
 
 will_expire_soon() {
     local cert="$1"
@@ -106,6 +104,8 @@ gen_cert() {
         echo "* creating certificate for -[${project}]-"
         echo '*********************************************************'
         echo ''
+
+        RESTART_SITES="y"
 
         # create password for the keyfile
         PASSWORD=$(gen_pwd)
@@ -171,6 +171,8 @@ then
     echo '* CA cert is not expiring soon, it will not be generated.'
     echo ''
 else
+    RESTART_SITES="y"
+
     CA_KEY_NEW="${CA_DIR}/ca_${DATE}.key"
     CA_KEY_PWD_NEW="${CA_KEY_NEW}.pwd"
     CA_CRT_NEW="${CA_DIR}/ca_${DATE}.crt"
@@ -236,3 +238,18 @@ done
 # Add the trusted certificate to the system:
 # sudo cp neocities.ca.crt /usr/local/share/ca-certificates/
 # sudo update-ca-certificates
+
+if [ "${RESTART_SITES}" == 'y' ] && [ "${IS_PROD}" != 'y' ]
+then
+    chown -R svc_www_maw:svc_www_maw "${CERT_ROOT}"
+
+    echo 'Restarting web services...'
+
+    systemctl stop maw_api.service
+    systemctl stop maw_auth.service
+    systemctl stop maw_www.service
+
+    systemctl start maw_api.service
+    systemctl start maw_auth.service
+    systemctl start maw_www.service
+fi

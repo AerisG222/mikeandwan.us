@@ -37,6 +37,9 @@ if [ "${PATH_VIDEO_SOURCE}" = "" ]; then
 
     # cleanup trailing slash if needed
     PATH_VIDEO_SOURCE="${PATH_VIDEO_SOURCE%/}"
+
+    # now add it back as it is required
+    PATH_VIDEO_SOURCE="${PATH_VIDEO_SOURCE}/"
 fi
 
 if [ "${CAT_NAME}" = "" ]; then
@@ -114,9 +117,9 @@ if [ "${DEBUG}" = "y" ]; then
     fi
 fi
 
-if [ -d "${PATH_VIDEO_SOURCE}/src" ]; then
+if [ -d "${PATH_VIDEO_SOURCE}/raw" ]; then
     # move previously processed source files back to main photo directory
-    mv "${PATH_VIDEO_SOURCE}"/src/* "${PATH_VIDEO_SOURCE}"
+    mv "${PATH_VIDEO_SOURCE}"/raw/* "${PATH_VIDEO_SOURCE}"
 
     # remove generated directories
     rm -rf "${PATH_VIDEO_SOURCE}/raw"
@@ -128,6 +131,8 @@ fi
 echo '* processing videos...'
 
 dotnet "${PATH_CONVERT_VIDEOS}" -c "${CAT_NAME}" -o "${PATH_LOCAL_SQL_FILE}" -v "${PATH_VIDEO_SOURCE}" -w "movies" -y ${YEAR} ${PRIVATE_FLAG}
+
+stty sane
 
 # after processing the first time, we typically want to manually review all the photos to make sure
 # we keep the good ones and toss the bad / dupes /etc.  This check allows the user to bail if this
@@ -151,7 +156,7 @@ if [ ! -d "${DEST_MOVIES_YEAR_ROOT}" ]; then
     mkdir "${DEST_MOVIES_YEAR_ROOT}"
 fi
 
-echo '* moving photos for local site...'
+echo '* moving videos for local site...'
 mv "${PATH_VIDEO_SOURCE}" "${DEST_MOVIES_YEAR_ROOT}"
 
 echo '* applying sql to local database...'

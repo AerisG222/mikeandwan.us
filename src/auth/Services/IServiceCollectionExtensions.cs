@@ -1,4 +1,5 @@
 using IdentityServer4.Stores;
+using MawAuth.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +16,8 @@ namespace MawAuth.Services
             services
                 .AddSingleton<ISigningCredentialStore>(new MawSigningCredentialStore(signingCertDir))
                 .AddSingleton<IValidationKeysStore>(new MawValidationKeysStore(signingCertDir))
-                .AddScoped<IPersistedGrantStore>(x => new PersistedGrantStore(connString));
+                .AddSingleton<StoreConfig>(new StoreConfig(connString))
+                .AddScoped<IPersistedGrantStore, PersistedGrantStore>();
 
             return services;
         }

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Dapper;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
+using MawAuth.Models;
+using Microsoft.Extensions.Logging;
 using Npgsql;
 
 
@@ -14,22 +16,26 @@ namespace MawAuth.Services
     public class PersistedGrantStore
         : IPersistedGrantStore
     {
-        string _connString;
+        readonly string _connString;
+        readonly ILogger _log;
 
 
-        public PersistedGrantStore(string connectionString)
+        public PersistedGrantStore(StoreConfig config, ILogger<IdentityServerProfileService> log)
         {
-            if(string.IsNullOrWhiteSpace(connectionString))
+            if(config == null)
             {
-                throw new ArgumentNullException(nameof(connectionString));
+                throw new ArgumentNullException(nameof(config));
             }
 
-            _connString = connectionString;
+            _connString = config.ConnectionString;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
 
         public Task<IEnumerable<PersistedGrant>> GetAllAsync(string subjectId)
         {
+            _log.LogDebug($"getting all grants for subject: {subjectId}");
+
             return RunAsync(conn => {
 				return conn.QueryAsync<PersistedGrant>(
 					@"SELECT *
@@ -44,6 +50,8 @@ namespace MawAuth.Services
 
         public Task<PersistedGrant> GetAsync(string key)
         {
+            _log.LogDebug($"getting all grants for key: {key}");
+
             return RunAsync(conn => {
 				return conn.QuerySingleOrDefaultAsync<PersistedGrant>(
 					@"SELECT *
@@ -57,6 +65,8 @@ namespace MawAuth.Services
 
         public Task RemoveAllAsync(string subjectId, string clientId)
         {
+            _log.LogDebug($"removing all grants for subject: {subjectId} and client: {clientId}");
+
             return RunAsync(async conn => {
 				var result = await conn.ExecuteAsync(
 					@"DELETE FROM idsrv.persisted_grant
@@ -73,6 +83,8 @@ namespace MawAuth.Services
 
         public Task RemoveAllAsync(string subjectId, string clientId, string type)
         {
+            _log.LogDebug($"removing all grants for subject: {subjectId} and client: {clientId} and type: {type}");
+
             return RunAsync(async conn => {
 				var result = await conn.ExecuteAsync(
 					@"DELETE FROM idsrv.persisted_grant
@@ -91,6 +103,8 @@ namespace MawAuth.Services
 
         public Task RemoveAsync(string key)
         {
+            _log.LogDebug($"removing grant for key: {key}");
+
             return RunAsync(async conn => {
 				var result = await conn.ExecuteAsync(
 					@"DELETE FROM idsrv.persisted_grant
@@ -103,6 +117,8 @@ namespace MawAuth.Services
 
         public Task StoreAsync(PersistedGrant grant)
         {
+            _log.LogDebug($"storing grant for key: {grant.Key}, type: {grant.Type}, subject: {grant.SubjectId}, client: {grant.ClientId}");
+
             return RunAsync(async conn => {
 				var result = await conn.ExecuteAsync(
 					@"INSERT INTO idsrv.persisted_grant

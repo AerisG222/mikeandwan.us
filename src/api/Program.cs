@@ -33,7 +33,7 @@ namespace MawApi
                                 .AddFilter("Microsoft", LogLevel.Warning)
                                 .AddFilter("System", LogLevel.Warning)
                                 .AddFilter("Maw", LogLevel.Debug)
-                                .AddFilter("MawMvcApp", LogLevel.Debug);
+                                .AddFilter("MawApi", LogLevel.Debug);
                         }
                         else
                         {
@@ -42,7 +42,7 @@ namespace MawApi
                                 .AddFilter("Microsoft", LogLevel.Warning)
                                 .AddFilter("System", LogLevel.Warning)
                                 .AddFilter("Maw", LogLevel.Information)
-                                .AddFilter("MawMvcApp", LogLevel.Information);
+                                .AddFilter("MawApi", LogLevel.Information);
                         }
                     })
                 .UseKestrel(opts =>

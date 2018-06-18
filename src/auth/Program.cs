@@ -40,10 +40,11 @@ namespace MawAuth
                         {
                             factory
                                 .AddConsole()
+                                .AddFilter("IdentityServer4", LogLevel.Debug)
                                 .AddFilter("Microsoft", LogLevel.Warning)
                                 .AddFilter("System", LogLevel.Warning)
-                                .AddFilter("Maw", LogLevel.Information)
-                                .AddFilter("MawAuth", LogLevel.Information);
+                                .AddFilter("Maw", LogLevel.Debug)
+                                .AddFilter("MawAuth", LogLevel.Debug);
                         }
                     })
                 .UseKestrel(opts =>

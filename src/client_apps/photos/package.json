@@ -27,7 +27,7 @@
     "babel-polyfill": "^6.26.0",
     "core-js": "^2.5.5",
     "mousetrap": "^1.6.2",
-    "oidc-client": "^1.5.0",
+    "oidc-client": "1.5.0",
     "rxjs": "6.2.0",
     "three": "^0.93.0",
     "zone.js": "0.8.26"

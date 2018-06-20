@@ -103,13 +103,21 @@ namespace MawAuth.Services
 
         public Task RemoveAsync(string key)
         {
-            _log.LogDebug($"removing grant for key: {key}");
+            _log.LogDebug($"removing grant for key: {key} (if expired)");
 
+            // for now, lets only delete explicit items when they are expired.  there could
+            // be a condition where the client application did not successfully receive the
+            // refresh token, and seeing we only allow one use per refresh token they might
+            // have the old one when our system would have deleted it...
             return RunAsync(async conn => {
 				var result = await conn.ExecuteAsync(
 					@"DELETE FROM idsrv.persisted_grant
-					   WHERE key = @key;",
-					new { key = key }
+					   WHERE key = @key
+                         AND expiration < @now;",
+					new {
+                        key = key,
+                        now = DateTime.Now
+                    }
 				);
 			});
         }

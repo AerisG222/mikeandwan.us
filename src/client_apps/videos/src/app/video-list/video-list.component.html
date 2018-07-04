@@ -11,7 +11,7 @@
     <div class="col">
         <div class="row">
             <div class="col mt-3">
-                <ngb-pagination [collectionSize]="videoList.length" [pageSize]="cardsPerPage" [size]="'sm'" (pageChange)="onChangePage($event)"></ngb-pagination>
+                <ngb-pagination [collectionSize]="videoList.length" [pageSize]="cardsPerPage" [size]="'sm'" [(page)]="page"></ngb-pagination>
             </div>
         </div>
         <app-video-card-grid [cardsPerPage]="cardsPerPage" [videoList]="videoList" [page]="page" [activeVideo]="currentVideo" (videoSelected)="onVideoSelected($event)"></app-video-card-grid>

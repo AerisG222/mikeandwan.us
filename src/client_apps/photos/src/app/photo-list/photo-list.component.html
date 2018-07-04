@@ -5,7 +5,7 @@
 <div [@fadeInOut]="'in'">
     <div class="row">
         <div class="col mt-3">
-            <ngb-pagination [collectionSize]="context?.photos.length" [pageSize]="cardsPerPage" [size]="'sm'" (pageChange)="onChangePage($event)"></ngb-pagination>
+            <ngb-pagination [collectionSize]="context?.photos.length" [pageSize]="cardsPerPage" [size]="'sm'" [(page)]="page"></ngb-pagination>
         </div>
     </div>
     <app-photo-card-grid [cardsPerPage]="cardsPerPage" [photoList]="context?.photos" [page]="page" [activePhoto]="context?.current" (photoSelected)="onPhotoSelected($event)"></app-photo-card-grid>

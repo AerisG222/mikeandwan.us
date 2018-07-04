@@ -119,7 +119,7 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
     }
 
     onPhotoUpdated(index: number): void {
-        // this.thumbnailList.setItemSelectedIndex(index);
+        this.updatePageIfNeeded(index);
 
         if (!this.showPhotoView && !this.showMapView) {
             const modal = this._modalService.open(PhotoDialogComponent);
@@ -132,10 +132,8 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
         this.showPhotoView = !showMap;
     }
 
-    onChangePage(page: number) {
-        if (page >= 1) {
-            this.page = page;
-        }
+    updatePageIfNeeded(index: number): void {
+        this.page = Math.floor(index / this.cardsPerPage) + 1;
     }
 
     setCardsPerPage(config: Config): void {

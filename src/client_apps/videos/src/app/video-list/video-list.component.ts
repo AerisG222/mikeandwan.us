@@ -71,12 +71,6 @@ export class VideoListComponent implements OnInit, AfterViewInit {
         });
     }
 
-    onChangePage(page: number): void {
-        if (page >= 1) {
-            this.page = page;
-        }
-    }
-
     onVideoSelected(video: IVideo): void {
         if (video !== null) {
             this.currentVideo = video;

@@ -4,11 +4,11 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "ts-loader": "^4.3.0",
-    "typescript": "^2.9.1",
-    "webpack": "^4.10.2",
+    "ts-loader": "^4.4.2",
+    "typescript": "^2.9.2",
+    "webpack": "^4.14.0",
     "webpack-bundle-analyzer": "^2.13.1",
-    "webpack-cli": "^3.0.1",
+    "webpack-cli": "^3.0.8",
     "webpack-stats-plugin": "^0.2.1"
   },
   "scripts": {
@@ -18,6 +18,6 @@
   },
   "dependencies": {
     "stats.js": "^0.17.0",
-    "three": "^0.93.0"
+    "three": "^0.94.0"
   }
 }

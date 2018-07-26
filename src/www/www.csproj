@@ -23,7 +23,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="IdentityModel" Version="3.8.0" />
-    <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.119" />
+    <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.133" />
     <PackageReference Include="NMagickWand" Version="0.5.1" />
   </ItemGroup>
 

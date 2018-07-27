@@ -18,6 +18,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="RedHat.AspNetCore.Server.Kestrel.Transport.Linux" Version="2.1.0-*" />
     </ItemGroup>
 
     <ItemGroup>

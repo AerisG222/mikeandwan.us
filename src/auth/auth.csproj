@@ -27,6 +27,7 @@
     <PackageReference Include="IdentityServer4" Version="2.2.0" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.1.0" />
     <PackageReference Include="Npgsql" Version="4.0.2" />
+    <PackageReference Include="RedHat.AspNetCore.Server.Kestrel.Transport.Linux" Version="2.1.0-*" />
   </ItemGroup>
 
   <ItemGroup>

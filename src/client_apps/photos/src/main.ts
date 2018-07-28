@@ -4,9 +4,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-import {} from '@types/googlemaps';
-import {} from '@types/modernizr';
-
 
 if (environment.production) {
   enableProdMode();

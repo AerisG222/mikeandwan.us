@@ -27,6 +27,9 @@ update_ngcli() {
     npm install --save-dev ${CLI_VERSION}
     ng update @angular/cli
     ng update @angular/core
+    ng update @angular-devkit/build-angular
+    ng update core-js
+    ng update codelyzer
     
     cd ..
 }

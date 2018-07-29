@@ -150,6 +150,14 @@ button {
     }
 }
 
+#sidebarAccordion {
+    & .btn {
+        color: $body-color;
+        font-weight: bold;
+        text-shadow: none;
+    }
+}
+
 /* not sure why this is needed, but appearance:none; does not seem to work for me on chrome/ff on linux */
 .custom-select {
     -moz-appearance: none;

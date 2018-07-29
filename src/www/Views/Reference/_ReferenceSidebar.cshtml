@@ -7,54 +7,56 @@
     var presentationClass = string.Equals(Model.Group, "presentation", StringComparison.OrdinalIgnoreCase) ? "show" : "collapse";
 }
 
-<div class="card mb-2">
-    <div class="card-header">
-        <a data-toggle="collapse" data-parent="#accordion" href="#html">HTML</a>
-    </div>
-    <div id="html" class="@htmlClass">
-        <div class="list-group list-group-flush">
-            <a class="list-group-item" asp-controller="reference" asp-action="HtmlColors" maw-active="@string.Equals(Model.Item, "html-colors", StringComparison.OrdinalIgnoreCase)">Colors</a>
-            <a class="list-group-item" asp-controller="reference" asp-action="HtmlDoctypes" maw-active="@string.Equals(Model.Item, "html-doctypes", StringComparison.OrdinalIgnoreCase)">Doctypes</a>
-            <a class="list-group-item" asp-controller="reference" asp-action="HtmlEntities" maw-active="@string.Equals(Model.Item, "html-entities", StringComparison.OrdinalIgnoreCase)">Entities</a>
+<div class="accordion" id="sidebarAccordion">
+    <div class="card mb-2">
+        <div class="card-header">
+            <button class="btn btn-link p-0" type="button" data-toggle="collapse" data-target="#html">HTML</button>
+        </div>
+        <div id="html" class="@htmlClass" data-parent="#sidebarAccordion">
+            <div class="list-group list-group-flush">
+                <a class="list-group-item" asp-controller="reference" asp-action="HtmlColors" maw-active="@string.Equals(Model.Item, "html-colors", StringComparison.OrdinalIgnoreCase)">Colors</a>
+                <a class="list-group-item" asp-controller="reference" asp-action="HtmlDoctypes" maw-active="@string.Equals(Model.Item, "html-doctypes", StringComparison.OrdinalIgnoreCase)">Doctypes</a>
+                <a class="list-group-item" asp-controller="reference" asp-action="HtmlEntities" maw-active="@string.Equals(Model.Item, "html-entities", StringComparison.OrdinalIgnoreCase)">Entities</a>
+            </div>
         </div>
     </div>
-</div>
-<div class="card mb-2">
-    <div class="card-header">
-        <a data-toggle="collapse" data-parent="#accordion" href="#http">HTTP</a>
-    </div>
-    <div id="http" class="@httpClass">
-        <div class="list-gdoup list-group-flush">
-            <a class="list-group-item" asp-controller="reference" asp-action="httpStatusCodes" maw-active="@string.Equals(Model.Item, "http-status-codes", StringComparison.OrdinalIgnoreCase)">Status Codes</a>
-            <a class="list-group-item" asp-controller="reference" asp-action="httpRfcs" maw-active="@string.Equals(Model.Item, "http-rfcs", StringComparison.OrdinalIgnoreCase)">RFCs</a>
+    <div class="card mb-2">
+        <div class="card-header">
+            <button class="btn btn-link p-0" type="button" data-toggle="collapse" data-target="#http">HTTP</button>
+        </div>
+        <div id="http" class="@httpClass" data-parent="#sidebarAccordion">
+            <div class="list-gdoup list-group-flush">
+                <a class="list-group-item" asp-controller="reference" asp-action="httpStatusCodes" maw-active="@string.Equals(Model.Item, "http-status-codes", StringComparison.OrdinalIgnoreCase)">Status Codes</a>
+                <a class="list-group-item" asp-controller="reference" asp-action="httpRfcs" maw-active="@string.Equals(Model.Item, "http-rfcs", StringComparison.OrdinalIgnoreCase)">RFCs</a>
+            </div>
         </div>
     </div>
-</div>
-<div class="card mb-2">
-    <div class="card-header">
-        <a data-toggle="collapse" data-parent="#accordion" href="#dotnet">.Net Design Guidelines</a>
-    </div>
-    <div id="dotnet" class="@dotnetClass">
-        <div class="list-group list-group-flush">
-            <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesFundamentals" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-fundamentals", StringComparison.OrdinalIgnoreCase)">Fundamentals</a>
-            <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesNaming" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-naming", StringComparison.OrdinalIgnoreCase)">Naming</a>
-            <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesTypeDesign" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-type-design", StringComparison.OrdinalIgnoreCase)">Type Design</a>
-            <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesMemberDesign" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-member-design", StringComparison.OrdinalIgnoreCase)">Member Design</a>
-            <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesDesignForExtensibility" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-design-for-extensibility", StringComparison.OrdinalIgnoreCase)">Design for Extensibility</a>
-            <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesExceptions" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-exceptions", StringComparison.OrdinalIgnoreCase)">Exceptions</a>
-            <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesUsageGuidelines" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-usage-guidelines", StringComparison.OrdinalIgnoreCase)">Usage Guidelines</a>
-            <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesCommonPatterns" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-common-patterns", StringComparison.OrdinalIgnoreCase)">Common Patterns</a>
+    <div class="card mb-2">
+        <div class="card-header">
+            <button class="btn btn-link p-0" type="button" data-toggle="collapse" data-target="#dotnet">.Net Design Guidelines</button>
+        </div>
+        <div id="dotnet" class="@dotnetClass" data-parent="#sidebarAccordion">
+            <div class="list-group list-group-flush">
+                <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesFundamentals" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-fundamentals", StringComparison.OrdinalIgnoreCase)">Fundamentals</a>
+                <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesNaming" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-naming", StringComparison.OrdinalIgnoreCase)">Naming</a>
+                <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesTypeDesign" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-type-design", StringComparison.OrdinalIgnoreCase)">Type Design</a>
+                <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesMemberDesign" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-member-design", StringComparison.OrdinalIgnoreCase)">Member Design</a>
+                <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesDesignForExtensibility" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-design-for-extensibility", StringComparison.OrdinalIgnoreCase)">Design for Extensibility</a>
+                <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesExceptions" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-exceptions", StringComparison.OrdinalIgnoreCase)">Exceptions</a>
+                <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesUsageGuidelines" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-usage-guidelines", StringComparison.OrdinalIgnoreCase)">Usage Guidelines</a>
+                <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesCommonPatterns" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-common-patterns", StringComparison.OrdinalIgnoreCase)">Common Patterns</a>
+            </div>
         </div>
     </div>
-</div>
-<div class="card mb-2">
-    <div class="card-header">
-        <a data-toggle="collapse" data-parent="#accordion" href="#presentation">Presentations</a>
-    </div>
-    <div id="presentation" class="@presentationClass">
-        <div class="list-group list-group-flush">
-            <a class="list-group-item" asp-controller="reference" asp-action="aspnet5" maw-active="@string.Equals(Model.Item, "aspnet5", StringComparison.OrdinalIgnoreCase)">ASPNET5 / MVC6</a>
-            <a class="list-group-item" asp-controller="reference" asp-action="angular2" maw-active="@string.Equals(Model.Item, "angular2", StringComparison.OrdinalIgnoreCase)">Angular2</a>
+    <div class="card mb-2">
+        <div class="card-header">
+            <button class="btn btn-link p-0" type="button" data-toggle="collapse" data-target="#presentation">Presentations</button>
+        </div>
+        <div id="presentation" class="@presentationClass" data-parent="#sidebarAccordion">
+            <div class="list-group list-group-flush">
+                <a class="list-group-item" asp-controller="reference" asp-action="aspnet5" maw-active="@string.Equals(Model.Item, "aspnet5", StringComparison.OrdinalIgnoreCase)">ASPNET5 / MVC6</a>
+                <a class="list-group-item" asp-controller="reference" asp-action="angular2" maw-active="@string.Equals(Model.Item, "angular2", StringComparison.OrdinalIgnoreCase)">Angular2</a>
+            </div>
         </div>
     </div>
 </div>

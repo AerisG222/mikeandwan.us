@@ -22,6 +22,7 @@ namespace Maw.TagHelpers
         Trello,
         Twitter,
         UnlockAlt,
+        Upload,
         VideoCamera,
         Windows,
         Wrench

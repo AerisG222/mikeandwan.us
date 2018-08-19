@@ -15,19 +15,14 @@ namespace MawMvcApp.Controllers
     public class ToolsController
         : MawBaseController<ToolsController>
     {
-		IFileProvider _fileProvider { get; set; }
+		readonly IFileProvider _fileProvider;
 
 
 		public ToolsController(ILogger<ToolsController> log,
 							   IHostingEnvironment env)
 			: base(log)
         {
-			if(env == null)
-			{
-				throw new ArgumentNullException(nameof(env));
-			}
-
-			_fileProvider = env.WebRootFileProvider;
+			_fileProvider = env?.WebRootFileProvider ?? throw new ArgumentNullException(nameof(env));
         }
 
 
@@ -532,4 +527,3 @@ namespace MawMvcApp.Controllers
         }
     }
 }
-

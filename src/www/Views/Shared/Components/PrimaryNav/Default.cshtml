@@ -20,6 +20,12 @@
         </li>
     }
 
+    @if(Model.AuthorizedForUpload) {
+        <li class="nav-item" maw-action="Index" maw-controller="Upload" maw-active="@Model.ActiveNavigationZone == NavigationZone.Upload">
+            <svg-icon icon="Upload"></svg-icon>
+        </li>
+    }
+
     @if(Model.AuthorizedForAdmin) {
         <li class="nav-item" maw-action="Index" maw-controller="Admin" maw-active="@Model.ActiveNavigationZone == NavigationZone.Administration">
             <svg-icon icon="Cog"></svg-icon>

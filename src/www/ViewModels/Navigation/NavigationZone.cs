@@ -13,6 +13,7 @@ namespace MawMvcApp.ViewModels.Navigation
 		FlashVideos,
 		Videos,
 		Games,
-		Webgl
+		Webgl,
+        Upload
 	}
 }

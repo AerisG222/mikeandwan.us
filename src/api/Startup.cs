@@ -8,11 +8,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using IdentityModel;
 using Maw.Data;
 using Maw.Domain;
 using Maw.Security;
-using Microsoft.IdentityModel.Tokens;
+using MawApi.ViewModels.Upload;
 
 
 namespace MawApi
@@ -38,6 +39,7 @@ namespace MawApi
 
             services
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
+                .Configure<FileUploadConfig>(_config.GetSection("FileUpload"))
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
                 .AddMvcCore()

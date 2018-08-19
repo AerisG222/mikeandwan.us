@@ -9,6 +9,7 @@ NG_APPS=(
     "money_spin"
     "photos"
     "time"
+    "upload-client"
     "videos"
     "weekend_countdown"
 )
@@ -30,7 +31,7 @@ update_ngcli() {
     ng update @angular-devkit/build-angular
     ng update core-js
     ng update codelyzer
-    
+
     cd ..
 }
 

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Maw.Security;
-using MawApi.ViewModels.Upload;
+using MawApi.Models.Upload;
 
 
 namespace MawMvcApp.Controllers

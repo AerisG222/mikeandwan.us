@@ -13,7 +13,7 @@ using IdentityModel;
 using Maw.Data;
 using Maw.Domain;
 using Maw.Security;
-using MawApi.ViewModels.Upload;
+using MawApi.Models.Upload;
 
 
 namespace MawApi

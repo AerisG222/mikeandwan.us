@@ -1,7 +1,7 @@
 using System;
 
 
-namespace MawApi.ViewModels.Upload
+namespace MawApi.Models.Upload
 {
     public class UploadedFile
     {

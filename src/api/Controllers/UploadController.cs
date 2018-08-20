@@ -77,9 +77,9 @@ namespace MawMvcApp.Controllers
         }
 
 
-        IEnumerable<FileUploadResult> DeleteFiles(string[] files)
+        IEnumerable<FileOperationResult> DeleteFiles(string[] files)
         {
-            var results = new List<FileUploadResult>();
+            var results = new List<FileOperationResult>();
 
             if(files.Length == 0)
             {
@@ -88,7 +88,7 @@ namespace MawMvcApp.Controllers
 
             foreach(var file in files)
             {
-                var result = new FileUploadResult();
+                var result = new FileOperationResult();
 
                 result.Operation = FileOperation.Delete;
                 result.FileName = Path.GetFileName(file);
@@ -134,13 +134,13 @@ namespace MawMvcApp.Controllers
         }
 
 
-        async Task<IEnumerable<FileUploadResult>> SaveFilesAsync(IEnumerable<IFormFile> files)
+        async Task<IEnumerable<FileOperationResult>> SaveFilesAsync(IEnumerable<IFormFile> files)
         {
-            var results = new List<FileUploadResult>();
+            var results = new List<FileOperationResult>();
 
             foreach(var file in files)
             {
-                var result = new FileUploadResult();
+                var result = new FileOperationResult();
                 var filename = Path.GetFileName(file.FileName);
                 var userDir = GetUserDirectory();
                 var destPath = Path.Combine(userDir, filename);

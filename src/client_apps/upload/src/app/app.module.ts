@@ -3,6 +3,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { NgxsModule } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 
 import { AppComponent } from './app.component';
 import { AuthService } from './shared/auth-service';
@@ -11,9 +14,10 @@ import { EnvironmentConfig } from './shared/environment-config';
 import { AuthInterceptor } from './shared/auth-interceptor';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { HomeComponent } from './home/home.component';
-import { ResultComponent } from './result/result.component';
 import { FileListingComponent } from './file-listing/file-listing.component';
 import { UploadComponent } from './upload/upload.component';
+import { NotificationsComponent } from './notifications/notifications.component';
+import { environment } from '../environments/environment';
 
 @NgModule({
     imports: [
@@ -21,6 +25,13 @@ import { UploadComponent } from './upload/upload.component';
         FormsModule,
         HttpClientModule,
         // NgbModule.forRoot(),
+        NgxsModule.forRoot([]),
+        NgxsReduxDevtoolsPluginModule.forRoot({
+            disabled: environment.production
+        }),
+        NgxsLoggerPluginModule.forRoot({
+            disabled: environment.production
+        }),
         RouterModule.forRoot([
             { path: '',            component: HomeComponent,  canActivate: [AuthGuardService] },
             { path: 'signin-oidc', component: SignInComponent },
@@ -31,7 +42,7 @@ import { UploadComponent } from './upload/upload.component';
         AppComponent,
         FileListingComponent,
         HomeComponent,
-        ResultComponent,
+        NotificationsComponent,
         SignInComponent,
         UploadComponent
     ],

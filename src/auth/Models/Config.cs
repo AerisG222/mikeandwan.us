@@ -51,6 +51,38 @@ namespace MawAuth.Models
             {
                 new Client
                 {
+                    ClientId = "maw_upload",
+                    ClientName = "mikeandwan.us Upload Application",
+                    RequireConsent = false,
+                    //AccessTokenLifetime = 600, // 10 minutes, default 60 minutes
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris = new List<string>
+                    {
+                        $"{_wwwUrl}/upload/signin-oidc",
+                        $"{_wwwUrl}/account/spa-silent-signin"
+                    },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        $"{_wwwUrl}/"
+                    },
+                    AllowedCorsOrigins = new List<string>
+                    {
+                        _wwwUrl
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+
+                        // apis
+                        "maw_api",
+
+                        // identity resources
+                        JwtClaimTypes.Role
+                    }
+                },
+                new Client
+                {
                     ClientId = "maw_videos",
                     ClientName = "mikeandwan.us Video Application",
                     RequireConsent = false,

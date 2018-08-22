@@ -1,5 +1,5 @@
 import { State, Action, StateContext } from '@ngxs/store';
-import { IFileInfo } from '../shared/ifile-info';
+import { IFileInfo } from '../models/ifile-info';
 import { DeleteServerFiles, LoadServerFiles } from './upload.actions';
 
 export interface UploadStateModel {

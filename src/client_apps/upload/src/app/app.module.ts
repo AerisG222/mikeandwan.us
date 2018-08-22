@@ -8,10 +8,10 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 
 import { AppComponent } from './app.component';
-import { AuthService } from './shared/auth-service';
-import { AuthGuardService } from './shared/auth-guard.service';
-import { EnvironmentConfig } from './shared/environment-config';
-import { AuthInterceptor } from './shared/auth-interceptor';
+import { AuthService } from './services/auth-service';
+import { AuthGuardService } from './services/auth-guard.service';
+import { EnvironmentConfig } from './models/environment-config';
+import { AuthInterceptor } from './services/auth-interceptor';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { HomeComponent } from './home/home.component';
 import { FileListingComponent } from './file-listing/file-listing.component';

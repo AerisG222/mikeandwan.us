@@ -1,4 +1,4 @@
-import { IFileInfo } from '../shared/ifile-info';
+import { IFileInfo } from '../models/ifile-info';
 
 export class FileViewModel implements IFileInfo {
     isDeleteChecked = false;

@@ -1,5 +1,5 @@
-import { IFileInfo } from '../shared/ifile-info';
-import { IFileOperationResult } from '../shared/ifile-operation-result';
+import { IFileInfo } from '../models/ifile-info';
+import { IFileOperationResult } from '../models/ifile-operation-result';
 
 export class DeleteServerFiles {
     static readonly type = '[File Listing] Delete Server Files';

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IFileOperationResult } from '../shared/ifile-operation-result';
+import { IFileOperationResult } from '../models/ifile-operation-result';
 import { from, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 

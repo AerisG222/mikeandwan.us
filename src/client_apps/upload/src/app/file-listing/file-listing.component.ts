@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FileViewModel } from './file-view-model';
 import { from, Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
-import * as actions from '../state/actions';
+import * as actions from '../state/upload.actions';
 
 @Component({
     selector: 'app-file-listing',

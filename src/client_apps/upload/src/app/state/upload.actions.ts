@@ -1,20 +1,6 @@
 import { IFileInfo } from '../shared/ifile-info';
 import { IFileOperationResult } from '../shared/ifile-operation-result';
 
-export enum ActionTypes {
-    DeleteServerFiles = 'Delete Server Files',
-    DeleteServerFilesSuccess = 'Delete Server Files [success]',
-    DeleteServerFilesFailure = 'Delete Server Files [failure]',
-
-    LoadServerFiles = 'Load Server Files',
-    LoadServerFilesSuccess = 'Load Server Files [success]',
-    LoadServerFilesFailure = 'Load Server Files [failure]',
-
-    UploadFiles = 'Upload Files',
-    UploadFilesSuccess = 'Upload Files [success]',
-    UploadFilesFailure = 'Upload Files [failure]'
-}
-
 export class DeleteServerFiles {
     static readonly type = '[File Listing] Delete Server Files';
 

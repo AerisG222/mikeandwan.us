@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EnvironmentConfig } from '../models/environment-config';
-import { UserManager, UserManagerSettings, User } from 'oidc-client';
+import { UserManager, User } from 'oidc-client';
 
 @Injectable()
 export class AuthService {
@@ -12,8 +12,8 @@ export class AuthService {
             automaticSilentRenew: true,
             silent_redirect_uri: `${cfg.wwwUrl}/account/spa-silent-signin`,
             authority: cfg.authUrl,
-            client_id: 'maw_videos',
-            redirect_uri: `${cfg.wwwUrl}/videos/signin-oidc`,
+            client_id: 'maw_upload',
+            redirect_uri: `${cfg.wwwUrl}/upload/signin-oidc`,
             response_type: 'id_token token',
             scope: 'openid maw_api role',
             loadUserInfo: true,

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FileViewModel } from './file-view-model';
 import { from, Observable } from 'rxjs';
-import { Store } from '@ngxs/store';
-import * as actions from '../state/upload.actions';
+import { Store, Select } from '@ngxs/store';
+import { LoadServerFiles } from '../state/upload.actions';
+import { UploadState } from '../state/upload.state';
 
 @Component({
     selector: 'app-file-listing',
@@ -10,15 +11,15 @@ import * as actions from '../state/upload.actions';
     styleUrls: ['./file-listing.component.css']
 })
 export class FileListingComponent implements OnInit {
-    showUsername = true;
-    files: Array<FileViewModel>;
+    @Select(UploadState.getServerFiles) files$;
+    @Select(UploadState.getShowUsername) showUsername$;
 
     constructor(private _store: Store) {
 
     }
 
     ngOnInit(): void {
-        this._store.dispatch(new actions.LoadServerFiles());
+        this._store.dispatch(new LoadServerFiles());
 
         /*
         // TODO: unsubscribe
@@ -36,13 +37,6 @@ export class FileListingComponent implements OnInit {
                 }
             );
         */
-    }
-
-    getFiles(): Observable<FileViewModel> {
-        return from(this.files)
-            .pipe(
-
-            );
     }
 
     downloadSelected(): void {

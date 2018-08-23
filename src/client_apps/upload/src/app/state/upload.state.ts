@@ -1,10 +1,11 @@
-import { State, Action, StateContext } from '@ngxs/store';
+import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { IFileInfo } from '../models/ifile-info';
 import { UploadService } from '../services/upload.service';
 import * as actions from './upload.actions';
 
 export interface UploadStateModel {
     serverFiles: Array<IFileInfo>;
+    showUsername: boolean;
     error: any;
 }
 
@@ -12,12 +13,23 @@ export interface UploadStateModel {
     name: 'upload',
     defaults: {
         serverFiles: [],
+        showUsername: false,
         error: null
     }
 })
-export class UploadAppState {
+export class UploadState {
     constructor(private _uploadService: UploadService) {
 
+    }
+
+    @Selector()
+    static getServerFiles(state: UploadStateModel) {
+        return state.serverFiles;
+    }
+
+    @Selector()
+    static getShowUsername(state: UploadStateModel) {
+        return state.showUsername;
     }
 
     @Action(actions.DeleteServerFiles)

@@ -12,7 +12,7 @@ export interface AuthStateModel {
         user: null
     }
 })
-export class UploadAppState {
+export class AuthState {
     @Action(AuthSuccess)
     authSuccess(ctx: StateContext<AuthStateModel>) {
 

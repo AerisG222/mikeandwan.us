@@ -18,6 +18,8 @@ import { FileListingComponent } from './file-listing/file-listing.component';
 import { UploadComponent } from './upload/upload.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { environment } from '../environments/environment';
+import { UploadState } from './state/upload.state';
+import { AuthState } from './state/auth.state';
 
 @NgModule({
     imports: [
@@ -25,7 +27,10 @@ import { environment } from '../environments/environment';
         FormsModule,
         HttpClientModule,
         // NgbModule.forRoot(),
-        NgxsModule.forRoot([]),
+        NgxsModule.forRoot([
+            AuthState,
+            UploadState
+        ]),
         NgxsReduxDevtoolsPluginModule.forRoot({
             disabled: environment.production
         }),

@@ -20,7 +20,7 @@ export class DeleteServerFilesSuccess {
 }
 
 export class LoadServerFiles {
-    readonly type = '[File Listing] Load Server Files';
+    static readonly type = '[File Listing] Load Server Files';
 }
 
 export class LoadServerFilesFailed {
@@ -36,7 +36,7 @@ export class LoadServerFilesSuccess {
 }
 
 export class UploadFiles {
-    readonly type = '[Upload] Upload Files';
+    static readonly type = '[Upload] Upload Files';
 
     constructor(public files: Array<string>) { }
 }

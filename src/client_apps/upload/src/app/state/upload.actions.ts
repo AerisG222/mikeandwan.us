@@ -9,6 +9,8 @@ export class DeleteServerFiles {
 
 export class DeleteServerFilesFailed {
     static readonly type = '[API] Delete Server Files Failed';
+
+    constructor(public error: any) { }
 }
 
 export class DeleteServerFilesSuccess {
@@ -23,6 +25,8 @@ export class LoadServerFiles {
 
 export class LoadServerFilesFailed {
     static readonly type = '[API] Load Server Files Failed';
+
+    constructor(public error: any) { }
 }
 
 export class LoadServerFilesSuccess {
@@ -39,6 +43,8 @@ export class UploadFiles {
 
 export class UploadFilesFailed {
     static readonly type = '[API] Upload Files Failed';
+
+    constructor(public error: any) { }
 }
 
 export class UploadFilesSuccess {

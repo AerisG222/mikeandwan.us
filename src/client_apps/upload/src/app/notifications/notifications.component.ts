@@ -10,12 +10,12 @@ import { filter } from 'rxjs/operators';
     styleUrls: ['./notifications.component.css']
 })
 export class NotificationsComponent {
-    @Input() results: Array<IFileOperationResult>;
+   // @Input() results: Array<IFileOperationResult> = [];
 
     constructor() {
 
     }
-
+/*
     getSuccessfulResults(): Observable<IFileOperationResult> {
         return from(this.results)
             .pipe(
@@ -29,4 +29,5 @@ export class NotificationsComponent {
                 filter(x => !x.wasSuccessful)
             );
     }
+    */
 }

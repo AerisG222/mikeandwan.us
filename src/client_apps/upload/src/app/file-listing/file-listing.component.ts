@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FileViewModel } from './file-view-model';
-import { from, Observable } from 'rxjs';
 import { Store, Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
+
 import { LoadServerFiles } from '../state/upload.actions';
 import { UploadState } from '../state/upload.state';
+import { IFileInfo } from '../models/ifile-info';
 
 @Component({
     selector: 'app-file-listing',
@@ -11,8 +12,8 @@ import { UploadState } from '../state/upload.state';
     styleUrls: ['./file-listing.component.css']
 })
 export class FileListingComponent implements OnInit {
-    @Select(UploadState.getServerFiles) files$;
-    @Select(UploadState.getShowUsername) showUsername$;
+    @Select(UploadState.getServerFiles) files$: Observable<Array<IFileInfo>>;
+    @Select(UploadState.getShowUsername) showUsername$: Observable<boolean>;
 
     constructor(private _store: Store) {
 

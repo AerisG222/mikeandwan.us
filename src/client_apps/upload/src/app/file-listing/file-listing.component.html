@@ -1,7 +1,7 @@
 <h2>Available Files</h2>
 
-<div *ngIf="files$ | async as files;">
-    <p *ngIf="files.length === 0">No files available</p>
+<ng-container *ngIf="files$ | async as files;">
+    <p *ngIf="files.length == 0">No files available</p>
 
     <table *ngIf="files.length > 0" class="table table-striped table-hover table-sm">
         <tr>
@@ -35,4 +35,4 @@
         <button type="submit" (click)="downloadSelected()" class="btn btn-primary">Download</button>
         <button type="submit" (click)="deleteSelected()" class="btn btn-danger">Delete</button>
     </div>
-</div>
+</ng-container>

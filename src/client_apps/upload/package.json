@@ -28,6 +28,7 @@
     "@ngxs/logger-plugin": "^3.2.0",
     "@ngxs/store": "^3.2.0",
     "core-js": "^2.5.4",
+    "date-fns": "^2.0.0-alpha.9",
     "oidc-client": "^1.5.2",
     "pretty-bytes": "^5.1.0",
     "rxjs": "^6.0.0",

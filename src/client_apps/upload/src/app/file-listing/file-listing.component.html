@@ -6,8 +6,8 @@
     <table *ngIf="files.length > 0" class="table table-striped table-hover table-sm">
         <tr>
             <th *ngIf="showUsername$ | async">User</th>
-            <th>Name</th>
-            <th>Created</th>
+            <th>Filename</th>
+            <th>Uploaded</th>
             <th>Size</th>
             <th class="text-center">Download</th>
             <th class="text-center">Delete</th>
@@ -16,7 +16,7 @@
         <tr *ngFor="let file of files">
             <td *ngIf="showUsername$ | async">{{file.username}}</td>
             <td>{{file.filename}}</td>
-            <td>{{file.creationTime}}</td>
+            <td>{{file.creationTime | relativeDate}}</td>
             <td>{{file.sizeInBytes | fileSize}}</td>
             <td class="text-center">
                 <div class="form-check">

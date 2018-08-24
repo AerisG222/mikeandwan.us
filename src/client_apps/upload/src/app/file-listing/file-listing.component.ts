@@ -6,12 +6,16 @@ import { LoadServerFiles } from '../state/upload.actions';
 import { UploadState } from '../state/upload.state';
 import { IFileInfo } from '../models/ifile-info';
 import { FileSizePipe } from '../pipes/file-size.pipe';
+import { RelativeDatePipe } from '../pipes/relative-date.pipe';
 
 @Component({
     selector: 'app-file-listing',
     templateUrl: './file-listing.component.html',
     styleUrls: ['./file-listing.component.css'],
-    providers: [ FileSizePipe ]
+    providers: [
+        FileSizePipe,
+        RelativeDatePipe
+    ]
 })
 export class FileListingComponent implements OnInit {
     @Select(UploadState.getServerFiles) files$: Observable<Array<IFileInfo>>;

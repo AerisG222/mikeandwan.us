@@ -21,6 +21,7 @@ import { environment } from '../environments/environment';
 import { UploadState } from './state/upload.state';
 import { AuthState } from './state/auth.state';
 import { FileSizePipe } from './pipes/file-size.pipe';
+import { RelativeDatePipe } from './pipes/relative-date.pipe';
 
 @NgModule({
     imports: [
@@ -51,7 +52,8 @@ import { FileSizePipe } from './pipes/file-size.pipe';
         NotificationsComponent,
         SignInComponent,
         UploadComponent,
-        FileSizePipe
+        FileSizePipe,
+        RelativeDatePipe
     ],
     providers: [
         AuthService,

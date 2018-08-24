@@ -21,23 +21,6 @@ export class FileListingComponent implements OnInit {
 
     ngOnInit(): void {
         this._store.dispatch(new LoadServerFiles());
-
-        /*
-        // TODO: unsubscribe
-        this._store.pipe(
-            select(''),
-            map(x => new FileViewModel(x.username,
-                x.filename,
-                x.creationTime,
-                x.sizeInBytes,
-                x.relativePath)
-)           )
-            .subscribe(
-                state => {
-                    // this.files = state.files;
-                }
-            );
-        */
     }
 
     downloadSelected(): void {

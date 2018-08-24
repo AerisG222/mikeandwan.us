@@ -20,6 +20,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { environment } from '../environments/environment';
 import { UploadState } from './state/upload.state';
 import { AuthState } from './state/auth.state';
+import { FileSizePipe } from './pipes/file-size.pipe';
 
 @NgModule({
     imports: [
@@ -49,7 +50,8 @@ import { AuthState } from './state/auth.state';
         HomeComponent,
         NotificationsComponent,
         SignInComponent,
-        UploadComponent
+        UploadComponent,
+        FileSizePipe
     ],
     providers: [
         AuthService,

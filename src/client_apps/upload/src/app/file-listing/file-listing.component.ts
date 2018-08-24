@@ -5,11 +5,13 @@ import { Observable } from 'rxjs';
 import { LoadServerFiles } from '../state/upload.actions';
 import { UploadState } from '../state/upload.state';
 import { IFileInfo } from '../models/ifile-info';
+import { FileSizePipe } from '../pipes/file-size.pipe';
 
 @Component({
     selector: 'app-file-listing',
     templateUrl: './file-listing.component.html',
-    styleUrls: ['./file-listing.component.css']
+    styleUrls: ['./file-listing.component.css'],
+    providers: [ FileSizePipe ]
 })
 export class FileListingComponent implements OnInit {
     @Select(UploadState.getServerFiles) files$: Observable<Array<IFileInfo>>;

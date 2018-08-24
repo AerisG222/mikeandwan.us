@@ -17,7 +17,7 @@
             <td *ngIf="showUsername$ | async">{{file.username}}</td>
             <td>{{file.filename}}</td>
             <td>{{file.creationTime}}</td>
-            <td>{{file.sizeInBytes}}</td>
+            <td>{{file.sizeInBytes | fileSize}}</td>
             <td class="text-center">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" [(ngModel)]="file.isDownloadChecked" />

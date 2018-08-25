@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { EnvironmentConfig } from '../models/environment-config';
 import { UserManager, User } from 'oidc-client';
+import { Store } from '@ngxs/store';
+import { UpdateUser, ShowUsername } from '../state/auth.actions';
 
 @Injectable()
 export class AuthService {
     private _mgr: UserManager;
     private _user: User;
 
-    constructor(cfg: EnvironmentConfig) {
+    constructor(private _store: Store,
+                cfg: EnvironmentConfig) {
         const config = {
             automaticSilentRenew: true,
             silent_redirect_uri: `${cfg.wwwUrl}/account/spa-silent-signin`,
@@ -23,11 +26,11 @@ export class AuthService {
         this._mgr = new UserManager(config);
 
         this._mgr.events.addUserLoaded(user => {
-            this._user = user;
+            this.updateUser(user);
         });
 
         this._mgr.getUser().then(user => {
-            this._user = user;
+            this.updateUser(user);
         });
     }
 
@@ -49,13 +52,23 @@ export class AuthService {
 
     completeAuthentication(): Promise<void> {
         return this._mgr.signinRedirectCallback().then(user => {
-            this._user = user;
+            this.updateUser(user);
         });
     }
 
     attemptSilentSignin(): Promise<void> {
         return this._mgr.signinSilent().then(user => {
-            this._user = user;
+            this.updateUser(user);
         });
+    }
+
+    private updateUser(user: User) {
+        this._user = user;
+
+        if (user) {
+            this._store.dispatch(new ShowUsername(user.profile.role.includes('admin')));
+        }
+
+        this._store.dispatch(new UpdateUser(user));
     }
 }

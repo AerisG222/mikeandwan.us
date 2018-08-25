@@ -14,13 +14,13 @@ export class UploadService {
     }
 
     getServerFiles(): Observable<Array<IFileInfo>> {
-            const url = this.getAbsoluteUrl('upload/files');
+        const url = this.getAbsoluteUrl('upload/files');
 
-            return this._http
-                .get<Array<IFileInfo>>(url);
+        return this._http
+            .get<Array<IFileInfo>>(url);
     }
 
-    private getAbsoluteUrl(relativeUrl: string) {
+    getAbsoluteUrl(relativeUrl: string) {
         return `${this._cfg.apiUrl}/${relativeUrl}`;
     }
 }

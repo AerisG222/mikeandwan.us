@@ -7,6 +7,7 @@ import { UploadState } from '../state/upload.state';
 import { IFileInfo } from '../models/ifile-info';
 import { FileSizePipe } from '../pipes/file-size.pipe';
 import { RelativeDatePipe } from '../pipes/relative-date.pipe';
+import { AuthState } from '../state/auth.state';
 
 @Component({
     selector: 'app-file-listing',
@@ -19,7 +20,7 @@ import { RelativeDatePipe } from '../pipes/relative-date.pipe';
 })
 export class FileListingComponent implements OnInit {
     @Select(UploadState.getServerFiles) files$: Observable<Array<IFileInfo>>;
-    @Select(UploadState.getShowUsername) showUsername$: Observable<boolean>;
+    @Select(AuthState.getShowUsername) showUsername$: Observable<boolean>;
 
     constructor(private _store: Store) {
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth-service';
-import { Router } from '@angular/router';
+import { Store } from '@ngxs/store';
+import { CompleteSignin } from '../state/auth.actions';
 
 @Component({
     selector: 'app-sign-in',
@@ -9,14 +9,11 @@ import { Router } from '@angular/router';
 })
 export class SignInComponent implements OnInit {
 
-    constructor(private _authService: AuthService,
-                private _router: Router) {
+    constructor(private _store: Store) {
 
     }
 
     ngOnInit() {
-        this._authService.completeAuthentication().then(() => {
-            this._router.navigate([ '/' ]);
-        });
+        this._store.dispatch(new CompleteSignin());
     }
 }

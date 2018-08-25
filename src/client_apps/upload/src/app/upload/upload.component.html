@@ -1,7 +1,7 @@
 <form asp-controller="upload" asp-action="upload" method="post" enctype="multipart/form-data" autocomplete="off" role="form">
     <div class="form-group">
 		<p>Upload one or more files using this form:</p>
-        <input type="file" name="files" multiple />
+        <input type="file" ng2FileSelect [uploader]="(uploader$ | async)" multiple />
 	</div>
 
     <div class="form-group">

@@ -1,25 +1,56 @@
-import { State, Action, StateContext } from '@ngxs/store';
-import { AuthSuccess, AuthFailed } from './auth.actions';
+import { Router } from '@angular/router';
+import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { User } from 'oidc-client';
+import { CompleteSignin, UpdateUser, ShowUsername } from './auth.actions';
+import { AuthService } from '../services/auth-service';
 
 export interface AuthStateModel {
     user: User;
+    showUsername: boolean;
 }
 
 @State<AuthStateModel>({
     name: 'auth',
     defaults: {
-        user: null
+        user: null,
+        showUsername: false
     }
 })
 export class AuthState {
-    @Action(AuthSuccess)
-    authSuccess(ctx: StateContext<AuthStateModel>) {
+    constructor(private _router: Router,
+                private _authService: AuthService) {
 
     }
 
-    @Action(AuthFailed)
-    loadServerFiles(ctx: StateContext<AuthStateModel>) {
+    @Selector()
+    static getUser(state: AuthStateModel) {
+        return state.user;
+    }
 
+    @Selector()
+    static getShowUsername(state: AuthStateModel) {
+        return state.showUsername;
+    }
+
+    @Action(CompleteSignin)
+    completeSignin(ctx: StateContext<AuthState>) {
+        this._authService.completeAuthentication().then(() => {
+            // should probably be done somewhere else...
+            this._router.navigate([ '/' ]);
+        });
+    }
+
+    @Action(UpdateUser)
+    updateUser(ctx: StateContext<AuthStateModel>, user: User) {
+        ctx.patchState({
+            user: user
+        });
+    }
+
+    @Action(ShowUsername)
+    showUsername(ctx: StateContext<AuthStateModel>, doShowUsername: boolean) {
+        ctx.patchState({
+            showUsername: doShowUsername
+        });
     }
 }

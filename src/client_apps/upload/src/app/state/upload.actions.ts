@@ -19,6 +19,12 @@ export class DeleteServerFilesSuccess {
     constructor(public results: Array<IFileOperationResult>) { }
 }
 
+export class InitializeUploader {
+    static readonly type = '[Upload Component] Initialize Uploader';
+
+    constructor() { }
+}
+
 export class LoadServerFiles {
     static readonly type = '[File Listing] Load Server Files';
 }

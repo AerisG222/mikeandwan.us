@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
 import { AuthService } from './services/auth-service';
@@ -26,6 +27,7 @@ import { RelativeDatePipe } from './pipes/relative-date.pipe';
 @NgModule({
     imports: [
         BrowserAnimationsModule,
+        FileUploadModule,
         FormsModule,
         HttpClientModule,
         // NgbModule.forRoot(),

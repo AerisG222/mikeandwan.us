@@ -31,8 +31,7 @@ export interface UploadStateModel {
 export class UploadState {
     @Select(AuthState.getUser) _user$: Observable<User>;
 
-    constructor(private _uploadService: UploadService,
-                private _authState: AuthState) {
+    constructor(private _uploadService: UploadService) {
 
     }
 
@@ -54,9 +53,6 @@ export class UploadState {
             if (user) {
                 token = user.access_token;
             }
-
-            // tslint:disable-next-line:no-console
-            console.debug(token);
 
             ctx.patchState({
                 uploader: new FileUploader({

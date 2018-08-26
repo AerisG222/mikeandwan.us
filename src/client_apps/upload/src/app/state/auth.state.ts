@@ -17,8 +17,7 @@ export interface AuthStateModel {
     }
 })
 export class AuthState {
-    constructor(private _router: Router,
-                private _authService: AuthService) {
+    constructor(private _authService: AuthService) {
 
     }
 

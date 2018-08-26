@@ -34,10 +34,7 @@ export class AuthState {
 
     @Action(CompleteSignin)
     completeSignin(ctx: StateContext<AuthState>) {
-        this._authService.completeAuthentication().then(() => {
-            // should probably be done somewhere else...
-            this._router.navigate([ '/' ]);
-        });
+        this._authService.completeAuthentication();
     }
 
     @Action(UpdateUser)

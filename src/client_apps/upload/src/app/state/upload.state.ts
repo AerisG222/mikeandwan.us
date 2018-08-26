@@ -29,9 +29,10 @@ export interface UploadStateModel {
     }
 })
 export class UploadState {
-    @Select(AuthState.getUser) user$: Observable<User>;
+    @Select(AuthState.getUser) _user$: Observable<User>;
 
-    constructor(private _uploadService: UploadService) {
+    constructor(private _uploadService: UploadService,
+                private _authState: AuthState) {
 
     }
 
@@ -47,11 +48,21 @@ export class UploadState {
 
     @Action(InitializeUploader)
     initUploader(ctx: StateContext<UploadStateModel>) {
-        this.user$.subscribe(user => {
+        this._user$.subscribe(user => {
+            let token: string = null;
+
+            if (user) {
+                token = user.access_token;
+            }
+
+            // tslint:disable-next-line:no-console
+            console.debug(token);
+
             ctx.patchState({
-                uploader: new FileUploader({ url: this._uploadService.getAbsoluteUrl('upload/upload'),
-                                             authToken: `Bearer ${user.access_token}`
-                                            })
+                uploader: new FileUploader({
+                    url: this._uploadService.getAbsoluteUrl('upload/upload'),
+                    authToken: `Bearer ${token}`
+                })
             });
         });
     }

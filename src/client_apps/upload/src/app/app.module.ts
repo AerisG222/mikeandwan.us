@@ -17,7 +17,6 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { HomeComponent } from './home/home.component';
 import { FileListingComponent } from './file-listing/file-listing.component';
 import { UploadComponent } from './upload/upload.component';
-import { NotificationsComponent } from './notifications/notifications.component';
 import { environment } from '../environments/environment';
 import { UploadState } from './state/upload.state';
 import { AuthState } from './state/auth.state';
@@ -51,7 +50,6 @@ import { RelativeDatePipe } from './pipes/relative-date.pipe';
         AppComponent,
         FileListingComponent,
         HomeComponent,
-        NotificationsComponent,
         SignInComponent,
         UploadComponent,
         FileSizePipe,

@@ -1,4 +1,4 @@
-import { State, Action, StateContext, Selector, Select } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Select, Store } from '@ngxs/store';
 import { FileUploader } from 'ng2-file-upload';
 import { User } from 'oidc-client';
 import { Observable } from 'rxjs';
@@ -29,9 +29,8 @@ export interface UploadStateModel {
     }
 })
 export class UploadState {
-    @Select(AuthState.getUser) _user$: Observable<User>;
-
-    constructor(private _uploadService: UploadService) {
+    constructor(private _uploadService: UploadService,
+                private _store: Store) {
 
     }
 
@@ -47,19 +46,19 @@ export class UploadState {
 
     @Action(InitializeUploader)
     initUploader(ctx: StateContext<UploadStateModel>) {
-        this._user$.subscribe(user => {
-            let token: string = null;
+        const slice = <any> this._store.selectSnapshot(AuthState.getUser);
 
-            if (user) {
-                token = user.access_token;
-            }
+        let token: string = null;
 
-            ctx.patchState({
-                uploader: new FileUploader({
-                    url: this._uploadService.getAbsoluteUrl('upload/upload'),
-                    authToken: `Bearer ${token}`
-                })
-            });
+        if (slice != null && slice !== undefined && slice.user != null && slice.user !== undefined) {
+            token = slice.user.access_token;
+        }
+
+        ctx.patchState({
+            uploader: new FileUploader({
+                url: this._uploadService.getAbsoluteUrl('upload/upload'),
+                authToken: `Bearer ${token}`
+            })
         });
     }
 

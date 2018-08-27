@@ -57,9 +57,9 @@ namespace MawMvcApp.Controllers
 
 
         [HttpPost("upload")]
-        public async Task<IActionResult> Upload(List<IFormFile> files)
+        public async Task<IActionResult> Upload(IFormFile file)
         {
-            return Ok(await SaveFilesAsync(files));
+            return Ok(await SaveFileAsync(file));
         }
 
 
@@ -134,65 +134,61 @@ namespace MawMvcApp.Controllers
         }
 
 
-        async Task<IEnumerable<FileOperationResult>> SaveFilesAsync(IEnumerable<IFormFile> files)
+        async Task<FileOperationResult> SaveFileAsync(IFormFile file)
         {
-            var results = new List<FileOperationResult>();
+            var result = new FileOperationResult();
+            var filename = Path.GetFileName(file.FileName);
+            var userDir = GetUserDirectory();
+            var destPath = Path.Combine(userDir, filename);
 
-            foreach(var file in files)
+            result.Operation = FileOperation.Upload;
+            result.FileName = filename;
+
+            if(file.Length == 0)
             {
-                var result = new FileOperationResult();
-                var filename = Path.GetFileName(file.FileName);
-                var userDir = GetUserDirectory();
-                var destPath = Path.Combine(userDir, filename);
+                result.Error = $"File with name {filename} is empty.";
 
-                results.Add(result);
+                return result;;
+            }
 
-                result.Operation = FileOperation.Upload;
-                result.FileName = filename;
+            if(System.IO.File.Exists(destPath))
+            {
+                result.Error = $"File with name {filename} already exists.";
 
-                if(file.Length == 0)
-                {
-                    result.Error = $"File with name {filename} is empty.";
-                    continue;
-                }
+                return result;
+            }
 
-                if(System.IO.File.Exists(destPath))
-                {
-                    result.Error = $"File with name {filename} already exists.";
-                    continue;
-                }
+            try
+            {
+                EnsureUserDirectoryExists(userDir);
+            }
+            catch(Exception ex)
+            {
+                _log.LogError(ex, $"Could not create user directory {userDir}");
 
+                result.WasSuccessful = false;
+                result.Error = $"There was an error trying to save {filename}";
+
+                return result;
+            }
+
+            using (var stream = new FileStream(destPath, FileMode.Create))
+            {
                 try
                 {
-                    EnsureUserDirectoryExists(userDir);
+                    await file.CopyToAsync(stream);
+
+                    result.WasSuccessful = true;
                 }
                 catch(Exception ex)
                 {
-                    _log.LogError(ex, $"Could not create user directory {userDir}");
+                    _log.LogError(ex, $"Unable to save file upload for {User.Identity.Name} with filename {filename}.");
 
-                    result.WasSuccessful = false;
-                    result.Error = $"There was an error trying to save {filename}";
-                    continue;
-                }
-
-                using (var stream = new FileStream(destPath, FileMode.Create))
-                {
-                    try
-                    {
-                        await file.CopyToAsync(stream);
-
-                        result.WasSuccessful = true;
-                    }
-                    catch(Exception ex)
-                    {
-                        _log.LogError(ex, $"Unable to save file upload for {User.Identity.Name} with filename {filename}.");
-
-                        result.Error = $"There was an error trying to save {filename}.";
-                    }
+                    result.Error = $"There was an error trying to save {filename}.";
                 }
             }
 
-            return results;
+            return result;
         }
 
 

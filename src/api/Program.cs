@@ -30,8 +30,8 @@ namespace MawApi
                         {
                             factory
                                 .AddConsole()
-                                .AddFilter("Microsoft", LogLevel.Warning)
-                                .AddFilter("System", LogLevel.Warning)
+                                .AddFilter("Microsoft", LogLevel.Debug)
+                                .AddFilter("System", LogLevel.Debug)
                                 .AddFilter("Maw", LogLevel.Debug)
                                 .AddFilter("MawApi", LogLevel.Debug);
                         }

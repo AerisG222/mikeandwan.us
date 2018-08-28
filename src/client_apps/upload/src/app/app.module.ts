@@ -22,6 +22,7 @@ import { UploadState } from './state/upload.state';
 import { AuthState } from './state/auth.state';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { RelativeDatePipe } from './pipes/relative-date.pipe';
+import { SvgIconComponent } from './svg-icon/svg-icon.component';
 
 @NgModule({
     imports: [
@@ -53,7 +54,8 @@ import { RelativeDatePipe } from './pipes/relative-date.pipe';
         SignInComponent,
         UploadComponent,
         FileSizePipe,
-        RelativeDatePipe
+        RelativeDatePipe,
+        SvgIconComponent
     ],
     providers: [
         AuthService,

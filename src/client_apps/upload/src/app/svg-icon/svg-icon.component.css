@@ -4,3 +4,8 @@
 .icon-md { font-size: 0.8em; }
 .icon-sm { font-size: 0.6em; }
 .icon-xs { font-size: 0.4em; }
+
+/* https://css-tricks.com/cascading-svg-fill-color/ */
+svg {
+    fill: currentColor !important;
+}

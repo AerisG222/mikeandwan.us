@@ -1,5 +1,5 @@
 <div class="row" *ngIf="uploader$ | async as uploader">
-    <div class="col-4">
+    <div class="col-3">
         <h3>Select Files to Upload</h3>
 
         <div class="form-group">
@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <div class="col-8">
+    <div class="col">
         <h3>Upload Queue</h3>
         <p>Queue length: {{ uploader?.queue?.length }}</p>
 
@@ -23,30 +23,36 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Size</th>
-                    <th>Progress</th>
+                    <th *ngIf="uploader.options.isHTML5">Size</th>
+                    <th *ngIf="uploader.options.isHTML5">Progress</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let item of uploader.queue">
-                    <td><strong>{{ item?.file?.name }}</strong></td>
-                    <td *ngIf="uploader.options.isHTML5" nowrap>{{ item?.file?.size | fileSize }}</td>
-                    <td *ngIf="uploader.options.isHTML5">
+                    <td class="align-middle"><strong>{{ item?.file?.name }}</strong></td>
+                    <td class="align-middle" *ngIf="uploader.options.isHTML5" nowrap>{{ item?.file?.size | fileSize }}</td>
+                    <td class="align-middle" *ngIf="uploader.options.isHTML5">
                         <div class="progress" style="margin-bottom: 0;">
                             <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
                         </div>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center align-middle">
                         <span *ngIf="item.isSuccess">ok</span>
                         <span *ngIf="item.isCancel">cancelled</span>
                         <span *ngIf="item.isError">removed</span>
                     </td>
-                    <td nowrap>
-                        <button type="button" class="btn btn-success btn-sm ml-1" (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">Upload</button>
-                        <button type="button" class="btn btn-warning btn-sm ml-1" (click)="item.cancel()" [disabled]="!item.isUploading">Cancel</button>
-                        <button type="button" class="btn btn-danger btn-sm ml-1" (click)="item.remove()">Remove</button>
+                    <td class="align-middle text-right" nowrap>
+                        <button type="button" class="btn btn-primary btn-sm ml-1" (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                            <app-svg-icon [icon]="svgIcon.Upload" [klass]="'mr-1'"></app-svg-icon> Upload
+                        </button>
+                        <button type="button" class="btn btn-warning btn-sm ml-1" (click)="item.cancel()" [disabled]="!item.isUploading">
+                            <app-svg-icon [icon]="svgIcon.Close" [klass]="'mr-1'"></app-svg-icon> Cancel
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm ml-1" (click)="item.remove()">
+                            <app-svg-icon [icon]="svgIcon.Trash" [klass]="'mr-1'"></app-svg-icon> Remove
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -63,9 +69,15 @@
 
         <div class="row my-1">
             <div class="col text-right">
-                <button type="button" class="btn btn-success btn-sm ml-2" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">Upload all</button>
-                <button type="button" class="btn btn-warning btn-sm ml-2" (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">Cancel all</button>
-                <button type="button" class="btn btn-danger btn-sm ml-2" (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">Remove all</button>
+                <button type="button" class="btn btn-primary btn-sm ml-2" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                    <app-svg-icon [icon]="svgIcon.Upload" [klass]="'mr-1'"></app-svg-icon> Upload all
+                </button>
+                <button type="button" class="btn btn-warning btn-sm ml-2" (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+                    <app-svg-icon [icon]="svgIcon.Close" [klass]="'mr-1'"></app-svg-icon> Cancel all
+                </button>
+                <button type="button" class="btn btn-danger btn-sm ml-2" (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+                    <app-svg-icon [icon]="svgIcon.Trash" [klass]="'mr-1'"></app-svg-icon> Remove all
+                </button>
             </div>
         </div>
     </div>

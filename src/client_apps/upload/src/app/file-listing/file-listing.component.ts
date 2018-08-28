@@ -8,6 +8,7 @@ import { IFileInfo } from '../models/ifile-info';
 import { FileSizePipe } from '../pipes/file-size.pipe';
 import { RelativeDatePipe } from '../pipes/relative-date.pipe';
 import { AuthState } from '../state/auth.state';
+import { SvgIcon } from '../svg-icon/svg-icon.enum';
 
 @Component({
     selector: 'app-file-listing',
@@ -19,6 +20,8 @@ import { AuthState } from '../state/auth.state';
     ]
 })
 export class FileListingComponent implements OnInit {
+    svgIcon = SvgIcon;
+
     @Select(UploadState.getServerFiles) files$: Observable<Array<IFileInfo>>;
     @Select(AuthState.getShowUsername) showUsername$: Observable<boolean>;
 

@@ -5,6 +5,7 @@ import { UploadState } from '../state/upload.state';
 import { Select, Store } from '@ngxs/store';
 import { InitializeUploader } from '../state/upload.actions';
 import { FileSizePipe } from '../pipes/file-size.pipe';
+import { SvgIcon } from '../svg-icon/svg-icon.enum';
 
 @Component({
     selector: 'app-upload',
@@ -15,6 +16,7 @@ import { FileSizePipe } from '../pipes/file-size.pipe';
     ]
 })
 export class UploadComponent implements OnInit {
+    svgIcon = SvgIcon;
     hasBaseDropZoneOver = false;
 
     @Select(UploadState.getUploader) uploader$: Observable<FileUploader>;

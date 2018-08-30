@@ -127,7 +127,7 @@ namespace Maw.Domain.Upload
         }
 
 
-        public Stream GetFileAsync(ClaimsPrincipal user, string relativePath)
+        public Stream GetFile(ClaimsPrincipal user, string relativePath)
         {
             if(user == null)
             {

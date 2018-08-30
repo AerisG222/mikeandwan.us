@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Maw.Domain.Upload;
@@ -27,15 +28,18 @@ namespace MawMvcApp.Controllers
         readonly ILogger<UploadController> _log;
         readonly IUploadService _uploadSvc;
         readonly IHubContext<UploadHub> _uploadHub;
+        readonly IContentTypeProvider _contentTypeProvider;
 
 
 		public UploadController(ILogger<UploadController> log,
                                 IUploadService uploadSvc,
-                                IHubContext<UploadHub> uploadHubCtx)
+                                IHubContext<UploadHub> uploadHubCtx,
+                                IContentTypeProvider contentTypeProvider)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _uploadSvc = uploadSvc ?? throw new ArgumentNullException(nameof(uploadSvc));
             _uploadHub = uploadHubCtx ?? throw new ArgumentNullException(nameof(uploadHubCtx));
+            _contentTypeProvider = contentTypeProvider ?? throw new ArgumentNullException(nameof(contentTypeProvider));
         }
 
 
@@ -64,7 +68,46 @@ namespace MawMvcApp.Controllers
         [HttpGet("download")]
         public IActionResult Download(string[] downloadFiles)
         {
-            return BadRequest();
+            if(downloadFiles.Length == 0)
+            {
+                return BadRequest();
+            }
+
+            Stream stream = null;
+            string filename = null;
+
+            try
+            {
+                if(downloadFiles.Length == 1)
+                {
+                    stream = _uploadSvc.GetFile(User, downloadFiles[0]);
+                    filename = Path.GetFileName(downloadFiles[0]);
+                }
+                else
+                {
+                    stream = _uploadSvc.GetFiles(User, downloadFiles);
+                    filename = "download.zip";
+                }
+
+                return File(stream, GetContentType(filename), filename);
+            }
+            catch(Exception ex)
+            {
+                _log.LogError(ex, "There was an error trying to download.");
+
+                return BadRequest();
+            }
+        }
+
+
+        string GetContentType(string filename)
+        {
+            if(_contentTypeProvider.TryGetContentType(filename, out var contentType))
+            {
+                return contentType;
+            }
+
+            return "application/octet-stream";
         }
     }
 }

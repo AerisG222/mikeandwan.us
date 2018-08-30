@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
@@ -14,6 +15,8 @@ namespace Maw.Domain.Upload
     public class UploadService
         : IUploadService
     {
+        const int TWENTY_MB = 20 * 1024 * 1024;
+
         readonly UploadConfig _cfg;
         readonly ILogger<UploadService> _log;
 
@@ -56,6 +59,8 @@ namespace Maw.Domain.Upload
             }
             catch(Exception)
             {
+                _log.LogWarning($"Supplied RelativePath [{relativePath}] is invalid.");
+
                 result.Error = "Invalid file path";
 
                 return result;
@@ -64,6 +69,8 @@ namespace Maw.Domain.Upload
             result.FileLocation = location;
 
             if(!UserCanAccessFile(user, location)) {
+                _log.LogWarning($"User [{location.Username}] does not have access to [{location.RelativePath}].");
+
                 result.Error = "Invalid file path";
 
                 return result;
@@ -84,12 +91,14 @@ namespace Maw.Domain.Upload
                 File.Delete(absolutePath);
 
                 result.WasSuccessful = true;
+
+                _log.LogInformation($"User [{location.Username}] successfully deleted [{location.RelativePath}].");
             }
             catch(Exception ex)
             {
                 result.Error = "Unable to delete file";
 
-                _log.LogError(ex, $"Unable to delete file for path {absolutePath}");
+                _log.LogError(ex, $"Unable to delete file for path [{absolutePath}]");
             }
 
             return result;
@@ -118,7 +127,7 @@ namespace Maw.Domain.Upload
         }
 
 
-        public Task<Stream> GetFileAsync(ClaimsPrincipal user, string relativePath)
+        public Stream GetFileAsync(ClaimsPrincipal user, string relativePath)
         {
             if(user == null)
             {
@@ -130,23 +139,95 @@ namespace Maw.Domain.Upload
                 throw new ArgumentNullException(nameof(relativePath));
             }
 
-            throw new NotImplementedException();
+            FileLocation location = null;
+
+            try
+            {
+                location = FileLocation.FromRelativePath(relativePath);
+            }
+            catch(Exception ex)
+            {
+                _log.LogError(ex, $"Unable to parse relative path [{relativePath}].");
+
+                throw;
+            }
+
+            if(!UserCanAccessFile(user, location))
+            {
+                var msg = $"User [{location.Username}] does not have access to the requested file [{location.RelativePath}].";
+
+                _log.LogError(msg);
+
+                throw new UnauthorizedAccessException(msg);
+            }
+
+            _log.LogInformation($"Delivering file [{location.RelativePath}] for user [{user.Identity.Name}].");
+
+            return File.OpenRead(GetAbsoluteFilePath(location));
         }
 
 
-        public Task<Stream> GetFilesAsync(ClaimsPrincipal user, IEnumerable<string> relativePaths)
+        public Stream GetFiles(ClaimsPrincipal user, IEnumerable<string> relativePaths)
         {
             if(user == null)
             {
                 throw new ArgumentNullException(nameof(user));
             }
 
-            if(relativePaths == null)
+            if(relativePaths == null || relativePaths.Count() == 0)
             {
                 throw new ArgumentNullException(nameof(relativePaths));
             }
 
-            throw new NotImplementedException();
+            var validLocations = new List<FileLocation>();
+
+            foreach(var relativePath in relativePaths)
+            {
+                FileLocation location = null;
+
+                try
+                {
+                    location = FileLocation.FromRelativePath(relativePath);
+                }
+                catch(Exception ex)
+                {
+                    _log.LogError(ex, $"Unable to parse relative path [{relativePath}].  This will not be added to the zip archive.");
+
+                    continue;
+                }
+
+                if(UserCanAccessFile(user, location))
+                {
+                    validLocations.Add(location);
+                }
+                else
+                {
+                    _log.LogError($"User [{location.Username}] does not have access to the requested file [{location.RelativePath}].");
+                }
+            }
+
+            if(validLocations.Count == 0)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var ms = new MemoryStream(TWENTY_MB);
+
+            using(var za = new ZipArchive(ms, ZipArchiveMode.Create, true))
+            {
+                foreach(var location in validLocations)
+                {
+                    _log.LogDebug($"Adding {location.RelativePath} to archive.");
+
+                    za.CreateEntryFromFile(GetAbsoluteFilePath(location), location.RelativePath);
+                }
+            }
+
+            ms.Seek(0, SeekOrigin.Begin);
+
+            _log.LogInformation($"Zip file created for user {user.Identity.Name} with size {ms.Length / 1024 / 1024} MB");
+
+            return ms;
         }
 
 

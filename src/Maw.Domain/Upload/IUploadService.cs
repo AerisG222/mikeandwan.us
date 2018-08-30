@@ -10,8 +10,8 @@ namespace Maw.Domain.Upload
     {
         FileOperationResult DeleteFile(ClaimsPrincipal user, string relativePath);
         IEnumerable<FileOperationResult> DeleteFiles(ClaimsPrincipal user, IEnumerable<string> relativePaths);
-        Task<Stream> GetFileAsync(ClaimsPrincipal user, string relativePath);
-        Task<Stream> GetFilesAsync(ClaimsPrincipal user, IEnumerable<string> relativePaths);
+        Stream GetFileAsync(ClaimsPrincipal user, string relativePath);
+        Stream GetFiles(ClaimsPrincipal user, IEnumerable<string> relativePaths);
         IEnumerable<UploadedFile> GetFileList(ClaimsPrincipal user);
         Task<FileOperationResult> SaveFileAsync(ClaimsPrincipal user, string filename, Stream stream);
     }

@@ -4,6 +4,7 @@ using Maw.Domain.Captcha;
 using Maw.Domain.Email;
 using Maw.Domain.Identity;
 using Maw.Domain.Photos;
+using Maw.Domain.Upload;
 using Maw.Domain.Videos;
 
 
@@ -22,7 +23,8 @@ namespace Maw.Domain
                 .AddScoped<ICaptchaService, GoogleCaptchaService>()
                 //.AddScoped<IEmailService, SmtpEmailService>()
                 .AddScoped<IEmailService, GmailApiEmailService>()
-                .AddScoped<ILoginService, LoginService>();
+                .AddScoped<ILoginService, LoginService>()
+                .AddScoped<IUploadService, UploadService>();
 
             return services;
         }

@@ -1,6 +1,6 @@
-namespace MawApi.Models.Upload
+namespace Maw.Domain.Upload
 {
-    public class FileUploadConfig
+    public class UploadConfig
     {
         public string RootDirectory { get; set; }
     }

@@ -12,8 +12,9 @@ using Microsoft.IdentityModel.Tokens;
 using IdentityModel;
 using Maw.Data;
 using Maw.Domain;
+using Maw.Domain.Upload;
 using Maw.Security;
-using MawApi.Models.Upload;
+using MawApi.Hubs;
 
 
 namespace MawApi
@@ -39,13 +40,16 @@ namespace MawApi
 
             services
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
-                .Configure<FileUploadConfig>(_config.GetSection("FileUpload"))
+                .Configure<UploadConfig>(_config.GetSection("FileUpload"))
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
                 .AddMvcCore()
                     .AddAuthorization()
                     .AddJsonFormatters()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                    .Services
+                .AddSignalR()
+                    .AddMessagePackProtocol()
                     .Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opts => {
@@ -77,6 +81,7 @@ namespace MawApi
         {
             app.UseCors("default");
             app.UseAuthentication();
+            app.UseSignalR(routes => routes.MapHub<UploadHub>("/uploadhub"));
             app.UseMvc();
         }
     }

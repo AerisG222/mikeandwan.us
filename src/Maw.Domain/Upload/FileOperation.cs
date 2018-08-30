@@ -1,4 +1,4 @@
-namespace MawApi.Models.Upload
+namespace Maw.Domain.Upload
 {
     public enum FileOperation
     {

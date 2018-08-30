@@ -22,4 +22,8 @@
     <PackageReference Include="NMagickWand" Version="0.5.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Maw.Security\Maw.Security.csproj" />
+  </ItemGroup>
+
 </Project>

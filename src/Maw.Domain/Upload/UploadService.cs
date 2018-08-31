@@ -50,7 +50,8 @@ namespace Maw.Domain.Upload
             FileLocation location = null;
 
             var result = new FileOperationResult() {
-                Operation = FileOperation.Delete
+                Operation = FileOperation.Delete,
+                RelativePathSpecified = relativePath
             };
 
             try
@@ -65,8 +66,6 @@ namespace Maw.Domain.Upload
 
                 return result;
             }
-
-            result.FileLocation = location;
 
             if(!UserCanAccessFile(user, location)) {
                 _log.LogWarning($"User [{location.Username}] does not have access to [{location.RelativePath}].");
@@ -85,6 +84,8 @@ namespace Maw.Domain.Upload
 
                 return result;
             }
+
+            result.UploadedFile = GetFileDetails(location);
 
             try
             {
@@ -261,16 +262,17 @@ namespace Maw.Domain.Upload
                 throw new ArgumentNullException(nameof(filename));
             }
 
-            var result = new FileOperationResult();
+            var result = new FileOperationResult {
+                Operation = FileOperation.Upload,
+                RelativePathSpecified = filename
+            };
+
             var location = new FileLocation {
                 Username = user.Identity.Name,
                 Filename = Path.GetFileName(filename)
             };
             var userDir = GetAbsoluteUserDirectory(location.Username);
             var destPath = GetAbsoluteFilePath(location);
-
-            result.Operation = FileOperation.Upload;
-            result.FileLocation = location;
 
             if(stream == null || stream.Length == 0)
             {
@@ -306,6 +308,7 @@ namespace Maw.Domain.Upload
                 {
                     await stream.CopyToAsync(outputStream);
 
+                    result.UploadedFile = GetFileDetails(location);
                     result.WasSuccessful = true;
                 }
                 catch(Exception ex)
@@ -391,6 +394,18 @@ namespace Maw.Domain.Upload
         bool UserCanAccessFile(ClaimsPrincipal user, FileLocation location) {
             return Role.IsAdmin(user) ||
                 string.Equals(location.Username, user.Identity.Name, StringComparison.OrdinalIgnoreCase);
+        }
+
+
+        UploadedFile GetFileDetails(FileLocation location)
+        {
+            var fi = new FileInfo(GetAbsoluteFilePath(location));
+
+            return new UploadedFile {
+                Location = location,
+                CreationTime = fi.CreationTime,
+                SizeInBytes = fi.Length
+            };
         }
     }
 }

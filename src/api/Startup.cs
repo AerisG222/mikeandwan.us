@@ -83,7 +83,7 @@ namespace MawApi
         {
             app.UseCors("default");
             app.UseAuthentication();
-            app.UseSignalR(routes => routes.MapHub<UploadHub>("/uploadhub"));
+            app.UseSignalR(routes => routes.MapHub<UploadHub>("/uploadr"));
             app.UseMvc();
         }
     }

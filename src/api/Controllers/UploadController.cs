@@ -54,7 +54,9 @@ namespace MawMvcApp.Controllers
         [RequestSizeLimit(2_147_483_648)]  // 2GB
         public async Task<IActionResult> Upload(IFormFile file)
         {
-            return Ok(await _uploadSvc.SaveFileAsync(User, file.FileName, file.OpenReadStream()));
+            var result = await _uploadSvc.SaveFileAsync(User, file.FileName, file.OpenReadStream());
+
+            return Ok();
         }
 
 

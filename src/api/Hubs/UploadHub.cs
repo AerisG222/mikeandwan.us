@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Maw.Security;
 using Maw.Domain.Upload;
-
+using System.Security.Claims;
 
 namespace MawApi.Hubs
 {
@@ -14,7 +14,7 @@ namespace MawApi.Hubs
     public class UploadHub
         : Hub
     {
-        const string GROUP_ADMINS = "GroupAdmins";
+        const string GROUP_ADMINS = "Admins";
         const string CALL_ALL_FILES = "AllFiles";
         const string CALL_FILE_ADDED = "FileAdded";
         const string CALL_FILE_DELETED = "FileDeleted";
@@ -63,29 +63,29 @@ namespace MawApi.Hubs
         }
 
 
-        internal async Task FileAdded(UploadedFile file)
+        public static async Task FileAdded(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
         {
-            _log.LogDebug($"Sending [{CALL_FILE_ADDED}] for file [{file.Location.RelativePath}].");
+            //_log.LogDebug($"Sending [{CALL_FILE_ADDED}] for file [{file.Location.RelativePath}].");
 
-            if(!Role.IsAdmin(Context.User))
+            if(!Role.IsAdmin(user))
             {
-                await Clients.User(file.Location.Username).SendAsync(CALL_FILE_ADDED, file);
+                await ctx.Clients.User(file.Location.Username).SendAsync(CALL_FILE_ADDED, file);
             }
 
-            await Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_ADDED, file);
+            await ctx.Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_ADDED, file);
         }
 
 
-        internal async Task FileDeleted(UploadedFile file)
+        public static async Task FileDeleted(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
         {
-            _log.LogDebug($"Sending [{CALL_FILE_DELETED}] for file [{file.Location.RelativePath}].");
+            //_log.LogDebug($"Sending [{CALL_FILE_DELETED}] for file [{file.Location.RelativePath}].");
 
-            if(!Role.IsAdmin(Context.User))
+            if(!Role.IsAdmin(user))
             {
-                await Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file);
+                await ctx.Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file);
             }
 
-            await Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_DELETED, file);
+            await ctx.Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_DELETED, file);
         }
     }
 }

@@ -52,18 +52,33 @@ namespace MawMvcApp.Controllers
 
         [HttpPost("upload")]
         [RequestSizeLimit(2_147_483_648)]  // 2GB
-        public async Task<IActionResult> Upload(IFormFile file)
+        public async Task<IActionResult> UploadAsync(IFormFile file)
         {
             var result = await _uploadSvc.SaveFileAsync(User, file.FileName, file.OpenReadStream());
 
-            return Ok();
+            if(result.WasSuccessful)
+            {
+                await UploadHub.FileAdded(_uploadHub, User, result.UploadedFile);
+            }
+
+            return Ok(result);
         }
 
 
         [HttpPost("delete")]
-        public IActionResult Delete(string[] relativePaths)
+        public async Task<IActionResult> DeleteAsync(string[] relativePaths)
         {
-            return Ok(_uploadSvc.DeleteFiles(User, relativePaths));
+            var results = _uploadSvc.DeleteFiles(User, relativePaths);
+
+            foreach(var result in results)
+            {
+                if(result.WasSuccessful)
+                {
+                    await UploadHub.FileDeleted(_uploadHub, User, result.UploadedFile);
+                }
+            }
+
+            return Ok(results);
         }
 
 

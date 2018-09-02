@@ -1,6 +1,9 @@
+import { IFileInfo } from './ifile-info';
+
 export interface IFileOperationResult {
     operation: string;
-    fileName: string;
+    relativePathSpecified: string;
+    UploadedFile: IFileInfo;
     wasSuccessful: boolean;
     error: string;
 }

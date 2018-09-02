@@ -1,7 +1,7 @@
+import { IFileLocation } from './ifile-location';
+
 export interface IFileInfo {
-    username: string;
-    filename: string;
+    location: IFileLocation;
     creationTime: Date;
     sizeInBytes: number;
-    relativePath: string;
 }

@@ -1,11 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using Maw.Security;
 using Maw.Domain.Upload;
-using System.Security.Claims;
+using Maw.Security;
+
 
 namespace MawApi.Hubs
 {
@@ -15,7 +17,6 @@ namespace MawApi.Hubs
         : Hub
     {
         const string GROUP_ADMINS = "Admins";
-        const string CALL_ALL_FILES = "AllFiles";
         const string CALL_FILE_ADDED = "FileAdded";
         const string CALL_FILE_DELETED = "FileDeleted";
 
@@ -31,9 +32,9 @@ namespace MawApi.Hubs
         }
 
 
-        public async Task GetAllFiles()
+        public IEnumerable<UploadedFile> GetAllFiles()
         {
-            await Clients.Caller.SendAsync(CALL_ALL_FILES, _uploadSvc.GetFileList(Context.User));
+            return _uploadSvc.GetFileList(Context.User);
         }
 
 

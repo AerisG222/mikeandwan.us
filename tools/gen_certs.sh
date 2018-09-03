@@ -239,7 +239,7 @@ done
 # sudo cp neocities.ca.crt /usr/local/share/ca-certificates/
 # sudo update-ca-certificates
 
-if [ "${RESTART_SITES}" == 'y' ] && [ "${IS_PROD}" != 'y' ]
+if [ "${RESTART_SITES}" == 'y' ] && [ "${IS_PROD}" == 'y' ]
 then
     chown -R svc_www_maw:svc_www_maw "${CERT_ROOT}"
 

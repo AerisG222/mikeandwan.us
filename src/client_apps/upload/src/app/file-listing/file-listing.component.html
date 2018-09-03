@@ -9,12 +9,9 @@
             <th>Filename</th>
             <th>Uploaded</th>
             <th>Size</th>
-            <th class="text-center">
-                Download <input type="checkbox" class="align-middle ml-1" />
-            </th>
-            <th class="text-center">
-                Delete <input type="checkbox" class="align-middle ml-1" />
-            </th>
+            <th class="text-center">Download</th>
+            <th class="text-center">Delete</th>
+            <th class="text-center"><input type="checkbox" class="align-middle" /></th>
         </tr>
 
         <tr *ngFor="let file of files">
@@ -24,27 +21,21 @@
             <td>{{file.sizeInBytes | fileSize}}</td>
             <td class="text-center text-success">
                 <app-svg-icon [icon]="svgIcon.Download" [klass]="'mr-2'"></app-svg-icon>
-                <input type="checkbox" [(ngModel)]="file.isDownloadChecked" />
             </td>
             <td class="text-center text-danger">
                 <app-svg-icon [icon]="svgIcon.Trash" [klass]="'mr-2'"></app-svg-icon>
-                <input type="checkbox" [(ngModel)]="file.isDeleteChecked" />
             </td>
+            <td class="text-center"><input type="checkbox" [(ngModel)]="file.isSelected" /></td>
         </tr>
 
         <tr>
             <td *ngIf="showUsername$ | async"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="text-center">
-                <button type="submit" (click)="downloadSelected()" class="btn btn-primary btn-sm">
-                    <app-svg-icon [icon]="svgIcon.Download" [klass]="'mr-1'"></app-svg-icon> Download Selected
+            <td colspan="6" class="text-right">
+                <button type="submit" (click)="downloadSelected()" class="btn btn-primary btn-sm ml-2">
+                    <app-svg-icon [icon]="svgIcon.Download"></app-svg-icon> Download Selected
                 </button>
-            </td>
-            <td class="text-center">
-                <button type="submit" (click)="deleteSelected()" class="btn btn-danger btn-sm">
-                    <app-svg-icon [icon]="svgIcon.Trash" [klass]="'mr-1'"></app-svg-icon> Delete Selected
+                <button type="submit" (click)="deleteSelected()" class="btn btn-danger btn-sm ml-2">
+                    <app-svg-icon [icon]="svgIcon.Trash"></app-svg-icon> Delete Selected
                 </button>
             </td>
         </tr>

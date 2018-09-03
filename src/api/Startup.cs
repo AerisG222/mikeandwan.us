@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using IdentityModel;
 using Maw.Data;
@@ -16,7 +18,6 @@ using Maw.Domain;
 using Maw.Domain.Upload;
 using Maw.Security;
 using MawApi.Hubs;
-
 
 namespace MawApi
 {
@@ -61,6 +62,26 @@ namespace MawApi
                         opts.TokenValidationParameters = new TokenValidationParameters
                         {
                             NameClaimType = "name"
+                        };
+
+                        // https://damienbod.com/2017/10/16/securing-an-angular-signalr-client-using-jwt-tokens-with-asp-net-core-and-identityserver4/
+                        opts.Events = new JwtBearerEvents {
+                            OnMessageReceived = context =>
+                            {
+                                if (context.Request.Path.Value.StartsWith("/uploadr") &&
+                                    context.Request.Query.TryGetValue("token", out StringValues token)
+                                )
+                                {
+                                    context.Token = token;
+                                }
+
+                                return Task.CompletedTask;
+                            },
+                            OnAuthenticationFailed = context =>
+                            {
+                                var te = context.Exception;
+                                return Task.CompletedTask;
+                            }
                         };
                     })
                     .Services

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { User } from 'oidc-client';
-import { Observable, from } from 'rxjs';
+import { Observable, from, Subject, BehaviorSubject } from 'rxjs';
+import { map, filter, switchMap } from 'rxjs/operators';
 import * as signalR from '@aspnet/signalr';
 
 import { IFileInfo } from '../models/ifile-info';
@@ -11,7 +12,7 @@ import { EnvironmentConfig } from '../models/environment-config';
     providedIn: 'root'
 })
 export class UploadService {
-    private _hub: signalR.HubConnection;
+    private _hubReady$ = new BehaviorSubject<signalR.HubConnection>(undefined);
 
     constructor(private _cfg: EnvironmentConfig,
                 private _store: Store) {
@@ -29,11 +30,13 @@ export class UploadService {
 
         console.log('getserverfiles');
 
-        const hub = this.getHubConnection();
+        this.ensureHubConnected();
 
-        if (hub != null) {
-            return from(this._hub.invoke('GetAllFiles'));
-        }
+        return this._hubReady$
+            .pipe(
+                filter(hub => !!hub === true),
+                switchMap(hub => from(hub.invoke('GetAllFiles')))
+            );
     }
 
     getAbsoluteUrl(relativeUrl: string) {
@@ -46,44 +49,42 @@ export class UploadService {
     // never got the user coming through after subscribing.  we now assume that our method
     // is called only after auth, and we should have a valid user instance to pull from state
     // (which should be populated after our constructor completes)
-    private getHubConnection() {
-        if (!!this._hub === true) {
-            return this._hub;
+    private async ensureHubConnected() {
+        if (!!this._hubReady$.value === true) {
+            return;
         }
 
         const userState = this._store.selectSnapshot(state => state.auth.user);
 
         if (!!userState === false || !!userState.user === false) {
             console.log('user is not defined, unable to get hub!');
-            return null;
+            return;
         }
 
-        this.setupSignalrHub(userState.user);
-
-        return this._hub;
+        await this.setupSignalrHub(userState.user);
     }
 
-    private setupSignalrHub(user: User) {
+    private async setupSignalrHub(user: User) {
         console.log('setting up signalr hub...');
 
         const tokenValue = `?token=${user.access_token}`;
         const url = `${this.getAbsoluteUrl('uploadr')}${tokenValue}`;
 
-        console.log(url);
-
-        this._hub = new signalR.HubConnectionBuilder()
+        const hub = new signalR.HubConnectionBuilder()
             .withUrl(url)
             .configureLogging(signalR.LogLevel.Information)
             .build();
 
-        this._hub.start().catch(err => console.error(err.toString()));
-
-        this._hub.on('FileAdded', (uploadedFile: IFileInfo) => {
+        hub.on('FileAdded', (uploadedFile: IFileInfo) => {
             // this._store.dispatch(new NewsActions.ReceivedItemAction(newsItem));
         });
 
-        this._hub.on('FileDeleted', (uploadedFile: IFileInfo) => {
+        hub.on('FileDeleted', (uploadedFile: IFileInfo) => {
             // this._store.dispatch(new NewsActions.ReceivedGroupJoinedAction(data));
         });
+
+        hub.start()
+            .then(() => this._hubReady$.next(hub))
+            .catch(err => console.error(err.toString()));
     }
 }

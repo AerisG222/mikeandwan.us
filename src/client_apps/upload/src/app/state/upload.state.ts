@@ -76,7 +76,7 @@ export class UploadState {
         this._uploadService
             .getServerFiles()
             .subscribe(
-                files => ctx.patchState({ serverFiles: files}), // ctx.dispatch(new actions.LoadServerFilesSuccess(files)),
+                files => ctx.dispatch(new LoadServerFilesSuccess(files)),
                 err => ctx.dispatch(new LoadServerFilesFailed(err))
             );
     }

@@ -46,6 +46,8 @@ export class UploadState {
 
     @Action(InitializeUploader)
     initUploader(ctx: StateContext<UploadStateModel>) {
+        console.log('uploadstate.initUploader');
+
         const slice = <any> this._store.selectSnapshot(AuthState.getUser);
 
         let token: string = null;
@@ -69,6 +71,8 @@ export class UploadState {
 
     @Action(LoadServerFiles)
     loadServerFiles(ctx: StateContext<UploadStateModel>) {
+        console.log('uploadstate.initUploader');
+
         this._uploadService
             .getServerFiles()
             .subscribe(

@@ -11,6 +11,8 @@ export class AuthService {
 
     constructor(private _store: Store,
                 cfg: EnvironmentConfig) {
+        console.log('creating auth service');
+
         const config = {
             automaticSilentRenew: true,
             silent_redirect_uri: `${cfg.wwwUrl}/account/spa-silent-signin`,
@@ -30,6 +32,7 @@ export class AuthService {
         });
 
         this._mgr.getUser().then(user => {
+            console.log('got user');
             this.updateUser(user);
         });
     }

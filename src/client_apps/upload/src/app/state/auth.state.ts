@@ -18,11 +18,13 @@ export interface AuthStateModel {
 })
 export class AuthState {
     constructor(private _authService: AuthService) {
-
+        console.log('creating auth state');
     }
 
     @Selector()
     static getUser(state: AuthStateModel) {
+        console.log('getuser');
+
         return state.user;
     }
 
@@ -33,11 +35,15 @@ export class AuthState {
 
     @Action(CompleteSignin)
     completeSignin(ctx: StateContext<AuthState>) {
+        console.log('complete signin');
+
         this._authService.completeAuthentication();
     }
 
     @Action(UpdateUser)
     updateUser(ctx: StateContext<AuthStateModel>, user: User) {
+        console.log('update user');
+
         ctx.patchState({
             user: user
         });

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { User } from 'oidc-client';
-import { Observable,  BehaviorSubject, from, Subject } from 'rxjs';
-import { filter, tap, map, switchMap, first, catchError } from 'rxjs/operators';
+import { Observable, from, Subject } from 'rxjs';
+import { filter, tap, switchMap } from 'rxjs/operators';
 import * as signalR from '@aspnet/signalr';
 
 import { IFileInfo } from '../models/ifile-info';
@@ -13,15 +13,13 @@ import { AuthState } from '../state/auth.state';
     providedIn: 'root'
 })
 export class UploadService {
-    private _initSubject$ = new Subject();
     private _hub: signalR.HubConnection;
-    private _x: any;
 
     @Select(AuthState.getUser) private _user$: Observable<User>;
 
     constructor(private _cfg: EnvironmentConfig,
                 private _store: Store) {
-        this._x = this._user$
+        this._user$
             .pipe(
                 tap(x => console.log('user: ', x)),
                 filter(user => user !== undefined)
@@ -42,11 +40,7 @@ export class UploadService {
 
         return this._user$
             .pipe(
-                switchMap((user, idx) =>
-                    from(this._hub
-                        .invoke('GetAllFiles')
-                    )
-                )
+                switchMap(() => from(this._hub.invoke('GetAllFiles')))
             );
     }
 

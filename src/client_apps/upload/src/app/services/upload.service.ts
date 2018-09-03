@@ -25,7 +25,7 @@ export class UploadService {
         const url = this.getAbsoluteUrl('upload/files');
 
         return this._http
-            .get<Array<IFileInfo>>(url);
+            .get<IFileInfo[]>(url);
         */
 
         console.log('getserverfiles');

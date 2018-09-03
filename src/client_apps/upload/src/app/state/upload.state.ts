@@ -15,7 +15,7 @@ import {
 } from './upload.actions';
 
 export interface UploadStateModel {
-    serverFiles: Array<IFileInfo>;
+    serverFiles: IFileInfo[];
     error: any;
     uploader: FileUploader;
 }
@@ -82,7 +82,7 @@ export class UploadState {
     }
 
     @Action(LoadServerFilesSuccess)
-    loadServerFilesSuccess(ctx: StateContext<UploadStateModel>, files: Array<IFileInfo>) {
+    loadServerFilesSuccess(ctx: StateContext<UploadStateModel>, files: IFileInfo[]) {
         ctx.patchState({
             serverFiles: files
         });

@@ -22,7 +22,7 @@ import { SvgIcon } from '../svg-icon/svg-icon.enum';
 export class FileListingComponent implements OnInit {
     svgIcon = SvgIcon;
 
-    @Select(UploadState.getServerFiles) files$: Observable<Array<IFileInfo>>;
+    @Select(UploadState.getServerFiles) files$: Observable<IFileInfo[]>;
     @Select(AuthState.getShowUsername) showUsername$: Observable<boolean>;
 
     constructor(private _store: Store) {

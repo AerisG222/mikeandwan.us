@@ -13,6 +13,7 @@ import {
     LoadServerFilesSuccess,
     LoadServerFilesFailed
 } from './upload.actions';
+import { tap } from 'rxjs/operators';
 
 export interface UploadStateModel {
     serverFiles: IFileInfo[];
@@ -75,6 +76,9 @@ export class UploadState {
 
         this._uploadService
             .getServerFiles()
+            .pipe(
+                tap(x => console.log(x))
+            )
             .subscribe(
                 files => ctx.dispatch(new LoadServerFilesSuccess(files)),
                 err => ctx.dispatch(new LoadServerFilesFailed(err))
@@ -83,8 +87,10 @@ export class UploadState {
 
     @Action(LoadServerFilesSuccess)
     loadServerFilesSuccess(ctx: StateContext<UploadStateModel>, files: IFileInfo[]) {
+        console.log('files:', files.results);
+
         ctx.patchState({
-            serverFiles: files
+            serverFiles: files.results
         });
     }
 

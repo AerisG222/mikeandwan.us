@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { User } from 'oidc-client';
-import { Observable, from, Subject, BehaviorSubject } from 'rxjs';
-import { map, filter, switchMap } from 'rxjs/operators';
+import { Observable, from, BehaviorSubject } from 'rxjs';
+import { filter, switchMap } from 'rxjs/operators';
 import * as signalR from '@aspnet/signalr';
 
 import { IFileInfo } from '../models/ifile-info';

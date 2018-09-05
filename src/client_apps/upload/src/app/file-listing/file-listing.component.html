@@ -15,7 +15,7 @@
 
     <tr *ngFor="let file of files">
         <td *ngIf="showUsername$ | async">{{file.location.username}}</td>
-        <td><strong>{{file.location.filename}}</strong></td>
+        <td>{{file.location.filename}}</td>
         <td>{{file.creationTime | relativeDate}}</td>
         <td>{{file.sizeInBytes | fileSize}}</td>
         <td class="text-center text-success">

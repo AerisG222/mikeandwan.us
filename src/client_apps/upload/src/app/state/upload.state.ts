@@ -86,7 +86,7 @@ export class UploadState {
     }
 
     @Action(LoadServerFilesSuccess)
-    loadServerFilesSuccess(ctx: StateContext<UploadStateModel>, files: IFileInfo[]) {
+    loadServerFilesSuccess(ctx: StateContext<UploadStateModel>, files) {  // files: IFileInfo[]
         console.log('files:', files.results);
 
         ctx.patchState({

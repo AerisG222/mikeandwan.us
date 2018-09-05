@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { LoadServerFiles } from '../state/upload.actions';
 import { UploadState } from '../state/upload.state';
@@ -9,6 +9,8 @@ import { FileSizePipe } from '../pipes/file-size.pipe';
 import { RelativeDatePipe } from '../pipes/relative-date.pipe';
 import { AuthState } from '../state/auth.state';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
+import { FileViewModel } from './file-view-model';
+import { map, flatMap, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-file-listing',
@@ -19,10 +21,12 @@ import { SvgIcon } from '../svg-icon/svg-icon.enum';
         RelativeDatePipe
     ]
 })
-export class FileListingComponent implements OnInit {
+export class FileListingComponent implements OnInit, OnDestroy {
     svgIcon = SvgIcon;
 
-    @Select(UploadState.getServerFiles) files$: Observable<IFileInfo[]>;
+    private _unsubscribe: Subject<void> = new Subject();
+    files: FileViewModel[] = [];
+    @Select(UploadState.getServerFiles) sourceFiles$: Observable<IFileInfo[]>;
     @Select(AuthState.getShowUsername) showUsername$: Observable<boolean>;
 
     constructor(private _store: Store) {
@@ -30,7 +34,21 @@ export class FileListingComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.sourceFiles$
+            .pipe(
+                takeUntil(this._unsubscribe),
+                map(files => this.generateViewModel(files))
+            )
+            .subscribe(
+                files => this.files = files
+            );
+
         this._store.dispatch(new LoadServerFiles());
+    }
+
+    ngOnDestroy(): void {
+        this._unsubscribe.next();
+        this._unsubscribe.complete();
     }
 
     downloadSelected(): void {
@@ -39,5 +57,24 @@ export class FileListingComponent implements OnInit {
 
     deleteSelected(): void {
 
+    }
+
+    generateViewModel(files: IFileInfo[]): FileViewModel[] {
+        const result = [];
+
+        for (const file of files) {
+            result.push(new FileViewModel(file.location,
+                                          file.creationTime,
+                                          file.sizeInBytes)
+            );
+        }
+
+        return result;
+    }
+
+    toggleFiles(isChecked): void {
+        this.files.forEach(x => {
+            x.isChecked = isChecked;
+        });
     }
 }

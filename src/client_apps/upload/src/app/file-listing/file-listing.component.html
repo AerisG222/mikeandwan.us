@@ -1,43 +1,41 @@
 <h2>Available Files</h2>
 
-<ng-container *ngIf="files$ | async as files">
-    <p *ngIf="files.length == 0">No files available</p>
+<p *ngIf="files.length == 0">No files available</p>
 
-    <table *ngIf="files.length > 0" class="table table-striped table-hover table-sm">
-        <tr>
-            <th *ngIf="showUsername$ | async">User</th>
-            <th>Filename</th>
-            <th>Uploaded</th>
-            <th>Size</th>
-            <th class="text-center">Download</th>
-            <th class="text-center">Delete</th>
-            <th class="text-center"><input type="checkbox" class="align-middle" /></th>
-        </tr>
+<table *ngIf="files.length > 0" class="table table-striped table-hover table-sm">
+    <tr>
+        <th *ngIf="showUsername$ | async">User</th>
+        <th>Filename</th>
+        <th>Uploaded</th>
+        <th>Size</th>
+        <th class="text-center">Download</th>
+        <th class="text-center">Delete</th>
+        <th class="text-center"><input type="checkbox" class="align-middle" (click)="toggleFiles(toggle.checked)" #toggle /></th>
+    </tr>
 
-        <tr *ngFor="let file of files">
-            <td *ngIf="showUsername$ | async">{{file.location.username}}</td>
-            <td><strong>{{file.location.filename}}</strong></td>
-            <td>{{file.creationTime | relativeDate}}</td>
-            <td>{{file.sizeInBytes | fileSize}}</td>
-            <td class="text-center text-success">
-                <app-svg-icon [icon]="svgIcon.Download" [klass]="'mr-2'"></app-svg-icon>
-            </td>
-            <td class="text-center text-danger">
-                <app-svg-icon [icon]="svgIcon.Trash" [klass]="'mr-2'"></app-svg-icon>
-            </td>
-            <td class="text-center"><input type="checkbox" [(ngModel)]="file.isSelected" /></td>
-        </tr>
+    <tr *ngFor="let file of files">
+        <td *ngIf="showUsername$ | async">{{file.location.username}}</td>
+        <td><strong>{{file.location.filename}}</strong></td>
+        <td>{{file.creationTime | relativeDate}}</td>
+        <td>{{file.sizeInBytes | fileSize}}</td>
+        <td class="text-center text-success">
+            <app-svg-icon [icon]="svgIcon.Download" [klass]="'mr-2'"></app-svg-icon>
+        </td>
+        <td class="text-center text-danger">
+            <app-svg-icon [icon]="svgIcon.Trash" [klass]="'mr-2'"></app-svg-icon>
+        </td>
+        <td class="text-center"><input type="checkbox" [(ngModel)]="file.isChecked" /></td>
+    </tr>
 
-        <tr>
-            <td *ngIf="showUsername$ | async"></td>
-            <td colspan="6" class="text-right">
-                <button type="submit" (click)="downloadSelected()" class="btn btn-primary btn-sm ml-2">
-                    <app-svg-icon [icon]="svgIcon.Download"></app-svg-icon> Download Selected
-                </button>
-                <button type="submit" (click)="deleteSelected()" class="btn btn-danger btn-sm ml-2">
-                    <app-svg-icon [icon]="svgIcon.Trash"></app-svg-icon> Delete Selected
-                </button>
-            </td>
-        </tr>
-    </table>
-</ng-container>
+    <tr>
+        <td *ngIf="showUsername$ | async"></td>
+        <td colspan="6" class="text-right">
+            <button type="submit" (click)="downloadSelected()" class="btn btn-primary btn-sm ml-2">
+                <app-svg-icon [icon]="svgIcon.Download"></app-svg-icon> Download Selected
+            </button>
+            <button type="submit" (click)="deleteSelected()" class="btn btn-danger btn-sm ml-2">
+                <app-svg-icon [icon]="svgIcon.Trash"></app-svg-icon> Delete Selected
+            </button>
+        </td>
+    </tr>
+</table>

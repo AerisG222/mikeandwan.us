@@ -51,12 +51,30 @@ export class FileListingComponent implements OnInit, OnDestroy {
         this._unsubscribe.complete();
     }
 
-    downloadSelected(): void {
+    downloadSingle(file: FileViewModel) {
+        console.log('download: ' + file);
+    }
 
+    deleteSingle(file: FileViewModel) {
+        console.log('delete: ' + file);
+    }
+
+    downloadSelected(): void {
+        const list = this.getSelected();
+
+        console.log('download many: ' + list);
     }
 
     deleteSelected(): void {
+        const list = this.getSelected();
 
+        console.log('delete many: ' + list);
+    }
+
+    getSelected(): string[] {
+        return this.files
+            .filter(x => x.isChecked)
+            .map(x => x.location.relativePath);
     }
 
     generateViewModel(files: IFileInfo[]): FileViewModel[] {

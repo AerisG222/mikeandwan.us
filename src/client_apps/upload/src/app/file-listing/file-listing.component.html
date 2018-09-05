@@ -19,10 +19,10 @@
         <td>{{file.creationTime | relativeDate}}</td>
         <td>{{file.sizeInBytes | fileSize}}</td>
         <td class="text-center text-success">
-            <app-svg-icon [icon]="svgIcon.Download" [klass]="'hover mr-2'"></app-svg-icon>
+            <app-svg-icon [icon]="svgIcon.Download" [klass]="'hover mr-2'" (click)="downloadSingle(file)"></app-svg-icon>
         </td>
         <td class="text-center text-danger">
-            <app-svg-icon [icon]="svgIcon.Trash" [klass]="'hover mr-2'"></app-svg-icon>
+            <app-svg-icon [icon]="svgIcon.Trash" [klass]="'hover mr-2'" (click)="deleteSingle(file)"></app-svg-icon>
         </td>
         <td class="text-center"><input type="checkbox" [(ngModel)]="file.isChecked" /></td>
     </tr>

@@ -23,6 +23,7 @@ import { AuthState } from './state/auth.state';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { RelativeDatePipe } from './pipes/relative-date.pipe';
 import { SvgIconComponent } from './svg-icon/svg-icon.component';
+import { FocusRemoverDirective } from './directives/focus-remover.directive';
 
 @NgModule({
     imports: [
@@ -48,14 +49,20 @@ import { SvgIconComponent } from './svg-icon/svg-icon.component';
         ])
     ],
     declarations: [
+        // directives
+        FocusRemoverDirective,
+
+        // pipes
+        FileSizePipe,
+        RelativeDatePipe,
+
+        // components
         AppComponent,
         FileListingComponent,
         HomeComponent,
         SignInComponent,
-        UploadComponent,
-        FileSizePipe,
-        RelativeDatePipe,
-        SvgIconComponent
+        SvgIconComponent,
+        UploadComponent
     ],
     providers: [
         AuthService,

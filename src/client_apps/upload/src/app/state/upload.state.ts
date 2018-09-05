@@ -11,7 +11,8 @@ import {
     DeleteServerFiles,
     LoadServerFiles,
     LoadServerFilesSuccess,
-    LoadServerFilesFailed
+    LoadServerFilesFailed,
+    DownloadServerFiles
 } from './upload.actions';
 import { tap } from 'rxjs/operators';
 
@@ -65,9 +66,14 @@ export class UploadState {
         });
     }
 
-    @Action(DeleteServerFiles)
-    deleteServerFiles(ctx: StateContext<UploadStateModel>) {
+    @Action(DownloadServerFiles)
+    DownloadServerFiles(ctx: StateContext<UploadStateModel>, files: string | string[]) {
+        console.log(files);
+    }
 
+    @Action(DeleteServerFiles)
+    deleteServerFiles(ctx: StateContext<UploadStateModel>, files: string | string[]) {
+        console.log(files);
     }
 
     @Action(LoadServerFiles)

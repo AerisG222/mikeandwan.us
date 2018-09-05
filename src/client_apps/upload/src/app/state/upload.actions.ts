@@ -4,7 +4,7 @@ import { IFileOperationResult } from '../models/ifile-operation-result';
 export class DeleteServerFiles {
     static readonly type = '[File Listing] Delete Server Files';
 
-    constructor(public files: string[]) { }
+    constructor(public files: string | string[]) { }
 }
 
 export class DeleteServerFilesFailed {
@@ -17,6 +17,24 @@ export class DeleteServerFilesSuccess {
     static readonly type = '[API] Delete Server Files Success';
 
     constructor(public results: IFileOperationResult[]) { }
+}
+
+export class DownloadServerFiles {
+    static readonly type = '[File Listing] Download Server Files';
+
+    constructor(public files: string | string[]) { }
+}
+
+export class DownloadServerFilesSuccess {
+    static readonly type = '[API] Download Server Files Success';
+
+    constructor(public file: any) { }
+}
+
+export class DownloadServerFilesError {
+    static readonly type = '[API] Download Server Files Error';
+
+    constructor(err: string) { }
 }
 
 export class InitializeUploader {

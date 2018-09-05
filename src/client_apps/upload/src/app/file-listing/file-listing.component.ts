@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 
-import { LoadServerFiles } from '../state/upload.actions';
+import { LoadServerFiles, DownloadServerFiles, DeleteServerFiles } from '../state/upload.actions';
 import { UploadState } from '../state/upload.state';
 import { IFileInfo } from '../models/ifile-info';
 import { FileSizePipe } from '../pipes/file-size.pipe';
@@ -52,23 +52,23 @@ export class FileListingComponent implements OnInit, OnDestroy {
     }
 
     downloadSingle(file: FileViewModel) {
-        console.log('download: ' + file);
+        this._store.dispatch(new DownloadServerFiles(file.location.relativePath));
     }
 
     deleteSingle(file: FileViewModel) {
-        console.log('delete: ' + file);
+        this._store.dispatch(new DeleteServerFiles(file.location.relativePath));
     }
 
     downloadSelected(): void {
         const list = this.getSelected();
 
-        console.log('download many: ' + list);
+        this._store.dispatch(new DownloadServerFiles(list));
     }
 
     deleteSelected(): void {
         const list = this.getSelected();
 
-        console.log('delete many: ' + list);
+        this._store.dispatch(new DeleteServerFiles(list));
     }
 
     getSelected(): string[] {

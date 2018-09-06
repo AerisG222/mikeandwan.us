@@ -41,18 +41,18 @@ export class AuthState {
     }
 
     @Action(UpdateUser)
-    updateUser(ctx: StateContext<AuthStateModel>, user: User) {
+    updateUser(ctx: StateContext<AuthStateModel>, payload: UpdateUser) {
         console.log('update user');
 
         ctx.patchState({
-            user: user
+            user: payload.user
         });
     }
 
     @Action(ShowUsername)
-    showUsername(ctx: StateContext<AuthStateModel>, doShowUsername: boolean) {
+    showUsername(ctx: StateContext<AuthStateModel>, payload: ShowUsername) {
         ctx.patchState({
-            showUsername: doShowUsername
+            showUsername: payload.doShowUsername
         });
     }
 }

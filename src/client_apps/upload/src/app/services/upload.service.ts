@@ -60,14 +60,14 @@ export class UploadService {
             return;
         }
 
-        const userState = this._store.selectSnapshot(state => state.auth.user);
+        const user = this._store.selectSnapshot(state => state.auth.user);
 
-        if (!!userState === false || !!userState.user === false) {
+        if (!!user === false) {
             console.log('user is not defined, unable to get hub!');
             return;
         }
 
-        await this.setupSignalrHub(userState.user);
+        await this.setupSignalrHub(user);
     }
 
     private async setupSignalrHub(user: User) {

@@ -1,7 +1,5 @@
 import { State, Action, StateContext, Selector, Select, Store } from '@ngxs/store';
 import { FileUploader } from 'ng2-file-upload';
-import { User } from 'oidc-client';
-import { Observable } from 'rxjs';
 
 import { IFileInfo } from '../models/ifile-info';
 import { UploadService } from '../services/upload.service';
@@ -13,7 +11,6 @@ import {
     LoadServerFilesSuccess,
     LoadServerFilesFailed,
     DownloadServerFiles,
-    DownloadServerFilesSuccess,
     DownloadServerFilesError
 } from './upload.actions';
 import { tap } from 'rxjs/operators';
@@ -92,8 +89,8 @@ export class UploadState {
     }
 
     @Action(DeleteServerFiles)
-    deleteServerFiles(ctx: StateContext<UploadStateModel>, files: string | string[]) {
-        console.log(files);
+    deleteServerFiles(ctx: StateContext<UploadStateModel>, payload: DeleteServerFiles) {
+        console.log(payload.files);
     }
 
     @Action(LoadServerFiles)
@@ -112,18 +109,18 @@ export class UploadState {
     }
 
     @Action(LoadServerFilesSuccess)
-    loadServerFilesSuccess(ctx: StateContext<UploadStateModel>, files) {  // files: IFileInfo[]
-        console.log('files:', files.results);
+    loadServerFilesSuccess(ctx: StateContext<UploadStateModel>, payload: LoadServerFilesSuccess) {  // files: IFileInfo[]
+        console.log('files:', payload.results);
 
         ctx.patchState({
-            serverFiles: files.results
+            serverFiles: payload.results
         });
     }
 
     @Action(LoadServerFilesFailed)
-    loadServerFilesFailed(ctx: StateContext<UploadStateModel>, error: any) {
+    loadServerFilesFailed(ctx: StateContext<UploadStateModel>, payload: LoadServerFiles) {
         ctx.patchState({
-            error: error
+            error: payload
         });
     }
 

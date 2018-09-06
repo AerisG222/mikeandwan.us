@@ -12,12 +12,15 @@ import {
     LoadServerFiles,
     LoadServerFilesSuccess,
     LoadServerFilesFailed,
-    DownloadServerFiles
+    DownloadServerFiles,
+    DownloadServerFilesSuccess,
+    DownloadServerFilesError
 } from './upload.actions';
 import { tap } from 'rxjs/operators';
 
 export interface UploadStateModel {
     serverFiles: IFileInfo[];
+    downloadError: any;
     error: any;
     uploader: FileUploader;
 }
@@ -26,6 +29,7 @@ export interface UploadStateModel {
     name: 'upload',
     defaults: {
         serverFiles: [],
+        downloadError: null,
         error: null,
         uploader: null
     }
@@ -44,6 +48,11 @@ export class UploadState {
     @Selector()
     static getUploader(state: UploadStateModel) {
         return state.uploader;
+    }
+
+    @Selector()
+    static getDownloadError(state: UploadStateModel) {
+        return state.downloadError;
     }
 
     @Action(InitializeUploader)
@@ -67,8 +76,19 @@ export class UploadState {
     }
 
     @Action(DownloadServerFiles)
-    DownloadServerFiles(ctx: StateContext<UploadStateModel>, files: string | string[]) {
-        console.log(files);
+    DownloadServerFiles(ctx: StateContext<UploadStateModel>, payload: DownloadServerFiles) {
+        const list = [];
+
+        list.push(payload.files);
+
+        console.log(list);
+
+        this._uploadService
+            .downloadFiles(list)
+            .subscribe(
+                blob => this.saveDownload(blob),  // don't push such a big thing into state
+                err => ctx.dispatch(new DownloadServerFilesError(err))
+            );
     }
 
     @Action(DeleteServerFiles)
@@ -105,5 +125,14 @@ export class UploadState {
         ctx.patchState({
             error: error
         });
+    }
+
+
+    // we should probably not shove big things into state, so handle the downloaded content
+    // here for now
+    private saveDownload(blob: Blob) {
+        const url = window.URL.createObjectURL(blob);
+
+        window.open(url);
     }
 }

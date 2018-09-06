@@ -24,6 +24,7 @@ import { FileSizePipe } from './pipes/file-size.pipe';
 import { RelativeDatePipe } from './pipes/relative-date.pipe';
 import { SvgIconComponent } from './svg-icon/svg-icon.component';
 import { FocusRemoverDirective } from './directives/focus-remover.directive';
+import { DownloadHandlerComponent } from './download-handler/download-handler.component';
 
 @NgModule({
     imports: [
@@ -62,7 +63,8 @@ import { FocusRemoverDirective } from './directives/focus-remover.directive';
         HomeComponent,
         SignInComponent,
         SvgIconComponent,
-        UploadComponent
+        UploadComponent,
+        DownloadHandlerComponent
     ],
     providers: [
         AuthService,

@@ -7,6 +7,7 @@ import * as signalR from '@aspnet/signalr';
 
 import { IFileInfo } from '../models/ifile-info';
 import { EnvironmentConfig } from '../models/environment-config';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -15,19 +16,13 @@ export class UploadService {
     private _hubReady$ = new BehaviorSubject<signalR.HubConnection>(undefined);
 
     constructor(private _cfg: EnvironmentConfig,
+                private _http: HttpClient,
                 private _store: Store) {
         console.log('creating upload service');
         console.log(_store);
     }
 
     getServerFiles(): Observable<IFileInfo[]> {
-        /* webapi call:
-        const url = this.getAbsoluteUrl('upload/files');
-
-        return this._http
-            .get<IFileInfo[]>(url);
-        */
-
         console.log('getserverfiles');
 
         this.ensureHubConnected();
@@ -37,6 +32,17 @@ export class UploadService {
                 filter(hub => !!hub === true),
                 switchMap(hub => from(hub.invoke('GetAllFiles')))
             );
+    }
+
+    downloadFiles(files: string[]): Observable<Blob> {
+        if (!!files === false || files.length === 0) {
+            return;
+        }
+
+        const url = this.getAbsoluteUrl('upload/download');
+
+        return this._http
+            .post<Blob>(url, files);
     }
 
     getAbsoluteUrl(relativeUrl: string) {

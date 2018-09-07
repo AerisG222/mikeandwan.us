@@ -1,5 +1,7 @@
-import { State, Action, StateContext, Selector, Select, Store } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
+import { saveAs } from 'file-saver/FileSaver';
 import { FileUploader } from 'ng2-file-upload';
+import { tap } from 'rxjs/operators';
 
 import { IFileInfo } from '../models/ifile-info';
 import { UploadService } from '../services/upload.service';
@@ -13,7 +15,7 @@ import {
     DownloadServerFiles,
     DownloadServerFilesError
 } from './upload.actions';
-import { tap } from 'rxjs/operators';
+import { HttpResponse } from '@angular/common/http';
 
 export interface UploadStateModel {
     serverFiles: IFileInfo[];
@@ -32,6 +34,8 @@ export interface UploadStateModel {
     }
 })
 export class UploadState {
+    private readonly _filenameRegex = /.*filename\=(.*);.*/g;
+
     constructor(private _uploadService: UploadService,
                 private _store: Store) {
 
@@ -83,7 +87,7 @@ export class UploadState {
         this._uploadService
             .downloadFiles(list)
             .subscribe(
-                blob => this.saveDownload(blob),  // don't push such a big thing into state
+                response => this.saveDownload(response),  // don't push such a big thing into state
                 err => ctx.dispatch(new DownloadServerFilesError(err))
             );
     }
@@ -127,9 +131,11 @@ export class UploadState {
 
     // we should probably not shove big things into state, so handle the downloaded content
     // here for now
-    private saveDownload(blob: Blob) {
-        const url = window.URL.createObjectURL(blob);
+    private saveDownload(response: HttpResponse<Blob>) {
+        const disposition = response.headers.get('Content-Disposition');
+        const results = this._filenameRegex.exec(disposition);
+        const filename = results.length > 1 ? results[1] : 'download_file';
 
-        window.open(url);
+        saveAs(response.body, filename);
     }
 }

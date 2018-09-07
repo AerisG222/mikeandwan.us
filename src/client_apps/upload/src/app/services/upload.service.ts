@@ -7,7 +7,7 @@ import * as signalR from '@aspnet/signalr';
 
 import { IFileInfo } from '../models/ifile-info';
 import { EnvironmentConfig } from '../models/environment-config';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +34,7 @@ export class UploadService {
             );
     }
 
-    downloadFiles(files: string[]): Observable<Blob> {
+    downloadFiles(files: string[]): Observable<HttpResponse<Blob>> {
         if (!!files === false || files.length === 0) {
             return;
         }
@@ -42,7 +42,7 @@ export class UploadService {
         const url = this.getAbsoluteUrl('upload/download');
 
         return this._http
-            .post<Blob>(url, files);
+            .post(url, files, { responseType: 'blob', observe: 'response' });
     }
 
     getAbsoluteUrl(relativeUrl: string) {

@@ -78,9 +78,7 @@ export class UploadState {
 
     @Action(DownloadServerFiles)
     DownloadServerFiles(ctx: StateContext<UploadStateModel>, payload: DownloadServerFiles) {
-        const list = [];
-
-        list.push(payload.files);
+        const list = [].concat(payload.files);
 
         console.log(list);
 

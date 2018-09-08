@@ -38,6 +38,23 @@ namespace MawApi.Hubs
         }
 
 
+        [HubMethodName("DeleteFiles")]
+        public async Task<IEnumerable<FileOperationResult>> DeleteFilesAsync(List<string> files)
+        {
+            var results = _uploadSvc.DeleteFiles(Context.User, files);
+
+            foreach(var result in results)
+            {
+                if(result.WasSuccessful)
+                {
+                    await FileDeletedAsync(result.UploadedFile);
+                }
+            }
+
+            return results;
+        }
+
+
         public override async Task OnConnectedAsync()
         {
             _log.LogDebug($"User [{Context.User.Identity.Name}] connected to the {nameof(UploadHub)}.");
@@ -64,7 +81,7 @@ namespace MawApi.Hubs
         }
 
 
-        public static async Task FileAdded(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
+        public static async Task FileAddedAsync(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
         {
             //_log.LogDebug($"Sending [{CALL_FILE_ADDED}] for file [{file.Location.RelativePath}].");
 
@@ -77,7 +94,7 @@ namespace MawApi.Hubs
         }
 
 
-        public static async Task FileDeleted(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
+        public static async Task FileDeletedAsync(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
         {
             //_log.LogDebug($"Sending [{CALL_FILE_DELETED}] for file [{file.Location.RelativePath}].");
 
@@ -87,6 +104,17 @@ namespace MawApi.Hubs
             }
 
             await ctx.Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_DELETED, file);
+        }
+
+
+        async Task FileDeletedAsync(UploadedFile file)
+        {
+            if(!Role.IsAdmin(Context.User))
+            {
+                await Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file);
+            }
+
+            await Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_DELETED, file);
         }
     }
 }

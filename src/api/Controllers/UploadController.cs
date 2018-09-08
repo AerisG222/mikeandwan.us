@@ -62,7 +62,7 @@ namespace MawMvcApp.Controllers
 
             if(result.WasSuccessful)
             {
-                await UploadHub.FileAdded(_uploadHub, User, result.UploadedFile);
+                await UploadHub.FileAddedAsync(_uploadHub, User, result.UploadedFile);
             }
 
             return Ok(result);
@@ -78,7 +78,7 @@ namespace MawMvcApp.Controllers
             {
                 if(result.WasSuccessful)
                 {
-                    await UploadHub.FileDeleted(_uploadHub, User, result.UploadedFile);
+                    await UploadHub.FileDeletedAsync(_uploadHub, User, result.UploadedFile);
                 }
             }
 

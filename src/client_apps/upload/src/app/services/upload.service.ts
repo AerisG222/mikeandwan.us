@@ -3,7 +3,7 @@ import { Store } from '@ngxs/store';
 import { User } from 'oidc-client';
 import { Observable, from, BehaviorSubject } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
-import * as signalR from '@aspnet/signalr';
+import { HubConnectionBuilder, LogLevel } from '@aspnet/signalr';
 
 import { IFileInfo } from '../models/ifile-info';
 import { EnvironmentConfig } from '../models/environment-config';
@@ -91,9 +91,11 @@ export class UploadService {
         const tokenValue = `?token=${user.access_token}`;
         const url = `${this.getAbsoluteUrl('uploadr')}${tokenValue}`;
 
-        const hub = new signalR.HubConnectionBuilder()
+        const hub = new HubConnectionBuilder()
             .withUrl(url)
-            .configureLogging(signalR.LogLevel.Information)
+            .configureLogging(LogLevel.Information)
+            // TODO: enable message pack once it supports camel casing
+            // .withHubProtocol(new MessagePackHubProtocol())
             .build();
 
         hub.on('FileAdded', (addedFile: IFileInfo) => {

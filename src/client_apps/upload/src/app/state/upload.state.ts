@@ -34,7 +34,7 @@ export interface UploadStateModel {
     }
 })
 export class UploadState {
-    private readonly _filenameRegex = /.*filename\=(.*);.*/g;
+    private readonly _filenameRegex = /.*filename\=(.*);.*/;
 
     constructor(private _uploadService: UploadService,
                 private _store: Store) {

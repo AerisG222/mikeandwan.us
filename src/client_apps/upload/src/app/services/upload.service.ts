@@ -8,6 +8,8 @@ import * as signalR from '@aspnet/signalr';
 import { IFileInfo } from '../models/ifile-info';
 import { EnvironmentConfig } from '../models/environment-config';
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import { IFileOperationResult } from '../models/ifile-operation-result';
+import { FileAdded, FileDeleted } from '../state/upload.actions';
 
 @Injectable({
     providedIn: 'root'
@@ -31,6 +33,18 @@ export class UploadService {
             .pipe(
                 filter(hub => !!hub === true),
                 switchMap(hub => from(hub.invoke('GetAllFiles')))
+            );
+    }
+
+    deleteFiles(files: string[]): Observable<IFileOperationResult[]> {
+        if (!!files === false || files.length === 0) {
+            return;
+        }
+
+        return this._hubReady$
+            .pipe(
+                filter(hub => !!hub === true),
+                switchMap(hub => from(hub.invoke('DeleteFiles', files)))
             );
     }
 
@@ -81,12 +95,16 @@ export class UploadService {
             .configureLogging(signalR.LogLevel.Information)
             .build();
 
-        hub.on('FileAdded', (uploadedFile: IFileInfo) => {
-            // this._store.dispatch(new NewsActions.ReceivedItemAction(newsItem));
+        hub.on('FileAdded', (addedFile: IFileInfo) => {
+            console.log('file added: ', addedFile);
+
+            this._store.dispatch(new FileAdded(addedFile));
         });
 
-        hub.on('FileDeleted', (uploadedFile: IFileInfo) => {
-            // this._store.dispatch(new NewsActions.ReceivedGroupJoinedAction(data));
+        hub.on('FileDeleted', (deletedFile: IFileInfo) => {
+            console.log('file deleted: ', deletedFile);
+
+            this._store.dispatch(new FileDeleted(deletedFile));
         });
 
         hub.start()

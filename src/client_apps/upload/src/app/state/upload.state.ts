@@ -13,7 +13,9 @@ import {
     LoadServerFilesSuccess,
     LoadServerFilesFailed,
     DownloadServerFiles,
-    DownloadServerFilesError
+    DownloadServerFilesError,
+    DeleteServerFilesSuccess,
+    FileAdded
 } from './upload.actions';
 import { HttpResponse } from '@angular/common/http';
 
@@ -92,7 +94,16 @@ export class UploadState {
 
     @Action(DeleteServerFiles)
     deleteServerFiles(ctx: StateContext<UploadStateModel>, payload: DeleteServerFiles) {
-        console.log(payload.files);
+        const list = [].concat(payload.files);
+
+        console.log(list);
+
+        this._uploadService
+            .deleteFiles(list)
+            .subscribe(
+                response => ctx.dispatch(new DeleteServerFilesSuccess(response)),  // don't push such a big thing into state
+                err => console.log(err)
+            );
     }
 
     @Action(LoadServerFiles)
@@ -126,6 +137,31 @@ export class UploadState {
         });
     }
 
+    @Action(FileAdded)
+    FileAdded(ctx: StateContext<UploadStateModel>, payload: FileAdded) {
+        const state = ctx.getState();
+        const files = state.serverFiles;
+
+        if (!files.find(x => x.location.relativePath === payload.file.location.relativePath)) {
+            files.push(payload.file);
+        }
+
+        ctx.setState({
+            ...state,
+            serverFiles: files
+        });
+    }
+
+    @Action(FileAdded)
+    FileDeleted(ctx: StateContext<UploadStateModel>, payload: FileAdded) {
+        const state = ctx.getState();
+        const files = state.serverFiles;
+
+        ctx.setState({
+            ...state,
+            serverFiles: files.filter(x => x.location.relativePath !== x.location.relativePath)
+        });
+    }
 
     // we should probably not shove big things into state, so handle the downloaded content
     // here for now

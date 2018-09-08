@@ -37,6 +37,18 @@ export class DownloadServerFilesError {
     constructor(err: string) { }
 }
 
+export class FileAdded {
+    static readonly  type = '[SignalR] File Added';
+
+    constructor(public file: IFileInfo) { }
+}
+
+export class FileDeleted {
+    static readonly  type = '[SignalR] File Deleted';
+
+    constructor(public file: IFileInfo) { }
+}
+
 export class InitializeUploader {
     static readonly type = '[Upload Component] Initialize Uploader';
 

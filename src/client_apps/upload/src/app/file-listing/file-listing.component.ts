@@ -10,7 +10,8 @@ import { RelativeDatePipe } from '../pipes/relative-date.pipe';
 import { AuthState } from '../state/auth.state';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
 import { FileViewModel } from './file-view-model';
-import { map, flatMap, takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
     selector: 'app-file-listing',
@@ -19,6 +20,15 @@ import { map, flatMap, takeUntil } from 'rxjs/operators';
     providers: [
         FileSizePipe,
         RelativeDatePipe
+    ],
+    animations: [
+        trigger('itemAnim', [
+            transition(':leave', [
+                animate('0.5s 0.2s ease', style({
+                    opacity: 0
+                }))
+            ])
+        ])
     ]
 })
 export class FileListingComponent implements OnInit, OnDestroy {
@@ -82,8 +92,8 @@ export class FileListingComponent implements OnInit, OnDestroy {
 
         for (const file of files) {
             result.push(new FileViewModel(file.location,
-                                          file.creationTime,
-                                          file.sizeInBytes)
+                file.creationTime,
+                file.sizeInBytes)
             );
         }
 
@@ -94,5 +104,9 @@ export class FileListingComponent implements OnInit, OnDestroy {
         this.files.forEach(x => {
             x.isChecked = isChecked;
         });
+    }
+
+    trackByFile(index, item): number {
+        return item.location.relativePath;
     }
 }

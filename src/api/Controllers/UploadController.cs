@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Maw.Domain.Upload;
+using Maw.Domain.Utilities;
 using Maw.Security;
 using MawApi.Hubs;
 
@@ -29,17 +30,20 @@ namespace MawMvcApp.Controllers
         readonly IUploadService _uploadSvc;
         readonly IHubContext<UploadHub> _uploadHub;
         readonly IContentTypeProvider _contentTypeProvider;
+        readonly LinuxFileTypeIdentifier _linuxFileTypeIdentifier;
 
 
 		public UploadController(ILogger<UploadController> log,
                                 IUploadService uploadSvc,
                                 IHubContext<UploadHub> uploadHubCtx,
-                                IContentTypeProvider contentTypeProvider)
+                                IContentTypeProvider contentTypeProvider,
+                                LinuxFileTypeIdentifier linuxFileTypeIdentifier)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _uploadSvc = uploadSvc ?? throw new ArgumentNullException(nameof(uploadSvc));
             _uploadHub = uploadHubCtx ?? throw new ArgumentNullException(nameof(uploadHubCtx));
             _contentTypeProvider = contentTypeProvider ?? throw new ArgumentNullException(nameof(contentTypeProvider));
+            _linuxFileTypeIdentifier = linuxFileTypeIdentifier ?? throw new ArgumentNullException(nameof(linuxFileTypeIdentifier));
         }
 
 
@@ -92,6 +96,7 @@ namespace MawMvcApp.Controllers
 
             Stream stream = null;
             string filename = null;
+            string fullPath = null;
 
             try
             {
@@ -99,6 +104,7 @@ namespace MawMvcApp.Controllers
                 {
                     stream = _uploadSvc.GetFile(User, downloadFiles[0]);
                     filename = Path.GetFileName(downloadFiles[0]);
+                    fullPath = _uploadSvc.GetAbsoluteFilePath(User, downloadFiles[0]);
                 }
                 else
                 {
@@ -106,7 +112,7 @@ namespace MawMvcApp.Controllers
                     filename = "download.zip";
                 }
 
-                return File(stream, GetContentType(filename), filename);
+                return File(stream, GetContentType(fullPath ?? filename), filename);
             }
             catch(Exception ex)
             {
@@ -117,9 +123,16 @@ namespace MawMvcApp.Controllers
         }
 
 
-        string GetContentType(string filename)
+        string GetContentType(string filePath)
         {
-            if(_contentTypeProvider.TryGetContentType(filename, out var contentType))
+            var mimeType = _linuxFileTypeIdentifier.GetMimeType(filePath);
+
+            if(!string.IsNullOrWhiteSpace(mimeType))
+            {
+                return mimeType;
+            }
+
+            if(_contentTypeProvider.TryGetContentType(filePath, out var contentType))
             {
                 return contentType;
             }

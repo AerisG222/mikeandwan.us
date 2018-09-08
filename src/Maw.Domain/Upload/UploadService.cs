@@ -37,16 +37,6 @@ namespace Maw.Domain.Upload
 
         public FileOperationResult DeleteFile(ClaimsPrincipal user, string relativePath)
         {
-            if(user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
-            if(string.IsNullOrWhiteSpace(relativePath))
-            {
-                throw new ArgumentNullException(nameof(relativePath));
-            }
-
             FileLocation location = null;
 
             var result = new FileOperationResult() {
@@ -56,20 +46,10 @@ namespace Maw.Domain.Upload
 
             try
             {
-                location = FileLocation.FromRelativePath(relativePath);
+                location = GetValidatedLocation(user, relativePath, true);
             }
             catch(Exception)
             {
-                _log.LogWarning($"Supplied RelativePath [{relativePath}] is invalid.");
-
-                result.Error = "Invalid file path";
-
-                return result;
-            }
-
-            if(!UserCanAccessFile(user, location)) {
-                _log.LogWarning($"User [{location.Username}] does not have access to [{location.RelativePath}].");
-
                 result.Error = "Invalid file path";
 
                 return result;
@@ -108,11 +88,6 @@ namespace Maw.Domain.Upload
 
         public IEnumerable<FileOperationResult> DeleteFiles(ClaimsPrincipal user, IEnumerable<string> relativePaths)
         {
-            if(user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
             if(relativePaths == null)
             {
                 throw new ArgumentNullException(nameof(relativePaths));
@@ -128,30 +103,17 @@ namespace Maw.Domain.Upload
         }
 
 
+        public string GetAbsoluteFilePath(ClaimsPrincipal user, string relativePath)
+        {
+            var location =  GetValidatedLocation(user, relativePath, true);
+
+            return GetAbsoluteFilePath(location);
+        }
+
+
         public Stream GetFile(ClaimsPrincipal user, string relativePath)
         {
-            if(user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
-            if(string.IsNullOrWhiteSpace(relativePath))
-            {
-                throw new ArgumentNullException(nameof(relativePath));
-            }
-
-            FileLocation location = null;
-
-            try
-            {
-                location = FileLocation.FromRelativePath(relativePath);
-            }
-            catch(Exception ex)
-            {
-                _log.LogError(ex, $"Unable to parse relative path [{relativePath}].");
-
-                throw;
-            }
+            var location = GetValidatedLocation(user, relativePath, true);
 
             if(!UserCanAccessFile(user, location))
             {
@@ -406,6 +368,41 @@ namespace Maw.Domain.Upload
                 CreationTime = fi.CreationTime,
                 SizeInBytes = fi.Length
             };
+        }
+
+
+        FileLocation GetValidatedLocation(ClaimsPrincipal user, string relativePath, bool verifyPermissions)
+        {
+            if(user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if(string.IsNullOrWhiteSpace(relativePath))
+            {
+                throw new ArgumentNullException(nameof(relativePath));
+            }
+
+            FileLocation location = null;
+
+            try
+            {
+                location = FileLocation.FromRelativePath(relativePath);
+            }
+            catch(Exception ex)
+            {
+                _log.LogError(ex, $"Unable to parse relative path [{relativePath}].");
+
+                throw;
+            }
+
+            if(verifyPermissions && !UserCanAccessFile(user, location)) {
+                _log.LogWarning($"User [{location.Username}] does not have access to [{location.RelativePath}].");
+
+                throw new ApplicationException();
+            }
+
+            return location;
         }
     }
 }

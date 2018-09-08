@@ -14,5 +14,6 @@ namespace Maw.Domain.Upload
         Stream GetFiles(ClaimsPrincipal user, IEnumerable<string> relativePaths);
         IEnumerable<UploadedFile> GetFileList(ClaimsPrincipal user);
         Task<FileOperationResult> SaveFileAsync(ClaimsPrincipal user, string filename, Stream stream);
+        string GetAbsoluteFilePath(ClaimsPrincipal user, string relativePath);
     }
 }

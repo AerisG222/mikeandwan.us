@@ -5,6 +5,7 @@ using Maw.Domain.Email;
 using Maw.Domain.Identity;
 using Maw.Domain.Photos;
 using Maw.Domain.Upload;
+using Maw.Domain.Utilities;
 using Maw.Domain.Videos;
 
 
@@ -17,6 +18,7 @@ namespace Maw.Domain
             services
                 .AddSingleton<IImageCropper, ImageCropper>()
                 .AddSingleton<IPhotoZipper, PhotoZipper>()
+                .AddSingleton<LinuxFileTypeIdentifier>()
                 .AddScoped<IBlogService, BlogService>()
                 .AddScoped<IPhotoService, PhotoService>()
                 .AddScoped<IVideoService, VideoService>()

@@ -15,7 +15,8 @@ import {
     DownloadServerFiles,
     DownloadServerFilesError,
     DeleteServerFilesSuccess,
-    FileAdded
+    FileAdded,
+    FileDeleted
 } from './upload.actions';
 import { HttpResponse } from '@angular/common/http';
 
@@ -138,7 +139,7 @@ export class UploadState {
     }
 
     @Action(FileAdded)
-    FileAdded(ctx: StateContext<UploadStateModel>, payload: FileAdded) {
+    fileAdded(ctx: StateContext<UploadStateModel>, payload: FileAdded) {
         const state = ctx.getState();
         const files = state.serverFiles;
 
@@ -146,20 +147,18 @@ export class UploadState {
             files.push(payload.file);
         }
 
-        ctx.setState({
-            ...state,
+        ctx.patchState({
             serverFiles: files
         });
     }
 
-    @Action(FileAdded)
-    FileDeleted(ctx: StateContext<UploadStateModel>, payload: FileAdded) {
+    @Action(FileDeleted)
+    fileDeleted(ctx: StateContext<UploadStateModel>, payload: FileAdded) {
         const state = ctx.getState();
         const files = state.serverFiles;
 
-        ctx.setState({
-            ...state,
-            serverFiles: files.filter(x => x.location.relativePath !== x.location.relativePath)
+        ctx.patchState({
+            serverFiles: files.filter(x => x.location.relativePath !== payload.file.location.relativePath)
         });
     }
 

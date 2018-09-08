@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { User } from 'oidc-client';
 import { Observable, from, BehaviorSubject } from 'rxjs';
@@ -19,7 +19,8 @@ export class UploadService {
 
     constructor(private _cfg: EnvironmentConfig,
                 private _http: HttpClient,
-                private _store: Store) {
+                private _store: Store,
+                private _zone: NgZone) {
         console.log('creating upload service');
         console.log(_store);
     }
@@ -98,13 +99,13 @@ export class UploadService {
         hub.on('FileAdded', (addedFile: IFileInfo) => {
             console.log('file added: ', addedFile);
 
-            this._store.dispatch(new FileAdded(addedFile));
+            this._zone.run(() => this._store.dispatch(new FileAdded(addedFile)));
         });
 
         hub.on('FileDeleted', (deletedFile: IFileInfo) => {
             console.log('file deleted: ', deletedFile);
 
-            this._store.dispatch(new FileDeleted(deletedFile));
+            this._zone.run(() => this._store.dispatch(new FileDeleted(deletedFile)));
         });
 
         hub.start()

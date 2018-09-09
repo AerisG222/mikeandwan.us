@@ -63,12 +63,12 @@ export class UploadState {
     initUploader(ctx: StateContext<UploadStateModel>) {
         console.log('uploadstate.initUploader');
 
-        const slice = <any> this._store.selectSnapshot(AuthState.getUser);
+        const user = this._store.selectSnapshot(AuthState.getUser);
 
         let token: string = null;
 
-        if (slice != null && slice !== undefined && slice.user != null && slice.user !== undefined) {
-            token = slice.user.access_token;
+        if (!!user === true) {
+            token = user.access_token;
         }
 
         ctx.patchState({

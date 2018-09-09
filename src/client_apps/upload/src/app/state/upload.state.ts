@@ -141,9 +141,9 @@ export class UploadState {
     @Action(FileAdded)
     fileAdded(ctx: StateContext<UploadStateModel>, payload: FileAdded) {
         const state = ctx.getState();
-        const files = state.serverFiles;
+        const files = state.serverFiles.slice(0);
 
-        if (!files.find(x => x.location.relativePath === payload.file.location.relativePath)) {
+        if (files.find(x => x.location.relativePath === payload.file.location.relativePath) === undefined) {
             files.push(payload.file);
         }
 

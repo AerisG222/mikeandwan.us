@@ -9,7 +9,7 @@ NG_APPS=(
     "money_spin"
     "photos"
     "time"
-    "upload-client"
+    "upload"
     "videos"
     "weekend_countdown"
 )

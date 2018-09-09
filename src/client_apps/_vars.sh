@@ -11,7 +11,7 @@ APPS=(
     "photos"
     "photos3d"
     "time"
-    "upload-client"
+    "upload"
     "videos"
     "webgl_cube"
     "webgl_shader"

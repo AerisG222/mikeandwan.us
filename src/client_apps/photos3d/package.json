@@ -6,8 +6,8 @@
   "description": "3D photo viewing application for www.mikeandwan.us",
   "devDependencies": {
     "@types/bootstrap": "^4.1.2",
-    "@types/three": "^0.92.14",
-    "rxjs": "^6.2.2",
+    "@types/three": "^0.92.18",
+    "rxjs": "^6.3.2",
     "ts-loader": "^4.4.2",
     "tslint": "^5.11.0",
     "typescript": "^2.9.2",
@@ -22,7 +22,7 @@
     "mousetrap": "^1.6.2",
     "oidc-client": "1.5.2",
     "stats.js": "^0.17.0",
-    "three": "^0.94.0",
+    "three": "^0.96.0",
     "tween.js": "^16.6.0"
   },
   "scripts": {

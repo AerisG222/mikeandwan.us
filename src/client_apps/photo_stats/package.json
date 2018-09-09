@@ -4,9 +4,9 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "ts-loader": "^4.4.2",
-    "typescript": "^2.9.2",
-    "webpack": "^4.16.3",
+    "ts-loader": "^5.0.0",
+    "typescript": "^3.0.3",
+    "webpack": "^4.17.2",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^3.1.0",
     "webpack-stats-plugin": "^0.2.1"
@@ -17,7 +17,7 @@
     "bundle-report": "webpack-bundle-analyzer dist/stats.json"
   },
   "dependencies": {
-    "d3": "5.5.0",
+    "d3": "5.7.0",
     "oidc-client": "1.5.2"
   }
 }

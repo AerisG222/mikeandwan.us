@@ -11,7 +11,7 @@ import { AuthState } from '../state/auth.state';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
 import { FileViewModel } from './file-view-model';
 import { map, takeUntil } from 'rxjs/operators';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { listItemAnimation } from '../animations/animations';
 
 @Component({
     selector: 'app-file-listing',
@@ -22,13 +22,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
         RelativeDatePipe
     ],
     animations: [
-        trigger('itemAnim', [
-            transition(':leave', [
-                animate('0.5s 0.2s ease', style({
-                    opacity: 0
-                }))
-            ])
-        ])
+        listItemAnimation
     ]
 })
 export class FileListingComponent implements OnInit, OnDestroy {

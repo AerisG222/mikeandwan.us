@@ -6,7 +6,7 @@ import { Select, Store } from '@ngxs/store';
 import { InitializeUploader } from '../state/upload.actions';
 import { FileSizePipe } from '../pipes/file-size.pipe';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
-import { trigger, transition, animate, style } from '@angular/animations';
+import { listItemAnimation } from '../animations/animations';
 
 @Component({
     selector: 'app-upload',
@@ -16,13 +16,7 @@ import { trigger, transition, animate, style } from '@angular/animations';
         FileSizePipe
     ],
     animations: [
-        trigger('itemAnim', [
-            transition(':leave', [
-                animate('0.5s 0.2s ease', style({
-                    opacity: 0
-                }))
-            ])
-        ])
+        listItemAnimation
     ]
 })
 export class UploadComponent implements OnInit {

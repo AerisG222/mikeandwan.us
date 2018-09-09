@@ -29,6 +29,7 @@ update_ngcli() {
     ng update @angular/cli \
               @angular/core \
               @angular-devkit/build-angular \
+              @ng-bootstrap/ng-bootstrap \
               core-js \
               codelyzer \
               zone.js

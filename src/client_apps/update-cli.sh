@@ -26,11 +26,12 @@ update_ngcli() {
 
     # clean and install new cli
     npm install --save-dev ${CLI_VERSION}
-    ng update @angular/cli
-    ng update @angular/core
-    ng update @angular-devkit/build-angular
-    ng update core-js
-    ng update codelyzer
+    ng update @angular/cli \
+              @angular/core \
+              @angular-devkit/build-angular \
+              core-js \
+              codelyzer \
+              zone.js
 
     cd ..
 }

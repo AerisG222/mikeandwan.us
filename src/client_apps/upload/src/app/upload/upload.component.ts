@@ -6,6 +6,7 @@ import { Select, Store } from '@ngxs/store';
 import { InitializeUploader } from '../state/upload.actions';
 import { FileSizePipe } from '../pipes/file-size.pipe';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
+import { trigger, transition, animate, style } from '@angular/animations';
 
 @Component({
     selector: 'app-upload',
@@ -13,6 +14,15 @@ import { SvgIcon } from '../svg-icon/svg-icon.enum';
     styleUrls: ['./upload.component.css'],
     providers: [
         FileSizePipe
+    ],
+    animations: [
+        trigger('itemAnim', [
+            transition(':leave', [
+                animate('0.5s 0.2s ease', style({
+                    opacity: 0
+                }))
+            ])
+        ])
     ]
 })
 export class UploadComponent implements OnInit {
@@ -29,7 +39,11 @@ export class UploadComponent implements OnInit {
         this._store.dispatch(new InitializeUploader());
     }
 
-    public fileOverBase(e: any): void {
+    fileOverBase(e: any): void {
         this.hasBaseDropZoneOver = e;
+    }
+
+    trackByFile(index, item) {
+        return item.file.name;
     }
 }

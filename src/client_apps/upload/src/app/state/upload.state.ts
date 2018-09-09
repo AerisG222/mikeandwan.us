@@ -74,7 +74,8 @@ export class UploadState {
         ctx.patchState({
             uploader: new FileUploader({
                 url: this._uploadService.getAbsoluteUrl('upload/upload'),
-                authToken: `Bearer ${token}`
+                authToken: `Bearer ${token}`,
+                removeAfterUpload: true
             })
         });
     }

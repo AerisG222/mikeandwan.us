@@ -7,8 +7,8 @@
 DEBUG=y
 SSH_REMOTE_HOST=tifa
 SSH_USERNAME=mmorano
-PATH_SIZE_PHOTOS="/home/mmorano/git/SizePhotos/src/SizePhotos/bin/Debug/netcoreapp2.0/SizePhotos.dll"
-PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup/bin/Debug/netcoreapp2.0/GlacierBackup.dll"
+PATH_SIZE_PHOTOS="/home/mmorano/git/SizePhotos/src/SizePhotos/bin/Release/netcoreapp2.1/SizePhotos.dll"
+PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup/bin/Release/netcoreapp2.1/GlacierBackup.dll"
 PATH_ASSET_ROOT="/srv/www/website_assets"
 PATH_IMAGE_SOURCE=
 CAT_NAME=
@@ -55,7 +55,7 @@ if [ "${PREVIEWMODE}" = 'y' ]; then
     echo '  After you are done with your review, hit <enter> to proceed.'
     echo '****'
     echo ''
-    
+
     read -rsp $'Press enter to continue, or CTL-C to exit...\n'
 fi
 
@@ -95,7 +95,7 @@ if [ -d "${DEST_IMAGES_CATEGORY_ROOT}" ]; then
     echo '  If you are trying to add images to a previously published directory, you must do this manually.'
     echo '  Otherwise, please give the directory a unique name and then try again.'
     echo '****'
-    
+
     exit
 fi
 

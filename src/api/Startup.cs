@@ -18,7 +18,8 @@ using Maw.Domain;
 using Maw.Domain.Upload;
 using Maw.Security;
 using MawApi.Hubs;
-
+using Microsoft.Extensions.FileProviders;
+using NMagickWand;
 
 namespace MawApi
 {
@@ -30,6 +31,8 @@ namespace MawApi
         public Startup(IConfiguration config)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
+
+            MagickWandEnvironment.Genesis();
         }
 
 

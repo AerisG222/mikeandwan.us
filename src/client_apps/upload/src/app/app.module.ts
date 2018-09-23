@@ -25,6 +25,7 @@ import { RelativeDatePipe } from './pipes/relative-date.pipe';
 import { SvgIconComponent } from './svg-icon/svg-icon.component';
 import { FocusRemoverDirective } from './directives/focus-remover.directive';
 import { DownloadHandlerComponent } from './download-handler/download-handler.component';
+import { FileThumbnailComponent } from './file-thumbnail/file-thumbnail.component';
 
 @NgModule({
     imports: [
@@ -64,7 +65,8 @@ import { DownloadHandlerComponent } from './download-handler/download-handler.co
         SignInComponent,
         SvgIconComponent,
         UploadComponent,
-        DownloadHandlerComponent
+        DownloadHandlerComponent,
+        FileThumbnailComponent
     ],
     providers: [
         AuthService,

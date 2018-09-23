@@ -5,6 +5,7 @@
 <table *ngIf="files.length > 0" class="table table-striped table-hover table-sm">
     <tr>
         <th *ngIf="showUsername$ | async">User</th>
+        <th></th>
         <th>Filename</th>
         <th>Uploaded</th>
         <th>Size</th>
@@ -14,22 +15,23 @@
     </tr>
 
     <tr *ngFor="let file of files; trackBy: trackByFile" [@listItemAnimation]>
-        <td *ngIf="showUsername$ | async">{{file.location.username}}</td>
-        <td>{{file.location.filename}}</td>
-        <td>{{file.creationTime | relativeDate}}</td>
-        <td>{{file.sizeInBytes | fileSize}}</td>
-        <td class="text-center text-success">
+        <td *ngIf="showUsername$ | async" class="align-middle">{{file.location.username}}</td>
+        <td class="align-middle"><app-file-thumbnail [relativeFilePath]="file.location.relativePath"></app-file-thumbnail></td>
+        <td class="align-middle">{{file.location.filename}}</td>
+        <td class="align-middle">{{file.creationTime | relativeDate}}</td>
+        <td class="align-middle">{{file.sizeInBytes | fileSize}}</td>
+        <td class="align-middle text-center text-success">
             <app-svg-icon [icon]="svgIcon.Download" [klass]="'hover mr-2'" (click)="downloadSingle(file)"></app-svg-icon>
         </td>
-        <td class="text-center text-danger">
+        <td class="align-middle text-center text-danger">
             <app-svg-icon [icon]="svgIcon.Trash" [klass]="'hover mr-2'" (click)="deleteSingle(file)"></app-svg-icon>
         </td>
-        <td class="text-center"><input type="checkbox" [(ngModel)]="file.isChecked" /></td>
+        <td class="align-middle text-center"><input type="checkbox" class="mt-2" [(ngModel)]="file.isChecked" /></td>
     </tr>
 
     <tr>
         <td *ngIf="showUsername$ | async"></td>
-        <td colspan="6" class="text-right">
+        <td colspan="7" class="text-right">
             <button type="submit" (click)="downloadSelected()" class="btn btn-primary btn-sm ml-2" appFocusRemover>
                 <app-svg-icon [icon]="svgIcon.Download"></app-svg-icon> Download Selected
             </button>

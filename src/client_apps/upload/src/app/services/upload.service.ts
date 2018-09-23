@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { User } from 'oidc-client';
 import { Observable, from, BehaviorSubject } from 'rxjs';
-import { filter, switchMap } from 'rxjs/operators';
+import { filter, switchMap, map } from 'rxjs/operators';
 import { HubConnectionBuilder, LogLevel } from '@aspnet/signalr';
 
 import { IFileInfo } from '../models/ifile-info';
@@ -60,8 +60,22 @@ export class UploadService {
             .post(url, files, { responseType: 'blob', observe: 'response' });
     }
 
+    loadThumbnail(relativeUrl: string) {
+        const url = this.getThumbnailUrl(relativeUrl);
+
+        return this._http
+            .get(url, {responseType: 'blob'})
+            .pipe(
+                map(e => URL.createObjectURL(e))
+            );
+    }
+
     getAbsoluteUrl(relativeUrl: string) {
         return `${this._cfg.apiUrl}/${relativeUrl}`;
+    }
+
+    private getThumbnailUrl(relativeUrl: string) {
+        return this.getAbsoluteUrl(`upload/thumbnail/${encodeURIComponent(relativeUrl)}`);
     }
 
     // TODO: determine if there is a more reactive way to get the hub connection

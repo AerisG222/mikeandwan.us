@@ -11,11 +11,12 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Maw.Domain.Photos;
 using Maw.Domain.Upload;
 using Maw.Domain.Utilities;
 using Maw.Security;
 using MawApi.Hubs;
-
+using System.Net;
 
 namespace MawMvcApp.Controllers
 {
@@ -120,6 +121,36 @@ namespace MawMvcApp.Controllers
 
                 return BadRequest();
             }
+        }
+
+
+        [HttpGet("thumbnail/{relativePath}")]
+        public IActionResult Thumbnail(string relativePath)
+        {
+            if(string.IsNullOrWhiteSpace(relativePath))
+            {
+                return BadRequest();
+            }
+
+            relativePath = WebUtility.UrlDecode(relativePath);
+
+            var type = GetContentType(relativePath);
+
+            if(type.StartsWith("image", StringComparison.OrdinalIgnoreCase))
+            {
+                _log.LogDebug("GOT HERE");
+
+                var stream = _uploadSvc.GetThumbnail(User, relativePath, 48);
+
+                _log.LogDebug("STREAM NULL?: " + (stream == null));
+
+                if(stream != null)
+                {
+                    return File(stream, "image/jpeg");
+                }
+            }
+
+            return BadRequest();
         }
 
 

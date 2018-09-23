@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Maw.Security;
-
+using NMagickWand;
+using NMagickWand.Enums;
 
 namespace Maw.Domain.Upload
 {
@@ -282,6 +283,49 @@ namespace Maw.Domain.Upload
             }
 
             return result;
+        }
+
+
+        public Stream GetThumbnail(ClaimsPrincipal user, string relativePath, int maxDimension)
+        {
+            FileLocation location = null;
+
+            location = GetValidatedLocation(user, relativePath, true);
+
+            var absolutePath = Path.Combine(_cfg.RootDirectory, location.RelativePath);
+
+            if(!File.Exists(absolutePath))
+            {
+                return null;
+            }
+
+            using(var mw = new MagickWand(absolutePath))
+            {
+                if(mw.ImageWidth > 256 || mw.ImageHeight > 256)
+                {
+                    // crop 20%
+                    var xoffset = Convert.ToInt32(mw.ImageWidth * 0.1);
+                    var yoffset = Convert.ToInt32(mw.ImageHeight * 0.1);
+                    var newWidth = mw.ImageWidth - (2 * xoffset);
+                    var newHeight = mw.ImageHeight - (2 * yoffset);
+
+                    mw.CropImage((uint)newWidth, (uint)newHeight, xoffset, yoffset);
+                }
+
+                var leftPos = (mw.ImageWidth / 2) - (maxDimension / 2);
+                var topPos = (mw.ImageHeight / 2) - (maxDimension / 2);
+
+                var ms = new MemoryStream();
+
+                mw.ResizeImage((uint)maxDimension, (uint)maxDimension, FilterTypes.Lanczos2SharpFilter, 1);
+                mw.Compression = CompressionType.JPEGCompression;
+                mw.CompressionQuality = 72;
+                mw.WriteImage(ms);
+
+                ms.Seek(0, SeekOrigin.Begin);
+
+                return ms;
+            }
         }
 
 

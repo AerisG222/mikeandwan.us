@@ -22,7 +22,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "networking", Item = "networking-file-size" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "networking", Item = "networking-file-size" };
+    }
+    <partial name="_ToolSidebar" model="sidebarModel" />
 }
 
 <p>

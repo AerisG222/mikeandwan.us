@@ -9,7 +9,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-formatting-numbers" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "dotnet", Item = "dotnet-formatting-numbers" };
+    }
+    <partial name="_ToolSidebar" model="sidebarModel" />
 }
 
 <p>
@@ -17,4 +20,4 @@
     for the set of examples below, we use a double value unless otherwise stated.
 </p>
 
-@await Html.PartialAsync("_DotnetFormatExampleGroupListing", Model)
+<partial name="_DotnetFormatExampleGroupListing" model="Model" />

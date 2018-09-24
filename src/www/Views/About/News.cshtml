@@ -9,7 +9,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_AboutSidebar", "news")
+    @{
+        var sidebarModel = "news";
+    }
+    <partial name="_AboutSidebar" model="sidebarModel" />
 }
 
 @foreach(var post in Model) {

@@ -8,7 +8,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "binaryclock", Item = "binary-clock-about" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "binaryclock", Item = "binary-clock-about" };
+    }
+    <partial name="_ToolSidebar" model="sidebarModel" />
 }
 
 @section custom_head {

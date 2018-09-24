@@ -11,8 +11,8 @@
 }
 
 @section scripts_footer {
-	@await Html.PartialAsync("_js_GoogleMaps")
-    @await Html.PartialAsync("_js_Pixastic")
+	<partial name="_js_GoogleMaps" />
+    <partial name="_js_Pixastic" />
     <script type="text/javascript" src="/js/photos/runtime.js"></script>
     <script type="text/javascript" src="/js/photos/polyfills.js"></script>
     <script type="text/javascript" src="/js/photos/main.js"></script>

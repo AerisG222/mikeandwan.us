@@ -4,7 +4,7 @@
 }
 
 @section custom_head {
-    @await Html.PartialAsync("_css_Reveal")
+    <partial name="_css_Reveal" />
 }
 
 <div class="reveal">
@@ -157,7 +157,7 @@
     </div>
 </div>
 
-@await Html.PartialAsync("_js_Reveal")
+<partial name="_js_Reveal" />
 <script>
     document.addEventListener('DOMContentLoaded', function(event) {
         // Full list of configuration options available at:

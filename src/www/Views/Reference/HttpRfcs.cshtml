@@ -8,7 +8,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ReferenceSidebar", new SidebarModel() { Group = "http", Item = "http-rfcs" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "http", Item = "http-rfcs" };
+    }
+    <partial name="_ReferenceSidebar" model="sidebarModel" />
 }
 
 <p>This page provides a list of HTTP related RFCs.</p>

@@ -8,7 +8,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ReferenceSidebar", new SidebarModel() { Group = "html", Item = "html-colors" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "html", Item = "html-colors" };
+    }
+    <partial name="_ReferenceSidebar" model="sidebarModel" />
 }
 
 <p>

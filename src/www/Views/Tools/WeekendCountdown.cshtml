@@ -22,7 +22,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "general", Item = "weekend-countdown" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "general", Item = "weekend-countdown" };
+    }
+    <partial name="_ToolSidebar" model="sidebarModel" />
 }
 
 <section>

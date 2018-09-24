@@ -9,7 +9,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "xsd-validate" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "dotnet", Item = "xsd-validate" };
+    }
+    <partial name="_ToolSidebar" model="sidebarModel" />
 }
 
 @if(Model.HasErrors) {

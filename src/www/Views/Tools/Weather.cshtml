@@ -8,7 +8,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "general", Item = "weather" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "general", Item = "weather" };
+    }
+    <partial name="_ToolSidebar" model="sidebarModel" />
 }
 
 <a href="https://www.accuweather.com/en/us/boston-ma/02108/current-weather/348735" class="aw-widget-legal">

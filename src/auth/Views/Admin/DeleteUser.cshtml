@@ -13,7 +13,11 @@
     <a asp-action="Index" asp-controller="Admin"><svg-icon icon="Cog"></svg-icon></a>
 }
 
-@await Html.PartialAsync("_identityResult", new IdentityResultModel("user", Model.Result))
+@{
+    var resultModel = new IdentityResultModel("user", Model.Result);
+}
+
+<partial name="_identityResult" model="resultModel" />
 
 @if(Model.Result == null || !Model.Result.Succeeded) {
 	<form asp-controller="admin" asp-action="deleteuser" method="post" autocomplete="off" role="form">

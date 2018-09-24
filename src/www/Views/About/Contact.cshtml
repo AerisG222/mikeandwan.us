@@ -5,11 +5,14 @@
 }
 
 @section scripts_head {
-    @await Html.PartialAsync("_js_GoogleRecaptcha")
+    <partial name="_js_GoogleRecaptcha" />
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_AboutSidebar", "contact")
+    @{
+        var sidebarModel = "contact";
+    }
+    <partial name="_AboutSidebar" model="sidebarModel" />
 }
 
 @section header {
@@ -81,7 +84,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col">
-                    @await Html.PartialAsync("_GoogleRecaptcha", @Model.RecaptchaSiteKey)
+                    <partial name="_GoogleRecaptcha" for="RecaptchaSiteKey" />
                     @*<span asp-validation-for="IsHuman" class="form-text"></span>*@
                 </div>
             </div>

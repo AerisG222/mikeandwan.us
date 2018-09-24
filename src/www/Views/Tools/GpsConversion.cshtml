@@ -10,7 +10,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "general", Item = "gps-conversion" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "general", Item = "gps-conversion" };
+    }
+    <partial name="_ToolSidebar" model="sidebarModel" />
 }
 
 <p>

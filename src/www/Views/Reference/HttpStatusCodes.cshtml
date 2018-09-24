@@ -8,7 +8,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ReferenceSidebar", new SidebarModel() { Group = "http", Item = "http-status-codes" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "http", Item = "http-status-codes" };
+    }
+    <partial name="_ReferenceSidebar" model="sidebarModel" />
 }
 
 <p>

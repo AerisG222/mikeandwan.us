@@ -9,7 +9,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "date-diff" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "dotnet", Item = "date-diff" };
+    }
+    <partial name="_ToolSidebar" model="sidebarModel" />
 }
 
 @if(Model.HasErrors) {

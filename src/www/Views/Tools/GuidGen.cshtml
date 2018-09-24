@@ -8,7 +8,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "general", Item = "guid-gen" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "general", Item = "guid-gen" };
+    }
+    <partial name="_ToolSidebar" model="sidebarModel" />
 }
 
 <p>This page allows you to generate GUIDs.  To get a new GUID, keep refreshing this page.</p>

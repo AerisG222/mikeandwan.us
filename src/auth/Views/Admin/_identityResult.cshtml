@@ -9,7 +9,7 @@
 		<div class="alert alert-danger">
 		    There was an error trying to edit or create the @Model.EntityName:
 		</div>
-		@await Html.PartialAsync("_identityErrors", Model.Result.Errors)
+        <partial name="_identityErrors" for="Result.Errors" />
 		<div class="text-danger" asp-validation-summary="All"></div>
 	}
 }

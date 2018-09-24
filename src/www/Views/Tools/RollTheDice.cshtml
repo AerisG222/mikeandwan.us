@@ -9,7 +9,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "general", Item = "roll-the-dice" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "general", Item = "roll-the-dice" };
+    }
+    <partial name="_ToolSidebar" model="sidebarModel" />
 }
 
 @if(Model.HasErrors) {

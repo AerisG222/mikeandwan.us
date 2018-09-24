@@ -8,7 +8,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ReferenceSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-guidelines-fundamentals" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "dotnet", Item = "dotnet-guidelines-fundamentals" };
+    }
+    <partial name="_ReferenceSidebar" model="sidebarModel" />
 }
 
 <p>The following items are called out as points to remember in this excellent book by Krzysztof Cwalina and Brad Abrams.</p>

@@ -2,12 +2,12 @@
 
 @section custom_head {
 	@await RenderSectionAsync("custom_head", required: false)
-	@await Html.PartialAsync("_Favicons")
+	<partial name="_Favicons" />
 	<meta name="theme-color" content="#272b30">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine:bold" />
-	@await Html.PartialAsync("_css_site")
+	<partial name="_css_site" />
 	@await RenderSectionAsync("stylesheets", required: false)
-	@await Html.PartialAsync("_js_Modernizr")
+	<partial name="_js_Modernizr" />
 	@await RenderSectionAsync("scripts_head", required: false)
 }
 
@@ -35,6 +35,6 @@
 
 <mini-profiler />
 
-@await Html.PartialAsync("_js_Bootstrap")
+<partial name="_js_Bootstrap" />
 @await RenderSectionAsync("scripts_footer", required: false)
-@await Html.PartialAsync("_js_GoogleAnalytics")
+<partial name="_js_GoogleAnalytics" />

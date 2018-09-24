@@ -14,7 +14,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "general", Item = "browser-hell" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "general", Item = "browser-hell" };
+    }
+    <partial name="_ToolSidebar" model="sidebarModel" />
 }
 
 <p>

@@ -8,7 +8,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_AboutSidebar", "index")
+    @{
+        var sidebarModel = "index";
+    }
+    <partial name="_AboutSidebar" model="sidebarModel" />
 }
 
 <img class="img-fluid center-block" src="/images/2011/dinner_with_friends/md/DSC_7713.jpg" />

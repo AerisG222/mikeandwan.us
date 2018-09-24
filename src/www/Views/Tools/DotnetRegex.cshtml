@@ -10,7 +10,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "dotnet", Item = "dotnet-regex" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "dotnet", Item = "dotnet-regex" };
+    }
+    <partial name="_ToolSidebar" model="sidebarModel" />
 }
 
 @if(Model.HasErrors) {

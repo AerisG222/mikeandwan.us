@@ -13,7 +13,11 @@
     <a asp-action="Index" asp-controller="Admin"><svg-icon icon="Cog"></svg-icon></a>
 }
 
-@await Html.PartialAsync("_identityResult", new IdentityResultModel("user role assignments", Model.Result))
+@{
+    var resultModel = new IdentityResultModel("user role assignments", Model.Result);
+}
+
+<partial name="_identityResult" model="resultModel" />
 
 <form asp-controller="admin" asp-action="managerolesforuser" method="post" autocomplete="off" role="form">
 	<input asp-for="Username" type="hidden" />

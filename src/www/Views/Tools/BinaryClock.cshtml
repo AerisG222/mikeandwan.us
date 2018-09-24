@@ -23,7 +23,10 @@
 }
 
 @section sidebar {
-    @await Html.PartialAsync("_ToolSidebar", new SidebarModel() { Group = "binaryclock", Item = "binary-clock" })
+    @{
+        var sidebarModel = new SidebarModel() { Group = "binaryclock", Item = "binary-clock" };
+    }
+    <partial name="_ToolSidebar" model="sidebarModel" />
 }
 
 <section>

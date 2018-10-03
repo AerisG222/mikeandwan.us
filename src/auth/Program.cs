@@ -61,7 +61,6 @@ namespace MawAuth
                 .UseDefaultServiceProvider((context, options) => {
                     options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
                 })
-                .UseLinuxTransport()
                 .UseStartup<Startup>()
                 .Build()
                 .Run();

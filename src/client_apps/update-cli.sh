@@ -32,7 +32,8 @@ update_ngcli() {
               @ng-bootstrap/ng-bootstrap \
               core-js \
               codelyzer \
-              zone.js
+              zone.js \
+              webpack-bundle-analyzer
 
     cd ..
 }

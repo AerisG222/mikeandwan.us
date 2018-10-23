@@ -36,7 +36,7 @@ import { FocusRemoverDirective } from './focus-remover.directive';
         BrowserAnimationsModule,
         FormsModule,
         HttpClientModule,
-        NgbModule.forRoot(),
+        NgbModule,
         RouterModule.forRoot([
             { path: '',                component: YearListComponent,     canActivate: [AuthGuardService] },
             { path: 'signin-oidc',     component: SignInComponent },

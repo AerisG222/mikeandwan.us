@@ -56,7 +56,7 @@ import { FocusRemoverDirective } from './focus-remover.directive';
         BrowserAnimationsModule,
         FormsModule,
         HttpClientModule,
-        NgbModule.forRoot(),
+        NgbModule,
         RouterModule.forRoot([
             // tslint:disable-next-line:max-line-length
             { path: '',                     component: ModeComponent,         canActivate: [AuthGuardService], data: { animation: 'home' } },

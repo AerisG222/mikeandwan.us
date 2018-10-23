@@ -1,5 +1,5 @@
-import { Observable, Observer } from 'rxjs';
-import { zip } from 'rxjs/operators';
+import { Observable, Observer, zip } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { PhotoSource } from './photo-source.model';
 import { PhotoDataService } from './photo-data.service';
@@ -18,9 +18,10 @@ export class CategoryPhotoSource extends PhotoSource {
             const catObs = this.getCategoryObservable();
             const photoObs = this.getPhotoObservable();
 
-            catObs.pipe(
-                    zip(photoObs, (c, p) => {
-                        return { category: c, photos: p };
+            zip(catObs, photoObs)
+                .pipe(
+                    map(r => {
+                        return { category: r[0], photos: r[1] };
                     })
                 )
                 .subscribe((result: any) => {

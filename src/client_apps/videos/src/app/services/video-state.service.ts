@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { Config } from './config.model';
-import { LocalStorageService } from '../shared/local-storage.service';
+import { Config } from '../models/config.model';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable()
 export class VideoStateService {

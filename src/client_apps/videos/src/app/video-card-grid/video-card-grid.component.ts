@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { IVideo } from '../shared/ivideo.model';
+import { IVideo } from '../models/ivideo.model';
 
 @Component({
     selector: 'app-video-card-grid',

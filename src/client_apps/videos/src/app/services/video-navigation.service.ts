@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
-import { BreadcrumbService } from '../shared/breadcrumb.service';
-import { Breadcrumb } from '../shared/breadcrumb.model';
-import { ICategory } from './icategory.model';
+import { BreadcrumbService } from './breadcrumb.service';
+import { Breadcrumb } from '../models/breadcrumb.model';
 import { VideoDataService } from './video-data.service';
+import { ICategory } from '../models/icategory.model';
 
 @Injectable()
 export class VideoNavigationService {

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { state, style, transition, trigger, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../shared/animation';
-import { VideoDataService } from '../shared/video-data.service';
-import { VideoNavigationService } from '../shared/video-navigation.service';
+import { fadeIn, fadeOut } from '../animations/animation';
+import { VideoDataService } from '../services/video-data.service';
 import { Observable } from 'rxjs';
+import { VideoNavigationService } from '../services/video-navigation.service';
 
 @Component({
     selector: 'app-year-list',

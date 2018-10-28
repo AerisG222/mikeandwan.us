@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../shared/auth-service';
-import { VideoNavigationService } from '../shared/video-navigation.service';
+import { AuthService } from '../services/auth-service';
+import { VideoNavigationService } from '../services/video-navigation.service';
 
 @Component({
     selector: 'app-sign-in',

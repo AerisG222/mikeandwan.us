@@ -1,6 +1,6 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 
-import { ICategory } from '../shared/icategory.model';
+import { ICategory } from '../models/icategory.model';
 
 @Component({
     selector: 'app-category-card-grid',

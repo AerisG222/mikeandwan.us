@@ -6,30 +6,30 @@ import { RouterModule } from '@angular/router';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { AuthGuardService } from './shared/auth-guard.service';
+import { AuthGuardService } from './services/auth-guard.service';
 import { AppComponent } from './app.component';
-import { AuthService } from './shared/auth-service';
-import { AuthInterceptor } from './shared/auth-interceptor';
+import { AuthService } from './services/auth-service';
+import { AuthInterceptor } from './services/auth-interceptor';
 import { BreadcrumbListComponent } from './breadcrumb-list/breadcrumb-list.component';
-import { BreadcrumbService } from './shared/breadcrumb.service';
+import { BreadcrumbService } from './services/breadcrumb.service';
 import { CategoryCardComponent } from './category-card/category-card.component';
 import { CategoryCardGridComponent } from './category-card-grid/category-card-grid.component';
 import { CategoryListComponent } from './category-list/category-list.component';
 import { HeaderComponent } from './header/header.component';
-import { LocalStorageService } from './shared/local-storage.service';
+import { LocalStorageService } from './services/local-storage.service';
 import { PreferenceDialogComponent } from './preference-dialog/preference-dialog.component';
 import { VideoListComponent } from './video-list/video-list.component';
 import { YearListComponent } from './year-list/year-list.component';
-import { SizeService } from './shared/size.service';
+import { SizeService } from './services/size.service';
 import { SvgIconComponent } from './svg-icon/svg-icon.component';
 import { VideoCardComponent } from './video-card/video-card.component';
 import { VideoCardGridComponent } from './video-card-grid/video-card-grid.component';
-import { VideoDataService } from './shared/video-data.service';
-import { VideoNavigationService } from './shared/video-navigation.service';
-import { VideoStateService } from './shared/video-state.service';
+import { VideoDataService } from './services/video-data.service';
+import { VideoStateService } from './services/video-state.service';
 import { SignInComponent } from './sign-in/sign-in.component';
-import { EnvironmentConfig } from './shared/environment-config';
+import { EnvironmentConfig } from './models/environment-config';
 import { FocusRemoverDirective } from './focus-remover.directive';
+import { VideoNavigationService } from './services/video-navigation.service';
 
 @NgModule({
     imports: [

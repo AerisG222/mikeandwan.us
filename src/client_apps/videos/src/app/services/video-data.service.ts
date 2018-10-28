@@ -2,9 +2,9 @@ import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { ICategory } from './icategory.model';
-import { IVideo } from './ivideo.model';
-import { EnvironmentConfig } from './environment-config';
+import { ICategory } from '../models/icategory.model';
+import { IVideo } from '../models/ivideo.model';
+import { EnvironmentConfig } from '../models/environment-config';
 
 @Injectable()
 export class VideoDataService {

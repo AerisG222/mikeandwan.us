@@ -2,11 +2,11 @@ import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { trigger, state, style, transition, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../shared/animation';
-import { ICategory } from '../shared/icategory.model';
-import { VideoNavigationService } from '../shared/video-navigation.service';
-import { VideoDataService } from '../shared/video-data.service';
+import { fadeIn, fadeOut } from '../animations/animation';
+import { ICategory } from '../models/icategory.model';
 import { Observable } from 'rxjs';
+import { VideoDataService } from '../services/video-data.service';
+import { VideoNavigationService } from '../services/video-navigation.service';
 
 @Component({
     selector: 'app-category-list',

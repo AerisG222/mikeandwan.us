@@ -2,13 +2,13 @@ import { Component, ChangeDetectorRef, AfterViewInit, OnInit } from '@angular/co
 import { ActivatedRoute } from '@angular/router';
 import { state, style, transition, trigger, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../shared/animation';
-import { IVideo } from '../shared/ivideo.model';
-import { IVideoInfo } from '../shared/ivideo-info.model';
-import { VideoDataService } from '../shared/video-data.service';
-import { VideoNavigationService } from '../shared/video-navigation.service';
-import { VideoStateService } from '../shared/video-state.service';
+import { fadeIn, fadeOut } from '../animations/animation';
+import { IVideo } from '../models/ivideo.model';
+import { IVideoInfo } from '../models/ivideo-info.model';
+import { VideoDataService } from '../services/video-data.service';
+import { VideoStateService } from '../services/video-state.service';
 import { Observable } from 'rxjs';
+import { VideoNavigationService } from '../services/video-navigation.service';
 
 @Component({
     selector: 'app-video-list',

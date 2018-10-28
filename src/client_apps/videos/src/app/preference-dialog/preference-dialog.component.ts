@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { VideoStateService } from '../shared/video-state.service';
+import { VideoStateService } from '../services/video-state.service';
 
 @Component({
     selector: 'app-preference-dialog',

@@ -1,16 +1,12 @@
-import { Component, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { trigger, state, style, transition, useAnimation } from '@angular/animations';
-
-import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 
 import { fadeIn, fadeOut } from '../shared/animation';
 import { ICategory } from '../shared/icategory.model';
 import { VideoNavigationService } from '../shared/video-navigation.service';
-import { SizeService } from '../shared/size.service';
 import { VideoDataService } from '../shared/video-data.service';
-import { VideoStateService } from '../shared/video-state.service';
-import { Config } from '../shared/config.model';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-category-list',
@@ -24,32 +20,25 @@ import { Config } from '../shared/config.model';
         ])
     ]
 })
-export class CategoryListComponent implements AfterViewInit {
+export class CategoryListComponent implements OnInit {
     year = -1;
     page = 1;
-    categoryList: Array<ICategory> = [];
+    categoryList$: Observable<ICategory[]>;
     cardsPerPage = 24;
 
-    constructor(private _sizeService: SizeService,
-                private _dataService: VideoDataService,
-                private _stateService: VideoStateService,
+    constructor(private _dataService: VideoDataService,
                 private _navService: VideoNavigationService,
                 private _changeDetectionRef: ChangeDetectorRef,
                 private _activatedRoute: ActivatedRoute) {
 
     }
 
-    ngAfterViewInit(): void {
+    ngOnInit(): void {
         this._activatedRoute.params.subscribe(params => {
             this.year = parseInt(params['year'], 10);
 
-            this._dataService.getCategoriesForYear(this.year)
-                .subscribe(
-                    (categories: Array<ICategory>) => {
-                        this.categoryList = categories;
-                    },
-                    (err: any) => console.error(`there was an error: ${err}`)
-                );
+            this.categoryList$ = this._dataService
+                .getCategoriesForYear(this.year);
 
             this._changeDetectionRef.detectChanges();
         });

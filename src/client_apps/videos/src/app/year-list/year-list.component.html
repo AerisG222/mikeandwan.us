@@ -1,7 +1,7 @@
 <div class="row" [@fadeInOut]="'in'">
     <div class="col">
         <ul class="select-list">
-            <li *ngFor="let year of years">
+            <li *ngFor="let year of years$ | async">
                 <button type="button" class="btn btn-primary btn-sm" (click)="selectItem(year)" appFocusRemover>{{year}}</button>
             </li>
         </ul>

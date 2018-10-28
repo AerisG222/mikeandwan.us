@@ -4,6 +4,7 @@ import { state, style, transition, trigger, useAnimation } from '@angular/animat
 import { fadeIn, fadeOut } from '../shared/animation';
 import { VideoDataService } from '../shared/video-data.service';
 import { VideoNavigationService } from '../shared/video-navigation.service';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-year-list',
@@ -19,7 +20,7 @@ import { VideoNavigationService } from '../shared/video-navigation.service';
 })
 export class YearListComponent implements OnInit {
     year = -1;
-    years: Array<number> = [];
+    years$: Observable<number[]>;
 
     constructor(private _dataService: VideoDataService,
                 private _navService: VideoNavigationService) {
@@ -31,10 +32,7 @@ export class YearListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this._dataService.getYears()
-            .subscribe(
-            (data: Array<number>) => this.years = data,
-            (err: any) => console.error(`there was an error: ${err}`)
-            );
+        this.years$ = this._dataService
+            .getYears();
     }
 }

@@ -11,9 +11,9 @@
     <div class="col">
         <div class="row">
             <div class="col mt-3">
-                <ngb-pagination [collectionSize]="videoList.length" [pageSize]="cardsPerPage" [size]="'sm'" [(page)]="page"></ngb-pagination>
+                <ngb-pagination [collectionSize]="(videoList$ | async)?.length" [pageSize]="cardsPerPage" [size]="'sm'" [(page)]="page"></ngb-pagination>
             </div>
         </div>
-        <app-video-card-grid [cardsPerPage]="cardsPerPage" [videoList]="videoList" [page]="page" [activeVideo]="currentVideo" (videoSelected)="onVideoSelected($event)"></app-video-card-grid>
+        <app-video-card-grid [cardsPerPage]="cardsPerPage" [videoList]="videoList$ | async" [page]="page" [activeVideo]="currentVideo" (videoSelected)="onVideoSelected($event)"></app-video-card-grid>
     </div>
 </div>

@@ -1,16 +1,14 @@
-import { Component, ViewChild, ChangeDetectorRef, AfterViewInit, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, AfterViewInit, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { state, style, transition, trigger, useAnimation } from '@angular/animations';
-
-import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 
 import { fadeIn, fadeOut } from '../shared/animation';
 import { IVideo } from '../shared/ivideo.model';
 import { IVideoInfo } from '../shared/ivideo-info.model';
-import { SizeService } from '../shared/size.service';
 import { VideoDataService } from '../shared/video-data.service';
 import { VideoNavigationService } from '../shared/video-navigation.service';
 import { VideoStateService } from '../shared/video-state.service';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-video-list',
@@ -31,10 +29,9 @@ export class VideoListComponent implements OnInit, AfterViewInit {
     year: number = null;
     currentVideo: IVideo = null;
     displayedVideo: IVideoInfo = null;
-    videoList: Array<IVideo> = [];
+    videoList$: Observable<IVideo[]>;
 
-    constructor(private _sizeService: SizeService,
-                private _videoDataService: VideoDataService,
+    constructor(private _videoDataService: VideoDataService,
                 private _videoStateService: VideoStateService,
                 private _videoNavigationService: VideoNavigationService,
                 private _changeDetectionRef: ChangeDetectorRef,
@@ -61,13 +58,8 @@ export class VideoListComponent implements OnInit, AfterViewInit {
             // state when starting from video list page
             this._videoNavigationService.onRouterEvent(null);
 
-            this._videoDataService.getVideosForCategory(this.categoryId)
-                .subscribe(
-                    (videos: Array<IVideo>) => {
-                        this.videoList = videos;
-                    },
-                    (err: any) => console.error('there was an error: ' + err)
-                );
+            this.videoList$ = this._videoDataService
+                .getVideosForCategory(this.categoryId);
         });
     }
 

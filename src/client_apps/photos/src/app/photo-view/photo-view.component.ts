@@ -5,19 +5,19 @@ import * as Mousetrap from 'mousetrap';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { ResponsiveService } from '../shared/responsive.service';
+import { ResponsiveService } from '../services/responsive.service';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
-import { PhotoNavigationService } from '../shared/photo-navigation.service';
-import { PhotoStateService } from '../shared/photo-state.service';
-import { IPhoto } from '../shared/iphoto.model';
-import { ICategory } from '../shared/icategory.model';
-import { PhotoListContext } from '../shared/photo-list-context.model';
-import { FilterSettings } from '../shared/filter-settings.model';
-import { ContainerBox } from '../shared/container-box.model';
-import { IPhotoInfo } from '../shared/iphoto-info.model';
-import { PhotoViewTool } from '../shared/photo-view-tool.model';
+import { PhotoNavigationService } from '../services/photo-navigation.service';
+import { PhotoStateService } from '../services/photo-state.service';
+import { IPhoto } from '../models/iphoto.model';
+import { ICategory } from '../models/icategory.model';
+import { PhotoListContext } from '../models/photo-list-context.model';
+import { FilterSettings } from '../models/filter-settings.model';
+import { ContainerBox } from '../models/container-box.model';
+import { IPhotoInfo } from '../models/iphoto-info.model';
 import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 import { SaveDialogComponent } from '../save-dialog/save-dialog.component';
+import { PhotoViewTool } from '../models/photo-view-tool.model';
 
 @Component({
     selector: 'app-photo-view',

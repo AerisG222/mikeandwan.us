@@ -2,10 +2,10 @@ import { Observable, Observer, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { PhotoSource } from './photo-source.model';
-import { PhotoDataService } from './photo-data.service';
 import { Photo } from './photo.model';
 import { ICategory } from './icategory.model';
 import { IPhoto } from './iphoto.model';
+import { PhotoDataService } from '../services/photo-data.service';
 
 export class CategoryPhotoSource extends PhotoSource {
     constructor(_dataService: PhotoDataService,

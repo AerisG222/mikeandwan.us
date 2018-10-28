@@ -2,9 +2,9 @@ import { Component, Input, ElementRef, NgZone, OnDestroy, AfterViewInit } from '
 
 import * as Mousetrap from 'mousetrap';
 
-import { Photo } from '../shared/photo.model';
-import { IPhoto } from '../shared/iphoto.model';
-import { PhotoListContext } from '../shared/photo-list-context.model';
+import { IPhoto } from '../models/iphoto.model';
+import { PhotoListContext } from '../models/photo-list-context.model';
+import { Photo } from '../models/photo.model';
 
 @Component({
     selector: 'app-map-view',

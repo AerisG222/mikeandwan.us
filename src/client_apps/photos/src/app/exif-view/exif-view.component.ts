@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 
 import { ExifCategory } from './exif-category.model';
-import { PhotoDataService } from '../shared/photo-data.service';
 import { ExifDetail } from './exif-detail.model';
 import { ExifFormatter } from './exif-formatter.model';
-import { Photo } from '../shared/photo.model';
-import { PhotoExifInfo } from '../shared/photo-exif-info.model';
+import { PhotoExifInfo } from '../models/photo-exif-info.model';
+import { Photo } from '../models/photo.model';
+import { PhotoDataService } from '../services/photo-data.service';
 
 @Component({
     selector: 'app-exif-view',

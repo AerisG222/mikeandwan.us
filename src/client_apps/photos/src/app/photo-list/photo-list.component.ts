@@ -1,22 +1,21 @@
-import { Component, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { trigger, state, style, transition, useAnimation } from '@angular/animations';
 
-import { NgbModal, NgbPagination } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { fadeIn, fadeOut } from '../shared/animation';
-import { ResponsiveService } from '../shared';
-import { Config } from '../shared/config.model';
-import { ModeRouteInfo } from '../shared/mode-route-info.model';
-import { PhotoStateService } from '../shared/photo-state.service';
-import { PhotoDataService } from '../shared/photo-data.service';
-import { PhotoSource } from '../shared/photo-source.model';
-import { PhotoSourceFactory } from '../shared/photo-source-factory.model';
-import { PhotoListContext } from '../shared/photo-list-context.model';
-import { RouteMode } from '../shared/route-mode.model';
-import { RandomPhotoListContext } from '../shared/random-photo-list-context.model';
-import { Photo } from '../shared/photo.model';
+import { fadeIn, fadeOut } from '../animations/animation';
+import { Config } from '../models/config.model';
+import { ModeRouteInfo } from '../models/mode-route-info.model';
+import { PhotoStateService } from '../services/photo-state.service';
+import { PhotoSource } from '../models/photo-source.model';
+import { PhotoSourceFactory } from '../models/photo-source-factory.model';
+import { PhotoListContext } from '../models/photo-list-context.model';
+import { RouteMode } from '../models/route-mode.model';
+import { RandomPhotoListContext } from '../models/random-photo-list-context.model';
 import { PhotoDialogComponent } from '../photo-dialog/photo-dialog.component';
+import { ResponsiveService } from '../services/responsive.service';
+import { Photo } from '../models/photo.model';
 
 @Component({
     selector: 'app-photo-list',
@@ -41,7 +40,6 @@ export class PhotoListComponent implements AfterViewInit, OnDestroy {
 
     constructor(private _changeDetectorRef: ChangeDetectorRef,
                 private _modalService: NgbModal,
-                private _dataService: PhotoDataService,
                 private _stateService: PhotoStateService,
                 private _responsiveService: ResponsiveService,
                 private _activatedRoute: ActivatedRoute,

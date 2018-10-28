@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
-import { ResponsiveService } from '../shared';
-import { IPhoto } from '../shared/iphoto.model';
+import { IPhoto } from '../models/iphoto.model';
+import { ResponsiveService } from '../services/responsive.service';
 
 @Component({
     selector: 'app-photo-dialog',

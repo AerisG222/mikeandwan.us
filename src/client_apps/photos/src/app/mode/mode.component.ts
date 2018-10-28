@@ -3,12 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { animate, state, style, transition, trigger, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../shared/animation';
-import { Breadcrumb } from '../shared/breadcrumb.model';
-import { PhotoStateService } from '../shared/photo-state.service';
-import { PhotoNavigationService } from '../shared/photo-navigation.service';
-import { ModeRouteInfo } from '../shared/mode-route-info.model';
-import { RouteMode } from '../shared/route-mode.model';
+import { fadeIn, fadeOut } from '../animations/animation';
+import { Breadcrumb } from '../models/breadcrumb.model';
+import { PhotoStateService } from '../services/photo-state.service';
+import { PhotoNavigationService } from '../services/photo-navigation.service';
+import { ModeRouteInfo } from '../models/mode-route-info.model';
+import { RouteMode } from '../models/route-mode.model';
 
 @Component({
     selector: 'app-mode',

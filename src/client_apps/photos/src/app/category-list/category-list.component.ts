@@ -2,9 +2,14 @@ import { Component, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular
 import { ActivatedRoute } from '@angular/router';
 import { state, style, transition, trigger, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../shared/animation';
-import { Config, ModeRouteInfo, PhotoNavigationService, PhotoStateService, ICategory, PhotoDataService } from '../shared';
+import { fadeIn, fadeOut } from '../animations/animation';
 import { Observable } from 'rxjs';
+import { ICategory } from '../models/icategory.model';
+import { PhotoDataService } from '../services/photo-data.service';
+import { PhotoStateService } from '../services/photo-state.service';
+import { PhotoNavigationService } from '../services/photo-navigation.service';
+import { ModeRouteInfo } from '../models/mode-route-info.model';
+import { Config } from 'protractor';
 
 @Component({
     selector: 'app-category-list',

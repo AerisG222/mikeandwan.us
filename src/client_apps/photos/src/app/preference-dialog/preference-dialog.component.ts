@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { PhotoStateService } from '../shared/photo-state.service';
+import { PhotoStateService } from '../services/photo-state.service';
 
 @Component({
     selector: 'app-preference-dialog',

@@ -7,11 +7,11 @@ import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
-import { AuthService } from './shared/auth-service';
-import { AuthGuardService } from './shared/auth-guard.service';
-import { AuthInterceptor } from './shared/auth-interceptor';
+import { AuthService } from './services/auth-service';
+import { AuthGuardService } from './services/auth-guard.service';
+import { AuthInterceptor } from './services/auth-interceptor';
 import { BreadcrumbListComponent } from './breadcrumb-list/breadcrumb-list.component';
-import { BreadcrumbService } from './shared/breadcrumb.service';
+import { BreadcrumbService } from './services/breadcrumb.service';
 import { CategoryLinkComponent } from './category-link/category-link.component';
 import { CategoryListComponent } from './category-list/category-list.component';
 import { CommentViewComponent } from './comment-view/comment-view.component';
@@ -21,7 +21,7 @@ import { ExifViewComponent } from './exif-view/exif-view.component';
 import { FullscreenViewComponent } from './fullscreen-view/fullscreen-view.component';
 import { HeaderComponent } from './header/header.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
-import { LocalStorageService } from './shared/local-storage.service';
+import { LocalStorageService } from './services/local-storage.service';
 import { MapViewComponent } from './map-view/map-view.component';
 import { ModeComponent } from './mode/mode.component';
 import { PhotoDialogComponent } from './photo-dialog/photo-dialog.component';
@@ -29,14 +29,13 @@ import { PhotoListComponent } from './photo-list/photo-list.component';
 import { PhotoViewComponent } from './photo-view/photo-view.component';
 import { PreferenceDialogComponent } from './preference-dialog/preference-dialog.component';
 import { RatingViewComponent } from './rating-view/rating-view.component';
-import { ResponsiveService } from './shared/responsive.service';
+import { ResponsiveService } from './services/responsive.service';
 import { SaveDialogComponent } from './save-dialog/save-dialog.component';
 import { SlideshowButtonComponent } from './slideshow-button/slideshow-button.component';
-import { PhotoDataService } from './shared/photo-data.service';
-import { PhotoSourceFactory } from './shared/photo-source-factory.model';
-import { PhotoStateService } from './shared/photo-state.service';
-import { PhotoNavigationService } from './shared/photo-navigation.service';
-import { RouteMode } from './shared/route-mode.model';
+import { PhotoSourceFactory } from './models/photo-source-factory.model';
+import { PhotoStateService } from './services/photo-state.service';
+import { PhotoNavigationService } from './services/photo-navigation.service';
+import { RouteMode } from './models/route-mode.model';
 import { SvgIconComponent } from './svg-icon/svg-icon.component';
 import { CategoryCardGridComponent } from './category-card-grid/category-card-grid.component';
 import { CategoryCardComponent } from './category-card/category-card.component';
@@ -45,8 +44,9 @@ import { PhotoCardGridComponent } from './photo-card-grid/photo-card-grid.compon
 import { ToolbarButtonComponent } from './toolbar-button/toolbar-button.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ThreeDLinkComponent } from './three-dlink/three-dlink.component';
-import { EnvironmentConfig } from './shared/environment-config';
+import { EnvironmentConfig } from './models/environment-config';
 import { FocusRemoverDirective } from './focus-remover.directive';
+import { PhotoDataService } from './services/photo-data.service';
 
 
 // TODO: the odd constants for data below are to satisfy an AOT requirement - is there a better way?

@@ -1,6 +1,6 @@
 import { Component, Input, HostBinding } from '@angular/core';
 
-import { ICategory } from '../shared/icategory.model';
+import { ICategory } from '../models/icategory.model';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
 
 @Component({

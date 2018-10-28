@@ -1,9 +1,9 @@
 import { Component, EventEmitter } from '@angular/core';
 import { trigger, query, state, style, animate, stagger, transition, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../shared/animation';
-import { Breadcrumb } from '../shared/breadcrumb.model';
-import { BreadcrumbService } from '../shared/breadcrumb.service';
+import { fadeIn, fadeOut } from '../animations/animation';
+import { Breadcrumb } from '../models/breadcrumb.model';
+import { BreadcrumbService } from '../services/breadcrumb.service';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
 
 @Component({

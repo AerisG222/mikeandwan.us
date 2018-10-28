@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Breadcrumb } from './breadcrumb.model';
+import { Breadcrumb } from '../models/breadcrumb.model';
 
 @Injectable()
 export class BreadcrumbService {

@@ -2,7 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 
 import { LocalStorageService } from './local-storage.service';
 import { ResponsiveService } from './responsive.service';
-import { Config } from './config.model';
+import { Config } from '../models/config.model';
 
 @Injectable()
 export class PhotoStateService {

@@ -1,13 +1,13 @@
 import { EventEmitter } from '@angular/core';
 
 import { Photo } from './photo.model';
-import { PhotoStateService } from './photo-state.service';
+import { PhotoStateService } from '../services/photo-state.service';
 import { RouteMode } from './route-mode.model';
 
 export class PhotoListContext {
     private _lastGpsIndex: number = null;
     private _firstGpsIndex: number = null;
-    private _intervalId: number = null;
+    private _intervalId: any = null;
     current: Photo = null;
     currentIndex = -1;
     photoUpdated: EventEmitter<number> = new EventEmitter<number>();

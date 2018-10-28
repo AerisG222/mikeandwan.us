@@ -1,9 +1,9 @@
 import { Observable, Observer } from 'rxjs';
 
-import { PhotoDataService } from './photo-data.service';
 import { PhotoSource } from './photo-source.model';
 import { Photo } from './photo.model';
 import { IPhotoAndCategory } from './iphoto-and-category.model';
+import { PhotoDataService } from '../services/photo-data.service';
 
 export class RandomPhotoSource extends PhotoSource {
     constructor(dataService: PhotoDataService) {

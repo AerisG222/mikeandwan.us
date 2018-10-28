@@ -1,6 +1,6 @@
 import { Component, Input, HostBinding } from '@angular/core';
 
-import { IPhoto } from '../shared/iphoto.model';
+import { IPhoto } from '../models/iphoto.model';
 
 @Component({
     selector: 'app-photo-card',

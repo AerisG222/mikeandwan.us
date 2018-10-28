@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IPhotoInfo } from '../shared/iphoto-info.model';
+import { IPhotoInfo } from '../models/iphoto-info.model';
 
 @Component({
     selector: 'app-save-dialog',

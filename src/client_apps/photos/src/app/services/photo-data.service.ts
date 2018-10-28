@@ -3,13 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Observer } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ICategory } from './icategory.model';
-import { IPhoto } from './iphoto.model';
-import { IExifDetail } from './iexif-detail.model';
-import { IRating } from './irating.model';
-import { IComment } from './icomment.model';
-import { IPhotoAndCategory } from './iphoto-and-category.model';
-import { EnvironmentConfig } from './environment-config';
+import { ICategory } from '../models/icategory.model';
+import { IPhoto } from '../models/iphoto.model';
+import { IExifDetail } from '../models/iexif-detail.model';
+import { IRating } from '../models/irating.model';
+import { IComment } from '../models/icomment.model';
+import { IPhotoAndCategory } from '../models/iphoto-and-category.model';
+import { EnvironmentConfig } from '../models/environment-config';
 
 @Injectable()
 export class PhotoDataService {

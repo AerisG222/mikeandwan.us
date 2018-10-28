@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Breadcrumb } from '../shared/breadcrumb.model';
-import { ICategory } from '../shared/icategory.model';
-import { PhotoNavigationService } from '../shared/photo-navigation.service';
-import { RouteMode } from '../shared/route-mode.model';
-import { CategoryBreadcrumb } from '../shared/category-breadcrumb.model';
+import { Breadcrumb } from '../models/breadcrumb.model';
+import { ICategory } from '../models/icategory.model';
+import { PhotoNavigationService } from '../services/photo-navigation.service';
+import { RouteMode } from '../models/route-mode.model';
+import { CategoryBreadcrumb } from '../models/category-breadcrumb.model';
 
 @Component({
     selector: 'app-category-link',

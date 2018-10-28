@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
-import { PhotoListContext } from '../shared/photo-list-context.model';
+import { PhotoListContext } from '../models/photo-list-context.model';
 
 @Component({
     selector: 'app-slideshow-button',

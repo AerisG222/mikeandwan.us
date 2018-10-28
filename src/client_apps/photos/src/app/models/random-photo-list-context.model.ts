@@ -1,7 +1,7 @@
 import { EventEmitter } from '@angular/core';
 
 import { PhotoListContext } from './photo-list-context.model';
-import { PhotoStateService } from './photo-state.service';
+import { PhotoStateService } from '../services/photo-state.service';
 import { RouteMode } from './route-mode.model';
 import { Photo } from './photo.model';
 import { RandomPhotoSource } from './random-photo-source.model';

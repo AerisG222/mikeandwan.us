@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Photo } from '../shared/photo.model';
+import { Photo } from '../models/photo.model';
 
 @Component({
     selector: 'app-photo-card-grid',

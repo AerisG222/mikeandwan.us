@@ -2,12 +2,12 @@ import { Observable, Observer } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
-import { BreadcrumbService } from '../shared/breadcrumb.service';
-import { Breadcrumb } from '../shared/breadcrumb.model';
+import { BreadcrumbService } from './breadcrumb.service';
+import { Breadcrumb } from '../models/breadcrumb.model';
 import { PhotoDataService } from './photo-data.service';
-import { CategoryBreadcrumb } from './category-breadcrumb.model';
-import { RouteMode } from './route-mode.model';
-import { ICategory } from './icategory.model';
+import { CategoryBreadcrumb } from '../models/category-breadcrumb.model';
+import { RouteMode } from '../models/route-mode.model';
+import { ICategory } from '../models/icategory.model';
 
 @Injectable()
 export class PhotoNavigationService {

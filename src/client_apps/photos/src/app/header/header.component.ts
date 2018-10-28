@@ -3,12 +3,12 @@ import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { BreadcrumbListComponent } from '../breadcrumb-list/breadcrumb-list.component';
-import { Breadcrumb } from '../shared/breadcrumb.model';
+import { Breadcrumb } from '../models/breadcrumb.model';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
 import { PreferenceDialogComponent } from '../preference-dialog/preference-dialog.component';
-import { PhotoNavigationService } from '../shared/photo-navigation.service';
-import { PhotoStateService } from '../shared/photo-state.service';
-import { CategoryBreadcrumb } from '../shared/category-breadcrumb.model';
+import { PhotoNavigationService } from '../services/photo-navigation.service';
+import { PhotoStateService } from '../services/photo-state.service';
+import { CategoryBreadcrumb } from '../models/category-breadcrumb.model';
 
 @Component({
     selector: 'app-header',

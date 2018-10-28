@@ -1,4 +1,4 @@
-import { Breadcrumb } from '../shared/breadcrumb.model';
+import { Breadcrumb } from './breadcrumb.model';
 import { ICategory } from './icategory.model';
 
 export class CategoryBreadcrumb extends Breadcrumb {

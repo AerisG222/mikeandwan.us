@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 
-import { PhotoDataService } from '../shared/photo-data.service';
-import { IComment } from '../shared/icomment.model';
-import { IPhoto } from '../shared/iphoto.model';
+import { IComment } from '../models/icomment.model';
+import { IPhoto } from '../models/iphoto.model';
+import { PhotoDataService } from '../services/photo-data.service';
 
 @Component({
     selector: 'app-comment-view',

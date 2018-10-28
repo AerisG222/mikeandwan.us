@@ -1,8 +1,8 @@
 <div [@fadeInOut]="'in'">
     <div class="row">
         <div class="col mt-3">
-            <ngb-pagination [collectionSize]="categoryList.length" [page]="page" [pageSize]="cardsPerPage" [size]="'sm'" (pageChange)="onChangePage($event)"></ngb-pagination>
+            <ngb-pagination [collectionSize]="(categoryList$ | async)?.length" [page]="page" [pageSize]="cardsPerPage" [size]="'sm'" (pageChange)="onChangePage($event)"></ngb-pagination>
         </div>
     </div>
-    <app-category-card-grid [cardsPerPage]="cardsPerPage" [categoryList]="categoryList" [page]="page" (categorySelected)="onCategorySelected($event)"></app-category-card-grid>
+    <app-category-card-grid [cardsPerPage]="cardsPerPage" [categoryList]="categoryList$ | async" [page]="page" (categorySelected)="onCategorySelected($event)"></app-category-card-grid>
 </div>

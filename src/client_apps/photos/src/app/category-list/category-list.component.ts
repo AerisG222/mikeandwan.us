@@ -1,12 +1,10 @@
 import { Component, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { animate, state, style, transition, trigger, useAnimation } from '@angular/animations';
-
-import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
+import { state, style, transition, trigger, useAnimation } from '@angular/animations';
 
 import { fadeIn, fadeOut } from '../shared/animation';
-import { SvgIcon } from '../svg-icon/svg-icon.enum';
 import { Config, ModeRouteInfo, PhotoNavigationService, PhotoStateService, ICategory, PhotoDataService } from '../shared';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-category-list',
@@ -22,7 +20,7 @@ import { Config, ModeRouteInfo, PhotoNavigationService, PhotoStateService, ICate
 })
 export class CategoryListComponent implements AfterViewInit {
     private _year: number = null;
-    categoryList: Array<ICategory> = [];
+    categoryList$: Observable<ICategory[]>;
     page = 1;
     cardsPerPage: number;
 
@@ -43,19 +41,8 @@ export class CategoryListComponent implements AfterViewInit {
                 this.setCardsPerPage(config);
             });
 
-            this._dataService.getCategoriesForYear(this._year)
-                .subscribe(categories => {
-                    this.categoryList = categories;
-                    /*
-                    const lastIndex = this._stateService.lastCategoryIndex;
-
-                    if (lastIndex > 0) {
-                        const page = Math.floor(lastIndex / this.thumbnailList.itemsPerPage);
-
-                        this.thumbnailList.setPageDisplayedIndex(page);
-                    }
-                    */
-                });
+            this.categoryList$ = this._dataService
+                .getCategoriesForYear(this._year);
 
             this._changeDetectorRef.detectChanges();
         });

@@ -1,6 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 
-import { StateService } from '../state.service';
+import { StateService } from '../services/state.service';
 
 @Component({
     selector: 'app-splash-screen',

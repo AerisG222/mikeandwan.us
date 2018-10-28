@@ -4,7 +4,7 @@ import { Scene, OrthographicCamera, Renderer, Group, WebGLRenderer, TextureLoade
          PlaneGeometry, Mesh, MeshBasicMaterial, DoubleSide, Math as _Math
        } from 'three';
 
-import { BoardSector } from '../board-sector.model';
+import { BoardSector } from '../models/board-sector.model';
 
 @Component({
     selector: 'app-spinner',

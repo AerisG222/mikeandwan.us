@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { Player } from '../player.model';
-import { StateService } from '../state.service';
+import { Player } from '../models/player.model';
+import { StateService } from '../services/state.service';
 
 @Component({
     selector: 'app-play',

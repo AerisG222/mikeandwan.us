@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { Character } from '../character.model';
-import { StateService } from '../state.service';
+import { Character } from '../models/character.model';
+import { StateService } from '../services/state.service';
 
 @Component({
     selector: 'app-choose-player',

@@ -11,7 +11,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { SplashScreenComponent } from './splash-screen/splash-screen.component';
 import { WinnerComponent } from './winner/winner.component';
 import { CanPlayGuard } from './play/can-play-guard';
-import { StateService } from './state.service';
+import { StateService } from './services/state.service';
 import { FocusRemoverDirective } from './focus-remover.directive';
 
 @NgModule({

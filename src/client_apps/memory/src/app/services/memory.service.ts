@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ICardInfo } from './icard-info.model';
-import { ICharacter } from './icharacter.model';
-import { IPlayer } from './iplayer.model';
+import { ICardInfo } from '../models/icard-info.model';
+import { ICharacter } from '../models/icharacter.model';
+import { IPlayer } from '../models/iplayer.model';
 
 @Injectable()
 export class MemoryService {

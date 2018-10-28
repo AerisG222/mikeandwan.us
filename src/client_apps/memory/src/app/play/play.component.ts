@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { IPlayer } from '../iplayer.model';
-import { MemoryService } from '../memory.service';
+import { IPlayer } from '../models/iplayer.model';
+import { MemoryService } from '../services/memory.service';
 
 @Component({
     selector: 'app-play',

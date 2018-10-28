@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { MemoryService } from '../memory.service';
+import { MemoryService } from '../services/memory.service';
 
 @Injectable()
 export class CanPlayGuard implements CanActivate {

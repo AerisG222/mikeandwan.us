@@ -1,9 +1,9 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 
 import { CardComponent } from '../card/card.component';
-import { ICardInfo } from '../icard-info.model';
-import { ISelectedCards } from '../iselected-card.model';
-import { MemoryService } from '../memory.service';
+import { ICardInfo } from '../models/icard-info.model';
+import { ISelectedCards } from '../models/iselected-card.model';
+import { MemoryService } from '../services/memory.service';
 
 @Component({
     selector: 'app-game-board',

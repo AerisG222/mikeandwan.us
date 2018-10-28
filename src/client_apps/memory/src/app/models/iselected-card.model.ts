@@ -1,4 +1,4 @@
-import { CardComponent } from './card/card.component';
+import { CardComponent } from '../card/card.component';
 
 export interface ISelectedCards {
     card1?: CardComponent;

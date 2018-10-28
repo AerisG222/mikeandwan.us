@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { IPlayer } from '../iplayer.model';
+import { IPlayer } from '../models/iplayer.model';
 
 @Component({
     selector: 'app-winner-screen',

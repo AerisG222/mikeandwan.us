@@ -12,7 +12,7 @@ import { TieScreenComponent } from './tie-screen/tie-screen.component';
 import { TurtleScoreComponent } from './turtle-score/turtle-score.component';
 import { WinnerScreenComponent } from './winner-screen/winner-screen.component';
 import { CanPlayGuard } from './play/can-play-guard';
-import { MemoryService } from './memory.service';
+import { MemoryService } from './services/memory.service';
 
 @NgModule({
     imports: [

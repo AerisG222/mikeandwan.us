@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { IPlayer } from '../iplayer.model';
+import { IPlayer } from '../models/iplayer.model';
 
 @Component({
     selector: 'app-turtle-score',

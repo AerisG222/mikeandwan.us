@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { ICharacter } from '../icharacter.model';
-import { MemoryService } from '../memory.service';
+import { ICharacter } from '../models/icharacter.model';
+import { MemoryService } from '../services/memory.service';
 
 @Component({
     selector: 'app-choose-turtle',

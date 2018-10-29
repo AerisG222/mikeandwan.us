@@ -32,10 +32,10 @@
     <tr>
         <td *ngIf="showUsername$ | async"></td>
         <td colspan="7" class="text-right">
-            <button type="submit" (click)="downloadSelected()" class="btn btn-primary btn-sm ml-2" appFocusRemover>
+            <button type="submit" (click)="downloadSelected()" class="btn btn-primary btn-sm ml-2" mawFocusRemover>
                 <app-svg-icon [icon]="svgIcon.Download"></app-svg-icon> Download Selected
             </button>
-            <button type="submit" (click)="deleteSelected()" class="btn btn-danger btn-sm ml-2" appFocusRemover>
+            <button type="submit" (click)="deleteSelected()" class="btn btn-danger btn-sm ml-2" mawFocusRemover>
                 <app-svg-icon [icon]="svgIcon.Trash"></app-svg-icon> Delete Selected
             </button>
         </td>

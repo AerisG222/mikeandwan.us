@@ -45,9 +45,8 @@ import { ToolbarButtonComponent } from './toolbar-button/toolbar-button.componen
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ThreeDLinkComponent } from './three-dlink/three-dlink.component';
 import { EnvironmentConfig } from './models/environment-config';
-import { FocusRemoverDirective } from './focus-remover.directive';
 import { PhotoDataService } from './services/photo-data.service';
-
+import { MawCommonModule } from 'maw-common';
 
 // TODO: the odd constants for data below are to satisfy an AOT requirement - is there a better way?
 //  SEE: https://github.com/angular/angular/issues/10789
@@ -56,6 +55,7 @@ import { PhotoDataService } from './services/photo-data.service';
         BrowserAnimationsModule,
         FormsModule,
         HttpClientModule,
+        MawCommonModule,
         NgbModule,
         RouterModule.forRoot([
             // tslint:disable-next-line:max-line-length
@@ -104,8 +104,7 @@ import { PhotoDataService } from './services/photo-data.service';
         SlideshowButtonComponent,
         ToolbarButtonComponent,
         SignInComponent,
-        ThreeDLinkComponent,
-        FocusRemoverDirective
+        ThreeDLinkComponent
     ],
     providers: [
         BreadcrumbService,

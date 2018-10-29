@@ -28,14 +28,15 @@ import { VideoDataService } from './services/video-data.service';
 import { VideoStateService } from './services/video-state.service';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { EnvironmentConfig } from './models/environment-config';
-import { FocusRemoverDirective } from './focus-remover.directive';
 import { VideoNavigationService } from './services/video-navigation.service';
+import { MawCommonModule } from 'maw-common';
 
 @NgModule({
     imports: [
         BrowserAnimationsModule,
         FormsModule,
         HttpClientModule,
+        MawCommonModule,
         NgbModule,
         RouterModule.forRoot([
             { path: '',                component: YearListComponent,     canActivate: [AuthGuardService] },
@@ -58,8 +59,7 @@ import { VideoNavigationService } from './services/video-navigation.service';
         VideoCardGridComponent,
         VideoListComponent,
         YearListComponent,
-        SignInComponent,
-        FocusRemoverDirective
+        SignInComponent
     ],
     providers: [
         BreadcrumbService,

@@ -3,16 +3,16 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { FocusRemoverDirective } from './focus-remover.directive';
+import { MawCommonModule } from 'maw-common';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    FocusRemoverDirective
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    MawCommonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

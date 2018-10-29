@@ -12,11 +12,12 @@ import { SplashScreenComponent } from './splash-screen/splash-screen.component';
 import { WinnerComponent } from './winner/winner.component';
 import { CanPlayGuard } from './play/can-play-guard';
 import { StateService } from './services/state.service';
-import { FocusRemoverDirective } from './focus-remover.directive';
+import { MawCommonModule } from 'maw-common';
 
 @NgModule({
     imports: [
         BrowserModule,
+        MawCommonModule,
         RouterModule.forRoot([
             { path: '',       component: SplashScreenComponent },
             { path: 'choose', component: ChoosePlayerComponent },
@@ -33,8 +34,7 @@ import { FocusRemoverDirective } from './focus-remover.directive';
         PlayerSelectComponent,
         SpinnerComponent,
         SplashScreenComponent,
-        WinnerComponent,
-        FocusRemoverDirective
+        WinnerComponent
     ],
     providers: [
         CanPlayGuard,

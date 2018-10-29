@@ -23,9 +23,9 @@ import { AuthState } from './state/auth.state';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { RelativeDatePipe } from './pipes/relative-date.pipe';
 import { SvgIconComponent } from './svg-icon/svg-icon.component';
-import { FocusRemoverDirective } from './directives/focus-remover.directive';
 import { DownloadHandlerComponent } from './download-handler/download-handler.component';
 import { FileThumbnailComponent } from './file-thumbnail/file-thumbnail.component';
+import { MawCommonModule } from 'maw-common';
 
 @NgModule({
     imports: [
@@ -33,6 +33,7 @@ import { FileThumbnailComponent } from './file-thumbnail/file-thumbnail.componen
         FileUploadModule,
         FormsModule,
         HttpClientModule,
+        MawCommonModule,
         // NgbModule.forRoot(),
         NgxsModule.forRoot([
             AuthState,
@@ -51,9 +52,6 @@ import { FileThumbnailComponent } from './file-thumbnail/file-thumbnail.componen
         ])
     ],
     declarations: [
-        // directives
-        FocusRemoverDirective,
-
         // pipes
         FileSizePipe,
         RelativeDatePipe,

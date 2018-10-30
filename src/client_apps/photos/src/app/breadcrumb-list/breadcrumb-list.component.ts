@@ -1,10 +1,10 @@
 import { Component, EventEmitter } from '@angular/core';
 import { trigger, query, state, style, animate, stagger, transition, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../animations/animation';
 import { Breadcrumb } from '../models/breadcrumb.model';
 import { BreadcrumbService } from '../services/breadcrumb.service';
 import { SvgIcon } from '../svg-icon/svg-icon.enum';
+import { fadeIn, fadeOut } from 'maw-common';
 
 @Component({
     selector: 'app-breadcrumb-list',

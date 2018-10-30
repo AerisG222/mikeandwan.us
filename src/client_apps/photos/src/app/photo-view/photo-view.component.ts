@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, AfterViewInit, OnDestroy, OnChanges, NgZone } from '@angular/core';
+import { Component, Input, AfterViewInit, OnDestroy, OnChanges, NgZone } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import * as Mousetrap from 'mousetrap';

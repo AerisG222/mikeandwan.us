@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { animate, state, style, transition, trigger, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../animations/animation';
+import { fadeIn, fadeOut } from 'maw-common';
 import { Breadcrumb } from '../models/breadcrumb.model';
 import { PhotoStateService } from '../services/photo-state.service';
 import { PhotoNavigationService } from '../services/photo-navigation.service';

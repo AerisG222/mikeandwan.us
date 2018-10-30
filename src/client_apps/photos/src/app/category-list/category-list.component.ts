@@ -2,7 +2,7 @@ import { Component, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular
 import { ActivatedRoute } from '@angular/router';
 import { state, style, transition, trigger, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../animations/animation';
+import { fadeIn, fadeOut } from 'maw-common';
 import { Observable } from 'rxjs';
 import { ICategory } from '../models/icategory.model';
 import { PhotoDataService } from '../services/photo-data.service';

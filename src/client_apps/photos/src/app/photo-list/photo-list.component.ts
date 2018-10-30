@@ -4,7 +4,7 @@ import { trigger, state, style, transition, useAnimation } from '@angular/animat
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { fadeIn, fadeOut } from '../animations/animation';
+import { fadeIn, fadeOut } from 'maw-common';
 import { Config } from '../models/config.model';
 import { ModeRouteInfo } from '../models/mode-route-info.model';
 import { PhotoStateService } from '../services/photo-state.service';

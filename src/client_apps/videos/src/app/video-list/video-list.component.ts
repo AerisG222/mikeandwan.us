@@ -2,7 +2,7 @@ import { Component, ChangeDetectorRef, AfterViewInit, OnInit } from '@angular/co
 import { ActivatedRoute } from '@angular/router';
 import { state, style, transition, trigger, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../animations/animation';
+import { fadeIn, fadeOut } from 'maw-common';
 import { IVideo } from '../models/ivideo.model';
 import { IVideoInfo } from '../models/ivideo-info.model';
 import { VideoDataService } from '../services/video-data.service';

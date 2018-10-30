@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { state, style, transition, trigger, useAnimation } from '@angular/animations';
 
-import { fadeIn, fadeOut } from '../animations/animation';
+import { fadeIn, fadeOut } from 'maw-common';
 import { VideoDataService } from '../services/video-data.service';
 import { Observable } from 'rxjs';
 import { VideoNavigationService } from '../services/video-navigation.service';

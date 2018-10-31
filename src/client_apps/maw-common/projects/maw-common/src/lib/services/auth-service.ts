@@ -1,33 +1,26 @@
 import { Injectable } from '@angular/core';
-import { EnvironmentConfig } from '../models/environment-config';
-import { UserManager, UserManagerSettings, User } from 'oidc-client';
+import { UserManager, User } from 'oidc-client';
+
+import { AuthConfig } from '../models/auth-config';
+import { BehaviorSubject } from 'rxjs';
+
 
 @Injectable()
 export class AuthService {
     private _mgr: UserManager;
     private _user: User;
 
-    constructor(cfg: EnvironmentConfig) {
-        const config = {
-            automaticSilentRenew: true,
-            silent_redirect_uri: `${cfg.wwwUrl}/account/spa-silent-signin`,
-            authority: cfg.authUrl,
-            client_id: 'maw_videos',
-            redirect_uri: `${cfg.wwwUrl}/videos/signin-oidc`,
-            response_type: 'id_token token',
-            scope: 'openid maw_api role',
-            loadUserInfo: true,
-            post_logout_redirect_uri: `${cfg.wwwUrl}/`
-        };
+    user$ = new BehaviorSubject(null);
 
-        this._mgr = new UserManager(config);
+    constructor(cfg: AuthConfig) {
+        this._mgr = new UserManager(cfg);
 
         this._mgr.events.addUserLoaded(user => {
-            this._user = user;
+            this.updateUser(user);
         });
 
         this._mgr.getUser().then(user => {
-            this._user = user;
+            this.updateUser(user);
         });
     }
 
@@ -49,13 +42,19 @@ export class AuthService {
 
     completeAuthentication(): Promise<void> {
         return this._mgr.signinRedirectCallback().then(user => {
-            this._user = user;
+            this.updateUser(user);
         });
     }
 
     attemptSilentSignin(): Promise<void> {
         return this._mgr.signinSilent().then(user => {
-            this._user = user;
+            this.updateUser(user);
         });
+    }
+
+    private updateUser(user: User) {
+        this._user = user;
+
+        this.user$.next(user);
     }
 }

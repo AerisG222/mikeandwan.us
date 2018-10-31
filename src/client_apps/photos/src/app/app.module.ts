@@ -7,9 +7,6 @@ import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
-import { AuthService } from './services/auth-service';
-import { AuthGuardService } from './services/auth-guard.service';
-import { AuthInterceptor } from './services/auth-interceptor';
 import { BreadcrumbListComponent } from './breadcrumb-list/breadcrumb-list.component';
 import { BreadcrumbService } from './services/breadcrumb.service';
 import { CategoryLinkComponent } from './category-link/category-link.component';
@@ -44,9 +41,9 @@ import { PhotoCardGridComponent } from './photo-card-grid/photo-card-grid.compon
 import { ToolbarButtonComponent } from './toolbar-button/toolbar-button.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ThreeDLinkComponent } from './three-dlink/three-dlink.component';
-import { EnvironmentConfig } from './models/environment-config';
 import { PhotoDataService } from './services/photo-data.service';
-import { MawCommonModule } from 'maw-common';
+import { MawCommonModule, AuthGuardService, AuthInterceptor, AuthConfig, AuthService, EnvironmentConfig } from 'maw-common';
+
 
 // TODO: the odd constants for data below are to satisfy an AOT requirement - is there a better way?
 //  SEE: https://github.com/angular/angular/issues/10789
@@ -117,6 +114,19 @@ import { MawCommonModule } from 'maw-common';
         AuthService,
         AuthGuardService,
         EnvironmentConfig,
+        {
+            provide: AuthConfig,
+            useFactory: (env: EnvironmentConfig) => {
+                return new AuthConfig(
+                    env.authUrl,
+                    'maw_photos',
+                    env.wwwUrl,
+                    `${env.wwwUrl}/photos/signin-oidc`,
+                    `${env.wwwUrl}/account/spa-silent-signin`
+                );
+            },
+            deps: [ EnvironmentConfig ]
+        },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,

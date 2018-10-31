@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth-service';
 import { PhotoNavigationService } from '../services/photo-navigation.service';
+import { AuthService } from 'maw-common';
 
 @Component({
     selector: 'app-sign-in',

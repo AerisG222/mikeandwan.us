@@ -9,7 +9,7 @@ import { IExifDetail } from '../models/iexif-detail.model';
 import { IRating } from '../models/irating.model';
 import { IComment } from '../models/icomment.model';
 import { IPhotoAndCategory } from '../models/iphoto-and-category.model';
-import { EnvironmentConfig } from '../models/environment-config';
+import { EnvironmentConfig } from 'maw-common';
 
 @Injectable()
 export class PhotoDataService {

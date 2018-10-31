@@ -6,10 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { AuthGuardService } from './services/auth-guard.service';
 import { AppComponent } from './app.component';
-import { AuthService } from './services/auth-service';
-import { AuthInterceptor } from './services/auth-interceptor';
 import { BreadcrumbListComponent } from './breadcrumb-list/breadcrumb-list.component';
 import { BreadcrumbService } from './services/breadcrumb.service';
 import { CategoryCardComponent } from './category-card/category-card.component';
@@ -27,9 +24,8 @@ import { VideoCardGridComponent } from './video-card-grid/video-card-grid.compon
 import { VideoDataService } from './services/video-data.service';
 import { VideoStateService } from './services/video-state.service';
 import { SignInComponent } from './sign-in/sign-in.component';
-import { EnvironmentConfig } from './models/environment-config';
 import { VideoNavigationService } from './services/video-navigation.service';
-import { MawCommonModule } from 'maw-common';
+import { MawCommonModule, AuthGuardService, AuthInterceptor, AuthConfig, AuthService, EnvironmentConfig } from 'maw-common';
 
 @NgModule({
     imports: [
@@ -71,6 +67,19 @@ import { MawCommonModule } from 'maw-common';
         AuthService,
         AuthGuardService,
         EnvironmentConfig,
+        {
+            provide: AuthConfig,
+            useFactory: (env: EnvironmentConfig) => {
+                return new AuthConfig(
+                    env.authUrl,
+                    'maw_videos',
+                    env.wwwUrl,
+                    `${env.wwwUrl}/videos/signin-oidc`,
+                    `${env.wwwUrl}/account/spa-silent-signin`
+                );
+            },
+            deps: [ EnvironmentConfig ]
+        },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,

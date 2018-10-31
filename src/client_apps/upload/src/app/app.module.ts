@@ -9,10 +9,7 @@ import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
-import { AuthService } from './services/auth-service';
-import { AuthGuardService } from './services/auth-guard.service';
-import { EnvironmentConfig } from './models/environment-config';
-import { AuthInterceptor } from './services/auth-interceptor';
+import { AuthStoreManagerService } from './services/auth-store-manager.service';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { HomeComponent } from './home/home.component';
 import { FileListingComponent } from './file-listing/file-listing.component';
@@ -25,7 +22,7 @@ import { RelativeDatePipe } from './pipes/relative-date.pipe';
 import { SvgIconComponent } from './svg-icon/svg-icon.component';
 import { DownloadHandlerComponent } from './download-handler/download-handler.component';
 import { FileThumbnailComponent } from './file-thumbnail/file-thumbnail.component';
-import { MawCommonModule } from 'maw-common';
+import { MawCommonModule, AuthConfig, AuthGuardService, EnvironmentConfig, AuthInterceptor, AuthService } from 'maw-common';
 
 @NgModule({
     imports: [
@@ -69,7 +66,21 @@ import { MawCommonModule } from 'maw-common';
     providers: [
         AuthService,
         AuthGuardService,
+        AuthStoreManagerService,
         EnvironmentConfig,
+        {
+            provide: AuthConfig,
+            useFactory: (env: EnvironmentConfig) => {
+                return new AuthConfig(
+                    env.authUrl,
+                    'maw_upload',
+                    env.wwwUrl,
+                    `${env.wwwUrl}/upload/signin-oidc`,
+                    `${env.wwwUrl}/account/spa-silent-signin`
+                );
+            },
+            deps: [ EnvironmentConfig ]
+        },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,

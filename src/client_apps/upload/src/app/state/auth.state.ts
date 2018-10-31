@@ -1,8 +1,8 @@
-import { Router } from '@angular/router';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { User } from 'oidc-client';
 import { CompleteSignin, UpdateUser, ShowUsername } from './auth.actions';
-import { AuthService } from '../services/auth-service';
+import { AuthService } from 'maw-common';
+import { AuthStoreManagerService } from '../services/auth-store-manager.service';
 
 export interface AuthStateModel {
     user: User;
@@ -17,8 +17,14 @@ export interface AuthStateModel {
     }
 })
 export class AuthState {
-    constructor(private _authService: AuthService) {
+    constructor(private _authService: AuthService,
+                private _authStoreManagerService: AuthStoreManagerService) {
         console.log('creating auth state');
+
+        // TODO: this is a little lame.  we need to pull in AuthStoreManagerService
+        // so that DI creates an instance, which then subscribes to the auth service
+        // events.  consider refactoring to make this a more natural integration
+        console.log(this._authStoreManagerService);
     }
 
     @Selector()

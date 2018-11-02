@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { IPhoto } from '../models/iphoto.model';
-import { SvgIcon } from '../svg-icon/svg-icon.enum';
+import { SvgIcon } from 'maw-common';
 import { PhotoDataService } from '../services/photo-data.service';
 
 @Component({

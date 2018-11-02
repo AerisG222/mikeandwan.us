@@ -5,12 +5,12 @@
             <app-breadcrumb-list></app-breadcrumb-list>
         </div>
         <div class="btn-group">
-                <a target="_blank" class="btn btn-primary btn-sm hover-bright" *ngIf="downloadUrl" [href]="downloadUrl"><span style="margin-right:6px;" mawFocusRemover>Download</span><app-svg-icon [icon]="svgIcon.Download"></app-svg-icon></a>
-                <button type="button" class="btn btn-primary btn-sm hover-bright" *ngIf="showRegularButton" (click)="toggleMapView()" mawFocusRemover><span style="margin-right:6px;">Regular View</span><app-svg-icon [icon]="svgIcon.Home"></app-svg-icon></button>
-                <button type="button" class="btn btn-primary btn-sm hover-bright" *ngIf="showMapButton" (click)="toggleMapView()" mawFocusRemover><span style="margin-right:6px;">Map View</span><app-svg-icon [icon]="svgIcon.MapMarker"></app-svg-icon></button>
-                <button type="button" class="btn btn-primary btn-sm hover-bright" (click)="clickConfig()" mawFocusRemover><span style="margin-right:6px;">Settings</span><app-svg-icon [icon]="svgIcon.Wrench"></app-svg-icon></button>
-                <button type="button" class="btn btn-primary btn-sm hover-bright" title="Interactive Statistics" (click)="clickStats()" mawFocusRemover><app-svg-icon [icon]="svgIcon.PieChart"></app-svg-icon></button>
-                <button type="button" class="btn btn-primary btn-sm hover-bright" title="Get Android App" (click)="clickAndroid()" mawFocusRemover><app-svg-icon [icon]="svgIcon.Android"></app-svg-icon></button>
+                <a target="_blank" class="btn btn-primary btn-sm hover-bright" *ngIf="downloadUrl" [href]="downloadUrl"><span style="margin-right:6px;" mawFocusRemover>Download</span><maw-svg-icon [icon]="svgIcon.Download"></maw-svg-icon></a>
+                <button type="button" class="btn btn-primary btn-sm hover-bright" *ngIf="showRegularButton" (click)="toggleMapView()" mawFocusRemover><span style="margin-right:6px;">Regular View</span><maw-svg-icon [icon]="svgIcon.Home"></maw-svg-icon></button>
+                <button type="button" class="btn btn-primary btn-sm hover-bright" *ngIf="showMapButton" (click)="toggleMapView()" mawFocusRemover><span style="margin-right:6px;">Map View</span><maw-svg-icon [icon]="svgIcon.MapMarker"></maw-svg-icon></button>
+                <button type="button" class="btn btn-primary btn-sm hover-bright" (click)="clickConfig()" mawFocusRemover><span style="margin-right:6px;">Settings</span><maw-svg-icon [icon]="svgIcon.Wrench"></maw-svg-icon></button>
+                <button type="button" class="btn btn-primary btn-sm hover-bright" title="Interactive Statistics" (click)="clickStats()" mawFocusRemover><maw-svg-icon [icon]="svgIcon.PieChart"></maw-svg-icon></button>
+                <button type="button" class="btn btn-primary btn-sm hover-bright" title="Get Android App" (click)="clickAndroid()" mawFocusRemover><maw-svg-icon [icon]="svgIcon.Android"></maw-svg-icon></button>
             </div>
     </div>
 </div>

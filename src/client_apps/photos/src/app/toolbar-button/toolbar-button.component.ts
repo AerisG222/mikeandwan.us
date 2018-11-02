@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { SvgIcon } from '../svg-icon/svg-icon.enum';
+import { SvgIcon } from 'maw-common';
 
 @Component({
     selector: 'app-toolbar-button',

@@ -8,10 +8,10 @@ import { IFileInfo } from '../models/ifile-info';
 import { FileSizePipe } from '../pipes/file-size.pipe';
 import { RelativeDatePipe } from '../pipes/relative-date.pipe';
 import { AuthState } from '../state/auth.state';
-import { SvgIcon } from '../svg-icon/svg-icon.enum';
 import { FileViewModel } from './file-view-model';
 import { map, takeUntil } from 'rxjs/operators';
 import { listItemAnimation } from '../animations/animations';
+import { SvgIcon } from 'maw-common';
 
 @Component({
     selector: 'app-file-listing',

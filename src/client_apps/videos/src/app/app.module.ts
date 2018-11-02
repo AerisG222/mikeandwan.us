@@ -18,7 +18,6 @@ import { PreferenceDialogComponent } from './preference-dialog/preference-dialog
 import { VideoListComponent } from './video-list/video-list.component';
 import { YearListComponent } from './year-list/year-list.component';
 import { SizeService } from './services/size.service';
-import { SvgIconComponent } from './svg-icon/svg-icon.component';
 import { VideoCardComponent } from './video-card/video-card.component';
 import { VideoCardGridComponent } from './video-card-grid/video-card-grid.component';
 import { VideoDataService } from './services/video-data.service';
@@ -47,7 +46,6 @@ import { MawCommonModule, AuthGuardService, AuthInterceptor, AuthConfig, AuthSer
         BreadcrumbListComponent,
         CategoryCardComponent,
         CategoryCardGridComponent,
-        SvgIconComponent,
         CategoryListComponent,
         HeaderComponent,
         PreferenceDialogComponent,

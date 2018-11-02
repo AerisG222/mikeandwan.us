@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { SvgIcon } from '../svg-icon/svg-icon.enum';
+import { SvgIcon } from 'maw-common';
 import { PhotoListContext } from '../models/photo-list-context.model';
 
 @Component({

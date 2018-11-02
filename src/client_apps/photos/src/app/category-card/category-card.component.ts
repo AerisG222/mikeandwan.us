@@ -1,7 +1,7 @@
 import { Component, Input, HostBinding } from '@angular/core';
 
 import { ICategory } from '../models/icategory.model';
-import { SvgIcon } from '../svg-icon/svg-icon.enum';
+import { SvgIcon } from 'maw-common';
 
 @Component({
     selector: 'app-category-card',

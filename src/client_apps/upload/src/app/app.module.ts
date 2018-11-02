@@ -19,10 +19,15 @@ import { UploadState } from './state/upload.state';
 import { AuthState } from './state/auth.state';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { RelativeDatePipe } from './pipes/relative-date.pipe';
-import { SvgIconComponent } from './svg-icon/svg-icon.component';
 import { DownloadHandlerComponent } from './download-handler/download-handler.component';
 import { FileThumbnailComponent } from './file-thumbnail/file-thumbnail.component';
-import { MawCommonModule, AuthConfig, AuthGuardService, EnvironmentConfig, AuthInterceptor, AuthService } from 'maw-common';
+import {
+    MawCommonModule,
+    AuthConfig,
+    AuthGuardService,
+    EnvironmentConfig,
+    AuthInterceptor,
+    AuthService } from 'maw-common';
 
 @NgModule({
     imports: [
@@ -58,7 +63,6 @@ import { MawCommonModule, AuthConfig, AuthGuardService, EnvironmentConfig, AuthI
         FileListingComponent,
         HomeComponent,
         SignInComponent,
-        SvgIconComponent,
         UploadComponent,
         DownloadHandlerComponent,
         FileThumbnailComponent

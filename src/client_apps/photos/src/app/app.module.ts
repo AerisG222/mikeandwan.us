@@ -33,7 +33,6 @@ import { PhotoSourceFactory } from './models/photo-source-factory.model';
 import { PhotoStateService } from './services/photo-state.service';
 import { PhotoNavigationService } from './services/photo-navigation.service';
 import { RouteMode } from './models/route-mode.model';
-import { SvgIconComponent } from './svg-icon/svg-icon.component';
 import { CategoryCardGridComponent } from './category-card-grid/category-card-grid.component';
 import { CategoryCardComponent } from './category-card/category-card.component';
 import { PhotoCardComponent } from './photo-card/photo-card.component';
@@ -76,7 +75,6 @@ import { MawCommonModule, AuthGuardService, AuthInterceptor, AuthConfig, AuthSer
     declarations: [
         AppComponent,
         BreadcrumbListComponent,
-        SvgIconComponent,
         CategoryCardComponent,
         CategoryCardGridComponent,
         CategoryLinkComponent,

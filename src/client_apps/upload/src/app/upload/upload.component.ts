@@ -5,8 +5,8 @@ import { UploadState } from '../state/upload.state';
 import { Select, Store } from '@ngxs/store';
 import { InitializeUploader } from '../state/upload.actions';
 import { FileSizePipe } from '../pipes/file-size.pipe';
-import { SvgIcon } from '../svg-icon/svg-icon.enum';
 import { listItemAnimation } from '../animations/animations';
+import { SvgIcon } from 'maw-common';
 
 @Component({
     selector: 'app-upload',

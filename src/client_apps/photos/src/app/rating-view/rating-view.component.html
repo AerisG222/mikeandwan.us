@@ -6,8 +6,8 @@
         <div class="col-sm-9">
             <ngb-rating [max]="5" [rate]="userRating" [resettable]="true" (rateChange)="onRatePhoto($event)">
                 <ng-template let-fill="fill">
-                    <app-svg-icon *ngIf="fill === 100" [icon]="svgIcon.Star"></app-svg-icon>
-                    <app-svg-icon *ngIf="fill === 0" [icon]="svgIcon.StarO"></app-svg-icon>
+                    <maw-svg-icon *ngIf="fill === 100" [icon]="svgIcon.Star"></maw-svg-icon>
+                    <maw-svg-icon *ngIf="fill === 0" [icon]="svgIcon.StarO"></maw-svg-icon>
                 </ng-template>
             </ngb-rating>
         </div>
@@ -19,8 +19,8 @@
         <div class="col-sm-9">
             <ngb-rating [max]="5" [rate]="averageRating" [readonly]="true">
                 <ng-template let-fill="fill">
-                    <app-svg-icon *ngIf="fill === 100" [icon]="svgIcon.Star"></app-svg-icon>
-                    <app-svg-icon *ngIf="fill === 0" [icon]="svgIcon.StarO"></app-svg-icon>
+                    <maw-svg-icon *ngIf="fill === 100" [icon]="svgIcon.Star"></maw-svg-icon>
+                    <maw-svg-icon *ngIf="fill === 0" [icon]="svgIcon.StarO"></maw-svg-icon>
                 </ng-template>
             </ngb-rating>
         </div>

@@ -6,7 +6,7 @@ import * as Mousetrap from 'mousetrap';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { ResponsiveService } from '../services/responsive.service';
-import { SvgIcon } from '../svg-icon/svg-icon.enum';
+import { SvgIcon } from 'maw-common';
 import { PhotoNavigationService } from '../services/photo-navigation.service';
 import { PhotoStateService } from '../services/photo-state.service';
 import { IPhoto } from '../models/iphoto.model';

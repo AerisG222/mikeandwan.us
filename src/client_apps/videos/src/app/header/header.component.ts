@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { PreferenceDialogComponent } from '../preference-dialog/preference-dialog.component';
-import { SvgIcon } from '../svg-icon/svg-icon.enum';
+import { SvgIcon } from 'maw-common';
 
 @Component({
     selector: 'app-header',

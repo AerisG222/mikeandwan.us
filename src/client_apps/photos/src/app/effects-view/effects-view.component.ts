@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { SvgIcon } from '../svg-icon/svg-icon.enum';
+import { SvgIcon } from 'maw-common';
 import { FilterSettings } from '../models/filter-settings.model';
 import { Photo } from '../models/photo.model';
 

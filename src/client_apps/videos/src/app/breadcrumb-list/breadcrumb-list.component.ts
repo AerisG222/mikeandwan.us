@@ -4,7 +4,7 @@ import { trigger, query, state, style, animate, stagger, transition, useAnimatio
 import { fadeIn, fadeOut } from 'maw-common';
 import { Breadcrumb } from '../models/breadcrumb.model';
 import { BreadcrumbService } from '../services/breadcrumb.service';
-import { SvgIcon } from '../svg-icon/svg-icon.enum';
+import { SvgIcon } from 'maw-common';
 
 @Component({
     selector: 'app-breadcrumb-list',

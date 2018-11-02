@@ -4,7 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { BreadcrumbListComponent } from '../breadcrumb-list/breadcrumb-list.component';
 import { Breadcrumb } from '../models/breadcrumb.model';
-import { SvgIcon } from '../svg-icon/svg-icon.enum';
+import { SvgIcon } from 'maw-common';
 import { PreferenceDialogComponent } from '../preference-dialog/preference-dialog.component';
 import { PhotoNavigationService } from '../services/photo-navigation.service';
 import { PhotoStateService } from '../services/photo-state.service';

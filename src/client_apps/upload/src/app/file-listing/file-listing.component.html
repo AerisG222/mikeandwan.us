@@ -21,10 +21,10 @@
         <td class="align-middle">{{file.creationTime | relativeDate}}</td>
         <td class="align-middle">{{file.sizeInBytes | fileSize}}</td>
         <td class="align-middle text-center text-success">
-            <app-svg-icon [icon]="svgIcon.Download" [klass]="'hover mr-2'" (click)="downloadSingle(file)"></app-svg-icon>
+            <maw-svg-icon [icon]="svgIcon.Download" [klass]="'hover mr-2'" (click)="downloadSingle(file)"></maw-svg-icon>
         </td>
         <td class="align-middle text-center text-danger">
-            <app-svg-icon [icon]="svgIcon.Trash" [klass]="'hover mr-2'" (click)="deleteSingle(file)"></app-svg-icon>
+            <maw-svg-icon [icon]="svgIcon.Trash" [klass]="'hover mr-2'" (click)="deleteSingle(file)"></maw-svg-icon>
         </td>
         <td class="align-middle text-center"><input type="checkbox" class="mt-2" [(ngModel)]="file.isChecked" /></td>
     </tr>
@@ -33,10 +33,10 @@
         <td *ngIf="showUsername$ | async"></td>
         <td colspan="7" class="text-right">
             <button type="submit" (click)="downloadSelected()" class="btn btn-primary btn-sm ml-2" mawFocusRemover>
-                <app-svg-icon [icon]="svgIcon.Download"></app-svg-icon> Download Selected
+                <maw-svg-icon [icon]="svgIcon.Download"></maw-svg-icon> Download Selected
             </button>
             <button type="submit" (click)="deleteSelected()" class="btn btn-danger btn-sm ml-2" mawFocusRemover>
-                <app-svg-icon [icon]="svgIcon.Trash"></app-svg-icon> Delete Selected
+                <maw-svg-icon [icon]="svgIcon.Trash"></maw-svg-icon> Delete Selected
             </button>
         </td>
     </tr>

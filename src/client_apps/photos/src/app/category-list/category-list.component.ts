@@ -10,6 +10,7 @@ import { PhotoStateService } from '../services/photo-state.service';
 import { PhotoNavigationService } from '../services/photo-navigation.service';
 import { ModeRouteInfo } from '../models/mode-route-info.model';
 import { Config } from 'protractor';
+import { CategoryIndex } from '../models/category-index.model';
 
 @Component({
     selector: 'app-category-list',
@@ -59,10 +60,10 @@ export class CategoryListComponent implements AfterViewInit {
         }
     }
 
-    onCategorySelected(category: ICategory) {
-        if (category !== null) {
-            // this._stateService.lastCategoryIndex = thumbInfo.index;
-            this._navService.gotoCategoryPhotoList(category);
+    onCategorySelected(categoryAndIndex: CategoryIndex) {
+        if (categoryAndIndex !== null) {
+            this._stateService.lastCategoryIndex = categoryAndIndex.index;
+            this._navService.gotoCategoryPhotoList(categoryAndIndex.category);
         }
     }
 

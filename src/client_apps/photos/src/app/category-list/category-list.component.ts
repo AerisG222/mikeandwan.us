@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { state, style, transition, trigger, useAnimation } from '@angular/animations';
 
 import { fadeIn, fadeOut } from 'maw-common';
-import { Observable } from 'rxjs';
 import { ICategory } from '../models/icategory.model';
 import { PhotoDataService } from '../services/photo-data.service';
 import { PhotoStateService } from '../services/photo-state.service';
@@ -26,7 +25,6 @@ import { CategoryIndex } from '../models/category-index.model';
 })
 export class CategoryListComponent implements AfterViewInit {
     private _year: number = null;
-    categoryList$: Observable<ICategory[]>;
     categoryList: ICategory[] = [];
     page = 1;
     cardsPerPage: number;
@@ -47,15 +45,14 @@ export class CategoryListComponent implements AfterViewInit {
         this._activatedRoute.params.subscribe(params => {
             this._year = parseInt(params[ModeRouteInfo.PARAM_YEAR], 10);
 
-            this.categoryList$ = this._dataService
-                .getCategoriesForYear(this._year);
+            this._dataService
+                .getCategoriesForYear(this._year)
+                .subscribe(x => {
+                    this.categoryList = x;
 
-            this.categoryList$.subscribe(x => {
-                this.categoryList = x;
-
-                const pageIndex = Math.trunc(this._stateService.lastCategoryIndex / this.cardsPerPage);
-                this.page = pageIndex + 1;
-            });
+                    const pageIndex = Math.trunc(this._stateService.lastCategoryIndex / this.cardsPerPage);
+                    this.page = pageIndex + 1;
+                });
         });
     }
 

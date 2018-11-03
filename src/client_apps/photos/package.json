@@ -23,7 +23,7 @@
     "@angular/platform-browser": "~7.0.0",
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
-    "@ng-bootstrap/ng-bootstrap": "~3.3.1",
+    "@ng-bootstrap/ng-bootstrap": "~4.0.0",
     "core-js": "~2.5.7",
     "maw-common": "file:../maw-common/dist/maw-common/maw-common-0.0.6.tgz",
     "mousetrap": "~1.6.2",

@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { state, style, transition, trigger, useAnimation } from '@angular/animations';
 
@@ -35,29 +35,24 @@ export class CategoryListComponent implements AfterViewInit {
                 private _stateService: PhotoStateService,
                 private _navService: PhotoNavigationService,
                 private _activatedRoute: ActivatedRoute) {
+        this.setCardsPerPage(this._stateService.config);
 
+        const pageIndex = Math.trunc(this._stateService.lastCategoryIndex / this._stateService.config.thumbnailsPerPage);
+
+        this.onChangePage(pageIndex + 1);
+
+        this._stateService.configUpdatedEventEmitter.subscribe((config: Config) => {
+            this.setCardsPerPage(config);
+        });
     }
 
     ngAfterViewInit() {
         this._activatedRoute.params.subscribe(params => {
             this._year = parseInt(params[ModeRouteInfo.PARAM_YEAR], 10);
-            this.setCardsPerPage(this._stateService.config);
-
-            this._stateService.configUpdatedEventEmitter.subscribe((config: Config) => {
-                this.setCardsPerPage(config);
-            });
 
             this.categoryList$ = this._dataService
                 .getCategoriesForYear(this._year);
-
-            this._changeDetectorRef.detectChanges();
         });
-    }
-
-    onChangePage(page: number) {
-        if (page >= 1) {
-            this.page = page;
-        }
     }
 
     onCategorySelected(categoryAndIndex: CategoryIndex) {
@@ -68,7 +63,13 @@ export class CategoryListComponent implements AfterViewInit {
     }
 
     setCardsPerPage(config: Config): void {
-        this.page = 1;
+        this.onChangePage(1);
         this.cardsPerPage = config.thumbnailsPerPage;
+    }
+
+    onChangePage(page: number) {
+        if (page >= 1) {
+            this.page = page;
+        }
     }
 }

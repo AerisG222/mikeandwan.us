@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { state, style, transition, trigger, useAnimation } from '@angular/animations';
 
@@ -27,22 +27,19 @@ import { CategoryIndex } from '../models/category-index.model';
 export class CategoryListComponent implements AfterViewInit {
     private _year: number = null;
     categoryList$: Observable<ICategory[]>;
+    categoryList: ICategory[] = [];
     page = 1;
     cardsPerPage: number;
 
-    constructor(private _changeDetectorRef: ChangeDetectorRef,
-                private _dataService: PhotoDataService,
+    constructor(private _dataService: PhotoDataService,
                 private _stateService: PhotoStateService,
                 private _navService: PhotoNavigationService,
                 private _activatedRoute: ActivatedRoute) {
-        this.setCardsPerPage(this._stateService.config);
-
-        const pageIndex = Math.trunc(this._stateService.lastCategoryIndex / this._stateService.config.thumbnailsPerPage);
-
-        this.onChangePage(pageIndex + 1);
+        this.cardsPerPage = this._stateService.config.thumbnailsPerPage;
 
         this._stateService.configUpdatedEventEmitter.subscribe((config: Config) => {
-            this.setCardsPerPage(config);
+            this.page = 1;
+            this.cardsPerPage = config.thumbnailsPerPage;
         });
     }
 
@@ -52,6 +49,13 @@ export class CategoryListComponent implements AfterViewInit {
 
             this.categoryList$ = this._dataService
                 .getCategoriesForYear(this._year);
+
+            this.categoryList$.subscribe(x => {
+                this.categoryList = x;
+
+                const pageIndex = Math.trunc(this._stateService.lastCategoryIndex / this.cardsPerPage);
+                this.page = pageIndex + 1;
+            });
         });
     }
 
@@ -60,11 +64,6 @@ export class CategoryListComponent implements AfterViewInit {
             this._stateService.lastCategoryIndex = categoryAndIndex.index;
             this._navService.gotoCategoryPhotoList(categoryAndIndex.category);
         }
-    }
-
-    setCardsPerPage(config: Config): void {
-        this.onChangePage(1);
-        this.cardsPerPage = config.thumbnailsPerPage;
     }
 
     onChangePage(page: number) {

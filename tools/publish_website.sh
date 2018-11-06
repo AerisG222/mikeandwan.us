@@ -74,6 +74,12 @@ publish_client_apps() {
         copy_app "${APP}" "${SITE_ROOT}"
         update_refs "${APP}" "${SITE_ROOT}"
     done
+
+    for APP in ${NG_APPS[@]}; do
+        ensure_dir "${APP}" "${SITE_ROOT}"
+        copy_app "${APP}" "${SITE_ROOT}"
+        update_refs "${APP}" "${SITE_ROOT}"
+    done
 }
 
 link_media() {

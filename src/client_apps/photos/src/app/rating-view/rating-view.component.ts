@@ -11,8 +11,8 @@ import { PhotoDataService } from '../services/photo-data.service';
 })
 export class RatingViewComponent {
     svgIcon = SvgIcon;
-    averageRating = -1;
-    userRating = -1;
+    averageRating = 0;
+    userRating = 0;
     private _photo: IPhoto;
 
     @Input() set photo(value: IPhoto) {

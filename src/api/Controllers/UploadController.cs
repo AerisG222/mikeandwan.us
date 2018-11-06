@@ -88,7 +88,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpPost("download")]
-        public IActionResult Download(string[] downloadFiles)
+        public IActionResult Download([FromBody] string[] downloadFiles)
         {
             if(downloadFiles.Length == 0)
             {

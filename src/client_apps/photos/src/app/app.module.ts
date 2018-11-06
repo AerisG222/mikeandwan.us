@@ -41,7 +41,8 @@ import { ToolbarButtonComponent } from './toolbar-button/toolbar-button.componen
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ThreeDLinkComponent } from './three-dlink/three-dlink.component';
 import { PhotoDataService } from './services/photo-data.service';
-import { MawCommonModule, AuthGuardService, AuthInterceptor, AuthConfig, AuthService, EnvironmentConfig } from 'maw-common';
+import { MawCommonModule, EnvironmentConfig } from 'maw-common';
+import { MawAuthModule, AuthGuardService, AuthInterceptor, AuthConfig, AuthService } from 'maw-auth';
 
 
 // TODO: the odd constants for data below are to satisfy an AOT requirement - is there a better way?
@@ -51,6 +52,7 @@ import { MawCommonModule, AuthGuardService, AuthInterceptor, AuthConfig, AuthSer
         BrowserAnimationsModule,
         FormsModule,
         HttpClientModule,
+        MawAuthModule,
         MawCommonModule,
         NgbModule,
         RouterModule.forRoot([

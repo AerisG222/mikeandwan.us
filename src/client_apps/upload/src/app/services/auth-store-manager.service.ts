@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { UpdateUser, ShowUsername } from '../state/auth.actions';
-import { AuthService } from 'maw-common';
+import { AuthService } from 'maw-auth';
 import { User } from 'oidc-client';
 
 @Injectable()

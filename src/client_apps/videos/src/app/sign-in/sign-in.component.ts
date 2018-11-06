@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'maw-common';
+import { AuthService } from 'maw-auth';
 import { VideoNavigationService } from '../services/video-navigation.service';
 
 @Component({

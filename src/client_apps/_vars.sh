@@ -1,22 +1,9 @@
 APPS=(
-    "bandwidth"
-    "binary_clock"
-    "byte_counter"
-    "filesize"
-    "googlemaps"
-    "learning"
-    "memory"
-    "money_spin"
     "photo_stats"
-    "photos"
     "photos3d"
-    "time"
-    "upload"
-    "videos"
     "webgl_cube"
     "webgl_shader"
     "webgl_text"
-    "weekend_countdown"
 )
 
 NG_APPS=(
@@ -36,6 +23,7 @@ NG_APPS=(
 )
 
 NG_LIBS=(
+    "maw-auth"
     "maw-common"
 )
 
@@ -100,33 +88,39 @@ build_app() {
 
 update_ngcli_all_projects() {
     # do libs first as these could be referenced / needed by the npm install step in the app
-    for I in "${NG_LIBS[@]}"
+    for i in "${NG_LIBS[@]}"
     do
-        echo "updating tooling for ${I}..."
-        update_ngcli_project "${I}"
-        build_lib "${I}"
+        echo "updating tooling for ${i}..."
+        update_ngcli_project "${i}"
+        build_lib "${i}"
     done
 
-    for I in "${NG_APPS[@]}"
+    for i in "${NG_APPS[@]}"
     do
-        echo "updating tooling for ${I}..."
-        update_ngcli_project "${I}"
+        echo "updating tooling for ${i}..."
+        update_ngcli_project "${i}"
     done
 }
 
 
 install_all_deps() {
-    for I in "${NG_LIBS[@]}"
+    for i in "${APPS[@]}"
     do
-        echo "installing dependencies for ${I}..."
-        install_deps "${I}"
-        build_lib "${I}"
+        echo "installing dependencies for ${i}..."
+        install_deps "${i}"
     done
 
-    for I in "${NG_APPS[@]}"
+    for i in "${NG_LIBS[@]}"
     do
-        echo "installing dependencies for ${I}..."
-        install_deps "${I}"
+        echo "installing dependencies for ${i}..."
+        install_deps "${i}"
+        build_lib "${i}"
+    done
+
+    for i in "${NG_APPS[@]}"
+    do
+        echo "installing dependencies for ${i}..."
+        install_deps "${i}"
     done
 }
 
@@ -134,13 +128,19 @@ install_all_deps() {
 build_all_apps() {
     local buildcmd=$1
 
+    for i in "${APPS[@]}"
+    do
+        echo "building ${i}..."
+        build_app "${i}" "${buildcmd}"
+    done
+
     for i in "${NG_LIBS[@]}"
     do
         echo "building ${i}..."
         build_lib "${i}"
     done
 
-    for i in "${APPS[@]}"
+    for i in "${NG_APPS[@]}"
     do
         echo "building ${i}..."
         build_app "${i}" "${buildcmd}"

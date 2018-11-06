@@ -24,13 +24,15 @@ import { VideoDataService } from './services/video-data.service';
 import { VideoStateService } from './services/video-state.service';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { VideoNavigationService } from './services/video-navigation.service';
-import { MawCommonModule, AuthGuardService, AuthInterceptor, AuthConfig, AuthService, EnvironmentConfig } from 'maw-common';
+import { MawCommonModule, EnvironmentConfig } from 'maw-common';
+import { MawAuthModule, AuthGuardService, AuthInterceptor, AuthConfig, AuthService } from 'maw-auth';
 
 @NgModule({
     imports: [
         BrowserAnimationsModule,
         FormsModule,
         HttpClientModule,
+        MawAuthModule,
         MawCommonModule,
         NgbModule,
         RouterModule.forRoot([

@@ -21,13 +21,9 @@ import { FileSizePipe } from './pipes/file-size.pipe';
 import { RelativeDatePipe } from './pipes/relative-date.pipe';
 import { DownloadHandlerComponent } from './download-handler/download-handler.component';
 import { FileThumbnailComponent } from './file-thumbnail/file-thumbnail.component';
-import {
-    MawCommonModule,
-    AuthConfig,
-    AuthGuardService,
-    EnvironmentConfig,
-    AuthInterceptor,
-    AuthService } from 'maw-common';
+import { MawCommonModule, EnvironmentConfig, } from 'maw-common';
+import { MawAuthModule, AuthConfig, AuthGuardService, AuthInterceptor, AuthService } from 'maw-auth';
+
 
 @NgModule({
     imports: [
@@ -35,6 +31,7 @@ import {
         FileUploadModule,
         FormsModule,
         HttpClientModule,
+        MawAuthModule,
         MawCommonModule,
         // NgbModule.forRoot(),
         NgxsModule.forRoot([

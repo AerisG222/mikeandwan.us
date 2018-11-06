@@ -19,44 +19,75 @@ APPS=(
     "weekend_countdown"
 )
 
+NG_APPS=(
+    "bandwidth"
+    "binary_clock"
+    "byte_counter"
+    "filesize"
+    "googlemaps"
+    "learning"
+    "memory"
+    "money_spin"
+    "photos"
+    "time"
+    "upload"
+    "videos"
+    "weekend_countdown"
+)
+
+NG_LIBS=(
+    "maw-common"
+)
+
 NG_CLI_VERSION='@angular/cli@latest'
 
 
-install_ngcli_global() {
+update_ngcli_global() {
     local isdockerbuild=$1
 
     if [ "${isdockerbuild}" == "y" ]; then
         npm install -g ${NG_CLI_VERSION}
     else
         sudo npm uninstall -g @angular/cli
-        sudo npm cache clean ${NG_CLI_VERSION}
         sudo npm cache verify
         sudo npm install -g ${NG_CLI_VERSION}
     fi
 }
 
 
-install_libs() {
+update_ngcli_project() {
     cd "${1}"
 
-    if [ -e 'package-lock.json' ]
-    then
-        npm ci
-    else
-        rm -rf node_modules
-        npm install
-    fi
+    # clean and install new cli
+    npm install --save-dev ${NG_CLI_VERSION}
+
+    # add in any other missing libs
+    npm install
+
+    ng update @angular/cli \
+              @angular/core \
+              @angular-devkit/build-angular \
+              @ng-bootstrap/ng-bootstrap \
+              core-js \
+              codelyzer \
+              zone.js \
+              webpack-bundle-analyzer
 
     cd ..
 }
 
 
-install_all_libs() {
-    for i in "${APPS[@]}"
-    do
-        echo "installing libs for ${i}..."
-        install_libs "${i}"
-    done
+install_deps() {
+    cd "${1}"
+    npm install
+    cd ..
+}
+
+
+build_lib() {
+    cd "${1}"
+    npm run package
+    cd ..
 }
 
 
@@ -67,8 +98,47 @@ build_app() {
 }
 
 
+update_ngcli_all_projects() {
+    # do libs first as these could be referenced / needed by the npm install step in the app
+    for I in "${NG_LIBS[@]}"
+    do
+        echo "updating tooling for ${I}..."
+        update_ngcli_project "${I}"
+        build_lib "${I}"
+    done
+
+    for I in "${NG_APPS[@]}"
+    do
+        echo "updating tooling for ${I}..."
+        update_ngcli_project "${I}"
+    done
+}
+
+
+install_all_deps() {
+    for I in "${NG_LIBS[@]}"
+    do
+        echo "installing dependencies for ${I}..."
+        install_deps "${I}"
+        build_lib "${I}"
+    done
+
+    for I in "${NG_APPS[@]}"
+    do
+        echo "installing dependencies for ${I}..."
+        install_deps "${I}"
+    done
+}
+
+
 build_all_apps() {
     local buildcmd=$1
+
+    for i in "${NG_LIBS[@]}"
+    do
+        echo "building ${i}..."
+        build_lib "${i}"
+    done
 
     for i in "${APPS[@]}"
     do

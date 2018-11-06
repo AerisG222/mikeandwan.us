@@ -1,43 +1,4 @@
-NG_APPS=(
-    "bandwidth"
-    "binary_clock"
-    "byte_counter"
-    "filesize"
-    "googlemaps"
-    "learning"
-    "memory"
-    "money_spin"
-    "photos"
-    "time"
-    "upload"
-    "videos"
-    "weekend_countdown"
-)
-CLI_VERSION='@angular/cli@latest'
-
-update_ngcli_global() {
-    # global update
-    sudo npm uninstall -g @angular/cli
-    sudo npm install -g ${CLI_VERSION}
-}
-
-update_ngcli() {
-    cd "${1}"
-
-    # clean and install new cli
-    npm install --save-dev ${CLI_VERSION}
-    ng update @angular/cli \
-              @angular/core \
-              @angular-devkit/build-angular \
-              @ng-bootstrap/ng-bootstrap \
-              core-js \
-              codelyzer \
-              zone.js \
-              webpack-bundle-analyzer
-
-    cd ..
-}
-
+source _vars.sh
 
 # 1: update global tooling
 echo 'Update global ng cli? [y/n]'
@@ -52,9 +13,5 @@ echo 'Update local project cli? [y/n]'
 read LOCAL_UPDATE
 
 if [ "${LOCAL_UPDATE}" == "y" ]; then
-    for I in "${NG_APPS[@]}"
-    do
-        echo "updating tooling for ${I}..."
-        update_ngcli "${I}"
-    done
+    update_ngcli_all_projects
 fi

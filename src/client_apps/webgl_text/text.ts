@@ -5,6 +5,11 @@ import { Scene, PerspectiveCamera, Renderer, Mesh, Object3D, AmbientLight, SpotL
 
 import * as Stats from 'stats.js';
 
+const floorTexture = require('./floor_texture.jpg');
+const fontFile = require('./open_sans_bold.json');
+
+export const _script_root = document.currentScript;
+
 export class TextDemo {
     scene: Scene;
     camera: PerspectiveCamera;
@@ -63,7 +68,7 @@ export class TextDemo {
 
         // floor
         let textureLoader = new TextureLoader();
-        textureLoader.load('/img/webgl/floor_texture.jpg', texture => {
+        textureLoader.load(floorTexture, texture => {
             let floorPlane = new PlaneGeometry(1000, 1000);
             texture.wrapS = RepeatWrapping;
             texture.wrapT = RepeatWrapping;
@@ -88,7 +93,7 @@ export class TextDemo {
     private prepareText() {
         let loader = new FontLoader();
 
-        loader.load('/js/libs/fonts/open_sans_bold.json', response => {
+        loader.load(fontFile, response => {
             let textGeometry = new TextGeometry('WebGL', {
                 font: response,
                 size: 60,

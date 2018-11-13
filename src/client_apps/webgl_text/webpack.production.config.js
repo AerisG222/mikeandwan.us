@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
 
 module.exports = {
@@ -14,7 +13,31 @@ module.exports = {
     },
     module: {
         rules: [
-            { test: /\.ts$/, use: 'ts-loader' }
+            {
+                test: /\.ts$/,
+                use: 'ts-loader'
+            },
+            {
+                test: /\.json$/,
+                type: 'javascript/auto',
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[hash].[ext]',
+                        publicPath: '/js/webgl_text/'
+                    }
+                }]
+            },
+            {
+                test: /\.(png|jpg|gif)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[hash].[ext]',
+                        publicPath: '/js/webgl_text/'
+                    }
+                }]
+            }
         ]
     },
     plugins: [

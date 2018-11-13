@@ -5,6 +5,9 @@ import { Scene, PerspectiveCamera, Renderer, Mesh, AmbientLight, Fog, WebGLRende
 
 import * as Stats from 'stats.js';
 
+const floorTexture = require('./floor_texture.jpg');
+const cubeTexture = require('./DSC_8562.jpg');
+
 export class CubeDemo {
     scene: Scene;
     camera: PerspectiveCamera;
@@ -56,7 +59,7 @@ export class CubeDemo {
 
         // cube
         let textureLoader = new TextureLoader();
-        textureLoader.load('/images/2013/alyssas_first_snowman/xs/DSC_9960.jpg', texture => {
+        textureLoader.load(cubeTexture, texture => {
             let geometry = new BoxGeometry(50, 50, 50);
             let material = new MeshPhongMaterial({ color: 0xffffff, map: texture });
             this.cube = new Mesh(geometry, material);
@@ -69,7 +72,7 @@ export class CubeDemo {
         });
 
         // floor
-        textureLoader.load('/img/webgl/floor_texture.jpg', texture => {
+        textureLoader.load(floorTexture, texture => {
             let floorPlane = new PlaneGeometry(1000, 1000);
             texture.wrapS = RepeatWrapping;
             texture.wrapT = RepeatWrapping;

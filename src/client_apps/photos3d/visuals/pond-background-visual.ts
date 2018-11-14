@@ -9,11 +9,15 @@ import { IVisual } from './ivisual';
 import { TextureLoader } from '../services/texture-loader';
 import { VisualContext } from '../models/visual-context';
 
-export class PondBackgroundVisual extends Group implements IDisposable, IVisual {
-    private static readonly TEXTURE_WATER = 'water.jpg';
-    private static readonly TEXTURE_TREES = 'trees_blur20.jpg';
-    private static readonly TEXTURE_NOISE = 'noise.png';
+const textureNoiseMd = require('../img/md/noise.png');
+const textureTreeseMd = require('../img/md/trees_blur20.jpg');
+const textureWaterMd = require('../img/md/water.jpg');
 
+const textureNoiseLg = require('../img/lg/noise.png');
+const textureTreeseLg = require('../img/lg/trees.jpg');
+const textureWaterLg = require('../img/lg/water.jpg');
+
+export class PondBackgroundVisual extends Group implements IDisposable, IVisual {
     private _horizontalRepeat = 2;
     private _isDisposed = false;
     private _textureLoader = new TextureLoader();
@@ -87,11 +91,19 @@ export class PondBackgroundVisual extends Group implements IDisposable, IVisual 
     }
 
     private loadTextures() {
-        return this._textureLoader.loadTextures([
-            `/img/photos3d/${this._ctx.size}/${PondBackgroundVisual.TEXTURE_NOISE}`,
-            `/img/photos3d/${this._ctx.size}/${PondBackgroundVisual.TEXTURE_TREES}`,
-            `/img/photos3d/${this._ctx.size}/${PondBackgroundVisual.TEXTURE_WATER}`
-        ]);
+        if (this._ctx.size === 'md') {
+            return this._textureLoader.loadTextures([
+                textureNoiseMd,
+                textureTreeseMd,
+                textureWaterMd
+            ]);
+        } else {
+            return this._textureLoader.loadTextures([
+                textureNoiseLg,
+                textureTreeseLg,
+                textureWaterLg
+            ]);
+        }
     }
 
     private updateTextures(texturePromises: Array<Promise<Texture>>) {
@@ -100,11 +112,11 @@ export class PondBackgroundVisual extends Group implements IDisposable, IVisual 
             let noiseTexture: Texture = null;
 
             for (let texture of textures) {
-                if (texture.name.indexOf(PondBackgroundVisual.TEXTURE_NOISE) > 0) {
+                if (texture.name.indexOf('noise') > 0) {
                     noiseTexture = texture;
-                } else if (texture.name.indexOf(PondBackgroundVisual.TEXTURE_TREES) > 0) {
+                } else if (texture.name.indexOf('tree') > 0) {
                     this.updateTrees(texture);
-                } else if (texture.name.indexOf(PondBackgroundVisual.TEXTURE_WATER) > 0) {
+                } else if (texture.name.indexOf('water') > 0) {
                     waterTexture = texture;
                 }
             }

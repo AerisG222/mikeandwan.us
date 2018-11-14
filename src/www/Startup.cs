@@ -32,7 +32,7 @@ using Maw.Domain.Photos;
 using Maw.Security;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
-
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace MawMvcApp
 {
@@ -143,31 +143,34 @@ namespace MawMvcApp
                         ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
                     })
                 .UseAuthentication()
-                .UseStaticFiles()
+                .UseStaticFiles(new StaticFileOptions {
+                    ContentTypeProvider = GetCustomMimeTypeProvider()
+                })
                 .UseMvc();
         }
 
 
         void AddDevPathMappings(IApplicationBuilder app)
         {
-            AddDevPathMapping(app, "../client_apps/bandwidth/dist",         "/js/bandwidth");
-            AddDevPathMapping(app, "../client_apps/binary_clock/dist",      "/js/binary_clock");
-            AddDevPathMapping(app, "../client_apps/byte_counter/dist",      "/js/byte_counter");
-            AddDevPathMapping(app, "../client_apps/filesize/dist",          "/js/filesize");
-            AddDevPathMapping(app, "../client_apps/googlemaps/dist",        "/js/googlemaps");
-            AddDevPathMapping(app, "../client_apps/learning/dist",          "/js/learning");
-            AddDevPathMapping(app, "../client_apps/memory/dist",            "/js/memory");
-            AddDevPathMapping(app, "../client_apps/money_spin/dist",        "/js/money_spin");
-            AddDevPathMapping(app, "../client_apps/photos/dist",            "/js/photos");
-            AddDevPathMapping(app, "../client_apps/photos3d/dist",          "/js/photos3d");
-            AddDevPathMapping(app, "../client_apps/photo_stats/dist",       "/js/photo_stats");
-            AddDevPathMapping(app, "../client_apps/time/dist",              "/js/time");
-            AddDevPathMapping(app, "../client_apps/upload/dist",            "/js/upload");
-            AddDevPathMapping(app, "../client_apps/videos/dist",            "/js/videos");
-            AddDevPathMapping(app, "../client_apps/webgl_cube/dist",        "/js/webgl_cube");
-            AddDevPathMapping(app, "../client_apps/webgl_shader/dist",      "/js/webgl_shader");
-            AddDevPathMapping(app, "../client_apps/webgl_text/dist",        "/js/webgl_text");
-            AddDevPathMapping(app, "../client_apps/weekend_countdown/dist", "/js/weekend_countdown");
+            AddDevPathMapping(app, "../client_apps/bandwidth/dist",           "/js/bandwidth");
+            AddDevPathMapping(app, "../client_apps/binary_clock/dist",        "/js/binary_clock");
+            AddDevPathMapping(app, "../client_apps/byte_counter/dist",        "/js/byte_counter");
+            AddDevPathMapping(app, "../client_apps/filesize/dist",            "/js/filesize");
+            AddDevPathMapping(app, "../client_apps/googlemaps/dist",          "/js/googlemaps");
+            AddDevPathMapping(app, "../client_apps/learning/dist",            "/js/learning");
+            AddDevPathMapping(app, "../client_apps/memory/dist",              "/js/memory");
+            AddDevPathMapping(app, "../client_apps/money_spin/dist",          "/js/money_spin");
+            AddDevPathMapping(app, "../client_apps/photos/dist",              "/js/photos");
+            AddDevPathMapping(app, "../client_apps/photos3d/dist",            "/js/photos3d");
+            AddDevPathMapping(app, "../client_apps/photo_stats/dist",         "/js/photo_stats");
+            AddDevPathMapping(app, "../client_apps/time/dist",                "/js/time");
+            AddDevPathMapping(app, "../client_apps/upload/dist",              "/js/upload");
+            AddDevPathMapping(app, "../client_apps/videos/dist",              "/js/videos");
+            AddDevPathMapping(app, "../client_apps/webgl_blender_model/dist", "/js/webgl_blender_model");
+            AddDevPathMapping(app, "../client_apps/webgl_cube/dist",          "/js/webgl_cube");
+            AddDevPathMapping(app, "../client_apps/webgl_shader/dist",        "/js/webgl_shader");
+            AddDevPathMapping(app, "../client_apps/webgl_text/dist",          "/js/webgl_text");
+            AddDevPathMapping(app, "../client_apps/weekend_countdown/dist",   "/js/weekend_countdown");
         }
 
 
@@ -176,8 +179,19 @@ namespace MawMvcApp
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), localRelativePath)),
-                RequestPath = new PathString(urlPath)
+                RequestPath = new PathString(urlPath),
+                ContentTypeProvider = GetCustomMimeTypeProvider()
             });
+        }
+
+
+        FileExtensionContentTypeProvider GetCustomMimeTypeProvider()
+        {
+            var provider = new FileExtensionContentTypeProvider();
+
+            provider.Mappings[".gltf"] = "model/gltf+json";
+
+            return provider;
         }
     }
 }

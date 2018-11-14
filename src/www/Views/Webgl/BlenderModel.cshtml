@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "blender model";
+    Layout = "_LayoutMinimal";
+}
+
+@section custom_head {
+    <partial name="_css_site" />
+    <style>
+        body { margin: 0; padding: 0; }
+        canvas { width: 99%; height: 99% }
+    </style>
+}
+
+<script src="/js/webgl_blender_model/main.bundle.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function(event) {
+        var demo = new WebGLDemo.BlenderModelDemo();
+        demo.run();
+    });
+</script>

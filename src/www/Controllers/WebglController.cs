@@ -46,5 +46,13 @@ namespace MawMvcApp.Controllers
             ViewBag.NavigationZone = NavigationZone.Webgl;
             return View();
         }
+
+
+        [HttpGet("blender-model")]
+        public ActionResult BlenderModel()
+        {
+            ViewBag.NavigationZone = NavigationZone.Webgl;
+            return View();
+        }
     }
 }

@@ -22,6 +22,7 @@ export class AppComponent {
     doRun = false;
     runButtonText = 'Start';
     intervalId: number = null;
+    assetRoot = '/js/learning/assets';
     @ViewChild('audio') audioElement: ElementRef;
 
     toggleRunning(): void {
@@ -58,7 +59,7 @@ export class AppComponent {
     }
 
     getCurrentAudioSources(): AudioSource {
-        const prefix = `/audio/learning/${this.currentSpeaker.toLowerCase()}/${this.currentChar.toLowerCase()}`;
+        const prefix = `${this.assetRoot}/${this.currentSpeaker.toLowerCase()}/${this.currentChar.toLowerCase()}`;
 
         return new AudioSource(`${prefix}.mp3`, `${prefix}.ogg`);
     }

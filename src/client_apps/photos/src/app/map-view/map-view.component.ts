@@ -13,7 +13,7 @@ import { Photo } from '../models/photo.model';
 })
 export class MapViewComponent implements OnDestroy, AfterViewInit {
     private _markerImage = {
-        url: '/css/photo_app/map_marker.png',
+        url: '/js/photos/assets/map_marker.png',
         size: new google.maps.Size(11, 11),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(5, 11)

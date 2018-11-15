@@ -24,7 +24,18 @@ copy_app() {
     local SITE_ROOT=$2
 
     # https://silentorbit.com/notes/2013/08/rsync-by-extension/
-    rsync -ah --include '*/' --include '*.js' --include '*.css' --exclude '*' "${SRC_ROOT}/client_apps/${APP}/dist/" "${SITE_ROOT}/wwwroot/js/${APP}"
+    rsync -ahm \
+          --include '*/'     \
+          --include '*.js'   \
+          --include '*.css'  \
+          --include '*.jpg'  \
+          --include '*.png'  \
+          --include '*.json' \
+          --include '*.gltf' \
+          --include '*.bin'  \
+          --exclude '*'      \
+          "${SRC_ROOT}/client_apps/${APP}/dist/" \
+          "${SITE_ROOT}/wwwroot/js/${APP}"
 }
 
 update_refs() {

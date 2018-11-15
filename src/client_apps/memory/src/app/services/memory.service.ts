@@ -11,24 +11,24 @@ export class MemoryService {
     private _player2: IPlayer = null;
 
     private _cards: Array<ICardInfo> = [
-        { id: 1,  img: '/img/games/memory/cards/card1.jpg' },
-        { id: 2,  img: '/img/games/memory/cards/card2.jpg' },
-        { id: 3,  img: '/img/games/memory/cards/card3.jpg' },
-        { id: 4,  img: '/img/games/memory/cards/card4.jpg' },
-        { id: 5,  img: '/img/games/memory/cards/card5.jpg' },
-        { id: 6,  img: '/img/games/memory/cards/card6.jpg' },
-        { id: 7,  img: '/img/games/memory/cards/card7.jpg' },
-        { id: 8,  img: '/img/games/memory/cards/card8.jpg' },
-        { id: 9,  img: '/img/games/memory/cards/card9.jpg' },
-        { id: 10, img: '/img/games/memory/cards/card10.jpg' },
-        { id: 11, img: '/img/games/memory/cards/card11.jpg' }
+        { id: 1,  img: '/js/memory/assets/cards/card1.jpg' },
+        { id: 2,  img: '/js/memory/assets/cards/card2.jpg' },
+        { id: 3,  img: '/js/memory/assets/cards/card3.jpg' },
+        { id: 4,  img: '/js/memory/assets/cards/card4.jpg' },
+        { id: 5,  img: '/js/memory/assets/cards/card5.jpg' },
+        { id: 6,  img: '/js/memory/assets/cards/card6.jpg' },
+        { id: 7,  img: '/js/memory/assets/cards/card7.jpg' },
+        { id: 8,  img: '/js/memory/assets/cards/card8.jpg' },
+        { id: 9,  img: '/js/memory/assets/cards/card9.jpg' },
+        { id: 10, img: '/js/memory/assets/cards/card10.jpg' },
+        { id: 11, img: '/js/memory/assets/cards/card11.jpg' }
     ];
 
     private _characters: Array<ICharacter> = [
-        { name: 'Leonardo',      color: 'blue',   img: '/img/games/memory/players/leonardo.jpg' },
-        { name: 'Michaelangelo', color: 'orange', img: '/img/games/memory/players/michaelangelo.jpg' },
-        { name: 'Donatello',     color: 'purple', img: '/img/games/memory/players/donatello.jpg' },
-        { name: 'Raphael',       color: 'red',    img: '/img/games/memory/players/raphael.jpg' }
+        { name: 'Leonardo',      color: 'blue',   img: '/js/memory/assets/players/leonardo.jpg' },
+        { name: 'Michaelangelo', color: 'orange', img: '/js/memory/assets/players/michaelangelo.jpg' },
+        { name: 'Donatello',     color: 'purple', img: '/js/memory/assets/players/donatello.jpg' },
+        { name: 'Raphael',       color: 'red',    img: '/js/memory/assets/players/raphael.jpg' }
     ];
 
     constructor(private _router: Router) {

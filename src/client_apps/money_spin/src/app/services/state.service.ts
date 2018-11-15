@@ -9,16 +9,16 @@ export class StateService {
     private _winningScore = 25;
     private _splashShown = false;
     player1Characters = [
-        new Character('C3P0',  '/img/games/money_spin/p1c3p0.png'),
-        new Character('R2D2',  '/img/games/money_spin/p1r2d2.png'),
-        new Character('Leo',   '/img/games/money_spin/p1leo.png'),
-        new Character('Mikey', '/img/games/money_spin/p1mikey.png')
+        new Character('C3P0',  '/js/money_spin/assets/p1c3p0.png'),
+        new Character('R2D2',  '/js/money_spin/assets/p1r2d2.png'),
+        new Character('Leo',   '/js/money_spin/assets/p1leo.png'),
+        new Character('Mikey', '/js/money_spin/assets/p1mikey.png')
     ];
     player2Characters = [
-        new Character('C3P0',  '/img/games/money_spin/p2c3p0.png'),
-        new Character('R2D2',  '/img/games/money_spin/p2r2d2.png'),
-        new Character('Leo',   '/img/games/money_spin/p2leo.png'),
-        new Character('Mikey', '/img/games/money_spin/p2mikey.png')
+        new Character('C3P0',  '/js/money_spin/assets/p2c3p0.png'),
+        new Character('R2D2',  '/js/money_spin/assets/p2r2d2.png'),
+        new Character('Leo',   '/js/money_spin/assets/p2leo.png'),
+        new Character('Mikey', '/js/money_spin/assets/p2mikey.png')
     ];
     player1: Player;
     player2: Player;

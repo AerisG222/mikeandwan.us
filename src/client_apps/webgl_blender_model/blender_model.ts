@@ -16,6 +16,8 @@ export class BlenderModelDemo {
     private _smStar: Mesh;
     private _mdStar: Mesh;
     private _lgStar: Mesh;
+    private _frameCounter = 0;
+    private _rotateMultiplier = 1.0;
 
     run() {
         this.prepareScene();
@@ -63,45 +65,43 @@ export class BlenderModelDemo {
     }
 
     private setupModel(gltf) {
-        const smStar = gltf.scene.children.find(x => x.name === 'Small_Star'  && x.type === 'Mesh');
-        const mdStar = gltf.scene.children.find(x => x.name === 'Medium_Star' && x.type === 'Mesh');
-        const lgStar = gltf.scene.children.find(x => x.name === 'Large_Star'  && x.type === 'Mesh');
+        this._smStar = this.prepareMesh(gltf, 'Small_Star',  '#000b8c');
+        this._mdStar = this.prepareMesh(gltf, 'Medium_Star', '#0047ba');
+        this._lgStar = this.prepareMesh(gltf, 'Large_Star',  '#acc5e9');
+    }
 
-        const smStarMat = new MeshPhongMaterial({
-            color: '#000b8c',
+    private prepareMesh(gltf, name: string, color: string): Mesh {
+        const mesh = gltf.scene.children.find(x => x.name === name  && x.type === 'Mesh');
+        const mat = new MeshPhongMaterial({
+            color: color,
             specular: 0xffffff,
-            shininess: 50
+            shininess: 20
         });
 
-        const mdStarMat = new MeshPhongMaterial({
-            color: '#0047ba',
-            specular: 0xffffff,
-            shininess: 50
-        });
+        mesh.material = mat;
 
-        const lgStarMat = new MeshPhongMaterial({
-            color: '#acc5e9',
-            specular: 0xffffff,
-            shininess: 50
-        });
+        this._scene.add(mesh);
 
-        this._smStar = new Mesh(smStar.geometry, smStarMat);
-        this._mdStar = new Mesh(mdStar.geometry, mdStarMat);
-        this._lgStar = new Mesh(lgStar.geometry, lgStarMat);
-
-        this._scene.add(this._smStar);
-        this._scene.add(this._mdStar);
-        this._scene.add(this._lgStar);
+        return mesh;
     }
 
     private render() {
         requestAnimationFrame(() => this.render());
 
-        if (this._smStar !== undefined) {
-            this._smStar.rotation.x += 0.01;
+        if (this._smStar !== undefined &&
+            this._mdStar !== undefined &&
+            this._lgStar !== undefined) {
+            this._smStar.rotation.x += 0.01 * this._rotateMultiplier;
+            this._mdStar.rotation.x += 0.01 * this._rotateMultiplier;
+            this._lgStar.rotation.x += 0.01 * this._rotateMultiplier;
+
+            this._frameCounter++;
+
+            if(this._frameCounter > 40) {
+                this._frameCounter = 0;
+                this._rotateMultiplier = this._rotateMultiplier * -1.0;
+            }
         }
-        // this.cube.rotation.x += 0.01;
-        // this.cube.rotation.y += 0.01;
 
         this._renderer.render(this._scene, this._camera);
 

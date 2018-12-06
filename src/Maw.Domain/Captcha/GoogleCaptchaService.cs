@@ -30,7 +30,7 @@ namespace Maw.Domain.Captcha
 		}
 
 
-		public virtual string SiteKey 
+		public virtual string SiteKey
 		{
 			get
 			{
@@ -50,7 +50,7 @@ namespace Maw.Domain.Captcha
 
 			parameters.Add(new KeyValuePair<string, string>("secret", _config.SecretKey));
 			parameters.Add(new KeyValuePair<string, string>("response", recaptchaResponse));
-			
+
 			using(var client = new HttpClient())
 			using(var content = new FormUrlEncodedContent(parameters))
 			{
@@ -59,10 +59,10 @@ namespace Maw.Domain.Captcha
 				var jobject = JObject.Parse(val);
 				var result = (bool)jobject["success"];
 
-				_log.LogInformation("google capture returned: " + result.ToString());
+				_log.LogInformation($"google recaptcha returned: {result}");
 
 				response.Dispose();
-				
+
 				return result;
 			}
 		}

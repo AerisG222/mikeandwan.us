@@ -53,7 +53,7 @@ namespace MawApi
                 .AddMvcCore()
                     .AddAuthorization()
                     .AddJsonFormatters()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                     .Services
                 .AddSignalR()
                     .AddMessagePackProtocol()

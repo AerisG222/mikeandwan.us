@@ -4,37 +4,37 @@
     <AssemblyName>maw_auth</AssemblyName>
     <VersionPrefix>1.0.0</VersionPrefix>
     <Authors>Mike Morano &lt;mmorano@mikeandwan.us&gt;</Authors>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>portable</DebugType>
     <DefaultItemExcludes>**/node_modules/**;$(DefaultItemExcludes)</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot/" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="certs\*">
+    <None Update="certs/*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="2.0.0" />
     <PackageReference Include="Dapper" Version="1.50.5" />
-    <PackageReference Include="IdentityServer4" Version="2.3.0" />
+    <PackageReference Include="IdentityServer4" Version="2.3.2" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.3.0" />
     <PackageReference Include="Npgsql" Version="4.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Maw.Domain\Maw.Domain.csproj" />
-    <ProjectReference Include="..\Maw.Data\Maw.Data.csproj" />
-    <ProjectReference Include="..\Maw.TagHelpers\Maw.TagHelpers.csproj" />
-    <ProjectReference Include="..\Mvc.RenderViewToString\Mvc.RenderViewToString.csproj" />
-    <ProjectReference Include="..\Maw.Security\Maw.Security.csproj" />
+    <ProjectReference Include="../Maw.Domain/Maw.Domain.csproj" />
+    <ProjectReference Include="../Maw.Data/Maw.Data.csproj" />
+    <ProjectReference Include="../Maw.TagHelpers/Maw.TagHelpers.csproj" />
+    <ProjectReference Include="../Mvc.RenderViewToString/Mvc.RenderViewToString.csproj" />
+    <ProjectReference Include="../Maw.Security/Maw.Security.csproj" />
   </ItemGroup>
 
 </Project>

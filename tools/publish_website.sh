@@ -232,7 +232,7 @@ publish_client_apps "${BUILD_ROOT}/www"
 for SITE in "${SITES[@]}"
 do
     cd "${BUILD_ROOT}/${SITE}"
-    dotnet publish -f netcoreapp2.1 -o "${DIST_ROOT}/${SITE}" -c Release
+    dotnet publish -o "${DIST_ROOT}/${SITE}" -c Release
 done
 
 rm -rf "${BUILD_ROOT}"

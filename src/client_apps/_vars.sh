@@ -22,7 +22,12 @@ NG_LIBS=(
     "maw-common"
 )
 
-NG_CLI_VERSION='@angular/cli@latest'
+NG_LIB_PATHS=(
+    "../maw-auth/dist/maw-auth/maw-auth-0.0.1.tgz"
+    "../maw-common/dist/maw-common/maw-common-0.0.7.tgz"
+)
+
+NG_CLI_VERSION='@angular/cli@7.1.4'
 
 
 update_ngcli_global() {
@@ -32,14 +37,27 @@ update_ngcli_global() {
         npm install -g ${NG_CLI_VERSION}
     else
         sudo npm uninstall -g @angular/cli
-        sudo npm cache verify
+        npm cache verify
         sudo npm install -g ${NG_CLI_VERSION}
     fi
 }
 
 
 update_ngcli_project() {
-    cd "${1}"
+    local projectdir=$1
+    local installlibs=$2
+
+    cd "${projectdir}"
+
+    rm -rf node_modules dist
+
+    if [ "${installlibs}" == "y" ]; then
+        # remove local libs [currently ng update does not like when there is a file:// package]
+        for i in "${NG_LIBS}"
+        do
+            npm rm "${i}" --save-dev
+        done
+    fi
 
     # clean and install new cli
     npm install --save-dev ${NG_CLI_VERSION}
@@ -47,12 +65,19 @@ update_ngcli_project() {
     # add in any other missing libs
     npm install
 
+    if [ "${installlibs}" == "y" ]; then
+        # add in local libs
+        for i in "${NG_LIB_PATHS}"
+        do
+            npm install "${i}" --save-dev
+        done
+    fi
+
     ng update @angular/cli \
               @angular/core \
-              @angular-devkit/build-angular \
               @ng-bootstrap/ng-bootstrap \
-              core-js \
               codelyzer \
+              core-js \
               zone.js \
               webpack-bundle-analyzer
 
@@ -86,14 +111,14 @@ update_ngcli_all_projects() {
     for i in "${NG_LIBS[@]}"
     do
         echo "updating tooling for ${i}..."
-        update_ngcli_project "${i}"
+        update_ngcli_project "${i}" 'n'
         build_lib "${i}"
     done
 
     for i in "${NG_APPS[@]}"
     do
         echo "updating tooling for ${i}..."
-        update_ngcli_project "${i}"
+        update_ngcli_project "${i}" 'y'
     done
 }
 

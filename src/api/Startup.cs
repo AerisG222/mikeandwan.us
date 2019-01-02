@@ -112,7 +112,7 @@ namespace MawApi
         }
 
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseCors("default");
             app.UseSwagger();

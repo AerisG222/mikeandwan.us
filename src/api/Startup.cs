@@ -8,28 +8,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using IdentityModel;
+using NMagickWand;
 using Maw.Data;
 using Maw.Domain;
 using Maw.Domain.Upload;
 using Maw.Security;
 using MawApi.Hubs;
-using Microsoft.Extensions.FileProviders;
-using NMagickWand;
+
 
 namespace MawApi
 {
     public class Startup
     {
         readonly IConfiguration _config;
+        readonly IHostingEnvironment _env;
 
 
-        public Startup(IConfiguration config)
+        public Startup(IConfiguration config, IHostingEnvironment env)
         {
+            _env = env ?? throw new ArgumentNullException(nameof(env));
             _config = config ?? throw new ArgumentNullException(nameof(config));
 
             MagickWandEnvironment.Genesis();
@@ -39,10 +42,8 @@ namespace MawApi
         public void ConfigureServices(IServiceCollection services)
         {
             var authConfig = new AuthConfig();
-            var corsConfig = new CorsConfig();
 
             _config.GetSection("AuthConfig").Bind(authConfig);
-            _config.GetSection("CorsConfig").Bind(corsConfig);
 
             services
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
@@ -95,7 +96,23 @@ namespace MawApi
                 .AddCors(opts => {
                     // this defines a CORS policy called "default"
                     opts.AddPolicy("default", policy => {
-                        policy.WithOrigins(corsConfig.SiteUrl)
+                        string[] origins = null;
+
+                        if(_env.IsDevelopment())
+                        {
+                            origins = new string[] {
+                                "http://localhost:4200",
+                                "https://wwwdev.mikeandwan.us:5021"
+                            };
+                        }
+                        else
+                        {
+                            origins = new string[] {
+                                "https://www.mikeandwan.us"
+                            };
+                        }
+
+                        policy.WithOrigins(origins)
                             .WithExposedHeaders(new string[] {
                                 "Content-Disposition"
                             })
@@ -107,7 +124,7 @@ namespace MawApi
         }
 
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseCors("default");
             app.UseAuthentication();

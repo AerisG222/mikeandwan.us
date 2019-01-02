@@ -271,7 +271,40 @@ namespace MawAuth.Models
                         JwtClaimTypes.Role
                     },
                     AllowOfflineAccess = true
-                }
+                },
+                new Client
+                {
+                    ClientId = "maw-photos",
+                    ClientName = "NEW mikeandwan.us Photo Application",
+                    RequireConsent = false,
+                    //AccessTokenLifetime = 600, // 10 minutes, default 60 minutes
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris = new List<string>
+                    {
+                        $"http://localhost:4200/spa-signin",
+                        $"http://localhost:4200/spa-silent-signin"
+                    },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        $"http://localhost:4200/"
+                    },
+                    AllowedCorsOrigins = new List<string>
+                    {
+                        "http://localhost:4200"
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+
+                        // apis
+                        "maw_api",
+
+                        // identity resources
+                        JwtClaimTypes.Role
+                    }
+                },
             };
         }
     }

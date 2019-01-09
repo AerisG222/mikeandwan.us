@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -67,11 +69,28 @@ namespace MawAuth
                         opts.ClientSecret = _config["GitHub:ClientSecret"];
                         opts.Scope.Add("user:email");
                     })
+                /*
                 .AddGoogle(opts =>
                     {
                         opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                         opts.ClientId = _config["GooglePlus:ClientId"];
                         opts.ClientSecret = _config["GooglePlus:ClientSecret"];
+                    })
+                */
+                .AddGoogle(opts =>
+                    {
+                        // https://github.com/aspnet/AspNetCore/issues/6486
+                        opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                        opts.ClientId = _config["GooglePlus:ClientId"];
+                        opts.ClientSecret = _config["GooglePlus:ClientSecret"];
+                        opts.UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
+                        opts.ClaimActions.Clear();
+                        opts.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                        opts.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                        opts.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+                        opts.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+                        opts.ClaimActions.MapJsonKey("urn:google:profile", "link");
+                        opts.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
                     })
                 .AddMicrosoftAccount(opts =>
                     {

@@ -152,7 +152,6 @@ namespace MawMvcApp
 
         void AddDevPathMappings(IApplicationBuilder app)
         {
-            AddDevPathMapping(app, "../client_apps/bandwidth/dist",           "/js/bandwidth");
             AddDevPathMapping(app, "../client_apps/binary_clock/dist",        "/js/binary_clock");
             AddDevPathMapping(app, "../client_apps/byte_counter/dist",        "/js/byte_counter");
             AddDevPathMapping(app, "../client_apps/filesize/dist",            "/js/filesize");

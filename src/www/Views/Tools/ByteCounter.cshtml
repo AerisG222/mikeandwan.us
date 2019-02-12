@@ -1,20 +1,7 @@
+@model MawMvcApp.ViewModels.Tools.ByteCounterViewModel
 @{
     Layout = "_LayoutSidebar";
     ViewBag.Title = "tools | byte counter";
-}
-
-@section custom_head {
-    <base href="/" />
-}
-
-@section stylesheets {
-    <link rel="stylesheet" href="/js/byte_counter/styles.css" />
-}
-
-@section scripts_footer {
-    <script type="text/javascript" src="/js/byte_counter/runtime.js"></script>
-    <script type="text/javascript" src="/js/byte_counter/polyfills.js"></script>
-    <script type="text/javascript" src="/js/byte_counter/main.js"></script>
 }
 
 @section header {
@@ -35,5 +22,30 @@
 </p>
 
 <section>
-    <app-root>Loading...</app-root>
+    <form asp-controller="tools" asp-action="ByteCounter" method="post" autocomplete="off" role="form">
+        <div class="form-group">
+            <label asp-for="Text" class="col-form-label"></label>
+            <textarea asp-for="Text" rows="12" class="form-control" autofocus></textarea>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Count</button>
+            <button type="reset" class="btn btn-primary">Clear</button>
+        </div>
+    </form>
+
+    <table class="table table-striped table-hover table-sm">
+        <tr>
+            <td>Bytes</td>
+            <td>@Model.Bytes.ToString("#,##0")</td>
+        </tr>
+        <tr>
+            <td>Kilobytes</td>
+            <td>@Model.Kilobytes.ToString("#,##0.00")</td>
+        </tr>
+        <tr>
+            <td>Megabytes</td>
+            <td>@Model.Megabytes.ToString("#,##0.00")</td>
+        </tr>
+    </table>
 </section>

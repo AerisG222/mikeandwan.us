@@ -239,7 +239,18 @@ namespace MawMvcApp.Controllers
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
-			return View();
+			return View(new ByteCounterViewModel());
+		}
+
+
+        [HttpPost("byte-counter")]
+		public IActionResult ByteCounter(ByteCounterViewModel model)
+		{
+			ViewBag.NavigationZone = NavigationZone.Tools;
+
+            model.Calculate();
+
+			return View(model);
 		}
 
 

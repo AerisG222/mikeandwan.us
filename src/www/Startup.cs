@@ -153,7 +153,6 @@ namespace MawMvcApp
         void AddDevPathMappings(IApplicationBuilder app)
         {
             AddDevPathMapping(app, "../client_apps/binary_clock/dist",        "/js/binary_clock");
-            AddDevPathMapping(app, "../client_apps/filesize/dist",            "/js/filesize");
             AddDevPathMapping(app, "../client_apps/googlemaps/dist",          "/js/googlemaps");
             AddDevPathMapping(app, "../client_apps/learning/dist",            "/js/learning");
             AddDevPathMapping(app, "../client_apps/memory/dist",              "/js/memory");

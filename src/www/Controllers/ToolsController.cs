@@ -8,6 +8,7 @@ using MawMvcApp.ViewModels.Navigation;
 using MawMvcApp.ViewModels.Tools;
 using MawMvcApp.ViewModels.Tools.Dotnet;
 using MawMvcApp.ViewModels.Tools.Bandwidth;
+using MawMvcApp.ViewModels.Tools.FileSize;
 
 namespace MawMvcApp.Controllers
 {
@@ -184,7 +185,25 @@ namespace MawMvcApp.Controllers
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
-			return View();
+			return View(new FileSizeViewModel());
+		}
+
+
+        [HttpPost("networking-file-size")]
+		public IActionResult NetworkingFileSize(FileSizeViewModel model)
+		{
+			ViewBag.NavigationZone = NavigationZone.Tools;
+
+            if(ModelState.IsValid)
+            {
+                model.Calculate();
+            }
+            else
+            {
+                model.ErrorMessage = "Please enter a valid file size";
+            }
+
+			return View(model);
 		}
 
 

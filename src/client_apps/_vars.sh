@@ -8,7 +8,6 @@ APPS=(
 )
 
 NG_APPS=(
-    "bandwidth"
     "binary_clock"
     "byte_counter"
     "filesize"

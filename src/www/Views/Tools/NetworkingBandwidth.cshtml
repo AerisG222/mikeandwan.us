@@ -1,24 +1,11 @@
+@model MawMvcApp.ViewModels.Tools.Bandwidth.BandwidthViewModel
 @{
     Layout = "_LayoutSidebar";
     ViewBag.Title = "tools | networking | bandwidth";
 }
 
-@section custom_head {
-    <base href="/" />
-}
-
 @section header {
     <h1>Bandwidth Calculator</h1>
-}
-
-@section stylesheets {
-    <link rel="stylesheet" href="/js/bandwidth/styles.css" />
-}
-
-@section scripts_footer {
-    <script type="text/javascript" src="/js/bandwidth/runtime.js"></script>
-    <script type="text/javascript" src="/js/bandwidth/polyfills.js"></script>
-    <script type="text/javascript" src="/js/bandwidth/main.js"></script>
 }
 
 @section sidebar {
@@ -35,5 +22,73 @@
 </p>
 
 <section>
-    <app-root>Loading...</app-root>
+    @if(!string.IsNullOrEmpty(Model.ErrorMessage)) {
+        <p maw-alert-type="Danger">
+            <text>@Model.ErrorMessage</text>
+        </p>
+    }
+
+    <form asp-controller="tools" asp-action="NetworkingBandwidth" method="post" autocomplete="off" role="form">
+        <div class="form-row">
+            <div class="form-group col-sm-2">
+                <label asp-for="Size" class="col-form-label"></label>
+            </div>
+
+            <div class="form-group col-sm-3">
+                <input type="text" id="size" class="form-control" asp-for="Size" autofocus />
+            </div>
+
+            <div class="form-group col-sm-2">
+                <select class="custom-select w-100" asp-for="SizeScale">
+                    <option value="b">B</option>
+                    <option value="k">KB</option>
+                    <option value="m">MB</option>
+                    <option value="g">GB</option>
+                </select>
+            </div>
+
+            <div class="form-group col-sm-1 d-flex justify-content-center">
+                <label class="col-form-label">in</label>
+            </div>
+
+            <div class="form-group col-sm-2">
+                <select class="custom-select w-100" asp-for="TimeScale">
+                    <option value="s">Seconds</option>
+                    <option value="m">Minutes</option>
+                    <option value="h">Hours</option>
+                    <option value="d">Days</option>
+                </select>
+            </div>
+
+            <div class="form-group col-sm-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+
+    @if(Model.Results != null) {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-sm">
+                <tr>
+                    <th>Connection Name</th>
+                    <th>Connection Speed</th>
+                    <th>Download Time</th>
+                </tr>
+                @foreach(var result in Model.Results) {
+                    <tr>
+                        <td>@result.Name</td>
+                        <td>@result.Description</td>
+                        <td>@result.Time.ToString("#,##0.0000")</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+
+    Note: 1 Gbps = 1,000 Mbps = 1,000,000 Kbps = 1,000,000,000 bps
+    <br/>
+    Note: 1 Mbps = 1,000 Kbps = 1,000,000 bps
+    <br/>
+    Note: 1 Kbps = 1,000 bps
+
 </section>

@@ -7,7 +7,7 @@ using MawMvcApp.ViewModels.Gps;
 using MawMvcApp.ViewModels.Navigation;
 using MawMvcApp.ViewModels.Tools;
 using MawMvcApp.ViewModels.Tools.Dotnet;
-
+using MawMvcApp.ViewModels.Tools.Bandwidth;
 
 namespace MawMvcApp.Controllers
 {
@@ -157,7 +157,25 @@ namespace MawMvcApp.Controllers
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
-			return View();
+			return View(new BandwidthViewModel());
+		}
+
+
+        [HttpPost("networking-bandwidth")]
+		public IActionResult NetworkingBandwidth(BandwidthViewModel model)
+		{
+			ViewBag.NavigationZone = NavigationZone.Tools;
+
+            if(ModelState.IsValid)
+            {
+                model.Calculate();
+            }
+            else
+            {
+                model.ErrorMessage = "Please enter a number for the file size";
+            }
+
+			return View(model);
 		}
 
 

@@ -12,9 +12,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Apis.Gmail.v1" Version="1.36.1.1431" />
-    <PackageReference Include="IdentityModel" Version="3.10.4" />
-    <PackageReference Include="MailKit" Version="2.1.1" />
+    <PackageReference Include="Google.Apis.Gmail.v1" Version="1.38.0.1495" />
+    <PackageReference Include="IdentityModel" Version="3.10.6" />
+    <PackageReference Include="MailKit" Version="2.1.2" />
     <PackageReference Include="MedallionShell" Version="1.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />

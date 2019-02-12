@@ -9,6 +9,8 @@ using MawMvcApp.ViewModels.Tools;
 using MawMvcApp.ViewModels.Tools.Dotnet;
 using MawMvcApp.ViewModels.Tools.Bandwidth;
 using MawMvcApp.ViewModels.Tools.FileSize;
+using MawMvcApp.ViewModels.Tools.Time;
+
 
 namespace MawMvcApp.Controllers
 {
@@ -212,7 +214,25 @@ namespace MawMvcApp.Controllers
 		{
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
-			return View();
+			return View(new NetworkingTimeViewModel());
+		}
+
+
+        [HttpPost("networking-time")]
+		public IActionResult NetworkingTime(NetworkingTimeViewModel model)
+		{
+			ViewBag.NavigationZone = NavigationZone.Tools;
+
+            if(ModelState.IsValid)
+            {
+                model.Calculate();
+            }
+            else
+            {
+                model.ErrorMessage = "Please enter a valid time";
+            }
+
+			return View(model);
 		}
 
 

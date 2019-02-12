@@ -15,7 +15,6 @@ NG_APPS=(
     "memory"
     "money_spin"
     "photos"
-    "time"
     "upload"
     "videos"
     "weekend_countdown"

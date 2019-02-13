@@ -43,26 +43,35 @@ namespace api.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<PhotoCategory>> GetById(int id)
+        public async Task<ActionResult<PhotoCategory>> GetById(short id)
         {
-            short catId = 0;
+            var category = await _svc.GetCategoryAsync(id, Role.IsAdmin(User));
 
-            try
+            if(category == null)
             {
-                catId = Convert.ToInt16(id);
-            }
-            catch(Exception)
-            {
-                return NotFound();
-            }
-
-            var category = await _svc.GetCategoryAsync(catId, Role.IsAdmin(User));
-
-            if(category == null) {
                 return NotFound();
             }
 
             return BuildPhotoCategory(category);
+        }
+
+
+        [HttpGet("{id}/photos")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<List<api.Models.Photos.Photo>>> GetPhotos(short id)
+        {
+            var photos = await _svc.GetPhotosForCategoryAsync(id, Role.IsAdmin(User));
+
+            if(photos == null)
+            {
+                return NotFound();
+            }
+
+            var results = photos.Select(p => BuildPhoto(p));
+
+            return results.ToList();
         }
 
 
@@ -75,8 +84,44 @@ namespace api.Controllers
                 HasGpsData = c.HasGpsData,
                 PhotoCount = c.PhotoCount,
                 TeaserPhotoInfo = c.TeaserPhotoInfo,
-                Self = $"https://something/photo-categories/{c.Id}"
+                Self = GetAbsoluteLink($"photo-categories/{c.Id}")
             };
+        }
+
+
+        api.Models.Photos.Photo BuildPhoto(Maw.Domain.Photos.Photo p)
+        {
+            return new api.Models.Photos.Photo {
+                Id = p.Id,
+                CategoryId = p.CategoryId,
+                Latitude = p.Latitude,
+                Longitude = p.Longitude,
+                XsInfo = p.XsInfo,
+                SmInfo = p.SmInfo,
+                MdInfo = p.MdInfo,
+                LgInfo = p.LgInfo,
+                PrtInfo = p.PrtInfo,
+                Self = GetPhotoLink(p.Id),
+                CategoryLink = GetPhotoCategoryLink(p.CategoryId)
+            };
+        }
+
+
+        string GetPhotoCategoryLink(short categoryId)
+        {
+            return GetAbsoluteLink($"photo-categories/{categoryId}");
+        }
+
+
+        string GetPhotoLink(int photoId)
+        {
+            return GetAbsoluteLink($"photos/{photoId}");
+        }
+
+
+        string GetAbsoluteLink(string relativePath)
+        {
+            return $"https://something/{relativePath}";
         }
     }
 }

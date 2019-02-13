@@ -21,6 +21,7 @@ using MawApi.Hubs;
 using Microsoft.Extensions.FileProviders;
 using NMagickWand;
 
+
 namespace MawApi
 {
     public class Startup
@@ -50,9 +51,7 @@ namespace MawApi
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
                 .AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>()
-                .AddMvcCore()
-                    .AddAuthorization()
-                    .AddJsonFormatters()
+                .AddMvc()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                     .Services
                 .AddSignalR()
@@ -103,6 +102,10 @@ namespace MawApi
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });
+                })
+                .AddOpenApiDocument(doc => {
+                    doc.Title = "mikeandwan.us APIs";
+                    doc.Description = "Full suite of APIs for interacting with data hosted at mikeandwan.us";
                 });
         }
 
@@ -110,6 +113,8 @@ namespace MawApi
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseCors("default");
+            app.UseSwagger();
+            app.UseSwaggerUi3();
             app.UseAuthentication();
             app.UseSignalR(routes => routes.MapHub<UploadHub>("/uploadr"));
             app.UseMvc();

@@ -9,6 +9,7 @@ namespace Maw.Domain.Photos
     {
         Task<PhotoAndCategory> GetRandomPhotoAsync(bool allowPrivate);
         Task<IEnumerable<short>> GetYearsAsync();
+        Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate);
         Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, bool allowPrivate);
         Task<short> GetCategoryCountAsync(bool allowPrivate);
         Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate);

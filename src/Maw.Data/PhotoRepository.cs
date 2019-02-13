@@ -20,6 +20,9 @@ namespace Maw.Data
             year,
             (SELECT COUNT(1)
                FROM photo.photo p
+              WHERE p.category_id = photo.category.id) AS photo_count,
+            (SELECT COUNT(1)
+               FROM photo.photo p
               WHERE p.gps_latitude IS NOT NULL
                 AND p.category_id = photo.category.id) > 0 AS has_gps_data,
             teaser_photo_path AS path,
@@ -130,6 +133,27 @@ namespace Maw.Data
                     @"SELECT DISTINCT year
                         FROM photo.category
                        ORDER BY year DESC;"
+                );
+            });
+        }
+
+
+        public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
+        {
+            return RunAsync(conn => {
+                return conn.QueryAsync<Category, PhotoInfo, Category>(
+                    $@"SELECT {CATEGORY_PROJECTION}
+                         FROM photo.category
+                        WHERE (1 = @allowPrivate OR is_private = FALSE)
+                        ORDER BY id;",
+                    (category, photoInfo) => {
+                        category.TeaserPhotoInfo = photoInfo;
+                        return category;
+                    },
+                    new {
+                        allowPrivate = allowPrivate ? 1 : 0
+                    },
+                    splitOn: "path"
                 );
             });
         }

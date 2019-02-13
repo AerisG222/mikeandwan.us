@@ -36,6 +36,12 @@ namespace Maw.Domain.Photos
         }
 
 
+        public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
+        {
+            return _repo.GetAllCategoriesAsync(allowPrivate);
+        }
+
+
 		public Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, bool allowPrivate)
         {
             return _repo.GetCategoriesForYearAsync(year, allowPrivate);
@@ -146,7 +152,7 @@ namespace Maw.Domain.Photos
         {
             return _repo.RemovePhotoRatingAsync(photoId, username);
         }
-        
+
         public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentDateAsync(bool newestFirst, bool allowPrivate)
         {
             return _repo.GetPhotosAndCategoriesByCommentDateAsync(newestFirst, allowPrivate);

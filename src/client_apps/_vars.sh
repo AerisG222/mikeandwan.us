@@ -9,7 +9,6 @@ APPS=(
 
 NG_APPS=(
     "binary_clock"
-    "byte_counter"
     "googlemaps"
     "learning"
     "memory"

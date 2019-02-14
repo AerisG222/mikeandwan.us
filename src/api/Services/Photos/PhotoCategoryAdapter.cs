@@ -33,6 +33,7 @@ namespace MawApi.Services.Photos
                 Longitude = 0,
                 PhotoCount = c.PhotoCount,
                 TeaserImage = _imgAdapter.Adapt(c.TeaserPhotoInfo),
+                TeaserImageSq = null,
                 Self = _urlSvc.GetPhotoCategoryUrl(c.Id)
             };
         }

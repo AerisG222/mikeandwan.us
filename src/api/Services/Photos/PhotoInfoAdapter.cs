@@ -22,7 +22,7 @@ namespace MawApi.Services.Photos
                 Height = info.Height,
                 Width = info.Width,
                 Url = _urlSvc.GetImageUrl(info.Path),
-                ByteCount = 0
+                Size = 0
             };
         }
     }

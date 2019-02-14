@@ -29,6 +29,7 @@ namespace MawApi.Services.Photos
                 TakenDateUtc = DateTime.MinValue,
                 Latitude = p.Latitude,
                 Longitude = p.Longitude,
+                ImageXsSq = null,
                 ImageXs = _imgAdapter.Adapt(p.XsInfo),
                 ImageSm = _imgAdapter.Adapt(p.SmInfo),
                 ImageMd = _imgAdapter.Adapt(p.MdInfo),

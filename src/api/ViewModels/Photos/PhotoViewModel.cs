@@ -10,6 +10,7 @@ namespace MawApi.ViewModels.Photos
         public DateTime TakenDateUtc { get; set; }
         public float? Latitude { get; set; }
         public float? Longitude { get; set; }
+        public Image ImageXsSq { get; set; }
         public Image ImageXs { get; set; }
         public Image ImageSm { get; set; }
 		public Image ImageMd { get; set; }

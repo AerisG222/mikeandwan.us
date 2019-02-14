@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Maw.Security;
 using Maw.Domain.Photos;
-using api.Models.Photos;
+using MawApi.ViewModels;
+using MawApi.ViewModels.Photos;
+using MawApi.Services.Photos;
 
 
-namespace api.Controllers
+namespace MawApi.Controllers
 {
     [ApiController]
     //[Authorize]
@@ -19,23 +21,30 @@ namespace api.Controllers
         : ControllerBase
     {
         readonly IPhotoService _svc;
+        readonly PhotoAdapter _photoAdapter;
+        readonly PhotoCategoryAdapter _categoryAdapter;
 
 
-        public PhotoCategoriesController(IPhotoService photoService)
+        public PhotoCategoriesController(
+            IPhotoService photoService,
+            PhotoAdapter photoAdapter,
+            PhotoCategoryAdapter categoryAdapter)
         {
             _svc = photoService ?? throw new ArgumentNullException(nameof(photoService));
+            _photoAdapter = photoAdapter ?? throw new ArgumentNullException(nameof(photoAdapter));
+            _categoryAdapter = categoryAdapter ?? throw new ArgumentNullException(nameof(categoryAdapter));
         }
 
 
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<List<PhotoCategory>>> Get()
+        public async Task<ActionResult<ApiCollection<PhotoCategoryViewModel>>> Get()
         {
             var categories = await _svc.GetAllCategoriesAsync(Role.IsAdmin(User));
-            var result = categories.Select(c => BuildPhotoCategory(c));
+            var result = _categoryAdapter.Adapt(categories);
 
-            return result.ToList();
+            return new ApiCollection<PhotoCategoryViewModel>(result.ToList());
         }
 
 
@@ -43,7 +52,7 @@ namespace api.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<PhotoCategory>> GetById(short id)
+        public async Task<ActionResult<PhotoCategoryViewModel>> GetById(short id)
         {
             var category = await _svc.GetCategoryAsync(id, Role.IsAdmin(User));
 
@@ -52,7 +61,7 @@ namespace api.Controllers
                 return NotFound();
             }
 
-            return BuildPhotoCategory(category);
+            return _categoryAdapter.Adapt(category);
         }
 
 
@@ -60,7 +69,7 @@ namespace api.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<List<api.Models.Photos.Photo>>> GetPhotos(short id)
+        public async Task<ActionResult<List<MawApi.ViewModels.Photos.PhotoViewModel>>> GetPhotos(short id)
         {
             var photos = await _svc.GetPhotosForCategoryAsync(id, Role.IsAdmin(User));
 
@@ -69,59 +78,9 @@ namespace api.Controllers
                 return NotFound();
             }
 
-            var results = photos.Select(p => BuildPhoto(p));
+            var results = _photoAdapter.Adapt(photos);
 
             return results.ToList();
-        }
-
-
-        PhotoCategory BuildPhotoCategory(Category c)
-        {
-            return new PhotoCategory {
-                Id = c.Id,
-                Name = c.Name,
-                Year = c.Year,
-                HasGpsData = c.HasGpsData,
-                PhotoCount = c.PhotoCount,
-                TeaserPhotoInfo = c.TeaserPhotoInfo,
-                Self = GetAbsoluteLink($"photo-categories/{c.Id}")
-            };
-        }
-
-
-        api.Models.Photos.Photo BuildPhoto(Maw.Domain.Photos.Photo p)
-        {
-            return new api.Models.Photos.Photo {
-                Id = p.Id,
-                CategoryId = p.CategoryId,
-                Latitude = p.Latitude,
-                Longitude = p.Longitude,
-                XsInfo = p.XsInfo,
-                SmInfo = p.SmInfo,
-                MdInfo = p.MdInfo,
-                LgInfo = p.LgInfo,
-                PrtInfo = p.PrtInfo,
-                Self = GetPhotoLink(p.Id),
-                CategoryLink = GetPhotoCategoryLink(p.CategoryId)
-            };
-        }
-
-
-        string GetPhotoCategoryLink(short categoryId)
-        {
-            return GetAbsoluteLink($"photo-categories/{categoryId}");
-        }
-
-
-        string GetPhotoLink(int photoId)
-        {
-            return GetAbsoluteLink($"photos/{photoId}");
-        }
-
-
-        string GetAbsoluteLink(string relativePath)
-        {
-            return $"https://something/{relativePath}";
         }
     }
 }

@@ -8,19 +8,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using IdentityModel;
+using NMagickWand;
 using Maw.Data;
 using Maw.Domain;
 using Maw.Domain.Upload;
 using Maw.Security;
 using MawApi.Hubs;
-using Microsoft.Extensions.FileProviders;
-using NMagickWand;
-
+using MawApi.Services;
+using MawApi.Models;
 
 namespace MawApi
 {
@@ -39,17 +40,17 @@ namespace MawApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var authConfig = new AuthConfig();
-            var corsConfig = new CorsConfig();
+            var urlConfig = new UrlConfig();
 
-            _config.GetSection("AuthConfig").Bind(authConfig);
-            _config.GetSection("CorsConfig").Bind(corsConfig);
+            _config.GetSection("UrlConfig").Bind(urlConfig);
 
             services
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
                 .Configure<UploadConfig>(_config.GetSection("FileUpload"))
+                .AddSingleton<UrlConfig>(urlConfig)
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
+                .AddMawApiServices()
                 .AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>()
                 .AddMvc()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
@@ -59,7 +60,7 @@ namespace MawApi
                     .Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opts => {
-                        opts.Authority = authConfig.AuthorizationUrl;
+                        opts.Authority = urlConfig.Auth;
                         opts.Audience = "maw_api";
 
                         opts.TokenValidationParameters = new TokenValidationParameters
@@ -94,7 +95,7 @@ namespace MawApi
                 .AddCors(opts => {
                     // this defines a CORS policy called "default"
                     opts.AddPolicy("default", policy => {
-                        policy.WithOrigins(corsConfig.SiteUrl)
+                        policy.WithOrigins(urlConfig.Www)
                             .WithExposedHeaders(new string[] {
                                 "Content-Disposition"
                             })

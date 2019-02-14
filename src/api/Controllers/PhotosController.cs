@@ -1,37 +1,107 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Photos;
 using Maw.Domain.Photos.ThreeD;
+using Maw.Security;
 using MawApi.Models;
 using MawApi.Models.Photos;
 using MawApi.Models.Photos.Stats;
-using Maw.Security;
-using System.Linq;
-using System.ComponentModel.DataAnnotations;
+using MawApi.ViewModels;
+using MawApi.ViewModels.Photos;
+using MawApi.Services.Photos;
 
 
 namespace MawApi.Controllers
 {
     [ApiController]
-    [Authorize]
-    [Authorize(Policy.ViewPhotos)]
+    //[Authorize]
+    //[Authorize(Policy.ViewPhotos)]
     [Route("photos")]
     public class PhotosController
         : ControllerBase
     {
         readonly IPhotoService _svc;
+        readonly PhotoAdapter _photoAdapter;
 
 
-        public PhotosController(IPhotoService photoService)
+        public PhotosController(
+            IPhotoService photoService,
+            PhotoAdapter photoAdapter)
         {
             _svc = photoService ?? throw new ArgumentNullException(nameof(photoService));
+            _photoAdapter = photoAdapter ?? throw new ArgumentNullException(nameof(photoAdapter));
         }
 
 
+        [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<MawApi.ViewModels.Photos.PhotoViewModel>> GetById(int id)
+        {
+            var photo = await _svc.GetPhotoAsync(id, Role.IsAdmin(User));
+
+            if(photo == null)
+            {
+                return NotFound();
+            }
+
+            return _photoAdapter.Adapt(photo);
+        }
+
+
+        [HttpGet("{id}/comments")]
+        public async Task<ApiCollection<Comment>> GetComments(int id)
+        {
+            var comments = await _svc.GetCommentsForPhotoAsync(id);
+
+            return new ApiCollection<Comment>(comments.ToList());
+        }
+
+
+        [HttpGet("{id}/exif")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<Detail>> GetExif(int id)
+        {
+            var data = await _svc.GetDetailForPhotoAsync(id, Role.IsAdmin(User));
+
+            if(data == null)
+            {
+                return NotFound();
+            }
+
+            return data;
+        }
+
+
+        [HttpGet("{id}/rating")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<Rating>> GetRating(int id)
+        {
+            var rating = await _svc.GetRatingsAsync(id, User.Identity.Name);
+
+            if(rating == null)
+            {
+                return NotFound();
+            }
+
+            return rating;
+        }
+
+
+        // *******************************************
+        // LEGACY APIS
+        // *******************************************
         [HttpGet("getPhotoYears")]
         public async Task<IEnumerable<short>> GetPhotoYears()
         {
@@ -89,7 +159,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotosByCategory/{categoryId:int}")]
-        public async Task<ActionResult<Photo[]>> GetPhotosByCategory(short categoryId)
+        public async Task<ActionResult<Maw.Domain.Photos.Photo[]>> GetPhotosByCategory(short categoryId)
         {
             var photos = await _svc.GetPhotosForCategoryAsync(categoryId, Role.IsAdmin(User));
 
@@ -103,35 +173,35 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotosByCommentDate/{newestFirst:alpha}")]
-        public async Task<IEnumerable<Photo>> GetPhotosByCommentDate(bool newestFirst)
+        public async Task<IEnumerable<Maw.Domain.Photos.Photo>> GetPhotosByCommentDate(bool newestFirst)
         {
             return await _svc.GetPhotosByCommentDateAsync(newestFirst, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosByUserCommentDate/{newestFirst:alpha}")]
-        public async Task<IEnumerable<Photo>> GetPhotosByUserCommentDate(bool newestFirst)
+        public async Task<IEnumerable<Maw.Domain.Photos.Photo>> GetPhotosByUserCommentDate(bool newestFirst)
         {
             return await _svc.GetPhotosByUserCommentDateAsync(User.Identity.Name, newestFirst, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosByCommentCount/{greatestFirst:alpha}")]
-        public async Task<IEnumerable<Photo>> GetPhotosByCommentCount(bool greatestFirst)
+        public async Task<IEnumerable<Maw.Domain.Photos.Photo>> GetPhotosByCommentCount(bool greatestFirst)
         {
             return await _svc.GetPhotosByCommentCountAsync(greatestFirst, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosByAverageRating/{highestFirst:alpha}")]
-        public async Task<IEnumerable<Photo>> GetPhotosByAverageRating(bool highestFirst)
+        public async Task<IEnumerable<Maw.Domain.Photos.Photo>> GetPhotosByAverageRating(bool highestFirst)
         {
             return await _svc.GetPhotosByAverageUserRatingAsync(highestFirst, Role.IsAdmin(User));
         }
 
 
         [HttpGet("getPhotosByUserRating/{highestFirst:alpha}")]
-        public async Task<IEnumerable<Photo>> GetPhotosByUserRating(bool highestFirst)
+        public async Task<IEnumerable<Maw.Domain.Photos.Photo>> GetPhotosByUserRating(bool highestFirst)
         {
             return await _svc.GetPhotosByUserRatingAsync(User.Identity.Name, highestFirst, Role.IsAdmin(User));
         }

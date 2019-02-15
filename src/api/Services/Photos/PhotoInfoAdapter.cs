@@ -1,5 +1,6 @@
 using System;
 using Maw.Domain.Photos;
+using MawApi.ViewModels;
 using MawApi.ViewModels.Photos;
 
 
@@ -16,9 +17,9 @@ namespace MawApi.Services.Photos
         }
 
 
-        public Image Adapt(PhotoInfo info)
+        public MultimediaAsset Adapt(PhotoInfo info)
         {
-            return new Image {
+            return new MultimediaAsset {
                 Height = info.Height,
                 Width = info.Width,
                 Url = _urlSvc.GetImageUrl(info.Path),

@@ -1,6 +1,6 @@
-namespace MawApi.ViewModels.Photos
+namespace MawApi.ViewModels
 {
-    public class Image
+    public class MultimediaAsset
     {
         public short Height { get; set; }
         public short Width { get; set; }

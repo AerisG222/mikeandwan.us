@@ -18,8 +18,8 @@ namespace MawApi.ViewModels.Photos
         public long TotalImageSizeSm { get; set; }
         public long TotalImageSizeXs { get; set; }
         public long TotalImageSizeXsSq { get; set; }
-        public Image TeaserImage { get; set; }
-        public Image TeaserImageSq { get; set; }
+        public MultimediaAsset TeaserImage { get; set; }
+        public MultimediaAsset TeaserImageSq { get; set; }
         public string Self { get; set; }
     }
 }

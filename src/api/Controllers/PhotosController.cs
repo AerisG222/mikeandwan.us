@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Photos;
-using Maw.Domain.Photos.ThreeD;
 using Maw.Security;
 using MawApi.Models;
 using MawApi.Models.Photos;
@@ -396,61 +395,6 @@ namespace MawApi.Controllers
         public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserRating(bool highestFirst)
         {
             return await _svc.GetPhotosAndCategoriesByUserRatingAsync(User.Identity.Name, highestFirst, Role.IsAdmin(User));
-        }
-
-
-        [HttpGet("getStats")]
-        public async Task<IEnumerable<YearStats>> GetStats()
-        {
-            short year = 0;
-            YearStats currYearStat = null;
-            var yearStats = new List<YearStats>();
-            var stats = await _svc.GetStats(Role.IsAdmin(User));
-
-            foreach(var stat in stats)
-            {
-                if(year != stat.Year)
-                {
-                    year = stat.Year;
-
-                    currYearStat = new YearStats
-                    {
-                        Year = year
-                    };
-
-                    yearStats.Add(currYearStat);
-                }
-
-                currYearStat.CategoryStats.Add(new CategoryStats
-                    {
-                        Id = stat.CategoryId,
-                        Name = stat.CategoryName,
-                        PhotoCount = stat.PhotoCount
-                    });
-            }
-
-            return yearStats;
-        }
-
-
-        [HttpGet("getAllCategories3D")]
-        public async Task<IEnumerable<Category3D>> GetAllCategories3D()
-        {
-            return await _svc.GetAllCategories3D();
-        }
-
-
-        [HttpGet("getPhotos3D/{categoryId:int}")]
-        public async Task<ActionResult<Photo3D[]>> GetPhotos3D(int categoryId)
-        {
-            var photos = await _svc.GetPhotos3D(categoryId);
-
-            if(photos == null)
-            {
-                return NotFound();
-            }
-
-            return photos.ToArray();
         }
     }
 }

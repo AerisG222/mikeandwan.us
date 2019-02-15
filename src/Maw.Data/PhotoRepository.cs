@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using Maw.Domain.Photos.ThreeD;
 using Maw.Domain.Photos;
 
 
@@ -718,80 +717,6 @@ namespace Maw.Data
                     .Cast<PhotoAndCategory>();
             });
 		}
-
-
-        public Task<IEnumerable<CategoryPhotoCount>> GetStats(bool allowPrivate)
-        {
-            return RunAsync(conn => {
-                return conn.QueryAsync<CategoryPhotoCount>(
-                    @"SELECT year,
-                             id AS CategoryId,
-                             name AS CategoryName,
-                             (SELECT COUNT(1)
-                                FROM photo.photo
-                               WHERE category_id = photo.category.id
-                             ) AS photo_count
-                       FROM photo.category
-                      WHERE (1 = @allowPrivate OR is_private = FALSE)
-                      ORDER BY year,
-                               name;",
-                    new { allowPrivate = allowPrivate ? 1 : 0 }
-                );
-            });
-        }
-
-
-        public Task<IEnumerable<Category3D>> GetAllCategories3D()
-        {
-            return RunAsync(conn => {
-                return conn.QueryAsync<Category3D, Image3D, Category3D>(
-                    @"SELECT id,
-                             year,
-                             name,
-                             teaser_photo_path AS path,
-                             teaser_photo_width AS width,
-                             teaser_photo_height AS height
-                        FROM photo.category
-                       ORDER BY id;",
-                    (cat, img) => {
-                        cat.TeaserImage = img;
-                        return cat;
-                    },
-                    splitOn: "path"
-                );
-            });
-        }
-
-
-        public Task<IEnumerable<Photo3D>> GetPhotos3D(int categoryId)
-        {
-            return RunAsync(conn => {
-                return conn.QueryAsync<Photo3D, Image3D, Image3D, Image3D, Photo3D>(
-                    @"SELECT id,
-                             xs_path AS path,
-                             xs_width AS width,
-                             xs_height AS height,
-                             md_path AS path,
-                             md_width AS width,
-                             md_height AS height,
-                             lg_path AS path,
-                             lg_width AS width,
-                             lg_height AS height
-                        FROM photo.photo
-                       WHERE category_id = @categoryId
-                       ORDER BY create_date;",
-                    (photo, xs, md, lg) => {
-                        photo.XsImage = xs;
-                        photo.MdImage = md;
-                        photo.LgImage = lg;
-
-                        return photo;
-                    },
-                    new { categoryId = categoryId },
-                    splitOn: "path"
-                );
-            });
-        }
 
 
         PhotoAndCategory BuildPhotoAndCategory(dynamic item)

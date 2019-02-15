@@ -50,10 +50,6 @@ export class HeaderComponent implements AfterViewInit {
         const modalRef = this._modal.open(PreferenceDialogComponent);
     }
 
-    clickStats(): void {
-        window.open('/photos/stats', '_blank');
-    }
-
     clickAndroid(): void {
         window.open('https://play.google.com/store/apps/details?id=us.mikeandwan.pictures', '_blank');
     }

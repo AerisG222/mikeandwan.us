@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Maw.Domain.Photos.ThreeD;
 
 
 namespace Maw.Domain.Photos
@@ -180,24 +179,6 @@ namespace Maw.Domain.Photos
 		public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
         {
             return _repo.GetPhotosAndCategoriesByUserRatingAsync(username, highestFirst, allowPrivate);
-        }
-
-
-        public Task<IEnumerable<CategoryPhotoCount>> GetStats(bool allowPrivate)
-        {
-            return _repo.GetStats(allowPrivate);
-        }
-
-
-        public Task<IEnumerable<Category3D>> GetAllCategories3D()
-        {
-            return _repo.GetAllCategories3D();
-        }
-
-
-        public Task<IEnumerable<Photo3D>> GetPhotos3D(int categoryId)
-        {
-            return _repo.GetPhotos3D(categoryId);
         }
     }
 }

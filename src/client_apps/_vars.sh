@@ -1,6 +1,4 @@
 APPS=(
-    "photo_stats"
-    "photos3d"
     "webgl_blender_model"
     "webgl_cube"
     "webgl_shader"

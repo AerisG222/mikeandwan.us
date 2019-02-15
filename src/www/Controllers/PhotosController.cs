@@ -52,24 +52,6 @@ namespace MawMvcApp.Controllers
         }
 
 
-        [HttpGet("3d/{*extra}")]
-        public IActionResult ThreeD()
-        {
-            ViewBag.NavigationZone = NavigationZone.Photos;
-
-            return View();
-        }
-
-
-        [HttpGet("stats/{*extra}")]
-        public IActionResult Stats()
-        {
-            ViewBag.NavigationZone = NavigationZone.Photos;
-
-            return View();
-        }
-
-
         [HttpGet("GetMobileThumbnail/{id:int}")]
         public async Task<IActionResult> GetMobileThumbnail(short id)
 		{

@@ -39,11 +39,43 @@ namespace MawApi.Controllers
         }
 
 
+        [HttpGet("random")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        public async Task<ActionResult<PhotoViewModel>> GetRandomPhotoAsync()
+        {
+            var photo = await _svc.GetRandomPhotoAsync(Role.IsAdmin(User));
+
+            return _photoAdapter.Adapt(photo);
+        }
+
+
+        [HttpGet("random/{count}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public async Task<ActionResult<ApiCollection<PhotoViewModel>>> GetRandomPhotosAsync(byte count)
+        {
+            if(count > 50) {
+                return BadRequest();
+            }
+
+            var photos = new List<PhotoAndCategory>();
+
+            for(int i = 0; i < count; i++)
+            {
+                photos.Add(await _svc.GetRandomPhotoAsync(Role.IsAdmin(User)));
+            }
+
+            return new ApiCollection<PhotoViewModel>(_photoAdapter.Adapt(photos).ToList());
+        }
+
+
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<MawApi.ViewModels.Photos.PhotoViewModel>> GetById(int id)
+        public async Task<ActionResult<MawApi.ViewModels.Photos.PhotoViewModel>> GetByIdAsync(int id)
         {
             var photo = await _svc.GetPhotoAsync(id, Role.IsAdmin(User));
 
@@ -57,11 +89,27 @@ namespace MawApi.Controllers
 
 
         [HttpGet("{id}/comments")]
-        public async Task<ApiCollection<Comment>> GetComments(int id)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public Task<ApiCollection<Comment>> GetCommentsAsync(int id)
         {
-            var comments = await _svc.GetCommentsForPhotoAsync(id);
+            return InternalGetCommentsAsync(id);
+        }
 
-            return new ApiCollection<Comment>(comments.ToList());
+
+        [HttpPost("{id}/comments")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ApiCollection<Comment>> AddCommentAsync(int id, CommentViewModel model)
+        {
+            // TODO: handle invalid photo id?
+            // TODO: remove photoId from commentViewModel?
+            await _svc.InsertPhotoCommentAsync(id, User.Identity.Name, model.Comment);
+
+            return await InternalGetCommentsAsync(id);
         }
 
 
@@ -69,7 +117,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<Detail>> GetExif(int id)
+        public async Task<ActionResult<Detail>> GetExifAsync(int id)
         {
             var data = await _svc.GetDetailForPhotoAsync(id, Role.IsAdmin(User));
 
@@ -86,9 +134,9 @@ namespace MawApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<Rating>> GetRating(int id)
+        public async Task<ActionResult<Rating>> GetRatingAsync(int id)
         {
-            var rating = await _svc.GetRatingsAsync(id, User.Identity.Name);
+            var rating = await InternalGetRatingAsync(id);
 
             if(rating == null)
             {
@@ -96,6 +144,53 @@ namespace MawApi.Controllers
             }
 
             return rating;
+        }
+
+
+        [HttpPatch("{id}/rating")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<Rating>> RatePhotoAsync(int id, UserPhotoRating userRating)
+        {
+            // TODO: handle invalid photo id?
+            // TODO: remove photoId from userPhotoRating?
+            if(userRating.Rating < 1)
+            {
+                await _svc.RemovePhotoRatingAsync(id, User.Identity.Name);
+            }
+            else if(userRating.Rating <= 5)
+            {
+                await _svc.SavePhotoRatingAsync(id, User.Identity.Name, userRating.Rating);
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+            var rating = await InternalGetRatingAsync(id);
+
+            if(rating == null)
+            {
+                return NotFound();
+            }
+
+            return rating;
+        }
+
+
+        async Task<ApiCollection<Comment>> InternalGetCommentsAsync(int id)
+        {
+            var comments = await _svc.GetCommentsForPhotoAsync(id);
+
+            return new ApiCollection<Comment>(comments.ToList());
+        }
+
+
+        Task<Rating> InternalGetRatingAsync(int id)
+        {
+            return _svc.GetRatingsAsync(id, User.Identity.Name);
         }
 
 

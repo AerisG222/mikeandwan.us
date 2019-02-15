@@ -7,7 +7,7 @@ namespace MawApi.ViewModels.Photos
     {
         public int Id { get; set; }
         public short CategoryId { get; set; }
-        public DateTime TakenDateUtc { get; set; }
+        public DateTime CreateDate { get; set; }
         public float? Latitude { get; set; }
         public float? Longitude { get; set; }
         public MultimediaAsset ImageXsSq { get; set; }

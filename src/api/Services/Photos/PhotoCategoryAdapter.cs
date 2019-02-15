@@ -28,7 +28,7 @@ namespace MawApi.Services.Photos
                 Id = c.Id,
                 Name = c.Name,
                 Year = c.Year,
-                TakenDateUtc = DateTime.MinValue,
+                CreateDate = DateTime.MinValue,
                 Latitude = 0,
                 Longitude = 0,
                 PhotoCount = c.PhotoCount,

@@ -26,7 +26,7 @@ namespace MawApi.Services.Photos
             return new MawApi.ViewModels.Photos.PhotoViewModel {
                 Id = p.Id,
                 CategoryId = p.CategoryId,
-                TakenDateUtc = DateTime.MinValue,
+                CreateDate = DateTime.MinValue,
                 Latitude = p.Latitude,
                 Longitude = p.Longitude,
                 ImageXsSq = null,

@@ -51,7 +51,7 @@ namespace MawMvcApp.Controllers
         {
             var category = await _svc.GetCategoryAsync(id, Role.IsAdmin(User));
 
-            return GetScaledImage(category.TeaserThumbnail.Path);
+            return GetScaledImage(category.TeaserImage.Path);
         }
 
 
@@ -60,7 +60,7 @@ namespace MawMvcApp.Controllers
         {
             var video = await _svc.GetVideoAsync(id, Role.IsAdmin(User));
 
-            return GetScaledImage(video.ThumbnailVideo.Path);
+            return GetScaledImage(video.Thumbnail.Path);
         }
 
 

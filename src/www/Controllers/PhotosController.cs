@@ -56,7 +56,7 @@ namespace MawMvcApp.Controllers
         public async Task<IActionResult> GetMobileThumbnail(short id)
 		{
             var category = await _svc.GetCategoryAsync(id, Role.IsAdmin(User));
-			var thumbInfo = category.TeaserPhotoInfo;
+			var thumbInfo = category.TeaserImage;
             var croppedImageStream = _imageCropper.CropImage(thumbInfo.Path, MOBILE_THUMB_SIZE);
 
             if(croppedImageStream == null)

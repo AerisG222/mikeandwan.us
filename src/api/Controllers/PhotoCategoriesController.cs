@@ -69,7 +69,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<List<MawApi.ViewModels.Photos.PhotoViewModel>>> GetPhotos(short id)
+        public async Task<ActionResult<ApiCollection<MawApi.ViewModels.Photos.PhotoViewModel>>> GetPhotos(short id)
         {
             var photos = await _svc.GetPhotosForCategoryAsync(id, Role.IsAdmin(User));
 
@@ -80,7 +80,7 @@ namespace MawApi.Controllers
 
             var results = _photoAdapter.Adapt(photos);
 
-            return results.ToList();
+            return new ApiCollection<PhotoViewModel>(results.ToList());
         }
     }
 }

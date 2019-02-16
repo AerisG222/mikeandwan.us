@@ -11,7 +11,8 @@ namespace MawApi.Services
             return services
                 // shared
                 .AddSingleton<UrlBuilderService>()
-                .AddSingleton<LegacyMultimediaInfoAdapter>()
+                .AddSingleton<MawApi.Services.Photos.LegacyMultimediaInfoAdapter>()
+                .AddSingleton<MawApi.Services.Videos.LegacyMultimediaInfoAdapter>()
                 .AddSingleton<MultimediaInfoAdapter>()
 
                 // photos
@@ -22,6 +23,8 @@ namespace MawApi.Services
                 .AddSingleton<PhotoUrlBuilderService>()
 
                 // videos
+                .AddSingleton<LegacyVideoAdapter>()
+                .AddSingleton<LegacyVideoCategoryAdapter>()
                 .AddSingleton<VideoAdapter>()
                 .AddSingleton<VideoCategoryAdapter>()
                 .AddSingleton<VideoUrlBuilderService>();

@@ -2,22 +2,22 @@ using System;
 using Maw.Domain;
 using Maw.Domain.Photos;
 using MawApi.ViewModels;
-using MawApi.ViewModels.LegacyPhotos;
+using MawApi.ViewModels.LegacyVideos;
 using MawApi.ViewModels.Photos;
 
 
-namespace MawApi.Services
+namespace MawApi.Services.Videos
 {
     public class LegacyMultimediaInfoAdapter
     {
-        public PhotoInfo Adapt(MultimediaInfo info)
+        public VideoInfo Adapt(MultimediaInfo info)
         {
             if(info == null)
             {
-                return new PhotoInfo();
+                return new VideoInfo();
             }
 
-            return new PhotoInfo {
+            return new VideoInfo {
                 Height = info.Height,
                 Width = info.Width,
                 Path = info.Path

@@ -6,7 +6,8 @@ namespace Maw.Domain.Photos
 {
     public interface IPhotoRepository
     {
-        Task<PhotoAndCategory> GetRandomPhotoAsync(bool allowPrivate);
+        Task<Photo> GetRandomPhotoAsync(bool allowPrivate);
+        Task<IEnumerable<Photo>> GetRandomPhotosAsync(byte count, bool allowPrivate);
         Task<IEnumerable<short>> GetYearsAsync();
         Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate);
         Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, bool allowPrivate);
@@ -22,10 +23,10 @@ namespace Maw.Domain.Photos
         Task<float?> SavePhotoRatingAsync(int photoId, string username, byte rating);
         Task<float?> RemovePhotoRatingAsync(int photoId, string username);
 
-        Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentDateAsync(bool newestFirst, bool allowPrivate);
-        Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate);
-        Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentCountAsync(bool greatestFirst, bool allowPrivate);
-        Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByAverageUserRatingAsync(bool highestFirst, bool allowPrivate);
-        Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserRatingAsync(string username, bool highestFirst, bool allowPrivate);
+        Task<IEnumerable<Photo>> GetPhotosByCommentDateAsync(bool newestFirst, bool allowPrivate);
+        Task<IEnumerable<Photo>> GetPhotosByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate);
+        Task<IEnumerable<Photo>> GetPhotosByCommentCountAsync(bool greatestFirst, bool allowPrivate);
+        Task<IEnumerable<Photo>> GetPhotosByAverageUserRatingAsync(bool highestFirst, bool allowPrivate);
+        Task<IEnumerable<Photo>> GetPhotosByUserRatingAsync(string username, bool highestFirst, bool allowPrivate);
     }
 }

@@ -105,40 +105,6 @@ namespace Maw.Data
             src_height AS height,
             src_size AS size";
 
-        const string PHOTO_AND_CATEGORY_PROJECTION = @"
-            p.id AS photo_id,
-            p.category_id,
-            p.xs_path,
-            p.xs_width,
-            p.xs_height,
-            p.sm_path,
-            p.sm_width,
-            p.sm_height,
-            p.md_path,
-            p.md_width,
-            p.md_height,
-            p.lg_path,
-            p.lg_width,
-            p.lg_height,
-            p.prt_path,
-            p.prt_width,
-            p.prt_height,
-            CASE WHEN p.gps_latitude_ref_id = 'S' THEN -1.0 * p.gps_latitude
-                 ELSE p.gps_latitude
-                  END AS latitude,
-            CASE WHEN p.gps_longitude_ref_id = 'W' THEN -1.0 * p.gps_longitude
-                 ELSE p.gps_longitude
-                  END AS longitude,
-            c.name,
-            c.year,
-            (SELECT COUNT(1)
-               FROM photo.photo
-              WHERE gps_latitude IS NOT NULL
-                AND category_id = c.id) > 0 AS has_gps_data,
-            c.teaser_photo_path,
-            c.teaser_photo_width,
-            c.teaser_photo_height";
-
 
         public PhotoRepository(string connectionString)
             : base(connectionString)
@@ -147,32 +113,52 @@ namespace Maw.Data
         }
 
 
-        public Task<PhotoAndCategory> GetRandomPhotoAsync(bool allowPrivate)
+        public Task<Photo> GetRandomPhotoAsync(bool allowPrivate)
         {
             return RunAsync(async conn => {
-                var result = await conn.QueryAsync(
+                var result = await conn.QueryAsync<Photo>(
                     $@"WITH random AS
                        (
-                            SELECT id
+                            SELECT id AS random_id
                               FROM photo.photo
                              WHERE (1 = @allowPrivate OR is_private = FALSE)
                              ORDER BY RANDOM()
                              LIMIT 1
                        )
-                       SELECT {PHOTO_AND_CATEGORY_PROJECTION}
+                       SELECT {PHOTO_PROJECTION}
                          FROM random
-                        INNER JOIN photo.photo p ON random.id = p.id
-                        INNER JOIN photo.category c ON p.category_id = c.id;",
-                    new { allowPrivate = allowPrivate ? 1 : 0 }
+                        INNER JOIN photo.photo p ON random.random_id = p.id;",
+                    PHOTO_PROJECTION_TYPES,
+                    (objects) => AssemblePhoto(objects),
+                    new { allowPrivate = allowPrivate ? 1 : 0 },
+                    splitOn: "path"
                 ).ConfigureAwait(false);
 
-                if(result == null || result.Count() == 0)
-                {
-                    return null;
-                }
+                return result.First();
+            });
+        }
 
-                // TODO: why is this cast needed?
-                return (PhotoAndCategory)BuildPhotoAndCategory(result.First());
+
+        public Task<IEnumerable<Photo>> GetRandomPhotosAsync(byte count, bool allowPrivate)
+        {
+            return RunAsync(conn => {
+                return conn.QueryAsync<Photo>(
+                    $@"WITH random AS
+                       (
+                            SELECT id AS random_id
+                              FROM photo.photo
+                             WHERE (1 = @allowPrivate OR is_private = FALSE)
+                             ORDER BY RANDOM()
+                             LIMIT {count}
+                       )
+                       SELECT {PHOTO_PROJECTION}
+                         FROM random
+                        INNER JOIN photo.photo p ON random.random_id = p.id;",
+                    PHOTO_PROJECTION_TYPES,
+                    (objects) => AssemblePhoto(objects),
+                    new { allowPrivate = allowPrivate ? 1 : 0 },
+                    splitOn: "path"
+                );
             });
         }
 
@@ -582,13 +568,13 @@ namespace Maw.Data
 		}
 
 
-        public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentDateAsync(bool newestFirst, bool allowPrivate)
+        public Task<IEnumerable<Photo>> GetPhotosByCommentDateAsync(bool newestFirst, bool allowPrivate)
         {
-            return RunAsync(async conn => {
+            return RunAsync(conn => {
                 var op = newestFirst ? "MAX" : "MIN";
                 var sort = newestFirst ? "DESC" : "ASC";
 
-                var result = await conn.QueryAsync(
+                return conn.QueryAsync<Photo>(
                     $@"WITH comments AS
                        (
                             SELECT photo_id,
@@ -596,33 +582,30 @@ namespace Maw.Data
                               FROM photo.comment
                              GROUP BY photo_id
                       )
-                      SELECT {PHOTO_AND_CATEGORY_PROJECTION}
+                      SELECT {PHOTO_PROJECTION}
                         FROM comments
                        INNER JOIN photo.photo p ON comments.photo_id = p.id AND (1 = @allowPrivate OR is_private = FALSE)
-                       INNER JOIN photo.category c ON p.category_id = c.id
                        ORDER BY entry_date {sort}
                        LIMIT @limit;",
+                    PHOTO_PROJECTION_TYPES,
+                    (objects) => AssemblePhoto(objects),
                     new {
                         allowPrivate = allowPrivate ? 1 : 0,
                         limit = MAX_RESULTS
-                    }
-                ).ConfigureAwait(false);
-
-                // TODO: why is this cast needed?
-                return result
-                    .Select(x => BuildPhotoAndCategory(x))
-                    .Cast<PhotoAndCategory>();
+                    },
+                    splitOn: "path"
+                );
             });
         }
 
 
-        public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserCommentDateAsync(string username, bool newestFirst, bool allowPrivate)
+        public Task<IEnumerable<Photo>> GetPhotosByUserCommentDateAsync(string username, bool newestFirst, bool allowPrivate)
         {
-            return RunAsync(async conn => {
+            return RunAsync(conn => {
                 var op = newestFirst ? "MAX" : "MIN";
                 var sort = newestFirst ? "DESC" : "ASC";
 
-                var result = await conn.QueryAsync(
+                return conn.QueryAsync<Photo>(
                     $@"WITH comments AS
                        (
                             SELECT photo_id,
@@ -631,32 +614,30 @@ namespace Maw.Data
                              INNER JOIN maw.user u ON c.user_id = u.id AND u.username = @username
                              GROUP BY photo_id
                       )
-                      SELECT {PHOTO_AND_CATEGORY_PROJECTION}
+                      SELECT {PHOTO_PROJECTION}
                         FROM comments
                        INNER JOIN photo.photo p ON comments.photo_id = p.id AND (1 = @allowPrivate OR is_private = FALSE)
-                       INNER JOIN photo.category c ON p.category_id = c.id
                        ORDER BY entry_date {sort}
                        LIMIT @limit;",
+                    PHOTO_PROJECTION_TYPES,
+                    (objects) => AssemblePhoto(objects),
                     new {
                         username = @username.ToLower(),
                         allowPrivate = allowPrivate ? 1 : 0,
                         limit = MAX_RESULTS
-                    }
-                ).ConfigureAwait(false);
-
-                return result
-                    .Select(x => BuildPhotoAndCategory(x))
-                    .Cast<PhotoAndCategory>();
+                    },
+                    splitOn: "path"
+                );
             });
         }
 
 
-        public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentCountAsync(bool greatestFirst, bool allowPrivate)
+        public Task<IEnumerable<Photo>> GetPhotosByCommentCountAsync(bool greatestFirst, bool allowPrivate)
         {
-            return RunAsync(async conn => {
+            return RunAsync(conn => {
                 var sort = greatestFirst ? "DESC" : "ASC";
 
-                var result = await conn.QueryAsync(
+                return conn.QueryAsync<Photo>(
                     $@"WITH comments AS
                        (
                             SELECT photo_id,
@@ -664,31 +645,29 @@ namespace Maw.Data
                               FROM photo.comment
                              GROUP BY photo_id
                       )
-                      SELECT {PHOTO_AND_CATEGORY_PROJECTION}
+                      SELECT {PHOTO_PROJECTION}
                         FROM comments
                        INNER JOIN photo.photo p ON comments.photo_id = p.id AND (1 = @allowPrivate OR is_private = FALSE)
-                       INNER JOIN photo.category c ON p.category_id = c.id
                        ORDER BY comment_count {sort}
                        LIMIT @limit;",
+                    PHOTO_PROJECTION_TYPES,
+                    (objects) => AssemblePhoto(objects),
                     new {
                         allowPrivate = allowPrivate ? 1 : 0,
                         limit = MAX_RESULTS
-                    }
+                    },
+                    splitOn: "path"
                 );
-
-                return result
-                    .Select(x => BuildPhotoAndCategory(x))
-                    .Cast<PhotoAndCategory>();
             });
         }
 
 
-        public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
+        public Task<IEnumerable<Photo>> GetPhotosByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
         {
-            return RunAsync(async conn => {
+            return RunAsync(conn => {
                 var sort = highestFirst ? "DESC" : "ASC";
 
-                var result = await conn.QueryAsync(
+                return conn.QueryAsync<Photo>(
                     $@"WITH ratings AS
                        (
                             SELECT photo_id,
@@ -696,31 +675,29 @@ namespace Maw.Data
                               FROM photo.rating
                              GROUP BY photo_id
                       )
-                      SELECT {PHOTO_AND_CATEGORY_PROJECTION}
+                      SELECT {PHOTO_PROJECTION}
                         FROM ratings
                        INNER JOIN photo.photo p ON ratings.photo_id = p.id AND (1 = @allowPrivate OR is_private = FALSE)
-                       INNER JOIN photo.category c ON p.category_id = c.id
                        ORDER BY avg_score {sort}
                        LIMIT @limit;",
+                    PHOTO_PROJECTION_TYPES,
+                    (objects) => AssemblePhoto(objects),
                     new {
                         allowPrivate = allowPrivate ? 1 : 0,
                         limit = MAX_RESULTS
-                    }
+                    },
+                    splitOn: "path"
                 );
-
-                return result
-                    .Select(x => BuildPhotoAndCategory(x))
-                    .Cast<PhotoAndCategory>();
             });
         }
 
 
-		public Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
+		public Task<IEnumerable<Photo>> GetPhotosByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
 		{
-            return RunAsync(async conn => {
+            return RunAsync(conn => {
                 var sort = highestFirst ? "DESC" : "ASC";
 
-                var result = await conn.QueryAsync(
+                return conn.QueryAsync<Photo>(
                     $@"WITH ratings AS
                        (
                             SELECT photo_id,
@@ -729,96 +706,22 @@ namespace Maw.Data
                              INNER JOIN maw.user u ON r.user_id = u.id AND u.username = @username
                              GROUP BY photo_id
                       )
-                      SELECT {PHOTO_AND_CATEGORY_PROJECTION}
+                      SELECT {PHOTO_PROJECTION}
                         FROM ratings
                        INNER JOIN photo.photo p ON ratings.photo_id = p.id AND (1 = @allowPrivate OR is_private = FALSE)
-                       INNER JOIN photo.category c ON p.category_id = c.id
                        ORDER BY avg_score {sort}
                        LIMIT @limit;",
+                    PHOTO_PROJECTION_TYPES,
+                    (objects) => AssemblePhoto(objects),
                     new {
                         username = username.ToLower(),
                         allowPrivate = allowPrivate ? 1 : 0,
                         limit = MAX_RESULTS
-                    }
+                    },
+                    splitOn: "path"
                 );
-
-                return result
-                    .Select(x => BuildPhotoAndCategory(x))
-                    .Cast<PhotoAndCategory>();
             });
 		}
-
-
-        PhotoAndCategory BuildPhotoAndCategory(dynamic item)
-        {
-            return new PhotoAndCategory {
-                Photo = new Photo {
-                    Id = item.photo_id,
-                    CategoryId = item.category_id,
-                    Latitude = (float?)item.latitude,
-                    Longitude = (float?)item.longitude,
-                    XsInfo = new MultimediaInfo {
-                        Path = item.xs_path,
-                        Width = item.xs_width,
-                        Height = item.xs_height,
-                        Size = item.xs_size
-                    },
-                    XsSqInfo = new MultimediaInfo {
-                        Path = item.xs_sq_path,
-                        Width = item.xs_sq_width,
-                        Height = item.xs_sq_height,
-                        Size = item.xs_sq_size
-                    },
-                    SmInfo = new MultimediaInfo {
-                        Path = item.sm_path,
-                        Width = item.sm_width,
-                        Height = item.sm_height,
-                        Size = item.sm_size
-                    },
-                    MdInfo = new MultimediaInfo {
-                        Path = item.md_path,
-                        Width = item.md_width,
-                        Height = item.md_height,
-                        Size = item.md_size
-                    },
-                    LgInfo = new MultimediaInfo {
-                        Path = item.lg_path,
-                        Width = item.lg_width,
-                        Height = item.lg_height,
-                        Size = item.lg_size
-                    },
-                    PrtInfo = new MultimediaInfo {
-                        Path = item.prt_path,
-                        Width = item.prt_width,
-                        Height = item.prt_height,
-                        Size = item.prt_size
-                    },
-                    SrcInfo = new MultimediaInfo {
-                        Path = item.src_path,
-                        Width = item.src_width,
-                        Height = item.src_height,
-                        Size = item.src_size
-                    }
-                },
-                Category = new Category {
-                    Id = item.category_id,
-                    Name = item.name,
-                    Year = item.year,
-                    Latitude = item.latitude,
-                    Longitude = item.longitude,
-                    TeaserImage = new MultimediaInfo {
-                        Path = item.teaser_photo_path,
-                        Width = item.teaser_photo_width,
-                        Height = item.teaser_photo_height
-                    },
-                    TeaserImageSq = new MultimediaInfo {
-                        Path = item.teaser_sq_photo_path,
-                        Width = item.teaser_sq_photo_width,
-                        Height = item.teaser_sq_photo_height
-                    }
-                }
-            };
-        }
 
 
         Category AssembleCategory(object[] objects)

@@ -46,17 +46,5 @@ namespace MawApi.Services.Photos
         {
             return photos.Select(p => Adapt(p));
         }
-
-
-        public MawApi.ViewModels.Photos.PhotoViewModel Adapt(PhotoAndCategory p)
-        {
-            return Adapt(p.Photo);
-        }
-
-
-        public IEnumerable<MawApi.ViewModels.Photos.PhotoViewModel> Adapt(IEnumerable<PhotoAndCategory> photos)
-        {
-            return photos.Select(p => Adapt(p.Photo));
-        }
     }
 }

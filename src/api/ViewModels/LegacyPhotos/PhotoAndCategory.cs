@@ -1,4 +1,4 @@
-namespace Maw.Domain.Photos
+namespace MawApi.ViewModels.LegacyPhotos
 {
     public class PhotoAndCategory
     {

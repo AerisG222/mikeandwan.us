@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using MawApi.Services.Photos;
-
+using MawApi.Services.Videos;
 
 namespace MawApi.Services
 {
@@ -11,15 +11,20 @@ namespace MawApi.Services
             return services
                 // shared
                 .AddSingleton<UrlBuilderService>()
+                .AddSingleton<LegacyMultimediaInfoAdapter>()
+                .AddSingleton<MultimediaInfoAdapter>()
 
                 // photos
-                .AddSingleton<LegacyMultimediaInfoAdapter>()
                 .AddSingleton<LegacyPhotoAdapter>()
                 .AddSingleton<LegacyPhotoCategoryAdapter>()
-                .AddSingleton<MultimediaInfoAdapter>()
                 .AddSingleton<PhotoAdapter>()
                 .AddSingleton<PhotoCategoryAdapter>()
-                .AddSingleton<PhotoUrlBuilderService>();
+                .AddSingleton<PhotoUrlBuilderService>()
+
+                // videos
+                .AddSingleton<VideoAdapter>()
+                .AddSingleton<VideoCategoryAdapter>()
+                .AddSingleton<VideoUrlBuilderService>();
         }
     }
 }

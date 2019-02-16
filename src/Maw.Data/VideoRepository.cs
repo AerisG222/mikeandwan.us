@@ -32,8 +32,12 @@ namespace Maw.Data
             year,
             name,
             create_date,
-            gps_latitude,
-            gps_longitude,
+            CASE WHEN gps_latitude_ref_id = 'S' THEN -1.0 * gps_latitude
+                 ELSE gps_latitude
+                  END AS latitude,
+            CASE WHEN gps_longitude_ref_id = 'W' THEN -1.0 * gps_longitude
+                 ELSE gps_longitude
+                  END AS longitude,
             video_count,
             total_duration,
             total_size_thumb,
@@ -99,6 +103,25 @@ namespace Maw.Data
                        WHERE (1 = @allowPrivate OR is_private = FALSE)
                        ORDER BY year DESC;",
                     new { allowPrivate = allowPrivate ? 1 : 0 }
+                );
+            });
+		}
+
+
+        public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
+		{
+            return RunAsync(conn => {
+                return conn.QueryAsync<Category>(
+                    $@"SELECT {CATEGORY_PROJECTION}
+                        FROM video.category
+                       WHERE (1 = @allowPrivate OR is_private = FALSE)
+                       ORDER BY id;",
+                    CATEGORY_PROJECTION_TYPES,
+                    (objects) => AssembleCategory(objects),
+                    new {
+                        allowPrivate = allowPrivate ? 1 : 0
+                    },
+                    splitOn: "path"
                 );
             });
 		}

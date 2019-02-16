@@ -28,6 +28,12 @@ namespace Maw.Domain.Videos
         }
 
 
+        public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
+        {
+            return _repo.GetAllCategoriesAsync(allowPrivate);
+        }
+
+
         public Task<IEnumerable<Category>> GetCategoriesAsync(short year, bool allowPrivate)
         {
             return _repo.GetCategoriesAsync(year, allowPrivate);

@@ -6,7 +6,7 @@ using MawApi.ViewModels.LegacyPhotos;
 using MawApi.ViewModels.Photos;
 
 
-namespace MawApi.Services.Photos
+namespace MawApi.Services
 {
     public class LegacyMultimediaInfoAdapter
     {

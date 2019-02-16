@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using Maw.Domain;
 using Maw.Domain.Photos;
 
 
@@ -11,26 +12,64 @@ namespace Maw.Data
 	public class PhotoRepository
         : Repository, IPhotoRepository
 	{
+        static readonly Type[] CATEGORY_PROJECTION_TYPES = new Type[] {
+            typeof(Category),
+            typeof(MultimediaInfo),
+            typeof(MultimediaInfo)
+        };
+
+        static readonly Type[] PHOTO_PROJECTION_TYPES = new Type[] {
+            typeof(Photo),
+            typeof(MultimediaInfo),
+            typeof(MultimediaInfo),
+            typeof(MultimediaInfo),
+            typeof(MultimediaInfo),
+            typeof(MultimediaInfo),
+            typeof(MultimediaInfo),
+            typeof(MultimediaInfo),
+        };
+
         const int MAX_RESULTS = 600;
 
         const string CATEGORY_PROJECTION = @"
             id,
             name,
             year,
-            (SELECT COUNT(1)
-               FROM photo.photo p
-              WHERE p.category_id = photo.category.id) AS photo_count,
-            (SELECT COUNT(1)
-               FROM photo.photo p
-              WHERE p.gps_latitude IS NOT NULL
-                AND p.category_id = photo.category.id) > 0 AS has_gps_data,
+            create_date,
+            CASE WHEN gps_latitude_ref_id = 'S' THEN -1.0 * gps_latitude
+                 ELSE gps_latitude
+                  END AS latitude,
+            CASE WHEN gps_longitude_ref_id = 'W' THEN -1.0 * gps_longitude
+                 ELSE gps_longitude
+                  END AS longitude,
+            photo_count,
+            total_size_xs,
+            total_size_xs_sq,
+            total_size_sm,
+            total_size_md,
+            total_size_lg,
+            total_size_prt,
+            total_size_src,
+            COALESCE(total_size_xs, 0) +
+                COALESCE(total_size_xs_sq, 0) +
+                COALESCE(total_size_sm, 0) +
+                COALESCE(total_size_md, 0) +
+                COALESCE(total_size_lg, 0) +
+                COALESCE(total_size_prt, 0) +
+                COALESCE(total_size_src, 0) AS total_size,
             teaser_photo_path AS path,
+            teaser_photo_height AS height,
             teaser_photo_width AS width,
-            teaser_photo_height AS height";
+            teaser_photo_size AS size,
+            teaser_photo_sq_path AS path,
+            teaser_photo_sq_height AS height,
+            teaser_photo_sq_width AS width,
+            teaser_photo_sq_size AS size";
 
         const string PHOTO_PROJECTION = @"
             id,
             category_id,
+            create_date,
             CASE WHEN gps_latitude_ref_id = 'S' THEN -1.0 * gps_latitude
                  ELSE gps_latitude
                   END AS latitude,
@@ -40,18 +79,31 @@ namespace Maw.Data
             xs_path AS path,
             xs_width AS width,
             xs_height AS height,
+            xs_size AS size,
+            xs_sq_path AS path,
+            xs_sq_width AS width,
+            xs_sq_height AS height,
+            xs_sq_size AS size,
             sm_path AS path,
             sm_width AS width,
             sm_height AS height,
+            sm_size AS size,
             md_path AS path,
             md_width AS width,
             md_height AS height,
+            md_size AS size,
             lg_path AS path,
             lg_width AS width,
             lg_height AS height,
+            lg_size AS size,
             prt_path AS path,
             prt_width AS width,
-            prt_height AS height";
+            prt_height AS height,
+            prt_size AS size,
+            src_path AS path,
+            src_width AS width,
+            src_height AS height,
+            src_size AS size";
 
         const string PHOTO_AND_CATEGORY_PROJECTION = @"
             p.id AS photo_id,
@@ -140,15 +192,13 @@ namespace Maw.Data
         public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
         {
             return RunAsync(conn => {
-                return conn.QueryAsync<Category, PhotoInfo, Category>(
+                return conn.QueryAsync<Category>(
                     $@"SELECT {CATEGORY_PROJECTION}
                          FROM photo.category
                         WHERE (1 = @allowPrivate OR is_private = FALSE)
                         ORDER BY id;",
-                    (category, photoInfo) => {
-                        category.TeaserPhotoInfo = photoInfo;
-                        return category;
-                    },
+                    CATEGORY_PROJECTION_TYPES,
+                    (objects) => AssembleCategory(objects),
                     new {
                         allowPrivate = allowPrivate ? 1 : 0
                     },
@@ -161,16 +211,14 @@ namespace Maw.Data
         public Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, bool allowPrivate)
 		{
             return RunAsync(conn => {
-                return conn.QueryAsync<Category, PhotoInfo, Category>(
+                return conn.QueryAsync<Category>(
                     $@"SELECT {CATEGORY_PROJECTION}
                          FROM photo.category
                         WHERE (1 = @allowPrivate OR is_private = FALSE)
                           AND year = @year
                         ORDER BY id;",
-                    (category, photoInfo) => {
-                        category.TeaserPhotoInfo = photoInfo;
-                        return category;
-                    },
+                    CATEGORY_PROJECTION_TYPES,
+                    (objects) => AssembleCategory(objects),
                     new {
                         allowPrivate = allowPrivate ? 1 : 0,
                         year = year
@@ -197,15 +245,13 @@ namespace Maw.Data
         public Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate)
         {
             return RunAsync(conn => {
-                return conn.QueryAsync<Category, PhotoInfo, Category>(
+                return conn.QueryAsync<Category>(
                     $@"SELECT {CATEGORY_PROJECTION}
                         FROM photo.category
                        WHERE (1 = @allowPrivate OR is_private = FALSE)
                          AND id > @sinceId;",
-                    (category, photoInfo) => {
-                        category.TeaserPhotoInfo = photoInfo;
-                        return category;
-                    },
+                    CATEGORY_PROJECTION_TYPES,
+                    (objects) => AssembleCategory(objects),
                     new {
                         allowPrivate = allowPrivate ? 1 : 0,
                         sinceId = sinceId
@@ -219,21 +265,14 @@ namespace Maw.Data
 		public Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, bool allowPrivate)
 		{
             return RunAsync(conn => {
-                return conn.QueryAsync<Photo, PhotoInfo, PhotoInfo, PhotoInfo, PhotoInfo, PhotoInfo, Photo>(
+                return conn.QueryAsync<Photo>(
                     $@"SELECT {PHOTO_PROJECTION}
                          FROM photo.photo
                         WHERE (1 = @allowPrivate OR is_private = FALSE)
                           AND category_id = @categoryId
                         ORDER BY lg_path;",
-                    (photo, xs, sm, md, lg, prt) => {
-                        photo.XsInfo = xs;
-                        photo.SmInfo = sm;
-                        photo.MdInfo = md;
-                        photo.LgInfo = lg;
-                        photo.PrtInfo = prt;
-
-                        return photo;
-                    },
+                    PHOTO_PROJECTION_TYPES,
+                    (objects) => AssemblePhoto(objects),
                     new {
                         allowPrivate = allowPrivate ? 1 : 0,
                         categoryId = categoryId
@@ -247,15 +286,13 @@ namespace Maw.Data
 		public Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
         {
             return RunAsync(async conn => {
-                var result = await conn.QueryAsync<Category, PhotoInfo, Category>(
+                var result = await conn.QueryAsync<Category>(
                     $@"SELECT {CATEGORY_PROJECTION}
                          FROM photo.category
                         WHERE (1 = @allowPrivate OR is_private = FALSE)
                           AND id = @categoryId;",
-                    (category, photoInfo) => {
-                        category.TeaserPhotoInfo = photoInfo;
-                        return category;
-                    },
+                    CATEGORY_PROJECTION_TYPES,
+                    (objects) => AssembleCategory(objects),
                     new {
                         allowPrivate = allowPrivate ? 1 : 0,
                         categoryId = categoryId
@@ -271,20 +308,13 @@ namespace Maw.Data
 		public Task<Photo> GetPhotoAsync(int photoId, bool allowPrivate)
 		{
             return RunAsync(async conn => {
-                var result = await conn.QueryAsync<Photo, PhotoInfo, PhotoInfo, PhotoInfo, PhotoInfo, PhotoInfo, Photo>(
+                var result = await conn.QueryAsync<Photo>(
                     $@"SELECT {PHOTO_PROJECTION}
                          FROM photo.photo
                         WHERE (1 = @allowPrivate OR is_private = FALSE)
                           AND id = @photoId;",
-                    (photo, xs, sm, md, lg, prt) => {
-                        photo.XsInfo = xs;
-                        photo.SmInfo = sm;
-                        photo.MdInfo = md;
-                        photo.LgInfo = lg;
-                        photo.PrtInfo = prt;
-
-                        return photo;
-                    },
+                    PHOTO_PROJECTION_TYPES,
+                    (objects) => AssemblePhoto(objects),
                     new {
                         allowPrivate = allowPrivate ? 1 : 0,
                         photoId = photoId
@@ -727,44 +757,94 @@ namespace Maw.Data
                     CategoryId = item.category_id,
                     Latitude = (float?)item.latitude,
                     Longitude = (float?)item.longitude,
-                    XsInfo = new PhotoInfo {
+                    XsInfo = new MultimediaInfo {
                         Path = item.xs_path,
                         Width = item.xs_width,
-                        Height = item.xs_height
+                        Height = item.xs_height,
+                        Size = item.xs_size
                     },
-                    SmInfo = new PhotoInfo {
+                    XsSqInfo = new MultimediaInfo {
+                        Path = item.xs_sq_path,
+                        Width = item.xs_sq_width,
+                        Height = item.xs_sq_height,
+                        Size = item.xs_sq_size
+                    },
+                    SmInfo = new MultimediaInfo {
                         Path = item.sm_path,
                         Width = item.sm_width,
-                        Height = item.sm_height
+                        Height = item.sm_height,
+                        Size = item.sm_size
                     },
-                    MdInfo = new PhotoInfo {
+                    MdInfo = new MultimediaInfo {
                         Path = item.md_path,
                         Width = item.md_width,
-                        Height = item.md_height
+                        Height = item.md_height,
+                        Size = item.md_size
                     },
-                    LgInfo = new PhotoInfo {
+                    LgInfo = new MultimediaInfo {
                         Path = item.lg_path,
                         Width = item.lg_width,
-                        Height = item.lg_height
+                        Height = item.lg_height,
+                        Size = item.lg_size
                     },
-                    PrtInfo = new PhotoInfo {
+                    PrtInfo = new MultimediaInfo {
                         Path = item.prt_path,
                         Width = item.prt_width,
-                        Height = item.prt_height
+                        Height = item.prt_height,
+                        Size = item.prt_size
                     },
+                    SrcInfo = new MultimediaInfo {
+                        Path = item.src_path,
+                        Width = item.src_width,
+                        Height = item.src_height,
+                        Size = item.src_size
+                    }
                 },
                 Category = new Category {
                     Id = item.category_id,
                     Name = item.name,
                     Year = item.year,
-                    HasGpsData = item.has_gps_data,
-                    TeaserPhotoInfo = new PhotoInfo {
+                    Latitude = item.latitude,
+                    Longitude = item.longitude,
+                    TeaserImage = new MultimediaInfo {
                         Path = item.teaser_photo_path,
                         Width = item.teaser_photo_width,
                         Height = item.teaser_photo_height
+                    },
+                    TeaserImageSq = new MultimediaInfo {
+                        Path = item.teaser_sq_photo_path,
+                        Width = item.teaser_sq_photo_width,
+                        Height = item.teaser_sq_photo_height
                     }
                 }
             };
+        }
+
+
+        Category AssembleCategory(object[] objects)
+        {
+            var category = (Category) objects[0];
+
+            category.TeaserImage = (MultimediaInfo) objects[1];
+            category.TeaserImageSq = (MultimediaInfo) objects[2];
+
+            return category;
+        }
+
+
+        Photo AssemblePhoto(object[] objects)
+        {
+            var photo = (Photo) objects[0];
+
+            photo.XsInfo = (MultimediaInfo) objects[1];
+            photo.XsSqInfo = (MultimediaInfo) objects[2];
+            photo.SmInfo = (MultimediaInfo) objects[3];
+            photo.MdInfo = (MultimediaInfo) objects[4];
+            photo.LgInfo = (MultimediaInfo) objects[5];
+            photo.PrtInfo = (MultimediaInfo) objects[6];
+            photo.SrcInfo = (MultimediaInfo) objects[7];
+
+            return photo;
         }
 	}
 }

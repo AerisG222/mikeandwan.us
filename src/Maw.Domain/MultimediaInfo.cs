@@ -1,10 +1,10 @@
-﻿namespace Maw.Domain.Videos
+namespace Maw.Domain
 {
-    public class VideoInfo
+    public class MultimediaInfo
     {
         public short Height { get; set; }
         public short Width { get; set; }
         public string Path { get; set; }
+        public long Size { get; set; }
     }
 }
-

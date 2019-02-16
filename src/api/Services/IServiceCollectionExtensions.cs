@@ -13,7 +13,7 @@ namespace MawApi.Services
                 .AddSingleton<UrlBuilderService>()
 
                 // photos
-                .AddSingleton<ImageAdapter>()
+                .AddSingleton<MultimediaInfoAdapter>()
                 .AddSingleton<PhotoAdapter>()
                 .AddSingleton<PhotoCategoryAdapter>()
                 .AddSingleton<PhotoUrlBuilderService>();

@@ -16,7 +16,7 @@ namespace MawApi.ViewModels.Photos
 		public MultimediaAsset ImageMd { get; set; }
         public MultimediaAsset ImageLg { get; set; }
         public MultimediaAsset ImagePrt { get; set; }
-        public MultimediaAsset ImageRaw { get; set; }
+        public MultimediaAsset ImageSrc { get; set; }
         public string Self { get; set; }
         public string CategoryLink { get; set; }
     }

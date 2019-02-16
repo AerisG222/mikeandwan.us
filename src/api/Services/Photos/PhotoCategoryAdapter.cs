@@ -10,15 +10,15 @@ namespace MawApi.Services.Photos
     public class PhotoCategoryAdapter
     {
         readonly PhotoUrlBuilderService _urlSvc;
-        readonly ImageAdapter _imgAdapter;
+        readonly MultimediaInfoAdapter _adapter;
 
 
         public PhotoCategoryAdapter(
             PhotoUrlBuilderService urlSvc,
-            ImageAdapter imageAdapter)
+            MultimediaInfoAdapter adapter)
         {
             _urlSvc = urlSvc ?? throw new ArgumentNullException(nameof(urlSvc));
-            _imgAdapter = imageAdapter ?? throw new ArgumentNullException(nameof(imageAdapter));
+            _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
         }
 
 
@@ -32,8 +32,8 @@ namespace MawApi.Services.Photos
                 Latitude = 0,
                 Longitude = 0,
                 PhotoCount = c.PhotoCount,
-                TeaserImage = _imgAdapter.Adapt(c.TeaserPhotoInfo),
-                TeaserImageSq = null,
+                TeaserImage = _adapter.Adapt(c.TeaserImage),
+                TeaserImageSq = _adapter.Adapt(c.TeaserImageSq),
                 Self = _urlSvc.GetPhotoCategoryUrl(c.Id)
             };
         }

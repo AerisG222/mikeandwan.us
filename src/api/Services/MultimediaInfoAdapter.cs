@@ -1,4 +1,5 @@
 using System;
+using Maw.Domain;
 using Maw.Domain.Photos;
 using MawApi.ViewModels;
 using MawApi.ViewModels.Photos;
@@ -6,24 +7,29 @@ using MawApi.ViewModels.Photos;
 
 namespace MawApi.Services.Photos
 {
-    public class ImageAdapter
+    public class MultimediaInfoAdapter
     {
         readonly PhotoUrlBuilderService _urlSvc;
 
 
-        public ImageAdapter(PhotoUrlBuilderService urlSvc)
+        public MultimediaInfoAdapter(PhotoUrlBuilderService urlSvc)
         {
             _urlSvc = urlSvc ?? throw new ArgumentNullException(nameof(urlSvc));
         }
 
 
-        public MultimediaAsset Adapt(PhotoInfo info)
+        public MultimediaAsset Adapt(MultimediaInfo info)
         {
+            if(info == null)
+            {
+                return new MultimediaAsset();
+            }
+
             return new MultimediaAsset {
                 Height = info.Height,
                 Width = info.Width,
-                Url = _urlSvc.GetImageUrl(info.Path),
-                Size = 0
+                Size = info.Size,
+                Url = _urlSvc.GetImageUrl(info.Path)
             };
         }
     }

@@ -1,13 +1,21 @@
+using System;
+
+
 namespace Maw.Domain.Videos
 {
 	public class Video
 	{
-        public short Id { get; set; }
-        public short Duration { get; set; }
-		public Category Category { get; set; }
-        public VideoInfo ScaledVideo { get; set; }
-        public VideoInfo FullsizeVideo { get; set; }
-        public VideoInfo ThumbnailVideo { get; set; }
+        public int Id { get; set; }
+        public short CategoryId { get; set; }
+        public DateTime CreateDate { get; set; }
+        public float? Latitude { get; set; }
+        public float? Longitude { get; set; }
+        public int Duration { get; set; }
+        public MultimediaInfo ThumbnailSq { get; set; }
+        public MultimediaInfo Thumbnail { get; set; }
+        public MultimediaInfo VideoScaled { get; set; }
+		public MultimediaInfo VideoFull { get; set; }
+        public MultimediaInfo VideoRaw { get; set; }
 	}
 }
 

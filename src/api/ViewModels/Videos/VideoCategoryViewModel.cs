@@ -19,6 +19,7 @@ namespace MawApi.ViewModels.Videos
         public long TotalSizeScaled { get; set; }
         public long TotalSizeFull { get; set; }
         public long TotalSizeRaw { get; set; }
+        public long TotalSize { get; set; }
         public MultimediaAsset TeaserImage { get; set; }
         public MultimediaAsset TeaserImageSq { get; set; }
         public string Self { get; set; }

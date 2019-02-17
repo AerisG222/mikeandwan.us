@@ -19,8 +19,8 @@ using MawApi.ViewModels.LegacyPhotos;
 namespace MawApi.Controllers
 {
     [ApiController]
-    //[Authorize]
-    //[Authorize(Policy.ViewPhotos)]
+    [Authorize]
+    [Authorize(Policy.ViewPhotos)]
     [Route("photos")]
     public class PhotosController
         : ControllerBase

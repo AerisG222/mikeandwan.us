@@ -13,8 +13,8 @@ using MawApi.ViewModels.Videos;
 namespace MawApi.Controllers
 {
     [ApiController]
-    //[Authorize]
-    //[Authorize(Policy.ViewPhotos)]
+    [Authorize]
+    [Authorize(Policy.ViewPhotos)]
     [Route("video-categories")]
     public class VideoCategoriesController
         : ControllerBase

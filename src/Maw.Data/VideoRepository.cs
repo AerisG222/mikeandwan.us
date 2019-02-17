@@ -217,6 +217,132 @@ namespace Maw.Data
         }
 
 
+        public Task<IEnumerable<Comment>> GetCommentsAsync(int videoId)
+		{
+            return RunAsync(conn => {
+                return conn.QueryAsync<Comment>(
+                    @"SELECT entry_date,
+                             message AS comment_text,
+                             u.username
+                        FROM video.comment c
+                       INNER JOIN maw.user u ON c.user_id = u.id
+                       WHERE c.video_id = @videoId
+                       ORDER by entry_date DESC;",
+                    new { videoId = videoId }
+                );
+            });
+		}
+
+
+		public Task<Rating> GetRatingsAsync(int videoId, string username)
+		{
+            return RunAsync(conn => {
+                return conn.QuerySingleOrDefaultAsync<Rating>(
+                    @"SELECT (SELECT AVG(score)
+                                FROM video.rating
+                               WHERE video_id = @videoId
+                             ) AS average_rating,
+                             (SELECT AVG(score)
+                                FROM video.rating
+                               WHERE video_id = @videoId
+                                 AND user_id = (SELECT id
+                                                  FROM maw.user
+                                                 WHERE username = @username
+                                               )
+                             ) AS user_rating;",
+                    new {
+                        videoId = videoId,
+                        username = username?.ToLower()
+                    }
+                );
+            });
+		}
+
+
+		public Task<int> InsertCommentAsync(int videoId, string username, string comment)
+        {
+            return RunAsync(conn => {
+                return conn.ExecuteAsync(
+                    @"INSERT INTO video.comment
+                           (
+                             user_id,
+                             video_id,
+                             message,
+                             entry_date
+                           )
+                      VALUES
+                           (
+                             (SELECT id FROM maw.user WHERE username = @username),
+                             @videoId,
+                             @message,
+                             @entryDate
+                           );",
+                    new {
+                        username = username.ToLower(),
+                        videoId = videoId,
+                        message = comment,
+                        entryDate = DateTime.Now
+                    }
+                );
+            });
+        }
+
+
+		public Task<float?> SaveRatingAsync(int videoId, string username, byte rating)
+        {
+            return RunAsync(async conn => {
+                var result = await conn.ExecuteAsync(
+                    @"INSERT INTO video.rating
+                           (
+                             video_id,
+                             user_id,
+                             score
+                           )
+                      VALUES
+                           (
+                             @videoId,
+                             (SELECT id
+                                FROM maw.user
+                               WHERE username = @username
+                             ),
+                             @score
+                           )
+                        ON CONFLICT (video_id, user_id)
+                        DO UPDATE
+                       SET score = @score;",
+                    new {
+                        videoId = videoId,
+                        username = username.ToLower(),
+                        score = rating
+                    }
+                ).ConfigureAwait(false);
+
+                return (await GetRatingsAsync(videoId, username).ConfigureAwait(false))?.AverageRating;
+            });
+        }
+
+
+		public Task<float?> RemoveRatingAsync(int videoId, string username)
+		{
+            return RunAsync(async conn => {
+                var result = await conn.ExecuteAsync(
+                    @"DELETE FROM video.rating
+                       WHERE video_id = @videoId
+                         AND user_id = (SELECT id
+                                          FROM maw.user
+                                         WHERE username = @username
+                                       );",
+                    new {
+                        videoId = videoId,
+                        username = username.ToLower()
+                    }
+                ).ConfigureAwait(false);
+
+                return (await GetRatingsAsync(videoId, username).ConfigureAwait(false))?.AverageRating;
+            });
+		}
+
+
         Category AssembleCategory(object[] objects)
         {
             var category = (Category) objects[0];

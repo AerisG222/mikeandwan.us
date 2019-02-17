@@ -113,7 +113,7 @@ namespace Maw.Data
         }
 
 
-        public Task<Photo> GetRandomPhotoAsync(bool allowPrivate)
+        public Task<Photo> GetRandomAsync(bool allowPrivate)
         {
             return RunAsync(async conn => {
                 var result = await conn.QueryAsync<Photo>(
@@ -139,7 +139,7 @@ namespace Maw.Data
         }
 
 
-        public Task<IEnumerable<Photo>> GetRandomPhotosAsync(byte count, bool allowPrivate)
+        public Task<IEnumerable<Photo>> GetRandomAsync(byte count, bool allowPrivate)
         {
             return RunAsync(conn => {
                 return conn.QueryAsync<Photo>(
@@ -313,7 +313,7 @@ namespace Maw.Data
 		}
 
 
-		public Task<Detail> GetDetailForPhotoAsync(int photoId, bool allowPrivate)
+		public Task<Detail> GetDetailAsync(int photoId, bool allowPrivate)
 		{
             return RunAsync(conn => {
                 return conn.QuerySingleOrDefaultAsync<Detail>(
@@ -442,7 +442,7 @@ namespace Maw.Data
 		}
 
 
-		public Task<IEnumerable<Comment>> GetCommentsForPhotoAsync(int photoId)
+		public Task<IEnumerable<Comment>> GetCommentsAsync(int photoId)
 		{
             return RunAsync(conn => {
                 return conn.QueryAsync<Comment>(
@@ -484,7 +484,7 @@ namespace Maw.Data
 		}
 
 
-		public Task<int> InsertPhotoCommentAsync(int photoId, string username, string comment)
+		public Task<int> InsertCommentAsync(int photoId, string username, string comment)
         {
             return RunAsync(conn => {
                 return conn.ExecuteAsync(
@@ -513,7 +513,7 @@ namespace Maw.Data
         }
 
 
-		public Task<float?> SavePhotoRatingAsync(int photoId, string username, byte rating)
+		public Task<float?> SaveRatingAsync(int photoId, string username, byte rating)
         {
             return RunAsync(async conn => {
                 var result = await conn.ExecuteAsync(
@@ -547,7 +547,7 @@ namespace Maw.Data
         }
 
 
-		public Task<float?> RemovePhotoRatingAsync(int photoId, string username)
+		public Task<float?> RemoveRatingAsync(int photoId, string username)
 		{
             return RunAsync(async conn => {
                 var result = await conn.ExecuteAsync(

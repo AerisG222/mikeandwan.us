@@ -1,7 +1,7 @@
 using System;
 
 
-namespace Maw.Domain.Photos
+namespace Maw.Domain
 {
     public class Comment
     {

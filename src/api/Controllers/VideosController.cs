@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Maw.Domain;
 using Maw.Domain.Videos;
 using Maw.Security;
 using MawApi.Models;
+using MawApi.Models.Videos;
 using MawApi.Services.Videos;
+using MawApi.ViewModels;
 
 
 namespace MawApi.Controllers
@@ -54,6 +57,95 @@ namespace MawApi.Controllers
             }
 
             return _adapter.Adapt(video);
+        }
+
+
+        [HttpGet("{id}/comments")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public Task<ApiCollection<Comment>> GetCommentsAsync(int id)
+        {
+            return InternalGetCommentsAsync(id);
+        }
+
+
+        [HttpPost("{id}/comments")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ApiCollection<Comment>> AddCommentAsync(int id, CommentViewModel model)
+        {
+            // TODO: handle invalid photo id?
+            // TODO: remove photoId from commentViewModel?
+            await _svc.InsertCommentAsync(id, User.Identity.Name, model.Comment);
+
+            return await InternalGetCommentsAsync(id);
+        }
+
+
+        [HttpGet("{id}/rating")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<Rating>> GetRatingAsync(int id)
+        {
+            var rating = await InternalGetRatingAsync(id);
+
+            if(rating == null)
+            {
+                return NotFound();
+            }
+
+            return rating;
+        }
+
+
+        [HttpPatch("{id}/rating")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<Rating>> RatePhotoAsync(int id, UserRating userRating)
+        {
+            // TODO: handle invalid photo id?
+            // TODO: remove photoId from userPhotoRating?
+            if(userRating.Rating < 1)
+            {
+                await _svc.RemoveRatingAsync(id, User.Identity.Name);
+            }
+            else if(userRating.Rating <= 5)
+            {
+                await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating);
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+            var rating = await InternalGetRatingAsync(id);
+
+            if(rating == null)
+            {
+                return NotFound();
+            }
+
+            return rating;
+        }
+
+
+        async Task<ApiCollection<Comment>> InternalGetCommentsAsync(int id)
+        {
+            var comments = await _svc.GetCommentsAsync(id);
+
+            return new ApiCollection<Comment>(comments.ToList());
+        }
+
+
+        Task<Rating> InternalGetRatingAsync(int id)
+        {
+            return _svc.GetRatingsAsync(id, User.Identity.Name);
         }
 
 

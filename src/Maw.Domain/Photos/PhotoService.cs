@@ -23,15 +23,15 @@ namespace Maw.Domain.Photos
         }
 
 
-        public Task<Photo> GetRandomPhotoAsync(bool allowPrivate)
+        public Task<Photo> GetRandomAsync(bool allowPrivate)
         {
-            return _repo.GetRandomPhotoAsync(allowPrivate);
+            return _repo.GetRandomAsync(allowPrivate);
         }
 
 
-        public Task<IEnumerable<Photo>> GetRandomPhotosAsync(byte count, bool allowPrivate)
+        public Task<IEnumerable<Photo>> GetRandomAsync(byte count, bool allowPrivate)
         {
-            return _repo.GetRandomPhotosAsync(count, allowPrivate);
+            return _repo.GetRandomAsync(count, allowPrivate);
         }
 
 
@@ -113,15 +113,15 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<Detail> GetDetailForPhotoAsync(int photoId, bool allowPrivate)
+		public Task<Detail> GetDetailAsync(int photoId, bool allowPrivate)
         {
-            return _repo.GetDetailForPhotoAsync(photoId, allowPrivate);
+            return _repo.GetDetailAsync(photoId, allowPrivate);
         }
 
 
-		public Task<IEnumerable<Comment>> GetCommentsForPhotoAsync(int photoId)
+		public Task<IEnumerable<Comment>> GetCommentsAsync(int photoId)
         {
-            return _repo.GetCommentsForPhotoAsync(photoId);
+            return _repo.GetCommentsAsync(photoId);
         }
 
 
@@ -131,21 +131,21 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<int> InsertPhotoCommentAsync(int photoId, string username, string comment)
+		public Task<int> InsertCommentAsync(int photoId, string username, string comment)
         {
-            return _repo.InsertPhotoCommentAsync(photoId, username, comment);
+            return _repo.InsertCommentAsync(photoId, username, comment);
         }
 
 
-		public Task<float?> SavePhotoRatingAsync(int photoId, string username, byte rating)
+		public Task<float?> SaveRatingAsync(int photoId, string username, byte rating)
         {
-            return _repo.SavePhotoRatingAsync(photoId, username, rating);
+            return _repo.SaveRatingAsync(photoId, username, rating);
         }
 
 
-		public Task<float?> RemovePhotoRatingAsync(int photoId, string username)
+		public Task<float?> RemoveRatingAsync(int photoId, string username)
         {
-            return _repo.RemovePhotoRatingAsync(photoId, username);
+            return _repo.RemoveRatingAsync(photoId, username);
         }
     }
 }

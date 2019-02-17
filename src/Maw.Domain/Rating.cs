@@ -1,4 +1,4 @@
-namespace Maw.Domain.Photos
+namespace Maw.Domain
 {
     public class Rating
     {

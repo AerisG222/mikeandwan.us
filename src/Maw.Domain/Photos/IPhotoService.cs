@@ -6,8 +6,8 @@ namespace Maw.Domain.Photos
 {
     public interface IPhotoService
     {
-        Task<Photo> GetRandomPhotoAsync(bool allowPrivate);
-        Task<IEnumerable<Photo>> GetRandomPhotosAsync(byte count, bool allowPrivate);
+        Task<Photo> GetRandomAsync(bool allowPrivate);
+        Task<IEnumerable<Photo>> GetRandomAsync(byte count, bool allowPrivate);
         Task<IEnumerable<short>> GetYearsAsync();
         Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate);
         Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, bool allowPrivate);
@@ -21,11 +21,11 @@ namespace Maw.Domain.Photos
         Task<IEnumerable<Photo>> GetPhotosByUserRatingAsync(string username, bool highestFirst, bool allowPrivate);
         Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate);
         Task<Photo> GetPhotoAsync(int photoId, bool allowPrivate);
-        Task<Detail> GetDetailForPhotoAsync(int photoId, bool allowPrivate);
-        Task<IEnumerable<Comment>> GetCommentsForPhotoAsync(int photoId);
+        Task<Detail> GetDetailAsync(int photoId, bool allowPrivate);
+        Task<IEnumerable<Comment>> GetCommentsAsync(int photoId);
         Task<Rating> GetRatingsAsync(int photoId, string username);
-        Task<int> InsertPhotoCommentAsync(int photoId, string username, string comment);
-        Task<float?> SavePhotoRatingAsync(int photoId, string username, byte rating);
-        Task<float?> RemovePhotoRatingAsync(int photoId, string username);
+        Task<int> InsertCommentAsync(int photoId, string username, string comment);
+        Task<float?> SaveRatingAsync(int photoId, string username, byte rating);
+        Task<float?> RemoveRatingAsync(int photoId, string username);
     }
 }

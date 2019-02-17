@@ -1,22 +1,18 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Maw.Domain.Photos;
 using Maw.Domain.Upload;
 using Maw.Domain.Utilities;
 using Maw.Security;
 using MawApi.Hubs;
-using System.Net;
+
 
 namespace MawMvcApp.Controllers
 {

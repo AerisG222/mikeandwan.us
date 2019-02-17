@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Maw.Domain.Videos;
-using MawApi.ViewModels.LegacyVideos;
 
 
 namespace MawApi.Services.Videos

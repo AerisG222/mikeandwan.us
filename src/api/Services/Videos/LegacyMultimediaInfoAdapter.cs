@@ -1,9 +1,5 @@
-using System;
 using Maw.Domain;
-using Maw.Domain.Photos;
-using MawApi.ViewModels;
 using MawApi.ViewModels.LegacyVideos;
-using MawApi.ViewModels.Photos;
 
 
 namespace MawApi.Services.Videos

@@ -31,6 +31,9 @@ export class BlenderModelDemo {
         // renderer
         this._renderer = new WebGLRenderer({ antialias: true, alpha: true });
         this._renderer.setSize(window.innerWidth, window.innerHeight);
+        this._renderer.gammaOutput = true;
+        this._renderer.gammaFactor = 2.2;
+
         document.body.appendChild(this._renderer.domElement);
 
         // stats

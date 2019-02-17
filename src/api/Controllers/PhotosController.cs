@@ -198,6 +198,8 @@ namespace MawApi.Controllers
         // LEGACY APIS
         // *******************************************
         [HttpGet("getPhotoYears")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IEnumerable<short>> GetPhotoYears()
         {
             return await _svc.GetYearsAsync();
@@ -205,6 +207,9 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getCategory/{categoryId:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<MawApi.ViewModels.LegacyPhotos.Category>> GetCategory(short categoryId)
         {
             var cat = await _svc.GetCategoryAsync(categoryId, Role.IsAdmin(User));
@@ -219,6 +224,8 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getRandomPhoto")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<PhotoAndCategory> GetRandomPhoto()
         {
             var categories = await _svc.GetAllCategoriesAsync(Role.IsAdmin(User));
@@ -229,6 +236,8 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getRecentCategories/{sinceId:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IEnumerable<MawApi.ViewModels.LegacyPhotos.Category>> GetRecentCategories(short sinceId)
         {
             var results = await _svc.GetRecentCategoriesAsync(sinceId, Role.IsAdmin(User));
@@ -238,6 +247,8 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getCategoryCount")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<int> GetCategoryCount()
         {
             return await _svc.GetCategoryCountAsync(Role.IsAdmin(User));
@@ -245,6 +256,9 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getCategoriesForYear/{year:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<MawApi.ViewModels.LegacyPhotos.Category[]>> GetCategoriesForYear(short year)
         {
             var cats = await _svc.GetCategoriesForYearAsync(year, Role.IsAdmin(User));
@@ -259,6 +273,9 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotosByCategory/{categoryId:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<MawApi.ViewModels.LegacyPhotos.Photo[]>> GetPhotosByCategory(short categoryId)
         {
             var photos = await _svc.GetPhotosForCategoryAsync(categoryId, Role.IsAdmin(User));
@@ -273,6 +290,8 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotosByCommentDate/{newestFirst:alpha}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IEnumerable<MawApi.ViewModels.LegacyPhotos.Photo>> GetPhotosByCommentDate(bool newestFirst)
         {
             var results = await _svc.GetPhotosByCommentDateAsync(newestFirst, Role.IsAdmin(User));
@@ -282,6 +301,8 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotosByUserCommentDate/{newestFirst:alpha}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IEnumerable<MawApi.ViewModels.LegacyPhotos.Photo>> GetPhotosByUserCommentDate(bool newestFirst)
         {
             var results = await _svc.GetPhotosByUserCommentDateAsync(User.Identity.Name, newestFirst, Role.IsAdmin(User));
@@ -291,6 +312,8 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotosByCommentCount/{greatestFirst:alpha}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IEnumerable<MawApi.ViewModels.LegacyPhotos.Photo>> GetPhotosByCommentCount(bool greatestFirst)
         {
             var results = await _svc.GetPhotosByCommentCountAsync(greatestFirst, Role.IsAdmin(User));
@@ -300,6 +323,8 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotosByAverageRating/{highestFirst:alpha}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IEnumerable<MawApi.ViewModels.LegacyPhotos.Photo>> GetPhotosByAverageRating(bool highestFirst)
         {
             var results = await _svc.GetPhotosByAverageUserRatingAsync(highestFirst, Role.IsAdmin(User));
@@ -309,6 +334,8 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotosByUserRating/{highestFirst:alpha}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IEnumerable<MawApi.ViewModels.LegacyPhotos.Photo>> GetPhotosByUserRating(bool highestFirst)
         {
             var results = await _svc.GetPhotosByUserRatingAsync(User.Identity.Name, highestFirst, Role.IsAdmin(User));
@@ -318,6 +345,9 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotoExifData/{photoId:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<Detail>> GetPhotoExifData(int photoId)
         {
             var data = await _svc.GetDetailForPhotoAsync(photoId, Role.IsAdmin(User));
@@ -332,6 +362,9 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getCommentsForPhoto/{photoId:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<IEnumerable<Comment>> GetCommentsForPhoto(int photoId)
         {
             return await _svc.GetCommentsForPhotoAsync(photoId);
@@ -339,6 +372,9 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getRatingForPhoto/{id:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<Rating>> GetRatingForPhoto(int id)
         {
             var rating = await _svc.GetRatingsAsync(id, User.Identity.Name);
@@ -353,6 +389,8 @@ namespace MawApi.Controllers
 
 
         [HttpPost("ratePhoto")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<float?> RatePhoto([FromBody] [Required] UserPhotoRating userRating)
         {
             if(userRating.Rating < 1)
@@ -371,6 +409,8 @@ namespace MawApi.Controllers
 
 
         [HttpPost("addCommentForPhoto")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<bool> AddCommentForPhoto([FromBody] [Required] CommentViewModel comment)
         {
             int result = await _svc.InsertPhotoCommentAsync(comment.PhotoId, User.Identity.Name, comment.Comment);
@@ -380,6 +420,8 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotosAndCategoriesByCommentDate/{newestFirst:alpha}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentDate(bool newestFirst)
         {
             var categories = await _svc.GetAllCategoriesAsync(Role.IsAdmin(User));
@@ -390,6 +432,8 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotosAndCategoriesByUserCommentDate/{newestFirst:alpha}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserCommentDate(bool newestFirst)
         {
             var categories = await _svc.GetAllCategoriesAsync(Role.IsAdmin(User));
@@ -400,6 +444,8 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotosAndCategoriesByCommentCount/{greatestFirst:alpha}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByCommentCount(bool greatestFirst)
         {
             var categories = await _svc.GetAllCategoriesAsync(Role.IsAdmin(User));
@@ -410,6 +456,8 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotosAndCategoriesByAverageRating/{highestFirst:alpha}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByAverageRating(bool highestFirst)
         {
             var categories = await _svc.GetAllCategoriesAsync(Role.IsAdmin(User));
@@ -420,6 +468,8 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getPhotosAndCategoriesByUserRating/{highestFirst:alpha}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IEnumerable<PhotoAndCategory>> GetPhotosAndCategoriesByUserRating(bool highestFirst)
         {
             var categories = await _svc.GetAllCategoriesAsync(Role.IsAdmin(User));

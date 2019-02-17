@@ -49,6 +49,8 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("files")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public IActionResult Files()
         {
             return Ok(_uploadSvc.GetFileList(User));
@@ -56,6 +58,8 @@ namespace MawMvcApp.Controllers
 
 
         [HttpPost("upload")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         [RequestSizeLimit(2_147_483_648)]  // 2GB
         public async Task<IActionResult> UploadAsync(IFormFile file)
         {
@@ -71,6 +75,8 @@ namespace MawMvcApp.Controllers
 
 
         [HttpPost("delete")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> DeleteAsync(string[] relativePaths)
         {
             var results = _uploadSvc.DeleteFiles(User, relativePaths);
@@ -88,6 +94,9 @@ namespace MawMvcApp.Controllers
 
 
         [HttpPost("download")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public IActionResult Download([FromBody] string[] downloadFiles)
         {
             if(downloadFiles.Length == 0)
@@ -125,6 +134,9 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("thumbnail/{relativePath}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public IActionResult Thumbnail(string relativePath)
         {
             if(string.IsNullOrWhiteSpace(relativePath))

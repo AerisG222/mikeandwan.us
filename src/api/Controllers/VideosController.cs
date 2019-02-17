@@ -59,6 +59,8 @@ namespace MawApi.Controllers
 
         // LEGACY APIS
         [HttpGet("getYears")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         public async Task<IEnumerable<short>> GetYears()
         {
             return await _svc.GetYearsAsync(Role.IsAdmin(User));
@@ -66,6 +68,9 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getCategoriesForYear/{year:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<MawApi.ViewModels.LegacyVideos.Category[]>> GetCategoriesForYear(short year)
         {
             var cats = await _svc.GetCategoriesAsync(year, Role.IsAdmin(User));
@@ -80,6 +85,9 @@ namespace MawApi.Controllers
 
 
         [HttpGet("getVideosByCategory/{categoryId:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<MawApi.ViewModels.LegacyVideos.Video[]>> GetVideosByCategory(short categoryId)
         {
             var vids = await _svc.GetVideosInCategoryAsync(categoryId, Role.IsAdmin(User));

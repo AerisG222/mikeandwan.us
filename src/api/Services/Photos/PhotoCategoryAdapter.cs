@@ -34,7 +34,9 @@ namespace MawApi.Services.Photos
                 PhotoCount = c.PhotoCount,
                 TeaserImage = _adapter.Adapt(c.TeaserImage),
                 TeaserImageSq = _adapter.Adapt(c.TeaserImageSq),
-                Self = _urlSvc.GetPhotoCategoryUrl(c.Id)
+                Self = _urlSvc.GetCategoryUrl(c.Id),
+                PhotosLink = _urlSvc.GetPhotosUrl(c.Id),
+                DownloadLink = _urlSvc.GetCategoryDownloadUrl(c.Id)
             };
         }
 

@@ -24,5 +24,7 @@ namespace MawApi.ViewModels.Photos
         public MultimediaAsset TeaserImage { get; set; }
         public MultimediaAsset TeaserImageSq { get; set; }
         public string Self { get; set; }
+        public string PhotosLink { get; set; }
+        public string DownloadLink { get; set; }
     }
 }

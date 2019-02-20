@@ -14,15 +14,33 @@ namespace MawApi.Services.Videos
         }
 
 
-        public string GetPhotoCategoryUrl(short categoryId)
+        public string GetCategoryUrl(short categoryId)
         {
             return _urlSvc.BuildApiUrl($"video-categories/{categoryId}");
         }
 
 
-        public string GetPhotoUrl(int photoId)
+        public string GetVideosUrl(short categoryId)
         {
-            return _urlSvc.BuildApiUrl($"videos/{photoId}");
+            return _urlSvc.BuildApiUrl($"video-categories/{categoryId}/photos");
+        }
+
+
+        public string GetVideoUrl(int videoId)
+        {
+            return _urlSvc.BuildApiUrl($"videos/{videoId}");
+        }
+
+
+        public string GetCommentsUrl(int videoId)
+        {
+            return _urlSvc.BuildApiUrl($"videos/{videoId}/comments");
+        }
+
+
+        public string GetRatingUrl(int videoId)
+        {
+            return _urlSvc.BuildApiUrl($"videos/{videoId}/rating");
         }
 
 

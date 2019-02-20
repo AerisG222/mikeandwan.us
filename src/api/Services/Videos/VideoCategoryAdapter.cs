@@ -41,7 +41,8 @@ namespace MawApi.Services.Videos
                 TotalSize = c.TotalSize,
                 TeaserImage = _adapter.Adapt(c.TeaserImage),
                 TeaserImageSq = _adapter.Adapt(c.TeaserImageSq),
-                Self = _urlSvc.GetPhotoCategoryUrl(c.Id)
+                Self = _urlSvc.GetCategoryUrl(c.Id),
+                VideosLink = _urlSvc.GetVideosUrl(c.Id),
             };
         }
 

@@ -14,15 +14,45 @@ namespace MawApi.Services.Photos
         }
 
 
-        public string GetPhotoCategoryUrl(short categoryId)
+        public string GetCategoryUrl(short categoryId)
         {
             return _urlSvc.BuildApiUrl($"photo-categories/{categoryId}");
+        }
+
+
+        public string GetPhotosUrl(short categoryId)
+        {
+            return _urlSvc.BuildApiUrl($"photo-categories/{categoryId}/photos");
+        }
+
+
+        public string GetCategoryDownloadUrl(short categoryId)
+        {
+            return _urlSvc.BuildWwwUrl($"/photos/download-category/{categoryId}");
         }
 
 
         public string GetPhotoUrl(int photoId)
         {
             return _urlSvc.BuildApiUrl($"photos/{photoId}");
+        }
+
+
+        public string GetCommentsUrl(int photoId)
+        {
+            return _urlSvc.BuildApiUrl($"photos/{photoId}/comments");
+        }
+
+
+        public string GetExifUrl(int photoId)
+        {
+            return _urlSvc.BuildApiUrl($"photos/{photoId}/exif");
+        }
+
+
+        public string GetRatingUrl(int photoId)
+        {
+            return _urlSvc.BuildApiUrl($"photos/{photoId}/rating");
         }
 
 

@@ -35,8 +35,10 @@ namespace MawApi.Services.Videos
                 VideoScaled = _adapter.Adapt(v.VideoScaled),
                 VideoFull = _adapter.Adapt(v.VideoFull),
                 VideoRaw = _adapter.Adapt(v.VideoRaw),
-                Self = _urlSvc.GetPhotoUrl(v.Id),
-                CategoryLink = _urlSvc.GetPhotoCategoryUrl(v.CategoryId)
+                Self = _urlSvc.GetVideoUrl(v.Id),
+                CategoryLink = _urlSvc.GetCategoryUrl(v.CategoryId),
+                CommentsLink = _urlSvc.GetCommentsUrl(v.Id),
+                RatingLink = _urlSvc.GetRatingUrl(v.Id)
             };
         }
 

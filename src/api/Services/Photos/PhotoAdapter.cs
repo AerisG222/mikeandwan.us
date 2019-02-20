@@ -37,7 +37,10 @@ namespace MawApi.Services.Photos
                 ImagePrt = _adapter.Adapt(p.PrtInfo),
                 ImageSrc = _adapter.Adapt(p.SrcInfo),
                 Self = _urlSvc.GetPhotoUrl(p.Id),
-                CategoryLink = _urlSvc.GetPhotoCategoryUrl(p.CategoryId)
+                CategoryLink = _urlSvc.GetCategoryUrl(p.CategoryId),
+                CommentsLink = _urlSvc.GetCommentsUrl(p.Id),
+                ExifLink = _urlSvc.GetExifUrl(p.Id),
+                RatingLink = _urlSvc.GetRatingUrl(p.Id)
             };
         }
 

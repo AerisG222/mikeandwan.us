@@ -13,4 +13,7 @@ run_psql_script "tables/video.video.sql";
 run_psql_script "tables/video.comment.sql";
 run_psql_script "tables/video.rating.sql";
 
+echo 'running seed...'
+run_psql_script "seed/aws.glacier_vault.sql";
+
 echo "...${DBNAME} updated.";

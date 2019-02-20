@@ -17,7 +17,12 @@ ALTER TABLE video.video
     ADD COLUMN thumb_sq_height SMALLINT,
     ADD COLUMN thumb_sq_width SMALLINT,
     ADD COLUMN thumb_sq_path VARCHAR(255),
-    ADD COLUMN thumb_sq_size INT;
+    ADD COLUMN thumb_sq_size INT,
+
+    -- backup info
+    ADD COLUMN aws_glacier_vault_id SMALLINT,
+    ADD COLUMN aws_archive_id CHAR(138),
+    ADD COLUMN aws_treehash CHAR(64);
 
 
 ALTER TABLE video.video
@@ -25,3 +30,6 @@ ALTER TABLE video.video
 
 ALTER TABLE video.video
   ADD CONSTRAINT fk_video_video_gps_longitude_ref FOREIGN KEY (gps_longitude_ref_id) REFERENCES photo.gps_longitude_ref(id);
+
+ALTER TABLE video.video
+  ADD CONSTRAINT fk_video_video_aws_glacier_vault FOREIGN KEY (aws_glacier_vault_id) REFERENCES aws.glacier_vault(id);

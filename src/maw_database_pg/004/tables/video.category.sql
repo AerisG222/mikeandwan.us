@@ -6,11 +6,11 @@ ALTER TABLE video.category
     ADD COLUMN gps_longitude_ref_id VARCHAR(2),
     ADD COLUMN video_count INT,
     ADD COLUMN total_duration INT,
-    ADD COLUMN total_size_thumb INT,
-    ADD COLUMN total_size_thumb_sq INT,
-    ADD COLUMN total_size_scaled INT,
-    ADD COLUMN total_size_full INT,
-    ADD COLUMN total_size_raw INT,
+    ADD COLUMN total_size_thumb BIGINT,
+    ADD COLUMN total_size_thumb_sq BIGINT,
+    ADD COLUMN total_size_scaled BIGINT,
+    ADD COLUMN total_size_full BIGINT,
+    ADD COLUMN total_size_raw BIGINT,
     ADD COLUMN teaser_image_size INT,
 
     -- square teaser

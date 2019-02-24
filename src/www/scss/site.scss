@@ -57,15 +57,21 @@ button {
     }
 }
 
-.hover-bright:hover {
-    cursor: pointer;
-
-    & a {
-        color: $link-color;
+.hover-bright {
+    a {
+        color: $body-color;
     }
 
-    & svg {
-        fill: $link-color;
+    &:hover {
+        cursor: pointer;
+
+        & a {
+            color: $link-color;
+        }
+
+        & svg {
+            fill: $link-color;
+        }
     }
 }
 

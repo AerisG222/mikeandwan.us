@@ -1,5 +1,5 @@
 import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
-import { saveAs } from 'file-saver/FileSaver';
+import { saveAs } from 'file-saver';
 import { FileUploader } from 'ng2-file-upload';
 import { tap } from 'rxjs/operators';
 

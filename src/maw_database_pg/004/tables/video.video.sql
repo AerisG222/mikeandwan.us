@@ -11,7 +11,7 @@ ALTER TABLE video.video
     ADD COLUMN full_size INT,
     ADD COLUMN raw_height SMALLINT,
     ADD COLUMN raw_width SMALLINT,
-    ADD COLUMN raw_size INT,
+    ADD COLUMN raw_size BIGINT,
 
     -- square thumbnails
     ADD COLUMN thumb_sq_height SMALLINT,

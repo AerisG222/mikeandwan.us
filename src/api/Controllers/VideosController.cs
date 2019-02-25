@@ -150,6 +150,7 @@ namespace MawApi.Controllers
 
 
         // LEGACY APIS
+        [Obsolete]
         [HttpGet("getYears")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -159,6 +160,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getCategoriesForYear/{year:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -176,6 +178,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getVideosByCategory/{categoryId:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]

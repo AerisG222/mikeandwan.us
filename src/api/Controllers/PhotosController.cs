@@ -196,6 +196,7 @@ namespace MawApi.Controllers
         // *******************************************
         // LEGACY APIS
         // *******************************************
+        [Obsolete]
         [HttpGet("getPhotoYears")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -205,6 +206,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getCategory/{categoryId:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -222,6 +224,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getRandomPhoto")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -234,6 +237,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getRecentCategories/{sinceId:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -245,6 +249,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getCategoryCount")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -254,6 +259,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getCategoriesForYear/{year:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -271,6 +277,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getPhotosByCategory/{categoryId:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -288,6 +295,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getPhotosByCommentDate/{newestFirst:alpha}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -299,6 +307,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getPhotosByUserCommentDate/{newestFirst:alpha}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -310,6 +319,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getPhotosByCommentCount/{greatestFirst:alpha}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -321,6 +331,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getPhotosByAverageRating/{highestFirst:alpha}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -332,6 +343,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getPhotosByUserRating/{highestFirst:alpha}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -343,6 +355,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getPhotoExifData/{photoId:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -360,6 +373,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getCommentsForPhoto/{photoId:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -370,6 +384,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getRatingForPhoto/{id:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -387,6 +402,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpPost("ratePhoto")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -407,6 +423,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpPost("addCommentForPhoto")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -418,6 +435,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getPhotosAndCategoriesByCommentDate/{newestFirst:alpha}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -430,6 +448,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getPhotosAndCategoriesByUserCommentDate/{newestFirst:alpha}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -442,6 +461,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getPhotosAndCategoriesByCommentCount/{greatestFirst:alpha}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -454,6 +474,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getPhotosAndCategoriesByAverageRating/{highestFirst:alpha}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
@@ -466,6 +487,7 @@ namespace MawApi.Controllers
         }
 
 
+        [Obsolete]
         [HttpGet("getPhotosAndCategoriesByUserRating/{highestFirst:alpha}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]

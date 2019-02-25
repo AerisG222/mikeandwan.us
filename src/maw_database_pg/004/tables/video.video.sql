@@ -7,8 +7,8 @@ ALTER TABLE video.video
 
     -- add size to existing videos
     ADD COLUMN thumb_size INT,
-    ADD COLUMN scaled_size INT,
-    ADD COLUMN full_size INT,
+    ADD COLUMN scaled_size BIGINT,
+    ADD COLUMN full_size BIGINT,
     ADD COLUMN raw_height SMALLINT,
     ADD COLUMN raw_width SMALLINT,
     ADD COLUMN raw_size BIGINT,

@@ -33,6 +33,8 @@ copy_app() {
           --include '*.json' \
           --include '*.gltf' \
           --include '*.bin'  \
+          --include '*.mp3'  \
+          --include '*.ogg'  \
           --exclude '*'      \
           "${SRC_ROOT}/client_apps/${APP}/dist/" \
           "${SITE_ROOT}/wwwroot/js/${APP}"

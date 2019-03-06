@@ -21,6 +21,7 @@ namespace MawApi.Services
                 .AddSingleton<PhotoAdapter>()
                 .AddSingleton<PhotoCategoryAdapter>()
                 .AddSingleton<PhotoUrlBuilderService>()
+                .AddSingleton<PhotoMultimediaInfoAdapter>()
 
                 // videos
                 .AddSingleton<LegacyVideoAdapter>()

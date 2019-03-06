@@ -60,5 +60,11 @@ namespace MawApi.Services.Photos
         {
             return _urlSvc.BuildWwwUrl(relativePath);
         }
+
+
+        public string GetImageDownloadUrl(int photoId, string size)
+        {
+            return _urlSvc.BuildWwwUrl($"photos/download/{photoId}/{size}");
+        }
     }
 }

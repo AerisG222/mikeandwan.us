@@ -69,6 +69,7 @@ namespace MawMvcApp
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
                 .AddTransient<RazorViewToStringRenderer>()
+                .AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>()
                 .AddSingleton<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
                 .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
                 .AddAuthentication(opts => {

@@ -10,13 +10,13 @@ namespace MawApi.ViewModels.Photos
         public DateTime CreateDate { get; set; }
         public float? Latitude { get; set; }
         public float? Longitude { get; set; }
-        public MultimediaAsset ImageXsSq { get; set; }
-        public MultimediaAsset ImageXs { get; set; }
-        public MultimediaAsset ImageSm { get; set; }
-		public MultimediaAsset ImageMd { get; set; }
-        public MultimediaAsset ImageLg { get; set; }
-        public MultimediaAsset ImagePrt { get; set; }
-        public MultimediaAsset ImageSrc { get; set; }
+        public PhotoMultimediaAsset ImageXsSq { get; set; }
+        public PhotoMultimediaAsset ImageXs { get; set; }
+        public PhotoMultimediaAsset ImageSm { get; set; }
+		public PhotoMultimediaAsset ImageMd { get; set; }
+        public PhotoMultimediaAsset ImageLg { get; set; }
+        public PhotoMultimediaAsset ImagePrt { get; set; }
+        public PhotoMultimediaAsset ImageSrc { get; set; }
         public string Self { get; set; }
         public string CategoryLink { get; set; }
         public string CommentsLink { get; set; }

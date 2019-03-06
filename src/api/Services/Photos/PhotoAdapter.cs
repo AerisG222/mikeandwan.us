@@ -9,12 +9,12 @@ namespace MawApi.Services.Photos
     public class PhotoAdapter
     {
         readonly PhotoUrlBuilderService _urlSvc;
-        readonly MultimediaInfoAdapter _adapter;
+        readonly PhotoMultimediaInfoAdapter _adapter;
 
 
         public PhotoAdapter(
             PhotoUrlBuilderService urlSvc,
-            MultimediaInfoAdapter adapter)
+            PhotoMultimediaInfoAdapter adapter)
         {
             _urlSvc = urlSvc ?? throw new ArgumentNullException(nameof(urlSvc));
             _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
@@ -29,13 +29,13 @@ namespace MawApi.Services.Photos
                 CreateDate = DateTime.MinValue,
                 Latitude = p.Latitude,
                 Longitude = p.Longitude,
-                ImageXsSq = _adapter.Adapt(p.XsSqInfo),
-                ImageXs = _adapter.Adapt(p.XsInfo),
-                ImageSm = _adapter.Adapt(p.SmInfo),
-                ImageMd = _adapter.Adapt(p.MdInfo),
-                ImageLg = _adapter.Adapt(p.LgInfo),
-                ImagePrt = _adapter.Adapt(p.PrtInfo),
-                ImageSrc = _adapter.Adapt(p.SrcInfo),
+                ImageXsSq = _adapter.Adapt(p.XsSqInfo, p.Id, "xs_sq"),
+                ImageXs = _adapter.Adapt(p.XsInfo, p.Id, "xs"),
+                ImageSm = _adapter.Adapt(p.SmInfo, p.Id, "sm"),
+                ImageMd = _adapter.Adapt(p.MdInfo, p.Id, "md"),
+                ImageLg = _adapter.Adapt(p.LgInfo, p.Id, "lg"),
+                ImagePrt = _adapter.Adapt(p.PrtInfo, p.Id, "prt"),
+                ImageSrc = _adapter.Adapt(p.SrcInfo, p.Id, "src"),
                 Self = _urlSvc.GetPhotoUrl(p.Id),
                 CategoryLink = _urlSvc.GetCategoryUrl(p.CategoryId),
                 CommentsLink = _urlSvc.GetCommentsUrl(p.Id),

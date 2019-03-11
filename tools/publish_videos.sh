@@ -126,6 +126,7 @@ if [ -d "${PATH_VIDEO_SOURCE}/raw" ]; then
     rm -rf "${PATH_VIDEO_SOURCE}/full"
     rm -rf "${PATH_VIDEO_SOURCE}/scaled"
     rm -rf "${PATH_VIDEO_SOURCE}/thumbnails"
+    rm -rf "${PATH_VIDEO_SOURCE}/thumb_sq"
 fi
 
 echo '* processing videos...'

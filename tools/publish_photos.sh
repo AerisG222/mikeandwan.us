@@ -143,6 +143,7 @@ if [ -d "${PATH_IMAGE_SOURCE}/src" ]; then
     mv "${PATH_IMAGE_SOURCE}"/src/* "${PATH_IMAGE_SOURCE}"
 
     # remove generated directories
+    rm -rf "${PATH_IMAGE_SOURCE}/xs_sq"
     rm -rf "${PATH_IMAGE_SOURCE}/xs"
     rm -rf "${PATH_IMAGE_SOURCE}/sm"
     rm -rf "${PATH_IMAGE_SOURCE}/md"

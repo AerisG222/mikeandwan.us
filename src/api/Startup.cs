@@ -29,11 +29,13 @@ namespace MawApi
     public class Startup
     {
         readonly IConfiguration _config;
+        readonly IHostingEnvironment _env;
 
 
-        public Startup(IConfiguration config)
+        public Startup(IConfiguration config, IHostingEnvironment env)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
+            _env = env ?? throw new ArgumentNullException(nameof(env));
 
             MagickWandEnvironment.Genesis();
         }
@@ -96,7 +98,14 @@ namespace MawApi
                 .AddCors(opts => {
                     // this defines a CORS policy called "default"
                     opts.AddPolicy("default", policy => {
-                        policy.WithOrigins(urlConfig.Www)
+                        var origins = new List<string> { urlConfig.Www };
+
+                        if(_env.IsDevelopment()) {
+                            // add angular dev server
+                            origins.Add("http://localhost:4200");
+                        }
+
+                        policy.WithOrigins(origins.ToArray())
                             .WithExposedHeaders(new string[] {
                                 "Content-Disposition"
                             })

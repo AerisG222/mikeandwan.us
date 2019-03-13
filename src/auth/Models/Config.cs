@@ -278,7 +278,9 @@ namespace MawAuth.Models
                     ClientName = "NEW mikeandwan.us Photo Application",
                     RequireConsent = false,
                     //AccessTokenLifetime = 600, // 10 minutes, default 60 minutes
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {

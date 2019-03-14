@@ -11,12 +11,14 @@ namespace MawAuth.Models
     {
         readonly string _wwwUrl;
         readonly string _wwwSecret;
+        readonly string _photosUrl;
 
 
-        public Config(string wwwUrl, string wwwSecret)
+        public Config(string wwwUrl, string wwwSecret, string photosUrl)
         {
             _wwwUrl = wwwUrl ?? throw new ArgumentNullException(nameof(wwwUrl));
             _wwwSecret = wwwSecret ?? throw new ArgumentNullException(nameof(wwwSecret));
+            _photosUrl = photosUrl ?? throw new ArgumentNullException(nameof(photosUrl));
         }
 
 
@@ -284,16 +286,16 @@ namespace MawAuth.Models
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {
-                        $"http://localhost:4200/auth",
-                        $"http://localhost:4200/auth-silent"
+                        $"{_photosUrl}/auth",
+                        $"{_photosUrl}/auth-silent"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        $"http://localhost:4200/"
+                        $"{_photosUrl}/"
                     },
                     AllowedCorsOrigins = new List<string>
                     {
-                        "http://localhost:4200"
+                        _photosUrl
                     },
                     AllowedScopes = new List<string>
                     {

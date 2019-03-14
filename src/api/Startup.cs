@@ -98,14 +98,12 @@ namespace MawApi
                 .AddCors(opts => {
                     // this defines a CORS policy called "default"
                     opts.AddPolicy("default", policy => {
-                        var origins = new List<string> { urlConfig.Www };
+                        var origins = new string[] {
+                            urlConfig.Www,
+                            urlConfig.Photos
+                        };
 
-                        if(_env.IsDevelopment()) {
-                            // add angular dev server
-                            origins.Add("http://localhost:4200");
-                        }
-
-                        policy.WithOrigins(origins.ToArray())
+                        policy.WithOrigins(origins)
                             .WithExposedHeaders(new string[] {
                                 "Content-Disposition"
                             })

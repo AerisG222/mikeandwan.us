@@ -39,7 +39,7 @@ namespace MawAuth
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var config = new Config(_config["Environment:WwwUrl"], _config["Environment:WwwClientSecret"]);
+            var config = new Config(_config["Environment:WwwUrl"], _config["Environment:WwwClientSecret"], _config["Environment:PhotosUrl"]);
 
             services
                 .Configure<IdentityOptions>(opts =>

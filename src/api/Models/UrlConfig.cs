@@ -5,5 +5,6 @@ namespace MawApi.Models
         public string Api { get; set; }
         public string Auth { get; set; }
         public string Www { get; set; }
+        public string Photos { get; set; }
     }
 }

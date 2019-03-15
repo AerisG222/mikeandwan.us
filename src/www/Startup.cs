@@ -115,6 +115,14 @@ namespace MawMvcApp
                     {
                         MawPolicyBuilder.AddMawPolicies(opts);
                     })
+                .AddCors(opts => {
+                    opts.AddPolicy("default", policy => {
+                        policy
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+                })
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -127,6 +135,8 @@ namespace MawMvcApp
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseCors("default");
+
             if (_env.IsDevelopment())
             {
                 app.UseMiniProfiler();
@@ -146,6 +156,13 @@ namespace MawMvcApp
                 .UseAuthentication()
                 .UseStaticFiles(new StaticFileOptions {
                     ContentTypeProvider = GetCustomMimeTypeProvider()
+
+                    /* see if we need this after the next deploy - which was needed when testing the histogram function of the new photos app
+                    OnPrepareResponse = ctx => {
+                        ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+                        ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                    }
+                    */
                 })
                 .UseMvc();
         }

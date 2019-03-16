@@ -287,7 +287,7 @@ namespace MawAuth.Models
                     RedirectUris = new List<string>
                     {
                         $"{_photosUrl}/auth",
-                        $"{_photosUrl}/auth-silent"
+                        $"{_photosUrl}/auth/silent"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {

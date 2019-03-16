@@ -36,11 +36,11 @@ namespace Maw.Data
             name,
             year,
             create_date,
-            CASE WHEN gps_latitude_ref_id = 'S' THEN -1.0 * gps_latitude
-                 ELSE gps_latitude
+            CASE WHEN gps_latitude_ref_id = 'S' THEN -1.0 * ABS(gps_latitude)
+                 ELSE ABS(gps_latitude)
                   END AS latitude,
-            CASE WHEN gps_longitude_ref_id = 'W' THEN -1.0 * gps_longitude
-                 ELSE gps_longitude
+            CASE WHEN gps_longitude_ref_id = 'W' THEN -1.0 * ABS(gps_longitude)
+                 ELSE ABS(gps_longitude)
                   END AS longitude,
             photo_count,
             total_size_xs,
@@ -70,11 +70,11 @@ namespace Maw.Data
             id,
             category_id,
             create_date,
-            CASE WHEN gps_latitude_ref_id = 'S' THEN -1.0 * gps_latitude
-                 ELSE gps_latitude
+            CASE WHEN gps_latitude_ref_id = 'S' THEN -1.0 * ABS(gps_latitude)
+                 ELSE ABS(gps_latitude)
                   END AS latitude,
-            CASE WHEN gps_longitude_ref_id = 'W' THEN -1.0 * gps_longitude
-                 ELSE gps_longitude
+            CASE WHEN gps_longitude_ref_id = 'W' THEN -1.0 * ABS(gps_longitude)
+                 ELSE ABS(gps_longitude)
                   END AS longitude,
             xs_path AS path,
             xs_width AS width,

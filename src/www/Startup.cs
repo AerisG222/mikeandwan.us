@@ -156,13 +156,6 @@ namespace MawMvcApp
                 .UseAuthentication()
                 .UseStaticFiles(new StaticFileOptions {
                     ContentTypeProvider = GetCustomMimeTypeProvider()
-
-                    /* see if we need this after the next deploy - which was needed when testing the histogram function of the new photos app
-                    OnPrepareResponse = ctx => {
-                        ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
-                        ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                    }
-                    */
                 })
                 .UseMvc();
         }

@@ -12,13 +12,15 @@ namespace MawAuth.Models
         readonly string _wwwUrl;
         readonly string _wwwSecret;
         readonly string _photosUrl;
+        readonly string _filesUrl;
 
 
-        public Config(string wwwUrl, string wwwSecret, string photosUrl)
+        public Config(string wwwUrl, string wwwSecret, string photosUrl, string filesUrl)
         {
             _wwwUrl = wwwUrl ?? throw new ArgumentNullException(nameof(wwwUrl));
             _wwwSecret = wwwSecret ?? throw new ArgumentNullException(nameof(wwwSecret));
             _photosUrl = photosUrl ?? throw new ArgumentNullException(nameof(photosUrl));
+            _filesUrl = filesUrl ?? throw new ArgumentNullException(nameof(filesUrl));
         }
 
 
@@ -309,6 +311,41 @@ namespace MawAuth.Models
                         JwtClaimTypes.Role
                     }
                 },
+                new Client
+                {
+                    ClientId = "maw-files",
+                    ClientName = "mikeandwan.us File Management Application",
+                    RequireConsent = false,
+                    //AccessTokenLifetime = 600, // 10 minutes, default 60 minutes
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris = new List<string>
+                    {
+                        $"{_filesUrl}/auth",
+                        $"{_filesUrl}/auth/silent"
+                    },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        $"{_filesUrl}/"
+                    },
+                    AllowedCorsOrigins = new List<string>
+                    {
+                        _filesUrl
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+
+                        // apis
+                        "maw_api",
+
+                        // identity resources
+                        JwtClaimTypes.Role
+                    }
+                }
             };
         }
     }

@@ -100,7 +100,8 @@ namespace MawApi
                     opts.AddPolicy("default", policy => {
                         var origins = new string[] {
                             urlConfig.Www,
-                            urlConfig.Photos
+                            urlConfig.Photos,
+                            urlConfig.Files
                         };
 
                         policy.WithOrigins(origins)

@@ -8,23 +8,13 @@
     <li class="nav-item" maw-action="Index" maw-controller="Games" maw-text="games" maw-active="@Model.ActiveNavigationZone == NavigationZone.Games"></li>
     <li class="nav-item" maw-action="Index" maw-controller="Webgl" maw-text="webgl" maw-active="@Model.ActiveNavigationZone == NavigationZone.Webgl"></li>
 
-    @if(Model.AuthorizedForPhotos) {
-        <li class="nav-item" maw-action="Index" maw-controller="Photos" maw-route-extra="" maw-active="@Model.ActiveNavigationZone == NavigationZone.Photos">
-            <svg-icon icon="Camera"></svg-icon>
-        </li>
-    }
+    <li class="nav-item">
+        <a class="nav-link px-3" href="https://photos.mikeandwan.us" target="_blank"><svg-icon icon="Camera"></svg-icon></a>
+    </li>
 
-	@if(Model.AuthorizedForVideos) {
-        <li class="nav-item" maw-action="Index" maw-controller="Videos" maw-route-extra="" maw-active="@Model.ActiveNavigationZone == NavigationZone.Videos">
-            <svg-icon icon="VideoCamera"></svg-icon>
-        </li>
-    }
-
-    @if(Model.AuthorizedForUpload) {
-        <li class="nav-item" maw-action="Index" maw-controller="Upload" maw-active="@Model.ActiveNavigationZone == NavigationZone.Upload">
-            <svg-icon icon="Upload"></svg-icon>
-        </li>
-    }
+    <li class="nav-item">
+        <a class="nav-link px-3" href="https://files.mikeandwan.us" target="_blank"><svg-icon icon="Upload"></svg-icon></a>
+    </li>
 
     @if(Model.AuthorizedForAdmin) {
         <li class="nav-item" maw-action="Index" maw-controller="Admin" maw-active="@Model.ActiveNavigationZone == NavigationZone.Administration">

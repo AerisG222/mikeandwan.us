@@ -6,6 +6,7 @@ using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.Navigation;
 using Maw.Security;
 
+
 namespace MawMvcApp.ViewComponents
 {
     public class PrimaryNav
@@ -31,10 +32,7 @@ namespace MawMvcApp.ViewComponents
 
             model.ActiveNavigationZone = activeZone;
 
-            model.AuthorizedForPhotos = (await _authzService.AuthorizeAsync(HttpContext.User, null, Policy.ViewPhotos)).Succeeded;
-            model.AuthorizedForVideos = (await _authzService.AuthorizeAsync(HttpContext.User, null, Policy.ViewVideos)).Succeeded;
             model.AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, Policy.AdminSite)).Succeeded;
-            model.AuthorizedForUpload = (await _authzService.AuthorizeAsync(HttpContext.User, null, Policy.CanUpload)).Succeeded;
 
             return View(model);
         }

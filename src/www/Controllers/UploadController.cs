@@ -22,9 +22,7 @@ namespace MawMvcApp.Controllers
 		[HttpGet("")]
         public IActionResult Index()
         {
-			ViewBag.NavigationZone = NavigationZone.Upload;
-
-            return View();
+			return Redirect("https://files.mikeandwan.us");
         }
     }
 }

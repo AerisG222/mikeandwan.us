@@ -40,9 +40,7 @@ namespace MawMvcApp.Controllers
         [HttpGet("{*extra}")]
         public IActionResult Index()
         {
-			ViewBag.NavigationZone = NavigationZone.Videos;
-
-            return View();
+			return Redirect("https://videos.mikeandwan.us");
         }
 
 

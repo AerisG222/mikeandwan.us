@@ -11,23 +11,10 @@ NG_APPS=(
     "learning"
     "memory"
     "money_spin"
-    "photos"
-    "upload"
-    "videos"
     "weekend_countdown"
 )
 
-NG_LIBS=(
-    "maw-auth"
-    "maw-common"
-)
-
-NG_LIB_PATHS=(
-    "../maw-auth/dist/maw-auth/maw-auth-0.0.1.tgz"
-    "../maw-common/dist/maw-common/maw-common-0.0.7.tgz"
-)
-
-NG_CLI_VERSION='@angular/cli@7.1.4'
+NG_CLI_VERSION='@angular/cli@latest'
 
 
 update_ngcli_global() {
@@ -45,33 +32,16 @@ update_ngcli_global() {
 
 update_ngcli_project() {
     local projectdir=$1
-    local installlibs=$2
 
     cd "${projectdir}"
 
     rm -rf node_modules dist
-
-    if [ "${installlibs}" == "y" ]; then
-        # remove local libs [currently ng update does not like when there is a file:// package]
-        for i in "${NG_LIBS}"
-        do
-            npm rm "${i}" --save-dev
-        done
-    fi
 
     # clean and install new cli
     npm install --save-dev ${NG_CLI_VERSION}
 
     # add in any other missing libs
     npm install
-
-    if [ "${installlibs}" == "y" ]; then
-        # add in local libs
-        for i in "${NG_LIB_PATHS}"
-        do
-            npm install "${i}" --save-dev
-        done
-    fi
 
     ng update @angular/cli \
               @angular/core \
@@ -107,14 +77,6 @@ build_app() {
 
 
 update_ngcli_all_projects() {
-    # do libs first as these could be referenced / needed by the npm install step in the app
-    for i in "${NG_LIBS[@]}"
-    do
-        echo "updating tooling for ${i}..."
-        update_ngcli_project "${i}" 'n'
-        build_lib "${i}"
-    done
-
     for i in "${NG_APPS[@]}"
     do
         echo "updating tooling for ${i}..."
@@ -128,13 +90,6 @@ install_all_deps() {
     do
         echo "installing dependencies for ${i}..."
         install_deps "${i}"
-    done
-
-    for i in "${NG_LIBS[@]}"
-    do
-        echo "installing dependencies for ${i}..."
-        install_deps "${i}"
-        build_lib "${i}"
     done
 
     for i in "${NG_APPS[@]}"
@@ -152,12 +107,6 @@ build_all_apps() {
     do
         echo "building ${i}..."
         build_app "${i}" "${buildcmd}"
-    done
-
-    for i in "${NG_LIBS[@]}"
-    do
-        echo "building ${i}..."
-        build_lib "${i}"
     done
 
     for i in "${NG_APPS[@]}"

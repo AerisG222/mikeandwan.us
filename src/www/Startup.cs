@@ -168,9 +168,6 @@ namespace MawMvcApp
             AddDevPathMapping(app, "../client_apps/learning/dist",            "/js/learning");
             AddDevPathMapping(app, "../client_apps/memory/dist",              "/js/memory");
             AddDevPathMapping(app, "../client_apps/money_spin/dist",          "/js/money_spin");
-            AddDevPathMapping(app, "../client_apps/photos/dist",              "/js/photos");
-            AddDevPathMapping(app, "../client_apps/upload/dist",              "/js/upload");
-            AddDevPathMapping(app, "../client_apps/videos/dist",              "/js/videos");
             AddDevPathMapping(app, "../client_apps/webgl_blender_model/dist", "/js/webgl_blender_model");
             AddDevPathMapping(app, "../client_apps/webgl_cube/dist",          "/js/webgl_cube");
             AddDevPathMapping(app, "../client_apps/webgl_shader/dist",        "/js/webgl_shader");

@@ -1,3 +1,0 @@
-.fullscreen { position: fixed; top: 0; left: 0; height: 100%; width: 100%; background-color: #000; display: table-cell; z-index: 1200; }  /* static nav in bootstrap has zindex of 1000, make sure this is greater */
-.fullscreen img { display: block; margin:auto; max-width:100%; max-height:100%; }
-.fullscreen > div { position: fixed; top: 0; background-color: transparent; width: 100%; opacity: 0.8; filter: alpha(opacity=80); }

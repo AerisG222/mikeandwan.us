@@ -1,5 +1,0 @@
-<div class="row equal-height">
-  <div class="col-lg-2 col-md-3 mb-3" *ngFor="let video of videoList | slice: (page - 1) * cardsPerPage : page * cardsPerPage">
-      <app-video-card [video]="video" [active]="video == activeVideo" (click)="selectVideo(video)"></app-video-card>
-  </div>
-</div>

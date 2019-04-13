@@ -26,20 +26,14 @@ namespace MawApi.Controllers
     {
         readonly IVideoService _svc;
         readonly VideoAdapter _adapter;
-        readonly LegacyVideoAdapter _legacyVideoAdapter;
-        readonly LegacyVideoCategoryAdapter _legacyVideoCategoryAdapter;
 
 
 		public VideosController(
-            LegacyVideoAdapter legacyVideoAdapter,
-            LegacyVideoCategoryAdapter legacyVideoCategoryAdapter,
             VideoAdapter videoAdapter,
             IVideoService videoService)
         {
 			_svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
             _adapter = videoAdapter ?? throw new ArgumentNullException(nameof(videoAdapter));
-            _legacyVideoAdapter = legacyVideoAdapter ?? throw new ArgumentNullException(nameof(legacyVideoAdapter));
-            _legacyVideoCategoryAdapter = legacyVideoCategoryAdapter ?? throw new ArgumentNullException(nameof(legacyVideoCategoryAdapter));
         }
 
 
@@ -107,7 +101,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<Rating>> RatePhotoAsync(int id, UserRating userRating)
+        public async Task<ActionResult<Rating>> RateVideoAsync(int id, UserRating userRating)
         {
             // TODO: handle invalid photo id?
             // TODO: remove photoId from userPhotoRating?
@@ -146,53 +140,6 @@ namespace MawApi.Controllers
         Task<Rating> InternalGetRatingAsync(int id)
         {
             return _svc.GetRatingsAsync(id, User.Identity.Name);
-        }
-
-
-        // LEGACY APIS
-        [Obsolete]
-        [HttpGet("getYears")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(401)]
-        public async Task<IEnumerable<short>> GetYears()
-        {
-            return await _svc.GetYearsAsync(Role.IsAdmin(User));
-        }
-
-
-        [Obsolete]
-        [HttpGet("getCategoriesForYear/{year:int}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<MawApi.ViewModels.LegacyVideos.Category[]>> GetCategoriesForYear(short year)
-        {
-            var cats = await _svc.GetCategoriesAsync(year, Role.IsAdmin(User));
-
-            if(cats == null || cats.Count() == 0)
-            {
-                return NotFound();
-            }
-
-            return _legacyVideoCategoryAdapter.Adapt(cats).ToArray();
-        }
-
-
-        [Obsolete]
-        [HttpGet("getVideosByCategory/{categoryId:int}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<MawApi.ViewModels.LegacyVideos.Video[]>> GetVideosByCategory(short categoryId)
-        {
-            var vids = await _svc.GetVideosInCategoryAsync(categoryId, Role.IsAdmin(User));
-
-            if(vids == null || vids.Count() == 0)
-            {
-                return NotFound();
-            }
-
-            return _legacyVideoAdapter.Adapt(vids).ToArray();
         }
     }
 }

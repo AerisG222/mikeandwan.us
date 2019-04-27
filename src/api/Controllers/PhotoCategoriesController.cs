@@ -48,6 +48,18 @@ namespace MawApi.Controllers
         }
 
 
+        [HttpGet("recent/{sinceId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        public async Task<ActionResult<ApiCollection<PhotoCategoryViewModel>>> GetRecent(short sinceId)
+        {
+            var categories = await _svc.GetRecentCategoriesAsync(sinceId, Role.IsAdmin(User));
+            var result = _categoryAdapter.Adapt(categories);
+
+            return new ApiCollection<PhotoCategoryViewModel>(result.ToList());
+        }
+
+
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]

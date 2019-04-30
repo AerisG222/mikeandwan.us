@@ -22,11 +22,5 @@ namespace Maw.Domain.Photos
         Task<int> InsertCommentAsync(int photoId, string username, string comment);
         Task<float?> SaveRatingAsync(int photoId, string username, byte rating);
         Task<float?> RemoveRatingAsync(int photoId, string username);
-
-        Task<IEnumerable<Photo>> GetPhotosByCommentDateAsync(bool newestFirst, bool allowPrivate);
-        Task<IEnumerable<Photo>> GetPhotosByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate);
-        Task<IEnumerable<Photo>> GetPhotosByCommentCountAsync(bool greatestFirst, bool allowPrivate);
-        Task<IEnumerable<Photo>> GetPhotosByAverageUserRatingAsync(bool highestFirst, bool allowPrivate);
-        Task<IEnumerable<Photo>> GetPhotosByUserRatingAsync(string username, bool highestFirst, bool allowPrivate);
     }
 }

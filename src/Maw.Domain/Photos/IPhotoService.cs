@@ -14,11 +14,6 @@ namespace Maw.Domain.Photos
         Task<short> GetCategoryCountAsync(bool allowPrivate);
         Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate);
         Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, bool allowPrivate);
-        Task<IEnumerable<Photo>> GetPhotosByCommentDateAsync(bool newestFirst, bool allowPrivate);
-        Task<IEnumerable<Photo>> GetPhotosByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate);
-        Task<IEnumerable<Photo>> GetPhotosByCommentCountAsync(bool greatestFirst, bool allowPrivate);
-        Task<IEnumerable<Photo>> GetPhotosByAverageUserRatingAsync(bool highestFirst, bool allowPrivate);
-        Task<IEnumerable<Photo>> GetPhotosByUserRatingAsync(string username, bool highestFirst, bool allowPrivate);
         Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate);
         Task<Photo> GetPhotoAsync(int photoId, bool allowPrivate);
         Task<Detail> GetDetailAsync(int photoId, bool allowPrivate);

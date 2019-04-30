@@ -71,36 +71,6 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<IEnumerable<Photo>> GetPhotosByCommentDateAsync(bool newestFirst, bool allowPrivate)
-        {
-            return _repo.GetPhotosByCommentDateAsync(newestFirst, allowPrivate);
-        }
-
-
-		public Task<IEnumerable<Photo>> GetPhotosByUserCommentDateAsync(string username, bool greatestFirst, bool allowPrivate)
-        {
-            return _repo.GetPhotosByUserCommentDateAsync(username, greatestFirst, allowPrivate);
-        }
-
-
-		public Task<IEnumerable<Photo>> GetPhotosByCommentCountAsync(bool greatestFirst, bool allowPrivate)
-        {
-            return _repo.GetPhotosByCommentCountAsync(greatestFirst, allowPrivate);
-        }
-
-
-		public Task<IEnumerable<Photo>> GetPhotosByAverageUserRatingAsync(bool highestFirst, bool allowPrivate)
-        {
-            return _repo.GetPhotosByAverageUserRatingAsync(highestFirst, allowPrivate);
-        }
-
-
-		public Task<IEnumerable<Photo>> GetPhotosByUserRatingAsync(string username, bool highestFirst, bool allowPrivate)
-        {
-            return _repo.GetPhotosByUserRatingAsync(username, highestFirst, allowPrivate);
-        }
-
-
 		public Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
         {
             return _repo.GetCategoryAsync(categoryId, allowPrivate);

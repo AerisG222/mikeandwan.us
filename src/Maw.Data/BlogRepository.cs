@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using Dapper;
 using Maw.Domain.Blogs;
@@ -20,14 +21,7 @@ namespace Maw.Data
 		public Task<IEnumerable<Blog>> GetBlogsAsync()
 		{
 			return RunAsync(conn => {
-				return conn.QueryAsync<Blog>(
-					@"SELECT *,
-							 (SELECT MAX(publish_date) 
-								FROM blog.post
-							   WHERE blog_id = b.id
-							 ) AS last_post_date 
-						FROM blog.blog b;"
-				);
+				return conn.QueryAsync<Blog>("SELECT * FROM blog.get_blogs();");
 			});
 		}
 
@@ -36,10 +30,7 @@ namespace Maw.Data
 		{
 			return RunAsync(conn => {
 				return conn.QueryAsync<Post>(
-					@"SELECT *
-					    FROM blog.post
-					   WHERE blog_id = @blogId
-					   ORDER BY publish_date DESC;",
+                    "SELECT * FROM blog.get_posts(@blogId);",
 					new { blogId = blogId }
 				);
 			});
@@ -48,16 +39,12 @@ namespace Maw.Data
 
 		public Task<IEnumerable<Post>> GetLatestPostsAsync(short blogId, short postCount)
 		{
-			return RunAsync(conn => {
+            return RunAsync(conn => {
 				return conn.QueryAsync<Post>(
-					@"SELECT *
-					    FROM blog.post
-					   WHERE blog_id = @blogId
-					   ORDER BY publish_date DESC
-					   LIMIT @postCount;",
-					new { 
+                    "SELECT * FROM blog.get_latest_posts(@blogId, @postCount);",
+					new {
 						blogId = blogId,
-					    postCount = postCount 
+					    postCount = postCount
 					}
 				);
 			});
@@ -68,9 +55,7 @@ namespace Maw.Data
 		{
 			return RunAsync(conn => {
 				return conn.QuerySingleOrDefaultAsync<Post>(
-					@"SELECT *
-					    FROM blog.post
-					   WHERE id = @id;",
+					@"SELECT * FROM blog.get_post(@id);",
 					new { id = id }
 				);
 			});
@@ -80,25 +65,21 @@ namespace Maw.Data
 		public Task AddPostAsync(Post post)
 		{
 			return RunAsync(async conn => {
-				var result = await conn.ExecuteAsync(
-					@"INSERT INTO blog.post
-					       ( 
-							 blog_id,
-							 title,
-							 description,
-							 publish_date
-						   )
-					  VALUES
-					       (
-							 @BlogId,
-							 @Title,
-							 @Description,
-							 @PublishDate
-						   );",
-					post
-				);
+				var result = await conn.QuerySingleOrDefaultAsync<short>(
+					@"SELECT * FROM blog.add_post(
+                        @blogId,
+                        @title,
+                        @description,
+                        @publishDate
+                    );",
+					new {
+                        blogId = post.BlogId,
+                        title = post.Title,
+                        description = post.Description,
+                        publishDate = post.PublishDate
+                    });
 
-				if(result != 1)
+				if(result <= 0)
 				{
 					throw new Exception("Did not save blog post!");
 				}

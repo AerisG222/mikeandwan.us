@@ -41,9 +41,10 @@ namespace Maw.Data
 		{
             return RunAsync(conn => {
 				return conn.QueryAsync<Post>(
-                    "SELECT * FROM blog.get_latest_posts(@blogId, @postCount);",
+                    "SELECT * FROM blog.get_posts(@blogId, @id, @postCount);",
 					new {
 						blogId = blogId,
+                        id = (short?) null,
 					    postCount = postCount
 					}
 				);
@@ -55,8 +56,11 @@ namespace Maw.Data
 		{
 			return RunAsync(conn => {
 				return conn.QuerySingleOrDefaultAsync<Post>(
-					@"SELECT * FROM blog.get_post(@id);",
-					new { id = id }
+					@"SELECT * FROM blog.get_posts(@blogId, @id);",
+					new {
+                        blogId = (short?) null,
+                        id = id
+                    }
 				);
 			});
 		}

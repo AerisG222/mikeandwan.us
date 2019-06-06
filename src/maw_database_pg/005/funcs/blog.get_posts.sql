@@ -1,6 +1,8 @@
 CREATE OR REPLACE FUNCTION blog.get_posts
 (
-    _blog_id SMALLINT
+    _blog_id SMALLINT DEFAULT NULL,
+    _id SMALLINT DEFAULT NULL,
+    _post_count SMALLINT DEFAULT NULL
 )
 RETURNS TABLE
 (
@@ -19,8 +21,10 @@ AS $$
            description,
            publish_date
       FROM blog.post
-     WHERE blog_id = _blog_id
-     ORDER BY publish_date DESC;
+     WHERE (_blog_id IS NULL OR blog_id = _blog_id)
+       AND (_id IS NULL OR _id = id)
+     ORDER BY publish_date DESC
+     LIMIT _post_count;
 
 $$;
 

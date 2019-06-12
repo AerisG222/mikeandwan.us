@@ -10,7 +10,7 @@ namespace Maw.Domain.Videos
         public DateTime CreateDate { get; set; }
         public float? Latitude { get; set; }
         public float? Longitude { get; set; }
-        public int Duration { get; set; }
+        public short Duration { get; set; }
         public MultimediaInfo ThumbnailSq { get; set; }
         public MultimediaInfo Thumbnail { get; set; }
         public MultimediaInfo VideoScaled { get; set; }

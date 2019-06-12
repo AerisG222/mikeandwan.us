@@ -12,10 +12,10 @@ namespace Maw.Domain.Videos
         Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, bool allowPrivate);
         Task<Video> GetVideoAsync(short id, bool allowPrivate);
         Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate);
-        Task<IEnumerable<Comment>> GetCommentsAsync(int videoId);
-        Task<Rating> GetRatingsAsync(int videoId, string username);
-        Task<int> InsertCommentAsync(int videoId, string username, string comment);
-        Task<float?> SaveRatingAsync(int videoId, string username, byte rating);
-        Task<float?> RemoveRatingAsync(int videoId, string username);
+        Task<IEnumerable<Comment>> GetCommentsAsync(short videoId);
+        Task<Rating> GetRatingsAsync(short videoId, string username);
+        Task<int> InsertCommentAsync(short videoId, string username, string comment);
+        Task<float?> SaveRatingAsync(short videoId, string username, short rating);
+        Task<float?> RemoveRatingAsync(short videoId, string username);
     }
 }

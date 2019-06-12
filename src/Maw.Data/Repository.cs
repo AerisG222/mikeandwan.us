@@ -48,10 +48,16 @@ namespace Maw.Data
         }
 
 
+        protected T GetValueOrDefault<T>(object value)
+        {
+            return value == null ? default(T) : (T)value;
+        }
+
+
         DbConnection GetConnection()
         {
             DbConnection dbConn = new NpgsqlConnection(_connString);
-            
+
             return new ProfiledDbConnection(dbConn, MiniProfiler.Current);
         }
     }

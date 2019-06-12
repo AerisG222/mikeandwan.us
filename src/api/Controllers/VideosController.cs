@@ -58,7 +58,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public Task<ApiCollection<Comment>> GetCommentsAsync(int id)
+        public Task<ApiCollection<Comment>> GetCommentsAsync(short id)
         {
             return InternalGetCommentsAsync(id);
         }
@@ -69,7 +69,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ApiCollection<Comment>> AddCommentAsync(int id, CommentViewModel model)
+        public async Task<ApiCollection<Comment>> AddCommentAsync(short id, CommentViewModel model)
         {
             // TODO: handle invalid photo id?
             // TODO: remove photoId from commentViewModel?
@@ -83,7 +83,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<Rating>> GetRatingAsync(int id)
+        public async Task<ActionResult<Rating>> GetRatingAsync(short id)
         {
             var rating = await InternalGetRatingAsync(id);
 
@@ -101,7 +101,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<Rating>> RateVideoAsync(int id, UserRating userRating)
+        public async Task<ActionResult<Rating>> RateVideoAsync(short id, UserRating userRating)
         {
             // TODO: handle invalid photo id?
             // TODO: remove photoId from userPhotoRating?
@@ -129,7 +129,7 @@ namespace MawApi.Controllers
         }
 
 
-        async Task<ApiCollection<Comment>> InternalGetCommentsAsync(int id)
+        async Task<ApiCollection<Comment>> InternalGetCommentsAsync(short id)
         {
             var comments = await _svc.GetCommentsAsync(id);
 
@@ -137,7 +137,7 @@ namespace MawApi.Controllers
         }
 
 
-        Task<Rating> InternalGetRatingAsync(int id)
+        Task<Rating> InternalGetRatingAsync(short id)
         {
             return _svc.GetRatingsAsync(id, User.Identity.Name);
         }

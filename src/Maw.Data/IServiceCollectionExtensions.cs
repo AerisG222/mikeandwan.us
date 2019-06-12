@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Dapper;
 using Maw.Data.Identity;
+using Maw.Domain;
 using Maw.Domain.Blogs;
 using Maw.Domain.Identity;
 using Maw.Domain.Photos;
@@ -13,8 +15,8 @@ namespace Maw.Data
     {
         public static IServiceCollection AddMawDataServices(this IServiceCollection services, string connString)
         {
-            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
-            Dapper.SqlMapper.AddTypeMap(typeof(string), System.Data.DbType.AnsiString);
+            DefaultTypeMap.MatchNamesWithUnderscores = true;
+            SqlMapper.AddTypeMap(typeof(string), System.Data.DbType.AnsiString);
 
             services
                 .AddScoped<IBlogRepository>(x => new BlogRepository(connString))

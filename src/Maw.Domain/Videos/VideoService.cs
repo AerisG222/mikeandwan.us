@@ -58,31 +58,31 @@ namespace Maw.Domain.Videos
         }
 
 
-        public Task<IEnumerable<Comment>> GetCommentsAsync(int videoId)
+        public Task<IEnumerable<Comment>> GetCommentsAsync(short videoId)
         {
             return _repo.GetCommentsAsync(videoId);
         }
 
 
-		public Task<Rating> GetRatingsAsync(int videoId, string username)
+		public Task<Rating> GetRatingsAsync(short videoId, string username)
         {
             return _repo.GetRatingsAsync(videoId, username);
         }
 
 
-		public Task<int> InsertCommentAsync(int videoId, string username, string comment)
+		public Task<int> InsertCommentAsync(short videoId, string username, string comment)
         {
             return _repo.InsertCommentAsync(videoId, username, comment);
         }
 
 
-		public Task<float?> SaveRatingAsync(int videoId, string username, byte rating)
+		public Task<float?> SaveRatingAsync(short videoId, string username, short rating)
         {
             return _repo.SaveRatingAsync(videoId, username, rating);
         }
 
 
-		public Task<float?> RemoveRatingAsync(int videoId, string username)
+		public Task<float?> RemoveRatingAsync(short videoId, string username)
         {
             return _repo.RemoveRatingAsync(videoId, username);
         }

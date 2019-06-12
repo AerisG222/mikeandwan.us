@@ -12,81 +12,6 @@ namespace Maw.Data
 	public class VideoRepository
         : Repository, IVideoRepository
 	{
-        static readonly Type[] CATEGORY_PROJECTION_TYPES = new Type[] {
-            typeof(Category),
-            typeof(MultimediaInfo),
-            typeof(MultimediaInfo)
-        };
-
-        static readonly Type[] VIDEO_PROJECTION_TYPES = new Type[] {
-            typeof(Video),
-            typeof(MultimediaInfo),
-            typeof(MultimediaInfo),
-            typeof(MultimediaInfo),
-            typeof(MultimediaInfo),
-            typeof(MultimediaInfo)
-        };
-
-        const string CATEGORY_PROJECTION = @"
-            id,
-            year,
-            name,
-            create_date,
-            CASE WHEN gps_latitude_ref_id = 'S' THEN -1.0 * ABS(gps_latitude)
-                 ELSE ABS(gps_latitude)
-                  END AS latitude,
-            CASE WHEN gps_longitude_ref_id = 'W' THEN -1.0 * ABS(gps_longitude)
-                 ELSE ABS(gps_longitude)
-                  END AS longitude,
-            video_count,
-            total_duration,
-            total_size_thumb,
-            total_size_thumb_sq,
-            total_size_scaled,
-            total_size_full,
-            total_size_raw,
-            COALESCE(total_size_thumb, 0) +
-                COALESCE(total_size_thumb_sq, 0) +
-                COALESCE(total_size_scaled, 0) +
-                COALESCE(total_size_full, 0) +
-                COALESCE(total_size_raw, 0) AS total_size,
-            teaser_image_path AS path,
-            teaser_image_width AS width,
-            teaser_image_height AS height,
-            teaser_image_size AS size,
-            teaser_image_sq_path AS path,
-            teaser_image_sq_width AS width,
-            teaser_image_sq_height AS height,
-            teaser_image_sq_size AS size";
-
-        const string VIDEO_PROJECTION = @"
-            id,
-            category_id,
-            duration,
-            create_date,
-            gps_latitude AS latitude,
-            gps_longitude AS longitude,
-            thumb_path AS path,
-            thumb_height AS height,
-            thumb_width AS width,
-            thumb_size AS size,
-            thumb_sq_path AS path,
-            thumb_sq_height AS height,
-            thumb_sq_width AS width,
-            thumb_sq_size AS size,
-            scaled_path AS path,
-            scaled_height AS height,
-            scaled_width AS width,
-            scaled_size AS size,
-            full_path AS path,
-            full_height AS height,
-            full_width AS width,
-            full_size AS size,
-            raw_path AS path,
-            raw_height AS height,
-            raw_width AS width,
-            raw_size AS size";
-
         public VideoRepository(string connectionString)
             : base(connectionString)
         {
@@ -98,11 +23,8 @@ namespace Maw.Data
 		{
             return RunAsync(conn => {
                 return conn.QueryAsync<short>(
-                    @"SELECT DISTINCT year
-                        FROM video.category
-                       WHERE (1 = @allowPrivate OR is_private = FALSE)
-                       ORDER BY year DESC;",
-                    new { allowPrivate = allowPrivate ? 1 : 0 }
+                    "SELECT * FROM video.get_years(@allowPrivate);",
+                    new { allowPrivate = allowPrivate }
                 );
             });
 		}
@@ -110,40 +32,31 @@ namespace Maw.Data
 
         public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
 		{
-            return RunAsync(conn => {
-                return conn.QueryAsync<Category>(
-                    $@"SELECT {CATEGORY_PROJECTION}
-                        FROM video.category
-                       WHERE (1 = @allowPrivate OR is_private = FALSE)
-                       ORDER BY id;",
-                    CATEGORY_PROJECTION_TYPES,
-                    (objects) => AssembleCategory(objects),
+            return RunAsync(async conn => {
+                var rows = await conn.QueryAsync(
+                    "SELECT * FROM video.get_categories(@allowPrivate);",
                     new {
-                        allowPrivate = allowPrivate ? 1 : 0
-                    },
-                    splitOn: "path"
-                );
+                        allowPrivate = allowPrivate
+                    }
+                ).ConfigureAwait(false);
+
+                return rows.Select(BuildCategory);
             });
 		}
 
 
 		public Task<IEnumerable<Category>> GetCategoriesAsync(short year, bool allowPrivate)
 		{
-            return RunAsync(conn => {
-                return conn.QueryAsync<Category>(
-                    $@"SELECT {CATEGORY_PROJECTION}
-                        FROM video.category
-                       WHERE (1 = @allowPrivate OR is_private = FALSE)
-                         AND year = @year
-                       ORDER BY id;",
-                    CATEGORY_PROJECTION_TYPES,
-                    (objects) => AssembleCategory(objects),
+            return RunAsync(async conn => {
+                var rows = await conn.QueryAsync(
+                    "SELECT * FROM video.get_categories(@allowPrivate, @year);",
                     new {
-                        allowPrivate = allowPrivate ? 1 : 0,
+                        allowPrivate = allowPrivate,
                         year = year
-                    },
-                    splitOn: "path"
-                );
+                    }
+                ).ConfigureAwait(false);
+
+                return rows.Select(BuildCategory);
             });
 		}
 
@@ -151,19 +64,15 @@ namespace Maw.Data
 		public Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, bool allowPrivate)
 		{
             return RunAsync(async conn => {
-                return await conn.QueryAsync<Video>(
-                    $@"SELECT {VIDEO_PROJECTION}
-                         FROM video.video
-                        WHERE (1 = @allowPrivate OR is_private = FALSE)
-                          AND category_id = @categoryId;",
-                    VIDEO_PROJECTION_TYPES,
-                    (objects) => AssembleVideo(objects),
+                var rows = await conn.QueryAsync(
+                    "SELECT * FROM video.get_videos(@allowPrivate, @categoryId);",
                     new {
-                        allowPrivate = allowPrivate ? 1 : 0,
+                        allowPrivate = allowPrivate,
                         categoryId = categoryId
-                    },
-                    splitOn: "path"
-                );
+                    }
+                ).ConfigureAwait(false);
+
+                return rows.Select(BuildVideo);
             });
 		}
 
@@ -171,21 +80,18 @@ namespace Maw.Data
 		public Task<Video> GetVideoAsync(short id, bool allowPrivate)
 		{
             return RunAsync(async conn => {
-                var result = await conn.QueryAsync<Video>(
-                    $@"SELECT {VIDEO_PROJECTION}
-                         FROM video.video
-                        WHERE (1 = @allowPrivate OR is_private = FALSE)
-                          AND id = @id;",
-                    VIDEO_PROJECTION_TYPES,
-                    (objects) => AssembleVideo(objects),
+                var rows = await conn.QueryAsync(
+                    "SELECT * FROM video.get_videos(@allowPrivate, @categoryId, @id);",
                     new {
-                        allowPrivate = allowPrivate ? 1 : 0,
+                        allowPrivate = allowPrivate,
+                        categoryId = (short?) null,
                         id = id
-                    },
-                    splitOn: "path"
+                    }
                 ).ConfigureAwait(false);
 
-                return result.FirstOrDefault();
+                return rows
+                    .Select(BuildVideo)
+                    .FirstOrDefault();
             });
 		}
 
@@ -193,63 +99,38 @@ namespace Maw.Data
         public Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
         {
             return RunAsync(async conn => {
-                var result = await conn.QueryAsync<Category>(
-                    $@"SELECT {CATEGORY_PROJECTION}
-                         FROM video.category
-                        WHERE (1 = @allowPrivate OR is_private = FALSE)
-                          AND id = @id;",
-                    CATEGORY_PROJECTION_TYPES,
-                    (objects) => AssembleCategory(objects),
+                var rows = await conn.QueryAsync(
+                    "SELECT * FROM video.get_categories(@allowPrivate, @year, @id);",
                     new {
-                        allowPrivate = allowPrivate ? 1 : 0,
+                        allowPrivate = allowPrivate,
+                        year = (short?) null,
                         id = categoryId
-                    },
-                    splitOn: "path"
-                );
+                    }
+                ).ConfigureAwait(false);
 
-                if(result == null || result.Count() == 0)
-                {
-                    return null;
-                }
-
-                return result.First();
+                return rows
+                    .Select(BuildCategory)
+                    .FirstOrDefault();
             });
         }
 
 
-        public Task<IEnumerable<Comment>> GetCommentsAsync(int videoId)
+        public Task<IEnumerable<Comment>> GetCommentsAsync(short videoId)
 		{
             return RunAsync(conn => {
                 return conn.QueryAsync<Comment>(
-                    @"SELECT entry_date,
-                             message AS comment_text,
-                             u.username
-                        FROM video.comment c
-                       INNER JOIN maw.user u ON c.user_id = u.id
-                       WHERE c.video_id = @videoId
-                       ORDER by entry_date DESC;",
+                    "SELECT * FROM video.get_comments(@videoId);",
                     new { videoId = videoId }
                 );
             });
 		}
 
 
-		public Task<Rating> GetRatingsAsync(int videoId, string username)
+		public Task<Rating> GetRatingsAsync(short videoId, string username)
 		{
             return RunAsync(conn => {
                 return conn.QuerySingleOrDefaultAsync<Rating>(
-                    @"SELECT (SELECT AVG(score)
-                                FROM video.rating
-                               WHERE video_id = @videoId
-                             ) AS average_rating,
-                             (SELECT AVG(score)
-                                FROM video.rating
-                               WHERE video_id = @videoId
-                                 AND user_id = (SELECT id
-                                                  FROM maw.user
-                                                 WHERE username = @username
-                                               )
-                             ) AS user_rating;",
+                    "SELECT * FROM video.get_ratings(@videoId, @username);",
                     new {
                         videoId = videoId,
                         username = username?.ToLower()
@@ -259,57 +140,34 @@ namespace Maw.Data
 		}
 
 
-		public Task<int> InsertCommentAsync(int videoId, string username, string comment)
+		public Task<int> InsertCommentAsync(short videoId, string username, string comment)
         {
-            return RunAsync(conn => {
-                return conn.ExecuteAsync(
-                    @"INSERT INTO video.comment
-                           (
-                             user_id,
-                             video_id,
-                             message,
-                             entry_date
-                           )
-                      VALUES
-                           (
-                             (SELECT id FROM maw.user WHERE username = @username),
-                             @videoId,
-                             @message,
-                             @entryDate
-                           );",
+            return RunAsync(async conn => {
+                var result = await conn.QuerySingleOrDefaultAsync<int>(
+                    "SELECT * FROM video.save_comment(@username, @videoId, @message, @entryDate);",
                     new {
                         username = username.ToLower(),
                         videoId = videoId,
                         message = comment,
                         entryDate = DateTime.Now
                     }
-                );
+                ).ConfigureAwait(false);
+
+                if(result <= 0)
+				{
+					throw new Exception("Did not save video comment!");
+				}
+
+                return result;
             });
         }
 
 
-		public Task<float?> SaveRatingAsync(int videoId, string username, byte rating)
+		public Task<float?> SaveRatingAsync(short videoId, string username, short rating)
         {
             return RunAsync(async conn => {
-                var result = await conn.ExecuteAsync(
-                    @"INSERT INTO video.rating
-                           (
-                             video_id,
-                             user_id,
-                             score
-                           )
-                      VALUES
-                           (
-                             @videoId,
-                             (SELECT id
-                                FROM maw.user
-                               WHERE username = @username
-                             ),
-                             @score
-                           )
-                        ON CONFLICT (video_id, user_id)
-                        DO UPDATE
-                       SET score = @score;",
+                var result = await conn.QueryAsync<long>(
+                    "SELECT * FROM video.save_rating(@videoId, @username, @score);",
                     new {
                         videoId = videoId,
                         username = username.ToLower(),
@@ -322,19 +180,15 @@ namespace Maw.Data
         }
 
 
-		public Task<float?> RemoveRatingAsync(int videoId, string username)
+		public Task<float?> RemoveRatingAsync(short videoId, string username)
 		{
             return RunAsync(async conn => {
-                var result = await conn.ExecuteAsync(
-                    @"DELETE FROM video.rating
-                       WHERE video_id = @videoId
-                         AND user_id = (SELECT id
-                                          FROM maw.user
-                                         WHERE username = @username
-                                       );",
+                var result = await conn.QueryAsync<long>(
+                    @"SELECT * FROM video.save_rating(@videoId, @username, @score);",
                     new {
                         videoId = videoId,
-                        username = username.ToLower()
+                        username = username.ToLower(),
+                        score = 0
                     }
                 ).ConfigureAwait(false);
 
@@ -343,28 +197,68 @@ namespace Maw.Data
 		}
 
 
-        Category AssembleCategory(object[] objects)
+        Category BuildCategory(dynamic row)
         {
-            var category = (Category) objects[0];
+            var category = new Category();
 
-            category.TeaserImage = (MultimediaInfo) objects[1];
-            category.TeaserImageSq = (MultimediaInfo) objects[2];
+            category.Id = (short) row.id;
+            category.Name = (string) row.name;
+            category.Year = (short) row.year;
+            category.CreateDate = GetValueOrDefault<DateTime>(row.create_date);
+            category.Latitude = row.latitude;
+            category.Longitude = row.longitude;
+            category.VideoCount = GetValueOrDefault<int>(row.video_count);
+            category.TotalDuration = GetValueOrDefault<int>(row.total_duration);
+            category.TotalSizeThumbnail = GetValueOrDefault<long>(row.total_size_thumb);
+            category.TotalSizeThumbnailSq = GetValueOrDefault<long>(row.total_size_thumb_sq);
+            category.TotalSizeScaled = GetValueOrDefault<long>(row.total_size_scaled);
+            category.TotalSizeFull = GetValueOrDefault<long>(row.total_size_full);
+            category.TotalSizeRaw = GetValueOrDefault<long>(row.total_size_raw);
+            category.TotalSize = GetValueOrDefault<long>(row.total_size);
+
+            category.TeaserImage = BuildMultimediaInfo(row.teaser_image_path, row.teaser_image_width, row.teaser_image_height, row.teaser_image_size);
+            category.TeaserImageSq = BuildMultimediaInfo(row.teaser_image_sq_path, row.teaser_image_sq_width, row.teaser_image_sq_height, row.teaser_image_sq_size);
 
             return category;
         }
 
 
-        Video AssembleVideo(object[] objects)
+        Video BuildVideo(dynamic row)
         {
-            var video = (Video) objects[0];
+            var video = new Video();
 
-            video.Thumbnail = (MultimediaInfo) objects[1];
-            video.ThumbnailSq = (MultimediaInfo) objects[2];
-            video.VideoScaled = (MultimediaInfo) objects[3];
-            video.VideoFull = (MultimediaInfo) objects[4];
-            video.VideoRaw = (MultimediaInfo) objects[5];
+            video.Id = (int) row.id;
+            video.CategoryId = (short) row.category_id;
+            video.CreateDate = GetValueOrDefault<DateTime>(row.create_date);
+            video.Latitude = row.latitude;
+            video.Longitude = row.longitude;
+            video.Duration = GetValueOrDefault<short>(row.duration);
+
+            video.Thumbnail = BuildMultimediaInfo(row.thumb_image_path, row.thumb_image_width, row.thumb_image_height, row.thumb_image_size);
+            video.ThumbnailSq = BuildMultimediaInfo(row.thumb_sq_image_path, row.thumb_sq_image_width, row.thumb_sq_image_height, row.thumb_sq_image_size);
+            video.VideoScaled = BuildMultimediaInfo(row.scaled_path, row.scaled_width, row.scaled_height, row.scaled_size);
+            video.VideoFull = BuildMultimediaInfo(row.full_path, row.full_width, row.full_height, row.full_size);
+            video.VideoRaw = BuildMultimediaInfo(row.raw_path, row.raw_width, row.raw_height, row.raw_size);
 
             return video;
+        }
+
+
+        MultimediaInfo BuildMultimediaInfo(dynamic path, dynamic width, dynamic height, dynamic size)
+        {
+            if(path == null)
+            {
+                return null;
+            }
+
+            var mi = new MultimediaInfo();
+
+            mi.Path = GetValueOrDefault<string>(path);
+            mi.Width = GetValueOrDefault<short>(width);
+            mi.Height = GetValueOrDefault<short>(height);
+            mi.Size = GetValueOrDefault<int>(size);
+
+            return mi;
         }
 	}
 }

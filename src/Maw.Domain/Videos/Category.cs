@@ -12,7 +12,7 @@ namespace Maw.Domain.Videos
         public float? Latitude { get; set; }
         public float? Longitude { get; set; }
         public int VideoCount { get; set; }
-        public long TotalDuration { get; set; }
+        public int TotalDuration { get; set; }
         public long TotalSizeThumbnail { get; set; }
         public long TotalSizeThumbnailSq { get; set; }
         public long TotalSizeScaled { get; set; }
@@ -23,4 +23,3 @@ namespace Maw.Domain.Videos
         public MultimediaInfo TeaserImageSq { get; set; }
 	}
 }
-

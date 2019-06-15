@@ -7,10 +7,10 @@ import { IPlayer } from '../models/iplayer.model';
 
 @Injectable()
 export class MemoryService {
-    private _player1: IPlayer = null;
-    private _player2: IPlayer = null;
+    private playerOne: IPlayer = null;
+    private playerTwo: IPlayer = null;
 
-    private _cards: Array<ICardInfo> = [
+    private cards: Array<ICardInfo> = [
         { id: 1,  img: '/js/memory/assets/cards/card1.jpg' },
         { id: 2,  img: '/js/memory/assets/cards/card2.jpg' },
         { id: 3,  img: '/js/memory/assets/cards/card3.jpg' },
@@ -24,63 +24,63 @@ export class MemoryService {
         { id: 11, img: '/js/memory/assets/cards/card11.jpg' }
     ];
 
-    private _characters: Array<ICharacter> = [
+    private characters: Array<ICharacter> = [
         { name: 'Leonardo',      color: 'blue',   img: '/js/memory/assets/players/leonardo.jpg' },
         { name: 'Michaelangelo', color: 'orange', img: '/js/memory/assets/players/michaelangelo.jpg' },
         { name: 'Donatello',     color: 'purple', img: '/js/memory/assets/players/donatello.jpg' },
         { name: 'Raphael',       color: 'red',    img: '/js/memory/assets/players/raphael.jpg' }
     ];
 
-    constructor(private _router: Router) {
+    constructor(private router: Router) {
         this.initPlayers();
     }
 
     get allCards(): Array<ICardInfo> {
-        return this._cards.slice(0); // clone
+        return this.cards.slice(0); // clone
     }
 
     get allCharacters(): Array<ICharacter> {
-        return this._characters.slice(0); // clone
+        return this.characters.slice(0); // clone
     }
 
     get player1(): IPlayer {
-        return this._player1;
+        return this.playerOne;
     }
 
     set player1(player: IPlayer) {
-        this._player1 = player;
+        this.playerOne = player;
     }
 
     get player2(): IPlayer {
-        return this._player2;
+        return this.playerTwo;
     }
 
     set player2(player: IPlayer) {
-        this._player2 = player;
+        this.playerTwo = player;
     }
 
     startGame(): void {
-        this.player1.score = 0;
-        this.player2.score = 0;
+        this.playerOne.score = 0;
+        this.playerTwo.score = 0;
 
-        this._router.navigateByUrl('/play');
+        this.router.navigateByUrl('/play');
     }
 
     isReadyToPlay(): boolean {
-        return this.player1 != null &&
-               this.player1.character != null &&
-               this.player2 != null &&
-               this.player2.character != null;
+        return this.playerOne != null &&
+               this.playerOne.character != null &&
+               this.playerTwo != null &&
+               this.playerTwo.character != null;
     }
 
     resetGame(): void {
         this.initPlayers();
-        this._router.navigateByUrl('/');
+        this.router.navigateByUrl('/');
     }
 
     initPlayers(): void {
-        this._player1 = this.initPlayer();
-        this._player2 = this.initPlayer();
+        this.playerOne = this.initPlayer();
+        this.playerTwo = this.initPlayer();
     }
 
     initPlayer(): IPlayer {

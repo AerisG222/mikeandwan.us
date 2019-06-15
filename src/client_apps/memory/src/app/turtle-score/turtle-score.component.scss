@@ -1,0 +1,40 @@
+.scoreboard_player {
+    padding-bottom: 9px;
+
+    img {
+        filter: grayscale(75%);
+    }
+
+    &.active img {
+        filter: grayscale(0%);
+    }
+}
+
+.scoreboard_score,
+.scoreboard_player {
+    border-bottom: 4px solid #ccc; padding-top: 8px;
+}
+
+.scoreboard_score {
+    padding-bottom: 8px;
+
+    &.red.active,
+    &.red.active {
+        border-bottom-color: #c00;
+    }
+
+    &.blue.active,
+    &.blue.active {
+        border-bottom-color: #00c;
+    }
+
+    &.purple.active,
+    &.purple.active {
+        border-bottom-color: #c0c;
+    }
+
+    &.orange.active,
+    &.orange.active {
+        border-bottom-color: #cc7200;
+    }
+}

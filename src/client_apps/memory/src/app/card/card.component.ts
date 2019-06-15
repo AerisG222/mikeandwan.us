@@ -5,31 +5,31 @@ import { ICardInfo } from '../models/icard-info.model';
 @Component({
     selector: 'app-card',
     templateUrl: './card.component.html',
-    styleUrls: [ './card.component.css' ]
+    styleUrls: [ './card.component.scss' ]
 })
 export class CardComponent {
-    private _isFlipped = false;
-    private _isRemoved = false;
+    private cardIsFlipped = false;
+    private cardIsRemoved = false;
     @Input() cardInfo: ICardInfo;
-    @Output() select: EventEmitter<CardComponent> = new EventEmitter<CardComponent>();
+    @Output() cardSelected: EventEmitter<CardComponent> = new EventEmitter<CardComponent>();
 
     get isFlipped(): boolean {
-        return this._isFlipped;
+        return this.cardIsFlipped;
     }
 
     set isFlipped(value: boolean) {
-        this._isFlipped = value;
+        this.cardIsFlipped = value;
     }
 
     get isRemoved(): boolean {
-        return this._isRemoved;
+        return this.cardIsRemoved;
     }
 
     set isRemoved(value: boolean) {
-        this._isRemoved = value;
+        this.cardIsRemoved = value;
     }
 
     onClick() {
-        this.select.next(this);
+        this.cardSelected.next(this);
     }
 }

@@ -4,17 +4,17 @@ import { MemoryService } from '../services/memory.service';
 
 @Injectable()
 export class CanPlayGuard implements CanActivate {
-    constructor(private _router: Router,
-                private _memoryService: MemoryService) {
+    constructor(private router: Router,
+                private memoryService: MemoryService) {
 
     }
 
     canActivate() {
-        if (this._memoryService.isReadyToPlay()) {
+        if (this.memoryService.isReadyToPlay()) {
             return true;
         }
 
-        this._router.navigateByUrl('/');
+        this.router.navigateByUrl('/');
 
         return false;
     }

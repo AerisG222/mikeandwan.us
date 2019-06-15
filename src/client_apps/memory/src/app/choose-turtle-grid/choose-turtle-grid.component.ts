@@ -6,27 +6,27 @@ import { MemoryService } from '../services/memory.service';
 @Component({
     selector: 'app-choose-turtle-grid',
     templateUrl: './choose-turtle-grid.component.html',
-    styleUrls: [ './choose-turtle-grid.component.css' ]
+    styleUrls: [ './choose-turtle-grid.component.scss' ]
 })
 export class ChooseTurtleGridComponent {
-    private _selectedCharacter: ICharacter = null;
+    private selectedCharacter: ICharacter = null;
     allCharacters: Array<ICharacter>;
     @Output() selected: EventEmitter<ICharacter> = new EventEmitter<ICharacter>();
 
-    constructor(private _svc: MemoryService) {
-        this.allCharacters = this._svc.allCharacters;
+    constructor(private svc: MemoryService) {
+        this.allCharacters = this.svc.allCharacters;
     }
 
     selectCharacter(character: ICharacter): void {
-        this._selectedCharacter = character;
+        this.selectedCharacter = character;
         this.selected.next(character);
     }
 
     isSelected(character: ICharacter): boolean {
-        if (this._selectedCharacter == null) {
+        if (this.selectedCharacter == null) {
             return false;
         }
 
-        return character.name === this._selectedCharacter.name;
+        return character.name === this.selectedCharacter.name;
     }
 }

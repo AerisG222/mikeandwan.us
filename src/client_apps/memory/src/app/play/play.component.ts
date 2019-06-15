@@ -6,19 +6,19 @@ import { MemoryService } from '../services/memory.service';
 @Component({
     selector: 'app-play',
     templateUrl: './play.component.html',
-    styleUrls: [ './play.component.css' ]
+    styleUrls: [ './play.component.scss' ]
 })
 export class PlayComponent implements OnInit {
-    private _activePlayer: IPlayer = null;
+    private activePlayer: IPlayer = null;
     winningPlayer: IPlayer = null;
     player1: IPlayer;
     player2: IPlayer;
     isGameOver = false;
     isTie = false;
 
-    constructor(private _svc: MemoryService) {
-        this.player1 = this._svc.player1;
-        this.player2 = this._svc.player2;
+    constructor(private svc: MemoryService) {
+        this.player1 = this.svc.player1;
+        this.player2 = this.svc.player2;
     }
 
     ngOnInit(): void {
@@ -26,14 +26,14 @@ export class PlayComponent implements OnInit {
     }
 
     toggleTurn(): void {
-        if (this._activePlayer === this.player1) {
-            this._activePlayer = this.player2;
+        if (this.activePlayer === this.player1) {
+            this.activePlayer = this.player2;
         } else {
-            this._activePlayer = this.player1;
+            this.activePlayer = this.player1;
         }
 
-        this.player1.isPlayersTurn = this._activePlayer === this.player1;
-        this.player2.isPlayersTurn = this._activePlayer === this.player2;
+        this.player1.isPlayersTurn = this.activePlayer === this.player1;
+        this.player2.isPlayersTurn = this.activePlayer === this.player2;
     }
 
     endGame(): void {
@@ -45,9 +45,9 @@ export class PlayComponent implements OnInit {
             return;
         } else if (this.player1.score > this.player2.score) {
             // force the winner to be the current player
-            this._activePlayer = this.player1;
+            this.activePlayer = this.player1;
         } else {
-            this._activePlayer = this.player2;
+            this.activePlayer = this.player2;
             playerNumber = 2;
         }
 
@@ -65,12 +65,12 @@ export class PlayComponent implements OnInit {
 
             this.winningPlayer = tmp;
         } else {
-            this.winningPlayer = this._activePlayer;
+            this.winningPlayer = this.activePlayer;
         }
     }
 
     onHit(isGameOver: boolean): void {
-        this._activePlayer.score += 1;
+        this.activePlayer.score += 1;
 
         if (isGameOver) {
             this.endGame();
@@ -85,10 +85,10 @@ export class PlayComponent implements OnInit {
         this.isGameOver = false;
         this.isTie = false;
         this.toggleTurn();
-        this._svc.startGame();
+        this.svc.startGame();
     }
 
     exit(): void {
-        this._svc.resetGame();
+        this.svc.resetGame();
     }
 }

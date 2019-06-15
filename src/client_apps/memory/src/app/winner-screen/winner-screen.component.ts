@@ -5,7 +5,7 @@ import { IPlayer } from '../models/iplayer.model';
 @Component({
     selector: 'app-winner-screen',
     templateUrl: './winner-screen.component.html',
-    styleUrls: [ './winner-screen.component.css' ]
+    styleUrls: [ './winner-screen.component.scss' ]
 })
 export class WinnerScreenComponent {
     @Input() player: IPlayer;

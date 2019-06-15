@@ -8,30 +8,30 @@ import { MemoryService } from '../services/memory.service';
 @Component({
     selector: 'app-game-board',
     templateUrl: './game-board.component.html',
-    styleUrls: [ './game-board.component.css' ]
+    styleUrls: [ './game-board.component.scss' ]
 })
 export class GameBoardComponent {
     private static CARDS_IN_GAME = 20;
 
-    private _selectedCards: ISelectedCards = { card1: null, card2: null };
-    private _matchedCards: Array<CardComponent> = [];
+    private selectedCards: ISelectedCards = { card1: null, card2: null };
+    private matchedCards: Array<CardComponent> = [];
     private ignoreSelect = false;
 
     board: Array<Array<ICardInfo>> = null;
     @Output() match: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() nonmatch: EventEmitter<any> = new EventEmitter<any>();
 
-    constructor(private _svc: MemoryService) {
+    constructor(private svc: MemoryService) {
         this.board = this.generateGameBoard();
     }
 
     removeCards(): void {
-        this._matchedCards.push(this._selectedCards.card1);
-        this._matchedCards.push(this._selectedCards.card2);
+        this.matchedCards.push(this.selectedCards.card1);
+        this.matchedCards.push(this.selectedCards.card2);
 
         setTimeout(() => {
-            this._selectedCards.card1.isRemoved = true;
-            this._selectedCards.card2.isRemoved = true;
+            this.selectedCards.card1.isRemoved = true;
+            this.selectedCards.card2.isRemoved = true;
         }, 700);
 
         setTimeout(() => {
@@ -41,24 +41,24 @@ export class GameBoardComponent {
 
     unFlipCards(): void {
         setTimeout(() => {
-            this._selectedCards.card1.isFlipped = false;
-            this._selectedCards.card2.isFlipped = false;
+            this.selectedCards.card1.isFlipped = false;
+            this.selectedCards.card2.isFlipped = false;
 
             this.prepareNextTurn(false);
         }, 800);
     }
 
     prepareNextTurn(wasMatch: boolean): void {
-        this._selectedCards.card1 = null;
-        this._selectedCards.card2 = null;
+        this.selectedCards.card1 = null;
+        this.selectedCards.card2 = null;
 
         this.ignoreSelect = false;
     }
 
     evaluateTurn(): void {
-        if (this._selectedCards.card1.cardInfo.id === this._selectedCards.card2.cardInfo.id) {
+        if (this.selectedCards.card1.cardInfo.id === this.selectedCards.card2.cardInfo.id) {
             this.removeCards();
-            this.match.next(this._matchedCards.length === GameBoardComponent.CARDS_IN_GAME);
+            this.match.next(this.matchedCards.length === GameBoardComponent.CARDS_IN_GAME);
         } else {
             this.unFlipCards();
             this.nonmatch.next(null);
@@ -75,11 +75,11 @@ export class GameBoardComponent {
         this.ignoreSelect = true;
         card.isFlipped = true;
 
-        if (this._selectedCards.card1 == null) {
-            this._selectedCards.card1 = card;
+        if (this.selectedCards.card1 == null) {
+            this.selectedCards.card1 = card;
             this.ignoreSelect = false;
         } else {
-            this._selectedCards.card2 = card;
+            this.selectedCards.card2 = card;
             this.evaluateTurn();
         }
     }
@@ -102,7 +102,7 @@ export class GameBoardComponent {
     }
 
     private generateGameBoard(): Array<Array<ICardInfo>> {
-        const sourceCards = this._svc.allCards;
+        const sourceCards = this.svc.allCards;
         const gameCards: Array<ICardInfo> = [];
 
         // get the cards that will be on the board, and add a copy for the matching elements

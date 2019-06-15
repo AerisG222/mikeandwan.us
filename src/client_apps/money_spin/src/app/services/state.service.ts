@@ -6,8 +6,8 @@ import { Player } from '../models/player.model';
 
 @Injectable()
 export class StateService {
-    private _winningScore = 25;
-    private _splashShown = false;
+    private winningScore = 25;
+    private splashShown = false;
     player1Characters = [
         new Character('C3P0',  '/js/money_spin/assets/p1c3p0.png'),
         new Character('R2D2',  '/js/money_spin/assets/p1r2d2.png'),
@@ -24,7 +24,7 @@ export class StateService {
     player2: Player;
     currentPlayer: Player;
 
-    constructor(private _router: Router) {
+    constructor(private router: Router) {
 
     }
 
@@ -40,7 +40,7 @@ export class StateService {
         this.player1 = null;
         this.player2 = null;
         this.currentPlayer = null;
-        this._router.navigate(['/choose']);
+        this.router.navigate(['/choose']);
     }
 
     isReadyToPlay(): boolean {
@@ -56,14 +56,14 @@ export class StateService {
 
         this.currentPlayer = this.player1;
 
-        this._router.navigate(['/play']);
+        this.router.navigate(['/play']);
     }
 
     evaluateTurn(dollarValue: number): boolean {
         this.currentPlayer.addDollarAmount(dollarValue);
 
-        if (this.currentPlayer.score >= this._winningScore) {
-            this._router.navigate(['/winner']);
+        if (this.currentPlayer.score >= this.winningScore) {
+            this.router.navigate(['/winner']);
             return true;
         }
 
@@ -73,7 +73,7 @@ export class StateService {
     }
 
     setSplashShown(): void {
-        this._splashShown = true;
+        this.splashShown = true;
     }
 
     private updateCurrentPlayer(): void {

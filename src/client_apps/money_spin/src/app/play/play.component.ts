@@ -6,22 +6,22 @@ import { StateService } from '../services/state.service';
 @Component({
     selector: 'app-play',
     templateUrl: './play.component.html',
-    styleUrls: [ './play.component.css' ]
+    styleUrls: [ './play.component.scss' ]
 })
 export class PlayComponent {
     player1: Player;
     player2: Player;
     currentPlayer: Player;
 
-    constructor(private _stateService: StateService) {
-        this.player1 = this._stateService.player1;
-        this.player2 = this._stateService.player2;
+    constructor(private stateService: StateService) {
+        this.player1 = this.stateService.player1;
+        this.player2 = this.stateService.player2;
 
         this.updateCurrentPlayer();
     }
 
     addScore(score: number): void {
-        const isGameOver = this._stateService.evaluateTurn(score);
+        const isGameOver = this.stateService.evaluateTurn(score);
 
         if (!isGameOver) {
             this.updateCurrentPlayer();
@@ -29,6 +29,6 @@ export class PlayComponent {
     }
 
     private updateCurrentPlayer(): void {
-        this.currentPlayer = this._stateService.currentPlayer;
+        this.currentPlayer = this.stateService.currentPlayer;
     }
 }

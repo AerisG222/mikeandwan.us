@@ -6,16 +6,16 @@ import { StateService } from '../services/state.service';
 @Component({
     selector: 'app-winner',
     templateUrl: './winner.component.html',
-    styleUrls: [ './winner.component.css' ]
+    styleUrls: [ './winner.component.scss' ]
 })
 export class WinnerComponent {
     winner: Player;
 
-    constructor(private _stateService: StateService) {
-        this.winner = this._stateService.currentPlayer;
+    constructor(private stateService: StateService) {
+        this.winner = this.stateService.currentPlayer;
     }
 
     newGame(): void {
-        this._stateService.newGame();
+        this.stateService.newGame();
     }
 }

@@ -5,16 +5,16 @@ import { StateService } from '../services/state.service';
 @Component({
     selector: 'app-splash-screen',
     templateUrl: './splash-screen.component.html',
-    styleUrls: [ './splash-screen.component.css' ]
+    styleUrls: [ './splash-screen.component.scss' ]
 })
 export class SplashScreenComponent implements AfterViewInit {
-    constructor(private _stateService: StateService) {
-        _stateService.setSplashShown();
+    constructor(private stateService: StateService) {
+        stateService.setSplashShown();
     }
 
     ngAfterViewInit(): void {
         setTimeout(() => {
-            this._stateService.newGame();
+            this.stateService.newGame();
         }, 2400);
     }
 }

@@ -9,7 +9,7 @@ import { BoardSector } from '../models/board-sector.model';
 @Component({
     selector: 'app-spinner',
     templateUrl: './spinner.component.html',
-    styleUrls: [ './spinner.component.css' ]
+    styleUrls: [ './spinner.component.scss' ]
 })
 export class SpinnerComponent implements OnInit, OnDestroy {
     private static SECTORS = [
@@ -30,113 +30,113 @@ export class SpinnerComponent implements OnInit, OnDestroy {
     private static MAX_ADDITIONAL_DROPOFF = .003;
     private static MIN_TOP_SPEED_TIME_MS = 511;
     private static MAX_ADDITIONAL_TOP_SPEED_TIME_MS = 1511;
-    _el: HTMLDivElement;
-    _scene: Scene;
-    _camera: OrthographicCamera;
-    _renderer: Renderer;
-    _board: Group;
-    _arrow: Group;
-    _arrowSpeed = 0;
-    _speedDropoff = 0;
-    _slowDown = true;
-    _animationId: number;
+    el: HTMLDivElement;
+    scene: Scene;
+    camera: OrthographicCamera;
+    renderer: Renderer;
+    board: Group;
+    arrow: Group;
+    arrowSpeed = 0;
+    speedDropoff = 0;
+    slowDown = true;
+    animationId: number;
     @Output() spinCompleted = new EventEmitter<number>();
 
-    constructor(private _elRef: ElementRef) {
+    constructor(private elRef: ElementRef) {
 
     }
 
     ngOnInit(): void {
-        this._el = this._elRef.nativeElement.querySelector('div');
+        this.el = this.elRef.nativeElement.querySelector('div');
         this.prepareScene();
     }
 
     ngOnDestroy(): void {
         // Stop the animation / cleanup
-        cancelAnimationFrame(this._animationId);
-        this._camera = null;
-        this._scene = null;
+        cancelAnimationFrame(this.animationId);
+        this.camera = null;
+        this.scene = null;
 
         // kill the rendering node
-        while (this._el.hasChildNodes()) {
-            this._el.removeChild(this._el.firstChild);
+        while (this.el.hasChildNodes()) {
+            this.el.removeChild(this.el.firstChild);
         }
     }
 
     prepareScene(): void {
         // scene
-        this._scene = new Scene();
+        this.scene = new Scene();
 
         // renderer
-        this._renderer = new WebGLRenderer({ antialias: true, alpha: true });
-        this._renderer.setSize(640, 498);
-        this._el.appendChild(this._renderer.domElement);
+        this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer.setSize(640, 498);
+        this.el.appendChild(this.renderer.domElement);
 
         // camera
-        this._camera = new OrthographicCamera(320, -320, 250, -250, 0.1, 1000);
-        this._camera.position.set(0, 0, -10);
-        this._camera.lookAt(this._scene.position);
-        this._scene.add(this._camera);
+        this.camera = new OrthographicCamera(320, -320, 250, -250, 0.1, 1000);
+        this.camera.position.set(0, 0, -10);
+        this.camera.lookAt(this.scene.position);
+        this.scene.add(this.camera);
 
-        this._board = new Group();
-        this._scene.add(this._board);
+        this.board = new Group();
+        this.scene.add(this.board);
 
-        this._arrow = new Group();
-        this._scene.add(this._arrow);
+        this.arrow = new Group();
+        this.scene.add(this.arrow);
 
         const loader = new TextureLoader();
         loader.load('/js/money_spin/assets/board.png', (texture: Texture) => {
             const geometry = new PlaneGeometry(640, 498);
             const material = new MeshBasicMaterial({ map: texture, side: DoubleSide });
             const mesh = new Mesh(geometry, material);
-            this._board.add(mesh);
+            this.board.add(mesh);
         });
         loader.load('/js/money_spin/assets/arrow.png', (texture: Texture) => {
             const geometry = new PlaneGeometry(240, 200);
             const material = new MeshBasicMaterial({ map: texture, side: DoubleSide, transparent: true });
             const mesh = new Mesh(geometry, material);
-            this._arrow.add(mesh);
-            this._arrow.position.z = -1;
+            this.arrow.add(mesh);
+            this.arrow.position.z = -1;
         });
 
         this.render();
     }
 
     spin(): void {
-        if (this._arrowSpeed > 0) {
+        if (this.arrowSpeed > 0) {
             return;
         }
 
         // randomize full speed, duration, and dropoff speed each spin
-        this._slowDown = false;
-        this._arrowSpeed = SpinnerComponent.MIN_TOP_SPEED + (Math.random() * SpinnerComponent.MAX_ADDITIONAL_TOP_SPEED);
-        this._speedDropoff = SpinnerComponent.MIN_DROPOFF + (Math.random() * SpinnerComponent.MAX_ADDITIONAL_DROPOFF);
+        this.slowDown = false;
+        this.arrowSpeed = SpinnerComponent.MIN_TOP_SPEED + (Math.random() * SpinnerComponent.MAX_ADDITIONAL_TOP_SPEED);
+        this.speedDropoff = SpinnerComponent.MIN_DROPOFF + (Math.random() * SpinnerComponent.MAX_ADDITIONAL_DROPOFF);
         const fullSpeedTime = SpinnerComponent.MIN_TOP_SPEED_TIME_MS + (Math.random() * SpinnerComponent.MAX_ADDITIONAL_TOP_SPEED_TIME_MS);
 
         setTimeout(() => {
-            this._slowDown = true;
+            this.slowDown = true;
         }, fullSpeedTime);
     }
 
 
     private render(): void {
-        this._animationId = requestAnimationFrame(() => { this.render(); });
+        this.animationId = requestAnimationFrame(() => { this.render(); });
 
-        if (this._slowDown) {
-            if (this._arrowSpeed !== 0) {
-                this._arrowSpeed -= this._speedDropoff;
+        if (this.slowDown) {
+            if (this.arrowSpeed !== 0) {
+                this.arrowSpeed -= this.speedDropoff;
 
-                if (this._arrowSpeed <= 0) {
-                    this._arrowSpeed = 0;
-                    const deg = _Math.radToDeg(this._arrow.rotation.z);
+                if (this.arrowSpeed <= 0) {
+                    this.arrowSpeed = 0;
+                    const deg = _Math.radToDeg(this.arrow.rotation.z);
                     this.spinCompleted.next(this.getScore(deg));
                 }
             }
         }
 
-        this._arrow.rotateZ(this._arrowSpeed);
+        this.arrow.rotateZ(this.arrowSpeed);
 
-        this._renderer.render(this._scene, this._camera);
+        this.renderer.render(this.scene, this.camera);
     }
 
     private getScore(deg: number): number {
@@ -144,9 +144,7 @@ export class SpinnerComponent implements OnInit, OnDestroy {
             deg = 360 + deg;
         }
 
-        for (let i = 0; i < SpinnerComponent.SECTORS.length; i++) {
-            const score = SpinnerComponent.SECTORS[i];
-
+        for (const score of SpinnerComponent.SECTORS) {
             if (deg <= score.minDegree) {
                 return score.value;
             }

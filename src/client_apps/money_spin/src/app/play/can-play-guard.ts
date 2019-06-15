@@ -4,17 +4,17 @@ import { StateService } from '../services/state.service';
 
 @Injectable()
 export class CanPlayGuard implements CanActivate {
-    constructor(private _router: Router,
-                private _stateService: StateService) {
+    constructor(private router: Router,
+                private stateService: StateService) {
 
     }
 
     canActivate() {
-        if (this._stateService.isReadyToPlay()) {
+        if (this.stateService.isReadyToPlay()) {
             return true;
         }
 
-        this._router.navigateByUrl('/');
+        this.router.navigateByUrl('/');
 
         return false;
     }

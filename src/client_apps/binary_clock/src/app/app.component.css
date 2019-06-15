@@ -1,4 +1,0 @@
-.binclock { margin: 16px auto; border-collapse: separate; border-spacing: 4px; width: auto; }
-.binclock td { margin: 4px; }
-.binclock .bc_on, .binclock .bc_off { width: 24px; height: 24px; border: 2px solid #ccc; }
-.binclock .bc_on { background-color: #ccc; }

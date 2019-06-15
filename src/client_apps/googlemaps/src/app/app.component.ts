@@ -5,7 +5,7 @@ import { MapComponent } from './map/map.component';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: [ './app.component.css' ]
+    styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent {
     addressToMap = '';
@@ -15,7 +15,7 @@ export class AppComponent {
     @ViewChild('map1', { static: true }) map1: MapComponent;
     @ViewChild('map2', { static: true }) map2: MapComponent;
 
-    constructor(private _zone: NgZone) {
+    constructor(private zone: NgZone) {
 
     }
 
@@ -37,7 +37,7 @@ export class AppComponent {
 
     showAddress(): void {
         this.geocoder.geocode({ address: this.addressToMap }, (results, status) => {
-            this._zone.run(() => {
+            this.zone.run(() => {
                 if (status !== google.maps.GeocoderStatus.OK) {
                     this.hideMaps();
                     alert(`There was an error geocoding the address: ${this.addressToMap}].  Reported error code = ${status}`);

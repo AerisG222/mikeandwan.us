@@ -6,7 +6,7 @@ import { MapContext } from '../map-context.model';
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
-    styleUrls: [ './map.component.css' ]
+    styleUrls: [ './map.component.scss' ]
 })
 export class MapComponent implements AfterViewInit {
     isVisible = false;
@@ -28,7 +28,7 @@ export class MapComponent implements AfterViewInit {
         this.isVisible = true;
 
         const myOptions: google.maps.MapOptions = {
-            zoom: zoom,
+            zoom,
             center: location,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             mapTypeControlOptions: { style: google.maps.MapTypeControlStyle.DEFAULT }

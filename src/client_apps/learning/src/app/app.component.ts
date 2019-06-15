@@ -5,7 +5,7 @@ import { AudioSource } from './audio-source.model';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: [ './app.component.css' ]
+    styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent {
     letters: string[] = [
@@ -30,7 +30,7 @@ export class AppComponent {
 
         if (this.doRun) {
             this.run();  // immediately start first character
-            this.intervalId = setInterval(() => this.run(), <any>3000);  // schedule additional letters
+            this.intervalId = window.setInterval(() => this.run(), 3000);  // schedule additional letters
         } else {
             clearInterval(this.intervalId);
         }
@@ -54,7 +54,7 @@ export class AppComponent {
                 this.currentCharAudio = srcs.mp3;
             }
 
-            (<HTMLMediaElement>this.audioElement.nativeElement).load();
+            (this.audioElement.nativeElement as HTMLMediaElement).load();
         }
     }
 

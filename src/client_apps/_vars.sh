@@ -43,6 +43,17 @@ update_ngcli_project() {
     # add in any other missing libs
     npm install
 
+    cd ..
+}
+
+
+update_ng_project() {
+    local projectdir=$1
+
+    cd "${projectdir}"
+
+    npm install
+
     ng update @angular/cli \
               @angular/core \
               @ng-bootstrap/ng-bootstrap \
@@ -81,6 +92,15 @@ update_ngcli_all_projects() {
     do
         echo "updating tooling for ${i}..."
         update_ngcli_project "${i}" 'y'
+    done
+}
+
+
+update_ng_all_projects() {
+    for i in "${NG_APPS[@]}"
+    do
+        echo "updating ng/libs for ${i}..."
+        update_ng_project "${i}" 'y'
     done
 }
 

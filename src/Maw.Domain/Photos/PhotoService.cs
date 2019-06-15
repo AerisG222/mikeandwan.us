@@ -53,12 +53,6 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<short> GetCategoryCountAsync(bool allowPrivate)
-        {
-            return _repo.GetCategoryCountAsync(allowPrivate);
-        }
-
-
 		public Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate)
         {
             return _repo.GetRecentCategoriesAsync(sinceId, allowPrivate);
@@ -107,7 +101,7 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<float?> SaveRatingAsync(int photoId, string username, byte rating)
+		public Task<float?> SaveRatingAsync(int photoId, string username, short rating)
         {
             return _repo.SaveRatingAsync(photoId, username, rating);
         }

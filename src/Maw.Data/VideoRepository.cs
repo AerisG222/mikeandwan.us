@@ -242,23 +242,5 @@ namespace Maw.Data
 
             return video;
         }
-
-
-        MultimediaInfo BuildMultimediaInfo(dynamic path, dynamic width, dynamic height, dynamic size)
-        {
-            if(path == null)
-            {
-                return null;
-            }
-
-            var mi = new MultimediaInfo();
-
-            mi.Path = GetValueOrDefault<string>(path);
-            mi.Width = GetValueOrDefault<short>(width);
-            mi.Height = GetValueOrDefault<short>(height);
-            mi.Size = GetValueOrDefault<int>(size);
-
-            return mi;
-        }
 	}
 }

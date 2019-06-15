@@ -26,9 +26,12 @@
     <script>
         var notick = true;
     </script>
-    <script type="text/javascript" src="/js/binary_clock/runtime.js"></script>
-    <script type="text/javascript" src="/js/binary_clock/polyfills.js"></script>
-    <script type="text/javascript" src="/js/binary_clock/main.js"></script>
+    <script src="/js/binary_clock/runtime-es2015.js" type="module"></script>
+    <script src="/js/binary_clock/polyfills-es2015.js" type="module"></script>
+    <script src="/js/binary_clock/runtime-es5.js" nomodule></script>
+    <script src="/js/binary_clock/polyfills-es5.js" nomodule></script>
+    <script src="/js/binary_clock/main-es2015.js" type="module"></script>
+    <script src="/js/binary_clock/main-es5.js" nomodule></script>
 }
 
 <p>

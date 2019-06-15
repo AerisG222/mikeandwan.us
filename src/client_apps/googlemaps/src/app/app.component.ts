@@ -12,8 +12,8 @@ export class AppComponent {
     show = true;
     geocoder: google.maps.Geocoder = new google.maps.Geocoder();
 
-    @ViewChild('map1') map1: MapComponent;
-    @ViewChild('map2') map2: MapComponent;
+    @ViewChild('map1', { static: true }) map1: MapComponent;
+    @ViewChild('map2', { static: true }) map2: MapComponent;
 
     constructor(private _zone: NgZone) {
 

@@ -17,7 +17,7 @@ export class MapComponent implements AfterViewInit {
     mapZoomListener: google.maps.MapsEventListener = null;
     boundingBoxOverlay: google.maps.Polyline = null;
     @Output() updated: EventEmitter<MapContext> = new EventEmitter<MapContext>();
-    @ViewChild('map') mapElement: ElementRef;
+    @ViewChild('map', { static: true }) mapElement: ElementRef;
     updateCount = 0;
 
     ngAfterViewInit(): void {

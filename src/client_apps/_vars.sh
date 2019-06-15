@@ -47,27 +47,6 @@ update_ngcli_project() {
 }
 
 
-update_ng_project() {
-    local projectdir=$1
-
-    echo "updating ng / libs for ${projectdir}"
-
-    cd "${projectdir}"
-
-    npm install
-
-    ng update @angular/cli \
-              @angular/core \
-              @ng-bootstrap/ng-bootstrap \
-              codelyzer \
-              core-js \
-              zone.js \
-              webpack-bundle-analyzer
-
-    cd ..
-}
-
-
 install_deps() {
     cd "${1}"
     npm install

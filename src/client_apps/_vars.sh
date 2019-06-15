@@ -48,9 +48,7 @@ update_ngcli_project() {
 
 
 update_ng_project() {
-    local projectdir=$1
-
-    cd "${projectdir}"
+    echo 'updating ng / libs for current project'
 
     npm install
 
@@ -61,8 +59,6 @@ update_ng_project() {
               core-js \
               zone.js \
               webpack-bundle-analyzer
-
-    cd ..
 }
 
 
@@ -92,15 +88,6 @@ update_ngcli_all_projects() {
     do
         echo "updating tooling for ${i}..."
         update_ngcli_project "${i}" 'y'
-    done
-}
-
-
-update_ng_all_projects() {
-    for i in "${NG_APPS[@]}"
-    do
-        echo "updating ng/libs for ${i}..."
-        update_ng_project "${i}" 'y'
     done
 }
 

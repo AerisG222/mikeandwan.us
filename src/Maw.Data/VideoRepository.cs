@@ -32,87 +32,36 @@ namespace Maw.Data
 
         public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
 		{
-            return RunAsync(async conn => {
-                var rows = await conn.QueryAsync(
-                    "SELECT * FROM video.get_categories(@allowPrivate);",
-                    new {
-                        allowPrivate = allowPrivate
-                    }
-                ).ConfigureAwait(false);
-
-                return rows.Select(BuildCategory);
-            });
+            return InternalGetCategoriesAsync(allowPrivate);
 		}
 
 
 		public Task<IEnumerable<Category>> GetCategoriesAsync(short year, bool allowPrivate)
 		{
-            return RunAsync(async conn => {
-                var rows = await conn.QueryAsync(
-                    "SELECT * FROM video.get_categories(@allowPrivate, @year);",
-                    new {
-                        allowPrivate = allowPrivate,
-                        year = year
-                    }
-                ).ConfigureAwait(false);
-
-                return rows.Select(BuildCategory);
-            });
+            return InternalGetCategoriesAsync(allowPrivate, year);
 		}
+
+
+        public async Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
+        {
+            var result = await InternalGetCategoriesAsync(allowPrivate, categoryId: categoryId).ConfigureAwait(false);
+
+            return result.FirstOrDefault();
+        }
 
 
 		public Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, bool allowPrivate)
 		{
-            return RunAsync(async conn => {
-                var rows = await conn.QueryAsync(
-                    "SELECT * FROM video.get_videos(@allowPrivate, @categoryId);",
-                    new {
-                        allowPrivate = allowPrivate,
-                        categoryId = categoryId
-                    }
-                ).ConfigureAwait(false);
-
-                return rows.Select(BuildVideo);
-            });
+            return InternalGetVideosAsync(allowPrivate, categoryId);
 		}
 
 
-		public Task<Video> GetVideoAsync(short id, bool allowPrivate)
+		public async Task<Video> GetVideoAsync(short id, bool allowPrivate)
 		{
-            return RunAsync(async conn => {
-                var rows = await conn.QueryAsync(
-                    "SELECT * FROM video.get_videos(@allowPrivate, @categoryId, @id);",
-                    new {
-                        allowPrivate = allowPrivate,
-                        categoryId = (short?) null,
-                        id = id
-                    }
-                ).ConfigureAwait(false);
+            var result = await InternalGetVideosAsync(allowPrivate, videoId: id).ConfigureAwait(false);
 
-                return rows
-                    .Select(BuildVideo)
-                    .FirstOrDefault();
-            });
+            return result.FirstOrDefault();
 		}
-
-
-        public Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
-        {
-            return RunAsync(async conn => {
-                var rows = await conn.QueryAsync(
-                    "SELECT * FROM video.get_categories(@allowPrivate, @year, @id);",
-                    new {
-                        allowPrivate = allowPrivate,
-                        year = (short?) null,
-                        id = categoryId
-                    }
-                ).ConfigureAwait(false);
-
-                return rows
-                    .Select(BuildCategory)
-                    .FirstOrDefault();
-            });
-        }
 
 
         public Task<IEnumerable<Comment>> GetCommentsAsync(short videoId)
@@ -195,6 +144,40 @@ namespace Maw.Data
                 return (await GetRatingsAsync(videoId, username).ConfigureAwait(false))?.AverageRating;
             });
 		}
+
+
+        Task<IEnumerable<Category>> InternalGetCategoriesAsync(bool allowPrivate, short? year = null, short? categoryId = null)
+        {
+            return RunAsync(async conn => {
+                var rows = await conn.QueryAsync(
+                    "SELECT * FROM video.get_categories(@allowPrivate, @year, @categoryId);",
+                    new {
+                        allowPrivate,
+                        year,
+                        categoryId
+                    }
+                ).ConfigureAwait(false);
+
+                return rows.Select(BuildCategory);
+            });
+        }
+
+
+        Task<IEnumerable<Video>> InternalGetVideosAsync(bool allowPrivate, short? categoryId = null, short? videoId = null)
+        {
+            return RunAsync(async conn => {
+                var rows = await conn.QueryAsync(
+                    "SELECT * FROM video.get_videos(@allowPrivate, @categoryId, @videoId);",
+                    new {
+                        allowPrivate,
+                        categoryId,
+                        videoId
+                    }
+                ).ConfigureAwait(false);
+
+                return rows.Select(BuildVideo);
+            });
+        }
 
 
         Category BuildCategory(dynamic row)

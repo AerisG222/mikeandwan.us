@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Maw.Domain.Blogs;
@@ -28,41 +28,21 @@ namespace Maw.Data
 
 		public Task<IEnumerable<Post>> GetAllPostsAsync(short blogId)
 		{
-			return RunAsync(conn => {
-				return conn.QueryAsync<Post>(
-                    "SELECT * FROM blog.get_posts(@blogId);",
-					new { blogId = blogId }
-				);
-			});
+			return InternalGetPostsAsync(blogId);
 		}
 
 
 		public Task<IEnumerable<Post>> GetLatestPostsAsync(short blogId, short postCount)
 		{
-            return RunAsync(conn => {
-				return conn.QueryAsync<Post>(
-                    "SELECT * FROM blog.get_posts(@blogId, @id, @postCount);",
-					new {
-						blogId = blogId,
-                        id = (short?) null,
-					    postCount = postCount
-					}
-				);
-			});
+            return InternalGetPostsAsync(blogId, postCount: postCount);
 		}
 
 
-		public Task<Post> GetPostAsync(short id)
+		public async Task<Post> GetPostAsync(short id)
 		{
-			return RunAsync(conn => {
-				return conn.QuerySingleOrDefaultAsync<Post>(
-					@"SELECT * FROM blog.get_posts(@blogId, @id);",
-					new {
-                        blogId = (short?) null,
-                        id = id
-                    }
-				);
-			});
+			var result = await InternalGetPostsAsync(postId: id).ConfigureAwait(false);
+
+            return result.FirstOrDefault();
 		}
 
 
@@ -89,5 +69,20 @@ namespace Maw.Data
 				}
 			});
 		}
+
+
+        Task<IEnumerable<Post>> InternalGetPostsAsync(short? blogId = null, short? postId = null, short? postCount = null)
+        {
+            return RunAsync(conn => {
+				return conn.QueryAsync<Post>(
+                    "SELECT * FROM blog.get_posts(@blogId, @postId, @postCount);",
+					new {
+                        blogId,
+                        postId,
+                        postCount
+                    }
+				);
+			});
+        }
 	}
 }

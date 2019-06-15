@@ -19,9 +19,59 @@ namespace Maw.Data
         }
 
 
+		public Task<IEnumerable<short>> GetYearsAsync()
+        {
+            return RunAsync(conn => {
+                return conn.QueryAsync<short>(
+                    "SELECT * FROM photo.get_years();"
+                );
+            });
+        }
+
+
+        public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
+        {
+            return InternalGetCategoriesAsync(allowPrivate);
+        }
+
+
+        public Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, bool allowPrivate)
+		{
+            return InternalGetCategoriesAsync(allowPrivate, year);
+		}
+
+
+        public Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate)
+        {
+            return InternalGetCategoriesAsync(allowPrivate, sinceCategoryId: sinceId);
+        }
+
+
+        public async Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
+        {
+            var result = await InternalGetCategoriesAsync(allowPrivate, categoryId: categoryId).ConfigureAwait(false);
+
+            return result.FirstOrDefault();
+        }
+
+
+		public Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, bool allowPrivate)
+		{
+            return InternalGetPhotosAsync(allowPrivate, categoryId);
+		}
+
+
+		public async Task<Photo> GetPhotoAsync(int photoId, bool allowPrivate)
+		{
+            var result = await InternalGetPhotosAsync(allowPrivate, photoId: photoId).ConfigureAwait(false);
+
+            return result.FirstOrDefault();
+		}
+
+
         public async Task<Photo> GetRandomAsync(bool allowPrivate)
         {
-            var results = await GetRandomAsync(1, allowPrivate);
+            var results = await GetRandomAsync(1, allowPrivate).ConfigureAwait(false);
 
             return results.First();
         }
@@ -41,119 +91,6 @@ namespace Maw.Data
                 return rows.Select(BuildPhoto);
             });
         }
-
-
-		public Task<IEnumerable<short>> GetYearsAsync()
-        {
-            return RunAsync(conn => {
-                return conn.QueryAsync<short>(
-                    "SELECT * FROM photo.get_years();"
-                );
-            });
-        }
-
-
-        public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
-        {
-            return RunAsync(async conn => {
-                var rows = await conn.QueryAsync(
-                    "SELECT * FROM photo.get_categories(@allowPrivate);",
-                    new {
-                        allowPrivate
-                    }
-                ).ConfigureAwait(false);
-
-                return rows.Select(BuildCategory);
-            });
-        }
-
-
-        public Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, bool allowPrivate)
-		{
-            return RunAsync(async conn => {
-                var rows = await conn.QueryAsync(
-                    "SELECT * FROM photo.get_categories(@allowPrivate, @year);",
-                    new {
-                        allowPrivate,
-                        year
-                    }
-                ).ConfigureAwait(false);
-
-                return rows.Select(BuildCategory);
-            });
-		}
-
-
-        public Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate)
-        {
-            return RunAsync(async conn => {
-                var rows = await conn.QueryAsync(
-                    "SELECT * FROM photo.get_categories(@allowPrivate, @year, @id, @sinceId);",
-                    new {
-                        allowPrivate,
-                        year = (short?) null,
-                        id = (short?) null,
-                        sinceId
-                    }
-                ).ConfigureAwait(false);
-
-                return rows.Select(BuildCategory);
-            });
-        }
-
-
-		public Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, bool allowPrivate)
-		{
-            return RunAsync(async conn => {
-                var rows = await conn.QueryAsync(
-                    "SELECT * FROM photo.get_photos(@allowPrivate, @categoryId);",
-                    new {
-                        allowPrivate,
-                        categoryId
-                    }
-                );
-
-                return rows.Select(BuildPhoto);
-            });
-		}
-
-
-		public Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
-        {
-            return RunAsync(async conn => {
-                var rows = await  conn.QueryAsync(
-                    "SELECT * FROM photo.get_categories(@allowPrivate, @year, @categoryId);",
-                    new {
-                        allowPrivate,
-                        year = (short?) null,
-                        categoryId
-                    }
-                ).ConfigureAwait(false);
-
-                return rows
-                    .Select(BuildCategory)
-                    .FirstOrDefault();
-            });
-        }
-
-
-		public Task<Photo> GetPhotoAsync(int photoId, bool allowPrivate)
-		{
-            return RunAsync(async conn => {
-                    var rows = await conn.QueryAsync(
-                    "SELECT * FROM photo.get_photos(@allowPrivate, @categoryId, @id);",
-                    new {
-                        allowPrivate,
-                        categoryId = (short?) null,
-                        photoId
-                    }
-                );
-
-                return rows
-                    .Select(BuildPhoto)
-                    .FirstOrDefault();
-            });
-		}
 
 
 		public Task<Detail> GetDetailAsync(int photoId, bool allowPrivate)
@@ -248,6 +185,41 @@ namespace Maw.Data
                 ).ConfigureAwait(false);
 
                 return (await GetRatingsAsync(photoId, username).ConfigureAwait(false))?.AverageRating;
+            });
+		}
+
+
+        Task<IEnumerable<Category>> InternalGetCategoriesAsync(bool allowPrivate, short? year = null, short? categoryId = null, short? sinceCategoryId = null)
+        {
+            return RunAsync(async conn => {
+                var rows = await conn.QueryAsync(
+                    "SELECT * FROM photo.get_categories(@allowPrivate, @year, @categoryId, @sinceCategoryId);",
+                    new {
+                        allowPrivate,
+                        year,
+                        categoryId,
+                        sinceCategoryId
+                    }
+                ).ConfigureAwait(false);
+
+                return rows.Select(BuildCategory);
+            });
+        }
+
+
+        Task<IEnumerable<Photo>> InternalGetPhotosAsync(bool allowPrivate, short? categoryId = null, int? photoId = null)
+		{
+            return RunAsync(async conn => {
+                var rows = await conn.QueryAsync(
+                    "SELECT * FROM photo.get_photos(@allowPrivate, @categoryId, @photoId);",
+                    new {
+                        allowPrivate,
+                        categoryId,
+                        photoId
+                    }
+                ).ConfigureAwait(false);
+
+                return rows.Select(BuildPhoto);
             });
 		}
 

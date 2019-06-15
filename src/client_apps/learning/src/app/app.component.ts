@@ -23,7 +23,7 @@ export class AppComponent {
     runButtonText = 'Start';
     intervalId: number = null;
     assetRoot = '/js/learning/assets';
-    @ViewChild('audio') audioElement: ElementRef;
+    @ViewChild('audio', { static: true }) audioElement: ElementRef;
 
     toggleRunning(): void {
         this.doRun = !this.doRun;

@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { MawCommonModule } from 'maw-common';
 
 @NgModule({
   declarations: [
@@ -11,8 +10,7 @@ import { MawCommonModule } from 'maw-common';
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    MawCommonModule
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

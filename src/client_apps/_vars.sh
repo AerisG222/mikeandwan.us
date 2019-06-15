@@ -30,65 +30,10 @@ update_ngcli_global() {
 }
 
 
-update_ngcli_project() {
-    local projectdir=$1
-
-    cd "${projectdir}"
-
-    rm -rf node_modules dist
-
-    # clean and install new cli
-    npm install --save-dev ${NG_CLI_VERSION}
-
-    # add in any other missing libs
-    npm install
-
-    cd ..
-}
-
-
-install_deps() {
-    cd "${1}"
-    npm install
-    cd ..
-}
-
-
-build_lib() {
-    cd "${1}"
-    npm run package
-    cd ..
-}
-
-
 build_app() {
     cd "${1}"
     npm run "${2}"
     cd ..
-}
-
-
-update_ngcli_all_projects() {
-    for i in "${NG_APPS[@]}"
-    do
-        echo "updating tooling for ${i}..."
-        update_ngcli_project "${i}" 'y'
-    done
-}
-
-
-install_all_deps() {
-    for i in "${APPS[@]}"
-    do
-        echo "installing dependencies for ${i}..."
-        install_deps "${i}"
-    done
-
-    for i in "${NG_APPS[@]}"
-    do
-        echo "installing dependencies for ${i}..."
-        install_deps "${i}"
-    done
 }
 
 

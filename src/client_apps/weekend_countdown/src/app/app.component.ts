@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: [ './app.component.css' ]
+    styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent implements OnInit, OnDestroy {
     intervalId: number = null;
@@ -11,7 +11,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.updateMessage();
-        this.intervalId = setInterval(() => { this.updateMessage(); }, <any>300);
+        this.intervalId = window.setInterval(() => { this.updateMessage(); }, 300);
     }
 
     ngOnDestroy(): void {

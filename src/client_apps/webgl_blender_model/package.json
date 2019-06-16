@@ -10,17 +10,16 @@
   },
   "dependencies": {
     "stats.js": "~0.17.0",
-    "three": "~0.98.0",
-    "three-gltf-loader": "^1.98.0"
+    "three": "^0.105.2"
   },
   "devDependencies": {
-    "file-loader": "^2.0.0",
-    "ts-loader": "~5.3.0",
-    "tslint": "~5.11.0",
-    "typescript": "~3.1.6",
-    "webpack": "~4.25.1",
-    "webpack-bundle-analyzer": "~3.0.3",
-    "webpack-cli": "~3.1.2",
+    "file-loader": "^4.0.0",
+    "ts-loader": "^6.0.2",
+    "tslint": "^5.17.0",
+    "typescript": "^3.5.2",
+    "webpack": "^4.34.0",
+    "webpack-bundle-analyzer": "^3.3.2",
+    "webpack-cli": "^3.3.4",
     "webpack-stats-plugin": "~0.2.1"
   }
 }

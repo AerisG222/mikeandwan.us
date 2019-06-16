@@ -1,6 +1,6 @@
 import { Scene, PerspectiveCamera, Renderer, Mesh, MeshPhongMaterial, AmbientLight,
          WebGLRenderer, DirectionalLight, AxesHelper } from 'three';
-import * as GLTFLoader from 'three-gltf-loader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as Stats from 'stats.js';
 
 const model = require('./bs.gltf');
@@ -31,8 +31,6 @@ export class BlenderModelDemo {
         // renderer
         this._renderer = new WebGLRenderer({ antialias: true, alpha: true });
         this._renderer.setSize(window.innerWidth, window.innerHeight);
-        this._renderer.gammaOutput = true;
-        this._renderer.gammaFactor = 2.2;
 
         document.body.appendChild(this._renderer.domElement);
 

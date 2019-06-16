@@ -123,7 +123,7 @@ namespace MawApi
         public void Configure(IApplicationBuilder app)
         {
             app.UseCors("default");
-            app.UseSwagger();
+            app.UseOpenApi();
             app.UseSwaggerUi3();
             app.UseAuthentication();
             app.UseSignalR(routes => routes.MapHub<UploadHub>("/uploadr"));

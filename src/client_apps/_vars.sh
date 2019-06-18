@@ -20,7 +20,7 @@ NG_CLI_VERSION='@angular/cli@latest'
 update_ngcli_global() {
     local isdockerbuild=$1
 
-    if [ "${isdockerbuild}" == "y" ]; then
+    if [ "${isdockerbuild}" == 'y' ]; then
         npm install -g ${NG_CLI_VERSION}
     else
         sudo npm uninstall -g @angular/cli
@@ -37,11 +37,26 @@ build_app() {
 }
 
 
+clean_app() {
+    cd "${1}"
+    rm -rf dist
+    rm -rf node_modules
+
+    npm ci
+}
+
+
 build_all_apps() {
     local buildcmd=$1
+    local clean=$2
 
     for i in "${APPS[@]}"
     do
+        if [ "${clean}" == 'y' ]; then
+            echo "cleaning ${i}..."
+            clean_app "${i}"
+        fi
+
         echo "building ${i}..."
         build_app "${i}" "${buildcmd}"
     done

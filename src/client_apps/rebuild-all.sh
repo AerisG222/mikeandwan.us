@@ -9,12 +9,12 @@ then
     read DOWORK
 fi
 
-if [ "${DOWORK}" == "y" ]
+if [ "${DOWORK}" == 'y' ]
 then
     if [ "${PROD}" == 'y' ]
     then
-        build_all_apps prod_build
+        build_all_apps prod_build 'y'
     else
-        build_all_apps dev_build
+        build_all_apps dev_build 'n'
     fi
 fi

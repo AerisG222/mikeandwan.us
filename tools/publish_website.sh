@@ -157,6 +157,9 @@ build_sass() {
 
     cd "${SRC_ROOT}/${SITE}"
 
+    # ensure clean builds
+    rm -rf node_modules
+
     npm ci
     npm run sass
 }

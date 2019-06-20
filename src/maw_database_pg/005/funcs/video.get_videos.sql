@@ -23,15 +23,15 @@ RETURNS TABLE
     scaled_path VARCHAR(255),
     scaled_height SMALLINT,
     scaled_width SMALLINT,
-    scaled_size INTEGER,
+    scaled_size BIGINT,
     full_path VARCHAR(255),
     full_height SMALLINT,
     full_width SMALLINT,
-    full_size INTEGER,
+    full_size BIGINT,
     raw_path VARCHAR(255),
     raw_height SMALLINT,
     raw_width SMALLINT,
-    raw_size INTEGER
+    raw_size BIGINT
 )
 LANGUAGE SQL
 AS $$

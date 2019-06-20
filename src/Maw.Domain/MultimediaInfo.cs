@@ -5,6 +5,6 @@ namespace Maw.Domain
         public short Height { get; set; }
         public short Width { get; set; }
         public string Path { get; set; }
-        public int Size { get; set; }
+        public long Size { get; set; }
     }
 }

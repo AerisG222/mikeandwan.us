@@ -11,8 +11,8 @@ RETURNS TABLE
     year SMALLINT,
     name VARCHAR(50),
     create_date TIMESTAMP,
-    latitude DOUBLE PRECISION,
-    longitude DOUBLE PRECISION,
+    latitude REAL,
+    longitude REAL,
     photo_count INTEGER,
     total_size_xs BIGINT,
     total_size_xs_sq BIGINT,
@@ -38,10 +38,10 @@ AS $$
            year,
            name,
            create_date,
-           CASE WHEN gps_latitude_ref_id = 'S' THEN -1.0 * ABS(gps_latitude)
+           CASE WHEN gps_latitude_ref_id = 'S' THEN CAST(-1.0 * ABS(gps_latitude) AS REAL)
                 ELSE ABS(gps_latitude)
                  END AS latitude,
-           CASE WHEN gps_longitude_ref_id = 'W' THEN -1.0 * ABS(gps_longitude)
+           CASE WHEN gps_longitude_ref_id = 'W' THEN CAST(-1.0 * ABS(gps_longitude) AS REAL)
                 ELSE ABS(gps_longitude)
                  END AS longitude,
            photo_count,

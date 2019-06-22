@@ -20,9 +20,9 @@ namespace Maw.Data
 
 		public Task<IEnumerable<Blog>> GetBlogsAsync()
 		{
-			return RunAsync(conn => {
-				return conn.QueryAsync<Blog>("SELECT * FROM blog.get_blogs();");
-			});
+			return RunAsync(conn =>
+				conn.QueryAsync<Blog>("SELECT * FROM blog.get_blogs();")
+			);
 		}
 
 
@@ -73,16 +73,16 @@ namespace Maw.Data
 
         Task<IEnumerable<Post>> InternalGetPostsAsync(short? blogId = null, short? postId = null, short? postCount = null)
         {
-            return RunAsync(conn => {
-				return conn.QueryAsync<Post>(
+            return RunAsync(conn =>
+				conn.QueryAsync<Post>(
                     "SELECT * FROM blog.get_posts(@blogId, @postId, @postCount);",
 					new {
                         blogId,
                         postId,
                         postCount
                     }
-				);
-			});
+				)
+			);
         }
 	}
 }

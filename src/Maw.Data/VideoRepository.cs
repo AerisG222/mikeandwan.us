@@ -21,12 +21,12 @@ namespace Maw.Data
 
 		public Task<IEnumerable<short>> GetYearsAsync(bool allowPrivate)
 		{
-            return RunAsync(conn => {
-                return conn.QueryAsync<short>(
+            return RunAsync(conn =>
+                conn.QueryAsync<short>(
                     "SELECT * FROM video.get_years(@allowPrivate);",
                     new { allowPrivate = allowPrivate }
-                );
-            });
+                )
+            );
 		}
 
 
@@ -66,26 +66,26 @@ namespace Maw.Data
 
         public Task<IEnumerable<Comment>> GetCommentsAsync(short videoId)
 		{
-            return RunAsync(conn => {
-                return conn.QueryAsync<Comment>(
+            return RunAsync(conn =>
+                conn.QueryAsync<Comment>(
                     "SELECT * FROM video.get_comments(@videoId);",
                     new { videoId = videoId }
-                );
-            });
+                )
+            );
 		}
 
 
 		public Task<Rating> GetRatingsAsync(short videoId, string username)
 		{
-            return RunAsync(conn => {
-                return conn.QuerySingleOrDefaultAsync<Rating>(
+            return RunAsync(conn =>
+                conn.QuerySingleOrDefaultAsync<Rating>(
                     "SELECT * FROM video.get_ratings(@videoId, @username);",
                     new {
                         videoId = videoId,
                         username = username?.ToLower()
                     }
-                );
-            });
+                )
+            );
 		}
 
 

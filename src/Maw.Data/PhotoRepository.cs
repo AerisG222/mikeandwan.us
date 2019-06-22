@@ -21,11 +21,11 @@ namespace Maw.Data
 
 		public Task<IEnumerable<short>> GetYearsAsync()
         {
-            return RunAsync(conn => {
-                return conn.QueryAsync<short>(
+            return RunAsync(conn =>
+                conn.QueryAsync<short>(
                     "SELECT * FROM photo.get_years();"
-                );
-            });
+                )
+            );
         }
 
 
@@ -95,40 +95,40 @@ namespace Maw.Data
 
 		public Task<Detail> GetDetailAsync(int photoId, bool allowPrivate)
 		{
-            return RunAsync(conn => {
-                return conn.QuerySingleOrDefaultAsync<Detail>(
+            return RunAsync(conn =>
+                conn.QuerySingleOrDefaultAsync<Detail>(
                     "SELECT * FROM photo.get_photo_metadata(@allowPrivate, @photoId);",
                     new {
                         allowPrivate,
                         photoId
                     }
-                );
-            });
+                )
+            );
 		}
 
 
 		public Task<IEnumerable<Comment>> GetCommentsAsync(int photoId)
 		{
-            return RunAsync(conn => {
-                return conn.QueryAsync<Comment>(
+            return RunAsync(conn =>
+                conn.QueryAsync<Comment>(
                     "SELECT * FROM photo.get_comments(@photoId);",
                     new { photoId = photoId }
-                );
-            });
+                )
+            );
 		}
 
 
 		public Task<Rating> GetRatingsAsync(int photoId, string username)
 		{
-            return RunAsync(conn => {
-                return conn.QuerySingleOrDefaultAsync<Rating>(
+            return RunAsync(conn =>
+                conn.QuerySingleOrDefaultAsync<Rating>(
                     "SELECT * FROM photo.get_ratings(@photoId, @username);",
                     new {
                         photoId = photoId,
                         username = username?.ToLower()
                     }
-                );
-            });
+                )
+            );
 		}
 
 

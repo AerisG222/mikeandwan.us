@@ -1,38 +1,28 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Logging;
 using IdentityModel;
 using Mvc.RenderViewToString;
-using Newtonsoft.Json.Linq;
 using NMagickWand;
 using Maw.Data;
-using Maw.Data.Identity;
 using Maw.Domain;
 using Maw.Domain.Captcha;
 using Maw.Domain.Email;
-using Maw.Domain.Identity;
-using Maw.Domain.Photos;
 using Maw.Security;
-using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
-using Microsoft.AspNetCore.StaticFiles;
+
 
 namespace MawMvcApp
 {

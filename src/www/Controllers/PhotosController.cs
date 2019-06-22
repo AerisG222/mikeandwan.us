@@ -9,8 +9,6 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Photos;
 using Maw.Security;
-using MawMvcApp.ViewModels;
-using MawMvcApp.ViewModels.Navigation;
 
 
 namespace MawMvcApp.Controllers

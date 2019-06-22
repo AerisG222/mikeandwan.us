@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
+
 namespace MawMvcApp.ViewModels.Tools.Dotnet
 {
 	public class UrlEncodeModel
@@ -12,27 +13,27 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 		[Display(Name = "Encoded String")]
 		[DataType(DataType.MultilineText)]
 		public string EncodedString { get; set; }
-		
+
 		[Display(Name = "Decoded String")]
 		[DataType(DataType.MultilineText)]
 		public string DecodedString { get; set; }
-		
-		
+
+
 		public EncodeMode Mode { get; set; }
-		
+
 		[BindNever]
 		public bool HasErrors { get; set; }
-		
+
 		public UrlEncodeModel ()
 		{
 			// do nothing
 		}
-		
-		
+
+
 		public IEnumerable<ValidationResult> Validate (ValidationContext validationContext)
 		{
 			var errorList = new List<ValidationResult>();
-			
+
 			switch(Mode)
 			{
 				case EncodeMode.Decode:
@@ -50,11 +51,11 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 				default:
 					throw new InvalidOperationException("A proper EncodeMode must be specified!");
 			}
-			
+
 			return errorList;
 		}
-		
-		
+
+
 		public void PerformCoding()
 	    {
 			if(Mode == EncodeMode.Decode)

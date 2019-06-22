@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Maw.Security;
-using MawMvcApp.ViewModels.Navigation;
 
 
 namespace MawMvcApp.Controllers

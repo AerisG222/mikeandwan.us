@@ -1,14 +1,10 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Videos;
 using Maw.Domain.Photos;
-using MawMvcApp.ViewModels.Navigation;
-using MawMvcApp.ViewModels;
-using NMagickWand;
 using Maw.Security;
 
 

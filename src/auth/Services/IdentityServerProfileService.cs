@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
-using Maw.Data.Identity;
 using Maw.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -31,7 +28,7 @@ namespace MawAuth.Services
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             _log.LogDebug("requested claims:");
-            
+
             foreach(var c in context.RequestedClaimTypes)
             {
                 _log.LogDebug(c);

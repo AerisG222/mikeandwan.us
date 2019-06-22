@@ -1,20 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
 using Maw.Domain.Blogs;
 using Maw.Domain.Email;
 using Maw.Domain.Identity;
 using Maw.Domain.Utilities;
-using MawAuth.ViewModels;
 using MawAuth.ViewModels.Admin;
 using MawAuth.ViewModels.Email;
 using Mvc.RenderViewToString;
@@ -112,7 +108,7 @@ namespace MawAuth.Controllers
 				};
 
 				var password = await GeneratePassword();
-				
+
 				model.Result = IdentityResult.Failed();
 
 				try

@@ -1,6 +1,5 @@
 using IdentityServer4.Stores;
 using MawAuth.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 

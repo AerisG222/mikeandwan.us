@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Dapper;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
-using MawAuth.Models;
-using Microsoft.Extensions.Logging;
 using Npgsql;
+using MawAuth.Models;
 
 
 namespace MawAuth.Services

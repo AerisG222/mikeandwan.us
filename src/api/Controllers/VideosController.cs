@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Maw.Domain;
 using Maw.Domain.Videos;
 using Maw.Security;
-using MawApi.Models;
 using MawApi.Models.Videos;
 using MawApi.Services.Videos;
 using MawApi.ViewModels;

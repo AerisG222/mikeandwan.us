@@ -1,5 +1,4 @@
 using System;
-using Maw.Domain.Photos;
 
 
 namespace MawApi.ViewModels.Photos

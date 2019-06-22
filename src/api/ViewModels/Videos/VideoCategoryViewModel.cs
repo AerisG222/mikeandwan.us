@@ -1,5 +1,4 @@
 using System;
-using Maw.Domain.Videos;
 
 
 namespace MawApi.ViewModels.Videos

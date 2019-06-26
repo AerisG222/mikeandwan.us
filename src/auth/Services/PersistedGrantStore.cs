@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Dapper;
@@ -36,30 +37,17 @@ namespace MawAuth.Services
         {
             _log.LogDebug($"getting all grants for subject: {subjectId}");
 
-            return RunAsync(conn => {
-				return conn.QueryAsync<PersistedGrant>(
-					@"SELECT *
-					    FROM idsrv.persisted_grant
-					   WHERE subject_id = @subjectId
-					   ORDER BY creation_time;",
-					new { subjectId = subjectId }
-				);
-			});
+            return InternalGetGrants(null, subjectId);
         }
 
 
-        public Task<PersistedGrant> GetAsync(string key)
+        public async Task<PersistedGrant> GetAsync(string key)
         {
             _log.LogDebug($"getting all grants for key: {key}");
 
-            return RunAsync(conn => {
-				return conn.QuerySingleOrDefaultAsync<PersistedGrant>(
-					@"SELECT *
-					    FROM idsrv.persisted_grant
-					   WHERE key = @key;",
-					new { key = key }
-				);
-			});
+            var grants = await InternalGetGrants(key).ConfigureAwait(false);
+
+            return grants.SingleOrDefault();
         }
 
 
@@ -67,17 +55,7 @@ namespace MawAuth.Services
         {
             _log.LogDebug($"removing all grants for subject: {subjectId} and client: {clientId}");
 
-            return RunAsync(async conn => {
-				var result = await conn.ExecuteAsync(
-					@"DELETE FROM idsrv.persisted_grant
-					   WHERE subject_id = @subjectId
-                         AND client_id = @clientId;",
-					new {
-                        subjectId = subjectId,
-                        clientId = clientId
-                     }
-				);
-			});
+            return InternalRemoveGrants(subjectId: subjectId, clientId: clientId);
         }
 
 
@@ -85,19 +63,7 @@ namespace MawAuth.Services
         {
             _log.LogDebug($"removing all grants for subject: {subjectId} and client: {clientId} and type: {type}");
 
-            return RunAsync(async conn => {
-				var result = await conn.ExecuteAsync(
-					@"DELETE FROM idsrv.persisted_grant
-					   WHERE subject_id = @subjectId
-                         AND client_id = @clientId
-                         AND type = @type;",
-					new {
-                        subjectId = subjectId,
-                        clientId = clientId,
-                        type = type
-                     }
-				);
-			});
+            return InternalRemoveGrants(subjectId: subjectId, clientId: clientId, type: type);
         }
 
 
@@ -105,21 +71,7 @@ namespace MawAuth.Services
         {
             _log.LogDebug($"removing grant for key: {key} (if expired)");
 
-            // for now, lets only delete explicit items when they are expired.  there could
-            // be a condition where the client application did not successfully receive the
-            // refresh token, and seeing we only allow one use per refresh token they might
-            // have the old one when our system would have deleted it...
-            return RunAsync(async conn => {
-				var result = await conn.ExecuteAsync(
-					@"DELETE FROM idsrv.persisted_grant
-					   WHERE key = @key
-                         AND expiration < @now;",
-					new {
-                        key = key,
-                        now = DateTime.Now
-                    }
-				);
-			});
+            return InternalRemoveGrants(key: key);
         }
 
 
@@ -127,39 +79,42 @@ namespace MawAuth.Services
         {
             _log.LogDebug($"storing grant for key: {grant.Key}, type: {grant.Type}, subject: {grant.SubjectId}, client: {grant.ClientId}");
 
-            return RunAsync(async conn => {
-				var result = await conn.ExecuteAsync(
-					@"INSERT INTO idsrv.persisted_grant
-                           (
-                               key,
-                               type,
-                               subject_id,
-                               client_id,
-                               creation_time,
-                               expiration,
-                               data
-                           )
-                      VALUES
-                           (
-                               @Key,
-                               @Type,
-                               @SubjectId,
-                               @ClientId,
-                               @CreationTime,
-                               @Expiration,
-                               @Data
-                           )
-                      ON CONFLICT (key)
-                      DO UPDATE
-                            SET type = @Type,
-                                subject_id = @SubjectId,
-                                client_id = @ClientId,
-                                creation_time = @CreationTime,
-                                expiration = @Expiration,
-                                data = @Data;",
+            return RunAsync(conn =>
+                conn.QuerySingleOrDefaultAsync<long>(
+					"SELECT * FROM idsrv.save_persisted_grant(@Key, @Type, @SubjectId, @ClientId, @CreationTime, @Expiration, @Data);",
 					grant
-				);
-			});
+				)
+			);
+        }
+
+
+        Task<long> InternalRemoveGrants(string key = null, string subjectId = null, string clientId = null, string type = null)
+        {
+            return RunAsync(conn =>
+				conn.QuerySingleOrDefaultAsync<long>(
+					"SELECT * FROM idsrv.delete_persisted_grants(@key, @subjectId, @clientId, @type);",
+					new {
+                        key,
+                        subjectId,
+                        clientId,
+                        type
+                    }
+				)
+			);
+        }
+
+
+        Task<IEnumerable<PersistedGrant>> InternalGetGrants(string key = null, string subjectId = null)
+        {
+            return RunAsync(conn =>
+				conn.QueryAsync<PersistedGrant>(
+					"SELECT * FROM idsrv.get_persisted_grants(@key, @subjectId);",
+					new {
+                        key,
+                        subjectId
+                    }
+				)
+			);
         }
 
 

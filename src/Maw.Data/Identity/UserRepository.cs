@@ -15,628 +15,452 @@ namespace Maw.Data.Identity
         const int LOGIN_SUCCESS = 1;
 
 
-		public UserRepository(string connectionString)
-			: base(connectionString)
-		{
+        public UserRepository(string connectionString)
+            : base(connectionString)
+        {
 
-		}
+        }
 
 
         public Task<IEnumerable<State>> GetStatesAsync()
         {
-			return RunAsync(conn => {
-				return conn.QueryAsync<State>(
-					@"SELECT *
-					    FROM maw.state;"
-				);
-			});
+            return RunAsync(conn =>
+                conn.QueryAsync<State>(
+                    "SELECT * FROM maw.get_states();"
+                )
+            );
         }
 
 
         public Task<IEnumerable<Country>> GetCountriesAsync()
         {
-            return RunAsync(conn => {
-				return conn.QueryAsync<Country>(
-					@"SELECT *
-					    FROM maw.country;"
-				);
-			});
+            return RunAsync(conn =>
+                conn.QueryAsync<Country>(
+                    "SELECT * FROM maw.get_countries();"
+                )
+            );
         }
 
 
         public Task<MawUser> GetUserAsync(string username)
         {
-			if(string.IsNullOrEmpty(username))
-			{
-				throw new ArgumentException("Username cannot be null or empty", nameof(username));
-			}
+            if(string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentException("Username cannot be null or empty", nameof(username));
+            }
 
-			return GetUserAsync("username", username.ToLower());
+            return InternalGetUserAsync(username: username.ToLower());
         }
 
 
         public Task<MawUser> GetUserAsync(short id)
         {
-			return GetUserAsync("id", id);
+            return InternalGetUserAsync(id: id);
         }
 
 
-		public Task<MawUser> GetUserByEmailAsync(string email)
-		{
-			if(string.IsNullOrEmpty(email))
-			{
-				throw new ArgumentException("email must not be null or empty", nameof(email));
-			}
-
-			return GetUserAsync("email", email.ToLower());
-		}
-
-
-        public Task<IEnumerable<string>> GetRoleNamesForUserAsync(string username)
+        public Task<MawUser> GetUserByEmailAsync(string email)
         {
-			if(string.IsNullOrEmpty(username))
-			{
-				throw new ArgumentException("username must not be null or empty", nameof(username));
-			}
+            if(string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentException("email must not be null or empty", nameof(email));
+            }
 
-			return RunAsync(conn => {
-				return conn.QueryAsync<string>(
-					@"SELECT r.name
-					    FROM maw.role r
-					   INNER JOIN maw.user_role ur ON ur.role_id = r.id
-					   INNER JOIN maw.user u ON u.id = ur.user_id
-					   WHERE u.username = @username
-					   ORDER BY r.name;",
-					new { username = username.ToLower() }
-				);
-			});
+            return InternalGetUserAsync(email: email.ToLower());
         }
 
 
-		public Task<bool> UpdateUserPasswordAsync(MawUser user)
-		{
-			if(user == null)
-			{
-				throw new ArgumentNullException(nameof(user));
-			}
+        public async Task<IEnumerable<string>> GetRoleNamesForUserAsync(string username)
+        {
+            if(string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentException("username must not be null or empty", nameof(username));
+            }
 
-			return RunAsync(async conn => {
-				var result = await conn.ExecuteAsync(
-					@"UPDATE maw.user
-					     SET hashed_password = @hashedPassword
-					   WHERE username = @username",
-					new { hashedPassword = user.HashedPassword, username = user.Username.ToLower() }
-				).ConfigureAwait(false);
+            var roles = await InternalGetRolesForUserAsync(username);
 
-				return result == 1;
-			});
-		}
+            return roles.Select(r => r.Name);
+        }
+
+
+        public Task<bool> UpdateUserPasswordAsync(MawUser user)
+        {
+            if(user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            return RunAsync(async conn => {
+                var result = await conn.QuerySingleAsync<long>(
+                    "SELECT * FROM maw.save_password(@username, @hashedPassword);",
+                    new {
+                        username = user.Username.ToLower(),
+                        hashedPassword = user.HashedPassword
+                    }
+                ).ConfigureAwait(false);
+
+                return result == 1;
+            });
+        }
 
 
         public Task<bool> UpdateUserAsync(MawUser updatedUser)
         {
-			if(updatedUser == null)
-			{
-				throw new ArgumentNullException(nameof(updatedUser));
-			}
+            if(updatedUser == null)
+            {
+                throw new ArgumentNullException(nameof(updatedUser));
+            }
 
-			return RunAsync(async conn => {
-				var result = await conn.ExecuteAsync(
-					@"UPDATE maw.user
-					     SET first_name = @firstName,
-						     last_name = @lastName,
-							 email = @email,
-							 hashed_password = @hashedPassword,
-							 security_stamp = @securityStamp,
-							 enable_github_auth = @enableGithubAuth,
-							 enable_google_auth = @enableGoogleAuth,
-							 enable_microsoft_auth = @enableMicrosoftAuth,
-							 enable_twitter_auth = @enableTwitterAuth
-					   WHERE username = @username",
-					new {
-						firstName = updatedUser.FirstName,
-						lastName = updatedUser.LastName,
-						email = updatedUser.Email?.ToLower(),
-						hashedPassword = updatedUser.HashedPassword,
-						securityStamp = updatedUser.SecurityStamp,
-						enableGithubAuth = updatedUser.IsGithubAuthEnabled,
-						enableGoogleAuth = updatedUser.IsGoogleAuthEnabled,
-						enableMicrosoftAuth = updatedUser.IsMicrosoftAuthEnabled,
-						enableTwitterAuth = updatedUser.IsTwitterAuthEnabled,
-						username = updatedUser.Username.ToLower()
-					}
-				).ConfigureAwait(false);
+            return RunAsync(async conn => {
+                var result = await conn.QuerySingleAsync<long>(
+                    "SELECT * FROM maw.update_user("
+                        + " @username, @firstName, @lastName, @email, @hashedPassword, @securityStamp,"
+                        + " @enableGithubAuth, @enableGoogleAuth, @enableMicrosoftAuth, @enableTwitterAuth);",
+                    new {
+                        username = updatedUser.Username.ToLower(),
+                        firstName = updatedUser.FirstName,
+                        lastName = updatedUser.LastName,
+                        email = updatedUser.Email?.ToLower(),
+                        hashedPassword = updatedUser.HashedPassword,
+                        securityStamp = updatedUser.SecurityStamp,
+                        enableGithubAuth = updatedUser.IsGithubAuthEnabled,
+                        enableGoogleAuth = updatedUser.IsGoogleAuthEnabled,
+                        enableMicrosoftAuth = updatedUser.IsMicrosoftAuthEnabled,
+                        enableTwitterAuth = updatedUser.IsTwitterAuthEnabled
+                    }
+                ).ConfigureAwait(false);
 
-				if(result != 1)
-				{
-					throw new InvalidOperationException("Was not able to find user to update with username: " + updatedUser.Username.ToLower());
-				}
+                if(result != 1)
+                {
+                    throw new InvalidOperationException("Was not able to find user to update with username: " + updatedUser.Username.ToLower());
+                }
 
-				return true;
-			});
+                return true;
+            });
         }
 
 
         public Task<bool> AddLoginHistoryAsync(string username, short loginActivityTypeId, short loginAreaId)
         {
-			if(string.IsNullOrEmpty(username))
-			{
-				throw new ArgumentException("username must not be null or empty", nameof(username));
-			}
+            if(string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentException("username must not be null or empty", nameof(username));
+            }
 
-			return RunAsync(async conn => {
-				var userId = await GetUserIdAsync(conn, "username", username.ToLower()).ConfigureAwait(false);
-
-				return await AddLoginHistoryAsync(conn, userId, username.ToLower(), loginActivityTypeId, loginAreaId).ConfigureAwait(false);
-			});
+            return RunAsync(conn =>
+                AddLoginHistoryAsync(conn, username.ToLower(), null, loginActivityTypeId, loginAreaId)
+            );
         }
 
 
-		public Task<bool> AddExternalLoginHistoryAsync(string email, short loginActivityTypeId, short loginAreaId)
-		{
-			if(string.IsNullOrEmpty(email))
-			{
-				throw new ArgumentException("email must not be null or empty", nameof(email));
-			}
+        public Task<bool> AddExternalLoginHistoryAsync(string email, short loginActivityTypeId, short loginAreaId)
+        {
+            if(string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentException("email must not be null or empty", nameof(email));
+            }
 
-			return RunAsync(async conn => {
-				var userId = await GetUserIdAsync(conn, "email", email.ToLower()).ConfigureAwait(false);
-
-				return await AddLoginHistoryAsync(conn, userId, email, loginActivityTypeId, loginAreaId).ConfigureAwait(false);
-			});
-		}
+            return RunAsync(conn =>
+                AddLoginHistoryAsync(conn, null, email, loginActivityTypeId, loginAreaId)
+            );
+        }
 
 
         public Task<IEnumerable<UserAndLastLogin>> GetUsersToManageAsync()
         {
-			return RunAsync(conn => {
-				return conn.QueryAsync<UserAndLastLogin>(
-					@"SELECT id,
-					         username,
-							 first_name,
-							 last_name,
-							 email,
-							 (SELECT MAX(attempt_time)
-							    FROM maw.login_history lh
-							   WHERE lh.user_id = u.id
-							 )
-					    FROM maw.user u
-					   ORDER BY u.username;"
-				);
-			});
+            return RunAsync(conn =>
+                conn.QueryAsync<UserAndLastLogin>(
+                    "SELECT * FROM maw.get_user_detail();"
+                )
+            );
         }
 
 
         public Task<IEnumerable<string>> GetAllUsernamesAsync()
         {
-			return RunAsync(conn => {
-				return conn.QueryAsync<string>(
-					@"SELECT username
-					    FROM maw.user
-					   ORDER BY username;"
-				);
-			});
+            return RunAsync(conn =>
+                conn.QueryAsync<string>(
+                    "SELECT * FROM maw.get_usernames();"
+                )
+            );
         }
 
 
         public Task<IEnumerable<string>> GetAllRoleNamesAsync()
         {
-			return RunAsync(conn => {
-				return conn.QueryAsync<string>(
-					@"SELECT name
-					    FROM maw.role
-					   ORDER BY name;"
-				);
-			});
+            return RunAsync(conn =>
+                conn.QueryAsync<string>(
+                    "SELECT * FROM maw.get_role_names();"
+                )
+            );
         }
 
 
-        public Task<int> AddUserAsync(MawUser user)
+        public Task<short> AddUserAsync(MawUser user)
         {
-			if(user == null)
-			{
-				throw new ArgumentNullException(nameof(user));
-			}
+            if(user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
 
-			return RunAsync(async conn => {
-				var result = await conn.ExecuteAsync(
-					@"INSERT INTO maw.user
-				           (
-				    	     username,
-				    		 hashed_password,
-				    		 first_name,
-				    		 last_name,
-				    		 email,
-				    		 security_stamp,
-							 password_last_set_on
-				    	   )
-				      VALUES
-				           (
-				    		 @username,
-				    		 @hashedPassword,
-				    		 @firstName,
-				    		 @lastName,
-				    		 @email,
-				    		 @securityStamp,
-							 @passwordLastSetOn
-				    	   );",
-				    new {
-				    	username = user.Username.ToLower(),
-				    	hashedPassword = user.HashedPassword,
-				    	firstName = user.FirstName,
-				    	lastName = user.LastName,
-				    	email = user.Email?.ToLower(),
-				    	securityStamp = user.SecurityStamp,
-						passwordLastSetOn = DateTime.Now
-				    }
-				).ConfigureAwait(false);
-
-				user.Id = (short) await GetUserIdAsync(conn, "username", user.Username.ToLower()).ConfigureAwait(false);
-
-				return result;
-			});
+            return RunAsync(conn =>
+                conn.QuerySingleAsync<short>(
+                    "SELECT * FROM maw.add_user(@username, @hashedPassword, @firstName,"
+                                             + "@lastName, @email, @securityStamp, @passwordLastSetOn);",
+                    new {
+                        username = user.Username.ToLower(),
+                        hashedPassword = user.HashedPassword,
+                        firstName = user.FirstName,
+                        lastName = user.LastName,
+                        email = user.Email?.ToLower(),
+                        securityStamp = user.SecurityStamp,
+                        passwordLastSetOn = DateTime.Now
+                    }
+                )
+            );
         }
 
 
-        public Task<int> RemoveUserAsync(string username)
+        public Task<long> RemoveUserAsync(string username)
         {
-			if(string.IsNullOrEmpty(username))
-			{
-				throw new ArgumentException("username must not be null or empty", nameof(username));
-			}
+            if(string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentException("username must not be null or empty", nameof(username));
+            }
 
-			return RunAsync(async conn => {
-				username = username.ToLower();
-
-				await conn.ExecuteAsync(
-					@"DELETE FROM maw.user_role
-					   WHERE user_id = (SELECT id
-					                      FROM maw.user
-										 WHERE username = @username
-									   );",
-					new { username = username }
-				);
-
-				await conn.ExecuteAsync(
-					@"UPDATE maw.login_history
-					     SET user_id = NULL
-					   WHERE user_id = (SELECT id
-					                      FROM maw.user
-										 WHERE username = @username
-									   );",
-					new { username = username }
-				);
-
-				var result = await conn.ExecuteAsync(
-					@"DELETE FROM maw.user
-					   WHERE username = @username",
-					new { username = username }
-				);
-
-				return result;
-			});
+            return RunAsync(conn =>
+                conn.QuerySingleAsync<long>(
+                    "SELECT * FROM maw.remove_user(@username);",
+                    new { username = username.ToLower() }
+                )
+            );
         }
 
 
         public Task<IEnumerable<MawUser>> GetUsersInRoleAsync(string roleName)
         {
-			if(string.IsNullOrEmpty(roleName))
-			{
-				throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
-			}
+            if(string.IsNullOrEmpty(roleName))
+            {
+                throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
+            }
 
-			return RunAsync(async conn => {
-				var users = await conn.QueryAsync<MawUser>(
-					$@"SELECT u.*,
-							  u.enable_github_auth AS is_github_auth_enabled,
-							  u.enable_google_auth AS is_google_auth_enabled,
-							  u.enable_microsoft_auth AS is_microsoft_auth_enabled,
-							  u.enable_twitter_auth AS is_twitter_auth_enabled
-						 FROM maw.user u
-					    WHERE u.id IN (SELECT user_id
-						                 FROM maw.user_role
-								  	    WHERE role_id = (SELECT id
-									                       FROM maw.role
-										                  WHERE name = @role
-													  )
-									);",
-					new { role = roleName.ToLower() }
-				).ConfigureAwait(false);
+            return RunAsync(async conn => {
+                var users = await conn.QueryAsync<MawUser>(
+                    "SELECT * FROM maw.get_users_in_role(@roleName);",
+                    new { roleName = roleName.ToLower() }
+                ).ConfigureAwait(false);
 
-				foreach(var user in users)
-				{
-					await AddRolesForUser(conn, user).ConfigureAwait(false);
-				}
+                foreach(var user in users)
+                {
+                    await AddRolesForUser(conn, user).ConfigureAwait(false);
+                }
 
-				return users;
-			});
+                return users;
+            });
         }
 
 
         public Task<bool> CreateRoleAsync(string roleName, string description)
         {
-			if(string.IsNullOrEmpty(roleName))
-			{
-				throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
-			}
+            if(string.IsNullOrEmpty(roleName))
+            {
+                throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
+            }
 
-			return RunAsync(async conn => {
-				var result = await conn.ExecuteAsync(
-					@"INSERT INTO maw.role
-					       (
-							 name,
-							 description
-						   )
-					  VALUES
-					       (
-							 @name,
-							 @description
-						   );",
-					new {
-						name = roleName.ToLower(),
-						description = description
-					}
-				).ConfigureAwait(false);
+            return RunAsync(async conn => {
+                var result = await conn.QuerySingleAsync<short>(
+                    "SELECT * FROM maw.add_role(@name, @description);",
+                    new {
+                        name = roleName.ToLower(),
+                        description
+                    }
+                ).ConfigureAwait(false);
 
-				return result == 1;
-			});
+                return result > 0;
+            });
         }
 
 
         public Task<bool> RemoveRoleAsync(string roleName)
         {
-			if(string.IsNullOrEmpty(roleName))
-			{
-				throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
-			}
+            if(string.IsNullOrEmpty(roleName))
+            {
+                throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
+            }
 
-			return RunAsync(async conn => {
-				roleName = roleName.ToLower();
+            return RunAsync(async conn => {
+                var result = await conn.QuerySingleAsync<long>(
+                    "SELECT * FROM maw.remove_role(@name);",
+                    new { name = roleName.ToLower() }
+                ).ConfigureAwait(false);
 
-				var result = await conn.ExecuteAsync(
-					@"DELETE FROM maw.user_role
-					   WHERE role_id = (SELECT id
-					                      FROM maw.role
-										 WHERE name = @name
-									   );",
-					new { @name = roleName }
-				).ConfigureAwait(false);
-
-				result = await conn.ExecuteAsync(
-					@"DELETE FROM maw.role
-					   WHERE id = (SELECT id
-					                 FROM maw.role
-									WHERE name = @name
-								  );",
-					new { @name = roleName }
-				).ConfigureAwait(false);
-
-				return result == 1;
-			});
+                return result == 1;
+            });
         }
 
 
         public Task<bool> AddUserToRoleAsync(string username, string roleName)
         {
-			if(string.IsNullOrEmpty(username))
-			{
-				throw new ArgumentException("username must not be null or empty", nameof(username));
-			}
+            if(string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentException("username must not be null or empty", nameof(username));
+            }
 
-			if(string.IsNullOrEmpty(roleName))
-			{
-				throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
-			}
+            if(string.IsNullOrEmpty(roleName))
+            {
+                throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
+            }
 
-			return RunAsync(async conn => {
-				var result = await conn.ExecuteAsync(
-					@"INSERT INTO maw.user_role
-					       (
-							 user_id,
-							 role_id
-						   )
-					  VALUES
-					       (
-							 (SELECT id FROM maw.user WHERE username = @username),
-							 (SELECT id FROM maw.role WHERE name = @role)
-						   );",
-					new {
-						username = username.ToLower(),
-						role = roleName.ToLower()
-					}
-				).ConfigureAwait(false);
+            return RunAsync(async conn => {
+                var result = await conn.QuerySingleAsync<long>(
+                    "SELECT * FROM maw.add_user_to_role(@username, @role);",
+                    new {
+                        username = username.ToLower(),
+                        role = roleName.ToLower()
+                    }
+                ).ConfigureAwait(false);
 
-				return result == 1;
-			});
+                return result == 1;
+            });
         }
 
 
         public Task<bool> RemoveUserFromRoleAsync(string username, string roleName)
         {
-			if(string.IsNullOrEmpty(username))
-			{
-				throw new ArgumentException("username must not be null or empty", nameof(username));
-			}
+            if(string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentException("username must not be null or empty", nameof(username));
+            }
 
-			if(string.IsNullOrEmpty(roleName))
-			{
-				throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
-			}
+            if(string.IsNullOrEmpty(roleName))
+            {
+                throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
+            }
 
-			return RunAsync(async conn => {
-				var result = await conn.ExecuteAsync(
-					@"DELETE FROM maw.user_role
-					   WHERE user_id = (SELECT id FROM maw.user WHERE username = @username)
-					     AND role_id = (SELECT id FROM maw.role WHERE name = @role);",
-					new {
-						username = username.ToLower(),
-						role = roleName.ToLower()
-					}
-				);
+            return RunAsync(async conn => {
+                var result = await conn.QuerySingleAsync<long>(
+                    "SELECT * FROM maw.remove_user_from_role(@username, @role);",
+                    new {
+                        username = username.ToLower(),
+                        role = roleName.ToLower()
+                    }
+                );
 
-				return result == 1;
-			});
+                return result == 1;
+            });
         }
 
 
-		public Task<bool> SetSecurityStampAsync(string username, string securityStamp)
-		{
-			if(string.IsNullOrEmpty(username))
-			{
-				throw new ArgumentException("username must not be null or empty", nameof(username));
-			}
+        public Task<bool> SetSecurityStampAsync(string username, string securityStamp)
+        {
+            if(string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentException("username must not be null or empty", nameof(username));
+            }
 
-			return RunAsync(async conn => {
-				var result = await conn.ExecuteAsync(
-					@"UPDATE maw.user
-					     SET security_stamp = @securityStamp
-					   WHERE username = @username;",
-					new {
-						securityStamp = securityStamp,
-						username = username.ToLower()
-					}
-				);
+            return RunAsync(async conn => {
+                var result = await conn.QuerySingleAsync<long>(
+                    "SELECT * FROM maw.save_security_stamp(@username, @securityStamp);",
+                    new {
+                        username = username.ToLower(),
+                        securityStamp
+                    }
+                );
 
-				return result == 1;
-			});
-		}
+                return result == 1;
+            });
+        }
 
 
-		public Task<MawRole> GetRoleAsync(string roleName)
-		{
-			if(string.IsNullOrEmpty(roleName))
-			{
-				throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
-			}
+        public Task<MawRole> GetRoleAsync(string roleName)
+        {
+            if(string.IsNullOrEmpty(roleName))
+            {
+                throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
+            }
 
-			return GetRoleAsync("name", roleName.ToLower());
-		}
-
-
-		public Task<MawRole> GetRoleAsync(short id)
-		{
-			return GetRoleAsync("id", id);
-		}
+            return InternalGetRoleAsync(name: roleName.ToLower());
+        }
 
 
-		Task<short?> GetUserIdAsync<T>(IDbConnection conn, string whereField, T whereValue)
-		{
-			return conn.QuerySingleOrDefaultAsync<short?>(
-				$@"SELECT id
-				     FROM maw.user u
-					WHERE u.{whereField} = @whereValue;",
-				new { whereValue = whereValue }
-			);
-		}
+        public Task<MawRole> GetRoleAsync(short id)
+        {
+            return InternalGetRoleAsync(id: id);
+        }
 
 
-		Task<MawUser> GetUserAsync<T>(string whereField, T whereValue)
-		{
-			return RunAsync(async conn => {
-				var userResult = await conn.QueryAsync<MawUser>(
-						$@"SELECT u.*,
-								  u.enable_github_auth AS is_github_auth_enabled,
-								  u.enable_google_auth AS is_google_auth_enabled,
-								  u.enable_microsoft_auth AS is_microsoft_auth_enabled,
-								  u.enable_twitter_auth AS is_twitter_auth_enabled
-							FROM maw.user u
-						WHERE u.{whereField} = @whereValue;",
-						new { whereValue = whereValue }
-					).ConfigureAwait(false);
+        Task<MawUser> InternalGetUserAsync(short? id = null, string username = null, string email = null)
+        {
+            return RunAsync(async conn => {
+                var mawUser = await conn.QuerySingleOrDefaultAsync<MawUser>(
+                        "SELECT * FROM maw.get_users(@id, @username, @email);",
+                        new {
+                            id,
+                            username,
+                            email
+                        }
+                    ).ConfigureAwait(false);
 
-				var mawUser = userResult.FirstOrDefault();
+                if(mawUser != null)
+                {
+                    await AddRolesForUser(conn, mawUser);
+                }
 
-				if(mawUser != null)
-				{
-					await AddRolesForUser(conn, mawUser);
-				}
-
-				return mawUser;
-			});
-		}
+                return mawUser;
+            });
+        }
 
 
-		Task<MawRole> GetRoleAsync<T>(string whereField, T whereValue)
-		{
-			return RunAsync(conn => {
-				return conn.QuerySingleOrDefaultAsync<MawRole>(
-					$@"SELECT *
-					    FROM maw.role
-					   WHERE {whereField} = @whereValue;",
-					new { whereValue = whereValue }
-				);
-			});
-		}
+        Task<MawRole> InternalGetRoleAsync(short? id = null, string name = null)
+        {
+            return RunAsync(conn =>
+                conn.QuerySingleOrDefaultAsync<MawRole>(
+                    "SELECT * FROM maw.get_roles(@id, @name);",
+                    new {
+                        id,
+                        name
+                    }
+                )
+            );
+        }
 
 
-		async Task AddRolesForUser(IDbConnection conn, MawUser user)
-		{
-			var rolesResult = await conn.QueryAsync<MawRole>(
-					@"SELECT *
-						FROM maw.role r
-					INNER JOIN maw.user_role ur ON ur.role_id = r.id
-					WHERE ur.user_id = @userId",
-					new { userId = user.Id }
-				).ConfigureAwait(false);
-
-			foreach(var role in rolesResult)
-			{
-				user.AddRole(role.Name);
-			}
-		}
+        Task<IEnumerable<MawRole>> InternalGetRolesForUserAsync(string username)
+        {
+            return RunAsync(conn =>
+                conn.QueryAsync<MawRole>(
+                    "SELECT * FROM maw.get_roles_for_user(@username);",
+                    new { username = username.ToLower() }
+                )
+            );
+        }
 
 
-		Task<State> GetStateAsync(IDbConnection conn, string code)
-		{
-			return conn.QuerySingleOrDefaultAsync<State>(
-				@"SELECT *
-				    FROM maw.state
-				   WHERE code = @code;",
-				new { code = code.ToUpper() }
-			);
-		}
+        async Task AddRolesForUser(IDbConnection conn, MawUser user)
+        {
+            var rolesResult = await InternalGetRolesForUserAsync(user.Username).ConfigureAwait(false);
+
+            foreach(var role in rolesResult)
+            {
+                user.AddRole(role.Name);
+            }
+        }
 
 
-		Task<Country> GetCountryAsync(IDbConnection conn, string code)
-		{
-			return conn.QuerySingleOrDefaultAsync<Country>(
-				@"SELECT *
-				    FROM maw.country
-				   WHERE code = @code;",
-				new { code = code.ToUpper() }
-			);
-		}
+        async Task<bool> AddLoginHistoryAsync(IDbConnection conn, string username, string email, short loginActivityTypeId, short loginAreaId)
+        {
+            var result = await conn.QuerySingleAsync<long>(
+                "SELECT * FROM maw.add_login_history(@loginActivityTypeId, @loginAreaId, @attemptTime, @username, @email);",
+                new {
+                    loginActivityTypeId,
+                    loginAreaId,
+                    attemptTime = DateTime.Now,
+                    username,
+                    email
+                }
+            ).ConfigureAwait(false);
 
-
-		async Task<bool> AddLoginHistoryAsync(IDbConnection conn, short? userId, string usernameOrEmail, short loginActivityTypeId, short loginAreaId)
-		{
-			var result = await conn.ExecuteAsync(
-				@"INSERT INTO maw.login_history
-				       (
-						 user_id,
-						 username,
-						 login_activity_type_id,
-						 login_area_id,
-						 attempt_time
-					   )
-				  VALUES
-				       (
-						 @userId,
-						 @username,
-						 @loginActivityTypeId,
-						 @loginAreaId,
-						 @attemptTime
-					   );",
-				new {
-					userId = userId,
-					username = usernameOrEmail,
-					loginActivityTypeId = loginActivityTypeId,
-					loginAreaId = loginAreaId,
-					attemptTime = DateTime.Now
-				}
-			).ConfigureAwait(false);
-
-			return result == 1;
-		}
+            return result == 1;
+        }
     }
 }

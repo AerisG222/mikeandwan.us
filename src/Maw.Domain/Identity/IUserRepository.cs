@@ -19,8 +19,8 @@ namespace Maw.Domain.Identity
         Task<IEnumerable<UserAndLastLogin>> GetUsersToManageAsync();
         Task<IEnumerable<string>> GetAllUsernamesAsync();
         Task<IEnumerable<string>> GetAllRoleNamesAsync();
-        Task<int> AddUserAsync(MawUser user);
-        Task<int> RemoveUserAsync(string username);
+        Task<short> AddUserAsync(MawUser user);
+        Task<long> RemoveUserAsync(string username);
         Task<IEnumerable<MawUser>> GetUsersInRoleAsync(string roleName);
         Task<bool> CreateRoleAsync(string roleName, string description);
         Task<bool> RemoveRoleAsync(string roleName);
@@ -31,4 +31,3 @@ namespace Maw.Domain.Identity
 		Task<MawRole> GetRoleAsync(short id);
     }
 }
-    

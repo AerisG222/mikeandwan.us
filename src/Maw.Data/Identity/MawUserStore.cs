@@ -93,8 +93,8 @@ namespace Maw.Data.Identity
 			}
 
 			var result = await _repo.AddUserAsync(user).ConfigureAwait(false);
-            
-			if(result == 1)
+
+			if(result > 0)
 			{
 				return IdentityResult.Success;
 			}
@@ -188,9 +188,9 @@ namespace Maw.Data.Identity
 			{
 				throw new ArgumentNullException(nameof(user));
 			}
-			
+
 			user.HashedPassword = passwordHash;
-			
+
 			return Task.FromResult(0);
 		}
 
@@ -333,7 +333,7 @@ namespace Maw.Data.Identity
 			}
 
 			user.SecurityStamp = stamp;
-			
+
 			return Task.FromResult(0);
 		}
 

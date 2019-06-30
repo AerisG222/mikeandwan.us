@@ -162,12 +162,12 @@ namespace MawAuth.Models
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {
-                        $"{_filesUrl}/auth",
-                        $"{_filesUrl}/auth/silent"
+                        $"{_filesUrl}/callback.html",
+                        $"{_filesUrl}/renew-callback.html"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        $"{_filesUrl}/"
+                        $"{_filesUrl}/signout-callback.html"
                     },
                     AllowedCorsOrigins = new List<string>
                     {

@@ -127,12 +127,12 @@ namespace MawAuth.Models
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {
-                        $"{_photosUrl}/auth",
-                        $"{_photosUrl}/auth/silent"
+                        $"{_photosUrl}/callback.html",
+                        $"{_photosUrl}/renew-callback.html"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        $"{_photosUrl}/"
+                        $"{_photosUrl}/signout-callback.html"
                     },
                     AllowedCorsOrigins = new List<string>
                     {

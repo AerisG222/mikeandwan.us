@@ -81,7 +81,7 @@ namespace Maw.Data
         {
             return RunAsync(async conn => {
                 var rows = await conn.QueryAsync(
-                    "SELECT * FROM photo.get_random(@allowPrivate, @count)",
+                    "SELECT * FROM photo.get_random_photos(@allowPrivate, @count)",
                     new {
                         allowPrivate,
                         count

@@ -217,8 +217,8 @@ namespace Maw.Data
             video.Longitude = row.longitude;
             video.Duration = GetValueOrDefault<short>(row.duration);
 
-            video.Thumbnail = BuildMultimediaInfo(row.thumb_image_path, row.thumb_image_width, row.thumb_image_height, row.thumb_image_size);
-            video.ThumbnailSq = BuildMultimediaInfo(row.thumb_sq_image_path, row.thumb_sq_image_width, row.thumb_sq_image_height, row.thumb_sq_image_size);
+            video.Thumbnail = BuildMultimediaInfo(row.thumb_path, row.thumb_width, row.thumb_height, row.thumb_size);
+            video.ThumbnailSq = BuildMultimediaInfo(row.thumb_sq_path, row.thumb_sq_width, row.thumb_sq_height, row.thumb_sq_size);
             video.VideoScaled = BuildMultimediaInfo(row.scaled_path, row.scaled_width, row.scaled_height, row.scaled_size);
             video.VideoFull = BuildMultimediaInfo(row.full_path, row.full_width, row.full_height, row.full_size);
             video.VideoRaw = BuildMultimediaInfo(row.raw_path, row.raw_width, row.raw_height, row.raw_size);

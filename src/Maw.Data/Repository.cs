@@ -66,7 +66,7 @@ namespace Maw.Data
             mi.Path = GetValueOrDefault<string>(path);
             mi.Width = GetValueOrDefault<short>(width);
             mi.Height = GetValueOrDefault<short>(height);
-            mi.Size = GetValueOrDefault<int>(size);
+            mi.Size = size == null ? 0 : Convert.ToInt64(size);
 
             return mi;
         }

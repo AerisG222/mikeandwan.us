@@ -79,7 +79,8 @@ AS $$
       FROM photo.photo
      WHERE (_allow_private OR is_private = FALSE)
        AND (_category_id IS NULL OR category_id = _category_id)
-       AND (_id IS NULL OR id = _id);
+       AND (_id IS NULL OR id = _id)
+     ORDER BY lg_path;
 
 $$;
 

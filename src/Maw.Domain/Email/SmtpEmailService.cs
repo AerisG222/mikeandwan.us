@@ -31,26 +31,26 @@ namespace Maw.Domain.Email
 		}
 
 
-        public virtual Task SendHtmlAsync(string to, string from, string subject, string body)
+        public virtual Task SendHtmlAsync(string recipient, string from, string subject, string body)
         {
-            return SendAsync(to, from, subject, body, true);
+            return SendAsync(recipient, from, subject, body, true);
         }
-        
-        
-        public virtual Task SendAsync(string to, string from, string subject, string body)
+
+
+        public virtual Task SendAsync(string recipient, string from, string subject, string body)
         {
-            return SendAsync(to, from, subject, body, false);
+            return SendAsync(recipient, from, subject, body, false);
         }
-        
-        
-		protected virtual async Task SendAsync(string to, string from, string subject, string body, bool html)
+
+
+		protected virtual async Task SendAsync(string recipient, string from, string subject, string body, bool html)
 		{
-			_log.LogInformation(string.Format("sending email to: {0}, from: {1}, subject: {2}", to, from, subject));
+			_log.LogInformation(string.Format("sending email to: {0}, from: {1}, subject: {2}", recipient, from, subject));
 
 			using(var smtp = new SmtpClient())
 			{
                 var builder = new BodyBuilder();
-                
+
                 if(html)
                 {
                     builder.HtmlBody = body;
@@ -59,13 +59,13 @@ namespace Maw.Domain.Email
                 {
                     builder.TextBody = body;
                 }
-                
+
                 var msg = new MimeMessage();
                 msg.From.Add(new MailboxAddress((string)null, from));
-				msg.To.Add(new MailboxAddress((string)null, to));
+				msg.To.Add(new MailboxAddress((string)null, recipient));
 				msg.Subject = subject;
 				msg.Body = builder.ToMessageBody();
-                
+
                 // http://stackoverflow.com/questions/33496290/how-to-send-email-by-using-mailkit
                 await smtp.ConnectAsync(_config.Server, _config.Port, SecureSocketOptions.StartTls).ConfigureAwait(false);
                 await smtp.AuthenticateAsync(_config.User, _config.Password).ConfigureAwait(false);

@@ -31,6 +31,7 @@ namespace Maw.Domain.Utilities
                 return null;
             }
 
+#pragma warning disable CA1031
             try
             {
                 var cmd = Command.Run("file", new string[] {
@@ -49,6 +50,7 @@ namespace Maw.Domain.Utilities
             {
                 _log.LogWarning(ex, $"Error trying to determine mime type for file [{filePath}].  This likely only works on Linux, so the error may be ignored.");
             }
+#pragma warning restore CA1031
 
             return null;
         }

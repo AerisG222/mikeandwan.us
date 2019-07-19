@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,9 +37,9 @@ namespace Maw.Data.Identity
 				throw new ArgumentNullException(nameof(user));
 			}
 
-			_log.LogInformation(string.Format("getting userid: {0}", user.Id));
+			_log.LogInformation($"getting userid: {user.Id}");
 
-			return Task.FromResult(user.Id.ToString());
+			return Task.FromResult(user.Id.ToString(CultureInfo.InvariantCulture));
         }
 
 
@@ -68,6 +69,11 @@ namespace Maw.Data.Identity
         {
 			cancellationToken.ThrowIfCancellationRequested();
 
+            if(user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
 			return Task.FromResult(user.Username);
         }
 
@@ -83,14 +89,14 @@ namespace Maw.Data.Identity
 
 		public virtual async Task<IdentityResult> CreateAsync(MawUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
-			_log.LogInformation("creating new user: " + user.Username + " with hash: " + user.HashedPassword);
-
-			cancellationToken.ThrowIfCancellationRequested();
-
 			if(user == null)
 			{
 				throw new ArgumentNullException(nameof(user));
 			}
+
+			_log.LogInformation($"creating new user: {user.Username} with hash: {user.HashedPassword}");
+
+			cancellationToken.ThrowIfCancellationRequested();
 
 			var result = await _repo.AddUserAsync(user).ConfigureAwait(false);
 
@@ -131,6 +137,11 @@ namespace Maw.Data.Identity
         {
 			cancellationToken.ThrowIfCancellationRequested();
 
+            if(user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
 			if(1 == await _repo.RemoveUserAsync(user.Username).ConfigureAwait(false))
 			{
 				return IdentityResult.Success;
@@ -146,7 +157,7 @@ namespace Maw.Data.Identity
         {
 			cancellationToken.ThrowIfCancellationRequested();
 
-			_log.LogInformation("attempting to find by ID: " + userId);
+			_log.LogInformation($"attempting to find by ID: {userId}");
 
             short id;
 
@@ -156,13 +167,17 @@ namespace Maw.Data.Identity
 
                 if(user == null)
                 {
+#pragma warning disable CA1303
                     throw new Exception("User was not found");
+#pragma warning restore CA1303
                 }
 
                 return user;
             }
 
+#pragma warning disable CA1303
 			throw new ArgumentException("userId should be a number", nameof(userId));
+#pragma warning restore CA1303
         }
 
 
@@ -170,7 +185,7 @@ namespace Maw.Data.Identity
         {
 			cancellationToken.ThrowIfCancellationRequested();
 
-			_log.LogInformation("attempting to find by NAME: " + normalizedUserName);
+			_log.LogInformation($"attempting to find by NAME: {normalizedUserName}");
 
             var user = await _repo.GetUserAsync(normalizedUserName).ConfigureAwait(false);
 
@@ -236,7 +251,9 @@ namespace Maw.Data.Identity
 
 			if (String.IsNullOrWhiteSpace(roleName))
 			{
+#pragma warning disable CA1303
 				throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
+#pragma warning restore CA1303
 			}
 
 			await _repo.AddUserToRoleAsync(user.Username, roleName).ConfigureAwait(false);
@@ -254,10 +271,12 @@ namespace Maw.Data.Identity
 
 			if (String.IsNullOrWhiteSpace(roleName))
 			{
+#pragma warning disable CA1303
 				throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
+#pragma warning restore CA1303
 			}
 
-			_log.LogInformation("removing " + user.Username + " from role " + roleName);
+			_log.LogInformation($"removing {user.Username} from role {roleName}");
 
 			await _repo.RemoveUserFromRoleAsync(user.Username, roleName).ConfigureAwait(false);
 		}
@@ -272,13 +291,13 @@ namespace Maw.Data.Identity
 				throw new ArgumentNullException(nameof(user));
 			}
 
-			_log.LogInformation("getting roles for: " + user.Username);
+			_log.LogInformation($"getting roles for: {user.Username}");
 
 			IList<string> list = user.GetRoles().ToList();
 
 			foreach(var r in list)
 			{
-				_log.LogInformation("    in role: " + r);
+				_log.LogInformation($"    in role: {r}");
 			}
 
 			return Task.FromResult(list);
@@ -296,7 +315,9 @@ namespace Maw.Data.Identity
 
 			if (String.IsNullOrWhiteSpace(roleName))
 			{
+#pragma warning disable CA1303
 				throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
+#pragma warning restore CA1303
 			}
 
 			_log.LogInformation("is user in role: " + user.Username + " : " + roleName);
@@ -314,10 +335,12 @@ namespace Maw.Data.Identity
 
 			if (String.IsNullOrWhiteSpace(roleName))
 			{
+#pragma warning disable CA1303
 				throw new ArgumentException("roleName can not be null or empty", nameof(roleName));
+#pragma warning restore CA1303
 			}
 
-			_log.LogInformation("getting users in role: " + roleName);
+			_log.LogInformation($"getting users in role: {roleName}");
 
 			return (await _repo.GetUsersInRoleAsync(roleName).ConfigureAwait(false)).ToList();
 		}
@@ -327,9 +350,16 @@ namespace Maw.Data.Identity
 		#region ISecurityStampStore
 		public virtual Task SetSecurityStampAsync(MawUser user, string stamp, CancellationToken cancellationToken = default(CancellationToken))
 		{
+            if(user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
 			if(string.IsNullOrEmpty(stamp))
 			{
+#pragma warning disable CA1303
 				throw new ArgumentException("stamp can not be null or empty", nameof(stamp));
+#pragma warning restore CA1303
 			}
 
 			user.SecurityStamp = stamp;
@@ -340,6 +370,11 @@ namespace Maw.Data.Identity
 
 		public virtual Task<string> GetSecurityStampAsync(MawUser user, CancellationToken cancellationToken = default(CancellationToken))
 		{
+            if(user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
 			return Task.FromResult(user.SecurityStamp);
 		}
 		#endregion
@@ -384,7 +419,7 @@ namespace Maw.Data.Identity
 
 		public async Task<MawUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
 		{
-			_log.LogInformation("find email: " + normalizedEmail);
+			_log.LogInformation($"find email: {normalizedEmail}");
 
 			return await _repo.GetUserByEmailAsync(normalizedEmail).ConfigureAwait(false);
 		}
@@ -392,6 +427,11 @@ namespace Maw.Data.Identity
 
 		public Task<string> GetNormalizedEmailAsync(MawUser user, CancellationToken cancellationToken)
 		{
+            if(user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
 			return Task.FromResult(user.Email);
 		}
 

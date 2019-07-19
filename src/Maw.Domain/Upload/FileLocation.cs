@@ -26,14 +26,18 @@ namespace Maw.Domain.Upload
 
             if(Path.IsPathRooted(relativePath))
             {
+#pragma warning disable CA1303
                 throw new ArgumentException("Invalid file path");
+#pragma warning restore CA1303
             }
 
             var parts = relativePath.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
 
             if(parts.Length != 2)
             {
+#pragma warning disable CA1303
                 throw new ArgumentException("Invalid file path");
+#pragma warning restore CA1303
             }
 
             return new FileLocation {

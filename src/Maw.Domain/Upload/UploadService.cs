@@ -45,6 +45,7 @@ namespace Maw.Domain.Upload
                 RelativePathSpecified = relativePath
             };
 
+#pragma warning disable CA1031
             try
             {
                 location = GetValidatedLocation(user, relativePath, true);
@@ -55,6 +56,7 @@ namespace Maw.Domain.Upload
 
                 return result;
             }
+#pragma warning restore CA1031
 
             var absolutePath = Path.Combine(_cfg.RootDirectory, location.RelativePath);
 
@@ -68,6 +70,7 @@ namespace Maw.Domain.Upload
 
             result.UploadedFile = GetFileDetails(location);
 
+#pragma warning disable CA1031
             try
             {
                 File.Delete(absolutePath);
@@ -82,6 +85,7 @@ namespace Maw.Domain.Upload
 
                 _log.LogError(ex, $"Unable to delete file for path [{absolutePath}]");
             }
+#pragma warning restore CA1031
 
             return result;
         }
@@ -153,7 +157,7 @@ namespace Maw.Domain.Upload
                 {
                     location = FileLocation.FromRelativePath(relativePath);
                 }
-                catch(Exception ex)
+                catch(IOException ex)
                 {
                     _log.LogError(ex, $"Unable to parse relative path [{relativePath}].  This will not be added to the zip archive.");
 
@@ -255,7 +259,7 @@ namespace Maw.Domain.Upload
             {
                 EnsureUserDirectoryExists(userDir);
             }
-            catch(Exception ex)
+            catch(IOException ex)
             {
                 _log.LogError(ex, $"Could not create user directory {userDir}");
 
@@ -269,12 +273,12 @@ namespace Maw.Domain.Upload
             {
                 try
                 {
-                    await stream.CopyToAsync(outputStream);
+                    await stream.CopyToAsync(outputStream).ConfigureAwait(false);
 
                     result.UploadedFile = GetFileDetails(location);
                     result.WasSuccessful = true;
                 }
-                catch(Exception ex)
+                catch(IOException ex)
                 {
                     _log.LogError(ex, $"Unable to save file upload for {location.Username} with filename {location.Filename}, and absolute path {destPath}.");
 
@@ -357,7 +361,7 @@ namespace Maw.Domain.Upload
         }
 
 
-        IEnumerable<UploadedFile> GetFilesInDirectory(string path)
+        static IEnumerable<UploadedFile> GetFilesInDirectory(string path)
         {
             var dir = new DirectoryInfo(path);
 
@@ -397,7 +401,7 @@ namespace Maw.Domain.Upload
         }
 
 
-        bool UserCanAccessFile(ClaimsPrincipal user, FileLocation location) {
+        static bool UserCanAccessFile(ClaimsPrincipal user, FileLocation location) {
             return Role.IsAdmin(user) ||
                 string.Equals(location.Username, user.Identity.Name, StringComparison.OrdinalIgnoreCase);
         }

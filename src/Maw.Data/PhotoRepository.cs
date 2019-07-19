@@ -120,30 +120,34 @@ namespace Maw.Data
 
 		public Task<Rating> GetRatingsAsync(int photoId, string username)
 		{
+#pragma warning disable CA1308
             return RunAsync(conn =>
                 conn.QuerySingleOrDefaultAsync<Rating>(
                     "SELECT * FROM photo.get_ratings(@photoId, @username);",
                     new {
                         photoId = photoId,
-                        username = username?.ToLower()
+                        username = username?.ToLowerInvariant()
                     }
                 )
             );
+#pragma warning restore CA1308
 		}
 
 
 		public Task<int> InsertCommentAsync(int photoId, string username, string comment)
         {
+#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var result = await conn.QuerySingleOrDefaultAsync<int>(
                     "SELECT * FROM photo.save_comment(@username, @photoId, @message, @entryDate);",
                     new {
-                        username = username.ToLower(),
+                        username = username.ToLowerInvariant(),
                         photoId = photoId,
                         message = comment,
                         entryDate = DateTime.Now
                     }
                 ).ConfigureAwait(false);
+#pragma warning restore CA1308
 
                 if(result <= 0)
 				{
@@ -157,15 +161,17 @@ namespace Maw.Data
 
 		public Task<float?> SaveRatingAsync(int photoId, string username, short rating)
         {
+#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var result = await conn.QueryAsync<long>(
                     "SELECT * FROM photo.save_rating(@photoId, @username, @score);",
                     new {
                         photoId = photoId,
-                        username = username.ToLower(),
+                        username = username.ToLowerInvariant(),
                         score = rating
                     }
                 ).ConfigureAwait(false);
+#pragma warning restore CA1308
 
                 return (await GetRatingsAsync(photoId, username).ConfigureAwait(false))?.AverageRating;
             });
@@ -174,15 +180,17 @@ namespace Maw.Data
 
 		public Task<float?> RemoveRatingAsync(int photoId, string username)
 		{
+#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var result = await conn.QueryAsync<long>(
                     "SELECT * FROM photo.save_rating(@photoId, @username, @score);",
                     new {
                         photoId = photoId,
-                        username = username.ToLower(),
+                        username = username.ToLowerInvariant(),
                         score = 0
                     }
                 ).ConfigureAwait(false);
+#pragma warning disable CA1308
 
                 return (await GetRatingsAsync(photoId, username).ConfigureAwait(false))?.AverageRating;
             });

@@ -28,6 +28,11 @@ namespace Maw.Data
         // http://www.joesauve.com/async-dapper-and-async-sql-connection-management/
         protected async Task<T> RunAsync<T>(Func<IDbConnection, Task<T>> queryData)
         {
+            if(queryData == null)
+            {
+                throw new ArgumentNullException(nameof(queryData));
+            }
+
             using(var conn = GetConnection())
             {
                 await conn.OpenAsync().ConfigureAwait(false);
@@ -39,6 +44,11 @@ namespace Maw.Data
 
         protected async Task RunAsync(Func<IDbConnection, Task> executeStatement)
         {
+            if(executeStatement == null)
+            {
+                throw new ArgumentNullException(nameof(executeStatement));
+            }
+
             using(var conn = GetConnection())
             {
                 await conn.OpenAsync().ConfigureAwait(false);
@@ -48,10 +58,12 @@ namespace Maw.Data
         }
 
 
+#pragma warning disable CA1822
         protected T GetValueOrDefault<T>(object value)
         {
             return value == null ? default(T) : (T)value;
         }
+#pragma warning restore CA1822
 
 
         protected MultimediaInfo BuildMultimediaInfo(dynamic path, dynamic width, dynamic height, dynamic size)
@@ -72,11 +84,13 @@ namespace Maw.Data
         }
 
 
+#pragma warning disable CA2000
         DbConnection GetConnection()
         {
             DbConnection dbConn = new NpgsqlConnection(_connString);
 
             return new ProfiledDbConnection(dbConn, MiniProfiler.Current);
         }
+#pragma warning restore CA2000
     }
 }

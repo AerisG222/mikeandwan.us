@@ -13,11 +13,11 @@ namespace Maw.Domain.Identity
 		readonly SignInManager<MawUser> _signInManager;
 		readonly UserManager<MawUser> _userMgr;
 		readonly ILogger _log;
-		
-		
-		public LoginService(IUserRepository repo, 
-		                    SignInManager<MawUser> signInManager, 
-							UserManager<MawUser> userManager, 
+
+
+		public LoginService(IUserRepository repo,
+		                    SignInManager<MawUser> signInManager,
+							UserManager<MawUser> userManager,
 							ILogger<LoginService> log)
 		{
 			_repo = repo ?? throw new ArgumentNullException(nameof(repo));
@@ -25,10 +25,11 @@ namespace Maw.Domain.Identity
 			_userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
 			_log = log ?? throw new ArgumentNullException(nameof(log));
 		}
-		
-		
+
+
 		public async Task<SignInResult> AuthenticateAsync(string username, string password, short loginArea)
 		{
+#pragma warning disable CA1031
 			try
 			{
 	            var result = await _signInManager.PasswordSignInAsync(username, password, isPersistent: false, lockoutOnFailure: false).ConfigureAwait(false);
@@ -40,39 +41,47 @@ namespace Maw.Domain.Identity
 	            {
 					_log.LogInformation(string.Concat(username, " logged in successfully against new authentication system"));
 	            }
-				
+
 				return result;
 			}
 			catch(Exception ex)
 			{
 				_log.LogWarning(ex, string.Concat("Unable to authenticate user [", username, "]."));
 			}
-			
+#pragma warning restore CA1031
+
 			return SignInResult.Failed;
 		}
 
 
 		public async Task LogExternalLoginAttemptAsync(string email, string provider, bool wasSuccessful)
 		{
+            if(provider == null)
+            {
+                throw new ArgumentNullException(nameof(provider));
+            }
+
 			var activityType = wasSuccessful ? (short) 1: (short) 2;
 			var area = (short)0;
 
-			switch(provider.ToLower())
+			switch(provider.ToUpperInvariant())
 			{
-				case "github":
+				case "GITHUB":
 					area = 3;
 					break;
-				case "google":
+				case "GOOGLE":
 					area = 4;
 					break;
-				case "microsoft":
+				case "MICROSOFT":
 					area = 5;
 					break;
-				case "twitter":
+				case "TWITTER":
 					area = 6;
 					break;
 				default:
+#pragma warning disable CA1303
 					throw new Exception("Invalid login area specified!");
+#pragma warning restore CA1303
 			}
 
 			await _repo.AddExternalLoginHistoryAsync(email, activityType, area).ConfigureAwait(false);

@@ -17,8 +17,7 @@ namespace Maw.Domain.Photos
         readonly IFileProvider _fileProvider;
 
 
-        public PhotoZipper(ILogger<PhotoZipper> log,
-                           IFileProvider fileProvider)
+        public PhotoZipper(ILogger<PhotoZipper> log, IFileProvider fileProvider)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
@@ -27,6 +26,11 @@ namespace Maw.Domain.Photos
 
         public Stream Zip(IEnumerable<Photo> photos)
         {
+            if(photos == null)
+            {
+                throw new ArgumentNullException(nameof(photos));
+            }
+
             var ms = new MemoryStream(TWENTY_MB);
 
             using(var za = new ZipArchive(ms, ZipArchiveMode.Create, true))
@@ -35,7 +39,7 @@ namespace Maw.Domain.Photos
                 {
 					var path = _fileProvider.GetFileInfo(photo.LgInfo.Path).PhysicalPath;
 
-					_log.LogInformation(string.Format("Adding file {0} to archive", path));
+					_log.LogInformation($"Adding file {path} to archive");
 
 					za.CreateEntryFromFile(path, Path.GetFileName(path));
                 }

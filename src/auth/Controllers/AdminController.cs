@@ -501,8 +501,7 @@ namespace MawAuth.Controllers
 			// limit to 100 tries
 			for(int i = 0; i < 100; i++)
 			{
-				var crypto = new Crypto();
-				var password = crypto.GeneratePassword(12);
+				var password = CryptoUtils.GeneratePassword(12);
 				var isValid = await _pwdValidator.ValidateAsync(_userMgr, null, password);
 
 				if(isValid == IdentityResult.Success)

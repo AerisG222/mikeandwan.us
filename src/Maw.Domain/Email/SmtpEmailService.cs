@@ -45,7 +45,7 @@ namespace Maw.Domain.Email
 
 		protected virtual async Task SendAsync(string recipient, string from, string subject, string body, bool html)
 		{
-			_log.LogInformation(string.Format("sending email to: {0}, from: {1}, subject: {2}", recipient, from, subject));
+			_log.LogInformation($"sending email to: {recipient}, from: {from}, subject: {subject}");
 
 			using(var smtp = new SmtpClient())
 			{

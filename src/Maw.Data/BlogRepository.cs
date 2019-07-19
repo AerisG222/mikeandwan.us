@@ -61,7 +61,7 @@ namespace Maw.Data
                         title = post.Title,
                         description = post.Description,
                         publishDate = post.PublishDate
-                    });
+                    }).ConfigureAwait(false);
 
 				if(result <= 0)
 				{

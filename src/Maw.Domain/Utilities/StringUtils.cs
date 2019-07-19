@@ -16,12 +16,12 @@ namespace Maw.Domain.Utilities
             var size = byteArray.Length;
 
 	        StringBuilder builder = new StringBuilder(byteArray.Length);
-	
+
 	        foreach(byte b in byteArray)
 	        {
-	            builder.AppendFormat("{0:X}", b);
+	            builder.Append($"{b:X}");
 	        }
-	
+
 	        return builder.ToString();
         }
     }

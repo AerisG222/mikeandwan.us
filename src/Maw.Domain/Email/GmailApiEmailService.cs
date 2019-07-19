@@ -51,13 +51,16 @@ namespace Maw.Domain.Email
 
         async Task SendMessageAsync(string recipient, string from, string subject, string body, bool isHtml)
         {
-            _log.LogInformation(string.Format("sending email to: {0}, from: {1}, subject: {2}", recipient, from, subject));
+            _log.LogInformation($"sending email to: {recipient}, from: {from}, subject: {subject}");
 
             var msg = BuildMessage(recipient, from, subject, body, isHtml);
-            var svc = await GetService().ConfigureAwait(false);
-            var req = svc.Users.Messages.Send(msg, "me");
 
-            var result = await req.ExecuteAsync().ConfigureAwait(false);
+            using(var svc = await GetService().ConfigureAwait(false))
+            {
+                var req = svc.Users.Messages.Send(msg, "me");
+
+                var result = await req.ExecuteAsync().ConfigureAwait(false);
+            }
         }
 
 

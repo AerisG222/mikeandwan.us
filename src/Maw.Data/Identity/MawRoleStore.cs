@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.AspNetCore.Identity;
@@ -33,7 +34,7 @@ namespace Maw.Data.Identity
 			}
 
 			var result = await _repo.CreateRoleAsync(role.Name, role.Description).ConfigureAwait(false);
-            
+
 			return result ? IdentityResult.Success : IdentityResult.Failed();
         }
 
@@ -64,7 +65,7 @@ namespace Maw.Data.Identity
 				throw new ArgumentNullException(nameof(role));
 			}
 
-			return Task.FromResult(role.Id.ToString());
+			return Task.FromResult(role.Id.ToString(CultureInfo.InvariantCulture));
         }
 
 
@@ -110,7 +111,9 @@ namespace Maw.Data.Identity
 
 			if(string.IsNullOrEmpty(roleName))
 			{
+#pragma warning disable CA1303
 				throw new ArgumentException("roleName must not be null and have a value.", nameof(roleName));
+#pragma warning restore CA1303
 			}
 
 			role.Name = roleName;
@@ -123,7 +126,9 @@ namespace Maw.Data.Identity
         {
 			if(string.IsNullOrEmpty(roleId))
 			{
+#pragma warning disable CA1303
 				throw new ArgumentException("Invalid roleId", nameof(roleId));
+#pragma warning restore CA1303
 			}
 
 			short id;
@@ -133,7 +138,9 @@ namespace Maw.Data.Identity
 				return _repo.GetRoleAsync(id);
 			}
 
+#pragma warning disable CA1303
 			throw new ArgumentException("roleId should be able to be parsed into a short.", nameof(roleId));
+#pragma warning restore CA1303
         }
 
 
@@ -141,7 +148,9 @@ namespace Maw.Data.Identity
         {
 			if(string.IsNullOrEmpty(roleName))
 			{
+#pragma warning disable CA1303
 				throw new ArgumentException("Invalid roleName", nameof(roleName));
+#pragma warning restore CA1303
 			}
 
 			return _repo.GetRoleAsync(roleName);

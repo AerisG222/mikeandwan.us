@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using IdentityModel;
@@ -15,11 +17,11 @@ namespace Maw.Domain.Identity
 			{
 				var id = GetSingleClaim(MawClaimTypes.UserId);
 
-				return id == null ?(short) 0 : short.Parse(id);
+				return id == null ?(short) 0 : short.Parse(id, CultureInfo.InvariantCulture);
 			}
 			set
 			{
-				SetSingleClaim(MawClaimTypes.UserId, value.ToString());
+				SetSingleClaim(MawClaimTypes.UserId, value.ToString(CultureInfo.InvariantCulture));
 			}
 		}
 
@@ -65,28 +67,28 @@ namespace Maw.Domain.Identity
         public bool IsGithubAuthEnabled
         {
             get { return bool.Parse(GetSingleClaim(MawClaimTypes.EnableGithubAuth)); }
-            set { SetSingleClaim(MawClaimTypes.EnableGithubAuth, value.ToString()); }
+            set { SetSingleClaim(MawClaimTypes.EnableGithubAuth, value.ToString(CultureInfo.InvariantCulture)); }
         }
 
 
         public bool IsGoogleAuthEnabled
         {
             get { return bool.Parse(GetSingleClaim(MawClaimTypes.EnableGoogleAuth)); }
-            set { SetSingleClaim(MawClaimTypes.EnableGoogleAuth, value.ToString()); }
+            set { SetSingleClaim(MawClaimTypes.EnableGoogleAuth, value.ToString(CultureInfo.InvariantCulture)); }
         }
 
 
         public bool IsMicrosoftAuthEnabled
         {
             get { return bool.Parse(GetSingleClaim(MawClaimTypes.EnableMicrosoftAuth)); }
-            set { SetSingleClaim(MawClaimTypes.EnableMicrosoftAuth, value.ToString()); }
+            set { SetSingleClaim(MawClaimTypes.EnableMicrosoftAuth, value.ToString(CultureInfo.InvariantCulture)); }
         }
 
 
         public bool IsTwitterAuthEnabled
         {
             get { return bool.Parse(GetSingleClaim(MawClaimTypes.EnableTwitterAuth)); }
-            set { SetSingleClaim(MawClaimTypes.EnableTwitterAuth, value.ToString()); }
+            set { SetSingleClaim(MawClaimTypes.EnableTwitterAuth, value.ToString(CultureInfo.InvariantCulture)); }
         }
 
 
@@ -110,6 +112,11 @@ namespace Maw.Domain.Identity
 
 		public static MawUser Convert(ClaimsIdentity identity)
 		{
+            if(identity == null)
+            {
+                throw new ArgumentNullException(nameof(identity));
+            }
+
 			var mawUser = new MawUser();
 
 			mawUser.AddClaims(identity.Claims);
@@ -125,17 +132,15 @@ namespace Maw.Domain.Identity
                 return false;
             }
 
-            provider = provider.ToLower();
-
-            switch(provider)
+            switch(provider.ToUpperInvariant())
             {
-                case "github":
+                case "GITHUB":
                     return IsGithubAuthEnabled;
-                case "google":
+                case "GOOGLE":
                     return IsGoogleAuthEnabled;
-                case "microsoft":
+                case "MICROSOFT":
                     return IsMicrosoftAuthEnabled;
-                case "twitter":
+                case "TWITTER":
                     return IsTwitterAuthEnabled;
                 default:
                     return false;

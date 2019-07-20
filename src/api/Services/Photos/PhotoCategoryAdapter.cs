@@ -24,6 +24,11 @@ namespace MawApi.Services.Photos
 
         public PhotoCategoryViewModel Adapt(Category c)
         {
+            if(c == null)
+            {
+                throw new ArgumentNullException(nameof(c));
+            }
+
             return new PhotoCategoryViewModel {
                 Id = c.Id,
                 Name = c.Name,

@@ -59,11 +59,16 @@ namespace MawMvcApp.Controllers
         [RequestSizeLimit(2_147_483_648)]  // 2GB
         public async Task<IActionResult> UploadAsync(IFormFile file)
         {
-            var result = await _uploadSvc.SaveFileAsync(User, file.FileName, file.OpenReadStream());
+            if(file == null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            var result = await _uploadSvc.SaveFileAsync(User, file.FileName, file.OpenReadStream()).ConfigureAwait(false);
 
             if(result.WasSuccessful)
             {
-                await UploadHub.FileAddedAsync(_uploadHub, User, result.UploadedFile);
+                await UploadHub.FileAddedAsync(_uploadHub, User, result.UploadedFile).ConfigureAwait(false);
             }
 
             return Ok(result);
@@ -81,7 +86,7 @@ namespace MawMvcApp.Controllers
             {
                 if(result.WasSuccessful)
                 {
-                    await UploadHub.FileDeletedAsync(_uploadHub, User, result.UploadedFile);
+                    await UploadHub.FileDeletedAsync(_uploadHub, User, result.UploadedFile).ConfigureAwait(false);
                 }
             }
 
@@ -95,6 +100,11 @@ namespace MawMvcApp.Controllers
         [ProducesResponseType(401)]
         public IActionResult Download([FromBody] string[] downloadFiles)
         {
+            if(downloadFiles == null)
+            {
+                throw new ArgumentNullException(nameof(downloadFiles));
+            }
+
             if(downloadFiles.Length == 0)
             {
                 return BadRequest();

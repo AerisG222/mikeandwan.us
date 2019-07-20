@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -70,7 +71,7 @@ namespace MawApi
                         opts.Events = new JwtBearerEvents {
                             OnMessageReceived = context =>
                             {
-                                if (context.Request.Path.Value.StartsWith("/uploadr") &&
+                                if (context.Request.Path.Value.StartsWith("/uploadr", true, CultureInfo.InvariantCulture) &&
                                     context.Request.Query.TryGetValue("token", out StringValues token)
                                 )
                                 {

@@ -24,6 +24,11 @@ namespace MawApi.Services.Videos
 
         public VideoCategoryViewModel Adapt(Category c)
         {
+            if(c == null)
+            {
+                throw new ArgumentNullException(nameof(c));
+            }
+
             return new VideoCategoryViewModel {
                 Id = c.Id,
                 Name = c.Name,

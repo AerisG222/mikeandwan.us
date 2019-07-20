@@ -39,7 +39,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(401)]
         public async Task<ActionResult<PhotoViewModel>> GetRandomPhotoAsync()
         {
-            var photo = await _svc.GetRandomAsync(Role.IsAdmin(User));
+            var photo = await _svc.GetRandomAsync(Role.IsAdmin(User)).ConfigureAwait(false);
 
             return _photoAdapter.Adapt(photo);
         }
@@ -55,7 +55,7 @@ namespace MawApi.Controllers
                 return BadRequest();
             }
 
-            var photos = await _svc.GetRandomAsync(count, Role.IsAdmin(User));
+            var photos = await _svc.GetRandomAsync(count, Role.IsAdmin(User)).ConfigureAwait(false);
 
             return new ApiCollection<PhotoViewModel>(_photoAdapter.Adapt(photos).ToList());
         }
@@ -67,7 +67,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<MawApi.ViewModels.Photos.PhotoViewModel>> GetByIdAsync(int id)
         {
-            var photo = await _svc.GetPhotoAsync(id, Role.IsAdmin(User));
+            var photo = await _svc.GetPhotoAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
 
             if(photo == null)
             {
@@ -95,11 +95,16 @@ namespace MawApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ApiCollection<Comment>> AddCommentAsync(int id, CommentViewModel model)
         {
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             // TODO: handle invalid photo id?
             // TODO: remove photoId from commentViewModel?
-            await _svc.InsertCommentAsync(id, User.Identity.Name, model.Comment);
+            await _svc.InsertCommentAsync(id, User.Identity.Name, model.Comment).ConfigureAwait(false);
 
-            return await InternalGetCommentsAsync(id);
+            return await InternalGetCommentsAsync(id).ConfigureAwait(false);
         }
 
 
@@ -109,7 +114,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<Detail>> GetExifAsync(int id)
         {
-            var data = await _svc.GetDetailAsync(id, Role.IsAdmin(User));
+            var data = await _svc.GetDetailAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
 
             if(data == null)
             {
@@ -126,7 +131,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<Rating>> GetRatingAsync(int id)
         {
-            var rating = await InternalGetRatingAsync(id);
+            var rating = await InternalGetRatingAsync(id).ConfigureAwait(false);
 
             if(rating == null)
             {
@@ -144,22 +149,27 @@ namespace MawApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<Rating>> RatePhotoAsync(int id, UserRating userRating)
         {
+            if(userRating == null)
+            {
+                throw new ArgumentNullException(nameof(userRating));
+            }
+
             // TODO: handle invalid photo id?
             // TODO: remove photoId from userPhotoRating?
             if(userRating.Rating < 1)
             {
-                await _svc.RemoveRatingAsync(id, User.Identity.Name);
+                await _svc.RemoveRatingAsync(id, User.Identity.Name).ConfigureAwait(false);
             }
             else if(userRating.Rating <= 5)
             {
-                await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating);
+                await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating).ConfigureAwait(false);
             }
             else
             {
                 return BadRequest();
             }
 
-            var rating = await InternalGetRatingAsync(id);
+            var rating = await InternalGetRatingAsync(id).ConfigureAwait(false);
 
             if(rating == null)
             {
@@ -172,7 +182,7 @@ namespace MawApi.Controllers
 
         async Task<ApiCollection<Comment>> InternalGetCommentsAsync(int id)
         {
-            var comments = await _svc.GetCommentsAsync(id);
+            var comments = await _svc.GetCommentsAsync(id).ConfigureAwait(false);
 
             return new ApiCollection<Comment>(comments.ToList());
         }

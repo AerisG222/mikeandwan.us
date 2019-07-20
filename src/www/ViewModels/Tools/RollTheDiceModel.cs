@@ -65,7 +65,7 @@ namespace MawMvcApp.ViewModels.Tools
 
 		public void ThrowDice()
 		{
-			ThrowCounts = new List<int>(NumberOfSides);
+			ThrowCounts = new List<int>(new int[NumberOfSides]);
             var rnd = new Random();
 
             for(int i = 0; i < NumberOfThrows; i++)
@@ -77,4 +77,3 @@ namespace MawMvcApp.ViewModels.Tools
 		}
 	}
 }
-

@@ -24,8 +24,8 @@ namespace MawMvcApp.Controllers
 
 			var feature = HttpContext.Features.Get<IExceptionHandlerFeature>();
 
-            _log.LogError("There was an error in the application: ", feature?.Error);
-			_log.LogError("Inner Exception: ", feature?.Error?.InnerException);
+            Log.LogError("There was an error in the application: ", feature?.Error);
+			Log.LogError("Inner Exception: ", feature?.Error?.InnerException);
 
 			return View();
         }

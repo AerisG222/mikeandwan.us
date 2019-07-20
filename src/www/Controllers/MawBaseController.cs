@@ -9,8 +9,8 @@ namespace MawMvcApp.Controllers
     public class MawBaseController<T>
         : Controller
     {
-		protected readonly ILogger<T> _log;
-		
+		protected ILogger<T> Log { get; }
+
 
 		public MawBaseController(ILogger<T> log)
 		{
@@ -18,18 +18,18 @@ namespace MawMvcApp.Controllers
 			{
 				throw new ArgumentNullException(nameof(log));
 			}
-			
-			_log = log; 
+
+			Log = log;
 		}
-		
-		
+
+
 		protected void LogValidationErrors()
 		{
 			var errs = ModelState.Values.SelectMany(v => v.Errors);
-				
+
 			foreach (var err in errs)
 			{
-				_log.LogWarning(err.ErrorMessage);
+				Log.LogWarning(err.ErrorMessage);
 			}
 		}
     }

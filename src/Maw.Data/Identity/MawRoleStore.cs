@@ -111,9 +111,7 @@ namespace Maw.Data.Identity
 
 			if(string.IsNullOrEmpty(roleName))
 			{
-#pragma warning disable CA1303
 				throw new ArgumentException("roleName must not be null and have a value.", nameof(roleName));
-#pragma warning restore CA1303
 			}
 
 			role.Name = roleName;
@@ -126,9 +124,7 @@ namespace Maw.Data.Identity
         {
 			if(string.IsNullOrEmpty(roleId))
 			{
-#pragma warning disable CA1303
 				throw new ArgumentException("Invalid roleId", nameof(roleId));
-#pragma warning restore CA1303
 			}
 
 			short id;
@@ -138,9 +134,7 @@ namespace Maw.Data.Identity
 				return _repo.GetRoleAsync(id);
 			}
 
-#pragma warning disable CA1303
 			throw new ArgumentException("roleId should be able to be parsed into a short.", nameof(roleId));
-#pragma warning restore CA1303
         }
 
 
@@ -148,9 +142,7 @@ namespace Maw.Data.Identity
         {
 			if(string.IsNullOrEmpty(roleName))
 			{
-#pragma warning disable CA1303
 				throw new ArgumentException("Invalid roleName", nameof(roleName));
-#pragma warning restore CA1303
 			}
 
 			return _repo.GetRoleAsync(roleName);

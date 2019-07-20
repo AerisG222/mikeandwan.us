@@ -43,14 +43,10 @@ namespace Maw.Data.Identity
         {
             if(string.IsNullOrEmpty(username))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("Username cannot be null or empty", nameof(username));
-#pragma warning restore CA1303
             }
 
-#pragma warning disable CA1308
             return InternalGetUserAsync(username: username.ToLowerInvariant());
-#pragma warning restore CA1308
         }
 
 
@@ -64,14 +60,10 @@ namespace Maw.Data.Identity
         {
             if(string.IsNullOrEmpty(email))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("email must not be null or empty", nameof(email));
-#pragma warning restore CA1303
             }
 
-#pragma warning disable CA1308
             return InternalGetUserAsync(email: email.ToLowerInvariant());
-#pragma warning restore CA1308
         }
 
 
@@ -79,9 +71,7 @@ namespace Maw.Data.Identity
         {
             if(string.IsNullOrEmpty(username))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("username must not be null or empty", nameof(username));
-#pragma warning restore CA1303
             }
 
             var roles = await InternalGetRolesForUserAsync(username).ConfigureAwait(false);
@@ -97,7 +87,6 @@ namespace Maw.Data.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var result = await conn.QuerySingleAsync<long>(
                     "SELECT * FROM maw.save_password(@username, @hashedPassword);",
@@ -106,7 +95,6 @@ namespace Maw.Data.Identity
                         hashedPassword = user.HashedPassword
                     }
                 ).ConfigureAwait(false);
-#pragma warning restore CA1308
 
                 return result == 1;
             });
@@ -120,7 +108,6 @@ namespace Maw.Data.Identity
                 throw new ArgumentNullException(nameof(updatedUser));
             }
 
-#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var result = await conn.QuerySingleAsync<long>(
                     "SELECT * FROM maw.update_user("
@@ -139,13 +126,10 @@ namespace Maw.Data.Identity
                         enableTwitterAuth = updatedUser.IsTwitterAuthEnabled
                     }
                 ).ConfigureAwait(false);
-#pragma warning restore CA1308
 
                 if(result != 1)
                 {
-#pragma warning disable CA1308
                     throw new InvalidOperationException("Was not able to find user to update with username: " + updatedUser.Username.ToLowerInvariant());
-#pragma warning restore CA1308
                 }
 
                 return true;
@@ -157,16 +141,12 @@ namespace Maw.Data.Identity
         {
             if(string.IsNullOrEmpty(username))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("username must not be null or empty", nameof(username));
-#pragma warning restore CA1303
             }
 
-#pragma warning disable CA1308
             return RunAsync(conn =>
                 AddLoginHistoryAsync(conn, username.ToLowerInvariant(), null, loginActivityTypeId, loginAreaId)
             );
-#pragma warning restore CA1308
         }
 
 
@@ -174,9 +154,7 @@ namespace Maw.Data.Identity
         {
             if(string.IsNullOrEmpty(email))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("email must not be null or empty", nameof(email));
-#pragma warning restore CA1303
             }
 
             return RunAsync(conn =>
@@ -222,7 +200,6 @@ namespace Maw.Data.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-#pragma warning disable CA1308
             return RunAsync(conn =>
                 conn.QuerySingleAsync<short>(
                     "SELECT * FROM maw.add_user(@username, @hashedPassword, @firstName,"
@@ -238,7 +215,6 @@ namespace Maw.Data.Identity
                     }
                 )
             );
-#pragma warning restore CA1308
         }
 
 
@@ -246,19 +222,15 @@ namespace Maw.Data.Identity
         {
             if(string.IsNullOrEmpty(username))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("username must not be null or empty", nameof(username));
-#pragma warning restore CA1303
             }
 
-#pragma warning disable CA1308
             return RunAsync(conn =>
                 conn.QuerySingleAsync<long>(
                     "SELECT * FROM maw.remove_user(@username);",
                     new { username = username.ToLowerInvariant() }
                 )
             );
-#pragma warning restore CA1308
         }
 
 
@@ -266,18 +238,14 @@ namespace Maw.Data.Identity
         {
             if(string.IsNullOrEmpty(roleName))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
-#pragma warning restore CA1303
             }
 
-#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var users = await conn.QueryAsync<MawUser>(
                     "SELECT * FROM maw.get_users_in_role(@roleName);",
                     new { roleName = roleName.ToLowerInvariant() }
                 ).ConfigureAwait(false);
-#pragma warning restore CA1308
 
                 foreach(var user in users)
                 {
@@ -293,12 +261,9 @@ namespace Maw.Data.Identity
         {
             if(string.IsNullOrEmpty(roleName))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
-#pragma warning restore CA1303
             }
 
-#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var result = await conn.QuerySingleAsync<short>(
                     "SELECT * FROM maw.add_role(@name, @description);",
@@ -307,7 +272,6 @@ namespace Maw.Data.Identity
                         description
                     }
                 ).ConfigureAwait(false);
-#pragma warning restore CA1308
 
                 return result > 0;
             });
@@ -318,12 +282,9 @@ namespace Maw.Data.Identity
         {
             if(string.IsNullOrEmpty(roleName))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
-#pragma warning restore CA1303
             }
 
-#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var result = await conn.QuerySingleAsync<long>(
                     "SELECT * FROM maw.remove_role(@name);",
@@ -332,7 +293,6 @@ namespace Maw.Data.Identity
 
                 return result == 1;
             });
-#pragma warning restore CA1308
         }
 
 
@@ -340,19 +300,14 @@ namespace Maw.Data.Identity
         {
             if(string.IsNullOrEmpty(username))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("username must not be null or empty", nameof(username));
-#pragma warning restore CA1303
             }
 
             if(string.IsNullOrEmpty(roleName))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
-#pragma warning restore CA1303
             }
 
-#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var result = await conn.QuerySingleAsync<long>(
                     "SELECT * FROM maw.add_user_to_role(@username, @role);",
@@ -364,7 +319,6 @@ namespace Maw.Data.Identity
 
                 return result == 1;
             });
-#pragma warning restore CA1308
         }
 
 
@@ -372,19 +326,14 @@ namespace Maw.Data.Identity
         {
             if(string.IsNullOrEmpty(username))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("username must not be null or empty", nameof(username));
-#pragma warning restore CA1303
             }
 
             if(string.IsNullOrEmpty(roleName))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
-#pragma warning restore CA1303
             }
 
-#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var result = await conn.QuerySingleAsync<long>(
                     "SELECT * FROM maw.remove_user_from_role(@username, @role);",
@@ -396,7 +345,6 @@ namespace Maw.Data.Identity
 
                 return result == 1;
             });
-#pragma warning restore CA1308
         }
 
 
@@ -404,12 +352,9 @@ namespace Maw.Data.Identity
         {
             if(string.IsNullOrEmpty(username))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("username must not be null or empty", nameof(username));
-#pragma warning restore CA1303
             }
 
-#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var result = await conn.QuerySingleAsync<long>(
                     "SELECT * FROM maw.save_security_stamp(@username, @securityStamp);",
@@ -421,7 +366,6 @@ namespace Maw.Data.Identity
 
                 return result == 1;
             });
-#pragma warning restore CA1308
         }
 
 
@@ -429,14 +373,10 @@ namespace Maw.Data.Identity
         {
             if(string.IsNullOrEmpty(roleName))
             {
-#pragma warning disable CA1303
                 throw new ArgumentException("roleName must not be null or empty", nameof(roleName));
-#pragma warning restore CA1303
             }
 
-#pragma warning disable CA1308
             return InternalGetRoleAsync(name: roleName.ToLowerInvariant());
-#pragma warning restore CA1308
         }
 
 
@@ -484,14 +424,12 @@ namespace Maw.Data.Identity
 
         Task<IEnumerable<MawRole>> InternalGetRolesForUserAsync(string username)
         {
-#pragma warning disable CA1308
             return RunAsync(conn =>
                 conn.QueryAsync<MawRole>(
                     "SELECT * FROM maw.get_roles_for_user(@username);",
                     new { username = username.ToLowerInvariant() }
                 )
             );
-#pragma warning restore CA1308
         }
 
 

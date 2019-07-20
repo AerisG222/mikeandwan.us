@@ -64,7 +64,7 @@ namespace MawAuth.Controllers
 		[HttpGet("manage-users")]
 		public async Task<IActionResult> ManageUsers()
 		{
-			var result = await _repo.GetUsersToManageAsync();
+			var result = await _repo.GetUsersToManageAsync().ConfigureAwait(false);
 
 			var model = result.Select(x => new ManageUserModel
 			{
@@ -82,7 +82,7 @@ namespace MawAuth.Controllers
 		[HttpGet("manage-roles")]
 		public async Task<IActionResult> ManageRoles()
 		{
-			return View(await _repo.GetAllRoleNamesAsync());
+			return View(await _repo.GetAllRoleNamesAsync().ConfigureAwait(false));
 		}
 
 
@@ -97,6 +97,11 @@ namespace MawAuth.Controllers
         [ValidateAntiForgeryToken]
 		public async Task<IActionResult> CreateUser(CreateUserModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			if(ModelState.IsValid)
 			{
 				var user = new MawUser
@@ -107,13 +112,13 @@ namespace MawAuth.Controllers
 					Email = model.Email
 				};
 
-				var password = await GeneratePassword();
+				var password = await GeneratePassword().ConfigureAwait(false);
 
 				model.Result = IdentityResult.Failed();
 
 				try
 				{
-					model.Result = await _userMgr.CreateAsync(user, password);
+					model.Result = await _userMgr.CreateAsync(user, password).ConfigureAwait(false);
 
 					if(model.Result == IdentityResult.Success)
 					{
@@ -165,15 +170,20 @@ namespace MawAuth.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteUser(DeleteUserModel model, IFormCollection collection)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			if(ModelState.IsValid)
 			{
 				if(collection.Any(x => string.Equals(x.Key, "delete", StringComparison.OrdinalIgnoreCase)))
 				{
-					var user = await _userMgr.FindByNameAsync(model.Username);
+					var user = await _userMgr.FindByNameAsync(model.Username).ConfigureAwait(false);
 
 					try
 					{
-						model.Result = await _userMgr.DeleteAsync(user);
+						model.Result = await _userMgr.DeleteAsync(user).ConfigureAwait(false);
 						return RedirectToAction(nameof(ManageUsers));
 					}
 					catch(Exception ex)
@@ -206,6 +216,11 @@ namespace MawAuth.Controllers
         [ValidateAntiForgeryToken]
 		public async Task<IActionResult> CreateRole(CreateRoleModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			if(ModelState.IsValid)
 			{
 				var role = new MawRole
@@ -214,7 +229,7 @@ namespace MawAuth.Controllers
 					Description = model.Description
 				};
 
-				model.Result = await _roleMgr.CreateAsync(role);
+				model.Result = await _roleMgr.CreateAsync(role).ConfigureAwait(false);
 			}
 			else
 			{
@@ -245,12 +260,17 @@ namespace MawAuth.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteRole(DeleteRoleModel model, IFormCollection collection)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			if(ModelState.IsValid)
 			{
 				if(collection.Any(x => string.Equals(x.Key, "delete", StringComparison.OrdinalIgnoreCase)))
 				{
-					var r = await _roleMgr.FindByNameAsync(model.Role);
-					model.Result = await _roleMgr.DeleteAsync(r);
+					var r = await _roleMgr.FindByNameAsync(model.Role).ConfigureAwait(false);
+					model.Result = await _roleMgr.DeleteAsync(r).ConfigureAwait(false);
 
 					return RedirectToAction(nameof(ManageRoles));
 				}
@@ -276,7 +296,7 @@ namespace MawAuth.Controllers
 				return RedirectToAction(nameof(Index));
 			}
 
-            var user = await _userMgr.FindByNameAsync(id);
+            var user = await _userMgr.FindByNameAsync(id).ConfigureAwait(false);
 
 			var model = new EditProfileModel
 			{
@@ -301,20 +321,25 @@ namespace MawAuth.Controllers
         [ValidateAntiForgeryToken]
 		public async Task<IActionResult> EditProfile(EditProfileModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			if(ModelState.IsValid)
 			{
-				var user = await _userMgr.FindByNameAsync(model.Username);
+				var user = await _userMgr.FindByNameAsync(model.Username).ConfigureAwait(false);
 
 				if(string.IsNullOrEmpty(user.SecurityStamp))
 				{
-					await _userMgr.UpdateSecurityStampAsync(user);
+					await _userMgr.UpdateSecurityStampAsync(user).ConfigureAwait(false);
 				}
 
 				user.Email = model.Email;
 				user.FirstName = model.FirstName;
 				user.LastName = model.LastName;
 
-                model.Result = await _userMgr.UpdateAsync(user);
+                model.Result = await _userMgr.UpdateAsync(user).ConfigureAwait(false);
 			}
 			else
 			{
@@ -334,12 +359,12 @@ namespace MawAuth.Controllers
 				return RedirectToAction(nameof(Index));
 			}
 
-			var user = await _userMgr.FindByNameAsync(id);
-			var userRoles = await _userMgr.GetRolesAsync(user);
+			var user = await _userMgr.FindByNameAsync(id).ConfigureAwait(false);
+			var userRoles = await _userMgr.GetRolesAsync(user).ConfigureAwait(false);
 
 			var model = new ManageRolesForUserModel();
 			model.Username = id;
-            model.AllRoles.AddRange(await _repo.GetAllRoleNamesAsync());
+            model.AllRoles.AddRange(await _repo.GetAllRoleNamesAsync().ConfigureAwait(false));
             model.GrantedRoles.AddRange(userRoles);
 
 			return View(model);
@@ -350,14 +375,19 @@ namespace MawAuth.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManageRolesForUser(IFormCollection collection)
 		{
+            if(collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
 			string username = collection["Username"];
 			var model = new ManageRolesForUserModel();
 
 			model.Username = username;
-			model.AllRoles.AddRange(await _repo.GetAllRoleNamesAsync());
+			model.AllRoles.AddRange(await _repo.GetAllRoleNamesAsync().ConfigureAwait(false));
 
-			var user = await _userMgr.FindByNameAsync(username);
-			var currRoles = await _userMgr.GetRolesAsync(user);
+			var user = await _userMgr.FindByNameAsync(username).ConfigureAwait(false);
+			var currRoles = await _userMgr.GetRolesAsync(user).ConfigureAwait(false);
 			var newRoleList = new List<string>();
 
 			if(!string.IsNullOrEmpty(collection["role"]))
@@ -373,7 +403,7 @@ namespace MawAuth.Controllers
 
 			foreach(var role in toRemove)
 			{
-				var result = await _userMgr.RemoveFromRoleAsync(user, role);
+				var result = await _userMgr.RemoveFromRoleAsync(user, role).ConfigureAwait(false);
 
 				if(!result.Succeeded)
 				{
@@ -383,7 +413,7 @@ namespace MawAuth.Controllers
 
 			foreach(var role in toAdd)
 			{
-				var result = await _userMgr.AddToRoleAsync(user, role);
+				var result = await _userMgr.AddToRoleAsync(user, role).ConfigureAwait(false);
 
 				if(!result.Succeeded)
 				{
@@ -401,8 +431,8 @@ namespace MawAuth.Controllers
 			}
 
 			// after the changes, get the new membership info (we are now
-			user = await _userMgr.FindByNameAsync(username);
-			currRoles = await _userMgr.GetRolesAsync(user);
+			user = await _userMgr.FindByNameAsync(username).ConfigureAwait(false);
+			currRoles = await _userMgr.GetRolesAsync(user).ConfigureAwait(false);
 			model.GrantedRoles.AddRange(currRoles);
 
 			return View(model);
@@ -421,8 +451,8 @@ namespace MawAuth.Controllers
 
 			model.Role = id;
 
-			model.Members = (await _userMgr.GetUsersInRoleAsync(model.Role)).Select(x => x.Username);
-            model.AllUsers = await _repo.GetAllUsernamesAsync();
+			model.Members = (await _userMgr.GetUsersInRoleAsync(model.Role).ConfigureAwait(false)).Select(x => x.Username);
+            model.AllUsers = await _repo.GetAllUsernamesAsync().ConfigureAwait(false);
 
 			return View(model);
 		}
@@ -432,11 +462,16 @@ namespace MawAuth.Controllers
         [ValidateAntiForgeryToken]
 		public async Task<IActionResult> EditRoleMembers(EditRoleMembersModel model)
 		{
+			if(model == null)
+			{
+				throw new ArgumentNullException(nameof(model));
+			}
+
 			// this follows the same logic as ManageRolesForUser, so see that for more info
 			if(ModelState.IsValid)
 			{
-				var currentMembers = await _userMgr.GetUsersInRoleAsync(model.Role);
-				model.AllUsers = await _repo.GetAllUsernamesAsync();
+				var currentMembers = await _userMgr.GetUsersInRoleAsync(model.Role).ConfigureAwait(false);
+				model.AllUsers = await _repo.GetAllUsernamesAsync().ConfigureAwait(false);
 
 				var toRemove = currentMembers.Where(cm => !model.NewMembers.Any(nm => string.Equals(cm.Username, nm, StringComparison.OrdinalIgnoreCase)));
 				var toAdd = model.NewMembers.Where(nm => !currentMembers.Any(cm => string.Equals(cm.Username, nm, StringComparison.OrdinalIgnoreCase)));
@@ -444,8 +479,8 @@ namespace MawAuth.Controllers
 
 				foreach(var newMember in toAdd)
 				{
-					var newUser = await _userMgr.FindByNameAsync(newMember);
-					var result = await _userMgr.AddToRoleAsync(newUser, model.Role);
+					var newUser = await _userMgr.FindByNameAsync(newMember).ConfigureAwait(false);
+					var result = await _userMgr.AddToRoleAsync(newUser, model.Role).ConfigureAwait(false);
 
 					if(!result.Succeeded)
 					{
@@ -455,8 +490,8 @@ namespace MawAuth.Controllers
 
 				foreach(var oldMember in toRemove)
 				{
-					_log.LogInformation(string.Format("removing {0} from {1}", oldMember.Username, model.Role));
-					var result = await _userMgr.RemoveFromRoleAsync(oldMember, model.Role);
+					_log.LogInformation($"removing {oldMember.Username} from {model.Role}");
+					var result = await _userMgr.RemoveFromRoleAsync(oldMember, model.Role).ConfigureAwait(false);
 
 					if(!result.Succeeded)
 					{
@@ -479,7 +514,7 @@ namespace MawAuth.Controllers
 				LogValidationErrors();
 			}
 
-			model.Members = (await _userMgr.GetUsersInRoleAsync(model.Role)).Select(x => x.Username);
+			model.Members = (await _userMgr.GetUsersInRoleAsync(model.Role).ConfigureAwait(false)).Select(x => x.Username);
 
 			return View(model);
 		}
@@ -502,7 +537,7 @@ namespace MawAuth.Controllers
 			for(int i = 0; i < 100; i++)
 			{
 				var password = CryptoUtils.GeneratePassword(12);
-				var isValid = await _pwdValidator.ValidateAsync(_userMgr, null, password);
+				var isValid = await _pwdValidator.ValidateAsync(_userMgr, null, password).ConfigureAwait(false);
 
 				if(isValid == IdentityResult.Success)
 				{

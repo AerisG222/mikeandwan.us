@@ -77,7 +77,6 @@ namespace Maw.Data
 
 		public Task<Rating> GetRatingsAsync(short videoId, string username)
 		{
-#pragma warning disable CA1308
             return RunAsync(conn =>
                 conn.QuerySingleOrDefaultAsync<Rating>(
                     "SELECT * FROM video.get_ratings(@videoId, @username);",
@@ -87,13 +86,11 @@ namespace Maw.Data
                     }
                 )
             );
-#pragma warning restore CA1308
 		}
 
 
 		public Task<int> InsertCommentAsync(short videoId, string username, string comment)
         {
-#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var result = await conn.QuerySingleOrDefaultAsync<int>(
                     "SELECT * FROM video.save_comment(@username, @videoId, @message, @entryDate);",
@@ -104,7 +101,6 @@ namespace Maw.Data
                         entryDate = DateTime.Now
                     }
                 ).ConfigureAwait(false);
-#pragma warning restore CA1308
 
                 if(result <= 0)
 				{
@@ -118,7 +114,6 @@ namespace Maw.Data
 
 		public Task<float?> SaveRatingAsync(short videoId, string username, short rating)
         {
-#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var result = await conn.QueryAsync<long>(
                     "SELECT * FROM video.save_rating(@videoId, @username, @score);",
@@ -128,7 +123,6 @@ namespace Maw.Data
                         score = rating
                     }
                 ).ConfigureAwait(false);
-#pragma warning restore CA1308
 
                 return (await GetRatingsAsync(videoId, username).ConfigureAwait(false))?.AverageRating;
             });
@@ -137,7 +131,6 @@ namespace Maw.Data
 
 		public Task<float?> RemoveRatingAsync(short videoId, string username)
 		{
-#pragma warning disable CA1308
             return RunAsync(async conn => {
                 var result = await conn.QueryAsync<long>(
                     @"SELECT * FROM video.save_rating(@videoId, @username, @score);",
@@ -150,7 +143,6 @@ namespace Maw.Data
 
                 return (await GetRatingsAsync(videoId, username).ConfigureAwait(false))?.AverageRating;
             });
-#pragma warning restore CA1308
 		}
 
 

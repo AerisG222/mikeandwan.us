@@ -34,9 +34,11 @@ namespace MawAuth.Services
             {
                 var pwdFile = $"{file}.pwd";
                 var pwd = File.ReadAllText(pwdFile).Trim();
-                var cert = new X509Certificate2(file, pwd);
 
-                _keys.Add(new X509SecurityKey(cert));
+                using(var cert = new X509Certificate2(file, pwd))
+                {
+                    _keys.Add(new X509SecurityKey(cert));
+                }
             }
         }
     }

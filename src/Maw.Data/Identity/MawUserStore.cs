@@ -167,17 +167,13 @@ namespace Maw.Data.Identity
 
                 if(user == null)
                 {
-#pragma warning disable CA1303
                     throw new Exception("User was not found");
-#pragma warning restore CA1303
                 }
 
                 return user;
             }
 
-#pragma warning disable CA1303
 			throw new ArgumentException("userId should be a number", nameof(userId));
-#pragma warning restore CA1303
         }
 
 
@@ -251,9 +247,7 @@ namespace Maw.Data.Identity
 
 			if (String.IsNullOrWhiteSpace(roleName))
 			{
-#pragma warning disable CA1303
 				throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
-#pragma warning restore CA1303
 			}
 
 			await _repo.AddUserToRoleAsync(user.Username, roleName).ConfigureAwait(false);
@@ -271,9 +265,7 @@ namespace Maw.Data.Identity
 
 			if (String.IsNullOrWhiteSpace(roleName))
 			{
-#pragma warning disable CA1303
 				throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
-#pragma warning restore CA1303
 			}
 
 			_log.LogInformation($"removing {user.Username} from role {roleName}");
@@ -315,9 +307,7 @@ namespace Maw.Data.Identity
 
 			if (String.IsNullOrWhiteSpace(roleName))
 			{
-#pragma warning disable CA1303
 				throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
-#pragma warning restore CA1303
 			}
 
 			_log.LogInformation("is user in role: " + user.Username + " : " + roleName);
@@ -335,9 +325,7 @@ namespace Maw.Data.Identity
 
 			if (String.IsNullOrWhiteSpace(roleName))
 			{
-#pragma warning disable CA1303
 				throw new ArgumentException("roleName can not be null or empty", nameof(roleName));
-#pragma warning restore CA1303
 			}
 
 			_log.LogInformation($"getting users in role: {roleName}");
@@ -357,9 +345,7 @@ namespace Maw.Data.Identity
 
 			if(string.IsNullOrEmpty(stamp))
 			{
-#pragma warning disable CA1303
 				throw new ArgumentException("stamp can not be null or empty", nameof(stamp));
-#pragma warning restore CA1303
 			}
 
 			user.SecurityStamp = stamp;

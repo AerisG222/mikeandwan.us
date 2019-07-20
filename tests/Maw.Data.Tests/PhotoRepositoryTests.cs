@@ -14,7 +14,7 @@ namespace Maw.Data.Tests
         {
             var repo = GetRepo();
 
-            var categories = await repo.GetAllCategoriesAsync(true);
+            var categories = await repo.GetAllCategoriesAsync(true).ConfigureAwait(false);
 
             Assert.NotNull(categories);
             Assert.NotNull(categories.First().TeaserImage);
@@ -27,7 +27,7 @@ namespace Maw.Data.Tests
         {
             var repo = GetRepo();
 
-            var photos = await repo.GetPhotosForCategoryAsync(1, true);
+            var photos = await repo.GetPhotosForCategoryAsync(1, true).ConfigureAwait(false);
 
             Assert.NotNull(photos);
             Assert.NotNull(photos.First().XsInfo);

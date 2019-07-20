@@ -26,7 +26,6 @@ namespace MawAuth.Controllers
 		: Controller
     {
 		const byte LOGIN_AREA_FORM = 1;
-		const string LoginProviderKey = "LoginProvider";
 		const string EmailFrom = "webmaster@mikeandwan.us";
 
 		readonly ILogger<AccountController> _log;
@@ -65,7 +64,7 @@ namespace MawAuth.Controllers
 			var vm = new LoginModel()
 			{
 				ReturnUrl = returnUrl,
-				ExternalSchemes = await GetExternalLoginSchemes()
+				ExternalSchemes = await GetExternalLoginSchemes().ConfigureAwait(false)
 			};
 
 			return View(vm);
@@ -76,8 +75,13 @@ namespace MawAuth.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Login(LoginModel model)
         {
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			model.WasAttempted = true;
-			model.ExternalSchemes = await GetExternalLoginSchemes();
+			model.ExternalSchemes = await GetExternalLoginSchemes().ConfigureAwait(false);
 
             if(!ModelState.IsValid)
             {
@@ -86,7 +90,7 @@ namespace MawAuth.Controllers
                 return View(model);
             }
 
-			var result = await _loginService.AuthenticateAsync(model.Username, model.Password, LOGIN_AREA_FORM);
+			var result = await _loginService.AuthenticateAsync(model.Username, model.Password, LOGIN_AREA_FORM).ConfigureAwait(false);
 
 			_log.LogInformation("Login complete");
 
@@ -123,7 +127,7 @@ namespace MawAuth.Controllers
 		[HttpGet("external-login-callback")]
 		public async Task<IActionResult> ExternalLoginCallback()
 		{
-			var result = await HttpContext.AuthenticateAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);
+			var result = await HttpContext.AuthenticateAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
 			var items = result?.Properties?.Items;
 
 			if(result?.Succeeded != true || items == null || !items.ContainsKey("scheme"))
@@ -141,18 +145,18 @@ namespace MawAuth.Controllers
 				return View();
 			}
 
-			var user = await _userMgr.FindByEmailAsync(email.Value);
+			var user = await _userMgr.FindByEmailAsync(email.Value).ConfigureAwait(false);
 
             if (user != null)
             {
 				if(user.IsExternalAuthEnabled(provider))
 				{
 					// now sign in the local user
-					await _signInManager.SignInAsync(user, false);
-					await _loginService.LogExternalLoginAttemptAsync(email.Value, provider, true);
+					await _signInManager.SignInAsync(user, false).ConfigureAwait(false);
+					await _loginService.LogExternalLoginAttemptAsync(email.Value, provider, true).ConfigureAwait(false);
 
 					// delete temporary cookie used during external authentication
-					await HttpContext.SignOutAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);
+					await HttpContext.SignOutAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
 
 					_log.LogInformation($"User {user.Username} logged in with {provider} provider.");
 
@@ -176,7 +180,7 @@ namespace MawAuth.Controllers
 				}
             }
 
-			await _loginService.LogExternalLoginAttemptAsync(email.Value, provider, false);
+			await _loginService.LogExternalLoginAttemptAsync(email.Value, provider, false).ConfigureAwait(false);
 
 			return View();
 		}
@@ -185,9 +189,9 @@ namespace MawAuth.Controllers
 		[HttpGet("logout")]
 		public async Task<IActionResult> Logout(string logoutId)
 		{
-			var logout = await _interaction.GetLogoutContextAsync(logoutId);
+			var logout = await _interaction.GetLogoutContextAsync(logoutId).ConfigureAwait(false);
 
-			await _signInManager.SignOutAsync();
+			await _signInManager.SignOutAsync().ConfigureAwait(false);
 
 			return Redirect(logout.PostLogoutRedirectUri);
 		}
@@ -204,11 +208,16 @@ namespace MawAuth.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
 		{
+			if(model == null)
+			{
+				throw new ArgumentNullException(nameof(model));
+			}
+
 			model.WasEmailAttempted = true;
 
 			if(ModelState.IsValid)
 			{
-				var user = await _userMgr.FindByEmailAsync(model.Email);
+				var user = await _userMgr.FindByEmailAsync(model.Email).ConfigureAwait(false);
 
 				if(user == null)
 				{
@@ -220,10 +229,10 @@ namespace MawAuth.Controllers
 				// legacy users might not have the security stamp set.  if so, set it here, as a non-null security stamp is requilred for this to work
 				if(string.IsNullOrEmpty(user.SecurityStamp))
 				{
-					await _userMgr.UpdateSecurityStampAsync(user);
+					await _userMgr.UpdateSecurityStampAsync(user).ConfigureAwait(false);
 				}
 
-				var code = await _userMgr.GeneratePasswordResetTokenAsync(user);
+				var code = await _userMgr.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
 				var callbackUrl = Url.Action("ResetPassword", "Account", new { user.Email, code }, Request.Scheme);
 
                 _log.LogInformation($"user: {user.Name}");
@@ -258,7 +267,7 @@ namespace MawAuth.Controllers
 		{
 			var model = new ResetPasswordModel();
 
-			await TryUpdateModelAsync<ResetPasswordModel>(model, string.Empty, x =>  x.Email, x => x.Code);
+			await TryUpdateModelAsync<ResetPasswordModel>(model, string.Empty, x =>  x.Email, x => x.Code).ConfigureAwait(false);
 			ModelState.Clear();
 
 			return View(model);
@@ -269,12 +278,17 @@ namespace MawAuth.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			model.ResetAttempted = true;
 
 			if(ModelState.IsValid)
 			{
-				var user = await _repo.GetUserByEmailAsync(model.Email);
-				var result = await _userMgr.ResetPasswordAsync(user, model.Code, model.NewPassword);
+				var user = await _repo.GetUserByEmailAsync(model.Email).ConfigureAwait(false);
+				var result = await _userMgr.ResetPasswordAsync(user, model.Code, model.NewPassword).ConfigureAwait(false);
 
 				if(result.Succeeded)
 				{
@@ -311,12 +325,17 @@ namespace MawAuth.Controllers
         [ValidateAntiForgeryToken]
 		public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			model.ChangeAttempted = true;
 
 			if(ModelState.IsValid)
 			{
-				var user = await _repo.GetUserAsync(User.Identity.Name);
-				var result = await _userMgr.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+				var user = await _repo.GetUserAsync(User.Identity.Name).ConfigureAwait(false);
+				var result = await _userMgr.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword).ConfigureAwait(false);
 
 				if (result.Succeeded)
 				{
@@ -349,10 +368,10 @@ namespace MawAuth.Controllers
 		[HttpGet("edit-profile")]
 		public async Task<IActionResult> EditProfile()
 		{
-			ViewBag.States = await GetStateSelectListItemsAsync();
-			ViewBag.Countries = await GetCountrySelectListItemsAsync();
+			ViewBag.States = await GetStateSelectListItemsAsync().ConfigureAwait(false);
+			ViewBag.Countries = await GetCountrySelectListItemsAsync().ConfigureAwait(false);
 
-			var user = await _userMgr.FindByNameAsync(User.Identity.Name);
+			var user = await _userMgr.FindByNameAsync(User.Identity.Name).ConfigureAwait(false);
 
 			var model = new ProfileModel
 			{
@@ -375,15 +394,20 @@ namespace MawAuth.Controllers
         [ValidateAntiForgeryToken]
 		public async Task<IActionResult> EditProfile(ProfileModel model)
 		{
-			ViewBag.States = await GetStateSelectListItemsAsync();
-			ViewBag.Countries = await GetCountrySelectListItemsAsync();
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+			ViewBag.States = await GetStateSelectListItemsAsync().ConfigureAwait(false);
+			ViewBag.Countries = await GetCountrySelectListItemsAsync().ConfigureAwait(false);
 
 			model.WasAttempted = true;
             model.Username = User.Identity.Name;
 
 			if(ModelState.IsValid)
 			{
-				var user = await _userMgr.FindByNameAsync(User.Identity.Name);
+				var user = await _userMgr.FindByNameAsync(User.Identity.Name).ConfigureAwait(false);
 
 				user.FirstName = model.FirstName;
 				user.LastName = model.LastName;
@@ -393,7 +417,7 @@ namespace MawAuth.Controllers
 				user.IsMicrosoftAuthEnabled = model.EnableMicrosoftAuth;
 				user.IsTwitterAuthEnabled = model.EnableTwitterAuth;
 
-                await _repo.UpdateUserAsync(user);
+                await _repo.UpdateUserAsync(user).ConfigureAwait(false);
 
 				model.WasUpdated = true;
 			}
@@ -408,7 +432,7 @@ namespace MawAuth.Controllers
 
 		async Task<IEnumerable<SelectListItem>> GetStateSelectListItemsAsync()
 		{
-			var states = await _repo.GetStatesAsync();
+			var states = await _repo.GetStatesAsync().ConfigureAwait(false);
 
 			return states.Select(x => new SelectListItem
 			{
@@ -420,7 +444,7 @@ namespace MawAuth.Controllers
 
 		async Task<IEnumerable<SelectListItem>> GetCountrySelectListItemsAsync()
 		{
-			var countries = await _repo.GetCountriesAsync();
+			var countries = await _repo.GetCountriesAsync().ConfigureAwait(false);
 
 			return countries.Select(x => new SelectListItem
 			{
@@ -432,7 +456,7 @@ namespace MawAuth.Controllers
 
 		async Task<IEnumerable<ExternalLoginScheme>> GetExternalLoginSchemes()
 		{
-			var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
+			var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync().ConfigureAwait(false);
 
 			return schemes
 				.Select(x => new ExternalLoginScheme(x))

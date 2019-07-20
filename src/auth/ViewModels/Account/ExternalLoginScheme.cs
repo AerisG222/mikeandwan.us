@@ -14,17 +14,17 @@ namespace MawAuth.ViewModels.Account
         {
             get
             {
-                var scheme = ExternalAuth.Name.ToLower();
+                var scheme = ExternalAuth.Name.ToUpperInvariant();
 
                 switch(scheme)
                 {
-                    case "github":
+                    case "GITHUB":
                         return SvgIcon.Github;
-                    case "google":
+                    case "GOOGLE":
                         return SvgIcon.GooglePlus;
-                    case "microsoft":
+                    case "MICROSOFT":
                         return SvgIcon.Windows;
-                    case "twitter":
+                    case "TWITTER":
                         return SvgIcon.Twitter;
                 }
 

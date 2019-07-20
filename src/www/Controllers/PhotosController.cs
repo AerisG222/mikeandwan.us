@@ -88,7 +88,7 @@ namespace MawMvcApp.Controllers
         [HttpGet("download/{id:int}/{size:length(2,5)}")]
         public async Task<IActionResult> Download(int id, string size)
         {
-            _log.LogInformation($"Attempting to download photo with id: {id} and size: {size}");
+            Log.LogInformation($"Attempting to download photo with id: {id} and size: {size}");
 
             string path = null;
             var photo = await _svc.GetPhotoAsync(id, Role.IsAdmin(User));

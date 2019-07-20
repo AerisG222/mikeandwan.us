@@ -55,7 +55,7 @@ namespace MawMvcApp.Controllers
 
 			foreach(var c in User?.Claims)
 			{
-				_log.LogInformation($"{c.Type}: {c.Value}");
+				Log.LogInformation($"{c.Type}: {c.Value}");
 			}
 
             return View();
@@ -118,7 +118,7 @@ namespace MawMvcApp.Controllers
 					}
 					catch(Exception ex)
 					{
-						_log.LogError(ex, "There was an error sending an email: " + ex.Message);
+						Log.LogError(ex, "There was an error sending an email: " + ex.Message);
 
 						model.SubmitSuccess = false;
 					}
@@ -137,7 +137,7 @@ namespace MawMvcApp.Controllers
         public async Task<IActionResult> News()
         {
 			ViewBag.NavigationZone = NavigationZone.About;
-			var blogs = await _blogService.GetLatestPostsAsync(MawConstants.MAW_BLOG_ID, 10);
+			var blogs = await _blogService.GetLatestPostsAsync(MawConstants.MawBlogId, 10);
 
             return View(blogs);
         }

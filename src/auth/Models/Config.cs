@@ -35,7 +35,6 @@ namespace MawAuth.Models
             };
         }
 
-
         public IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource>

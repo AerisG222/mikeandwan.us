@@ -1,3 +1,6 @@
+using System;
+
+
 namespace MawAuth.ViewModels.Email
 {
     public class ResetPasswordEmailModel

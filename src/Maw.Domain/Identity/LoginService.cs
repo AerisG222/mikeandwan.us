@@ -29,7 +29,6 @@ namespace Maw.Domain.Identity
 
 		public async Task<SignInResult> AuthenticateAsync(string username, string password, short loginArea)
 		{
-#pragma warning disable CA1031
 			try
 			{
 	            var result = await _signInManager.PasswordSignInAsync(username, password, isPersistent: false, lockoutOnFailure: false).ConfigureAwait(false);
@@ -48,7 +47,6 @@ namespace Maw.Domain.Identity
 			{
 				_log.LogWarning(ex, string.Concat("Unable to authenticate user [", username, "]."));
 			}
-#pragma warning restore CA1031
 
 			return SignInResult.Failed;
 		}
@@ -79,9 +77,7 @@ namespace Maw.Domain.Identity
 					area = 6;
 					break;
 				default:
-#pragma warning disable CA1303
 					throw new Exception("Invalid login area specified!");
-#pragma warning restore CA1303
 			}
 
 			await _repo.AddExternalLoginHistoryAsync(email, activityType, area).ConfigureAwait(false);

@@ -77,6 +77,11 @@ namespace MawAuth.Services
 
         public Task StoreAsync(PersistedGrant grant)
         {
+            if(grant == null)
+            {
+                throw new ArgumentNullException(nameof(grant));
+            }
+
             _log.LogDebug($"storing grant for key: {grant.Key}, type: {grant.Type}, subject: {grant.SubjectId}, client: {grant.ClientId}");
 
             return RunAsync(conn =>

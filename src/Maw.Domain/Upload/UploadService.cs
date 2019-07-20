@@ -45,7 +45,6 @@ namespace Maw.Domain.Upload
                 RelativePathSpecified = relativePath
             };
 
-#pragma warning disable CA1031
             try
             {
                 location = GetValidatedLocation(user, relativePath, true);
@@ -56,7 +55,6 @@ namespace Maw.Domain.Upload
 
                 return result;
             }
-#pragma warning restore CA1031
 
             var absolutePath = Path.Combine(_cfg.RootDirectory, location.RelativePath);
 
@@ -70,7 +68,6 @@ namespace Maw.Domain.Upload
 
             result.UploadedFile = GetFileDetails(location);
 
-#pragma warning disable CA1031
             try
             {
                 File.Delete(absolutePath);
@@ -85,7 +82,6 @@ namespace Maw.Domain.Upload
 
                 _log.LogError(ex, $"Unable to delete file for path [{absolutePath}]");
             }
-#pragma warning restore CA1031
 
             return result;
         }

@@ -27,6 +27,11 @@ namespace MawAuth.Services
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
+            if(context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             _log.LogDebug("requested claims:");
 
             foreach(var c in context.RequestedClaimTypes)
@@ -37,7 +42,7 @@ namespace MawAuth.Services
             _log.LogDebug("src subject claims:");
             PrintClaims(context.Subject.Claims);
 
-            var u = await _usrMgr.GetUserAsync(context.Subject);
+            var u = await _usrMgr.GetUserAsync(context.Subject).ConfigureAwait(false);
 
             _log.LogDebug("user subject claims:");
             PrintClaims(u?.Claims);
@@ -53,6 +58,11 @@ namespace MawAuth.Services
 
         public virtual Task IsActiveAsync(IsActiveContext context)
         {
+            if(context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             _log.LogDebug("IsActive called from: {caller}", context.Caller);
 
             context.IsActive = true;

@@ -26,6 +26,7 @@ namespace MawAuth.Services
         }
 
 
+#pragma warning disable CA2000
         void LoadKeys(string keyDir)
         {
             var files = Directory.EnumerateFiles(keyDir, "*.pfx");
@@ -34,12 +35,11 @@ namespace MawAuth.Services
             {
                 var pwdFile = $"{file}.pwd";
                 var pwd = File.ReadAllText(pwdFile).Trim();
+                var cert = new X509Certificate2(file, pwd);
 
-                using(var cert = new X509Certificate2(file, pwd))
-                {
-                    _keys.Add(new X509SecurityKey(cert));
-                }
+                _keys.Add(new X509SecurityKey(cert));
             }
         }
+#pragma warning restore CA2000
     }
 }

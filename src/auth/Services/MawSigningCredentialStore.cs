@@ -14,6 +14,7 @@ namespace MawAuth.Services
         readonly SigningCredentials _creds;
 
 
+#pragma warning disable CA2000
         public MawSigningCredentialStore(string signingCertificateDirectory)
         {
             if(string.IsNullOrWhiteSpace(signingCertificateDirectory))
@@ -24,13 +25,11 @@ namespace MawAuth.Services
             var certFile = Path.Combine(signingCertificateDirectory, "signing.pfx");
             var pwdFile = Path.Combine(signingCertificateDirectory, "signing.pfx.pwd");
             var pwd = File.ReadAllText(pwdFile).Trim();
+            var cert = new X509Certificate2(certFile, pwd);
 
-            using(var cert = new X509Certificate2(certFile, pwd))
-            {
-                _creds = new SigningCredentials(new X509SecurityKey(cert), "RS256");
-            }
+            _creds = new SigningCredentials(new X509SecurityKey(cert), "RS256");
         }
-
+#pragma warning restore CA2000
 
         public Task<SigningCredentials> GetSigningCredentialsAsync()
         {

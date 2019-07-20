@@ -12,6 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AsyncFixer" Version="1.1.6">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Google.Apis.Gmail.v1" Version="1.40.2.1635" />
     <PackageReference Include="IdentityModel" Version="3.10.10" />
     <PackageReference Include="MailKit" Version="2.2.0" />

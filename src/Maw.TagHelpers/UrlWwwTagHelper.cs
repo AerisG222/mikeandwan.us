@@ -25,6 +25,11 @@ namespace Maw.TagHelpers
 
 		public override void Process(TagHelperContext context, TagHelperOutput output)
 		{
+            if(output == null)
+            {
+                throw new ArgumentNullException(nameof(output));
+            }
+
             Uri dest = null;
 			var req = ViewContext.HttpContext.Request.Host;
 

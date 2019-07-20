@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Authorization;
 
 
@@ -7,10 +8,15 @@ namespace Maw.Security
     {
         public static void AddMawPolicies(AuthorizationOptions opts)
         {
-            opts.AddPolicy(Policy.ViewPhotos, new AuthorizationPolicyBuilder().RequireRole(Role.Friend, Role.Admin).Build());
-            opts.AddPolicy(Policy.ViewVideos, new AuthorizationPolicyBuilder().RequireRole(Role.Friend, Role.Admin).Build());
-            opts.AddPolicy(Policy.AdminSite, new AuthorizationPolicyBuilder().RequireRole(Role.Admin).Build());
-            opts.AddPolicy(Policy.CanUpload, new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
+            if(opts == null)
+            {
+                throw new ArgumentNullException(nameof(opts));
+            }
+
+            opts.AddPolicy(MawPolicy.ViewPhotos, new AuthorizationPolicyBuilder().RequireRole(Role.Friend, Role.Admin).Build());
+            opts.AddPolicy(MawPolicy.ViewVideos, new AuthorizationPolicyBuilder().RequireRole(Role.Friend, Role.Admin).Build());
+            opts.AddPolicy(MawPolicy.AdminSite, new AuthorizationPolicyBuilder().RequireRole(Role.Admin).Build());
+            opts.AddPolicy(MawPolicy.CanUpload, new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
         }
     }
 }

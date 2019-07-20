@@ -14,7 +14,7 @@ using Maw.Security;
 
 namespace MawMvcApp.Controllers
 {
-	[Authorize(Policy.ViewPhotos)]
+	[Authorize(MawPolicy.ViewPhotos)]
     [Route("photos")]
     public class PhotosController
         : MawBaseController<PhotosController>

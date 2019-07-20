@@ -18,7 +18,7 @@ namespace MawMvcApp.Controllers
 {
     [ApiController]
     [Authorize]
-    [Authorize(Policy.CanUpload)]
+    [Authorize(MawPolicy.CanUpload)]
     [Route("upload")]
     public class UploadController
         : Controller

@@ -14,7 +14,7 @@ namespace MawApi.Controllers
 {
     [ApiController]
     [Authorize]
-    [Authorize(Policy.ViewPhotos)]
+    [Authorize(MawPolicy.ViewPhotos)]
     [Route("photo-categories")]
     public class PhotoCategoriesController
         : ControllerBase

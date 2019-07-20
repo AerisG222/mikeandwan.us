@@ -12,7 +12,7 @@ using Maw.Security;
 namespace MawApi.Hubs
 {
     [Authorize]
-    [Authorize(Policy.CanUpload)]
+    [Authorize(MawPolicy.CanUpload)]
     public class UploadHub
         : Hub
     {

@@ -15,7 +15,7 @@ namespace MawApi.Controllers
 {
     [ApiController]
     [Authorize]
-	[Authorize(Policy.ViewVideos)]
+	[Authorize(MawPolicy.ViewVideos)]
     [Route("videos")]
     public class VideosController
         : ControllerBase

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 
@@ -8,23 +9,28 @@ namespace Maw.TagHelpers
 		: TagHelper
 	{
 		const string IsActiveAttributeName = "maw-active";
-		
-		
-		[HtmlAttributeName(IsActiveAttributeName)]	
+
+
+		[HtmlAttributeName(IsActiveAttributeName)]
 		public bool IsActive { get; set; }
-		
-		
+
+
 		public override void Process(TagHelperContext context, TagHelperOutput output)
 		{
+            if(output == null)
+            {
+                throw new ArgumentNullException(nameof(output));
+            }
+
 			var klass = "list-group-item";
-			
+
 			if(IsActive)
 			{
 				klass += " active";
 			}
-			
+
 			var att = output.Attributes["class"];
-			
+
 			if(att == null)
 			{
 				output.Attributes.Add("class", klass);
@@ -32,7 +38,7 @@ namespace Maw.TagHelpers
 			else
 			{
 				var val = att.Value as string;
-				
+
 				if(string.IsNullOrWhiteSpace(val))
 				{
 					val = klass;
@@ -41,7 +47,7 @@ namespace Maw.TagHelpers
 				{
 					val = $"{val} {klass}";
 				}
-                
+
                 output.Attributes.SetAttribute("class", val);
 			}
 		}

@@ -18,6 +18,11 @@ namespace Maw.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
 		{
+            if(output == null)
+            {
+                throw new ArgumentNullException(nameof(output));
+            }
+
             output.TagName = "span";
             output.Attributes.SetAttribute("class", $"svg-icon svg-baseline {Klass}");
 

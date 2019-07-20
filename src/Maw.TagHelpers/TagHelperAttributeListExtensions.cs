@@ -9,6 +9,11 @@ namespace Maw.TagHelpers
     {
         public static void Merge(this TagHelperAttributeList attributes, string name, string value)
         {
+            if(attributes == null)
+            {
+                throw new ArgumentNullException(nameof(attributes));
+            }
+
             var curr = attributes.FirstOrDefault(att => string.Equals(att.Name, name, StringComparison.Ordinal));
 
             if(curr == null)

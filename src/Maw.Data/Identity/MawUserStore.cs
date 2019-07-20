@@ -236,7 +236,7 @@ namespace Maw.Data.Identity
 
 
 		#region IUserRoleStore
-		public virtual async Task AddToRoleAsync(MawUser user, string roleName, CancellationToken cancellationToken = default(CancellationToken))
+		public virtual Task AddToRoleAsync(MawUser user, string roleName, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
@@ -250,11 +250,11 @@ namespace Maw.Data.Identity
 				throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
 			}
 
-			await _repo.AddUserToRoleAsync(user.Username, roleName).ConfigureAwait(false);
+			return _repo.AddUserToRoleAsync(user.Username, roleName);
 		}
 
 
-		public virtual async Task RemoveFromRoleAsync(MawUser user, string roleName, CancellationToken cancellationToken = default(CancellationToken))
+		public virtual Task RemoveFromRoleAsync(MawUser user, string roleName, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
@@ -270,7 +270,7 @@ namespace Maw.Data.Identity
 
 			_log.LogInformation($"removing {user.Username} from role {roleName}");
 
-			await _repo.RemoveUserFromRoleAsync(user.Username, roleName).ConfigureAwait(false);
+			return _repo.RemoveUserFromRoleAsync(user.Username, roleName);
 		}
 
 
@@ -367,7 +367,7 @@ namespace Maw.Data.Identity
 
 
 		#region IUserEmailStore
-		public async Task SetEmailAsync(MawUser user, string email, CancellationToken cancellationToken)
+		public Task SetEmailAsync(MawUser user, string email, CancellationToken cancellationToken)
 		{
 			if (user == null)
 			{
@@ -376,7 +376,7 @@ namespace Maw.Data.Identity
 
 			user.Email = email;
 
-			await _repo.UpdateUserAsync(user).ConfigureAwait(false);
+			return _repo.UpdateUserAsync(user);
 		}
 
 
@@ -403,11 +403,11 @@ namespace Maw.Data.Identity
 		}
 
 
-		public async Task<MawUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+		public Task<MawUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
 		{
 			_log.LogInformation($"find email: {normalizedEmail}");
 
-			return await _repo.GetUserByEmailAsync(normalizedEmail).ConfigureAwait(false);
+			return _repo.GetUserByEmailAsync(normalizedEmail);
 		}
 
 

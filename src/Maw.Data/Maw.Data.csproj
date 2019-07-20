@@ -13,6 +13,10 @@
     <ProjectReference Include="../Maw.Domain/Maw.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AsyncFixer" Version="1.1.6">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Dapper" Version="1.60.6" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.3" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.180" />

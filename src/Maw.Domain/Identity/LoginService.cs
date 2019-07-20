@@ -52,7 +52,7 @@ namespace Maw.Domain.Identity
 		}
 
 
-		public async Task LogExternalLoginAttemptAsync(string email, string provider, bool wasSuccessful)
+		public Task LogExternalLoginAttemptAsync(string email, string provider, bool wasSuccessful)
 		{
             if(provider == null)
             {
@@ -80,7 +80,7 @@ namespace Maw.Domain.Identity
 					throw new Exception("Invalid login area specified!");
 			}
 
-			await _repo.AddExternalLoginHistoryAsync(email, activityType, area).ConfigureAwait(false);
+			return _repo.AddExternalLoginHistoryAsync(email, activityType, area);
 		}
 	}
 }

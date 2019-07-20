@@ -19,7 +19,7 @@ using Maw.Security;
 
 namespace MawAuth.Controllers
 {
-	[Authorize(Policy.AdminSite)]
+	[Authorize(MawPolicy.AdminSite)]
 	[Route("admin")]
     public class AdminController
 		: Controller

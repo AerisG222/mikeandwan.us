@@ -10,7 +10,7 @@ using Maw.Security;
 
 namespace MawMvcApp.Controllers
 {
-	[Authorize(Policy.ViewVideos)]
+	[Authorize(MawPolicy.ViewVideos)]
     [Route("videos")]
     public class VideosController
         : MawBaseController<VideosController>

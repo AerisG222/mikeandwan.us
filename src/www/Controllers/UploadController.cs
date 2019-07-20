@@ -6,7 +6,7 @@ using Maw.Security;
 
 namespace MawMvcApp.Controllers
 {
-    [Authorize(Policy.CanUpload)]
+    [Authorize(MawPolicy.CanUpload)]
 	[Route("upload")]
     public class UploadController
         : MawBaseController<UploadController>

@@ -49,7 +49,7 @@ namespace Maw.TagHelpers
 
 
 		[HtmlAttributeName(RouteValuesDictionaryName, DictionaryAttributePrefix = RouteValuesPrefix)]
-        public IDictionary<string, string> RouteValues { get; set; } =
+        public IDictionary<string, string> RouteValues { get; } =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
 
@@ -66,6 +66,11 @@ namespace Maw.TagHelpers
 
 		public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
 		{
+            if(output == null)
+            {
+                throw new ArgumentNullException(nameof(output));
+            }
+
 			if(LinkText == null)
 			{
 				LinkText = string.Empty;
@@ -84,7 +89,7 @@ namespace Maw.TagHelpers
 			var action = Action.Replace("-", string.Empty);
 			var anchor = _htmlGenerator.GenerateActionLink(ViewContext, LinkText, action, Controller, null, null, null, routeValues, new { @class = "nav-link px-3" });
 
-			anchor.InnerHtml.AppendHtml(await output.GetChildContentAsync());
+			anchor.InnerHtml.AppendHtml(await output.GetChildContentAsync().ConfigureAwait(false));
 			output.Content.AppendHtml(anchor);
 		}
 	}

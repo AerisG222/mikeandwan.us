@@ -57,7 +57,7 @@ namespace Mvc.RenderViewToString
                     output,
                     new HtmlHelperOptions());
 
-                await view.RenderAsync(viewContext);
+                await view.RenderAsync(viewContext).ConfigureAwait(false);
 
                 return output.ToString();
             }

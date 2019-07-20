@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 
 
 namespace Maw.Domain.Utilities
@@ -9,7 +10,7 @@ namespace Maw.Domain.Utilities
         {
             var ms = new MemoryStream();
 
-            using(var writer = new StreamWriter(ms))
+            using(var writer = new StreamWriter(ms, Encoding.UTF8, 4096, true))
             {
                 writer.Write(input);
                 writer.Flush();

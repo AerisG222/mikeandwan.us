@@ -86,6 +86,7 @@ namespace MawMvcApp.Controllers
         }
 
 
+#pragma warning disable CA2000
         [HttpGet("download/{id:int}/{size:length(2,5)}")]
         public async Task<IActionResult> Download(int id, string size)
         {
@@ -125,11 +126,11 @@ namespace MawMvcApp.Controllers
                 return BadRequest();
             }
 
-            using(var stream = new FileStream(fi.PhysicalPath, FileMode.Open, FileAccess.Read))
-            {
-			    return File(stream, GetContentType(path), Path.GetFileName(path));
-            }
+            var stream = new FileStream(fi.PhysicalPath, FileMode.Open, FileAccess.Read);
+
+            return File(stream, GetContentType(path), Path.GetFileName(path));
         }
+#pragma warning restore CA2000
 
 
         string GetContentType(string filename)

@@ -12,21 +12,21 @@ namespace MawMvcApp.ViewModels.Tools
 		[Display(Name = "Number of Sides")]
 		[Range(1, 20)]
 		public int NumberOfSides { get; set; }
-		
+
 		[Required(ErrorMessage = "Please enter the number of throws")]
 		[Display(Name = "Number of Throws")]
 		[Range(1, 1000000)]
 		public int NumberOfThrows { get; set; }
-		
+
 		[BindNever]
 		public bool Executed { get; private set; }
-		
+
 		[BindNever]
-		public int[] ThrowCounts { get; private set; }
+		public List<int> ThrowCounts { get; private set; }
 
 		[BindNever]
 		public bool HasErrors { get; set; }
-		
+
 		[BindNever]
 		public IEnumerable<int> WinnerList
 		{
@@ -36,14 +36,14 @@ namespace MawMvcApp.ViewModels.Tools
 				{
 					return null;
 				}
-				
+
 				// so far have not gotten the linq to work...
 				//return ThrowCounts.Select((idx, num) => idx + 1)
 				//	              .Where((num, idx) => num == ThrowCounts.Max());
-				
+
 				int max = 0;
 	            var winnerList = new List<int>();
-	
+
 	            for(int i = 0; i < NumberOfSides; i++)
 	            {
 	                if(ThrowCounts[i] > max)
@@ -61,18 +61,18 @@ namespace MawMvcApp.ViewModels.Tools
 				return winnerList;
 			}
 		}
-		
-		
+
+
 		public void ThrowDice()
 		{
-			ThrowCounts = new int[NumberOfSides];
+			ThrowCounts = new List<int>(NumberOfSides);
             var rnd = new Random();
 
             for(int i = 0; i < NumberOfThrows; i++)
             {
                 ThrowCounts[rnd.Next(0, NumberOfSides)]++;
             }
-			
+
 			Executed = true;
 		}
 	}

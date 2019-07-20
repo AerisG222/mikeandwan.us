@@ -15,7 +15,7 @@ namespace MawMvcApp.ViewModels.Tools.Time
         public string TimeUnit { get; set; }
 
         [BindNever]
-        public Result[] Results { get; set; }
+        public List<Result> Results { get; private set; }
 
         [BindNever]
         public string ErrorMessage { get; set; }
@@ -43,7 +43,7 @@ namespace MawMvcApp.ViewModels.Tools.Time
                 results.Add(new Result(scale.Name, timeInSeconds / scale.SecondsInUnit));
             }
 
-            Results = results.ToArray();
+            Results = results;
         }
     }
 }

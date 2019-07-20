@@ -80,7 +80,7 @@ In an effort to facilitate decisions, this tool allows you to <i>roll the dice</
 
 			<h2>Results</h2>
 			<ul>
-			@for(int i = 0; i < Model.ThrowCounts.Length; i++) {
+			@for(int i = 0; i < Model.ThrowCounts.Count; i++) {
 				<li>@(i + 1): @Model.ThrowCounts[i]</li>
 			}
 			</ul>

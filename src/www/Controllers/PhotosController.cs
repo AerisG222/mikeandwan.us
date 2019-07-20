@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
@@ -56,7 +57,7 @@ namespace MawMvcApp.Controllers
         [HttpGet("GetMobileThumbnail/{id:int}")]
         public async Task<IActionResult> GetMobileThumbnail(short id)
 		{
-            var category = await _svc.GetCategoryAsync(id, Role.IsAdmin(User));
+            var category = await _svc.GetCategoryAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
 			var thumbInfo = category.TeaserImage;
             var croppedImageStream = _imageCropper.CropImage(thumbInfo.Path, MOBILE_THUMB_SIZE);
 
@@ -73,7 +74,7 @@ namespace MawMvcApp.Controllers
         public async Task<IActionResult> DownloadCategory(short id)
         {
             var filename = "photos.zip";
-            var photos = await _svc.GetPhotosForCategoryAsync(id, Role.IsAdmin(User));
+            var photos = await _svc.GetPhotosForCategoryAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
             var stream = _photoZipper.Zip(photos);
 
             if(stream == null)
@@ -91,9 +92,9 @@ namespace MawMvcApp.Controllers
             Log.LogInformation($"Attempting to download photo with id: {id} and size: {size}");
 
             string path = null;
-            var photo = await _svc.GetPhotoAsync(id, Role.IsAdmin(User));
+            var photo = await _svc.GetPhotoAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
 
-            switch(size?.ToLower())
+            switch(size?.ToLower(CultureInfo.InvariantCulture))
             {
                 case "xs":
                     path = photo.XsInfo.Path;
@@ -124,9 +125,10 @@ namespace MawMvcApp.Controllers
                 return BadRequest();
             }
 
-            var stream = new FileStream(fi.PhysicalPath, FileMode.Open, FileAccess.Read);
-
-			return File(stream, GetContentType(path), Path.GetFileName(path));
+            using(var stream = new FileStream(fi.PhysicalPath, FileMode.Open, FileAccess.Read))
+            {
+			    return File(stream, GetContentType(path), Path.GetFileName(path));
+            }
         }
 
 

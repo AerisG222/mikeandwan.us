@@ -31,7 +31,7 @@ namespace MawMvcApp.ViewComponents
 
             model.ActiveNavigationZone = activeZone;
 
-            model.AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, Policy.AdminSite)).Succeeded;
+            model.AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, Policy.AdminSite).ConfigureAwait(false)).Succeeded;
 
             return View(model);
         }

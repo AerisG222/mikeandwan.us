@@ -14,32 +14,32 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 	{
 		private StringBuilder Errors { get; set; }
 		private int CurrErr { get; set; }
-		
-		
+
+
 		[Required(ErrorMessage = "Please enter the XML source")]
 		[Display(Name = "XML Source")]
 		[DataType(DataType.MultilineText)]
 		public string XmlSource { get; set; }
-		
+
 		[Display(Name = "Schema / DTD Source")]
 		[DataType(DataType.MultilineText)]
 		public string SchemaOrDtdSource { get; set; }
-		
+
 		[BindNever]
 		public bool ValidationAttempted { get; set; }
-		
+
 		[BindNever]
 		public bool HasErrors { get; set; }
-		
+
 		[BindNever]
-		public bool AreErrors 
-		{ 
+		public bool AreErrors
+		{
 			get
 			{
 				return CurrErr > 0;
 			}
 		}
-		
+
 		[BindNever]
 		public string ValidationErrors
 		{
@@ -49,27 +49,27 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 				{
 					return string.Empty;
 				}
-				
+
 				return Errors.ToString();
 			}
 		}
-		
-		
+
+
 		public void ValidateXml()
 		{
 			ValidationAttempted = true;
 			Stream xmlStream = null;
-			Stream xsdStream = null;			
-			
+			Stream xsdStream = null;
+
 			try
 			{
 				xmlStream = StreamUtils.ConvertStringToStream(XmlSource);
-	
+
 		        if(!string.IsNullOrEmpty(SchemaOrDtdSource))
 		        {
 		            xsdStream = StreamUtils.ConvertStringToStream(SchemaOrDtdSource);
 		        }
-				
+
 				ValidateXml(xmlStream, xsdStream);
 			}
 			finally
@@ -84,30 +84,32 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 				}
 			}
 		}
-		
+
 
 		void ValidateXml(Stream xmlStream, Stream xsdStream)
 	    {
 			XmlReader reader = null;
+            XmlReader schemaReader = null;
 			Errors = new StringBuilder();
 			CurrErr = 0;
-			
+
 	        try
 	        {
 	            XmlReaderSettings settings = new XmlReaderSettings();
-	
+
 	            if(xsdStream != null)
 	            {
-	                XmlSchema schema = XmlSchema.Read(xsdStream, ValidationHandler);
+                    schemaReader = XmlReader.Create(xsdStream);
+	                var schema = XmlSchema.Read(schemaReader, ValidationHandler);
 	                settings.Schemas.Add(schema);
 	            }
 	            else
 	            {
 	                settings.ValidationType = ValidationType.None;
 	            }
-	
+
 	            reader = XmlReader.Create(xmlStream, settings);
-	
+
 	            // now that we have fully prepared the validating reader,
 	            // read through all contents of the xml doc to validate
 	            while(reader.Read())
@@ -138,18 +140,23 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 	        }
 			finally
 			{
+                if(schemaReader != null)
+                {
+                    schemaReader.Close();
+                }
+
 				if(reader != null)
 				{
 					reader.Close();
 				}
 			}
 	    }
-	
-	
+
+
 	    void ValidationHandler(object sender, ValidationEventArgs e)
 	    {
 	        CurrErr++;
-	
+
 	        Errors.Append(string.Concat("[", CurrErr, "] Error Validating XML\n"));
 	        Errors.Append(string.Concat("[", CurrErr, "] Line: ", e.Exception.LineNumber, "\n"));
 	        Errors.Append(string.Concat("[", CurrErr, "] Position: ", e.Exception.LinePosition, "\n"));

@@ -12,7 +12,7 @@ namespace MawMvcApp.ViewModels.Tools.FileSize
         public string SizeScale { get; set; }
 
         [BindNever]
-        public Result[] Results { get; set; }
+        public List<Result> Results { get; private set; }
 
         [BindNever]
         public string ErrorMessage { get; set; }
@@ -36,7 +36,7 @@ namespace MawMvcApp.ViewModels.Tools.FileSize
                 results.Add(new Result(u.Name, sizeInBytes / u.BytesInUnit));
             }
 
-            Results = results.ToArray();
+            Results = results;
         }
     }
 }

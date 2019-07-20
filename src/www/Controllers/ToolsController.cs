@@ -57,6 +57,11 @@ namespace MawMvcApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult RollTheDice(RollTheDiceModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
 			if(ModelState.IsValid)
@@ -139,6 +144,11 @@ namespace MawMvcApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult DotnetRegex(RegexViewModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
 			if(ModelState.IsValid)
@@ -167,6 +177,11 @@ namespace MawMvcApp.Controllers
         [HttpPost("networking-bandwidth")]
 		public IActionResult NetworkingBandwidth(BandwidthViewModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
             if(ModelState.IsValid)
@@ -194,6 +209,11 @@ namespace MawMvcApp.Controllers
         [HttpPost("networking-file-size")]
 		public IActionResult NetworkingFileSize(FileSizeViewModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
             if(ModelState.IsValid)
@@ -221,6 +241,11 @@ namespace MawMvcApp.Controllers
         [HttpPost("networking-time")]
 		public IActionResult NetworkingTime(NetworkingTimeViewModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
             if(ModelState.IsValid)
@@ -285,6 +310,11 @@ namespace MawMvcApp.Controllers
         [HttpPost("byte-counter")]
 		public IActionResult ByteCounter(ByteCounterViewModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
             model.Calculate();
@@ -310,19 +340,24 @@ namespace MawMvcApp.Controllers
 
 		[HttpPost("date-diff")]
 		[ValidateAntiForgeryToken]
-		public IActionResult DateDiff(DateDiff dd)
+		public IActionResult DateDiff(DateDiff model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
-			dd.ShowResults = ModelState.IsValid;
+			model.ShowResults = ModelState.IsValid;
 
 			if(!ModelState.IsValid)
 			{
-				dd.HasErrors = true;
+				model.HasErrors = true;
 				LogValidationErrors();
 			}
 
-			return View(dd);
+			return View(model);
 		}
 
 
@@ -339,6 +374,11 @@ namespace MawMvcApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult GpsConversion(GpsConversionModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
 			if(ModelState.IsValid)
@@ -377,6 +417,11 @@ namespace MawMvcApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult HtmlEncode(HtmlEncodeDecodeModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
 			if(ModelState.IsValid)
@@ -425,6 +470,11 @@ namespace MawMvcApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult RandomBytes(RandomBytesModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
 			if(ModelState.IsValid)
@@ -454,6 +504,11 @@ namespace MawMvcApp.Controllers
 		[ValidateAntiForgeryToken]
         public IActionResult ColorConverter(ColorConverterModel model)
         {
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             ViewBag.NavigationZone = NavigationZone.Tools;
 
             if(ModelState.IsValid)
@@ -483,6 +538,11 @@ namespace MawMvcApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult UrlEncode(UrlEncodeModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
 			if(ModelState.IsValid)
@@ -512,6 +572,11 @@ namespace MawMvcApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult XmlValidate(XmlValidateModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
 			if(ModelState.IsValid)
@@ -541,6 +606,11 @@ namespace MawMvcApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult XsdValidate(XsdValidateModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
 			if(ModelState.IsValid)
@@ -570,6 +640,11 @@ namespace MawMvcApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult XslTransform(XslTransformModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Tools;
 
 			if(ModelState.IsValid)

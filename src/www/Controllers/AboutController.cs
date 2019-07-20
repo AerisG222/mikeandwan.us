@@ -42,8 +42,8 @@ namespace MawMvcApp.Controllers
             _config = contactOpts.Value;
 
 			_blogService = blogService ?? throw new ArgumentNullException(nameof(blogService));
-			_captchaService = captchaService ?? throw new ArgumentException(nameof(captchaService));
-			_emailService = emailService ?? throw new ArgumentException(nameof(emailService));
+			_captchaService = captchaService ?? throw new ArgumentNullException(nameof(captchaService));
+			_emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
 			_razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
         }
 
@@ -78,16 +78,21 @@ namespace MawMvcApp.Controllers
 		[ValidateAntiForgeryToken]
         public async Task<IActionResult> Contact(IFormCollection collection)
 		{
+            if(collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.About;
 
             var model = new ContactModel();
-			await TryUpdateModelAsync<ContactModel>(model);
+			await TryUpdateModelAsync<ContactModel>(model).ConfigureAwait(false);
 			model.RecaptchaSiteKey = _captchaService.SiteKey;
 			model.SubmitAttempted = true;
 
 			if(ModelState.IsValid)
 			{
-				model.IsHuman = await _captchaService.VerifyAsync(collection["g-recaptcha-response"]);
+				model.IsHuman = await _captchaService.VerifyAsync(collection["g-recaptcha-response"]).ConfigureAwait(false);
 
 				if(!model.IsHuman)
 				{
@@ -137,7 +142,7 @@ namespace MawMvcApp.Controllers
         public async Task<IActionResult> News()
         {
 			ViewBag.NavigationZone = NavigationZone.About;
-			var blogs = await _blogService.GetLatestPostsAsync(MawConstants.MawBlogId, 10);
+			var blogs = await _blogService.GetLatestPostsAsync(MawConstants.MawBlogId, 10).ConfigureAwait(false);
 
             return View(blogs);
         }

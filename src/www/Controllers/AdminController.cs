@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +45,7 @@ namespace MawMvcApp.Controllers
 			var post = new BlogPostModel();
 			var date = DateTime.Now;
 
-			post.Title = date.ToString("MMMM dd, yyyy");
+			post.Title = date.ToString("MMMM dd, yyyy", CultureInfo.InvariantCulture);
 			post.PublishDate = date;
 
 			return View(post);
@@ -55,6 +56,11 @@ namespace MawMvcApp.Controllers
         [ValidateAntiForgeryToken]
 		public async Task<IActionResult> CreateBlogPost(BlogPostModel model)
 		{
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
 			ViewBag.NavigationZone = NavigationZone.Administration;
 
 			if (ModelState.IsValid)
@@ -75,7 +81,7 @@ namespace MawMvcApp.Controllers
 						PublishDate = model.PublishDate
 					};
 
-					await _blogSvc.AddPostAsync(post);
+					await _blogSvc.AddPostAsync(post).ConfigureAwait(false);
 
 					model.Success = true;
 				}

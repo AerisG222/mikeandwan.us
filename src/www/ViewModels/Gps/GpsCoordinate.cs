@@ -1,8 +1,10 @@
 using System;
+using System.Globalization;
 
 
 namespace MawMvcApp.ViewModels.Gps
 {
+    #pragma warning disable CA1721
     public class GpsCoordinate
     {
         public float LatitudeDegrees { get; private set; }
@@ -11,8 +13,8 @@ namespace MawMvcApp.ViewModels.Gps
 		public float LongitudeMinutes { get; private set; }
         public float LatitudeSeconds { get; private set; }
         public float LongitudeSeconds { get; private set; }
-		
-		
+
+
         public LatitudeReference LatitudeRef
         {
             get
@@ -58,15 +60,15 @@ namespace MawMvcApp.ViewModels.Gps
 			float degrees;
 			float minutes;
 			float seconds;
-			
+
             GetDegreesMinutesSeconds(latDegrees, latMinutes, out degrees, out minutes, out seconds);
-			
+
 			LatitudeDegrees = degrees;
 			LatitudeMinutes = minutes;
 			LatitudeSeconds = seconds;
-			
+
             GetDegreesMinutesSeconds(lngDegrees, lngMinutes, out degrees, out minutes, out seconds);
-			
+
 			LongitudeDegrees = degrees;
 			LongitudeMinutes = minutes;
 			LongitudeSeconds = seconds;
@@ -78,15 +80,15 @@ namespace MawMvcApp.ViewModels.Gps
 			float degrees;
 			float minutes;
 			float seconds;
-			
+
             GetDegreesMinutesSeconds(latDegrees, out degrees, out minutes, out seconds);
-			
+
 			LatitudeDegrees = degrees;
 			LatitudeMinutes = minutes;
 			LatitudeSeconds = seconds;
-			
+
             GetDegreesMinutesSeconds(lngDegrees, out degrees, out minutes, out seconds);
-			
+
 			LongitudeDegrees = degrees;
 			LongitudeMinutes = minutes;
 			LongitudeSeconds = seconds;
@@ -264,6 +266,11 @@ namespace MawMvcApp.ViewModels.Gps
 
         public static void ParseGpsCoordinate(string coord, out float degrees, out float minutes, out float seconds)
         {
+            if(coord == null)
+            {
+                throw new ArgumentNullException(nameof(coord));
+            }
+
             string[] splitTerms = new string[] {" ", "'", "\"", "deg", "N", "S", "E", "W"};
 
             string[] parts = coord.Split(splitTerms, StringSplitOptions.RemoveEmptyEntries);
@@ -273,9 +280,10 @@ namespace MawMvcApp.ViewModels.Gps
                 throw new Exception("Expected to find deg, min, sec for the gps coord!");
             }
 
-            degrees = float.Parse(parts[0]);
-            minutes = float.Parse(parts[1]);
-            seconds = float.Parse(parts[2]);
+            degrees = float.Parse(parts[0], CultureInfo.InvariantCulture);
+            minutes = float.Parse(parts[1], CultureInfo.InvariantCulture);
+            seconds = float.Parse(parts[2], CultureInfo.InvariantCulture);
         }
     }
+    #pragma warning restore CA1721
 }

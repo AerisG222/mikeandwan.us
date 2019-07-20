@@ -13,7 +13,7 @@ namespace MawMvcApp.ViewModels.Tools.Bandwidth
         public char TimeScale { get; set; }
 
         [BindNever]
-        public BandwidthSizeResult[] Results { get; set; }
+        public List<BandwidthSizeResult> Results { get; private set; }
 
         [BindNever]
         public string ErrorMessage { get; set; }
@@ -67,7 +67,7 @@ namespace MawMvcApp.ViewModels.Tools.Bandwidth
                 results.Add(new BandwidthSizeResult(size.Name, size.Speed, (sizeInBytes / size.Bps) / timeInSeconds));
             }
 
-            Results = results.ToArray();
+            Results = results;
         }
     }
 }

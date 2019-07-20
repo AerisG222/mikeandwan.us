@@ -23,44 +23,44 @@ namespace MawMvcApp.ViewModels.Tools
         public byte? BlueComponent { get; set; }
 
         public ColorConversionMode ConversionMode { get; set; }
-        
+
         [BindNever]
         public bool HasErrors { get; set; }
-        
+
         [BindNever]
         public string ErrorMessage { get; set; }
 
         [BindNever]
         public string HtmlColorCode { get; set; }
-        
-        
+
+
         public IEnumerable<ValidationResult> Validate (ValidationContext validationContext)
         {
             switch(ConversionMode)
             {
                 case ColorConversionMode.FromHex:
-                    if(string.IsNullOrEmpty(HexColorCode)) 
-                    { 
+                    if(string.IsNullOrEmpty(HexColorCode))
+                    {
                         yield return new ValidationResult("Color code must be provided.", new string[] {nameof(HexColorCode)});
                     }
-                    else if(!ValidateHexCode()) 
+                    else if(!ValidateHexCode())
                     {
                         yield return new ValidationResult("Color code is not a valid hex format.  Please enter this as #RRGGBB", new string [] { nameof(HexColorCode) });
-                    }    
-                    
+                    }
+
                     break;
                 case ColorConversionMode.FromComponents:
-                    if(RedComponent == null) 
-                    { 
-                        yield return new ValidationResult("Red component must be provided.", new string[] {nameof(RedComponent)}); 
+                    if(RedComponent == null)
+                    {
+                        yield return new ValidationResult("Red component must be provided.", new string[] {nameof(RedComponent)});
                     }
-                    if(GreenComponent == null) 
-                    { 
-                        yield return new ValidationResult("Green component must be provided.", new string[] {nameof(GreenComponent)}); 
+                    if(GreenComponent == null)
+                    {
+                        yield return new ValidationResult("Green component must be provided.", new string[] {nameof(GreenComponent)});
                     }
-                    if(BlueComponent == null) 
-                    { 
-                        yield return new ValidationResult("Blue component must be provided.", new string[] {nameof(BlueComponent)}); 
+                    if(BlueComponent == null)
+                    {
+                        yield return new ValidationResult("Blue component must be provided.", new string[] {nameof(BlueComponent)});
                     }
                     break;
                 default:
@@ -72,12 +72,12 @@ namespace MawMvcApp.ViewModels.Tools
         public void Convert()
         {
             switch(ConversionMode)
-            { 
+            {
                 case ColorConversionMode.FromHex:
-                    try 
+                    try
                     {
                         var code = NormalizeHexCode();
-                        
+
                         switch(code.Length) {
                             case 3:
                                 RedComponent = ToByte(string.Concat(code[0], code[0]));
@@ -93,7 +93,7 @@ namespace MawMvcApp.ViewModels.Tools
                                 ErrorMessage = "Invalid color value";
                                 break;
                         }
-                        
+
                         HtmlColorCode = GetHtmlColorCodeFromComponents();
                     }
                     catch {
@@ -110,50 +110,50 @@ namespace MawMvcApp.ViewModels.Tools
                     throw new Exception("Make sure conversion mode is properly specified");
             }
         }
-        
-        
-        bool ValidateHexCode() 
+
+
+        bool ValidateHexCode()
         {
             var code = NormalizeHexCode();
-            var max = int.Parse("FFFFFF", NumberStyles.HexNumber);
+            var max = int.Parse("FFFFFF", NumberStyles.HexNumber, CultureInfo.InvariantCulture);
             int val;
-            
+
             if(int.TryParse(code, NumberStyles.HexNumber, CultureInfo.InvariantCulture.NumberFormat, out val)) {
                 if(val < 0 || val > max) {
                     return false;
                 }
-                
+
                 return true;
             }
-            
+
             return false;
         }
-        
-        
+
+
         string GetHtmlColorCodeFromComponents() {
             return string.Concat("#", ToHex(RedComponent), ToHex(GreenComponent), ToHex(BlueComponent));
         }
-        
-        
-        string NormalizeHexCode() 
+
+
+        string NormalizeHexCode()
         {
-            if(HexColorCode.StartsWith("#")) {
+            if(HexColorCode.StartsWith("#", true, CultureInfo.InvariantCulture)) {
                 return HexColorCode.Substring(1);
             }
-            
+
             return HexColorCode;
         }
-        
-        
-        byte ToByte(string hex) 
+
+
+        byte ToByte(string hex)
         {
-            return (byte)int.Parse(hex, NumberStyles.HexNumber);
+            return (byte)int.Parse(hex, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
         }
-        
-        
-        string ToHex(byte? val) 
+
+
+        string ToHex(byte? val)
         {
-            return ((byte)val).ToString("X2").ToLower();
+            return ((byte)val).ToString("X2", CultureInfo.InvariantCulture).ToLowerInvariant();
         }
     }
 }

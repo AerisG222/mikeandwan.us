@@ -11,61 +11,61 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 		[DataType(DataType.MultilineText)]
 		[Display(Name = "Regular Expression Pattern")]
 		public string Pattern { get; set; }
-		
+
 		[Required(ErrorMessage = "Please enter the input string")]
 		[DataType(DataType.MultilineText)]
 		[Display(Name = "Input String")]
 		public string Input { get; set; }
-		
-		
+
+
 		[Display(Name = "Culture Invariant")]
 		public bool OptionCultureInvariant { get; set; }
-		
+
 		[Display(Name = "ECMA Script")]
 		public bool OptionEcmaScript { get; set; }
-		
+
 		[Display(Name = "Explicit Capture")]
 		public bool OptionExplicitCapture { get; set; }
-		
+
 		[Display(Name = "Ignore Case")]
 		public bool OptionIgnoreCase { get; set; }
-		
+
 		[Display(Name = "Ignore Pattern Whitespace")]
 		public bool OptionIgnorePatternWhitespace { get; set; }
-		
+
 		[Display(Name = "Multiline")]
 		public bool OptionMultiline { get; set; }
-		
+
 		[Display(Name = "None")]
 		public bool OptionNone { get; set; }
-		
+
 		[Display(Name = "Right to Left")]
 		public bool OptionRightToLeft { get; set; }
-		
+
 		[Display(Name = "Single Line")]
 		public bool OptionSingleLine { get; set; }
-		
+
 		[BindNever]
 		public bool HasErrors { get; set; }
-		
+
 		[BindNever]
-		public MatchCollection RegexMatches { get; set; }
-		
+		public MatchCollection RegexMatches { get; private set; }
+
 		[BindNever]
 		public Regex Regex { get; set; }
-		
-		
+
+
 		public void Execute()
 		{
 			Regex = PrepareRegex();
 			RegexMatches = Regex.Matches(Input.Trim());
 		}
-		
-		
+
+
 		Regex PrepareRegex()
 	    {
 	        RegexOptions options = RegexOptions.None;
-	
+
 	        if(OptionCultureInvariant)
 	        {
 	            options = options | RegexOptions.CultureInvariant;
@@ -99,7 +99,7 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet
 	        {
 	            options = options | RegexOptions.Singleline;
 	        }
-	
+
 	        return new Regex(Pattern, options);
 	    }
 	}

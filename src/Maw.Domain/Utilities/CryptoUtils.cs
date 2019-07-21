@@ -35,6 +35,7 @@ namespace Maw.Domain.Utilities
 		}
 
 
+#pragma warning disable SCS0005
         public static string GeneratePassword(int length)
         {
             var sb = new StringBuilder();
@@ -47,5 +48,6 @@ namespace Maw.Domain.Utilities
 
             return sb.ToString();
         }
+#pragma warning restore SCS0005
     }
 }

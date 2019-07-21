@@ -175,6 +175,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpPost("networking-bandwidth")]
+        [ValidateAntiForgeryToken]
 		public IActionResult NetworkingBandwidth(BandwidthViewModel model)
 		{
             if(model == null)
@@ -207,6 +208,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpPost("networking-file-size")]
+        [ValidateAntiForgeryToken]
 		public IActionResult NetworkingFileSize(FileSizeViewModel model)
 		{
             if(model == null)
@@ -239,6 +241,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpPost("networking-time")]
+        [ValidateAntiForgeryToken]
 		public IActionResult NetworkingTime(NetworkingTimeViewModel model)
 		{
             if(model == null)
@@ -308,6 +311,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpPost("byte-counter")]
+        [ValidateAntiForgeryToken]
 		public IActionResult ByteCounter(ByteCounterViewModel model)
 		{
             if(model == null)

@@ -63,6 +63,7 @@ namespace MawMvcApp.ViewModels.Tools
 		}
 
 
+#pragma warning disable SCS0005
 		public void ThrowDice()
 		{
 			ThrowCounts = new List<int>(new int[NumberOfSides]);
@@ -76,4 +77,5 @@ namespace MawMvcApp.ViewModels.Tools
 			Executed = true;
 		}
 	}
+#pragma warning restore SCS0005
 }

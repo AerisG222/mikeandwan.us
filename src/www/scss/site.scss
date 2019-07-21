@@ -164,14 +164,6 @@ button {
     }
 }
 
-/* not sure why this is needed, but appearance:none; does not seem to work for me on chrome/ff on linux */
-.custom-select {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-
 @include media-breakpoint-up(lg) {
     .banner {
         height: 300px;

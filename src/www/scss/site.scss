@@ -156,10 +156,10 @@ button {
     }
 }
 
-#sidebarAccordion {
+.sidebar-accordion {
     & .btn {
+        font-weight: 700;
         color: $body-color;
-        font-weight: bold;
         text-shadow: none;
     }
 }
@@ -168,6 +168,7 @@ button {
 .custom-select {
     -moz-appearance: none;
     -webkit-appearance: none;
+    appearance: none;
 }
 
 

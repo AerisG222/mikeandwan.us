@@ -269,9 +269,6 @@ for SITE in "${SITES[@]}"
 do
     cd "${DIST_ROOT}/${SITE}"
     DLL=$(get_site_dll_name "${SITE}")
-
-    echo "GOT DLL: ${DLL}"
-
     ASPNETCORE_ENVIRONMENT=staging dotnet "${DLL}" > "${TOOLS_ROOT}/${SITE}.log" &
     PIDS[${#PIDS[@]}]=$!
 done

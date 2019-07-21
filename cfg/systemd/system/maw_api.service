@@ -4,7 +4,7 @@ Description=mikeandwan.us web api
 [Service]
 EnvironmentFile=/etc/systemd/system/maw_api.env
 WorkingDirectory=/srv/www/maw_api
-ExecStart=/usr/share/dotnet/dotnet maw_api.dll
+ExecStart=/usr/share/dotnet/dotnet MawApi.dll
 RuntimeDirectory=maw_api
 RuntimeDirectoryMode=0775
 Restart=always

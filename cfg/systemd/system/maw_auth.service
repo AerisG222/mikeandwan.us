@@ -4,7 +4,7 @@ Description=mikeandwan.us web oauth application
 [Service]
 EnvironmentFile=/etc/systemd/system/maw_auth.env
 WorkingDirectory=/srv/www/maw_auth
-ExecStart=/usr/share/dotnet/dotnet maw_auth.dll
+ExecStart=/usr/share/dotnet/dotnet MawAuth.dll
 RuntimeDirectory=maw_auth
 RuntimeDirectoryMode=0775
 Restart=always

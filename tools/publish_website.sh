@@ -164,6 +164,20 @@ build_sass() {
     npm run sass
 }
 
+get_site_dll_name() {
+    local SITE=$1
+
+    if [ "${SITE}" == 'api' ]
+    then
+        echo 'MawApi.dll'
+    elif [ "${SITE}" == 'auth' ]
+    then
+        echo 'MawAuth.dll'
+    else
+        echo 'MawWww.dll'
+    fi
+}
+
 echo ''
 echo '***************************************'
 echo '** STEP 1: build css                 **'
@@ -254,7 +268,11 @@ PIDS=()
 for SITE in "${SITES[@]}"
 do
     cd "${DIST_ROOT}/${SITE}"
-    ASPNETCORE_ENVIRONMENT=staging dotnet "maw_${SITE}.dll" > "${TOOLS_ROOT}/${SITE}.log" &
+    DLL=$(get_site_dll_name "${SITE}")
+
+    echo "GOT DLL: ${DLL}"
+
+    ASPNETCORE_ENVIRONMENT=staging dotnet "${DLL}" > "${TOOLS_ROOT}/${SITE}.log" &
     PIDS[${#PIDS[@]}]=$!
 done
 

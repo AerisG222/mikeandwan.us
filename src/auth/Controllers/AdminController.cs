@@ -421,13 +421,13 @@ namespace MawAuth.Controllers
 				}
 			}
 
-			if(errs.Count() == 0)
+			if(errs.Any())
 			{
-				model.Result = IdentityResult.Success;
+				model.Result = IdentityResult.Failed(errs.ToArray());
 			}
 			else
 			{
-				model.Result = IdentityResult.Failed(errs.ToArray());
+				model.Result = IdentityResult.Success;
 			}
 
 			// after the changes, get the new membership info (we are now
@@ -499,13 +499,13 @@ namespace MawAuth.Controllers
 					}
 				}
 
-				if(errs.Count() == 0)
+				if(errs.Any())
 				{
-					model.Result = IdentityResult.Success;
+					model.Result = IdentityResult.Failed(errs.ToArray());
 				}
 				else
 				{
-					model.Result = IdentityResult.Failed(errs.ToArray());
+					model.Result = IdentityResult.Success;
 				}
 			}
 			else

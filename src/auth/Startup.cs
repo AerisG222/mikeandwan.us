@@ -24,10 +24,10 @@ namespace MawAuth
     public class Startup
     {
         readonly IConfiguration _config;
-        readonly IHostingEnvironment _env;
+        readonly IWebHostEnvironment _env;
 
 
-        public Startup(IConfiguration config, IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration config, IWebHostEnvironment hostingEnvironment)
         {
             _env = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
             _config = config ?? throw new ArgumentNullException(nameof(config));

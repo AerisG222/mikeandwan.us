@@ -138,7 +138,7 @@ namespace Maw.Domain.Upload
                 throw new ArgumentNullException(nameof(user));
             }
 
-            if(relativePaths == null || relativePaths.Count() == 0)
+            if(relativePaths == null || !relativePaths.Any())
             {
                 throw new ArgumentNullException(nameof(relativePaths));
             }

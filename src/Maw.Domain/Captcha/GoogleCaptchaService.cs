@@ -13,7 +13,7 @@ namespace Maw.Domain.Captcha
 	public class GoogleCaptchaService
 		: ICaptchaService
 	{
-		const string URL = "https://www.google.com/recaptcha/api/siteverify";
+		static readonly Uri URL = new Uri("https://www.google.com/recaptcha/api/siteverify");
 		readonly GoogleCaptchaConfig _config;
 		readonly ILogger _log;
 

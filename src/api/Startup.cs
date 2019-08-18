@@ -25,10 +25,10 @@ namespace MawApi
     public class Startup
     {
         readonly IConfiguration _config;
-        readonly IHostingEnvironment _env;
+        readonly IWebHostEnvironment _env;
 
 
-        public Startup(IConfiguration config, IHostingEnvironment env)
+        public Startup(IConfiguration config, IWebHostEnvironment env)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _env = env ?? throw new ArgumentNullException(nameof(env));

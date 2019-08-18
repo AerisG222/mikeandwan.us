@@ -12,10 +12,16 @@ namespace MawApi
     {
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder();
+            CreateHostBuilder(args)
+                .Build()
+                .Run();
+        }
 
-            host
-                .UseContentRoot(Directory.GetCurrentDirectory())
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host
+                .CreateDefaultBuilder(args)
+//                .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((context, builder) =>
                     {
                         builder.AddEnvironmentVariables("MAW_API_");
@@ -41,7 +47,13 @@ namespace MawApi
                                 .AddFilter("MawApi", LogLevel.Information);
                         }
                     })
-                .UseKestrel(opts =>
+                .UseDefaultServiceProvider((context, options) => {
+                    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
+                })
+                .ConfigureWebHostDefaults(webBuilder => {
+                    webBuilder.UseStartup<Startup>();
+
+                    webBuilder.UseKestrel(opts =>
                     {
                         var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
                         var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
@@ -50,14 +62,9 @@ namespace MawApi
                             {
                                 listenOptions.UseHttps(config["KestrelPfxFile"], pwd);
                             });
-                    })
-                .CaptureStartupErrors(true)
-                .UseDefaultServiceProvider((context, options) => {
-                    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
-                })
-                .UseStartup<Startup>()
-                .Build()
-                .Run();
-        }
+                    });
+
+                    webBuilder.CaptureStartupErrors(true);
+                });
     }
 }

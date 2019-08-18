@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using IdentityModel;
@@ -113,8 +114,8 @@ namespace MawMvcApp
                             .AllowAnyMethod();
                     });
                 })
-                .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .AddControllersWithViews()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
                 if(_env.IsDevelopment())
                 {
@@ -125,6 +126,10 @@ namespace MawMvcApp
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseStaticFiles(new StaticFileOptions {
+                    ContentTypeProvider = GetCustomMimeTypeProvider()
+                });
+            app.UseRouting();
             app.UseCors("default");
 
             if (_env.IsDevelopment())
@@ -144,10 +149,10 @@ namespace MawMvcApp
                         ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
                     })
                 .UseAuthentication()
-                .UseStaticFiles(new StaticFileOptions {
-                    ContentTypeProvider = GetCustomMimeTypeProvider()
-                })
-                .UseMvc();
+                .UseAuthorization()
+                .UseEndpoints(endpoints => {
+                    endpoints.MapControllers();
+                });
         }
 
 

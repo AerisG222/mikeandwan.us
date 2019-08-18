@@ -51,11 +51,8 @@ namespace MawApi
                 .AddMawDomainServices()
                 .AddMawApiServices()
                 .AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>()
-                .AddMvc()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                    .Services
-                .AddSignalR()
-                    .AddMessagePackProtocol()
+                .AddControllers()
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                     .Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opts => {
@@ -118,12 +115,16 @@ namespace MawApi
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseRouting();
             app.UseCors("default");
             app.UseOpenApi();
             app.UseSwaggerUi3();
             app.UseAuthentication();
-            app.UseSignalR(routes => routes.MapHub<UploadHub>("/uploadr"));
-            app.UseMvc();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints => {
+                endpoints.MapHub<UploadHub>("/uploadr");
+                endpoints.MapControllers();
+            });
         }
     }
 }

@@ -13,10 +13,16 @@ namespace MawMvcApp
     {
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder();
+            CreateHostBuilder(args)
+                .Build()
+                .Run();
+        }
 
-            host
-                .UseContentRoot(Directory.GetCurrentDirectory())
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host
+                .CreateDefaultBuilder(args)
+//                .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((context, builder) =>
                     {
                         builder.AddJsonFile("config.json");
@@ -43,7 +49,13 @@ namespace MawMvcApp
                                 .AddFilter("MawMvcApp", LogLevel.Information);
                         }
                     })
-                .UseKestrel(opts =>
+                .UseDefaultServiceProvider((context, options) => {
+                    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
+                })
+                .ConfigureWebHostDefaults(webBuilder => {
+                    webBuilder.UseStartup<Startup>();
+
+                    webBuilder.UseKestrel(opts =>
                     {
                         opts.Listen(IPAddress.Loopback, 5021, listenOptions =>
                             {
@@ -52,14 +64,9 @@ namespace MawMvcApp
 
                                 listenOptions.UseHttps(config["KestrelPfxFile"], pwd);
                             });
-                    })
-                .CaptureStartupErrors(true)
-                .UseDefaultServiceProvider((context, options) => {
-                    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
-                })
-                .UseStartup<Startup>()
-                .Build()
-                .Run();
-        }
+                    });
+
+                    webBuilder.CaptureStartupErrors(true);
+                });
     }
 }

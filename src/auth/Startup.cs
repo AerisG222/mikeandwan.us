@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using IdentityServer4;
 using Mvc.RenderViewToString;
 using Maw.Data;
@@ -70,14 +72,6 @@ namespace MawAuth
                         opts.ClientSecret = _config["GitHub:ClientSecret"];
                         opts.Scope.Add("user:email");
                     })
-                /*
-                .AddGoogle(opts =>
-                    {
-                        opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                        opts.ClientId = _config["GooglePlus:ClientId"];
-                        opts.ClientSecret = _config["GooglePlus:ClientSecret"];
-                    })
-                */
                 .AddGoogle(opts =>
                     {
                         // https://github.com/aspnet/AspNetCore/issues/6486
@@ -122,12 +116,12 @@ namespace MawAuth
                     {
                         MawPolicyBuilder.AddMawPolicies(opts);
                     })
-                .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .AddControllersWithViews()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -139,8 +133,11 @@ namespace MawAuth
             }
 
             app.UseStaticFiles();
+            app.UseRouting();
             app.UseIdentityServer();
-            app.UseMvc();
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllers();
+            });
         }
     }
 }

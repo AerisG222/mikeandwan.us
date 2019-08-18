@@ -10,7 +10,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="3.0.0-preview7.19365.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0-preview8.19405.7" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="3.0.0-preview8.19405.7" />
         <PackageReference Include="NSwag.AspNetCore" Version="13.0.4" />
     </ItemGroup>
 
@@ -20,7 +21,9 @@
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
+        <!--
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Api.Analyzers" Version="3.0.0-preview3-19153-02" />
+        -->
 
         <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.4">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

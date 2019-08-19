@@ -2,8 +2,8 @@ using System;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
-using StackExchange.Profiling;
-using StackExchange.Profiling.Data;
+//using StackExchange.Profiling;
+//using StackExchange.Profiling.Data;
 using Npgsql;
 using Maw.Domain;
 
@@ -89,7 +89,9 @@ namespace Maw.Data
         {
             DbConnection dbConn = new NpgsqlConnection(_connString);
 
-            return new ProfiledDbConnection(dbConn, MiniProfiler.Current);
+            // TODO: re-enable miniprofiler
+            //return new ProfiledDbConnection(dbConn, MiniProfiler.Current);
+            return dbConn;
         }
 #pragma warning restore CA2000
     }

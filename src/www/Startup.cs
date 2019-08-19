@@ -119,7 +119,7 @@ namespace MawMvcApp
 
                 if(_env.IsDevelopment())
                 {
-                    services.AddMiniProfiler();
+                    //services.AddMiniProfiler();
                 }
         }
 
@@ -134,7 +134,8 @@ namespace MawMvcApp
 
             if (_env.IsDevelopment())
             {
-                app.UseMiniProfiler();
+                // TODO: re-enable miniprofiler
+                //app.UseMiniProfiler();
                 app.UseDeveloperExceptionPage();
                 AddDevPathMappings(app);
             }

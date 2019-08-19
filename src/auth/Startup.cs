@@ -134,6 +134,8 @@ namespace MawAuth
 
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseIdentityServer();
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();

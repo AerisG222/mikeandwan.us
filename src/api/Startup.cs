@@ -54,6 +54,8 @@ namespace MawApi
                 .AddControllers()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                     .Services
+                .AddSignalR()
+                    .Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opts => {
                         opts.Authority = urlConfig.Auth;

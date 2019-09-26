@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -106,6 +108,7 @@ namespace MawAuth
                         // we need to set this especially for dev otherwise the issuer becomes 10.0.2.2 when testing the android app
                         opts.IssuerUri = _config["Environment:AuthUrl"];
                     })
+                    .AddMawIdentityServerKeyMaterial(_config["SigningCertDir"])
                     .AddInMemoryApiResources(config.GetApiResources())
                     .AddInMemoryClients(config.GetClients())
                     .AddInMemoryIdentityResources(config.GetIdentityResources())

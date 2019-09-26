@@ -193,7 +193,7 @@ namespace MawAuth.Controllers
 
 			await _signInManager.SignOutAsync().ConfigureAwait(false);
 
-			return Redirect(logout.PostLogoutRedirectUri);
+			return RedirectToLocal(logout.PostLogoutRedirectUri);
 		}
 
 

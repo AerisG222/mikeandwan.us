@@ -13,8 +13,6 @@ namespace MawAuth.Services
             Dapper.SqlMapper.AddTypeMap(typeof(string), System.Data.DbType.AnsiString);
 
             services
-                .AddSingleton<ISigningCredentialStore>(new MawSigningCredentialStore(signingCertDir))
-                .AddSingleton<IValidationKeysStore>(new MawValidationKeysStore(signingCertDir))
                 .AddSingleton<StoreConfig>(new StoreConfig(connString))
                 .AddScoped<IPersistedGrantStore, PersistedGrantStore>();
 

@@ -126,7 +126,9 @@ namespace MawMvcApp.Controllers
                 return BadRequest();
             }
 
+#pragma warning disable SCS0018
             var stream = new FileStream(fi.PhysicalPath, FileMode.Open, FileAccess.Read);
+#pragma warning restore SCS0018
 
             return File(stream, GetContentType(path), Path.GetFileName(path));
         }

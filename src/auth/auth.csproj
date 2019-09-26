@@ -17,7 +17,7 @@
         <PackageReference Include="Dapper" Version="2.0.4" />
         <PackageReference Include="IdentityServer4" Version="3.0.1" />
         <PackageReference Include="IdentityServer4.AspNetIdentity" Version="3.0.1" />
-        <PackageReference Include="Npgsql" Version="4.0.10" />
+        <PackageReference Include="Npgsql" Version="4.1.0" />
     </ItemGroup>
 
     <ItemGroup>

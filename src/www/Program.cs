@@ -22,6 +22,7 @@ namespace MawMvcApp
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host
                 .CreateDefaultBuilder(args)
+                .UseSystemd()
                 .ConfigureAppConfiguration((context, builder) =>
                     {
                         builder.AddJsonFile("config.json");

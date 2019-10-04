@@ -2,6 +2,7 @@
 Description=mikeandwan.us web application
 
 [Service]
+Type=notify
 EnvironmentFile=/etc/systemd/system/maw_www.env
 WorkingDirectory=/srv/www/maw_www
 ExecStart=/usr/share/dotnet/dotnet MawWww.dll

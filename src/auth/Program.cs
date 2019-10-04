@@ -21,6 +21,7 @@ namespace MawAuth
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host
                 .CreateDefaultBuilder(args)
+                .UseSystemd()
                 .ConfigureAppConfiguration((context, builder) =>
                     {
                         builder.AddEnvironmentVariables("MAW_AUTH_");

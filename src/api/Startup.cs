@@ -52,7 +52,6 @@ namespace MawApi
                 .AddMawApiServices()
                 .AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>()
                 .AddControllers()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                     .Services
                 .AddSignalR()
                     .Services

@@ -114,29 +114,23 @@ namespace MawMvcApp
                             .AllowAnyMethod();
                     });
                 })
-                .AddControllersWithViews()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                .AddControllersWithViews();
 
                 if(_env.IsDevelopment())
                 {
-                    //services.AddMiniProfiler();
+                    services.AddMiniProfiler();
                 }
         }
 
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseStaticFiles(new StaticFileOptions {
-                    ContentTypeProvider = GetCustomMimeTypeProvider()
-                });
-            app.UseRouting();
-            app.UseCors("default");
-
             if (_env.IsDevelopment())
             {
-                // TODO: re-enable miniprofiler
-                //app.UseMiniProfiler();
-                app.UseDeveloperExceptionPage();
+                app
+                    .UseMiniProfiler()
+                    .UseDeveloperExceptionPage();
+
                 AddDevPathMappings(app);
             }
             else
@@ -145,6 +139,11 @@ namespace MawMvcApp
             }
 
             app
+                .UseStaticFiles(new StaticFileOptions {
+                    ContentTypeProvider = GetCustomMimeTypeProvider()
+                })
+                .UseRouting()
+                .UseCors("default")
                 .UseForwardedHeaders(new ForwardedHeadersOptions
                     {
                         ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto

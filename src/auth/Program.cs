@@ -21,7 +21,6 @@ namespace MawAuth
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host
                 .CreateDefaultBuilder(args)
-//                .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((context, builder) =>
                     {
                         builder.AddEnvironmentVariables("MAW_AUTH_");
@@ -32,9 +31,9 @@ namespace MawAuth
                         {
                             factory
                                 .AddConsole()
-                                .AddFilter("IdentityServer4", LogLevel.Debug)
-                                .AddFilter("Microsoft", LogLevel.Warning)
-                                .AddFilter("System", LogLevel.Warning)
+                                .AddFilter("IdentityServer4", LogLevel.Information)
+                                .AddFilter("Microsoft", LogLevel.Information)
+                                .AddFilter("System", LogLevel.Information)
                                 .AddFilter("Maw", LogLevel.Debug)
                                 .AddFilter("MawAuth", LogLevel.Debug);
                         }
@@ -42,31 +41,31 @@ namespace MawAuth
                         {
                             factory
                                 .AddConsole()
-                                .AddFilter("IdentityServer4", LogLevel.Debug)
+                                .AddFilter("IdentityServer4", LogLevel.Warning)
                                 .AddFilter("Microsoft", LogLevel.Warning)
                                 .AddFilter("System", LogLevel.Warning)
-                                .AddFilter("Maw", LogLevel.Debug)
-                                .AddFilter("MawAuth", LogLevel.Debug);
+                                .AddFilter("Maw", LogLevel.Warning)
+                                .AddFilter("MawAuth", LogLevel.Warning);
                         }
                     })
                 .UseDefaultServiceProvider((context, options) => {
                     options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
                 })
                 .ConfigureWebHostDefaults(webBuilder => {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                        .CaptureStartupErrors(true)
+                        .UseLinuxTransport()
+                        .UseKestrel(opts =>
+                        {
+                            opts.Listen(IPAddress.Loopback, 5001, listenOptions =>
+                                {
+                                    var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
+                                    var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
 
-                    webBuilder.UseKestrel(opts =>
-                    {
-                        opts.Listen(IPAddress.Loopback, 5001, listenOptions =>
-                            {
-                                var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
-                                var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
-
-                                listenOptions.UseHttps(config["KestrelPfxFile"], pwd);
-                            });
-                    });
-
-                    webBuilder.CaptureStartupErrors(true);
+                                    listenOptions.UseHttps(config["KestrelPfxFile"], pwd);
+                                });
+                        })
+                        .UseStartup<Startup>();
                 });
     }
 }

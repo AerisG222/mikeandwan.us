@@ -21,7 +21,6 @@ namespace MawApi
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host
                 .CreateDefaultBuilder(args)
-//                .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((context, builder) =>
                     {
                         builder.AddEnvironmentVariables("MAW_API_");
@@ -32,8 +31,8 @@ namespace MawApi
                         {
                             factory
                                 .AddConsole()
-                                .AddFilter("Microsoft", LogLevel.Debug)
-                                .AddFilter("System", LogLevel.Debug)
+                                .AddFilter("Microsoft", LogLevel.Information)
+                                .AddFilter("System", LogLevel.Information)
                                 .AddFilter("Maw", LogLevel.Debug)
                                 .AddFilter("MawApi", LogLevel.Debug);
                         }
@@ -43,28 +42,28 @@ namespace MawApi
                                 .AddConsole()
                                 .AddFilter("Microsoft", LogLevel.Warning)
                                 .AddFilter("System", LogLevel.Warning)
-                                .AddFilter("Maw", LogLevel.Information)
-                                .AddFilter("MawApi", LogLevel.Information);
+                                .AddFilter("Maw", LogLevel.Warning)
+                                .AddFilter("MawApi", LogLevel.Warning);
                         }
                     })
                 .UseDefaultServiceProvider((context, options) => {
                     options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
                 })
                 .ConfigureWebHostDefaults(webBuilder => {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                        .CaptureStartupErrors(true)
+                        .UseLinuxTransport()
+                        .UseKestrel(opts =>
+                        {
+                            var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
+                            var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
 
-                    webBuilder.UseKestrel(opts =>
-                    {
-                        var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
-                        var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
-
-                        opts.Listen(IPAddress.Loopback, 5011, listenOptions =>
-                            {
-                                listenOptions.UseHttps(config["KestrelPfxFile"], pwd);
-                            });
-                    });
-
-                    webBuilder.CaptureStartupErrors(true);
+                            opts.Listen(IPAddress.Loopback, 5011, listenOptions =>
+                                {
+                                    listenOptions.UseHttps(config["KestrelPfxFile"], pwd);
+                                });
+                        })
+                        .UseStartup<Startup>();
                 });
     }
 }

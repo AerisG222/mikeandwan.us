@@ -119,8 +119,7 @@ namespace MawAuth
                     {
                         MawPolicyBuilder.AddMawPolicies(opts);
                     })
-                .AddControllersWithViews()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                .AddControllersWithViews();
         }
 
 

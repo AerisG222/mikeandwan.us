@@ -50,13 +50,5 @@ namespace MawMvcApp.Controllers
 				OpenIdConnectDefaults.AuthenticationScheme
 			});
 		}
-
-
-		[Authorize]
-		[HttpGet("spa-silent-signin")]
-		public IActionResult SpaSilentSignin()
-		{
-			return View();
-		}
     }
 }

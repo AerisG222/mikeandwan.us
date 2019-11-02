@@ -15,25 +15,6 @@ export class ShaderDemo {
         this.render();
     }
 
-    private prepareScene() {
-        const container = document.getElementById('container');
-
-        this.scene = new THREE.Scene();
-
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        this.renderer.setSize(this.WIDTH, this.HEIGHT);
-        container.appendChild(this.renderer.domElement);
-
-        this.stats = new Stats();
-        container.appendChild(this.stats.dom);
-
-        this.camera = new THREE.PerspectiveCamera(45, this.WIDTH / this.HEIGHT, 0.1, 10000);
-        this.camera.position.set(0, 0, 300);
-        this.camera.lookAt(this.scene.position);
-
-        this.setupSphere();
-    }
-
     setupSphere() {
         let geometry = new THREE.SphereBufferGeometry(100, 32, 32);
 
@@ -72,5 +53,24 @@ export class ShaderDemo {
         this.renderer.render(this.scene, this.camera);
 
         this.stats.update();
+    }
+
+    private prepareScene() {
+        const container = document.getElementById('container');
+
+        this.scene = new THREE.Scene();
+
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer.setSize(this.WIDTH, this.HEIGHT);
+        container.appendChild(this.renderer.domElement);
+
+        this.stats = new Stats();
+        container.appendChild(this.stats.dom);
+
+        this.camera = new THREE.PerspectiveCamera(45, this.WIDTH / this.HEIGHT, 0.1, 10000);
+        this.camera.position.set(0, 0, 300);
+        this.camera.lookAt(this.scene.position);
+
+        this.setupSphere();
     }
 }

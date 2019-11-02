@@ -29,6 +29,32 @@ export class TextDemo {
         this.render();
     }
 
+    render() {
+        requestAnimationFrame(() => this.render());
+
+        if (this.loaderCount < 2) {
+            return;
+        }
+
+        if (this.animate) {
+            if (this.textPivot.rotation.y >= Math.PI / 3) {
+                this.rotationAngle = -0.015;
+            }
+
+            if (this.textPivot.rotation.y <= -(Math.PI / 3)) {
+                this.rotationAngle = 0.015;
+            }
+
+            this.textPivot.rotation.y += this.rotationAngle;
+            this.textPivot.rotation.x += this.rotationAngle / 8;
+            this.textPivot.rotation.z += this.rotationAngle / 8;
+
+            this.renderer.render(this.scene, this.camera);
+
+            this.stats.update();
+        }
+    }
+
     private prepareScene() {
         // scene
         this.scene = new Scene();
@@ -127,31 +153,5 @@ export class TextDemo {
             this.loaderCount++;
             this.render();
         });
-    }
-
-    render() {
-        requestAnimationFrame(() => this.render());
-
-        if (this.loaderCount < 2) {
-            return;
-        }
-
-        if (this.animate) {
-            if (this.textPivot.rotation.y >= Math.PI / 3) {
-                this.rotationAngle = -0.015;
-            }
-
-            if (this.textPivot.rotation.y <= -(Math.PI / 3)) {
-                this.rotationAngle = 0.015;
-            }
-
-            this.textPivot.rotation.y += this.rotationAngle;
-            this.textPivot.rotation.x += this.rotationAngle / 8;
-            this.textPivot.rotation.z += this.rotationAngle / 8;
-
-            this.renderer.render(this.scene, this.camera);
-
-            this.stats.update();
-        }
     }
 }

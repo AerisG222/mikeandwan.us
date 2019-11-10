@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
 
 
 namespace Maw.Domain.Captcha
@@ -56,8 +56,7 @@ namespace Maw.Domain.Captcha
 			{
 				var response = await client.PostAsync(URL, content).ConfigureAwait(false);
 				var val = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-				var jobject = JObject.Parse(val);
-				var result = (bool)jobject["success"];
+				var result = JsonSerializer.Deserialize<GoogleCaptchaResponse>(val).success;
 
 				_log.LogInformation($"google recaptcha returned: {result}");
 

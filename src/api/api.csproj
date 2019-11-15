@@ -3,7 +3,7 @@
         <AssemblyName>MawApi</AssemblyName>
         <VersionPrefix>1.0.0</VersionPrefix>
         <Authors>Mike Morano &lt;mmorano@mikeandwan.us&gt;</Authors>
-        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <DebugType>portable</DebugType>
         <DefaultItemExcludes>**/node_modules/**;$(DefaultItemExcludes)</DefaultItemExcludes>
@@ -11,9 +11,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="3.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0-preview3.19555.2" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="3.1.0-preview3.19555.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.0-preview3.19553.2" />
         <PackageReference Include="NSwag.AspNetCore" Version="13.1.5" />
         <PackageReference Include="RedHat.AspNetCore.Server.Kestrel.Transport.Linux" Version="3.0.0-191007-1144" />
     </ItemGroup>

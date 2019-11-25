@@ -16,7 +16,7 @@
 
     <ItemGroup>
         <PackageReference Include="Google.Apis.Gmail.v1" Version="1.42.0.1635" />
-        <PackageReference Include="IdentityModel" Version="4.1.0" />
+        <PackageReference Include="IdentityModel" Version="4.1.1" />
         <PackageReference Include="MailKit" Version="2.4.1" />
         <PackageReference Include="MedallionShell" Version="1.6.0" />
         <PackageReference Include="NMagickWand" Version="0.5.1" />

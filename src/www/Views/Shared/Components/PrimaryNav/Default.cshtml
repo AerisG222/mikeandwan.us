@@ -9,11 +9,11 @@
     <li class="nav-item" maw-action="Index" maw-controller="Webgl" maw-text="webgl" maw-active="@Model.ActiveNavigationZone == NavigationZone.Webgl"></li>
 
     <li class="nav-item">
-        <a class="nav-link px-3" href="https://photos.mikeandwan.us" target="_blank"><svg-icon icon="Camera"></svg-icon></a>
+        <a class="nav-link px-3 remove-focus-on-click" href="https://photos.mikeandwan.us" target="_blank"><svg-icon icon="Camera"></svg-icon></a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link px-3" href="https://files.mikeandwan.us" target="_blank"><svg-icon icon="Upload"></svg-icon></a>
+        <a class="nav-link px-3 remove-focus-on-click" href="https://files.mikeandwan.us" target="_blank"><svg-icon icon="Upload"></svg-icon></a>
     </li>
 
     @if(Model.AuthorizedForAdmin) {

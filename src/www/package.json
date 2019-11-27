@@ -10,6 +10,7 @@
     "popper.js": "^1.16.0"
   },
   "devDependencies": {
+    "@types/jquery": "^3.3.31",
     "chokidar-cli": "^2.1.0",
     "node-sass": "^4.13.0",
     "node-sass-chokidar": "^1.4.0",
@@ -18,14 +19,17 @@
     "stylelint-config-recommended-scss": "^4.1.0",
     "stylelint-config-standard": "^19.0.0",
     "stylelint-order": "^3.1.1",
-    "stylelint-scss": "^3.13.0"
+    "stylelint-scss": "^3.13.0",
+    "typescript": "^3.7.2"
   },
   "scripts": {
+    "all": "run-p sass sitejs",
     "sass": "run-p sass:lint sass:site sass:games",
     "sass:lint": "stylelint scss/*.scss --syntax scss 2> /dev/null",
     "sass:site": "node-sass --output wwwroot/css --include-path node_modules scss/site.scss",
     "sass:games": "node-sass --output wwwroot/css --include-path node_modules scss/games.scss",
-    "sass:watch": "chokidar 'scss/**/*.scss' -c 'npm run sass'"
+    "sass:watch": "chokidar 'scss/**/*.scss' -c 'npm run sass'",
+    "sitejs": "tsc"
   },
   "author": "",
   "license": "MIT"

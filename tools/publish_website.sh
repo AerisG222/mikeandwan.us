@@ -117,6 +117,49 @@ unlink_media() {
     fi
 }
 
+minify_assets() {
+    local SITE=$1
+
+    minify_css "${SITE}"
+    minify_js "${SITE}"
+}
+
+minify_js() {
+    local SITE=$1
+    local SITE_ROOT="${BUILD_ROOT}/${SITE}"
+
+    for FILE in $( find "${SITE_ROOT}/wwwroot/js" -maxdepth 1 -name '*.js' )
+    do
+        # kill path from file
+        FILE="${FILE##*/}"
+
+        # kill extension from file
+        FILE="${FILE%.js}"
+
+        minify_js_file "${SITE_ROOT}" "${FILE}"
+    done
+}
+
+minify_js_file() {
+    local SITE_ROOT=$1
+    local FILE=$2
+
+    local ORIG="${SITE_ROOT}/wwwroot/js/${FILE}.js"
+    local ORIGURL="/js/${FILE}.js"
+    local MIN="${SITE_ROOT}/wwwroot/js/${FILE}.min.js"
+
+    uglifyjs -o "${MIN}" "${ORIG}"
+
+    local MD5="$(md5sum ${MIN} |cut -c 1-8)"
+    local MD5FILE="${SITE_ROOT}/wwwroot/js/${FILE}.min.${MD5}.js"
+    local MD5URL="/js/${FILE}.min.${MD5}.js"
+
+    mv "${MIN}" "${MD5FILE}"
+    rm "${ORIG}"
+
+    find "${SITE_ROOT}" -type f -name "*.cshtml" -exec sed -i "s#${ORIGURL}#${MD5URL}#g" {} +
+}
+
 minify_css() {
     local SITE=$1
     local SITE_ROOT="${BUILD_ROOT}/${SITE}"
@@ -152,7 +195,7 @@ minify_css_file() {
     find "${SITE_ROOT}" -type f -name "*.cshtml" -exec sed -i "s#${ORIGURL}#${MD5URL}#g" {} +
 }
 
-build_sass() {
+build_assets() {
     local SITE=$1
 
     cd "${SRC_ROOT}/${SITE}"
@@ -161,7 +204,7 @@ build_sass() {
     rm -rf node_modules
 
     npm ci
-    npm run sass
+    npm run all
 }
 
 get_site_dll_name() {
@@ -180,10 +223,10 @@ get_site_dll_name() {
 
 echo ''
 echo '***************************************'
-echo '** STEP 1: build css                 **'
+echo '** STEP 1: build assets              **'
 echo '***************************************'
-build_sass "auth"
-build_sass "www"
+build_assets "auth"
+build_assets "www"
 cd "${WD}"
 
 echo ''
@@ -238,9 +281,9 @@ rm -r "${BUILD_ROOT}/www/wwwroot/js/libs/jquery"
 rm -r "${BUILD_ROOT}/www/wwwroot/js/libs/popper"
 rm -r "${BUILD_ROOT}/www/wwwroot/js/libs/reveal"
 
-# minify css
-minify_css "auth"
-minify_css "www"
+# minify assets
+minify_assets "auth"
+minify_assets "www"
 
 # publish client apps to www
 cd "${BUILD_ROOT}/www"

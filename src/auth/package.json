@@ -21,6 +21,7 @@
     "stylelint-scss": "^3.13.0"
   },
   "scripts": {
+    "all": "run-p sass",
     "sass": "run-p sass:lint sass:site",
     "sass:lint": "stylelint scss/*.scss --syntax scss 2> /dev/null",
     "sass:site": "node-sass --output wwwroot/css --include-path node_modules scss/site.scss",

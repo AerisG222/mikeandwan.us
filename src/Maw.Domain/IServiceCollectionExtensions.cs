@@ -16,6 +16,7 @@ namespace Maw.Domain
         public static IServiceCollection AddMawDomainServices(this IServiceCollection services)
         {
             services
+                .AddDistributedMemoryCache()
                 .AddSingleton<IImageCropper, ImageCropper>()
                 .AddSingleton<IPhotoZipper, PhotoZipper>()
                 .AddSingleton<LinuxFileTypeIdentifier>()

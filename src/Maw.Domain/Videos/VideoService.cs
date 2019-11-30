@@ -1,60 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 
 
 namespace Maw.Domain.Videos
 {
     public class VideoService
-        : IVideoService
+        : BaseService, IVideoService
     {
         readonly IVideoRepository _repo;
 
 
-		public VideoService(IVideoRepository videoRepository)
+		public VideoService(IVideoRepository videoRepository,
+                            ILogger<VideoService> log,
+                            IDistributedCache cache)
+            : base("videos", log, cache)
         {
-			if(videoRepository == null)
-            {
-				throw new ArgumentNullException(nameof(videoRepository));
-            }
-
-			_repo = videoRepository;
+			_repo = videoRepository ?? throw new ArgumentNullException(nameof(videoRepository));
         }
 
 
         public Task<IEnumerable<short>> GetYearsAsync(bool allowPrivate)
         {
-            return _repo.GetYearsAsync(allowPrivate);
+            var key = $"{nameof(GetYearsAsync)}_{allowPrivate}";
+
+            return GetCachedValueAsync(key, () => _repo.GetYearsAsync(allowPrivate));
         }
 
 
         public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
         {
-            return _repo.GetAllCategoriesAsync(allowPrivate);
+            var key = $"{nameof(GetAllCategoriesAsync)}_{allowPrivate}";
+
+            return GetCachedValueAsync(key, () => _repo.GetAllCategoriesAsync(allowPrivate));
         }
 
 
         public Task<IEnumerable<Category>> GetCategoriesAsync(short year, bool allowPrivate)
         {
-            return _repo.GetCategoriesAsync(year, allowPrivate);
+            var key = $"{nameof(GetCategoriesAsync)}_{year}_{allowPrivate}";
+
+            return GetCachedValueAsync(key, () => _repo.GetCategoriesAsync(year, allowPrivate));
         }
 
 
         public Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, bool allowPrivate)
         {
-            return _repo.GetVideosInCategoryAsync(categoryId, allowPrivate);
+            var key = $"{nameof(GetVideosInCategoryAsync)}_{categoryId}_{allowPrivate}";
+
+            return GetCachedValueAsync(key, () => _repo.GetVideosInCategoryAsync(categoryId, allowPrivate), TimeSpan.FromHours(2));
         }
 
 
         public Task<Video> GetVideoAsync(short id, bool allowPrivate)
         {
-            return _repo.GetVideoAsync(id, allowPrivate);
+            var key = $"{nameof(GetVideoAsync)}_{id}_{allowPrivate}";
+
+            return GetCachedValueAsync(key, () => _repo.GetVideoAsync(id, allowPrivate), TimeSpan.FromHours(2));
         }
 
 
         public Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
         {
-            return _repo.GetCategoryAsync(categoryId, allowPrivate);
+            var key = $"{nameof(GetCategoryAsync)}_{categoryId}_{allowPrivate}";
+
+            return GetCachedValueAsync(key, () => _repo.GetCategoryAsync(categoryId, allowPrivate), TimeSpan.FromHours(2));
         }
 
 

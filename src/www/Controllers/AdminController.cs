@@ -19,17 +19,20 @@ namespace MawMvcApp.Controllers
     public class AdminController
         : MawBaseController<AdminController>
     {
+        readonly MawApiService _apiSvc;
 		readonly IBlogService _blogSvc;
         readonly IPhotoService _photoSvc;
         readonly IVideoService _videoSvc;
 
 
 		public AdminController(ILogger<AdminController> log,
+                               MawApiService apiService,
 							   IBlogService blogService,
                                IPhotoService photoService,
                                IVideoService videoService)
 			: base(log)
         {
+            _apiSvc = apiService ?? throw new ArgumentNullException(nameof(apiService));
 			_blogSvc = blogService ?? throw new ArgumentNullException(nameof(blogService));
             _photoSvc = photoService ?? throw new ArgumentNullException(nameof(photoService));
             _videoSvc = videoService ?? throw new ArgumentNullException(nameof(videoService));
@@ -129,6 +132,7 @@ namespace MawMvcApp.Controllers
             ViewBag.NavigationZone = NavigationZone.Administration;
 
             await _photoSvc.ClearCacheAsync().ConfigureAwait(false);
+            await _apiSvc.ClearPhotoCacheAsync().ConfigureAwait(false);
 
             return View(true);
         }
@@ -150,6 +154,7 @@ namespace MawMvcApp.Controllers
             ViewBag.NavigationZone = NavigationZone.Administration;
 
             await _videoSvc.ClearCacheAsync().ConfigureAwait(false);
+            await _apiSvc.ClearVideoCacheAsync().ConfigureAwait(false);
 
             return View(true);
         }

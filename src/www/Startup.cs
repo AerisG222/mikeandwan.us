@@ -22,6 +22,7 @@ using Maw.Domain;
 using Maw.Domain.Captcha;
 using Maw.Domain.Email;
 using Maw.Security;
+using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
 
 
@@ -56,7 +57,11 @@ namespace MawMvcApp
                 .Configure<GmailApiEmailConfig>(_config.GetSection("Gmail"))
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
                 .Configure<GoogleCaptchaConfig>(_config.GetSection("GoogleRecaptcha"))
+                .Configure<UrlConfig>(_config.GetSection("UrlConfig"))
                 .AddLogging()
+                .AddHttpContextAccessor()
+                .AddHttpClient<MawApiService>()
+                .Services
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
                 .AddTransient<RazorViewToStringRenderer>()

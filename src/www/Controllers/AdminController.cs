@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Maw.Domain.Blogs;
+using Maw.Domain.Photos;
+using Maw.Domain.Videos;
 using MawMvcApp.ViewModels.Admin;
 using MawMvcApp.ViewModels.Navigation;
 using Maw.Security;
@@ -18,13 +20,19 @@ namespace MawMvcApp.Controllers
         : MawBaseController<AdminController>
     {
 		readonly IBlogService _blogSvc;
+        readonly IPhotoService _photoSvc;
+        readonly IVideoService _videoSvc;
 
 
 		public AdminController(ILogger<AdminController> log,
-							   IBlogService blogService)
+							   IBlogService blogService,
+                               IPhotoService photoService,
+                               IVideoService videoService)
 			: base(log)
         {
 			_blogSvc = blogService ?? throw new ArgumentNullException(nameof(blogService));
+            _photoSvc = photoService ?? throw new ArgumentNullException(nameof(photoService));
+            _videoSvc = videoService ?? throw new ArgumentNullException(nameof(videoService));
         }
 
 
@@ -103,5 +111,47 @@ namespace MawMvcApp.Controllers
 
 			return View(HttpContext);
 		}
+
+
+        [HttpGet("clear-photo-cache")]
+        public IActionResult ClearPhotoCache()
+        {
+            ViewBag.NavigationZone = NavigationZone.Administration;
+
+            return View(false);
+        }
+
+
+        [HttpPost("clear-photo-cache")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ClearPhotoCache(bool doClear)
+        {
+            ViewBag.NavigationZone = NavigationZone.Administration;
+
+            await _photoSvc.ClearCacheAsync().ConfigureAwait(false);
+
+            return View(true);
+        }
+
+
+        [HttpGet("clear-video-cache")]
+        public IActionResult ClearVideoCache()
+        {
+            ViewBag.NavigationZone = NavigationZone.Administration;
+
+            return View(false);
+        }
+
+
+        [HttpPost("clear-video-cache")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ClearVideoCache(bool doClear)
+        {
+            ViewBag.NavigationZone = NavigationZone.Administration;
+
+            await _videoSvc.ClearCacheAsync().ConfigureAwait(false);
+
+            return View(true);
+        }
     }
 }

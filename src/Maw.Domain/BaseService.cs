@@ -59,6 +59,11 @@ namespace Maw.Domain
         protected async Task InternalClearCacheAsync() {
             var keys = await GetCachedKeysAsync().ConfigureAwait(false);
 
+            if(keys == null)
+            {
+                return;
+            }
+
             foreach(var key in keys) {
                 _log.LogDebug($"Removing cache entry with key: {key}");
 

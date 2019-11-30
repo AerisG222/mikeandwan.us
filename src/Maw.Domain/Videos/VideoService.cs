@@ -98,6 +98,12 @@ namespace Maw.Domain.Videos
         {
             return _repo.RemoveRatingAsync(videoId, username);
         }
+
+
+        public Task ClearCacheAsync()
+        {
+            return InternalClearCacheAsync();
+        }
     }
 }
 

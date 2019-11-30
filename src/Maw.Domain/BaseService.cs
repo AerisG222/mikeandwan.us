@@ -56,7 +56,7 @@ namespace Maw.Domain
         }
 
 
-        protected async Task ClearCacheAsync() {
+        protected async Task InternalClearCacheAsync() {
             var keys = await GetCachedKeysAsync().ConfigureAwait(false);
 
             foreach(var key in keys) {

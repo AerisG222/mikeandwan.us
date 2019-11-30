@@ -122,5 +122,11 @@ namespace Maw.Domain.Photos
         {
             return _repo.RemoveRatingAsync(photoId, username);
         }
+
+
+        public Task ClearCacheAsync()
+        {
+            return InternalClearCacheAsync();
+        }
     }
 }

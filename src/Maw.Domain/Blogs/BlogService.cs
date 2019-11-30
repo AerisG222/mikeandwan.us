@@ -53,7 +53,7 @@ namespace Maw.Domain.Blogs
 
             return Task.WhenAll(
                 _repo.AddPostAsync(post),
-                ClearCacheAsync()
+                InternalClearCacheAsync()
             );
 		}
 	}

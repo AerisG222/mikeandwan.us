@@ -11,8 +11,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.0-preview3.19555.2" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.0-preview3.19553.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.0" />
         <PackageReference Include="IdentityModel" Version="4.1.1" />
         <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.1.0" />
         <PackageReference Include="NMagickWand" Version="0.5.1" />
@@ -25,7 +25,7 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.7">
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>

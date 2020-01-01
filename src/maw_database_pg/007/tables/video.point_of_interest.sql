@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS video.point_of_interest (
     CONSTRAINT fk_point_of_interest_video FOREIGN KEY (video_id) REFERENCES video.video(id)
 );
 
-GRANT SELECT
+GRANT SELECT, INSERT
    ON video.point_of_interest
    TO website;

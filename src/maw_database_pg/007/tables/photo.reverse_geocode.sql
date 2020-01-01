@@ -16,11 +16,11 @@ CREATE TABLE IF NOT EXISTS photo.reverse_geocode (
     street_number TEXT,
     sub_premise TEXT,
 
-    CONSTRAINT pk_photo_reverse_geocde PRIMARY KEY (photo_id),
+    CONSTRAINT pk_photo_reverse_geocode PRIMARY KEY (photo_id),
 
     CONSTRAINT fk_reverse_geocode_photo FOREIGN KEY (photo_id) REFERENCES photo.photo(id)
 );
 
-GRANT SELECT
+GRANT SELECT, INSERT
    ON photo.reverse_geocode
    TO website;

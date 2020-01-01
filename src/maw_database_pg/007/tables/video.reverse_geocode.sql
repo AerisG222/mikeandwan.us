@@ -16,11 +16,11 @@ CREATE TABLE IF NOT EXISTS video.reverse_geocode (
     street_number TEXT,
     sub_premise TEXT,
 
-    CONSTRAINT pk_video_reverse_geocde PRIMARY KEY (video_id),
+    CONSTRAINT pk_video_reverse_geocode PRIMARY KEY (video_id),
 
-    CONSTRAINT fk_reverse_geocode_photo FOREIGN KEY (video_id) REFERENCES video.video(id)
+    CONSTRAINT fk_reverse_geocode_video FOREIGN KEY (video_id) REFERENCES video.video(id)
 );
 
-GRANT SELECT
+GRANT SELECT, INSERT
    ON video.reverse_geocode
    TO website;

@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS photo.point_of_interest (
     CONSTRAINT fk_point_of_interest_photo FOREIGN KEY (photo_id) REFERENCES photo.photo(id)
 );
 
-GRANT SELECT
+GRANT SELECT, INSERT
    ON photo.point_of_interest
    TO website;

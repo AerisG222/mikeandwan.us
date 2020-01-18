@@ -1,0 +1,26 @@
+# https://gadelkareem.com/2018/04/28/install-solr-as-systemd-with-restart-on-failure/
+# https://gist.github.com/hammady/3d7b5964c7b0f90997865ebef40bf5e1
+
+[Unit]
+Description=Apache SOLR
+After=syslog.target network.target remote-fs.target nss-lookup.target systemd-journald-dev-log.socket
+Before=multi-user.target
+Conflicts=shutdown.target
+
+[Service]
+User=solr
+LimitNOFILE=65000
+LimitNPROC=65000
+PIDFile=/var/solr/solr-8983.pid
+#Environment=RUNAS=solr
+#Environment=SOLR_INCLUDE=/etc/default/solr.in.sh
+#Environment=SOLR_INSTALL_DIR=/opt/solr
+
+ExecStart=/opt/solr/bin/solr start
+ExecStop=/opt/solr/bin/solr stop
+
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

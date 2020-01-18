@@ -188,6 +188,36 @@ but will try to get this well organized below to make it easy to follow.
 13. Reference: [https://docs.asp.net/en/latest/publishing/linuxproduction.html](ASP.Net Linux Production)
 
 
+## Solr
+
+The following will outline the steps to install and configure Solr
+
+1. Download the latest version from [https://lucene.apache.org/solr/](Solr Website)
+2. Run the install script as described in the [https://lucene.apache.org/solr/guide/8_4/taking-solr-to-production.html](Solr Guide)
+   - `tar xzf solr-8.4.0.tgz solr-8.4.0/bin/install_solr_service.sh --strip-components=2`
+   - `sudo bash ./install_solr_service.sh solr-8.4.0.tgz`
+3. Configure to run automatically
+   - move /etc/init.d/solr to ~root (or delete it)
+   - copy the cfg/systemd/system/solr.service in this repo to that directory on the server
+   - `sudo systemctl start solr.service`
+   - `sudo systemctl enable solr.service`
+   - SE Linux
+     - If you run into issues, SE Linux will need to be updated to allow additional rights - do the following multiple times until it starts
+     - `grep solr /var/log/audit/audit.log | audit2allow -a -w`  (view issues)
+     - `grep solr /var/log/audit/audit.log | audit2allow -M solr5`  (generate update policy)
+     - `semodule -i solr5.pp`  (activate policy)
+     - change '5' in above as needed
+4. Create a new core
+   - `su -`
+   - `su - solr`
+   - `/opt/solr/bin/solr create -c multimedia-categories`
+   - `/opt/solr/bin/solr config -solrUrl http://localhost:8983/solr -c multimedia-categories -action set-user-property -property update.autoCreateFields -value false`
+5. Create fields for the new core via the GUI (otherwise copy the following):
+   - cfg/solr/multimedia-categories/* /var/solr/data/multimedia-categories/conf/
+   - Reload the core
+   - update the postgres_import.xml to update the conn string / password
+   - run full import and verify by running a query in solr admin
+
 ## Systemd
 
 This will ensure that the backend application server (Kestrel / your website)

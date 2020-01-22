@@ -219,6 +219,7 @@ The following will outline the steps to install and configure Solr
    - run full import and verify by running a query in solr admin
 6. When testing, it might be useful to delete all data in the core.  to do this, submit the following via the GUI document page:
    - `<delete><query>*:*</query></delete>`
+7. Update synonyms.txt to account for any synonyms or common spelling mistakes
 
 ## Systemd
 

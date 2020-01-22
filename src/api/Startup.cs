@@ -11,8 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using NMagickWand;
+using SolrNet;
 using Maw.Data;
 using Maw.Domain;
+using Maw.Domain.Search;
 using Maw.Domain.Upload;
 using Maw.Security;
 using MawApi.Hubs;
@@ -48,8 +50,10 @@ namespace MawApi
                 .Configure<UploadConfig>(_config.GetSection("FileUpload"))
                 .AddSingleton<UrlConfig>(urlConfig)
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
+                .AddSolrNet<MultimediaCategory>(_config["Search:CoreUrl"])
                 .AddMawDomainServices()
                 .AddMawApiServices()
+                .AddScoped<ISearchService, SearchService>()
                 .AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>()
                 .AddControllers()
                     .Services

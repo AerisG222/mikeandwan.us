@@ -369,11 +369,11 @@
   <query>
 
     <!-- Maximum number of clauses allowed when parsing a boolean query string.
-         
+
          This limit only impacts boolean queries specified by a user as part of a query string,
          and provides per-collection controls on how complex user specified boolean queries can
          be.  Query strings that specify more clauses then this will result in an error.
-         
+
          If this per-collection limit is greater then the global `maxBooleanClauses` limit
          specified in `solr.xml`, it will have no effect, as that setting also limits the size
          of user specified boolean queries.
@@ -707,10 +707,10 @@
       <str name="echoParams">explicit</str>
       <int name="rows">10</int>
       <!-- Default search field
-         <str name="df">text</str> 
+         <str name="df">text</str>
         -->
       <!-- Change from JSON to XML format (the default prior to Solr 7.0)
-         <str name="wt">xml</str> 
+         <str name="wt">xml</str>
         -->
     </lst>
     <!-- In addition to defaults, "appends" params can be specified
@@ -775,6 +775,58 @@
       <str name="indent">true</str>
     </lst>
   </requestHandler>
+
+    <!-- SEARCH HANDLER FOR MAW PHOTOS APP -->
+    <requestHandler name="/maw-photos-query" class="solr.SearchHandler">
+        <lst name="defaults">
+            <str name="echoParams">explicit</str>
+
+            <!-- Query settings -->
+            <str name="defType">dismax</str>
+            <str name="qf">
+                name
+                year
+
+                camera_makes
+                camera_models
+
+                comment_messages
+
+                poi_names
+                poi_types
+
+                rg_administrative_area_level_1
+                rg_administrative_area_level_2
+                rg_administrative_area_level_3
+                rg_country
+                rg_formatted_address
+                rg_locality
+                rg_neighborhood
+                rg_postal_code
+                rg_premise
+                rg_route
+                rg_sub_locality_level_1
+                rg_sub_locality_level_2
+            </str>
+            <str name="q.alt">*:*</str>
+            <str name="rows">24</str>
+            <str name="wt">json</str>
+            <str name="fl">
+                solr_id
+                id
+                name
+                type
+                teaser_photo_height
+                teaser_photo_width
+                teaser_photo_path
+                teaser_photo_sq_height
+                teaser_photo_sq_width
+                teaser_photo_sq_path
+                score
+            </str>
+        </lst>
+    </requestHandler>
+
 
   <initParams path="/update/**,/query,/select,/spell">
     <lst name="defaults">

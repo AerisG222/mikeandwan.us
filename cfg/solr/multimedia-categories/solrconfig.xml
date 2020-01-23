@@ -814,6 +814,7 @@
             <str name="fl">
                 solr_id
                 id
+                year
                 name
                 type
                 teaser_photo_height

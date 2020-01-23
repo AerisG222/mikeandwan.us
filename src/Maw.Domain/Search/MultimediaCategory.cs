@@ -10,6 +10,9 @@ namespace Maw.Domain.Search
         [SolrField("id")]
         public int Id { get; set; }
 
+        [SolrField("year")]
+        public int Year { get; set; }
+
         [SolrField("name")]
         public string Name { get; set; }
 

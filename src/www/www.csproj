@@ -11,8 +11,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.0" />
+        <!-- todo: delete next line w/ 3.1.2 -->
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.Abstractions" Version="3.1.1" />
+
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.1" />
         <PackageReference Include="IdentityModel" Version="4.1.1" />
         <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.1.0" />
         <PackageReference Include="NMagickWand" Version="0.5.1" />
@@ -30,7 +33,7 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="SecurityCodeScan" Version="3.3.0">
+        <PackageReference Include="SecurityCodeScan" Version="3.4.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>

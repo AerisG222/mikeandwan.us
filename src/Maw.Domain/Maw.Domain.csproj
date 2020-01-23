@@ -15,10 +15,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Google.Apis.Gmail.v1" Version="1.42.0.1777" />
+        <PackageReference Include="Google.Apis.Gmail.v1" Version="1.43.0.1835" />
         <PackageReference Include="IdentityModel" Version="4.1.1" />
-        <PackageReference Include="MailKit" Version="2.4.1" />
-        <PackageReference Include="MedallionShell" Version="1.6.0" />
+        <PackageReference Include="MailKit" Version="2.5.0" />
+        <PackageReference Include="MedallionShell" Version="1.6.1" />
         <PackageReference Include="NMagickWand" Version="0.5.1" />
         <PackageReference Include="SolrNet.Core" Version="1.0.19" />
     </ItemGroup>
@@ -34,7 +34,7 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="SecurityCodeScan" Version="3.3.0">
+        <PackageReference Include="SecurityCodeScan" Version="3.4.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>

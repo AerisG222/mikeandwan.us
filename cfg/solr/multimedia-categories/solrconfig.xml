@@ -779,6 +779,7 @@
     <!-- SEARCH HANDLER FOR MAW PHOTOS APP -->
     <requestHandler name="/maw-photos-query" class="solr.SearchHandler">
         <lst name="defaults">
+            <int name="rows">24</int>
             <str name="echoParams">explicit</str>
 
             <!-- Query settings -->

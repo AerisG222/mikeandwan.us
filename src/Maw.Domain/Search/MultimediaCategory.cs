@@ -36,5 +36,8 @@ namespace Maw.Domain.Search
 
         [SolrField("teaser_photo_sq_path")]
         public string TeaserPhotoSqPath { get; set; }
+
+        [SolrField("score")]
+        public double Score { get; set; }
     }
 }

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SolrNet;
 using Maw.Domain.Search;
 using Maw.Security;
 
@@ -30,7 +29,7 @@ namespace MawApi.Controllers
         [HttpGet("multimedia-categories")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<SolrQueryResults<MultimediaCategory>>> SearchMultimediaCategories(string query, int start = 0)
+        public async Task<ActionResult<SearchResults<MultimediaCategory>>> SearchMultimediaCategories(string query, int start = 0)
         {
             var results = await _svc.SearchAsync(Role.IsAdmin(User), query, start).ConfigureAwait(false);
 

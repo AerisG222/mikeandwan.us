@@ -18,11 +18,17 @@ namespace Maw.Domain.Search
         }
 
 
-        public Task<SolrQueryResults<MultimediaCategory>> SearchAsync(bool allowPrivate, string query, int start)
+        public async Task<SearchResults<MultimediaCategory>> SearchAsync(bool allowPrivate, string query, int start)
         {
             var opts = GetQueryOptions(allowPrivate, start);
 
-            return _solr.QueryAsync(new SolrQuery(query), opts);
+            var solrResults = await _solr.QueryAsync(new SolrQuery(query), opts).ConfigureAwait(false);
+
+            return new SearchResults<MultimediaCategory>() {
+                Results = solrResults.ToArray(),
+                StartIndex = solrResults.Start,
+                TotalFound = solrResults.NumFound
+            };
         }
 
 

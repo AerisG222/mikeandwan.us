@@ -12,6 +12,7 @@ namespace MawApi.Controllers
     [ApiController]
     [Authorize]
     [Authorize(MawPolicy.ViewPhotos)]
+    [Authorize(MawPolicy.ViewVideos)]
     [Route("search")]
     public class SearchController
         : ControllerBase
@@ -29,9 +30,9 @@ namespace MawApi.Controllers
         [HttpGet("multimedia-categories")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<SolrQueryResults<MultimediaCategory>>> SearchMultimediaCategories(string query)
+        public async Task<ActionResult<SolrQueryResults<MultimediaCategory>>> SearchMultimediaCategories(string query, int start = 0)
         {
-            var results = await _svc.SearchAsync(Role.IsAdmin(User), query).ConfigureAwait(false);
+            var results = await _svc.SearchAsync(Role.IsAdmin(User), query, start).ConfigureAwait(false);
 
             return results;
         }

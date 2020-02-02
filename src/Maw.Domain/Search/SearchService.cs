@@ -18,19 +18,21 @@ namespace Maw.Domain.Search
         }
 
 
-        public Task<SolrQueryResults<MultimediaCategory>> SearchAsync(bool allowPrivate, string query)
+        public Task<SolrQueryResults<MultimediaCategory>> SearchAsync(bool allowPrivate, string query, int start)
         {
-            var opts = GetQueryOptions(allowPrivate);
+            var opts = GetQueryOptions(allowPrivate, start);
 
             return _solr.QueryAsync(new SolrQuery(query), opts);
         }
 
 
-        static QueryOptions GetQueryOptions(bool allowPrivate)
+        static QueryOptions GetQueryOptions(bool allowPrivate, int start)
         {
             var opts = new QueryOptions
             {
-                RequestHandler = new RequestHandlerParameters("/maw-photos-query")
+                RequestHandler = new RequestHandlerParameters("/maw-photos-query"),
+                StartOrCursor = new StartOrCursor.Start(start),
+                Rows = 24
             };
 
             if(!allowPrivate)

@@ -781,28 +781,29 @@
         <lst name="defaults">
             <int name="rows">24</int>
             <str name="echoParams">explicit</str>
+            <str name="sort">score desc, year desc, name asc</str>
 
             <!-- Query settings -->
             <str name="defType">dismax</str>
             <str name="qf">
-                name
+                name^10
                 year
 
                 camera_makes
                 camera_models
 
-                comment_messages
+                comment_messages^4
 
-                poi_names
-                poi_types
+                poi_names^8
+                poi_types^4
 
-                rg_administrative_area_level_1
-                rg_administrative_area_level_2
-                rg_administrative_area_level_3
-                rg_country
+                rg_administrative_area_level_1^2
+                rg_administrative_area_level_2^2
+                rg_administrative_area_level_3^2
+                rg_country^2
                 rg_formatted_address
-                rg_locality
-                rg_neighborhood
+                rg_locality^3
+                rg_neighborhood^3
                 rg_postal_code
                 rg_premise
                 rg_route

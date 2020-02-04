@@ -208,20 +208,20 @@ The following will outline the steps to install and configure Solr
      - `grep solr /var/log/audit/audit.log | audit2allow -M solr5`  (generate update policy)
      - `semodule -i solr5.pp`  (activate policy)
      - change '5' in above as needed
-6. Copy Postgres JDBC driver to `/opt/solr/contrib/dataimporthandler/lib`
-7. Create a new core using web GUI
+5. Copy Postgres JDBC driver to `/opt/solr/contrib/dataimporthandler/lib`
+6. Create a new core using web GUI
    - `su -`
    - `su - solr`
    - `/opt/solr/bin/solr create -c multimedia-categories`
    - `/opt/solr/bin/solr config -c multimedia-categories -p 8983 -action set-user-property -property update.autoCreateFields -value false`
-8. Create fields for the new core via the GUI (otherwise copy the following):
+7. Create fields for the new core via the GUI (otherwise copy the following):
    - cfg/solr/multimedia-categories/* /var/solr/data/multimedia-categories/conf/
    - update the postgres_import.xml to update the conn string / password
    - Reload the core
    - run full import and verify by running a query in solr admin
-9.  When testing, it might be useful to delete all data in the core.  to do this, submit the following via the GUI document page:
+8.  When testing, it might be useful to delete all data in the core.  to do this, submit the following via the GUI document page:
    - `<delete><query>*:*</query></delete>`
-10. Update synonyms.txt to account for any synonyms or common spelling mistakes
+9. Update synonyms.txt to account for any synonyms or common spelling mistakes
 
 ## Systemd
 

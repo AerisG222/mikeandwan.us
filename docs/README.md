@@ -196,7 +196,8 @@ The following will outline the steps to install and configure Solr
 2. Run the install script as described in the [https://lucene.apache.org/solr/guide/8_4/taking-solr-to-production.html](Solr Guide)
    - `tar xzf solr-8.4.0.tgz solr-8.4.0/bin/install_solr_service.sh --strip-components=2`
    - `sudo bash ./install_solr_service.sh solr-8.4.0.tgz`
-3. Configure to run automatically
+3. Download the latest [https://jdbc.postgresql.org/](Postgres JDBC driver)
+4. Configure to run automatically
    - move /etc/init.d/solr to ~root (or delete it)
    - copy the cfg/systemd/system/solr.service in this repo to that directory on the server
    - `sudo systemctl start solr.service`
@@ -207,19 +208,20 @@ The following will outline the steps to install and configure Solr
      - `grep solr /var/log/audit/audit.log | audit2allow -M solr5`  (generate update policy)
      - `semodule -i solr5.pp`  (activate policy)
      - change '5' in above as needed
-4. Create a new core
+6. Copy Postgres JDBC driver to `/opt/solr/contrib/dataimporthandler/lib`
+7. Create a new core using web GUI
    - `su -`
    - `su - solr`
    - `/opt/solr/bin/solr create -c multimedia-categories`
-   - `/opt/solr/bin/solr config -solrUrl http://localhost:8983/solr -c multimedia-categories -action set-user-property -property update.autoCreateFields -value false`
-5. Create fields for the new core via the GUI (otherwise copy the following):
+   - `/opt/solr/bin/solr config -c multimedia-categories -p 8983 -action set-user-property -property update.autoCreateFields -value false`
+8. Create fields for the new core via the GUI (otherwise copy the following):
    - cfg/solr/multimedia-categories/* /var/solr/data/multimedia-categories/conf/
-   - Reload the core
    - update the postgres_import.xml to update the conn string / password
+   - Reload the core
    - run full import and verify by running a query in solr admin
-6. When testing, it might be useful to delete all data in the core.  to do this, submit the following via the GUI document page:
+9.  When testing, it might be useful to delete all data in the core.  to do this, submit the following via the GUI document page:
    - `<delete><query>*:*</query></delete>`
-7. Update synonyms.txt to account for any synonyms or common spelling mistakes
+10. Update synonyms.txt to account for any synonyms or common spelling mistakes
 
 ## Systemd
 

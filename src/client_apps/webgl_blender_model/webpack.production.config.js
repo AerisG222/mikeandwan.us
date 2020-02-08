@@ -15,7 +15,8 @@ module.exports = {
         rules: [
             {
                 test: /\.ts$/,
-                use: 'ts-loader'
+                use: 'ts-loader',
+                exclude: /node_modules/
             },
             {
                 test: /\.gltf$/,
@@ -23,6 +24,7 @@ module.exports = {
                     loader: 'file-loader',
                     options: {
                         name: '[name].[hash].[ext]',
+                        esModule: false,
                         publicPath: '/js/webgl_blender_model/'
                     }
                 }]
@@ -33,6 +35,7 @@ module.exports = {
                     loader: 'file-loader',
                     options: {
                         name: '[name].[ext]',
+                        esModule: false,
                         publicPath: '/js/webgl_blender_model/'
                     }
                 }]

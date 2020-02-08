@@ -9,8 +9,8 @@ import { AxesHelper } from 'three/src/helpers/AxesHelper';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as Stats from 'stats.js';
 
-const model = require('./bs.gltf');
-const bin = require('./bs2.bin');
+import model from './bs.gltf';
+import bin from './bs.bin';
 
 export class BlenderModelDemo {
     private _scene: Scene;
@@ -65,6 +65,11 @@ export class BlenderModelDemo {
 
         // model loader
         this._loader = new GLTFLoader();
+
+        // force bin to not be treeshaked away
+        if (!!bin) {
+            console.log('x');
+        }
 
         this._loader.load(model, gltf => {
             this.setupModel(gltf);

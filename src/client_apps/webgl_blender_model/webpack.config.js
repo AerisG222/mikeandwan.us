@@ -15,25 +15,30 @@ module.exports = {
         rules: [
             {
                 test: /\.ts$/,
-                use: 'ts-loader'
+                use: 'ts-loader',
+                exclude: /node_modules/
             },
             {
                 test: /\.gltf$/,
+                type: 'javascript/auto',
                 use: [{
                     loader: 'file-loader',
                     options: {
                         name: '[name].[hash].[ext]',
+                        esModule: false,
                         publicPath: '/js/webgl_blender_model/'
                     }
                 }]
             },
             {
                 test: /\.bin$/,
+                type: 'javascript/auto',
                 use: [{
                     loader: 'file-loader',
                     options: {
                         name: '[name].[ext]',
-                        publicPath: '/js/webgl_blender_model/'
+                        esModule: false,
+                        /* publicPath: '/js/webgl_blender_model/' */
                     }
                 }]
             }

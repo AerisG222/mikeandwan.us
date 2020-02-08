@@ -1,8 +1,18 @@
-import { Scene, PerspectiveCamera, Renderer, Mesh, AmbientLight, Fog, WebGLRenderer, DirectionalLight,
-         AxesHelper, TextureLoader, BoxGeometry, MeshBasicMaterial, MeshPhongMaterial, PlaneGeometry,
-         DoubleSide, RepeatWrapping
-       } from 'three';
+import { DoubleSide, RepeatWrapping } from 'three/src/constants';
 
+import { Fog } from 'three/src/scenes/Fog';
+import { TextureLoader } from 'three/src/loaders/TextureLoader';
+import { BoxGeometry } from 'three/src/geometries/BoxGeometry';
+import { MeshBasicMaterial } from 'three/src/materials/MeshBasicMaterial';
+import { PlaneGeometry } from 'three/src/geometries/PlaneGeometry';
+import { Scene } from 'three/src/scenes/Scene';
+import { PerspectiveCamera } from 'three/src/cameras/PerspectiveCamera';
+import { Mesh } from 'three/src/objects/Mesh';
+import { MeshPhongMaterial } from 'three/src/materials/MeshPhongMaterial';
+import { AmbientLight } from 'three/src/lights/AmbientLight';
+import { DirectionalLight } from 'three/src/lights/DirectionalLight';
+import { WebGLRenderer } from 'three/src/renderers/WebGLRenderer';
+import { AxesHelper } from 'three/src/helpers/AxesHelper';
 import * as Stats from 'stats.js';
 
 const floorTexture = require('./floor_texture.jpg');
@@ -11,7 +21,7 @@ const cubeTexture = require('./DSC_8562.jpg');
 export class CubeDemo {
     scene: Scene;
     camera: PerspectiveCamera;
-    renderer: Renderer;
+    renderer: WebGLRenderer;
     cube: Mesh;
     ambientLight: AmbientLight;
     stats: Stats;

@@ -1,5 +1,11 @@
-import { Scene, PerspectiveCamera, Renderer, Mesh, MeshPhongMaterial, AmbientLight,
-         WebGLRenderer, DirectionalLight, AxesHelper } from 'three';
+import { Scene } from 'three/src/scenes/Scene';
+import { PerspectiveCamera } from 'three/src/cameras/PerspectiveCamera';
+import { Mesh } from 'three/src/objects/Mesh';
+import { MeshPhongMaterial } from 'three/src/materials/MeshPhongMaterial';
+import { AmbientLight } from 'three/src/lights/AmbientLight';
+import { DirectionalLight } from 'three/src/lights/DirectionalLight';
+import { WebGLRenderer } from 'three/src/renderers/WebGLRenderer';
+import { AxesHelper } from 'three/src/helpers/AxesHelper';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as Stats from 'stats.js';
 
@@ -9,7 +15,7 @@ const bin = require('./bs2.bin');
 export class BlenderModelDemo {
     private _scene: Scene;
     private _camera: PerspectiveCamera;
-    private _renderer: Renderer;
+    private _renderer: WebGLRenderer;
     private _ambientLight: AmbientLight;
     private _stats: Stats;
     private _loader: GLTFLoader;

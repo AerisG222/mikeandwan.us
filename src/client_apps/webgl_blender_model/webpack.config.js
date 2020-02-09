@@ -20,25 +20,21 @@ module.exports = {
             },
             {
                 test: /\.gltf$/,
-                type: 'javascript/auto',
                 use: [{
                     loader: 'file-loader',
                     options: {
                         name: '[name].[hash].[ext]',
-                        esModule: false,
                         publicPath: '/js/webgl_blender_model/'
                     }
                 }]
             },
             {
                 test: /\.bin$/,
-                type: 'javascript/auto',
                 use: [{
                     loader: 'file-loader',
                     options: {
                         name: '[name].[ext]',
-                        esModule: false,
-                        /* publicPath: '/js/webgl_blender_model/' */
+                        publicPath: '/js/webgl_blender_model/'
                     }
                 }]
             }

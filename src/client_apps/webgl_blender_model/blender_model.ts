@@ -68,7 +68,7 @@ export class BlenderModelDemo {
 
         // force bin to not be treeshaked away
         if (!!bin) {
-            console.log('x');
+            this._frameCounter = 0;
         }
 
         this._loader.load(model, gltf => {

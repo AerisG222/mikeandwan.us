@@ -160,7 +160,7 @@ namespace Maw.Domain.Identity
         {
 			var claims = FindAll(claimType).ToArray();
 
-			for(var i = 0; i < claims.Count(); i++)
+			for(var i = 0; i < claims.Length; i++)
 			{
 				RemoveClaim(claims[i]);
 			}

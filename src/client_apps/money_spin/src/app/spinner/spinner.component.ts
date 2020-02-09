@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
 
 import { Scene, OrthographicCamera, Renderer, Group, WebGLRenderer, TextureLoader, Texture,
-         PlaneGeometry, Mesh, MeshBasicMaterial, DoubleSide, Math as _Math
+         PlaneGeometry, Mesh, MeshBasicMaterial, DoubleSide, MathUtils
        } from 'three';
 
 import { BoardSector } from '../models/board-sector.model';
@@ -128,7 +128,7 @@ export class SpinnerComponent implements OnInit, OnDestroy {
 
                 if (this.arrowSpeed <= 0) {
                     this.arrowSpeed = 0;
-                    const deg = _Math.radToDeg(this.arrow.rotation.z);
+                    const deg = MathUtils.radToDeg(this.arrow.rotation.z);
                     this.spinCompleted.next(this.getScore(deg));
                 }
             }

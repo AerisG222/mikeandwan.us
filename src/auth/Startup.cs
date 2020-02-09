@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -7,7 +9,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using IdentityServer4;
 using Mvc.RenderViewToString;
 using Maw.Data;
@@ -24,10 +28,10 @@ namespace MawAuth
     public class Startup
     {
         readonly IConfiguration _config;
-        readonly IHostingEnvironment _env;
+        readonly IWebHostEnvironment _env;
 
 
-        public Startup(IConfiguration config, IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration config, IWebHostEnvironment hostingEnvironment)
         {
             _env = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
             _config = config ?? throw new ArgumentNullException(nameof(config));
@@ -70,14 +74,6 @@ namespace MawAuth
                         opts.ClientSecret = _config["GitHub:ClientSecret"];
                         opts.Scope.Add("user:email");
                     })
-                /*
-                .AddGoogle(opts =>
-                    {
-                        opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                        opts.ClientId = _config["GooglePlus:ClientId"];
-                        opts.ClientSecret = _config["GooglePlus:ClientSecret"];
-                    })
-                */
                 .AddGoogle(opts =>
                     {
                         // https://github.com/aspnet/AspNetCore/issues/6486
@@ -112,6 +108,7 @@ namespace MawAuth
                         // we need to set this especially for dev otherwise the issuer becomes 10.0.2.2 when testing the android app
                         opts.IssuerUri = _config["Environment:AuthUrl"];
                     })
+                    .AddMawIdentityServerKeyMaterial(_config["SigningCertDir"])
                     .AddInMemoryApiResources(config.GetApiResources())
                     .AddInMemoryClients(config.GetClients())
                     .AddInMemoryIdentityResources(config.GetIdentityResources())
@@ -122,12 +119,11 @@ namespace MawAuth
                     {
                         MawPolicyBuilder.AddMawPolicies(opts);
                     })
-                .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .AddControllersWithViews();
         }
 
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -139,8 +135,13 @@ namespace MawAuth
             }
 
             app.UseStaticFiles();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseIdentityServer();
-            app.UseMvc();
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllers();
+            });
         }
     }
 }

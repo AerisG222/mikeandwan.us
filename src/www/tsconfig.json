@@ -1,0 +1,25 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "outFile": "wwwroot/js/site.js",
+        "sourceMap": false,
+        "declaration": false,
+        "moduleResolution": "node",
+        "noEmitOnError": false,
+        "target": "es5",
+        "typeRoots": [
+            "node_modules/@types",
+            "custom_typings"
+        ],
+        "lib": [
+            "es2016",
+            "dom"
+        ]
+    },
+    "include": [
+        "js/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

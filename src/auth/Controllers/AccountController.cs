@@ -193,7 +193,9 @@ namespace MawAuth.Controllers
 
 			await _signInManager.SignOutAsync().ConfigureAwait(false);
 
+#pragma warning disable SCS0027
 			return Redirect(logout.PostLogoutRedirectUri);
+#pragma warning restore SCS0027
 		}
 
 

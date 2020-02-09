@@ -14,12 +14,7 @@ namespace MawMvcApp.Controllers
 
 		public MawBaseController(ILogger<T> log)
 		{
-			if(log == null)
-			{
-				throw new ArgumentNullException(nameof(log));
-			}
-
-			Log = log;
+			Log = log ?? throw new ArgumentNullException(nameof(log));
 		}
 
 

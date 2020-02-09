@@ -2,6 +2,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 
@@ -11,10 +12,16 @@ namespace MawAuth
     {
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder();
+            CreateHostBuilder(args)
+                .Build()
+                .Run();
+        }
 
-            host
-                .UseContentRoot(Directory.GetCurrentDirectory())
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host
+                .CreateDefaultBuilder(args)
+                .UseSystemd()
                 .ConfigureAppConfiguration((context, builder) =>
                     {
                         builder.AddEnvironmentVariables("MAW_AUTH_");
@@ -25,9 +32,9 @@ namespace MawAuth
                         {
                             factory
                                 .AddConsole()
-                                .AddFilter("IdentityServer4", LogLevel.Debug)
-                                .AddFilter("Microsoft", LogLevel.Warning)
-                                .AddFilter("System", LogLevel.Warning)
+                                .AddFilter("IdentityServer4", LogLevel.Information)
+                                .AddFilter("Microsoft", LogLevel.Information)
+                                .AddFilter("System", LogLevel.Information)
                                 .AddFilter("Maw", LogLevel.Debug)
                                 .AddFilter("MawAuth", LogLevel.Debug);
                         }
@@ -35,30 +42,31 @@ namespace MawAuth
                         {
                             factory
                                 .AddConsole()
-                                .AddFilter("IdentityServer4", LogLevel.Debug)
+                                .AddFilter("IdentityServer4", LogLevel.Warning)
                                 .AddFilter("Microsoft", LogLevel.Warning)
                                 .AddFilter("System", LogLevel.Warning)
-                                .AddFilter("Maw", LogLevel.Debug)
-                                .AddFilter("MawAuth", LogLevel.Debug);
+                                .AddFilter("Maw", LogLevel.Warning)
+                                .AddFilter("MawAuth", LogLevel.Warning);
                         }
                     })
-                .UseKestrel(opts =>
-                    {
-                        opts.Listen(IPAddress.Loopback, 5001, listenOptions =>
-                            {
-                                var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
-                                var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
-
-                                listenOptions.UseHttps(config["KestrelPfxFile"], pwd);
-                            });
-                    })
-                .CaptureStartupErrors(true)
                 .UseDefaultServiceProvider((context, options) => {
                     options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
                 })
-                .UseStartup<Startup>()
-                .Build()
-                .Run();
-        }
+                .ConfigureWebHostDefaults(webBuilder => {
+                    webBuilder
+                        .CaptureStartupErrors(true)
+                        .UseLinuxTransport()
+                        .UseKestrel(opts =>
+                        {
+                            opts.Listen(IPAddress.Loopback, 5001, listenOptions =>
+                                {
+                                    var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
+                                    var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
+
+                                    listenOptions.UseHttps(config["KestrelPfxFile"], pwd);
+                                });
+                        })
+                        .UseStartup<Startup>();
+                });
     }
 }

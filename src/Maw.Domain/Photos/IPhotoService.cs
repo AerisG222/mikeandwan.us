@@ -21,5 +21,6 @@ namespace Maw.Domain.Photos
         Task<int> InsertCommentAsync(int photoId, string username, string comment);
         Task<float?> SaveRatingAsync(int photoId, string username, short rating);
         Task<float?> RemoveRatingAsync(int photoId, string username);
+        Task ClearCacheAsync();
     }
 }

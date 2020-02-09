@@ -17,5 +17,6 @@ namespace Maw.Domain.Videos
         Task<int> InsertCommentAsync(short videoId, string username, string comment);
         Task<float?> SaveRatingAsync(short videoId, string username, short rating);
         Task<float?> RemoveRatingAsync(short videoId, string username);
+        Task ClearCacheAsync();
     }
 }

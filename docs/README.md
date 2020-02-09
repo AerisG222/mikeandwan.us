@@ -29,7 +29,7 @@ but will try to get this well organized below to make it easy to follow.
     - [nixCraft Guide - Congestion Control](https://www.cyberciti.biz/cloud-computing/increase-your-linux-server-internet-speed-with-tcp-bbr-congestion-control/)
 10. Update firewall to allow http/https
     ```
-    firewall-cmd --zone=FedoraServer --list-allow
+    firewall-cmd --zone=FedoraServer --list-all
     firewall-cmd --permanent --zone=FedoraServer --add-service=https
     firewall-cmd --permanent --zone=FedoraServer --add-service=http
     systemctl restart firewalld.service
@@ -187,6 +187,45 @@ but will try to get this well organized below to make it easy to follow.
     ```
 13. Reference: [https://docs.asp.net/en/latest/publishing/linuxproduction.html](ASP.Net Linux Production)
 
+
+## Solr
+
+The following will outline the steps to install and configure Solr
+
+If not yet installed, be sure to install java-11-openjdk and java-11-openjdk-devel.
+
+1. Download the latest version from [https://lucene.apache.org/solr/](Solr Website)
+2. Run the install script as described in the [https://lucene.apache.org/solr/guide/8_4/taking-solr-to-production.html](Solr Guide)
+   - `tar xzf solr-8.4.1.tgz solr-8.4.1/bin/install_solr_service.sh --strip-components=2`
+   - `sudo bash ./install_solr_service.sh solr-8.4.1.tgz`
+3. Enable access from remote machines:
+   - `sudo firewall-cmd --permanent --zone=FedoraServer --add-port=8983/tcp`
+4. Download the latest [https://jdbc.postgresql.org/](Postgres JDBC driver)
+5. Configure to run automatically
+   - move /etc/init.d/solr to ~root (or delete it)
+   - copy the cfg/systemd/system/solr.service in this repo to that directory on the server
+   - `sudo systemctl start solr.service`
+   - `sudo systemctl enable solr.service`
+   - SE Linux
+     - If you run into issues, SE Linux will need to be updated to allow additional rights - do the following multiple times until it starts
+     - `grep solr /var/log/audit/audit.log | audit2allow -a -w`  (view issues)
+     - `grep solr /var/log/audit/audit.log | audit2allow -M solr5`  (generate update policy)
+     - `semodule -i solr5.pp`  (activate policy)
+     - change '5' in above as needed
+6. Copy Postgres JDBC driver to `/opt/solr/contrib/dataimporthandler/lib`
+7. Create a new core using web GUI
+   - `su -`
+   - `su - solr`
+   - `/opt/solr/bin/solr create -c multimedia-categories`
+   - `/opt/solr/bin/solr config -c multimedia-categories -p 8983 -action set-user-property -property update.autoCreateFields -value false`
+8. Create fields for the new core via the GUI (otherwise copy the following):
+   - cfg/solr/multimedia-categories/* /var/solr/data/multimedia-categories/conf/
+   - update the postgres_import.xml to update the conn string / password
+   - Reload the core
+   - run full import and verify by running a query in solr admin
+9.  When testing, it might be useful to delete all data in the core.  to do this, submit the following via the GUI document page:
+   - `<delete><query>*:*</query></delete>`
+10. Update synonyms.txt to account for any synonyms or common spelling mistakes
 
 ## Systemd
 

@@ -7,6 +7,7 @@ using StackExchange.Profiling.Data;
 using Npgsql;
 using Maw.Domain;
 
+
 namespace Maw.Data
 {
     public abstract class Repository

@@ -5,8 +5,8 @@ import { Scene, PerspectiveCamera, Renderer, Mesh, Object3D, AmbientLight, SpotL
 
 import * as Stats from 'stats.js';
 
-const floorTexture = require('./floor_texture.jpg');
-const fontFile = require('./open_sans_bold.json');
+import floorTexture from './floor_texture.jpg';
+import fontFile from './open_sans_bold.json';
 
 export const _script_root = document.currentScript;
 
@@ -27,6 +27,32 @@ export class TextDemo {
     run() {
         this.prepareScene();
         this.render();
+    }
+
+    render() {
+        requestAnimationFrame(() => this.render());
+
+        if (this.loaderCount < 2) {
+            return;
+        }
+
+        if (this.animate) {
+            if (this.textPivot.rotation.y >= Math.PI / 3) {
+                this.rotationAngle = -0.015;
+            }
+
+            if (this.textPivot.rotation.y <= -(Math.PI / 3)) {
+                this.rotationAngle = 0.015;
+            }
+
+            this.textPivot.rotation.y += this.rotationAngle;
+            this.textPivot.rotation.x += this.rotationAngle / 8;
+            this.textPivot.rotation.z += this.rotationAngle / 8;
+
+            this.renderer.render(this.scene, this.camera);
+
+            this.stats.update();
+        }
     }
 
     private prepareScene() {
@@ -127,31 +153,5 @@ export class TextDemo {
             this.loaderCount++;
             this.render();
         });
-    }
-
-    render() {
-        requestAnimationFrame(() => this.render());
-
-        if (this.loaderCount < 2) {
-            return;
-        }
-
-        if (this.animate) {
-            if (this.textPivot.rotation.y >= Math.PI / 3) {
-                this.rotationAngle = -0.015;
-            }
-
-            if (this.textPivot.rotation.y <= -(Math.PI / 3)) {
-                this.rotationAngle = 0.015;
-            }
-
-            this.textPivot.rotation.y += this.rotationAngle;
-            this.textPivot.rotation.x += this.rotationAngle / 8;
-            this.textPivot.rotation.z += this.rotationAngle / 8;
-
-            this.renderer.render(this.scene, this.camera);
-
-            this.stats.update();
-        }
     }
 }

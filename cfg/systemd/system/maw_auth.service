@@ -2,6 +2,7 @@
 Description=mikeandwan.us web oauth application
 
 [Service]
+Type=notify
 EnvironmentFile=/etc/systemd/system/maw_auth.env
 WorkingDirectory=/srv/www/maw_auth
 ExecStart=/usr/share/dotnet/dotnet MawAuth.dll

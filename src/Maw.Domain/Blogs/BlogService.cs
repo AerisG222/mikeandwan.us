@@ -1,49 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 
 
 namespace Maw.Domain.Blogs
 {
 	public class BlogService
-		: IBlogService
+		: BaseService, IBlogService
 	{
 		readonly IBlogRepository _repo;
 
 
-		public BlogService(IBlogRepository blogRepository)
+		public BlogService(IBlogRepository blogRepository,
+                           ILogger<BlogService> log,
+                           IDistributedCache cache)
+            : base("blog", log, cache)
 		{
-			if(blogRepository == null)
-			{
-				throw new ArgumentNullException(nameof(blogRepository));
-			}
-
-			_repo = blogRepository;
+			_repo = blogRepository ?? throw new ArgumentNullException(nameof(blogRepository));
 		}
 
 
 		public Task<IEnumerable<Blog>> GetBlogsAsync()
 		{
-			return _repo.GetBlogsAsync();
+            return GetCachedValueAsync(nameof(GetBlogsAsync), () => _repo.GetBlogsAsync());
 		}
 
 
-		public Task<IEnumerable<Post>> GetAllPostsAsync(byte blogId)
+		public Task<IEnumerable<Post>> GetAllPostsAsync(short blogId)
 		{
-			return _repo.GetAllPostsAsync(blogId);
+            var key = $"{nameof(GetAllPostsAsync)}_{blogId}";
+
+			return GetCachedValueAsync(key, () => _repo.GetAllPostsAsync(blogId));
 		}
 
 
-		public Task<IEnumerable<Post>> GetLatestPostsAsync(byte blogId, short postCount)
+		public Task<IEnumerable<Post>> GetLatestPostsAsync(short blogId, short postCount)
 		{
-			return _repo.GetLatestPostsAsync(blogId, postCount);
+            var key = $"{nameof(GetLatestPostsAsync)}_{blogId}_{postCount}";
+
+            return GetCachedValueAsync(key, () => _repo.GetLatestPostsAsync(blogId, postCount));
 		}
-		
-		
+
+
 		public Task AddPostAsync(Post post)
 		{
-			return _repo.AddPostAsync(post);
+            if(post == null)
+            {
+                throw new ArgumentNullException(nameof(post));
+            }
+
+            return Task.WhenAll(
+                _repo.AddPostAsync(post),
+                InternalClearCacheAsync()
+            );
 		}
 	}
 }
-

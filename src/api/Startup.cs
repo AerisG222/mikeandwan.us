@@ -11,8 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using NMagickWand;
+using SolrNet;
 using Maw.Data;
 using Maw.Domain;
+using Maw.Domain.Search;
 using Maw.Domain.Upload;
 using Maw.Security;
 using MawApi.Hubs;
@@ -25,10 +27,10 @@ namespace MawApi
     public class Startup
     {
         readonly IConfiguration _config;
-        readonly IHostingEnvironment _env;
+        readonly IWebHostEnvironment _env;
 
 
-        public Startup(IConfiguration config, IHostingEnvironment env)
+        public Startup(IConfiguration config, IWebHostEnvironment env)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _env = env ?? throw new ArgumentNullException(nameof(env));
@@ -48,14 +50,14 @@ namespace MawApi
                 .Configure<UploadConfig>(_config.GetSection("FileUpload"))
                 .AddSingleton<UrlConfig>(urlConfig)
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
+                .AddSolrNet<MultimediaCategory>(_config["Search:CoreUrl"])
                 .AddMawDomainServices()
                 .AddMawApiServices()
+                .AddScoped<ISearchService, SearchService>()
                 .AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>()
-                .AddMvc()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddControllers()
                     .Services
                 .AddSignalR()
-                    .AddMessagePackProtocol()
                     .Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opts => {
@@ -118,12 +120,16 @@ namespace MawApi
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseRouting();
             app.UseCors("default");
             app.UseOpenApi();
             app.UseSwaggerUi3();
             app.UseAuthentication();
-            app.UseSignalR(routes => routes.MapHub<UploadHub>("/uploadr"));
-            app.UseMvc();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints => {
+                endpoints.MapHub<UploadHub>("/uploadr");
+                endpoints.MapControllers();
+            });
         }
     }
 }

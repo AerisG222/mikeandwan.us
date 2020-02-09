@@ -1,15 +1,21 @@
-import { Scene, PerspectiveCamera, Renderer, Mesh, MeshPhongMaterial, AmbientLight,
-         WebGLRenderer, DirectionalLight, AxesHelper } from 'three';
+import { Scene } from 'three/src/scenes/Scene';
+import { PerspectiveCamera } from 'three/src/cameras/PerspectiveCamera';
+import { Mesh } from 'three/src/objects/Mesh';
+import { MeshPhongMaterial } from 'three/src/materials/MeshPhongMaterial';
+import { AmbientLight } from 'three/src/lights/AmbientLight';
+import { DirectionalLight } from 'three/src/lights/DirectionalLight';
+import { WebGLRenderer } from 'three/src/renderers/WebGLRenderer';
+import { AxesHelper } from 'three/src/helpers/AxesHelper';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as Stats from 'stats.js';
 
-const model = require('./bs.gltf');
-const bin = require('./bs2.bin');
+import model from './bs.gltf';
+import bin from './bs.bin';
 
 export class BlenderModelDemo {
     private _scene: Scene;
     private _camera: PerspectiveCamera;
-    private _renderer: Renderer;
+    private _renderer: WebGLRenderer;
     private _ambientLight: AmbientLight;
     private _stats: Stats;
     private _loader: GLTFLoader;
@@ -60,6 +66,11 @@ export class BlenderModelDemo {
         // model loader
         this._loader = new GLTFLoader();
 
+        // force bin to not be treeshaked away
+        if (!!bin) {
+            this._frameCounter = 0;
+        }
+
         this._loader.load(model, gltf => {
             this.setupModel(gltf);
         });
@@ -98,7 +109,7 @@ export class BlenderModelDemo {
 
             this._frameCounter++;
 
-            if(this._frameCounter > 40) {
+            if (this._frameCounter > 40) {
                 this._frameCounter = 0;
                 this._rotateMultiplier = this._rotateMultiplier * -1.0;
             }

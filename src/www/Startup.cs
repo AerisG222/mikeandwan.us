@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using IdentityModel;
@@ -21,6 +22,7 @@ using Maw.Domain;
 using Maw.Domain.Captcha;
 using Maw.Domain.Email;
 using Maw.Security;
+using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
 
 
@@ -31,10 +33,10 @@ namespace MawMvcApp
     public class Startup
     {
         readonly IConfiguration _config;
-        readonly IHostingEnvironment _env;
+        readonly IWebHostEnvironment _env;
 
 
-        public Startup(IConfiguration config, IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration config, IWebHostEnvironment hostingEnvironment)
         {
             _env = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
             _config = config ?? throw new ArgumentNullException(nameof(config));
@@ -55,7 +57,11 @@ namespace MawMvcApp
                 .Configure<GmailApiEmailConfig>(_config.GetSection("Gmail"))
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
                 .Configure<GoogleCaptchaConfig>(_config.GetSection("GoogleRecaptcha"))
+                .Configure<UrlConfig>(_config.GetSection("UrlConfig"))
                 .AddLogging()
+                .AddHttpContextAccessor()
+                .AddHttpClient<MawApiService>()
+                .Services
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
                 .AddTransient<RazorViewToStringRenderer>()
@@ -113,8 +119,7 @@ namespace MawMvcApp
                             .AllowAnyMethod();
                     });
                 })
-                .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .AddControllersWithViews();
 
                 if(_env.IsDevelopment())
                 {
@@ -125,12 +130,12 @@ namespace MawMvcApp
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseCors("default");
-
             if (_env.IsDevelopment())
             {
-                app.UseMiniProfiler();
-                app.UseDeveloperExceptionPage();
+                app
+                    .UseMiniProfiler()
+                    .UseDeveloperExceptionPage();
+
                 AddDevPathMappings(app);
             }
             else
@@ -139,15 +144,20 @@ namespace MawMvcApp
             }
 
             app
+                .UseStaticFiles(new StaticFileOptions {
+                    ContentTypeProvider = GetCustomMimeTypeProvider()
+                })
+                .UseRouting()
+                .UseCors("default")
                 .UseForwardedHeaders(new ForwardedHeadersOptions
                     {
                         ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
                     })
                 .UseAuthentication()
-                .UseStaticFiles(new StaticFileOptions {
-                    ContentTypeProvider = GetCustomMimeTypeProvider()
-                })
-                .UseMvc();
+                .UseAuthorization()
+                .UseEndpoints(endpoints => {
+                    endpoints.MapControllers();
+                });
         }
 
 

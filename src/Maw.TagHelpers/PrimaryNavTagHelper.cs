@@ -86,7 +86,7 @@ namespace Maw.TagHelpers
                     kvp => (object)kvp.Value,
                     StringComparer.OrdinalIgnoreCase);
 
-			var action = Action.Replace("-", string.Empty);
+			var action = Action.Replace("-", string.Empty, StringComparison.OrdinalIgnoreCase);
 			var anchor = _htmlGenerator.GenerateActionLink(ViewContext, LinkText, action, Controller, null, null, null, routeValues, new { @class = "nav-link px-3" });
 
 			anchor.InnerHtml.AppendHtml(await output.GetChildContentAsync().ConfigureAwait(false));

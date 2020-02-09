@@ -70,15 +70,6 @@ namespace MawMvcApp.Controllers
 		}
 
 
-		[HttpGet("networking-ports")]
-		public IActionResult NetworkingPorts()
-		{
-			ViewBag.NavigationZone = NavigationZone.Reference;
-
-			return View();
-		}
-
-
 		[HttpGet("dotnet-guidelines-fundamentals")]
 		public IActionResult DotnetGuidelinesFundamentals()
 		{

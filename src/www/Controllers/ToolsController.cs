@@ -22,7 +22,7 @@ namespace MawMvcApp.Controllers
 
 
 		public ToolsController(ILogger<ToolsController> log,
-							   IHostingEnvironment env)
+							   IWebHostEnvironment env)
 			: base(log)
         {
 			_fileProvider = env?.WebRootFileProvider ?? throw new ArgumentNullException(nameof(env));

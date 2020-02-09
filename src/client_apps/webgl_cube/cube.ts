@@ -15,8 +15,8 @@ import { WebGLRenderer } from 'three/src/renderers/WebGLRenderer';
 import { AxesHelper } from 'three/src/helpers/AxesHelper';
 import * as Stats from 'stats.js';
 
-const floorTexture = require('./floor_texture.jpg');
-const cubeTexture = require('./DSC_8562.jpg');
+import floorTexture from './floor_texture.jpg';
+import cubeTexture from './DSC_8562.jpg';
 
 export class CubeDemo {
     scene: Scene;

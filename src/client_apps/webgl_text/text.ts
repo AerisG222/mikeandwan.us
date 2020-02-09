@@ -5,8 +5,8 @@ import { Scene, PerspectiveCamera, Renderer, Mesh, Object3D, AmbientLight, SpotL
 
 import * as Stats from 'stats.js';
 
-const floorTexture = require('./floor_texture.jpg');
-const fontFile = require('./open_sans_bold.json');
+import floorTexture from './floor_texture.jpg';
+import fontFile from './open_sans_bold.json';
 
 export const _script_root = document.currentScript;
 

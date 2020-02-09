@@ -45,6 +45,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("files")]
+        [HttpOptions("files")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         public IActionResult Files()
@@ -140,6 +141,7 @@ namespace MawMvcApp.Controllers
 
 
         [HttpGet("thumbnail/{relativePath}")]
+        [HttpOptions("thumbnail/{relativePath}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]

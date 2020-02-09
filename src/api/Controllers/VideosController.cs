@@ -34,6 +34,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet("{id}")]
+        [HttpOptions("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
@@ -51,6 +52,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet("{id}/comments")]
+        [HttpOptions("{id}/comments")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
@@ -81,6 +83,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet("{id}/rating")]
+        [HttpOptions("{id}/rating")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]

@@ -53,7 +53,7 @@ namespace MawApi
                 .ConfigureWebHostDefaults(webBuilder => {
                     webBuilder
                         .CaptureStartupErrors(true)
-                        .UseLinuxTransport()
+                        //.UseLinuxTransport()
                         .UseKestrel(opts =>
                         {
                             var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));

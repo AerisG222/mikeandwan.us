@@ -55,7 +55,7 @@ namespace MawMvcApp
                 .ConfigureWebHostDefaults(webBuilder => {
                     webBuilder
                         .CaptureStartupErrors(true)
-                        .UseLinuxTransport()
+                        //.UseLinuxTransport()
                         .UseKestrel(opts =>
                         {
                             opts.Listen(IPAddress.Loopback, 5021, listenOptions =>

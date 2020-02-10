@@ -35,6 +35,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet("random")]
+        [HttpOptions("random")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         public async Task<ActionResult<PhotoViewModel>> GetRandomPhotoAsync()
@@ -46,6 +47,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet("random/{count}")]
+        [HttpOptions("random/{count}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -62,6 +64,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet("{id}")]
+        [HttpOptions("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
@@ -79,6 +82,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet("{id}/comments")]
+        [HttpOptions("{id}/comments")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
@@ -109,6 +113,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet("{id}/exif")]
+        [HttpOptions("{id}/exif")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
@@ -126,6 +131,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet("{id}/rating")]
+        [HttpOptions("{id}/rating")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]

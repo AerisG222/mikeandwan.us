@@ -36,6 +36,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet]
+        [HttpOptions]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         public async Task<ActionResult<ApiCollection<PhotoCategoryViewModel>>> GetAll()
@@ -48,6 +49,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet("recent/{sinceId}")]
+        [HttpOptions("recent/{sinceId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         public async Task<ActionResult<ApiCollection<PhotoCategoryViewModel>>> GetRecent(short sinceId)
@@ -60,6 +62,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet("{id}")]
+        [HttpOptions("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
@@ -77,6 +80,7 @@ namespace MawApi.Controllers
 
 
         [HttpGet("{id}/photos")]
+        [HttpOptions("{id}/photos")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]

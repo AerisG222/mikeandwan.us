@@ -75,6 +75,44 @@ namespace Maw.Data
 		}
 
 
+        public Task<GpsDetail> GetGpsDetailAsync(int videoId)
+		{
+            return RunAsync(async conn => {
+                var result = await conn.QuerySingleOrDefaultAsync<dynamic>(
+                    "SELECT * FROM video.get_gps(@photoId);",
+                    new { videoId }
+                ).ConfigureAwait(false);
+
+                if(result == null)
+                {
+                    return null;
+                }
+
+                var detail = new GpsDetail();
+
+                if(result.source_latitude != DBNull.Value && result.source_longitude != DBNull.Value)
+                {
+                    detail.Source = new GpsCoordinate()
+                    {
+                        Latitude = result.source_latitude,
+                        Longitude = result.source_longitude
+                    };
+                }
+
+                if(result.override_latitude != DBNull.Value && result.override_longitude != DBNull.Value)
+                {
+                    detail.Override = new GpsCoordinate()
+                    {
+                        Latitude = result.override_latitude,
+                        Longitude = result.override_longitude
+                    };
+                }
+
+                return detail;
+            });
+		}
+
+
 		public Task<Rating> GetRatingsAsync(short videoId, string username)
 		{
             return RunAsync(conn =>
@@ -143,6 +181,23 @@ namespace Maw.Data
 
                 return (await GetRatingsAsync(videoId, username).ConfigureAwait(false))?.AverageRating;
             });
+		}
+
+
+        public Task SetGpsOverrideAsync(int videoId, GpsCoordinate gps, string username)
+		{
+            return RunAsync(conn =>
+                conn.QueryAsync<long>(
+                    "SELECT * FROM video.set_gps_override(@videoId, @latitude, @longitude, @username, @updateDate);",
+                    new {
+                        videoId,
+                        latitude = gps.Latitude,
+                        longitude = gps.Longitude,
+                        username = username.ToLowerInvariant(),
+                        updateDate = DateTime.Now
+                    }
+                )
+            );
 		}
 
 

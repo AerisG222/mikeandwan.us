@@ -18,12 +18,11 @@ run_psql_script "tables/video.reverse_geocode.sql";
 
 echo 'creating/updating functions...'
 run_psql_script "funcs/photo.get_photos.sql";
-run_psql_script "funcs/photo.get_gps_override.sql";
+run_psql_script "funcs/photo.get_gps.sql";
 run_psql_script "funcs/photo.set_gps_override.sql";
 
 run_psql_script "funcs/video.get_videos.sql";
-run_psql_script "funcs/video.get_gps_override.sql";
+run_psql_script "funcs/video.get_gps.sql";
 run_psql_script "funcs/video.set_gps_override.sql";
-run_psql_script "funcs/video.get_source_gps.sql";
 
 echo "...${DBNAME} updated.";

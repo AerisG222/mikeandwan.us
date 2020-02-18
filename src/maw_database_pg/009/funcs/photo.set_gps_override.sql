@@ -6,11 +6,12 @@ CREATE OR REPLACE FUNCTION photo.set_gps_override
     _username VARCHAR(30),
     _update_date TIMESTAMP
 )
-RETURNS BOOLEAN
+RETURNS BIGINT
 LANGUAGE PLPGSQL
 AS $$
 DECLARE
     _user_id SMALLINT;
+    _rowcount BIGINT;
 BEGIN
 
     DELETE FROM photo.point_of_interest poi
@@ -51,7 +52,9 @@ BEGIN
 
     END IF;
 
-    RETURN TRUE;
+    GET DIAGNOSTICS _rowcount = ROW_COUNT;
+
+    RETURN _rowcount;
 
 END;
 $$;

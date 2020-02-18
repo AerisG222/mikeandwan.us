@@ -13,10 +13,12 @@ namespace Maw.Domain.Videos
         Task<Video> GetVideoAsync(short id, bool allowPrivate);
         Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate);
         Task<IEnumerable<Comment>> GetCommentsAsync(short videoId);
+        Task<GpsDetail> GetGpsDetailAsync(int videoId);
         Task<Rating> GetRatingsAsync(short videoId, string username);
         Task<int> InsertCommentAsync(short videoId, string username, string comment);
         Task<float?> SaveRatingAsync(short videoId, string username, short rating);
         Task<float?> RemoveRatingAsync(short videoId, string username);
+        Task SetGpsOverrideAsync(int videoId, GpsCoordinate gps, string username);
         Task ClearCacheAsync();
     }
 }

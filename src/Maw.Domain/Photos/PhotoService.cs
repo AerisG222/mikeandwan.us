@@ -106,6 +106,12 @@ namespace Maw.Domain.Photos
         }
 
 
+        public Task<GpsDetail> GetGpsDetailAsync(int photoId)
+        {
+            return _repo.GetGpsDetailAsync(photoId);
+        }
+
+
 		public Task<int> InsertCommentAsync(int photoId, string username, string comment)
         {
             return _repo.InsertCommentAsync(photoId, username, comment);
@@ -121,6 +127,12 @@ namespace Maw.Domain.Photos
 		public Task<float?> RemoveRatingAsync(int photoId, string username)
         {
             return _repo.RemoveRatingAsync(photoId, username);
+        }
+
+
+        public Task SetGpsOverrideAsync(int photoId, GpsCoordinate gps, string username)
+        {
+            return _repo.SetGpsOverrideAsync(photoId, gps, username);
         }
 
 

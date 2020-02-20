@@ -7,3 +7,7 @@ ALTER TABLE photo.reverse_geocode
 ALTER TABLE photo.reverse_geocode
   ADD CONSTRAINT pk_photo_reverse_geocode
          PRIMARY KEY (photo_id, is_override);
+
+GRANT DELETE
+   ON photo.reverse_geocode
+   TO website;

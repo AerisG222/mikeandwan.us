@@ -7,3 +7,7 @@ ALTER TABLE video.reverse_geocode
 ALTER TABLE video.reverse_geocode
   ADD CONSTRAINT pk_video_reverse_geocode
          PRIMARY KEY (video_id, is_override);
+
+GRANT DELETE
+   ON video.reverse_geocode
+   TO website;

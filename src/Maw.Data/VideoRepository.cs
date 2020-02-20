@@ -78,8 +78,8 @@ namespace Maw.Data
         public Task<GpsDetail> GetGpsDetailAsync(int videoId)
 		{
             return RunAsync(async conn => {
-                var result = await conn.QuerySingleOrDefaultAsync<dynamic>(
-                    "SELECT * FROM video.get_gps(@photoId);",
+                var result = await conn.QuerySingleOrDefaultAsync<GpsSourceOverride>(
+                    "SELECT * FROM video.get_gps(@videoId);",
                     new { videoId }
                 ).ConfigureAwait(false);
 
@@ -90,21 +90,21 @@ namespace Maw.Data
 
                 var detail = new GpsDetail();
 
-                if(result.source_latitude != DBNull.Value && result.source_longitude != DBNull.Value)
+                if(result.SourceLatitude != null && result.SourceLongitude != null)
                 {
                     detail.Source = new GpsCoordinate()
                     {
-                        Latitude = result.source_latitude,
-                        Longitude = result.source_longitude
+                        Latitude = (float) result.SourceLatitude,
+                        Longitude = (float) result.SourceLongitude
                     };
                 }
 
-                if(result.override_latitude != DBNull.Value && result.override_longitude != DBNull.Value)
+                if(result.OverrideLatitude != null && result.OverrideLongitude != null)
                 {
                     detail.Override = new GpsCoordinate()
                     {
-                        Latitude = result.override_latitude,
-                        Longitude = result.override_longitude
+                        Latitude = (float) result.OverrideLatitude,
+                        Longitude = (float) result.OverrideLongitude
                     };
                 }
 

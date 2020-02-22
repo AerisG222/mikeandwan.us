@@ -23,5 +23,6 @@ namespace Maw.Domain.Photos
         Task<float?> SaveRatingAsync(int photoId, string username, short rating);
         Task<float?> RemoveRatingAsync(int photoId, string username);
         Task SetGpsOverrideAsync(int photoId, GpsCoordinate gps, string username);
+        Task<long> SetCategoryTeaserAsync(short categoryId, int photoId);
     }
 }

@@ -112,6 +112,17 @@ namespace Maw.Domain.Videos
         }
 
 
+        public async Task SetCategoryTeaserAsync(short categoryId, int videoId)
+        {
+            var count = await _repo.SetCategoryTeaserAsync(categoryId, videoId).ConfigureAwait(false);
+
+            if(count != 1)
+            {
+                throw new ApplicationException("Did not update category teaser!");
+            }
+        }
+
+
         public Task ClearCacheAsync()
         {
             return InternalClearCacheAsync();

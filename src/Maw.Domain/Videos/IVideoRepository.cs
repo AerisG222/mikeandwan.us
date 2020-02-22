@@ -19,5 +19,6 @@ namespace Maw.Domain.Videos
         Task<float?> SaveRatingAsync(short videoId, string username, short rating);
         Task<float?> RemoveRatingAsync(short videoId, string username);
         Task SetGpsOverrideAsync(int videoId, GpsCoordinate gps, string username);
+        Task<long> SetCategoryTeaserAsync(short categoryId, int videoId);
     }
 }

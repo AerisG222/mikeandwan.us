@@ -66,16 +66,9 @@ namespace MawApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<PhotoCategoryViewModel>> GetById(short id)
+        public Task<ActionResult<PhotoCategoryViewModel>> GetById(short id)
         {
-            var category = await _svc.GetCategoryAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
-
-            if(category == null)
-            {
-                return NotFound();
-            }
-
-            return _categoryAdapter.Adapt(category);
+            return GetCategoryInternalAsync(id);
         }
 
 
@@ -96,6 +89,45 @@ namespace MawApi.Controllers
             var results = _photoAdapter.Adapt(photos);
 
             return new ApiCollection<PhotoViewModel>(results.ToList());
+        }
+
+
+        [HttpPatch("{id}/teaser")]
+        [Authorize(MawPolicy.AdminPhotos)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<PhotoCategoryViewModel>> SetTeaserAsync(short id, SetTeaserViewModel model)
+        {
+            if(model == null)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                await _svc.SetCategoryTeaserAsync(id, model.PhotoId).ConfigureAwait(false);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+            return await GetCategoryInternalAsync(id).ConfigureAwait(false);
+        }
+
+
+        async Task<ActionResult<PhotoCategoryViewModel>> GetCategoryInternalAsync(short id)
+        {
+            var category = await _svc.GetCategoryAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
+
+            if(category == null)
+            {
+                return NotFound();
+            }
+
+            return _categoryAdapter.Adapt(category);
         }
     }
 }

@@ -136,6 +136,19 @@ namespace Maw.Domain.Photos
         }
 
 
+        public async Task SetCategoryTeaserAsync(short categoryId, int photoId)
+        {
+            var count = await _repo.SetCategoryTeaserAsync(categoryId, photoId).ConfigureAwait(false);
+
+            if(count != 1)
+            {
+                throw new ApplicationException("Did not update category teaser!");
+            }
+
+            await ClearCacheAsync().ConfigureAwait(false);
+        }
+
+
         public Task ClearCacheAsync()
         {
             return InternalClearCacheAsync();

@@ -201,6 +201,20 @@ namespace Maw.Data
 		}
 
 
+        public Task<long> SetCategoryTeaserAsync(short categoryId, int videoId)
+        {
+            return RunAsync(conn =>
+                conn.QueryFirstAsync<long>(
+                    @"SELECT * FROM video.set_category_teaser(@categoryId, @videoId);",
+                    new {
+                        categoryId,
+                        videoId
+                    }
+                )
+            );
+        }
+
+
         Task<IEnumerable<Category>> InternalGetCategoriesAsync(bool allowPrivate, short? year = null, short? categoryId = null)
         {
             return RunAsync(async conn => {

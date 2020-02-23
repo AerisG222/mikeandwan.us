@@ -120,6 +120,8 @@ namespace Maw.Domain.Videos
             {
                 throw new ApplicationException("Did not update category teaser!");
             }
+
+            await ClearCacheAsync().ConfigureAwait(false);
         }
 
 

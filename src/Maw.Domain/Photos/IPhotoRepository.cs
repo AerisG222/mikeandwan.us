@@ -18,8 +18,11 @@ namespace Maw.Domain.Photos
         Task<Detail> GetDetailAsync(int photoId, bool allowPrivate);
         Task<IEnumerable<Comment>> GetCommentsAsync(int photoId);
         Task<Rating> GetRatingsAsync(int photoId, string username);
+        Task<GpsDetail> GetGpsDetailAsync(int photoId);
         Task<int> InsertCommentAsync(int photoId, string username, string comment);
         Task<float?> SaveRatingAsync(int photoId, string username, short rating);
         Task<float?> RemoveRatingAsync(int photoId, string username);
+        Task SetGpsOverrideAsync(int photoId, GpsCoordinate gps, string username);
+        Task<long> SetCategoryTeaserAsync(short categoryId, int photoId);
     }
 }

@@ -75,6 +75,44 @@ namespace Maw.Data
 		}
 
 
+        public Task<GpsDetail> GetGpsDetailAsync(int videoId)
+		{
+            return RunAsync(async conn => {
+                var result = await conn.QuerySingleOrDefaultAsync<GpsSourceOverride>(
+                    "SELECT * FROM video.get_gps(@videoId);",
+                    new { videoId }
+                ).ConfigureAwait(false);
+
+                if(result == null)
+                {
+                    return null;
+                }
+
+                var detail = new GpsDetail();
+
+                if(result.SourceLatitude != null && result.SourceLongitude != null)
+                {
+                    detail.Source = new GpsCoordinate()
+                    {
+                        Latitude = (float) result.SourceLatitude,
+                        Longitude = (float) result.SourceLongitude
+                    };
+                }
+
+                if(result.OverrideLatitude != null && result.OverrideLongitude != null)
+                {
+                    detail.Override = new GpsCoordinate()
+                    {
+                        Latitude = (float) result.OverrideLatitude,
+                        Longitude = (float) result.OverrideLongitude
+                    };
+                }
+
+                return detail;
+            });
+		}
+
+
 		public Task<Rating> GetRatingsAsync(short videoId, string username)
 		{
             return RunAsync(conn =>
@@ -144,6 +182,37 @@ namespace Maw.Data
                 return (await GetRatingsAsync(videoId, username).ConfigureAwait(false))?.AverageRating;
             });
 		}
+
+
+        public Task SetGpsOverrideAsync(int videoId, GpsCoordinate gps, string username)
+		{
+            return RunAsync(conn =>
+                conn.QueryAsync<long>(
+                    "SELECT * FROM video.set_gps_override(@videoId, @latitude, @longitude, @username, @updateDate);",
+                    new {
+                        videoId,
+                        latitude = gps.Latitude,
+                        longitude = gps.Longitude,
+                        username = username.ToLowerInvariant(),
+                        updateDate = DateTime.Now
+                    }
+                )
+            );
+		}
+
+
+        public Task<long> SetCategoryTeaserAsync(short categoryId, int videoId)
+        {
+            return RunAsync(conn =>
+                conn.QueryFirstAsync<long>(
+                    @"SELECT * FROM video.set_category_teaser(@categoryId, @videoId);",
+                    new {
+                        categoryId,
+                        videoId
+                    }
+                )
+            );
+        }
 
 
         Task<IEnumerable<Category>> InternalGetCategoriesAsync(bool allowPrivate, short? year = null, short? categoryId = null)

@@ -82,6 +82,51 @@ namespace MawApi.Controllers
         }
 
 
+        [HttpGet("{id}/gps")]
+        [HttpOptions("{id}/gps")]
+        [Authorize(MawPolicy.AdminVideos)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<GpsDetail>> GetGpsDetailAsync(int id)
+        {
+            var gps = await _svc.GetGpsDetailAsync(id).ConfigureAwait(false);
+
+            if(gps == null)
+            {
+                return NotFound();
+            }
+
+            return gps;
+        }
+
+
+        [HttpPatch("{id}/gps")]
+        [Authorize(MawPolicy.AdminVideos)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<GpsDetail>> SetGpsOverrideAsync(int id, GpsCoordinate gps)
+        {
+            if(gps == null)
+            {
+                throw new ArgumentNullException(nameof(gps));
+            }
+
+            await _svc.SetGpsOverrideAsync(id, gps, User.Identity.Name).ConfigureAwait(false);
+
+            var detail = await _svc.GetGpsDetailAsync(id).ConfigureAwait(false);
+
+            if(detail == null)
+            {
+                return NotFound();
+            }
+
+            return detail;
+        }
+
+
         [HttpGet("{id}/rating")]
         [HttpOptions("{id}/rating")]
         [ProducesResponseType(200)]

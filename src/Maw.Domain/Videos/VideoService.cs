@@ -76,6 +76,12 @@ namespace Maw.Domain.Videos
         }
 
 
+        public Task<GpsDetail> GetGpsDetailAsync(int videoId)
+        {
+            return _repo.GetGpsDetailAsync(videoId);
+        }
+
+
 		public Task<Rating> GetRatingsAsync(short videoId, string username)
         {
             return _repo.GetRatingsAsync(videoId, username);
@@ -97,6 +103,23 @@ namespace Maw.Domain.Videos
 		public Task<float?> RemoveRatingAsync(short videoId, string username)
         {
             return _repo.RemoveRatingAsync(videoId, username);
+        }
+
+
+        public Task SetGpsOverrideAsync(int videoId, GpsCoordinate gps, string username)
+        {
+            return _repo.SetGpsOverrideAsync(videoId, gps, username);
+        }
+
+
+        public async Task SetCategoryTeaserAsync(short categoryId, int videoId)
+        {
+            var count = await _repo.SetCategoryTeaserAsync(categoryId, videoId).ConfigureAwait(false);
+
+            if(count != 1)
+            {
+                throw new ApplicationException("Did not update category teaser!");
+            }
         }
 
 

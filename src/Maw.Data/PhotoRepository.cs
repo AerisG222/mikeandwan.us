@@ -132,6 +132,44 @@ namespace Maw.Data
 		}
 
 
+        public Task<GpsDetail> GetGpsDetailAsync(int photoId)
+		{
+            return RunAsync(async conn => {
+                var result = await conn.QuerySingleOrDefaultAsync<GpsSourceOverride>(
+                    "SELECT * FROM photo.get_gps(@photoId);",
+                    new { photoId }
+                ).ConfigureAwait(false);
+
+                if(result == null)
+                {
+                    return null;
+                }
+
+                var detail = new GpsDetail();
+
+                if(result.SourceLatitude != null && result.SourceLongitude != null)
+                {
+                    detail.Source = new GpsCoordinate()
+                    {
+                        Latitude = (float) result.SourceLatitude,
+                        Longitude = (float) result.SourceLongitude
+                    };
+                }
+
+                if(result.OverrideLatitude != null && result.OverrideLongitude != null)
+                {
+                    detail.Override = new GpsCoordinate()
+                    {
+                        Latitude = (float) result.OverrideLatitude,
+                        Longitude = (float) result.OverrideLongitude
+                    };
+                }
+
+                return detail;
+            });
+		}
+
+
 		public Task<int> InsertCommentAsync(int photoId, string username, string comment)
         {
             return RunAsync(async conn => {
@@ -187,6 +225,37 @@ namespace Maw.Data
                 return (await GetRatingsAsync(photoId, username).ConfigureAwait(false))?.AverageRating;
             });
 		}
+
+
+        public Task SetGpsOverrideAsync(int photoId, GpsCoordinate gps, string username)
+		{
+            return RunAsync(conn =>
+                conn.QueryAsync<long>(
+                    "SELECT * FROM photo.set_gps_override(@photoId, @latitude, @longitude, @username, @updateDate);",
+                    new {
+                        photoId,
+                        latitude = gps.Latitude,
+                        longitude = gps.Longitude,
+                        username = username.ToLowerInvariant(),
+                        updateDate = DateTime.Now
+                    }
+                )
+            );
+		}
+
+
+        public Task<long> SetCategoryTeaserAsync(short categoryId, int photoId)
+        {
+            return RunAsync(conn =>
+                conn.QueryFirstAsync<long>(
+                    @"SELECT * FROM photo.set_category_teaser(@categoryId, @photoId);",
+                    new {
+                        categoryId,
+                        photoId
+                    }
+                )
+            );
+        }
 
 
         Task<IEnumerable<Category>> InternalGetCategoriesAsync(bool allowPrivate, short? year = null, short? categoryId = null, short? sinceCategoryId = null)

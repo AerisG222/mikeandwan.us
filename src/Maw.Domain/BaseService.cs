@@ -80,7 +80,7 @@ namespace Maw.Domain
         }
 
 
-        async Task<IEnumerable<string>> GetCachedKeysAsync()
+        async Task<List<string>> GetCachedKeysAsync()
         {
             var cachedValue = await _cache.GetStringAsync(BuildCachedKeysKey()).ConfigureAwait(false);
 
@@ -89,7 +89,7 @@ namespace Maw.Domain
                 return null;
             }
 
-            return JsonSerializer.Deserialize<IEnumerable<string>>(cachedValue);
+            return JsonSerializer.Deserialize<List<string>>(cachedValue);
         }
 
 
@@ -121,7 +121,7 @@ namespace Maw.Domain
 
             if(keys == null)
             {
-                keys = new string[] { key };
+                keys = new List<string> { key };
 
                 await SetCachedValueAsync(BuildCachedKeysKey(), keys, null).ConfigureAwait(false);
             }
@@ -129,7 +129,7 @@ namespace Maw.Domain
             {
                 if(!keys.Contains(key))
                 {
-                    keys.Append(key);
+                    keys.Add(key);
 
                     await SetCachedValueAsync(BuildCachedKeysKey(), keys, null).ConfigureAwait(false);
                 }

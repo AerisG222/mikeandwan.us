@@ -14,14 +14,6 @@ DECLARE
     _rowcount BIGINT;
 BEGIN
 
-    DELETE FROM video.point_of_interest poi
-     WHERE poi.video_id = _video_id
-       AND poi.is_override = TRUE;
-
-    DELETE FROM video.reverse_geocode rg
-     WHERE rg.video_id = _video_id
-       AND rg.is_override = TRUE;
-
     DELETE FROM video.gps_override pgo
      WHERE pgo.video_id = _video_id;
 

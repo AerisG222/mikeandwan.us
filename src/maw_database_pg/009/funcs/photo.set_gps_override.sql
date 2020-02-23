@@ -14,14 +14,6 @@ DECLARE
     _rowcount BIGINT;
 BEGIN
 
-    DELETE FROM photo.point_of_interest poi
-     WHERE poi.photo_id = _photo_id
-       AND poi.is_override = TRUE;
-
-    DELETE FROM photo.reverse_geocode rg
-     WHERE rg.photo_id = _photo_id
-       AND rg.is_override = TRUE;
-
     DELETE FROM photo.gps_override pgo
      WHERE pgo.photo_id = _photo_id;
 

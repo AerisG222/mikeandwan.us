@@ -14,8 +14,8 @@ DECLARE
     _rowcount BIGINT;
 BEGIN
 
-    DELETE FROM video.gps_override pgo
-     WHERE pgo.video_id = _video_id;
+    DELETE FROM video.gps_override vgo
+     WHERE vgo.video_id = _video_id;
 
     IF _latitude IS NOT NULL AND _longitude IS NOT NULL THEN
 

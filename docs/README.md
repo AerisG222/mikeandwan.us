@@ -226,6 +226,7 @@ If not yet installed, be sure to install java-11-openjdk and java-11-openjdk-dev
 9.  When testing, it might be useful to delete all data in the core.  to do this, submit the following via the GUI document page:
    - `<delete><query>*:*</query></delete>`
 10. Update synonyms.txt to account for any synonyms or common spelling mistakes
+11. Configure Solr to reindex each night - see cfg/crontab and cfg/solr/solr-reindex.sh
 
 ## Systemd
 

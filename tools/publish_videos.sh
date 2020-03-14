@@ -8,7 +8,7 @@ DEBUG=y
 SSH_REMOTE_HOST=tifa
 SSH_USERNAME=mmorano
 PATH_CONVERT_VIDEOS="/home/mmorano/git/ConvertVideos/src/ConvertVideos/bin/Release/netcoreapp3.1/ConvertVideos.dll"
-#PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup/bin/Debug/netcoreapp3.1/GlacierBackup.dll"
+PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup/bin/Release/netcoreapp3.1/GlacierBackup.dll"
 PATH_ASSET_ROOT="/srv/www/website_assets"
 PATH_VIDEO_SOURCE=
 CAT_NAME=
@@ -64,8 +64,8 @@ DEST_MOVIES_YEAR_ROOT="${DEST_MOVIES_ROOT}/${YEAR}"
 DEST_MOVIES_CATEGORY_ROOT="${DEST_MOVIES_YEAR_ROOT}/${CATEGORY_DIRECTORY_NAME}"
 SQL_FILE="${CATEGORY_DIRECTORY_NAME}.sql"
 PATH_LOCAL_SQL_FILE="${ASSET_ROOT}/${SQL_FILE}"
-#GLACIER_SQL_FILE="${SQL_FILE}.glacier.sql"
-#PATH_LOCAL_GLACIER_SQL_FILE="${ASSET_ROOT}/${GLACIER_SQL_FILE}"
+GLACIER_SQL_FILE="${SQL_FILE}.glacier.sql"
+PATH_LOCAL_GLACIER_SQL_FILE="${ASSET_ROOT}/${GLACIER_SQL_FILE}"
 
 if [ -d "${DEST_MOVIES_CATEGORY_ROOT}" ]; then
     echo ''
@@ -85,7 +85,7 @@ if [ "${DEBUG}" = "y" ]; then
     echo "            SSH_REMOTE_HOST: ${SSH_REMOTE_HOST}"
     echo "               SSH_USERNAME: ${SSH_USERNAME}"
     echo "        PATH_CONVERT_VIDEOS: ${PATH_CONVERT_VIDEOS}"
-    #echo "        PATH_GLACIER_BACKUP: ${PATH_GLACIER_BACKUP}"
+    echo "        PATH_GLACIER_BACKUP: ${PATH_GLACIER_BACKUP}"
     echo "          PATH_VIDEO_SOURCE: ${PATH_VIDEO_SOURCE}"
     echo "            PATH_ASSET_ROOT: ${PATH_ASSET_ROOT}"
     echo "                   CAT_NAME: ${CAT_NAME}"
@@ -99,8 +99,8 @@ if [ "${DEBUG}" = "y" ]; then
     echo "  DEST_MOVIES_CATEGORY_ROOT: ${DEST_MOVIES_CATEGORY_ROOT}"
     echo "                   SQL_FILE: ${SQL_FILE}"
     echo "        PATH_LOCAL_SQL_FILE: ${PATH_LOCAL_SQL_FILE}"
-    #echo "           GLACIER_SQL_FILE: ${GLACIER_SQL_FILE}"
-    #echo "PATH_LOCAL_GLACIER_SQL_FILE: ${PATH_LOCAL_GLACIER_SQL_FILE}"
+    echo "           GLACIER_SQL_FILE: ${GLACIER_SQL_FILE}"
+    echo "PATH_LOCAL_GLACIER_SQL_FILE: ${PATH_LOCAL_GLACIER_SQL_FILE}"
     echo ''
     echo '################################################'
     echo 'If this does not look right, hit Ctl-C to cancel'
@@ -163,11 +163,11 @@ mv "${PATH_VIDEO_SOURCE}" "${DEST_MOVIES_YEAR_ROOT}"
 echo '* applying sql to local database...'
 psql -d maw_website -f "${PATH_LOCAL_SQL_FILE}"
 
-#echo '* backing up photos to AWS Glacier...'
-#dotnet "${PATH_GLACIER_BACKUP}" glacier_backup us-east-1 photos assets "${DEST_MOVIES_CATEGORY_ROOT}" "${DEST_MOVIES_ROOT}/" photosql "${PATH_LOCAL_GLACIER_SQL_FILE}"
+echo '* backing up videos to AWS Glacier...'
+dotnet "${PATH_GLACIER_BACKUP}" glacier_backup us-east-1 videos assets "${DEST_MOVIES_CATEGORY_ROOT}" "${DEST_MOVIES_ROOT}/" videosql "${PATH_LOCAL_GLACIER_SQL_FILE}"
 
-#echo '* applying glacier sql file to local database...'
-#psql -d maw_website -f "${PATH_LOCAL_GLACIER_SQL_FILE}"
+echo '* applying glacier sql file to local database...'
+psql -d maw_website -f "${PATH_LOCAL_GLACIER_SQL_FILE}"
 
 #################################################
 ## REMOTE PROCESSING
@@ -175,7 +175,7 @@ psql -d maw_website -f "${PATH_LOCAL_SQL_FILE}"
 echo '* copying files to remote...'
 rsync -ah --exclude "*/raw*" "${DEST_MOVIES_CATEGORY_ROOT}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~/
 scp "${PATH_LOCAL_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
-#scp "${PATH_LOCAL_GLACIER_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
+scp "${PATH_LOCAL_GLACIER_SQL_FILE}" "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}":~
 
 echo '* deploying (please provide remote password when prompted)...'
 ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
@@ -191,10 +191,10 @@ ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
     sudo restorecon -R '${DEST_MOVIES_CATEGORY_ROOT}'
 
     psql -d maw_website -f '${SQL_FILE}'
-    #psql -d maw_website -f '${GLACIER_SQL_FILE}'
+    psql -d maw_website -f '${GLACIER_SQL_FILE}'
 
     rm '${SQL_FILE}'
-    #rm '${GLACIER_SQL_FILE}'
+    rm '${GLACIER_SQL_FILE}'
 "
 
 #################################################
@@ -204,7 +204,7 @@ read -r -p "Delete SQL Files? [y/n]: " CONTINUE
 
 if [ "${CONTINUE}" = "y" ]; then
     rm "${PATH_LOCAL_SQL_FILE}"
-    #rm "${PATH_LOCAL_GLACIER_SQL_FILE}"
+    rm "${PATH_LOCAL_GLACIER_SQL_FILE}"
 fi
 
 echo ''

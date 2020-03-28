@@ -62,7 +62,7 @@ namespace MawAuth
                     .Services
                 .ConfigureApplicationCookie(opts => {
                     opts.AccessDeniedPath = "/account/access-denied";
-                    opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+                    opts.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                     opts.LoginPath = "/account/login";
                     opts.LogoutPath = "/account/logout";
                 })

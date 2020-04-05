@@ -64,15 +64,12 @@ namespace MawAuth.Models
                         new Secret(_wwwSecret.Sha256())
                     },
 
-                    // where to redirect to after login
                     RedirectUris = { $"{_wwwUrl}/signin-oidc" },
-
-                    // where to redirect to after logout
                     PostLogoutRedirectUris = { $"{_wwwUrl}/signout-callback-oidc" },
-
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
 
@@ -92,13 +89,8 @@ namespace MawAuth.Models
                     RequireConsent = false,
                     RequireClientSecret = false,
                     RequirePkce = true,
-
-                    // uncomment to test refresh token scenario in Android emulator
-                    //AccessTokenLifetime = 30,
-
-                    // where to redirect to after login
+                    AllowOfflineAccess = true,
                     RedirectUris = { "us.mikeandwan.photos:/signin-oidc" },
-
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.Email,
@@ -111,23 +103,22 @@ namespace MawAuth.Models
 
                         // identity resources
                         JwtClaimTypes.Role
-                    },
-                    AllowOfflineAccess = true
+                    }
                 },
                 new Client
                 {
                     ClientId = "maw-photos",
-                    ClientName = "NEW mikeandwan.us Photo Application",
-                    RequireConsent = false,
-                    //AccessTokenLifetime = 600, // 10 minutes, default 60 minutes
+                    ClientName = "mikeandwan.us Photo Application",
                     AllowedGrantTypes = GrantTypes.Code,
+                    RequireConsent = false,
                     RequirePkce = true,
                     RequireClientSecret = false,
                     AllowAccessTokensViaBrowser = true,
+                    AllowOfflineAccess = true,
                     RedirectUris = new List<string>
                     {
-                        $"{_photosUrl}/callback.html",
-                        $"{_photosUrl}/renew-callback.html"
+                        $"{_photosUrl}/login",
+                        $"{_photosUrl}/silent-refresh.html"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
@@ -139,6 +130,7 @@ namespace MawAuth.Models
                     },
                     AllowedScopes = new List<string>
                     {
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
 
@@ -153,16 +145,16 @@ namespace MawAuth.Models
                 {
                     ClientId = "maw-files",
                     ClientName = "mikeandwan.us File Management Application",
-                    RequireConsent = false,
-                    //AccessTokenLifetime = 600, // 10 minutes, default 60 minutes
                     AllowedGrantTypes = GrantTypes.Code,
+                    RequireConsent = false,
                     RequirePkce = true,
                     RequireClientSecret = false,
                     AllowAccessTokensViaBrowser = true,
+                    AllowOfflineAccess = true,
                     RedirectUris = new List<string>
                     {
-                        $"{_filesUrl}/callback.html",
-                        $"{_filesUrl}/renew-callback.html"
+                        $"{_filesUrl}/login",
+                        $"{_filesUrl}/silent-refresh.html"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
@@ -174,6 +166,7 @@ namespace MawAuth.Models
                     },
                     AllowedScopes = new List<string>
                     {
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
 

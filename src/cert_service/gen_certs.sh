@@ -65,6 +65,8 @@ gen_cert() {
     local activekey="${certdir}/${project}.key"
     local activekeypwd="${activekey}.pwd"
     local activepfxpwd="${activepfx}.pwd"
+    local dhparam="${certdir}/dhparam_${DATE}.pem"
+    local activedhparam="${certdir}/dhparam.pem"
 
     if [ ! -d "${certdir}" ]
     then
@@ -111,6 +113,9 @@ gen_cert() {
         # Make pfx for kestrel
         openssl pkcs12 -export -out "${certpfx}" -inkey "${certkey}" -in "${certcrt}" -passin "file:${certkeypwd}" -passout "file:${certpfxpwd}"
 
+        # create dhparams file
+        openssl dhparam -out "${dhparam}" 2048
+
         # create symlink to new cert to make it available to services
         if [ -e "${activepfx}" ]
         then
@@ -119,6 +124,7 @@ gen_cert() {
             rm "${activekey}"
             rm "${activekeypwd}"
             rm "${activepfxpwd}"
+            rm "${activedhparam}"
         fi
 
         ln -s "${certkey}" "${activekey}"
@@ -126,6 +132,7 @@ gen_cert() {
         ln -s "${certcrt}" "${activecrt}"
         ln -s "${certpfx}" "${activepfx}"
         ln -s "${certpfxpwd}" "${activepfxpwd}"
+        ln -s "${dhparam}" "${activedhparam}"
     fi
 }
 

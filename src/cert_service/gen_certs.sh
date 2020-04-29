@@ -157,6 +157,11 @@ else
 
     echo '*********************************************************'
     echo '* creating certificate authority'
+    echo '* for dev - please make sure to run the following to trust the new CA cert:'
+    echo '*'
+    echo "* sudo cp ${CA_CRT_NEW} /usr/share/pki/ca-trust-source/anchors/"
+    echo '* sudo update-ca-trust'
+    echo '*'
     echo '*********************************************************'
     echo ''
 

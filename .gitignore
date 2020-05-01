@@ -18,3 +18,4 @@ project.lock.json
 **/yarn-error.log
 
 tools/*.log
+hosting/.~lock.architecture.odg#

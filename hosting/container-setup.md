@@ -108,3 +108,25 @@ container network via `ip addr show` which showed a device `eno1` with an ip `19
 Given that information, we could then connect to postgres from a different container as follows:
 
 `podman run -it --rm postgres:12.2 psql -h 192.168.1.211 -U svc_www_maw -d maw_website`
+
+## Container to Container Communication (part 2)
+
+A simpler approach of allowing containers to communicate to each other is by running
+containers within the same pod.  There is a good [writeup](https://developers.redhat.com/blog/2019/01/15/podman-managing-containers-pods/)
+on this approach.  What is particularly interesting, is you do not have to expose any
+ports to the underlying host, which means that you can force users to have to run
+containers in the pod to access different services.
+
+Using the sample above of trying to connect to postgres from another container, we can do this
+with pods by the following:
+
+``` bash
+podman pod create -n testpod
+podman run -it --pod testpod --rm -v postgres:/var/lib/postgresql/data:rw,z postgres:12.2
+podman run -it --pod testpod --rm postgres:12.2 psql -h localhost -U svc_www_maw -d maw_website
+```
+
+Those will all work, as postgres and the client are running within the same pod - so containers can
+just reference 'localhost' to communicate with each other.  However, if we try to connect to
+postres from the host: `psql -h localhost -U svc_www_maw -d maw_website', or using the IP from
+the previous section, it *cannot* connect!

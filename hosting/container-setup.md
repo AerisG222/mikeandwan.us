@@ -79,3 +79,32 @@ Once that is executed, running the container as follow works as expected
 `podman run -it --rm -v solr:/var/solr:rw,z -p 8983:8983 localhost/solr`
 
 There is a great [blog post](https://www.redhat.com/sysadmin/rootless-podman-makes-sense) describing this permission issue.
+
+## POSTGRES
+
+Taking our information from setting up SOLR, we can look at the postgres dockerfile, and see it is using UID/GID  = 999,
+so we will issue the same commands above for the postgres volume, and the postgres user/group IDs:
+
+``` bash
+sudo cp -R /var/lib/pgsql/data /srv/podman/1000/storage/volumes/postgres/_data
+sudo chown -R mmorano:mmorano /srv/podman/1000/storage/volumes/postgres
+podman unshare chown -R 999:999 /srv/podman/1000/storage/volumes/postgres
+podman run -it --rm -v postgres:/var/lib/postgresql/data:rw,z -p 5432:5432 postgres:12.2
+```
+
+## Container to Container Communication
+
+After getting postgres running, we confirmed that our data was available through our mount.
+This was done by using psql on the host to connect to the server running in the container.
+However, when we tried to then initiate the same test from using psql in a container, it was
+not able to locate the postgres service.
+
+After some searching we came across the following [article](https://www.redhat.com/sysadmin/container-networking-podman).
+Reading through to 'Communicate between two rootless containers' we find the information
+needed to connect containers that are not running in the same pod.  Namely, confirming
+the port mapping with `podman port -l`, and then identifying the ip that is used for the
+container network via `ip addr show` which showed a device `eno1` with an ip `192.168.1.211`.
+
+Given that information, we could then connect to postgres from a different container as follows:
+
+`podman run -it --rm postgres:12.2 psql -h 192.168.1.211 -U svc_www_maw -d maw_website`

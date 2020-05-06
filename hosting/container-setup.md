@@ -1,68 +1,6 @@
 # podman config
 
 The following steps will walk through the process of configuring podman for hosting all the containers for mikeandwan.us.
-Rather than accepting the default location under the user homedir, the steps below also move the files for podman under
-the preferred /srv directory (another suitable option could be the /var directory).
-
-This was originally achieved thanks to [this great blog post](https://qulogic.gitlab.io/posts/2019-10-20-migrating-to-podman/).
-
-## Step 0: Cleanup (if needed)
-
-``` bash
-rm -rf ~/.local/share/containers
-rm -rf ~/.config/containers
-```
-
-## Step 1: Create new storage location (as root)
-
-``` bash
-mkdir -p /srv/podman/1000
-chown 1000:1000 /srv/podman/1000
-chmod 0700 /srv/podman//1000
-semanage fcontext -a -e $HOME/.local/share/containers /srv/podman/1000
-restorecon -R -v /srv/podman/1000/
-```
-
-## Step 2: Update local config files (as user)
-
-``` bash
-mkdir -p ~/.config/containers
-cd ~/.config/containers
-cp /etc/containers/storage.conf .
-touch ~/.config/containers/libpod.conf
-```
-
-With the above steps completed, now edit storage.conf to override the following values:
-
-``` text
-driver = "vfs"
-runroot = "/srv/podman/1000/run/storage"
-graphroot = "/srv/podman/1000/storage"
-```
-
-Finally, enter the following in libpod.conf:
-
-``` text
-volume_path = "/srv/podman/1000/storage/volumes"
-static_dir = "/srv/podman/1000/storage/libpod"
-```
-
-## Step 3: Confirm
-
-Execute the following to ensure that podman is properly loading the configuration:
-
-`podman images ls`
-
-The above command should show an empty list of images - but more importantly, should not show any errors!
-
-Additionally, verify where volumes are created by running:
-
-`podman volume create testvol`
-
-Once that executes, you should see this volume as a new directory under /srv/podman/1000/storage/volumes.
-Once verified, remove the test volume with the following command:
-
-`podman volume rm testvol`
 
 ## SOLR
 
@@ -130,3 +68,98 @@ Those will all work, as postgres and the client are running within the same pod 
 just reference 'localhost' to communicate with each other.  However, if we try to connect to
 postres from the host: `psql -h localhost -U svc_www_maw -d maw_website', or using the IP from
 the previous section, it *cannot* connect!
+
+## Common POD
+
+In order for all the services to be able to connect to one another, we will setup a pod for
+all the services to live within.  In this way, services can reference one another in the pod
+simply by localhost and the appropriate port - which is quite convenient for our local hosting model.
+
+One trick with this, is that we would like to fully run a rootless pod environment.  However,
+to bind to port 80 and 443, this requires root access.  Given this, we will use no-default ports
+for the gateway, and will use port forwarding (from router in prod, and via SSH local forwarding for dev)
+to allow these to run in a rootless fashion, which is also needed so they can live within the same pod.
+
+To setup the pod, we need to run the following:
+
+``` bash
+# create pod
+podman pod create --name maw-pod -p 8080:80 -p 8443:443
+
+# add containers to pod
+mawphotos=$(podman create --pod maw-pod -v certs:/certs:ro,z localhost/maw-photos-dev)
+mawgateway=$(podman create --pod maw-pod -v certs:/certs:ro,z localhost/maw-gateway-dev)
+
+# start containers
+podman start $mawphotos
+podman start $mawgateway
+```
+
+## OLD
+
+Originally, there was interest in moving default storage locations outside of the homedir.  While
+this had worked originally, we will start to use the defaults going forward, and will try to define
+volumes that map to images and movies outside of the default volume location.
+
+Below are the original steps to define the custom location (which is likely to change in the future
+when containers.conf is fully supported).
+
+This was originally achieved thanks to [this great blog post](https://qulogic.gitlab.io/posts/2019-10-20-migrating-to-podman/).
+
+### Step 0: Cleanup (if needed)
+
+``` bash
+rm -rf ~/.local/share/containers
+rm -rf ~/.config/containers
+```
+
+### Step 1: Create new storage location (as root)
+
+``` bash
+mkdir -p /srv/podman/1000
+chown 1000:1000 /srv/podman/1000
+chmod 0700 /srv/podman//1000
+semanage fcontext -a -e $HOME/.local/share/containers /srv/podman/1000
+restorecon -R -v /srv/podman/1000/
+```
+
+### Step 2: Update local config files (as user)
+
+``` bash
+mkdir -p ~/.config/containers
+cd ~/.config/containers
+cp /etc/containers/storage.conf .
+touch ~/.config/containers/libpod.conf
+```
+
+With the above steps completed, now edit storage.conf to override the following values:
+
+``` text
+driver = "vfs"
+runroot = "/srv/podman/1000/run/storage"
+graphroot = "/srv/podman/1000/storage"
+```
+
+Finally, enter the following in libpod.conf:
+
+``` text
+volume_path = "/srv/podman/1000/storage/volumes"
+static_dir = "/srv/podman/1000/storage/libpod"
+```
+
+### Step 3: Confirm
+
+Execute the following to ensure that podman is properly loading the configuration:
+
+`podman images ls`
+
+The above command should show an empty list of images - but more importantly, should not show any errors!
+
+Additionally, verify where volumes are created by running:
+
+`podman volume create testvol`
+
+Once that executes, you should see this volume as a new directory under /srv/podman/1000/storage/volumes.
+Once verified, remove the test volume with the following command:
+
+`podman volume rm testvol`

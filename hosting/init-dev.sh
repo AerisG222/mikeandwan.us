@@ -11,6 +11,11 @@ podman volume create maw-solr
 # init certs
 podman run -it --rm -v maw-certs:/certs:rw,z maw-certs-dev
 
+# trust dev ca on local machine
+CERT_MOUNT_POINT=$(podman volume inspect maw-certs | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['Mountpoint'])")
+sudo find "${CERT_MOUNT_POINT}/internal/ca" -type f -name *.crt -exec cp {} /usr/share/pki/ca-trust-source/anchors/ \;
+sudo update-ca-trust
+
 # copy solr config+db from current system to volume, then configure permissions for container
 SOLR_VOL_MOUNT_POINT=$(podman volume inspect maw-solr | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['Mountpoint'])")
 SOLR_VOL_MOUNT_ROOT=$(dirname "${SOLR_VOL_MOUNT_POINT}")

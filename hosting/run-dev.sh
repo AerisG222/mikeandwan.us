@@ -10,7 +10,7 @@ podman run -dt --pod maw-pod -v maw-solr:/var/solr/data:rw,z maw-solr-dev
 podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z maw-photos-dev
 
 # files
-# podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z maw-files-dev
+podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z maw-files-dev
 
 # auth
 # podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z maw-auth-dev

@@ -13,13 +13,13 @@ podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z maw-photos-dev
 podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z maw-files-dev
 
 # auth
-# podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z maw-auth-dev
+podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z --env-file /home/mmorano/git/maw-auth.env maw-auth-dev
 
 # api
-# podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z maw-api-dev
+podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z -v maw-uploads:/maw-uploads:rw,z -v maw-images:/images:ro,z --env-file /home/mmorano/git/maw-api.env maw-api-dev
 
 # www
-# podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z maw-www-dev
+podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z -v maw-images:/images:ro,z -v maw-movies:/movies:ro,z --env-file /home/mmorano/git/maw-www.env maw-www-dev
 
 # gateway
 podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z maw-gateway-dev

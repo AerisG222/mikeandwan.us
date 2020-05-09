@@ -1,3 +1,5 @@
+#!/bin/bash
+
 APPS=(
     "webgl_blender_model"
     "webgl_cube"
@@ -29,22 +31,29 @@ update_ngcli_global() {
     fi
 }
 
-
-build_app() {
-    cd "${1}"
-    npm run "${2}"
-    cd ..
-}
-
-
 clean_app() {
-    cd "${1}"
     rm -rf dist
     rm -rf node_modules
-
     npm ci
 }
 
+build_app() {
+    local app=$1
+    local buildcmd=$2
+    local clean=$3
+
+    pushd "${app}"
+
+    if [ "${clean}" == 'y' ]; then
+        echo "cleaning ${app}..."
+        clean_app "${app}"
+    fi
+
+    echo "building ${app}..."
+    npm run "${buildcmd}"
+
+    popd
+}
 
 build_all_apps() {
     local buildcmd=$1
@@ -52,18 +61,11 @@ build_all_apps() {
 
     for i in "${APPS[@]}"
     do
-        if [ "${clean}" == 'y' ]; then
-            echo "cleaning ${i}..."
-            clean_app "${i}"
-        fi
-
-        echo "building ${i}..."
-        build_app "${i}" "${buildcmd}"
+        build_app "${i}" "${buildcmd}" "${clean}"
     done
 
     for i in "${NG_APPS[@]}"
     do
-        echo "building ${i}..."
-        build_app "${i}" "${buildcmd}"
+        build_app "${i}" "${buildcmd}" "${clean}"
     done
 }

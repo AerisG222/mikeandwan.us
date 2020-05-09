@@ -1,3 +1,5 @@
+#!/bin/bash
+
 source _vars.sh
 
 DOWORK=$1

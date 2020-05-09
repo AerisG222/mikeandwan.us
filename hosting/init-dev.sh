@@ -6,7 +6,9 @@ podman pod create --name maw-pod -p 8080:80 -p 8443:443
 # create volumes
 podman volume create maw-certs
 podman volume create maw-postgres
+podman volume create maw-postgres-backups
 podman volume create maw-solr
+podman volume create maw-uploads
 
 # init certs
 podman run -it --rm -v maw-certs:/certs:rw,z maw-certs-dev

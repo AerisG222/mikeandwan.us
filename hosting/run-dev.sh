@@ -34,5 +34,5 @@ sudo firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080
 sudo firewall-cmd --add-forward-port=port=443:proto=tcp:toport=8443
 
 # the following is for access on localhost
-sudo iptables -A OUTPUT -t nat -p tcp --dport 80 -j REDIRECT --to-port 8080
-sudo iptables -A OUTPUT -t nat -p tcp --dport 443 -j REDIRECT --to-port 8443
+sudo iptables -A OUTPUT -t nat -p tcp --destination 127.0.0.1 --dport 80 -j REDIRECT --to-port 8080
+sudo iptables -A OUTPUT -t nat -p tcp --destination 127.0.0.1 --dport 443 -j REDIRECT --to-port 8443

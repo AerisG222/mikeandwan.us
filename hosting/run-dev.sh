@@ -23,3 +23,16 @@ podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z -v maw-images:/images:ro,z
 
 # gateway
 podman run -dt --pod maw-pod -v maw-certs:/certs:ro,z maw-gateway-dev
+
+# redirect port 80 and 443 to 8080 and 8443 respectively (temporarily - add --permanent to change)
+# https://stackoverflow.com/questions/413807/is-there-a-way-for-non-root-processes-to-bind-to-privileged-ports-on-linux/31795603#31795603
+# https://serverfault.com/questions/654102/forwarding-ports-on-centos-7/713849
+
+# the following works for external access
+sudo firewall-cmd --add-masquerade
+sudo firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080
+sudo firewall-cmd --add-forward-port=port=443:proto=tcp:toport=8443
+
+# the following is for access on localhost
+sudo iptables -A OUTPUT -t nat -p tcp --dport 80 -j REDIRECT --to-port 8080
+sudo iptables -A OUTPUT -t nat -p tcp --dport 443 -j REDIRECT --to-port 8443

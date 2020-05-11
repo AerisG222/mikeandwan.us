@@ -39,6 +39,5 @@ namespace MawAuth.Services
 
             return new X509Certificate2(pfxFile, pwd);
         }
-
     }
 }

@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.Extensions.Hosting;
 using IdentityServer4;
 using Mvc.RenderViewToString;
+using NWebsec.Core.Common.Middleware.Options;
 using Maw.Data;
 using Maw.Domain;
 using Maw.Domain.Email;
@@ -28,12 +25,10 @@ namespace MawAuth
     public class Startup
     {
         readonly IConfiguration _config;
-        readonly IWebHostEnvironment _env;
 
 
-        public Startup(IConfiguration config, IWebHostEnvironment hostingEnvironment)
+        public Startup(IConfiguration config)
         {
-            _env = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
             _config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
@@ -119,6 +114,7 @@ namespace MawAuth
                     {
                         MawPolicyBuilder.AddMawPolicies(opts);
                     })
+                .AddResponseCompression()
                 .AddControllersWithViews();
         }
 
@@ -131,17 +127,79 @@ namespace MawAuth
             }
             else
             {
-                app.UseExceptionHandler("/error/");
+                app
+                    .UseExceptionHandler("/error/")
+                    .UseHsts(hsts => hsts.MaxAge(365 * 2).IncludeSubdomains().Preload());
             }
 
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseIdentityServer();
-            app.UseEndpoints(endpoints => {
-                endpoints.MapControllers();
-            });
+            app
+                .UseXContentTypeOptions()
+                .UseReferrerPolicy(opts => opts.StrictOriginWhenCrossOrigin())
+
+                .UseStaticFiles()
+
+                .UseResponseCompression()
+                .UseNoCacheHttpHeaders()
+                .UseXfo(xfo => xfo.Deny())
+                .UseXXssProtection(opts => opts.EnabledWithBlockMode())
+                .UseRedirectValidation(opts => opts.AllowedDestinations(GetAllowedRedirectUrls()))
+                .UseCsp(DefineContentSecurityPolicy)
+
+                .UseRouting()
+                .UseAuthentication()
+                .UseAuthorization()
+                .UseIdentityServer()
+                .UseEndpoints(endpoints => {
+                    endpoints.MapControllers();
+                });
+        }
+
+
+        string[] GetAllowedRedirectUrls()
+        {
+            return new string[] {
+                _config["Environment:FilesUrl"],
+                _config["Environment:PhotosUrl"],
+                _config["Environment:WwwUrl"]
+            };
+        }
+
+
+        void DefineContentSecurityPolicy(IFluentCspOptions csp)
+        {
+            var fontSources = new string[] {
+                "https://fonts.gstatic.com"
+            };
+
+            var reportUris = new string[] {
+                "https://mikeandwanus.report-uri.com/r/d/csp/enforce"
+            };
+
+            var scriptSources = new string[] {
+                "https://code.jquery.com",
+                "https://cdn.jsdelivr.net",
+                "https://stackpath.bootstrapcdn.com"
+            };
+
+            var styleSources = new string[] {
+                "https://fonts.googleapis.com"
+            };
+
+            csp
+                .DefaultSources(s => s.None())
+                .FontSources(s => s.CustomSources(fontSources))
+                .ImageSources(s => s.Self())
+                .ObjectSources(s => s.None())
+                .ReportUris(s => s.Uris(reportUris))
+                .ScriptSources(s => {
+                    s.Self();
+                    s.CustomSources(scriptSources);
+                })
+                .StyleSources(s => {
+                    s.Self();
+                    s.UnsafeInline();
+                    s.CustomSources(styleSources);
+                });
         }
     }
 }

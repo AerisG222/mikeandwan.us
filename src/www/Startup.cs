@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -17,6 +16,7 @@ using Microsoft.Extensions.FileProviders;
 using IdentityModel;
 using Mvc.RenderViewToString;
 using NMagickWand;
+using NWebsec.Core.Common.Middleware.Options;
 using Maw.Data;
 using Maw.Domain;
 using Maw.Domain.Captcha;
@@ -60,6 +60,7 @@ namespace MawMvcApp
                 .Configure<UrlConfig>(_config.GetSection("UrlConfig"))
                 .AddLogging()
                 .AddHttpContextAccessor()
+                .AddResponseCompression()
                 .AddHttpClient<MawApiService>()
                 .Services
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
@@ -112,9 +113,9 @@ namespace MawMvcApp
                         MawPolicyBuilder.AddMawPolicies(opts);
                     })
                 .AddCors(opts => {
-                    opts.AddPolicy("default", policy => {
-                        policy
-                            .AllowAnyOrigin()
+                    opts.AddDefaultPolicy(builder => {
+                        builder
+                            .WithOrigins(GetCorsOrigins())
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });
@@ -140,15 +141,28 @@ namespace MawMvcApp
             }
             else
             {
-                app.UseExceptionHandler("/error/");
+                app
+                    .UseExceptionHandler("/error/")
+                    .UseHsts(hsts => hsts.MaxAge(365 * 2).IncludeSubdomains().Preload());
             }
 
             app
+                .UseXContentTypeOptions()
+                .UseReferrerPolicy(opts => opts.StrictOriginWhenCrossOrigin())
+
                 .UseStaticFiles(new StaticFileOptions {
                     ContentTypeProvider = GetCustomMimeTypeProvider()
                 })
+
+                .UseResponseCompression()
+                .UseNoCacheHttpHeaders()
+                .UseXfo(xfo => xfo.Deny())
+                .UseXXssProtection(opts => opts.EnabledWithBlockMode())
+                .UseRedirectValidation(opts => opts.AllowedDestinations(GetAllowedRedirectUrls()))
+                .UseCsp(DefineContentSecurityPolicy)
+
                 .UseRouting()
-                .UseCors("default")
+                .UseCors()
                 .UseForwardedHeaders(new ForwardedHeadersOptions
                     {
                         ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -157,6 +171,92 @@ namespace MawMvcApp
                 .UseAuthorization()
                 .UseEndpoints(endpoints => {
                     endpoints.MapControllers();
+                });
+        }
+
+
+    string[] GetCorsOrigins()
+    {
+        return new string[] {
+            _config["UrlConfig:Api"],
+            _config["UrlConfig:Photos"]
+        };
+    }
+
+
+    string[] GetAllowedRedirectUrls()
+    {
+        return new string[] {
+            _config["UrlConfig:Api"],
+            _config["UrlConfig:Files"],
+            _config["UrlConfig:Photos"]
+        };
+    }
+
+
+    void DefineContentSecurityPolicy(IFluentCspOptions csp)
+        {
+            var connectSources = new string[] {
+                "https://www.google-analytics.com"
+            };
+
+            var fontSources = new string[] {
+                "https://fonts.gstatic.com"
+            };
+
+            var imageSources = new string[] {
+                "data:",
+                "https://maps.gstatic.com",
+                "https://*.googleapis.com",
+                "https://www.google-analytics.com"
+            };
+
+            var reportUris = new string[] {
+                "https://mikeandwanus.report-uri.com/r/d/csp/enforce"
+            };
+
+            var scriptSources = new string[] {
+                "https://code.jquery.com",
+                "https://cdn.jsdelivr.net",
+                "https://cdnjs.cloudflare.com",
+                "https://stackpath.bootstrapcdn.com",
+                "https://www.google.com",
+                "https://maps.googleapis.com",
+                "https://www.google-analytics.com",
+                "https://ssl.google-analytics.com",
+                "https://oap.accuweather.com",
+                "https://vortex.accuweather.com"
+            };
+
+            var styleSources = new string[] {
+                "https://cdnjs.cloudflare.com",
+                "https://fonts.googleapis.com"
+            };
+
+            csp
+                .DefaultSources(s => s.None())
+                .BaseUris(s => s.Self())
+                .ConnectSources(s => {
+                    s.Self();
+                    s.CustomSources(connectSources);
+                })
+                .FontSources(s => s.CustomSources(fontSources))
+                .ImageSources(s => {
+                    s.Self();
+                    s.CustomSources(imageSources);
+                })
+                .MediaSources(s => s.Self())
+                .ObjectSources(s => s.None())
+                .ReportUris(s => s.Uris(reportUris))
+                .ScriptSources(s => {
+                    s.Self();
+                    s.UnsafeInline();
+                    s.CustomSources(scriptSources);
+                })
+                .StyleSources(s => {
+                    s.Self();
+                    s.UnsafeInline();
+                    s.CustomSources(styleSources);
                 });
         }
 

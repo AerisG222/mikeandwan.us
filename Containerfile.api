@@ -51,6 +51,7 @@ FROM fedora:32
 
 RUN dnf install -y \
         aspnetcore-runtime-3.1 \
+        ca-certificates \
         ImageMagick-devel \
         file \
         && dnf clean all \
@@ -59,7 +60,9 @@ RUN dnf install -y \
 WORKDIR /maw-api
 
 COPY --from=build /src/dist .
+COPY start-site.sh /usr/local/bin/
 
 EXPOSE 5011
 
-ENTRYPOINT [ "./MawApi" ]
+ENTRYPOINT [ "start-site.sh" ]
+CMD [ "./MawApi" ]

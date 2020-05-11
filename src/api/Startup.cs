@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using NMagickWand;
@@ -27,13 +27,11 @@ namespace MawApi
     public class Startup
     {
         readonly IConfiguration _config;
-        readonly IWebHostEnvironment _env;
 
 
-        public Startup(IConfiguration config, IWebHostEnvironment env)
+        public Startup(IConfiguration config)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
-            _env = env ?? throw new ArgumentNullException(nameof(env));
 
             MagickWandEnvironment.Genesis();
         }
@@ -55,6 +53,7 @@ namespace MawApi
                 .AddMawApiServices()
                 .AddScoped<ISearchService, SearchService>()
                 .AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>()
+                .AddResponseCompression()
                 .AddControllers()
                     .Services
                 .AddSignalR()
@@ -94,8 +93,7 @@ namespace MawApi
                     MawPolicyBuilder.AddMawPolicies(opts);
                 })
                 .AddCors(opts => {
-                    // this defines a CORS policy called "default"
-                    opts.AddPolicy("default", policy => {
+                    opts.AddDefaultPolicy(policy => {
                         var origins = new string[] {
                             urlConfig.Www,
                             urlConfig.Photos,
@@ -118,18 +116,34 @@ namespace MawApi
         }
 
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseRouting();
-            app.UseCors("default");
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints => {
-                endpoints.MapHub<UploadHub>("/uploadr");
-                endpoints.MapControllers();
-            });
+            if(env.IsProduction())
+            {
+                app.UseHsts(hsts => hsts.MaxAge(365 * 2).IncludeSubdomains().Preload());
+            }
+
+            app
+                .UseXContentTypeOptions()
+                .UseReferrerPolicy(opts => opts.StrictOriginWhenCrossOrigin())
+
+                .UseResponseCompression()
+                .UseNoCacheHttpHeaders()
+                .UseXfo(xfo => xfo.Deny())
+                .UseXXssProtection(opts => opts.EnabledWithBlockMode())
+                .UseRedirectValidation()
+                .UseCsp(csp => csp.DefaultSources(s => s.None()))
+
+                .UseRouting()
+                .UseCors()
+                .UseOpenApi()
+                .UseSwaggerUi3()
+                .UseAuthentication()
+                .UseAuthorization()
+                .UseEndpoints(endpoints => {
+                    endpoints.MapHub<UploadHub>("/uploadr");
+                    endpoints.MapControllers();
+                });
         }
     }
 }

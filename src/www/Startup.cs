@@ -201,14 +201,16 @@ namespace MawMvcApp
             };
 
             var fontSources = new string[] {
-                "https://fonts.gstatic.com"
+                "https://fonts.gstatic.com",
+                "https://cdnjs.cloudflare.com"
             };
 
             var imageSources = new string[] {
                 "data:",
                 "https://maps.gstatic.com",
                 "https://*.googleapis.com",
-                "https://www.google-analytics.com"
+                "https://www.google-analytics.com",
+                "https://vortex.accuweather.com"
             };
 
             var reportUris = new string[] {
@@ -224,13 +226,15 @@ namespace MawMvcApp
                 "https://maps.googleapis.com",
                 "https://www.google-analytics.com",
                 "https://ssl.google-analytics.com",
+                "https://www.accuweather.com",
                 "https://oap.accuweather.com",
                 "https://vortex.accuweather.com"
             };
 
             var styleSources = new string[] {
                 "https://cdnjs.cloudflare.com",
-                "https://fonts.googleapis.com"
+                "https://fonts.googleapis.com",
+                "https://vortex.accuweather.com"
             };
 
             csp

@@ -187,9 +187,9 @@ namespace MawMvcApp
     string[] GetAllowedRedirectUrls()
     {
         return new string[] {
-            _config["UrlConfig:Api"],
-            _config["UrlConfig:Files"],
-            _config["UrlConfig:Photos"]
+            AddTrailingSlash(_config["UrlConfig:Auth"]),
+            AddTrailingSlash(_config["UrlConfig:Files"]),
+            AddTrailingSlash(_config["UrlConfig:Photos"])
         };
     }
 
@@ -298,6 +298,16 @@ namespace MawMvcApp
             provider.Mappings[".gltf"] = "model/gltf+json";
 
             return provider;
+        }
+
+
+        string AddTrailingSlash(string val)
+        {
+            if(val == null) {
+                return val;
+            }
+
+            return val.EndsWith('/') ? val : $"{val}/";
         }
     }
 }

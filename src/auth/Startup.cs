@@ -158,9 +158,9 @@ namespace MawAuth
         string[] GetAllowedRedirectUrls()
         {
             return new string[] {
-                _config["Environment:FilesUrl"],
-                _config["Environment:PhotosUrl"],
-                _config["Environment:WwwUrl"]
+                AddTrailingSlash(_config["Environment:FilesUrl"]),
+                AddTrailingSlash(_config["Environment:PhotosUrl"]),
+                AddTrailingSlash(_config["Environment:WwwUrl"])
             };
         }
 
@@ -200,6 +200,16 @@ namespace MawAuth
                     s.UnsafeInline();
                     s.CustomSources(styleSources);
                 });
+        }
+
+
+        string AddTrailingSlash(string val)
+        {
+            if(val == null) {
+                return val;
+            }
+
+            return val.EndsWith('/') ? val : $"{val}/";
         }
     }
 }

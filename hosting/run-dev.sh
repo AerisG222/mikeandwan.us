@@ -58,6 +58,8 @@ podman run -dt \
 podman run -dt \
  --pod maw-pod \
     -v maw-certs:/certs:ro,z \
+    -v /srv/www/website_assets:/assets:ro \
+    --security-opt label=disable \
        maw-gateway-dev
 
 

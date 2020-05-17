@@ -162,7 +162,7 @@ namespace MawMvcApp
 
                 .UseResponseCompression()
                 .UseNoCacheHttpHeaders()
-                .UseXfo(xfo => xfo.Deny())
+                // .UseXfo(xfo => xfo.Deny())  // needed for recaptcha
                 .UseXXssProtection(opts => opts.EnabledWithBlockMode())
                 .UseRedirectValidation(opts => opts.AllowedDestinations(GetAllowedRedirectUrls()))
                 .UseCsp(DefineContentSecurityPolicy)
@@ -224,6 +224,10 @@ namespace MawMvcApp
                 "https://cdnjs.cloudflare.com"
             };
 
+            var frameSources = new string[] {
+                "https://www.google.com/recaptcha/"
+            };
+
             var imageSources = new string[] {
                 "data:",
                 "https://maps.gstatic.com",
@@ -237,11 +241,13 @@ namespace MawMvcApp
             };
 
             var scriptSources = new string[] {
+                // bootstrap
                 "https://code.jquery.com",
                 "https://cdn.jsdelivr.net",
                 "https://cdnjs.cloudflare.com",
                 "https://stackpath.bootstrapcdn.com",
-                "https://www.google.com",
+                "https://www.google.com/recaptcha/",
+                "https://www.gstatic.com/recaptcha/",
                 "https://maps.googleapis.com",
                 "https://www.google-analytics.com",
                 "https://ssl.google-analytics.com",
@@ -264,6 +270,7 @@ namespace MawMvcApp
                     s.CustomSources(connectSources);
                 })
                 .FontSources(s => s.CustomSources(fontSources))
+                .FrameSources(s => s.CustomSources(frameSources))
                 .ImageSources(s => {
                     s.Self();
                     s.CustomSources(imageSources);

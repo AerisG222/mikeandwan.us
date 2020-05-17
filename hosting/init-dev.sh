@@ -12,6 +12,7 @@ podman volume create maw-uploads
 podman volume create maw-api-dataprotection
 podman volume create maw-auth-dataprotection
 podman volume create maw-www-dataprotection
+podman volume create maw-google-creds
 
 # init certs
 podman run -it --rm -v maw-certs:/certs:rw,z maw-certs-dev
@@ -20,6 +21,10 @@ podman run -it --rm -v maw-certs:/certs:rw,z maw-certs-dev
 CERT_MOUNT_POINT=$(podman volume inspect maw-certs | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['Mountpoint'])")
 sudo find "${CERT_MOUNT_POINT}/internal/ca" -type f -name *.crt -exec cp {} /usr/share/pki/ca-trust-source/anchors/ \;
 sudo update-ca-trust
+
+# copy google creds to volume
+GOOGLECRED_VOL_MOUNT_POINT=$(podman volume inspect maw-google-creds | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['Mountpoint'])")
+cp ~/www_emailer.json "${GOOGLECRED_VOL_MOUNT_POINT}"
 
 # copy solr config+db from current system to volume, then configure permissions for container
 SOLR_VOL_MOUNT_POINT=$(podman volume inspect maw-solr | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['Mountpoint'])")

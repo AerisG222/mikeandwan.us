@@ -29,6 +29,7 @@ podman run -dt \
  --pod maw-pod \
     -v maw-certs:/certs:ro,z \
     -v maw-auth-dataprotection:/dataprotection:rw,Z \
+    -v maw-google-creds:/google-creds:ro,z \
     --env-file /home/mmorano/git/maw-auth.env \
        maw-auth-dev
 
@@ -48,6 +49,7 @@ podman run -dt \
  --pod maw-pod \
     -v maw-certs:/certs:ro,z \
     -v maw-www-dataprotection:/dataprotection:rw,Z \
+    -v maw-google-creds:/google-creds:ro,z \
     -v /srv/www/website_assets/images:/maw-www/wwwroot/images:ro \
     -v /srv/www/website_assets/movies:/maw-www/wwwroot/movies:ro \
     --security-opt label=disable \

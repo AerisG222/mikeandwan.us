@@ -1,6 +1,4 @@
 using System;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 
@@ -11,16 +9,21 @@ namespace Maw.TagHelpers
 		: TagHelper
 	{
 		const string AttributeName = "maw-auth-url";
-        static readonly Uri LocalBaseUri = new Uri("https://authdev.mikeandwan.us:5001/");
-        static readonly Uri ProductionBaseUri = new Uri("https://auth.mikeandwan.us/");
-
-
-        [ViewContext]
-        public ViewContext ViewContext { get; set; }
+        readonly Uri _authUri;
 
 
 		[HtmlAttributeName(AttributeName)]
 		public string Url { get; set; }
+
+
+        public UrlAuthTagHelper(TagHelperConfig config) {
+            if(config == null)
+            {
+                throw new ArgumentNullException(nameof(config));
+            }
+
+            _authUri = new Uri(config.AuthUrl);
+        }
 
 
 		public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -30,17 +33,7 @@ namespace Maw.TagHelpers
                 throw new ArgumentNullException(nameof(output));
             }
 
-            Uri dest = null;
-			var req = ViewContext.HttpContext.Request.Host;
-
-            if(req.Host.IndexOf("dev", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                dest = new Uri(LocalBaseUri, Url);
-            }
-            else
-            {
-                dest = new Uri(ProductionBaseUri, Url);
-            }
+            Uri dest = new Uri(_authUri, Url);
 
 			output.Attributes.SetAttribute("href", dest);
 		}

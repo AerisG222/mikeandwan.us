@@ -18,6 +18,7 @@ using Maw.Domain;
 using Maw.Domain.Email;
 using Maw.Domain.Identity;
 using Maw.Security;
+using Maw.TagHelpers;
 using MawAuth.Models;
 using MawAuth.Services;
 
@@ -52,6 +53,10 @@ namespace MawAuth
                         opts.Password.RequiredUniqueChars = 6;
                     })
                 .Configure<GmailApiEmailConfig>(_config.GetSection("Gmail"))
+                .ConfigureMawTagHelpers(opts => {
+                    opts.AuthUrl = AddTrailingSlash(_config["Environment:AuthUrl"]);
+                    opts.WwwUrl = AddTrailingSlash(_config["Environment:WwwUrl"]);
+                })
                 .AddMawDataServices(_config["Environment:DbConnectionString"])
                 .AddMawDomainServices()
                 .AddMawIdentityServerServices(_config["Environment:IdsrvDbConnectionString"], _config["SigningCertDir"])

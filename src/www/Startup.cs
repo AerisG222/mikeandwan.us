@@ -23,6 +23,7 @@ using Maw.Domain;
 using Maw.Domain.Captcha;
 using Maw.Domain.Email;
 using Maw.Security;
+using Maw.TagHelpers;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
 
@@ -59,6 +60,10 @@ namespace MawMvcApp
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
                 .Configure<GoogleCaptchaConfig>(_config.GetSection("GoogleRecaptcha"))
                 .Configure<UrlConfig>(_config.GetSection("UrlConfig"))
+                .ConfigureMawTagHelpers(opts => {
+                    opts.AuthUrl = AddTrailingSlash(_config["UrlConfig:Auth"]);
+                    opts.WwwUrl = AddTrailingSlash(_config["UrlConfig:Www"]);
+                })
                 .AddLogging()
                 .AddHttpContextAccessor()
                 .AddResponseCompression()

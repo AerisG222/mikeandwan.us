@@ -9,6 +9,9 @@ podman volume create maw-postgres
 podman volume create maw-postgres-backups
 podman volume create maw-solr
 podman volume create maw-uploads
+podman volume create maw-api-dataprotection
+podman volume create maw-auth-dataprotection
+podman volume create maw-www-dataprotection
 
 # init certs
 podman run -it --rm -v maw-certs:/certs:rw,z maw-certs-dev

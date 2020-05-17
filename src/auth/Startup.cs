@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using IdentityServer4;
@@ -40,6 +42,8 @@ namespace MawAuth
                 _config["Environment:WwwClientSecret"],
                 _config["Environment:PhotosUrl"],
                 _config["Environment:FilesUrl"]);
+
+            ConfigureDataProtection(services);
 
             services
                 .Configure<IdentityOptions>(opts =>
@@ -155,12 +159,27 @@ namespace MawAuth
         }
 
 
+        void ConfigureDataProtection(IServiceCollection services)
+        {
+            var dpPath = _config["DataProtection:Path"];
+
+            if(!string.IsNullOrWhiteSpace(dpPath))
+            {
+                services
+                    .AddDataProtection()
+                    .PersistKeysToFileSystem(new DirectoryInfo(dpPath));
+            }
+        }
+
         string[] GetAllowedRedirectUrls()
         {
             return new string[] {
                 AddTrailingSlash(_config["Environment:FilesUrl"]),
                 AddTrailingSlash(_config["Environment:PhotosUrl"]),
-                AddTrailingSlash(_config["Environment:WwwUrl"])
+                AddTrailingSlash(_config["Environment:WwwUrl"]),
+                "https://accounts.google.com/o/oauth2/",
+                "https://login.microsoftonline.com/common/oauth2/",
+                "https://github.com/login/oauth/",
             };
         }
 
@@ -193,6 +212,7 @@ namespace MawAuth
                 .ReportUris(s => s.Uris(reportUris))
                 .ScriptSources(s => {
                     s.Self();
+                    s.UnsafeInline();  // needed by identityserver
                     s.CustomSources(scriptSources);
                 })
                 .StyleSources(s => {

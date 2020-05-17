@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
@@ -42,6 +44,8 @@ namespace MawApi
             var urlConfig = new UrlConfig();
 
             _config.GetSection("UrlConfig").Bind(urlConfig);
+
+            ConfigureDataProtection(services);
 
             services
                 .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
@@ -144,6 +148,19 @@ namespace MawApi
                     endpoints.MapHub<UploadHub>("/uploadr");
                     endpoints.MapControllers();
                 });
+        }
+
+
+        void ConfigureDataProtection(IServiceCollection services)
+        {
+            var dpPath = _config["DataProtection:Path"];
+
+            if(!string.IsNullOrWhiteSpace(dpPath))
+            {
+                services
+                    .AddDataProtection()
+                    .PersistKeysToFileSystem(new DirectoryInfo(dpPath));
+            }
         }
     }
 }

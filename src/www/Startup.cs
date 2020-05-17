@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -175,26 +176,39 @@ namespace MawMvcApp
         }
 
 
-    string[] GetCorsOrigins()
-    {
-        return new string[] {
-            _config["UrlConfig:Api"],
-            _config["UrlConfig:Photos"]
-        };
-    }
+        void ConfigureDataProtection(IServiceCollection services)
+        {
+            var dpPath = _config["DataProtection:Path"];
+
+            if(!string.IsNullOrWhiteSpace(dpPath))
+            {
+                services
+                    .AddDataProtection()
+                    .PersistKeysToFileSystem(new DirectoryInfo(dpPath));
+            }
+        }
 
 
-    string[] GetAllowedRedirectUrls()
-    {
-        return new string[] {
-            AddTrailingSlash(_config["UrlConfig:Auth"]),
-            AddTrailingSlash(_config["UrlConfig:Files"]),
-            AddTrailingSlash(_config["UrlConfig:Photos"])
-        };
-    }
+        string[] GetCorsOrigins()
+        {
+            return new string[] {
+                _config["UrlConfig:Api"],
+                _config["UrlConfig:Photos"]
+            };
+        }
 
 
-    void DefineContentSecurityPolicy(IFluentCspOptions csp)
+        string[] GetAllowedRedirectUrls()
+        {
+            return new string[] {
+                AddTrailingSlash(_config["UrlConfig:Auth"]),
+                AddTrailingSlash(_config["UrlConfig:Files"]),
+                AddTrailingSlash(_config["UrlConfig:Photos"])
+            };
+        }
+
+
+        void DefineContentSecurityPolicy(IFluentCspOptions csp)
         {
             var connectSources = new string[] {
                 "https://www.google-analytics.com"

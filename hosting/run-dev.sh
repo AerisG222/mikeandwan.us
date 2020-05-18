@@ -27,6 +27,12 @@ podman run -dt \
     -v maw-solr:/var/solr/data:rw,z \
        maw-solr-dev
 
+# solr reindex
+podman run -it \
+ --pod maw-pod \
+  --rm \
+       maw-solr-reindex
+
 # photos
 podman run -dt \
  --pod maw-pod \

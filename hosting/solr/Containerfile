@@ -8,4 +8,4 @@ RUN curl https://jdbc.postgresql.org/download/postgresql-42.2.12.jar --output po
 
 FROM solr
 
-COPY --from=0 /postgresql-42.2.12.jar /opt/solr/contrib/dataimporthandler/lib
+COPY --from=0 /postgresql-42.2.12.jar /opt/solr/contrib/dataimporthandler/lib/

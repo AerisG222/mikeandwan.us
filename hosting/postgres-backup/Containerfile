@@ -1,0 +1,7 @@
+FROM postgres:12.2
+
+WORKDIR /
+
+COPY run-backup.sh /usr/local/bin
+
+CMD [ "run-backup.sh" ]

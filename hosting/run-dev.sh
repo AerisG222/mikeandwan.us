@@ -2,9 +2,24 @@
 
 # postgres
 podman run -dt \
-  -pod maw-pod \
+ --pod maw-pod \
     -v maw-postgres:/var/lib/postgresql/data:rw,z \
        postgres:12.2
+
+# postgres psql
+podman run -it \
+ --pod maw-pod \
+  --rm \
+       postgres:12.2 \
+       psql -h localhost -U postgres
+
+# postgres backup
+podman run -it \
+ --pod maw-pod \
+  --rm \
+    -v maw-postgres-backup:/pg_backup:rw,z \
+    --env-file /home/mmorano/git/maw-postgres-backup.env \
+       maw-postgres-backup
 
 # solr
 podman run -dt \

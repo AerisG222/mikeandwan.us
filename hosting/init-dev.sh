@@ -39,6 +39,7 @@ podman unshare chown -R 8983:8983 "${SOLR_VOL_MOUNT_ROOT}"
 # podman run -it --rm -v maw-solr:/var/solr/data:rw,z -p 8983:8983 maw-solr-dev
 
 # copy posgtres db from current system to volume
+# first - please make sure you know the postgres / admin password.  if you don't log in to the current db and set one with: alter user postgres with password 'NEW_PASSWORD';
 PGSQL_VOL_MOUNT_POINT=$(podman volume inspect maw-postgres | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['Mountpoint'])")
 PGSQL_VOL_MOUNT_ROOT=$(dirname "${PGSQL_VOL_MOUNT_POINT}")
 

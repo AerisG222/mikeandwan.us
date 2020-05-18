@@ -24,7 +24,7 @@ podman run -it \
 # solr
 podman run -dt \
  --pod maw-pod \
-    -v maw-solr:/var/solr/data:rw,z \
+    -v maw-solr:/var/solr:rw,z \
        maw-solr-dev
 
 # solr reindex

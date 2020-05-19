@@ -8,8 +8,16 @@ pushd gateway
 buildah bud -f Containerfile.dev -t maw-gateway-dev
 popd
 
+pushd postgres-maintenance
+buildah bud -f Containerfile -t maw-postgres-maintenance
+popd
+
 pushd solr
 buildah bud -f Containerfile -t maw-solr-dev
+popd
+
+pushd solr-reindex
+buildah bud -f Containerfile -t maw-solr-reindex
 popd
 
 pushd ..

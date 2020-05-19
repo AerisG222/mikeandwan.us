@@ -13,13 +13,13 @@ podman run -it \
        postgres:12.2 \
        psql -h localhost -U postgres
 
-# postgres backup
+# postgres maintenance
 podman run -it \
  --pod maw-pod \
   --rm \
     -v maw-postgres-backup:/pg_backup:rw,z \
     --env-file /home/mmorano/git/maw-postgres-backup.env \
-       maw-postgres-backup
+       maw-postgres-maintenance
 
 # solr
 podman run -dt \

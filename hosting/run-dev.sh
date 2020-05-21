@@ -85,6 +85,8 @@ podman run -dt \
     --security-opt label=disable \
        maw-gateway-dev
 
+# remote archive
+remote-archive/archive.sh
 
 # redirect port 80 and 443 to 8080 and 8443 respectively (temporarily - add --permanent to change)
 # https://stackoverflow.com/questions/413807/is-there-a-way-for-non-root-processes-to-bind-to-privileged-ports-on-linux/31795603#31795603

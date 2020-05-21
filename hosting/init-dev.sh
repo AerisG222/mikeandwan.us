@@ -13,6 +13,7 @@ podman volume create maw-api-dataprotection
 podman volume create maw-auth-dataprotection
 podman volume create maw-www-dataprotection
 podman volume create maw-google-creds
+podman volume create maw-gdrive-creds
 
 # init certs
 podman run -it --rm -v maw-certs:/certs:rw,z maw-certs-dev
@@ -50,3 +51,14 @@ podman unshare chown -R 999:999 "${PGSQL_VOL_MOUNT_ROOT}"
 
 # test postgres
 # podman run -it --rm -v maw-postgres:/var/lib/postgresql/data:rw,z -p 5432:5432 postgres:12.2
+
+# gdrive (offsite backup)
+# follow instructions [here](https://hub.docker.com/r/d0whc3r/gdrive) to get credentials.json file
+GDRIVE_VOL_MOUNT_POINT=$(podman volume inspect maw-gdrive-creds | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['Mountpoint'])")
+GDRIVE_VOL_MOUNT_ROOT=$(dirname "${GDRIVE_VOL_MOUNT_POINT}")
+
+mv credentials.json "${GDRIVE_VOL_MOUNT_POINT}"
+chcon -R unconfined_u:object_r:container_file_t:s0 "${GDRIVE_VOL_MOUNT_POINT}"
+podman run --rm -it -v maw-gdrive-creds:/app/secrets/ d0whc3r/gdrive -l
+# follow prompt to view the google consent screen, then copy the code to the terminal to finalize getting the token
+# if everything worked, you should see a list of files from gdrive

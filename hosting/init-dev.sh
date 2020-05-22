@@ -14,6 +14,7 @@ podman volume create maw-auth-dataprotection
 podman volume create maw-www-dataprotection
 podman volume create maw-google-creds
 podman volume create maw-gdrive-creds
+podman volume create maw-reverse-geocode
 
 # init certs
 podman run -it --rm -v maw-certs:/certs:rw,z maw-certs-dev

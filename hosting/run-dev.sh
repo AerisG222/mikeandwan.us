@@ -88,6 +88,14 @@ podman run -dt \
 # remote archive
 remote-archive/archive.sh
 
+# reverse geocode
+podman run -it \
+ --pod maw-pod \
+    -v maw-reverse-geocode:/results:rw,z \
+       maw-reverse-geocode \
+       AUTO <conn_str> <api_key> /results
+
+
 # redirect port 80 and 443 to 8080 and 8443 respectively (temporarily - add --permanent to change)
 # https://stackoverflow.com/questions/413807/is-there-a-way-for-non-root-processes-to-bind-to-privileged-ports-on-linux/31795603#31795603
 # https://serverfault.com/questions/654102/forwarding-ports-on-centos-7/713849

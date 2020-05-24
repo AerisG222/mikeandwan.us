@@ -1,3 +1,4 @@
+![](https://github.com/AerisG222/mikeandwan.us/workflows/CI/badge.svg)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AerisG222/mikeandwan.us/blob/master/LICENSE.md)
 [![Travis](https://img.shields.io/travis/AerisG222/mikeandwan.us.svg)](https://travis-ci.org/AerisG222/mikeandwan.us)
 [![Coverity Scan](https://img.shields.io/coverity/scan/10078.svg)](https://scan.coverity.com/projects/aerisg222-mikeandwan.us)

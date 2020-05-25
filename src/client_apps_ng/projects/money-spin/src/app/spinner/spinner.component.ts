@@ -85,13 +85,13 @@ export class SpinnerComponent implements OnInit, OnDestroy {
         this.scene.add(this.arrow);
 
         const loader = new TextureLoader();
-        loader.load('/js/money_spin/assets/board.png', (texture: Texture) => {
+        loader.load('/js/money-spin/assets/board.png', (texture: Texture) => {
             const geometry = new PlaneGeometry(640, 498);
             const material = new MeshBasicMaterial({ map: texture, side: DoubleSide });
             const mesh = new Mesh(geometry, material);
             this.board.add(mesh);
         });
-        loader.load('/js/money_spin/assets/arrow.png', (texture: Texture) => {
+        loader.load('/js/money-spin/assets/arrow.png', (texture: Texture) => {
             const geometry = new PlaneGeometry(240, 200);
             const material = new MeshBasicMaterial({ map: texture, side: DoubleSide, transparent: true });
             const mesh = new Mesh(geometry, material);

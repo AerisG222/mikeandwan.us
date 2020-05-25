@@ -4,13 +4,8 @@ SRC_ROOT="${WORKDIR}/src"
 DIST_ROOT="${WORKDIR}/dist"
 
 # load js apps array
-source "${SRC_ROOT}/client_apps/_vars.sh"
+source _client_app_vars.sh
 
-build_client_apps() {
-    pushd "${SRC_ROOT}/client_apps"
-    ./rebuild-all.sh y y
-    popd
-}
 
 copy_client_app() {
     local APP=$1
@@ -196,7 +191,7 @@ build_www() {
     local SITE="www"
 
     build_assets "${SITE}"
-    build_client_apps
+    ./build_client_apps.sh y
     minify_assets "${SITE}"
     publish_client_apps "${SRC_ROOT}/${SITE}"
     build_site "${SITE}"

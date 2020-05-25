@@ -1,12 +1,7 @@
 #!/bin/bash
 PROD=$1
 
-APPS=(
-    "webgl_blender_model"
-    "webgl_cube"
-    "webgl_shader"
-    "webgl_text"
-)
+source _client_app_vars.sh
 
 
 clean_app() {

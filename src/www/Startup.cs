@@ -293,16 +293,17 @@ namespace MawMvcApp
 
         void AddDevPathMappings(IApplicationBuilder app)
         {
-            AddDevPathMapping(app, "../client_apps/binary_clock/dist",        "/js/binary_clock");
-            AddDevPathMapping(app, "../client_apps/googlemaps/dist",          "/js/googlemaps");
-            AddDevPathMapping(app, "../client_apps/learning/dist",            "/js/learning");
-            AddDevPathMapping(app, "../client_apps/memory/dist",              "/js/memory");
-            AddDevPathMapping(app, "../client_apps/money_spin/dist",          "/js/money_spin");
+            AddDevPathMapping(app, "../client_apps_ng/dist/binary-clock",        "/js/binary-clock");
+            AddDevPathMapping(app, "../client_apps_ng/dist/googlemaps",          "/js/googlemaps");
+            AddDevPathMapping(app, "../client_apps_ng/dist/learning",            "/js/learning");
+            AddDevPathMapping(app, "../client_apps_ng/dist/memory",              "/js/memory");
+            AddDevPathMapping(app, "../client_apps_ng/dist/money-spin",          "/js/money-spin");
+            AddDevPathMapping(app, "../client_apps_ng/dist/weekend-countdown",   "/js/weekend-countdown");
+
             AddDevPathMapping(app, "../client_apps/webgl_blender_model/dist", "/js/webgl_blender_model");
             AddDevPathMapping(app, "../client_apps/webgl_cube/dist",          "/js/webgl_cube");
             AddDevPathMapping(app, "../client_apps/webgl_shader/dist",        "/js/webgl_shader");
             AddDevPathMapping(app, "../client_apps/webgl_text/dist",          "/js/webgl_text");
-            AddDevPathMapping(app, "../client_apps/weekend_countdown/dist",   "/js/weekend_countdown");
         }
 
 

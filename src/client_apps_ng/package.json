@@ -8,7 +8,23 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+
+    "build-dev:binary-clock": "ng build binary-clock && ng lint binary-clock",
+    "build-dev:googlemaps": "ng build googlemaps && ng lint googlemaps",
+    "build-dev:learning": "ng build learning && ng lint learning",
+    "build-dev:memory": "ng build memory & ng lint memory",
+    "build-dev:money-spin": "ng build money-spin && ng lint money-spin",
+    "build-dev:weekend-countdown": "ng build weekend-countdown && ng lint weekend-countdown",
+    "build-dev": "npm run build-dev:binary-clock && npm run build-dev:googlemaps && npm run build-dev:learning && npm run build-dev:memory && npm run build-dev:money-spin && npm run build-dev:weekend-countdown",
+
+    "build-prod:binary-clock": "ng build binary-clock --prod",
+    "build-prod:googlemaps": "ng build googlemaps --prod",
+    "build-prod:learning": "ng build learning --prod",
+    "build-prod:memory": "ng build memory --prod",
+    "build-prod:money-spin": "ng build money-spin --prod",
+    "build-prod:weekend-countdown": "ng build weekend-countdown --prod",
+    "build-prod": "npm run build-prod:binary-clock && npm run build-prod:googlemaps && npm run build-prod:learning && npm run build-prod:memory && npm run build-prod:money-spin && npm run build-prod:weekend-countdown"
   },
   "private": true,
   "dependencies": {
@@ -21,6 +37,7 @@
     "@angular/platform-browser-dynamic": "~9.0.0-rc.9",
     "@angular/router": "~9.0.0-rc.9",
     "rxjs": "~6.5.4",
+    "three": "^0.116.1",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },
@@ -29,8 +46,10 @@
     "@angular/cli": "~9.0.0-rc.10",
     "@angular/compiler-cli": "~9.0.0-rc.9",
     "@angular/language-service": "~9.0.0-rc.9",
+    "@types/googlemaps": "^3.39.6",
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
+    "@types/modernizr": "^3.5.3",
     "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
     "jasmine-core": "~3.5.0",

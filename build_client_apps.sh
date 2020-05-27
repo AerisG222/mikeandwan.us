@@ -1,10 +1,12 @@
 #!/bin/bash
 PROD=$1
 
-source _client_app_vars.sh
+source ./_client_app_vars.sh
 
 
 clean_app() {
+    export NG_CLI_ANALYTICS=off
+
     rm -rf dist
     rm -rf node_modules
     npm ci
@@ -35,6 +37,8 @@ build_ng_apps() {
     if [ "${clean}" == 'y' ]; then
         clean_app
     fi
+
+    ng analytics off
 
     echo "building ${app}..."
     npm run "${buildcmd}"

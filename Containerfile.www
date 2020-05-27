@@ -19,9 +19,11 @@ RUN npm install -g \
 
 WORKDIR /src
 
-COPY build.sh                                                 build.sh
-COPY mikeandwan.us.sln                                        mikeandwan.us.sln
-COPY nuget.config                                             nuget.config
+COPY _client_app_vars.sh                                      .
+COPY build_client_apps.sh                                     .
+COPY build.sh                                                 .
+COPY mikeandwan.us.sln                                        .
+COPY nuget.config                                             .
 COPY src/api/api.csproj                                       src/api/api.csproj
 COPY src/auth/auth.csproj                                     src/auth/auth.csproj
 COPY src/Maw.Data/Maw.Data.csproj                             src/Maw.Data/Maw.Data.csproj
@@ -30,19 +32,15 @@ COPY src/Maw.Security/Maw.Security.csproj                     src/Maw.Security/M
 COPY src/Maw.TagHelpers/Maw.TagHelpers.csproj                 src/Maw.TagHelpers/Maw.TagHelpers.csproj
 COPY src/Mvc.RenderViewToString/Mvc.RenderViewToString.csproj src/Mvc.RenderViewToString/Mvc.RenderViewToString.csproj
 COPY src/www/www.csproj                                       src/www/www.csproj
-
-# SLOW COPY WORKAROUND (https://github.com/containers/buildah/issues/1714)
-# build with:  buildah bud -v "$(pwd)":/tmp/context:ro,Z -f Containerfile.auth -t maw-auth-dev
-# COPY tests/.                                                  tests/
-RUN cp -r /tmp/context/tests .
+COPY tests/.                                                  tests/
 
 RUN dotnet restore
 
+# SLOW COPY WORKAROUND (https://github.com/containers/buildah/issues/1714)
+# build with:  buildah bud -v "$(pwd)":/tmp/context:ro,Z -f Containerfile.auth -t maw-auth-dev
 # copy everything else and build
-# COPY src/. ./src/
+#COPY src/. ./src/
 RUN cp -r /tmp/context/src .
-
-ENV NG_CLI_ANALYTICS=ci
 
 RUN ./build.sh www
 

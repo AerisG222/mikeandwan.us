@@ -12,10 +12,10 @@ podman run -dt \
        maw-gateway-dev
 
 # certbot container
-podman run -dt \
+podman run -it \
  --pod maw-pod \
     -v maw-certbot-validation:/var/www/certbot:rw,z \
     -v maw-certbot-certs:/etc/letsencrypt:rw,z \
     --entrypoint=sh \
        certbot/certbot
-       -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait ${!}; done;'
+       /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait ${!}; done;'

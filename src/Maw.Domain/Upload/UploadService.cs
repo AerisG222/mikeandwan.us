@@ -388,7 +388,7 @@ namespace Maw.Domain.Upload
         }
 
 
-        void EnsureUserDirectoryExists(string userDir)
+        static void EnsureUserDirectoryExists(string userDir)
         {
             if(!Directory.Exists(userDir))
             {

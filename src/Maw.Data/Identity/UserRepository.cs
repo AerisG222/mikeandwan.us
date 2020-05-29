@@ -444,7 +444,7 @@ namespace Maw.Data.Identity
         }
 
 
-        async Task<bool> AddLoginHistoryAsync(IDbConnection conn, string username, string email, short loginActivityTypeId, short loginAreaId)
+        static async Task<bool> AddLoginHistoryAsync(IDbConnection conn, string username, string email, short loginActivityTypeId, short loginAreaId)
         {
             var result = await conn.QuerySingleAsync<long>(
                 "SELECT * FROM maw.add_login_history(@loginActivityTypeId, @loginAreaId, @attemptTime, @username, @email);",

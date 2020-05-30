@@ -746,6 +746,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "binary-clock"
+    }
+  },
+  "defaultProject": "binary-clock",
+  "cli": {
+    "analytics": false
+  }
 }

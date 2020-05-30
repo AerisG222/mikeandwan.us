@@ -213,6 +213,7 @@ namespace MawAuth
                 .DefaultSources(s => s.None())
                 .FontSources(s => s.CustomSources(fontSources))
                 .ImageSources(s => s.Self())
+                .ManifestSources(s => s.Self())
                 .ObjectSources(s => s.None())
                 .ReportUris(s => s.Uris(reportUris))
                 .ScriptSources(s => {

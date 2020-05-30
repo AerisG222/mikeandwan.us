@@ -275,6 +275,7 @@ namespace MawMvcApp
                     s.Self();
                     s.CustomSources(imageSources);
                 })
+                .ManifestSources(s => s.Self())
                 .MediaSources(s => s.Self())
                 .ObjectSources(s => s.None())
                 .ReportUris(s => s.Uris(reportUris))

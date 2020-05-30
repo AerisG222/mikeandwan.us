@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: build container
-      run: ./build_and_push.sh
+      run: ./_prod_build_and_push.sh
       env:
         DH_USER: ${{ secrets.DH_USER }}
         DH_PASS: ${{ secrets.DH_PASS }}

@@ -20,8 +20,8 @@ RUN npm install -g \
 WORKDIR /src
 
 COPY _client_app_vars.sh                                      .
+COPY _build.sh                                                .
 COPY build_client_apps.sh                                     .
-COPY build.sh                                                 .
 COPY mikeandwan.us.sln                                        .
 COPY nuget.config                                             .
 COPY src/api/api.csproj                                       src/api/api.csproj
@@ -42,7 +42,7 @@ RUN dotnet restore
 #COPY src/. ./src/
 RUN cp -r /tmp/context/src .
 
-RUN ./build.sh www
+RUN ./_build.sh www
 
 
 # build runtime image
@@ -59,9 +59,9 @@ RUN dnf install -y \
 WORKDIR /maw-www
 
 COPY --from=build /src/dist .
-COPY start-site.sh /usr/local/bin/
+COPY _start_site_in_container.sh /usr/local/bin/
 
 EXPOSE 5021
 
-ENTRYPOINT [ "start-site.sh" ]
+ENTRYPOINT [ "_start_site_in_container.sh" ]
 CMD [ "./MawWww" ]

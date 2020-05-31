@@ -225,6 +225,125 @@ map_default_ports_to_container_ports() {
     echo "    - firewall is now forwarding requests from 80/443 to 8080/8443"
 }
 
+create_containers() {
+    local ENV_NAME=${1}
+
+    if [ ${ENV_NAME} = 'dev' ]; then
+        local C_SOLR='maw-solr-dev'
+        local C_PHOTOS='maw-photos-dev'
+        local C_FILES='maw-files-dev'
+        local C_AUTH='maw-auth-dev'
+        local C_API='maw-api-dev'
+        local C_WWW='maw-www-dev'
+        local C_GATEWAY='maw-gateway-dev'
+    else
+        local C_SOLR='aerisg222/maw-solr:latest'
+        local C_PHOTOS='aerisg222/maw-photos:latest'
+        local C_FILES='aerisg222/maw-files:latest'
+        local C_AUTH='aerisg222/maw-auth:latest'
+        local C_API='aerisg222/maw-api:latest'
+        local C_WWW='aerisg222/maw-www:latest'
+        local C_GATEWAY='aerisg222/maw-gateway:latest'
+    fi
+
+    # postgres
+    podman create \
+        --pod maw-pod \
+        --name maw-postgres \
+        --volume maw-postgres:/var/lib/postgresql/data:rw,z \
+        postgres:12.2
+
+    # solr
+    podman create \
+        --pod maw-pod \
+        --name maw-solr \
+        --volume maw-solr:/var/solr:rw,z \
+        "${C_SOLR}"
+
+    # photos
+    podman create \
+        --pod maw-pod \
+        --name maw-photos \
+        --volume maw-certs:/certs:ro,z \
+        "${C_PHOTOS}"
+
+    # files
+    podman create \
+        --pod maw-pod \
+        --name maw-files \
+        --volume maw-certs:/certs:ro,z \
+        "${C_FILES}"
+
+    # auth
+    podman create \
+        --pod maw-pod \
+        --name maw-auth \
+        --volume maw-certs:/certs:ro,z \
+        --volume maw-auth-dataprotection:/dataprotection:rw,Z \
+        --volume maw-google-creds:/google-creds:ro,z \
+        --env-file /home/mmorano/git/maw-auth.env \
+        "${C_AUTH}"
+
+    # api
+    podman create \
+        --pod maw-pod \
+        --name maw-api \
+        --volume maw-certs:/certs:ro,z \
+        --volume maw-api-dataprotection:/dataprotection:rw,Z \
+        --volume maw-uploads:/maw-uploads:rw,z \
+        --volume /srv/www/website_assets/images:/maw-www/wwwroot/images:ro \
+        --security-opt label=disable \
+        --env-file /home/mmorano/git/maw-api.env \
+        "${C_API}"
+
+    # www
+    podman create \
+        --pod maw-pod \
+        --name maw-www \
+        --volume maw-certs:/certs:ro,z \
+        --volume maw-www-dataprotection:/dataprotection:rw,Z \
+        --volume maw-google-creds:/google-creds:ro,z \
+        --volume /srv/www/website_assets/images:/maw-www/wwwroot/images:ro \
+        --volume /srv/www/website_assets/movies:/maw-www/wwwroot/movies:ro \
+        --security-opt label=disable \
+        --env-file /home/mmorano/git/maw-www.env \
+        "${C_WWW}"
+
+    if [ ${ENV_NAME} = 'dev' ]; then
+        # gateway
+        podman create \
+            --pod maw-pod \
+            --name maw-gateway \
+            --volume maw-certs:/certs:ro,z \
+            --volume /srv/www/website_assets:/assets:ro \
+            --security-opt label=disable \
+            "${C_GATEWAY}"
+    else
+        # for prod, we need a slightly different setup for the gateway seeing we need to support
+        # official certs from Let's Encrypt.  as such, run the gateway as follows:
+        podman create \
+            --pod maw-pod \
+            --name maw-gateway \
+            --volume maw-certs:/certs:ro,z \
+            --volume maw-certbot-validation:/var/www/certbot:ro,z \
+            --volume maw-certbot-certs:/etc/letsencrypt:ro,z \
+            --volume /srv/www/website_assets:/assets:ro \
+            --label "io.containers.autoupdate=image" \
+            --security-opt label=disable \
+            "${C_GATEWAY}"
+
+        # certbot container
+        podman create \
+            --pod maw-pod \
+            --name maw-certbot \
+            --volume maw-certbot-validation:/var/www/certbot:rw,z \
+            --volume maw-certbot-certs:/etc/letsencrypt:rw,z \
+            --entrypoint=sh \
+            certbot/certbot
+            /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait ${!}; done;'
+    fi
+}
+
 build_pod_dev() {
     local POD_NAME="maw-pod-dev"
 
@@ -236,6 +355,7 @@ build_pod_dev() {
     init_certs 'localhost/maw-certs-dev'
     trust_dev_certs
     map_default_ports_to_container_ports
+    create_containers 'dev'
 
     echo "    - completed"
     echo
@@ -251,6 +371,7 @@ build_pod_prod() {
     create_volumes 'prod'
     init_certs 'aerisg222/maw-certs'
     map_default_ports_to_container_ports
+    create_containers 'prod'
 
     echo "    - completed"
     echo

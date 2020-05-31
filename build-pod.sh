@@ -37,6 +37,7 @@ create_volume_postgres() {
     fi
 
     if [ ! -d /var/lib/pgsql/ ]; then
+        echo '    - /var/lib/pgsql not found - not configuring postgres volume'
         return
     fi
 
@@ -66,6 +67,7 @@ create_volume_solr() {
     fi
 
     if [ ! -d /var/solr/data ]; then
+        echo '    - /var/solr/data not found - not configuring solr volume'
         return
     fi
 
@@ -94,6 +96,7 @@ create_volume_google_creds() {
     fi
 
     if [ ! -f ~/www_emailer.json ]; then
+        echo '    - ~/www_emailer.json not found - not configuring google credentials'
         return
     fi
 
@@ -113,7 +116,8 @@ create_volume_gdrive_creds() {
         return
     fi
 
-    if [ ! -f credentials.json ]; then
+    if [ ! -f ~/credentials.json ]; then
+        echo '    - ~/credentials.json not found - not configuring gdrive credentials'
         return
     fi
 
@@ -123,7 +127,7 @@ create_volume_gdrive_creds() {
     GDRIVE_VOL_MOUNT_POINT=$(podman volume inspect maw-gdrive-creds | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['Mountpoint'])")
     GDRIVE_VOL_MOUNT_ROOT=$(dirname "${GDRIVE_VOL_MOUNT_POINT}")
 
-    cp credentials.json "${GDRIVE_VOL_MOUNT_POINT}"
+    cp ~/credentials.json "${GDRIVE_VOL_MOUNT_POINT}"
     chcon -R unconfined_u:object_r:container_file_t:s0 "${GDRIVE_VOL_MOUNT_POINT}"
     podman run --rm -it -v maw-gdrive-creds:/app/secrets/ d0whc3r/gdrive -l
     # follow prompt to view the google consent screen, then copy the code to the terminal to finalize getting the token

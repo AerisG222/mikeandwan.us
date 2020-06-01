@@ -258,6 +258,7 @@ create_containers() {
         --pod maw-pod \
         --name maw-solr \
         --volume maw-solr:/var/solr:rw,z \
+        --label "io.containers.autoupdate=image" \
         "${C_SOLR}"
 
     # photos
@@ -265,6 +266,7 @@ create_containers() {
         --pod maw-pod \
         --name maw-photos \
         --volume maw-certs:/certs:ro,z \
+        --label "io.containers.autoupdate=image" \
         "${C_PHOTOS}"
 
     # files
@@ -272,6 +274,7 @@ create_containers() {
         --pod maw-pod \
         --name maw-files \
         --volume maw-certs:/certs:ro,z \
+        --label "io.containers.autoupdate=image" \
         "${C_FILES}"
 
     # auth
@@ -281,6 +284,7 @@ create_containers() {
         --volume maw-certs:/certs:ro,z \
         --volume maw-auth-dataprotection:/dataprotection:rw,Z \
         --volume maw-google-creds:/google-creds:ro,z \
+        --label "io.containers.autoupdate=image" \
         --env-file /home/mmorano/git/maw-auth.env \
         "${C_AUTH}"
 
@@ -292,6 +296,7 @@ create_containers() {
         --volume maw-api-dataprotection:/dataprotection:rw,Z \
         --volume maw-uploads:/maw-uploads:rw,z \
         --volume /srv/www/website_assets/images:/maw-www/wwwroot/images:ro \
+        --label "io.containers.autoupdate=image" \
         --security-opt label=disable \
         --env-file /home/mmorano/git/maw-api.env \
         "${C_API}"
@@ -305,6 +310,7 @@ create_containers() {
         --volume maw-google-creds:/google-creds:ro,z \
         --volume /srv/www/website_assets/images:/maw-www/wwwroot/images:ro \
         --volume /srv/www/website_assets/movies:/maw-www/wwwroot/movies:ro \
+        --label "io.containers.autoupdate=image" \
         --security-opt label=disable \
         --env-file /home/mmorano/git/maw-www.env \
         "${C_WWW}"
@@ -316,6 +322,7 @@ create_containers() {
             --name maw-gateway \
             --volume maw-certs:/certs:ro,z \
             --volume /srv/www/website_assets:/assets:ro \
+            --label "io.containers.autoupdate=image" \
             --security-opt label=disable \
             "${C_GATEWAY}"
     else
@@ -338,6 +345,7 @@ create_containers() {
             --name maw-certbot \
             --volume maw-certbot-validation:/var/www/certbot:rw,z \
             --volume maw-certbot-certs:/etc/letsencrypt:rw,z \
+            --label "io.containers.autoupdate=image" \
             --entrypoint=sh \
             certbot/certbot
             /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait ${!}; done;'
@@ -376,6 +384,15 @@ build_pod_prod() {
     echo "    - completed"
     echo
 }
+
+echo
+echo 'This script will initialize the container environment for mikeandwan.us'
+echo '  - to execute, please specify "dev" or "prod" to indicate which environment to create'
+echo '  - the script will automatically migrate current solr and postgres instances'
+echo '  - the script will also prepare the gdrive archive - but you must first place the containers.json file in ~'
+echo
+
+read -n 1 -r -s -p $'Press enter to continue...\n'
 
 
 if   [ ${1} = 'dev' ]; then

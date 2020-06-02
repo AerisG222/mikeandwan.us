@@ -16,7 +16,7 @@ namespace Maw.Domain.Email
     public class GmailApiEmailService
         : IEmailService
     {
-        static string[] Scopes = { GmailService.Scope.GmailSend };
+        static readonly string[] Scopes = { GmailService.Scope.GmailSend };
 
         readonly GmailApiEmailConfig _config;
         readonly ILogger _log;
@@ -26,15 +26,15 @@ namespace Maw.Domain.Email
 
 
         public GmailApiEmailService(ILogger<GmailApiEmailService> log, IOptions<GmailApiEmailConfig> config)
-		{
-			if(config == null)
-			{
-				throw new ArgumentNullException(nameof(config));
-			}
+        {
+            if (config == null)
+            {
+                throw new ArgumentNullException(nameof(config));
+            }
 
-			_config = config.Value;
-			_log = log ?? throw new ArgumentNullException(nameof(log));
-		}
+            _config = config.Value;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+        }
 
 
         public Task SendAsync(string recipient, string from, string subject, string body)
@@ -55,12 +55,11 @@ namespace Maw.Domain.Email
 
             var msg = BuildMessage(recipient, from, subject, body, isHtml);
 
-            using(var svc = await GetService().ConfigureAwait(false))
-            {
-                var req = svc.Users.Messages.Send(msg, "me");
+            using var svc = await GetService().ConfigureAwait(false);
 
-                var result = await req.ExecuteAsync().ConfigureAwait(false);
-            }
+            var req = svc.Users.Messages.Send(msg, "me");
+
+            var result = await req.ExecuteAsync().ConfigureAwait(false);
         }
 
 
@@ -68,7 +67,7 @@ namespace Maw.Domain.Email
         {
             var builder = new BodyBuilder();
 
-            if(isHtml)
+            if (isHtml)
             {
                 builder.HtmlBody = body;
             }
@@ -83,7 +82,8 @@ namespace Maw.Domain.Email
             msg.Subject = subject;
             msg.Body = builder.ToMessageBody();
 
-            return new Message {
+            return new Message
+            {
                 Raw = Encode(msg.ToString())
             };
         }
@@ -103,13 +103,15 @@ namespace Maw.Domain.Email
         }
 
 
-        async Task<GmailService> GetService() {
+        async Task<GmailService> GetService()
+        {
             var cred = await GoogleCredential.GetApplicationDefaultAsync().ConfigureAwait(false);
 
             cred = cred.CreateScoped(Scopes)
                        .CreateWithUser(_config.FromEmailAddress);
 
-            var svc = new GmailService(new BaseClientService.Initializer() {
+            var svc = new GmailService(new BaseClientService.Initializer()
+            {
                 HttpClientInitializer = cred,
                 ApplicationName = _config.ApplicationName
             });

@@ -9,9 +9,9 @@ using Maw.Domain.Photos;
 
 namespace Maw.Data
 {
-	public class PhotoRepository
+    public class PhotoRepository
         : Repository, IPhotoRepository
-	{
+    {
         public PhotoRepository(string connectionString)
             : base(connectionString)
         {
@@ -19,7 +19,7 @@ namespace Maw.Data
         }
 
 
-		public Task<IEnumerable<short>> GetYearsAsync()
+        public Task<IEnumerable<short>> GetYearsAsync()
         {
             return RunAsync(conn =>
                 conn.QueryAsync<short>(
@@ -36,9 +36,9 @@ namespace Maw.Data
 
 
         public Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, bool allowPrivate)
-		{
+        {
             return InternalGetCategoriesAsync(allowPrivate, year);
-		}
+        }
 
 
         public Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate)
@@ -55,18 +55,18 @@ namespace Maw.Data
         }
 
 
-		public Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, bool allowPrivate)
-		{
+        public Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, bool allowPrivate)
+        {
             return InternalGetPhotosAsync(allowPrivate, categoryId);
-		}
+        }
 
 
-		public async Task<Photo> GetPhotoAsync(int photoId, bool allowPrivate)
-		{
+        public async Task<Photo> GetPhotoAsync(int photoId, bool allowPrivate)
+        {
             var result = await InternalGetPhotosAsync(allowPrivate, photoId: photoId).ConfigureAwait(false);
 
             return result.FirstOrDefault();
-		}
+        }
 
 
         public async Task<Photo> GetRandomAsync(bool allowPrivate)
@@ -79,10 +79,12 @@ namespace Maw.Data
 
         public Task<IEnumerable<Photo>> GetRandomAsync(byte count, bool allowPrivate)
         {
-            return RunAsync(async conn => {
+            return RunAsync(async conn =>
+            {
                 var rows = await conn.QueryAsync(
                     "SELECT * FROM photo.get_random_photos(@allowPrivate, @count)",
-                    new {
+                    new
+                    {
                         allowPrivate,
                         count
                     }
@@ -93,113 +95,120 @@ namespace Maw.Data
         }
 
 
-		public Task<Detail> GetDetailAsync(int photoId, bool allowPrivate)
-		{
+        public Task<Detail> GetDetailAsync(int photoId, bool allowPrivate)
+        {
             return RunAsync(conn =>
                 conn.QuerySingleOrDefaultAsync<Detail>(
                     "SELECT * FROM photo.get_photo_metadata(@allowPrivate, @photoId);",
-                    new {
+                    new
+                    {
                         allowPrivate,
                         photoId
                     }
                 )
             );
-		}
+        }
 
 
-		public Task<IEnumerable<Comment>> GetCommentsAsync(int photoId)
-		{
+        public Task<IEnumerable<Comment>> GetCommentsAsync(int photoId)
+        {
             return RunAsync(conn =>
                 conn.QueryAsync<Comment>(
                     "SELECT * FROM photo.get_comments(@photoId);",
-                    new { photoId = photoId }
+                    new { photoId }
                 )
             );
-		}
+        }
 
 
-		public Task<Rating> GetRatingsAsync(int photoId, string username)
-		{
+        public Task<Rating> GetRatingsAsync(int photoId, string username)
+        {
             return RunAsync(conn =>
                 conn.QuerySingleOrDefaultAsync<Rating>(
                     "SELECT * FROM photo.get_ratings(@photoId, @username);",
-                    new {
-                        photoId = photoId,
+                    new
+                    {
+                        photoId,
                         username = username?.ToLowerInvariant()
                     }
                 )
             );
-		}
+        }
 
 
         public Task<GpsDetail> GetGpsDetailAsync(int photoId)
-		{
-            return RunAsync(async conn => {
+        {
+            return RunAsync(async conn =>
+            {
                 var result = await conn.QuerySingleOrDefaultAsync<GpsSourceOverride>(
                     "SELECT * FROM photo.get_gps(@photoId);",
                     new { photoId }
                 ).ConfigureAwait(false);
 
-                if(result == null)
+                if (result == null)
                 {
                     return null;
                 }
 
                 var detail = new GpsDetail();
 
-                if(result.SourceLatitude != null && result.SourceLongitude != null)
+                if (result.SourceLatitude != null && result.SourceLongitude != null)
                 {
                     detail.Source = new GpsCoordinate()
                     {
-                        Latitude = (float) result.SourceLatitude,
-                        Longitude = (float) result.SourceLongitude
+                        Latitude = (float)result.SourceLatitude,
+                        Longitude = (float)result.SourceLongitude
                     };
                 }
 
-                if(result.OverrideLatitude != null && result.OverrideLongitude != null)
+                if (result.OverrideLatitude != null && result.OverrideLongitude != null)
                 {
                     detail.Override = new GpsCoordinate()
                     {
-                        Latitude = (float) result.OverrideLatitude,
-                        Longitude = (float) result.OverrideLongitude
+                        Latitude = (float)result.OverrideLatitude,
+                        Longitude = (float)result.OverrideLongitude
                     };
                 }
 
                 return detail;
             });
-		}
+        }
 
 
-		public Task<int> InsertCommentAsync(int photoId, string username, string comment)
+        public Task<int> InsertCommentAsync(int photoId, string username, string comment)
         {
-            return RunAsync(async conn => {
+            return RunAsync(async conn =>
+            {
                 var result = await conn.QuerySingleOrDefaultAsync<int>(
                     "SELECT * FROM photo.save_comment(@username, @photoId, @message, @entryDate);",
-                    new {
+                    new
+                    {
                         username = username.ToLowerInvariant(),
-                        photoId = photoId,
+                        photoId,
                         message = comment,
                         entryDate = DateTime.Now
                     }
                 ).ConfigureAwait(false);
 
-                if(result <= 0)
-				{
-					throw new Exception("Did not save photo comment!");
-				}
+                if (result <= 0)
+                {
+                    throw new Exception("Did not save photo comment!");
+                }
 
                 return result;
             });
         }
 
 
-		public Task<float?> SaveRatingAsync(int photoId, string username, short rating)
+        public Task<float?> SaveRatingAsync(int photoId, string username, short rating)
         {
-            return RunAsync(async conn => {
+            return RunAsync(async conn =>
+            {
                 var result = await conn.QueryAsync<long>(
                     "SELECT * FROM photo.save_rating(@photoId, @username, @score);",
-                    new {
-                        photoId = photoId,
+                    new
+                    {
+                        photoId,
                         username = username.ToLowerInvariant(),
                         score = rating
                     }
@@ -210,13 +219,15 @@ namespace Maw.Data
         }
 
 
-		public Task<float?> RemoveRatingAsync(int photoId, string username)
-		{
-            return RunAsync(async conn => {
+        public Task<float?> RemoveRatingAsync(int photoId, string username)
+        {
+            return RunAsync(async conn =>
+            {
                 var result = await conn.QueryAsync<long>(
                     "SELECT * FROM photo.save_rating(@photoId, @username, @score);",
-                    new {
-                        photoId = photoId,
+                    new
+                    {
+                        photoId,
                         username = username.ToLowerInvariant(),
                         score = 0
                     }
@@ -224,15 +235,16 @@ namespace Maw.Data
 
                 return (await GetRatingsAsync(photoId, username).ConfigureAwait(false))?.AverageRating;
             });
-		}
+        }
 
 
         public Task SetGpsOverrideAsync(int photoId, GpsCoordinate gps, string username)
-		{
+        {
             return RunAsync(conn =>
                 conn.QueryAsync<long>(
                     "SELECT * FROM photo.set_gps_override(@photoId, @latitude, @longitude, @username, @updateDate);",
-                    new {
+                    new
+                    {
                         photoId,
                         latitude = gps.Latitude,
                         longitude = gps.Longitude,
@@ -241,7 +253,7 @@ namespace Maw.Data
                     }
                 )
             );
-		}
+        }
 
 
         public Task<long> SetCategoryTeaserAsync(short categoryId, int photoId)
@@ -249,7 +261,8 @@ namespace Maw.Data
             return RunAsync(conn =>
                 conn.QueryFirstAsync<long>(
                     @"SELECT * FROM photo.set_category_teaser(@categoryId, @photoId);",
-                    new {
+                    new
+                    {
                         categoryId,
                         photoId
                     }
@@ -260,10 +273,12 @@ namespace Maw.Data
 
         Task<IEnumerable<Category>> InternalGetCategoriesAsync(bool allowPrivate, short? year = null, short? categoryId = null, short? sinceCategoryId = null)
         {
-            return RunAsync(async conn => {
+            return RunAsync(async conn =>
+            {
                 var rows = await conn.QueryAsync(
                     "SELECT * FROM photo.get_categories(@allowPrivate, @year, @categoryId, @sinceCategoryId);",
-                    new {
+                    new
+                    {
                         allowPrivate,
                         year,
                         categoryId,
@@ -277,11 +292,13 @@ namespace Maw.Data
 
 
         Task<IEnumerable<Photo>> InternalGetPhotosAsync(bool allowPrivate, short? categoryId = null, int? photoId = null)
-		{
-            return RunAsync(async conn => {
+        {
+            return RunAsync(async conn =>
+            {
                 var rows = await conn.QueryAsync(
                     "SELECT * FROM photo.get_photos(@allowPrivate, @categoryId, @photoId);",
-                    new {
+                    new
+                    {
                         allowPrivate,
                         categoryId,
                         photoId
@@ -290,16 +307,16 @@ namespace Maw.Data
 
                 return rows.Select(BuildPhoto);
             });
-		}
+        }
 
 
         Category BuildCategory(dynamic row)
         {
             var category = new Category();
 
-            category.Id = (short) row.id;
-            category.Year = (short) row.year;
-            category.Name = (string) row.name;
+            category.Id = (short)row.id;
+            category.Year = (short)row.year;
+            category.Name = (string)row.name;
             category.CreateDate = GetValueOrDefault<DateTime>(row.create_date);
             category.Latitude = row.latitude;
             category.Longitude = row.longitude;
@@ -324,8 +341,8 @@ namespace Maw.Data
         {
             var photo = new Photo();
 
-            photo.Id = (int) row.id;
-            photo.CategoryId = (short) row.category_id;
+            photo.Id = (int)row.id;
+            photo.CategoryId = (short)row.category_id;
             photo.CreateDate = GetValueOrDefault<DateTime>(row.create_date);
             photo.Latitude = row.latitude;
             photo.Longitude = row.longitude;
@@ -340,5 +357,5 @@ namespace Maw.Data
 
             return photo;
         }
-	}
+    }
 }

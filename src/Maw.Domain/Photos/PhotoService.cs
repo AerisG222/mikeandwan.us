@@ -34,7 +34,7 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<IEnumerable<short>> GetYearsAsync()
+        public Task<IEnumerable<short>> GetYearsAsync()
         {
             return GetCachedValueAsync(nameof(GetYearsAsync), () => _repo.GetYearsAsync());
         }
@@ -48,7 +48,7 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, bool allowPrivate)
+        public Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, bool allowPrivate)
         {
             var key = $"{nameof(GetCategoriesForYearAsync)}_{year}_{allowPrivate}";
 
@@ -56,13 +56,13 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate)
+        public Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate)
         {
             return _repo.GetRecentCategoriesAsync(sinceId, allowPrivate);
         }
 
 
-		public Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, bool allowPrivate)
+        public Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, bool allowPrivate)
         {
             var key = $"{nameof(GetPhotosForCategoryAsync)}_{categoryId}_{allowPrivate}";
 
@@ -70,7 +70,7 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
+        public Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
         {
             var key = $"{nameof(GetCategoryAsync)}_{categoryId}_{allowPrivate}";
 
@@ -78,7 +78,7 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<Photo> GetPhotoAsync(int photoId, bool allowPrivate)
+        public Task<Photo> GetPhotoAsync(int photoId, bool allowPrivate)
         {
             var key = $"{nameof(GetPhotoAsync)}_{photoId}_{allowPrivate}";
 
@@ -86,7 +86,7 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<Detail> GetDetailAsync(int photoId, bool allowPrivate)
+        public Task<Detail> GetDetailAsync(int photoId, bool allowPrivate)
         {
             var key = $"{nameof(GetDetailAsync)}_{photoId}_{allowPrivate}";
 
@@ -94,13 +94,13 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<IEnumerable<Comment>> GetCommentsAsync(int photoId)
+        public Task<IEnumerable<Comment>> GetCommentsAsync(int photoId)
         {
             return _repo.GetCommentsAsync(photoId);
         }
 
 
-		public Task<Rating> GetRatingsAsync(int photoId, string username)
+        public Task<Rating> GetRatingsAsync(int photoId, string username)
         {
             return _repo.GetRatingsAsync(photoId, username);
         }
@@ -112,19 +112,19 @@ namespace Maw.Domain.Photos
         }
 
 
-		public Task<int> InsertCommentAsync(int photoId, string username, string comment)
+        public Task<int> InsertCommentAsync(int photoId, string username, string comment)
         {
             return _repo.InsertCommentAsync(photoId, username, comment);
         }
 
 
-		public Task<float?> SaveRatingAsync(int photoId, string username, short rating)
+        public Task<float?> SaveRatingAsync(int photoId, string username, short rating)
         {
             return _repo.SaveRatingAsync(photoId, username, rating);
         }
 
 
-		public Task<float?> RemoveRatingAsync(int photoId, string username)
+        public Task<float?> RemoveRatingAsync(int photoId, string username)
         {
             return _repo.RemoveRatingAsync(photoId, username);
         }
@@ -140,7 +140,7 @@ namespace Maw.Domain.Photos
         {
             var count = await _repo.SetCategoryTeaserAsync(categoryId, photoId).ConfigureAwait(false);
 
-            if(count != 1)
+            if (count != 1)
             {
                 throw new ApplicationException("Did not update category teaser!");
             }

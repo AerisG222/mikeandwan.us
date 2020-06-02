@@ -20,8 +20,8 @@ namespace MawMvcApp.ViewModels.Tools.Bandwidth
 
         public void Calculate()
         {
-            double timeInSeconds = 0;
-            double sizeInBytes = 0;
+            double timeInSeconds;
+            double sizeInBytes;
             var results = new List<BandwidthSizeResult>();
 
             // determine the divisor based on the time interval

@@ -7,21 +7,21 @@ using Maw.Security;
 namespace MawMvcApp.Controllers
 {
     [Authorize(MawPolicy.CanUpload)]
-	[Route("upload")]
+    [Route("upload")]
     public class UploadController
         : MawBaseController<UploadController>
     {
-		public UploadController(ILogger<UploadController> log)
-			: base(log)
+        public UploadController(ILogger<UploadController> log)
+            : base(log)
         {
 
         }
 
 
-		[HttpGet("")]
+        [HttpGet("")]
         public IActionResult Index()
         {
-			return Redirect("https://files.mikeandwan.us");
+            return Redirect("https://files.mikeandwan.us");
         }
     }
 }

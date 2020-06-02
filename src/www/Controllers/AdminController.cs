@@ -14,106 +14,106 @@ using Maw.Security;
 
 namespace MawMvcApp.Controllers
 {
-	[Authorize(MawPolicy.AdminSite)]
-	[Route("admin")]
+    [Authorize(MawPolicy.AdminSite)]
+    [Route("admin")]
     public class AdminController
         : MawBaseController<AdminController>
     {
         readonly MawApiService _apiSvc;
-		readonly IBlogService _blogSvc;
+        readonly IBlogService _blogSvc;
         readonly IPhotoService _photoSvc;
         readonly IVideoService _videoSvc;
 
 
-		public AdminController(ILogger<AdminController> log,
+        public AdminController(ILogger<AdminController> log,
                                MawApiService apiService,
-							   IBlogService blogService,
+                               IBlogService blogService,
                                IPhotoService photoService,
                                IVideoService videoService)
-			: base(log)
+            : base(log)
         {
             _apiSvc = apiService ?? throw new ArgumentNullException(nameof(apiService));
-			_blogSvc = blogService ?? throw new ArgumentNullException(nameof(blogService));
+            _blogSvc = blogService ?? throw new ArgumentNullException(nameof(blogService));
             _photoSvc = photoService ?? throw new ArgumentNullException(nameof(photoService));
             _videoSvc = videoService ?? throw new ArgumentNullException(nameof(videoService));
         }
 
 
-		[HttpGet("")]
+        [HttpGet("")]
         public IActionResult Index()
         {
-			ViewBag.NavigationZone = NavigationZone.Administration;
+            ViewBag.NavigationZone = NavigationZone.Administration;
 
             return View();
         }
 
 
-		[HttpGet("create-blog-post")]
-		public IActionResult CreateBlogPost()
-		{
-			ViewBag.NavigationZone = NavigationZone.Administration;
+        [HttpGet("create-blog-post")]
+        public IActionResult CreateBlogPost()
+        {
+            ViewBag.NavigationZone = NavigationZone.Administration;
 
-			var post = new BlogPostModel();
-			var date = DateTime.Now;
+            var post = new BlogPostModel();
+            var date = DateTime.Now;
 
-			post.Title = date.ToString("MMMM dd, yyyy", CultureInfo.InvariantCulture);
-			post.PublishDate = date;
+            post.Title = date.ToString("MMMM dd, yyyy", CultureInfo.InvariantCulture);
+            post.PublishDate = date;
 
-			return View(post);
-		}
+            return View(post);
+        }
 
 
-		[HttpPost("create-blog-post")]
+        [HttpPost("create-blog-post")]
         [ValidateAntiForgeryToken]
-		public async Task<IActionResult> CreateBlogPost(BlogPostModel model)
-		{
-            if(model == null)
+        public async Task<IActionResult> CreateBlogPost(BlogPostModel model)
+        {
+            if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-			ViewBag.NavigationZone = NavigationZone.Administration;
+            ViewBag.NavigationZone = NavigationZone.Administration;
 
-			if (ModelState.IsValid)
-			{
-				if(model.Behavior == BlogPostAction.Preview)
-				{
-					model.Preview = true;
-				}
-				if (model.Behavior == BlogPostAction.Save)
-				{
-					model.WasAttempted = true;
+            if (ModelState.IsValid)
+            {
+                if (model.Behavior == BlogPostAction.Preview)
+                {
+                    model.Preview = true;
+                }
+                if (model.Behavior == BlogPostAction.Save)
+                {
+                    model.WasAttempted = true;
 
-					var post = new Post()
-					{
-						BlogId = 1,
-						Title = model.Title,
-						Description = model.Description,
-						PublishDate = model.PublishDate
-					};
+                    var post = new Post()
+                    {
+                        BlogId = 1,
+                        Title = model.Title,
+                        Description = model.Description,
+                        PublishDate = model.PublishDate
+                    };
 
-					await _blogSvc.AddPostAsync(post).ConfigureAwait(false);
+                    await _blogSvc.AddPostAsync(post).ConfigureAwait(false);
 
-					model.Success = true;
-				}
-			}
-			else
-			{
-				model.WasAttempted = true;
-				LogValidationErrors();
-			}
+                    model.Success = true;
+                }
+            }
+            else
+            {
+                model.WasAttempted = true;
+                LogValidationErrors();
+            }
 
-			return View(model);
-		}
+            return View(model);
+        }
 
 
-		[HttpGet("show-request-details")]
-		public IActionResult ShowRequestDetails()
-		{
-			ViewBag.NavigationZone = NavigationZone.Administration;
+        [HttpGet("show-request-details")]
+        public IActionResult ShowRequestDetails()
+        {
+            ViewBag.NavigationZone = NavigationZone.Administration;
 
-			return View(HttpContext);
-		}
+            return View(HttpContext);
+        }
 
 
         [HttpGet("clear-photo-cache")]

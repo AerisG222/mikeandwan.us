@@ -9,59 +9,59 @@ using IdentityModel;
 namespace Maw.Domain.Identity
 {
     public class MawUser
-		: ClaimsIdentity
+        : ClaimsIdentity
     {
-		public short Id
-		{
-			get
-			{
-				var id = GetSingleClaim(MawClaimTypes.UserId);
+        public short Id
+        {
+            get
+            {
+                var id = GetSingleClaim(MawClaimTypes.UserId);
 
-				return id == null ?(short) 0 : short.Parse(id, CultureInfo.InvariantCulture);
-			}
-			set
-			{
-				SetSingleClaim(MawClaimTypes.UserId, value.ToString(CultureInfo.InvariantCulture));
-			}
-		}
-
-
-		public string Username
-		{
-			get { return GetSingleClaim(JwtClaimTypes.Name); }
-			set { SetSingleClaim(JwtClaimTypes.Name, value); }
-		}
+                return id == null ? (short)0 : short.Parse(id, CultureInfo.InvariantCulture);
+            }
+            set
+            {
+                SetSingleClaim(MawClaimTypes.UserId, value.ToString(CultureInfo.InvariantCulture));
+            }
+        }
 
 
-		public string Email
-		{
-			get { return GetSingleClaim(JwtClaimTypes.Email); }
-			set { SetSingleClaim(JwtClaimTypes.Email, value); }
-		}
+        public string Username
+        {
+            get { return GetSingleClaim(JwtClaimTypes.Name); }
+            set { SetSingleClaim(JwtClaimTypes.Name, value); }
+        }
 
 
-		public string HashedPassword
-		{
-			get { return GetSingleClaim(ClaimTypes.Hash); }
-			set { SetSingleClaim(ClaimTypes.Hash, value); }
-		}
+        public string Email
+        {
+            get { return GetSingleClaim(JwtClaimTypes.Email); }
+            set { SetSingleClaim(JwtClaimTypes.Email, value); }
+        }
+
+
+        public string HashedPassword
+        {
+            get { return GetSingleClaim(ClaimTypes.Hash); }
+            set { SetSingleClaim(ClaimTypes.Hash, value); }
+        }
 
 
         public string FirstName
         {
             get { return GetSingleClaim(JwtClaimTypes.GivenName); }
-			set { SetSingleClaim(JwtClaimTypes.GivenName, value); }
+            set { SetSingleClaim(JwtClaimTypes.GivenName, value); }
         }
 
 
         public string LastName
         {
             get { return GetSingleClaim(JwtClaimTypes.FamilyName); }
-			set { SetSingleClaim(JwtClaimTypes.FamilyName, value); }
+            set { SetSingleClaim(JwtClaimTypes.FamilyName, value); }
         }
 
 
-		public string SecurityStamp { get; set; }
+        public string SecurityStamp { get; set; }
 
 
         public bool IsGithubAuthEnabled
@@ -92,83 +92,78 @@ namespace Maw.Domain.Identity
         }
 
 
-		public void AddRole(string role)
-		{
-			AddClaim(new Claim(JwtClaimTypes.Role, role));
-		}
+        public void AddRole(string role)
+        {
+            AddClaim(new Claim(JwtClaimTypes.Role, role));
+        }
 
 
-		public void RemoveRole(string role)
-		{
-			RemoveClaim(new Claim(JwtClaimTypes.Role, role));
-		}
+        public void RemoveRole(string role)
+        {
+            RemoveClaim(new Claim(JwtClaimTypes.Role, role));
+        }
 
 
-		public IEnumerable<string> GetRoles()
-		{
-			return FindAll(JwtClaimTypes.Role).Select(x => x.Value);
-		}
+        public IEnumerable<string> GetRoles()
+        {
+            return FindAll(JwtClaimTypes.Role).Select(x => x.Value);
+        }
 
 
-		public static MawUser Convert(ClaimsIdentity identity)
-		{
-            if(identity == null)
+        public static MawUser Convert(ClaimsIdentity identity)
+        {
+            if (identity == null)
             {
                 throw new ArgumentNullException(nameof(identity));
             }
 
-			var mawUser = new MawUser();
+            var mawUser = new MawUser();
 
-			mawUser.AddClaims(identity.Claims);
+            mawUser.AddClaims(identity.Claims);
 
-			return mawUser;
-		}
+            return mawUser;
+        }
 
 
         public bool IsExternalAuthEnabled(string provider)
         {
-            if(string.IsNullOrWhiteSpace(provider))
+            if (string.IsNullOrWhiteSpace(provider))
             {
                 return false;
             }
 
-            switch(provider.ToUpperInvariant())
+            return provider.ToUpperInvariant() switch
             {
-                case "GITHUB":
-                    return IsGithubAuthEnabled;
-                case "GOOGLE":
-                    return IsGoogleAuthEnabled;
-                case "MICROSOFT":
-                    return IsMicrosoftAuthEnabled;
-                case "TWITTER":
-                    return IsTwitterAuthEnabled;
-                default:
-                    return false;
-            }
+                "GITHUB" => IsGithubAuthEnabled,
+                "GOOGLE" => IsGoogleAuthEnabled,
+                "MICROSOFT" => IsMicrosoftAuthEnabled,
+                "TWITTER" => IsTwitterAuthEnabled,
+                _ => false
+            };
         }
 
 
         string GetSingleClaim(string claimType)
         {
-			var val = FindFirst(claimType);
+            var val = FindFirst(claimType);
 
-			return val == null ? null : val.Value;
+            return val?.Value;
         }
 
 
         void SetSingleClaim(string claimType, string value)
         {
-			var claims = FindAll(claimType).ToArray();
+            var claims = FindAll(claimType).ToArray();
 
-			for(var i = 0; i < claims.Length; i++)
-			{
-				RemoveClaim(claims[i]);
-			}
+            for (var i = 0; i < claims.Length; i++)
+            {
+                RemoveClaim(claims[i]);
+            }
 
-            if(value != null)
-			{
-				AddClaim(new Claim(claimType, value));
-			}
+            if (value != null)
+            {
+                AddClaim(new Claim(claimType, value));
+            }
         }
     }
 }

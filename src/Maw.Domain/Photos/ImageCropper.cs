@@ -24,20 +24,18 @@ namespace Maw.Domain.Photos
 
             if(fi.Exists)
             {
-                using(var mw = new MagickWand(fi.PhysicalPath))
-                {
-                    var leftPos = (mw.ImageWidth / 2) - (maxDimension / 2);
-                    var topPos = (mw.ImageHeight / 2) - (maxDimension / 2);
+                using var mw = new MagickWand(fi.PhysicalPath);
+                var leftPos = (mw.ImageWidth / 2) - (maxDimension / 2);
+                var topPos = (mw.ImageHeight / 2) - (maxDimension / 2);
 
-                    var ms = new MemoryStream();
+                var ms = new MemoryStream();
 
-                    mw.CropImage((uint)maxDimension, (uint)maxDimension, (int)leftPos, (int)topPos);
-                    mw.WriteImage(ms);
+                mw.CropImage((uint)maxDimension, (uint)maxDimension, (int)leftPos, (int)topPos);
+                mw.WriteImage(ms);
 
-                    ms.Seek(0, SeekOrigin.Begin);
+                ms.Seek(0, SeekOrigin.Begin);
 
-                    return ms;
-                }
+                return ms;
             }
 
             return null;

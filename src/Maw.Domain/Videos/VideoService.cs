@@ -13,12 +13,12 @@ namespace Maw.Domain.Videos
         readonly IVideoRepository _repo;
 
 
-		public VideoService(IVideoRepository videoRepository,
+        public VideoService(IVideoRepository videoRepository,
                             ILogger<VideoService> log,
                             IDistributedCache cache)
             : base("videos", log, cache)
         {
-			_repo = videoRepository ?? throw new ArgumentNullException(nameof(videoRepository));
+            _repo = videoRepository ?? throw new ArgumentNullException(nameof(videoRepository));
         }
 
 
@@ -82,25 +82,25 @@ namespace Maw.Domain.Videos
         }
 
 
-		public Task<Rating> GetRatingsAsync(short videoId, string username)
+        public Task<Rating> GetRatingsAsync(short videoId, string username)
         {
             return _repo.GetRatingsAsync(videoId, username);
         }
 
 
-		public Task<int> InsertCommentAsync(short videoId, string username, string comment)
+        public Task<int> InsertCommentAsync(short videoId, string username, string comment)
         {
             return _repo.InsertCommentAsync(videoId, username, comment);
         }
 
 
-		public Task<float?> SaveRatingAsync(short videoId, string username, short rating)
+        public Task<float?> SaveRatingAsync(short videoId, string username, short rating)
         {
             return _repo.SaveRatingAsync(videoId, username, rating);
         }
 
 
-		public Task<float?> RemoveRatingAsync(short videoId, string username)
+        public Task<float?> RemoveRatingAsync(short videoId, string username)
         {
             return _repo.RemoveRatingAsync(videoId, username);
         }
@@ -116,7 +116,7 @@ namespace Maw.Domain.Videos
         {
             var count = await _repo.SetCategoryTeaserAsync(categoryId, videoId).ConfigureAwait(false);
 
-            if(count != 1)
+            if (count != 1)
             {
                 throw new ApplicationException("Did not update category teaser!");
             }

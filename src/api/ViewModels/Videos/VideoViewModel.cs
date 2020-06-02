@@ -14,7 +14,7 @@ namespace MawApi.ViewModels.Videos
         public MultimediaAsset ThumbnailSq { get; set; }
         public MultimediaAsset Thumbnail { get; set; }
         public MultimediaAsset VideoScaled { get; set; }
-		public MultimediaAsset VideoFull { get; set; }
+        public MultimediaAsset VideoFull { get; set; }
         public MultimediaAsset VideoRaw { get; set; }
         public string Self { get; set; }
         public string CategoryLink { get; set; }

@@ -23,32 +23,32 @@
 }
 
 <p>
-	This page allows you to validate an XML Schema document.
+    This page allows you to validate an XML Schema document.
 </p>
 
 <form asp-controller="tools" asp-action="xsdvalidate" method="post" autocomplete="off" role="form">
     <div class="form-group">
-		<label asp-for="XmlSchemaSource" class="col-form-label"></label>
-		<textarea asp-for="XmlSchemaSource" rows="10" class="form-control" autofocus=""></textarea>
-		@*<span asp-validation-for="XmlSchemaSource" class="form-text"></span>*@
-	</div>
+        <label asp-for="XmlSchemaSource" class="col-form-label"></label>
+        <textarea asp-for="XmlSchemaSource" rows="10" class="form-control" autofocus=""></textarea>
+        @*<span asp-validation-for="XmlSchemaSource" class="form-text"></span>*@
+    </div>
     <div class="form-group">
-		<button type="submit" class="btn btn-primary">Validate</button>
+        <button type="submit" class="btn btn-primary">Validate</button>
     </div>
 </form>
 
 <br/>
 
 @if(Model.ValidationAttempted) {
-	if(!Model.AreErrors) {
-		<p>
-			<strong>The XML schema is VALID!</strong>
-		</p>
-	}
-	else {
-		<p>Your XML Schema is invalid.  The following outlines the errors encountered:</p>
-		<pre><code>
+    if(!Model.AreErrors) {
+        <p>
+            <strong>The XML schema is VALID!</strong>
+        </p>
+    }
+    else {
+        <p>Your XML Schema is invalid.  The following outlines the errors encountered:</p>
+        <pre><code>
 @Model.ValidationErrors
-		</code></pre>
-	}
+        </code></pre>
+    }
 }

@@ -9,17 +9,17 @@ namespace MawMvcApp.Controllers
     public class HomeController
         : MawBaseController<HomeController>
     {
-		public HomeController(ILogger<HomeController> log)
-			: base(log)
-		{
+        public HomeController(ILogger<HomeController> log)
+            : base(log)
+        {
 
-		}
+        }
 
 
         [HttpGet("")]
         public IActionResult Index()
         {
-			ViewBag.NavigationZone = NavigationZone.Home;
+            ViewBag.NavigationZone = NavigationZone.Home;
 
             return View();
         }

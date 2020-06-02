@@ -4,20 +4,21 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Maw.TagHelpers
 {
-	[HtmlTargetElement("a", Attributes = AttributeName)]
-	public class UrlWwwTagHelper
-		: TagHelper
-	{
-		const string AttributeName = "maw-www-url";
+    [HtmlTargetElement("a", Attributes = AttributeName)]
+    public class UrlWwwTagHelper
+        : TagHelper
+    {
+        const string AttributeName = "maw-www-url";
         readonly Uri _wwwUri;
 
 
-		[HtmlAttributeName(AttributeName)]
-		public string Url { get; set; }
+        [HtmlAttributeName(AttributeName)]
+        public string Url { get; set; }
 
 
-        public UrlWwwTagHelper(TagHelperConfig config) {
-            if(config == null)
+        public UrlWwwTagHelper(TagHelperConfig config)
+        {
+            if (config == null)
             {
                 throw new ArgumentNullException(nameof(config));
             }
@@ -26,16 +27,16 @@ namespace Maw.TagHelpers
         }
 
 
-		public override void Process(TagHelperContext context, TagHelperOutput output)
-		{
-            if(output == null)
+        public override void Process(TagHelperContext context, TagHelperOutput output)
+        {
+            if (output == null)
             {
                 throw new ArgumentNullException(nameof(output));
             }
 
             Uri dest = new Uri(_wwwUri, Url);
 
-			output.Attributes.SetAttribute("href", dest);
-		}
-	}
+            output.Attributes.SetAttribute("href", dest);
+        }
+    }
 }

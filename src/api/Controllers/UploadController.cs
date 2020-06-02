@@ -30,7 +30,7 @@ namespace MawMvcApp.Controllers
         readonly LinuxFileTypeIdentifier _linuxFileTypeIdentifier;
 
 
-		public UploadController(ILogger<UploadController> log,
+        public UploadController(ILogger<UploadController> log,
                                 IUploadService uploadSvc,
                                 IHubContext<UploadHub> uploadHubCtx,
                                 IContentTypeProvider contentTypeProvider,
@@ -60,14 +60,14 @@ namespace MawMvcApp.Controllers
         [RequestSizeLimit(2_147_483_648)]  // 2GB
         public async Task<IActionResult> UploadAsync(IFormFile file)
         {
-            if(file == null)
+            if (file == null)
             {
                 throw new ArgumentNullException(nameof(file));
             }
 
             var result = await _uploadSvc.SaveFileAsync(User, file.FileName, file.OpenReadStream()).ConfigureAwait(false);
 
-            if(result.WasSuccessful)
+            if (result.WasSuccessful)
             {
                 await UploadHub.FileAddedAsync(_uploadHub, User, result.UploadedFile).ConfigureAwait(false);
             }
@@ -83,9 +83,9 @@ namespace MawMvcApp.Controllers
         {
             var results = _uploadSvc.DeleteFiles(User, relativePaths);
 
-            foreach(var result in results)
+            foreach (var result in results)
             {
-                if(result.WasSuccessful)
+                if (result.WasSuccessful)
                 {
                     await UploadHub.FileDeletedAsync(_uploadHub, User, result.UploadedFile).ConfigureAwait(false);
                 }
@@ -101,23 +101,23 @@ namespace MawMvcApp.Controllers
         [ProducesResponseType(401)]
         public IActionResult Download([FromBody] string[] downloadFiles)
         {
-            if(downloadFiles == null)
+            if (downloadFiles == null)
             {
                 throw new ArgumentNullException(nameof(downloadFiles));
             }
 
-            if(downloadFiles.Length == 0)
+            if (downloadFiles.Length == 0)
             {
                 return BadRequest();
             }
 
-            Stream stream = null;
-            string filename = null;
+            Stream stream;
+            string filename;
             string fullPath = null;
 
             try
             {
-                if(downloadFiles.Length == 1)
+                if (downloadFiles.Length == 1)
                 {
                     stream = _uploadSvc.GetFile(User, downloadFiles[0]);
                     filename = Path.GetFileName(downloadFiles[0]);
@@ -131,7 +131,7 @@ namespace MawMvcApp.Controllers
 
                 return File(stream, GetContentType(fullPath ?? filename), filename);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _log.LogError(ex, "There was an error trying to download.");
 
@@ -147,7 +147,7 @@ namespace MawMvcApp.Controllers
         [ProducesResponseType(401)]
         public IActionResult Thumbnail(string relativePath)
         {
-            if(string.IsNullOrWhiteSpace(relativePath))
+            if (string.IsNullOrWhiteSpace(relativePath))
             {
                 return BadRequest();
             }
@@ -156,7 +156,7 @@ namespace MawMvcApp.Controllers
 
             var type = GetContentType(relativePath);
 
-            if(type.StartsWith("image", StringComparison.OrdinalIgnoreCase))
+            if (type.StartsWith("image", StringComparison.OrdinalIgnoreCase))
             {
                 _log.LogDebug("GOT HERE");
 
@@ -164,7 +164,7 @@ namespace MawMvcApp.Controllers
 
                 _log.LogDebug("STREAM NULL?: " + (stream == null));
 
-                if(stream != null)
+                if (stream != null)
                 {
                     return File(stream, "image/jpeg");
                 }
@@ -178,12 +178,12 @@ namespace MawMvcApp.Controllers
         {
             var mimeType = _linuxFileTypeIdentifier.GetMimeType(filePath);
 
-            if(!string.IsNullOrWhiteSpace(mimeType))
+            if (!string.IsNullOrWhiteSpace(mimeType))
             {
                 return mimeType;
             }
 
-            if(_contentTypeProvider.TryGetContentType(filePath, out var contentType))
+            if (_contentTypeProvider.TryGetContentType(filePath, out var contentType))
             {
                 return contentType;
             }

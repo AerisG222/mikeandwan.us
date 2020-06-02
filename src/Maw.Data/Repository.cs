@@ -12,7 +12,7 @@ namespace Maw.Data
 {
     public abstract class Repository
     {
-        string _connString;
+        readonly string _connString;
 
 
         public Repository(string connectionString)
@@ -34,12 +34,11 @@ namespace Maw.Data
                 throw new ArgumentNullException(nameof(queryData));
             }
 
-            using(var conn = GetConnection())
-            {
-                await conn.OpenAsync().ConfigureAwait(false);
+            using var conn = GetConnection();
 
-                return await queryData(conn).ConfigureAwait(false);
-            }
+            await conn.OpenAsync().ConfigureAwait(false);
+
+            return await queryData(conn).ConfigureAwait(false);
         }
 
 
@@ -50,19 +49,18 @@ namespace Maw.Data
                 throw new ArgumentNullException(nameof(executeStatement));
             }
 
-            using(var conn = GetConnection())
-            {
-                await conn.OpenAsync().ConfigureAwait(false);
+            using var conn = GetConnection();
 
-                await executeStatement(conn).ConfigureAwait(false);
-            }
+            await conn.OpenAsync().ConfigureAwait(false);
+
+            await executeStatement(conn).ConfigureAwait(false);
         }
 
 
 #pragma warning disable CA1822
         protected T GetValueOrDefault<T>(object value)
         {
-            return value == null ? default(T) : (T)value;
+            return value == null ? default : (T)value;
         }
 #pragma warning restore CA1822
 

@@ -7,13 +7,13 @@ namespace MawMvcApp.Controllers
 {
     [Route("webgl")]
     public class WebglController
-		: MawBaseController<WebglController>
+        : MawBaseController<WebglController>
     {
-		public WebglController(ILogger<WebglController> log)
-			: base(log)
-		{
+        public WebglController(ILogger<WebglController> log)
+            : base(log)
+        {
 
-		}
+        }
 
 
         [HttpGet("")]

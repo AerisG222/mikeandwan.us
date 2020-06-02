@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace MawAuth.Services
 {
     public class IdentityServerProfileService
-		  : IProfileService
+          : IProfileService
     {
         readonly UserManager<MawUser> _usrMgr;
         readonly ILogger _log;
@@ -27,14 +27,14 @@ namespace MawAuth.Services
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            if(context == null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
             _log.LogDebug("requested claims:");
 
-            foreach(var c in context.RequestedClaimTypes)
+            foreach (var c in context.RequestedClaimTypes)
             {
                 _log.LogDebug(c);
             }
@@ -58,7 +58,7 @@ namespace MawAuth.Services
 
         public virtual Task IsActiveAsync(IsActiveContext context)
         {
-            if(context == null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -72,10 +72,10 @@ namespace MawAuth.Services
 
         void PrintClaims(IEnumerable<Claim> claims)
         {
-            foreach(var c in claims)
-			{
-				_log.LogInformation($"{c.Type}: {c.Value}");
-			}
+            foreach (var c in claims)
+            {
+                _log.LogInformation($"{c.Type}: {c.Value}");
+            }
         }
     }
 }

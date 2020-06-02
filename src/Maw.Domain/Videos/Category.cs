@@ -3,11 +3,11 @@ using System;
 
 namespace Maw.Domain.Videos
 {
-	public class Category
-	{
+    public class Category
+    {
         public short Id { get; set; }
         public string Name { get; set; }
-		public short Year { get; set; }
+        public short Year { get; set; }
         public DateTime CreateDate { get; set; }
         public float? Latitude { get; set; }
         public float? Longitude { get; set; }
@@ -21,5 +21,5 @@ namespace Maw.Domain.Videos
         public long TotalSize { get; set; }
         public MultimediaInfo TeaserImage { get; set; }
         public MultimediaInfo TeaserImageSq { get; set; }
-	}
+    }
 }

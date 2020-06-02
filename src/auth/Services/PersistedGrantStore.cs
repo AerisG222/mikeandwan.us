@@ -23,7 +23,7 @@ namespace MawAuth.Services
 
         public PersistedGrantStore(StoreConfig config, ILogger<IdentityServerProfileService> log)
         {
-            if(config == null)
+            if (config == null)
             {
                 throw new ArgumentNullException(nameof(config));
             }
@@ -77,7 +77,7 @@ namespace MawAuth.Services
 
         public Task StoreAsync(PersistedGrant grant)
         {
-            if(grant == null)
+            if (grant == null)
             {
                 throw new ArgumentNullException(nameof(grant));
             }
@@ -86,62 +86,62 @@ namespace MawAuth.Services
 
             return RunAsync(conn =>
                 conn.QuerySingleOrDefaultAsync<long>(
-					"SELECT * FROM idsrv.save_persisted_grant(@Key, @Type, @SubjectId, @ClientId, @CreationTime, @Expiration, @Data);",
-					grant
-				)
-			);
+                    "SELECT * FROM idsrv.save_persisted_grant(@Key, @Type, @SubjectId, @ClientId, @CreationTime, @Expiration, @Data);",
+                    grant
+                )
+            );
         }
 
 
         Task<long> InternalRemoveGrants(string key = null, string subjectId = null, string clientId = null, string type = null)
         {
             return RunAsync(conn =>
-				conn.QuerySingleOrDefaultAsync<long>(
-					"SELECT * FROM idsrv.delete_persisted_grants(@key, @subjectId, @clientId, @type);",
-					new {
+                conn.QuerySingleOrDefaultAsync<long>(
+                    "SELECT * FROM idsrv.delete_persisted_grants(@key, @subjectId, @clientId, @type);",
+                    new
+                    {
                         key,
                         subjectId,
                         clientId,
                         type
                     }
-				)
-			);
+                )
+            );
         }
 
 
         Task<IEnumerable<PersistedGrant>> InternalGetGrants(string key = null, string subjectId = null)
         {
             return RunAsync(conn =>
-				conn.QueryAsync<PersistedGrant>(
-					"SELECT * FROM idsrv.get_persisted_grants(@key, @subjectId);",
-					new {
+                conn.QueryAsync<PersistedGrant>(
+                    "SELECT * FROM idsrv.get_persisted_grants(@key, @subjectId);",
+                    new
+                    {
                         key,
                         subjectId
                     }
-				)
-			);
+                )
+            );
         }
 
 
         async Task<T> RunAsync<T>(Func<IDbConnection, Task<T>> queryData)
         {
-            using(var conn = GetConnection())
-            {
-                await conn.OpenAsync().ConfigureAwait(false);
+            using var conn = GetConnection();
 
-                return await queryData(conn).ConfigureAwait(false);
-            }
+            await conn.OpenAsync().ConfigureAwait(false);
+
+            return await queryData(conn).ConfigureAwait(false);
         }
 
 
         async Task RunAsync(Func<IDbConnection, Task> executeStatement)
         {
-            using(var conn = GetConnection())
-            {
-                await conn.OpenAsync().ConfigureAwait(false);
+            using var conn = GetConnection();
 
-                await executeStatement(conn).ConfigureAwait(false);
-            }
+            await conn.OpenAsync().ConfigureAwait(false);
+
+            await executeStatement(conn).ConfigureAwait(false);
         }
 
 

@@ -16,133 +16,135 @@ using Mvc.RenderViewToString;
 
 namespace MawMvcApp.Controllers
 {
-	[Route("about")]
+    [Route("about")]
     public class AboutController
         : MawBaseController<AboutController>
     {
-		readonly ContactConfig _config;
-		readonly ICaptchaService _captchaService;
-		readonly IBlogService _blogService;
-		readonly IEmailService _emailService;
-		readonly RazorViewToStringRenderer _razorRenderer;
+        readonly ContactConfig _config;
+        readonly ICaptchaService _captchaService;
+        readonly IBlogService _blogService;
+        readonly IEmailService _emailService;
+        readonly RazorViewToStringRenderer _razorRenderer;
 
-		public AboutController(ILogger<AboutController> log,
-							   IOptions<ContactConfig> contactOpts,
-							   IBlogService blogService,
-							   ICaptchaService captchaService,
-							   IEmailService emailService,
-							   RazorViewToStringRenderer razorRenderer)
-			: base(log)
+        public AboutController(ILogger<AboutController> log,
+                               IOptions<ContactConfig> contactOpts,
+                               IBlogService blogService,
+                               ICaptchaService captchaService,
+                               IEmailService emailService,
+                               RazorViewToStringRenderer razorRenderer)
+            : base(log)
         {
-			if(contactOpts == null)
-			{
-				throw new ArgumentNullException(nameof(contactOpts));
-			}
+            if (contactOpts == null)
+            {
+                throw new ArgumentNullException(nameof(contactOpts));
+            }
 
             _config = contactOpts.Value;
 
-			_blogService = blogService ?? throw new ArgumentNullException(nameof(blogService));
-			_captchaService = captchaService ?? throw new ArgumentNullException(nameof(captchaService));
-			_emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
-			_razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
+            _blogService = blogService ?? throw new ArgumentNullException(nameof(blogService));
+            _captchaService = captchaService ?? throw new ArgumentNullException(nameof(captchaService));
+            _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
+            _razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
         }
 
 
-		[HttpGet("")]
+        [HttpGet("")]
         public IActionResult Index()
         {
-			ViewBag.NavigationZone = NavigationZone.About;
+            ViewBag.NavigationZone = NavigationZone.About;
 
-			foreach(var c in User?.Claims)
-			{
-				Log.LogInformation($"{c.Type}: {c.Value}");
-			}
+            foreach (var c in User?.Claims)
+            {
+                Log.LogInformation($"{c.Type}: {c.Value}");
+            }
 
             return View();
         }
 
 
-		[HttpGet("contact")]
-		public IActionResult Contact()
-		{
-			ViewBag.NavigationZone = NavigationZone.About;
+        [HttpGet("contact")]
+        public IActionResult Contact()
+        {
+            ViewBag.NavigationZone = NavigationZone.About;
 
-            var model = new ContactModel();
-			model.RecaptchaSiteKey = _captchaService.SiteKey;
+            var model = new ContactModel
+            {
+                RecaptchaSiteKey = _captchaService.SiteKey
+            };
 
-			return View(model);
-		}
+            return View(model);
+        }
 
 
-		[HttpPost("contact")]
-		[ValidateAntiForgeryToken]
+        [HttpPost("contact")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Contact(IFormCollection collection)
-		{
-            if(collection == null)
+        {
+            if (collection == null)
             {
                 throw new ArgumentNullException(nameof(collection));
             }
 
-			ViewBag.NavigationZone = NavigationZone.About;
+            ViewBag.NavigationZone = NavigationZone.About;
 
             var model = new ContactModel();
-			await TryUpdateModelAsync<ContactModel>(model).ConfigureAwait(false);
-			model.RecaptchaSiteKey = _captchaService.SiteKey;
-			model.SubmitAttempted = true;
+            await TryUpdateModelAsync<ContactModel>(model).ConfigureAwait(false);
+            model.RecaptchaSiteKey = _captchaService.SiteKey;
+            model.SubmitAttempted = true;
 
-			if(ModelState.IsValid)
-			{
-				model.IsHuman = await _captchaService.VerifyAsync(collection["g-recaptcha-response"]).ConfigureAwait(false);
+            if (ModelState.IsValid)
+            {
+                model.IsHuman = await _captchaService.VerifyAsync(collection["g-recaptcha-response"]).ConfigureAwait(false);
 
-				if(!model.IsHuman)
-				{
-					ModelState.AddModelError("IsHuman", "The Captcha was not solved correctly, please try again");
-				}
-				else
-				{
-					try
-					{
-						var to = _config.To;
-						var from = _config.To;
-						var subject = _config.Subject;
+                if (!model.IsHuman)
+                {
+                    ModelState.AddModelError("IsHuman", "The Captcha was not solved correctly, please try again");
+                }
+                else
+                {
+                    try
+                    {
+                        var to = _config.To;
+                        var from = _config.To;
+                        var subject = _config.Subject;
 
-						var emailModel = new ContactUsEmailModel
-						{
-							Title = _config.Subject,
-							FirstName = model.FirstName,
-							LastName = model.LastName,
-							EmailAddress = model.Email,
-							Message = model.Message
-						};
+                        var emailModel = new ContactUsEmailModel
+                        {
+                            Title = _config.Subject,
+                            FirstName = model.FirstName,
+                            LastName = model.LastName,
+                            EmailAddress = model.Email,
+                            Message = model.Message
+                        };
 
-						var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ContactUs.cshtml", emailModel).ConfigureAwait(false);
+                        var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ContactUs.cshtml", emailModel).ConfigureAwait(false);
 
-						await _emailService.SendHtmlAsync(to, from, subject, body).ConfigureAwait(false);
+                        await _emailService.SendHtmlAsync(to, from, subject, body).ConfigureAwait(false);
 
-						model.SubmitSuccess = true;
-					}
-					catch(Exception ex)
-					{
-						Log.LogError(ex, "There was an error sending an email: " + ex.Message);
+                        model.SubmitSuccess = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.LogError(ex, "There was an error sending an email: " + ex.Message);
 
-						model.SubmitSuccess = false;
-					}
-				}
-			}
-			else
-			{
-				LogValidationErrors();
-			}
+                        model.SubmitSuccess = false;
+                    }
+                }
+            }
+            else
+            {
+                LogValidationErrors();
+            }
 
-			return View(model);
-		}
+            return View(model);
+        }
 
 
         [HttpGet("news")]
         public async Task<IActionResult> News()
         {
-			ViewBag.NavigationZone = NavigationZone.About;
-			var blogs = await _blogService.GetLatestPostsAsync(MawConstants.MawBlogId, 10).ConfigureAwait(false);
+            ViewBag.NavigationZone = NavigationZone.About;
+            var blogs = await _blogService.GetLatestPostsAsync(MawConstants.MawBlogId, 10).ConfigureAwait(false);
 
             return View(blogs);
         }

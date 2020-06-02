@@ -9,23 +9,23 @@ namespace MawMvcApp.Controllers
     public class MawBaseController<T>
         : Controller
     {
-		protected ILogger<T> Log { get; }
+        protected ILogger<T> Log { get; }
 
 
-		public MawBaseController(ILogger<T> log)
-		{
-			Log = log ?? throw new ArgumentNullException(nameof(log));
-		}
+        public MawBaseController(ILogger<T> log)
+        {
+            Log = log ?? throw new ArgumentNullException(nameof(log));
+        }
 
 
-		protected void LogValidationErrors()
-		{
-			var errs = ModelState.Values.SelectMany(v => v.Errors);
+        protected void LogValidationErrors()
+        {
+            var errs = ModelState.Values.SelectMany(v => v.Errors);
 
-			foreach (var err in errs)
-			{
-				Log.LogWarning(err.ErrorMessage);
-			}
-		}
+            foreach (var err in errs)
+            {
+                Log.LogWarning(err.ErrorMessage);
+            }
+        }
     }
 }

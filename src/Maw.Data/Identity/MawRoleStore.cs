@@ -10,147 +10,145 @@ using Maw.Domain.Identity;
 namespace Maw.Data.Identity
 {
     public class MawRoleStore
-		: IRoleStore<MawRole>, IDisposable
+        : IRoleStore<MawRole>, IDisposable
     {
-		readonly IUserRepository _repo;
-		readonly ILogger _log;
+        readonly IUserRepository _repo;
+        readonly ILogger _log;
 
 
-		#region ctor
-		public MawRoleStore(IUserRepository repo, ILogger<MawRoleStore> log)
-		{
-			_repo = repo ?? throw new ArgumentNullException(nameof(repo));
-			_log = log ?? throw new ArgumentNullException(nameof(log));
-		}
-		#endregion
-
-
-		#region IRoleStore
-        public async Task<IdentityResult> CreateAsync(MawRole role, CancellationToken cancellationToken = default(CancellationToken))
+        #region ctor
+        public MawRoleStore(IUserRepository repo, ILogger<MawRoleStore> log)
         {
-			if(role == null)
-			{
-				throw new ArgumentNullException(nameof(role));
-			}
+            _repo = repo ?? throw new ArgumentNullException(nameof(repo));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+        }
+        #endregion
 
-			var result = await _repo.CreateRoleAsync(role.Name, role.Description).ConfigureAwait(false);
 
-			return result ? IdentityResult.Success : IdentityResult.Failed();
+        #region IRoleStore
+        public async Task<IdentityResult> CreateAsync(MawRole role, CancellationToken cancellationToken = default)
+        {
+            if (role == null)
+            {
+                throw new ArgumentNullException(nameof(role));
+            }
+
+            var result = await _repo.CreateRoleAsync(role.Name, role.Description).ConfigureAwait(false);
+
+            return result ? IdentityResult.Success : IdentityResult.Failed();
         }
 
 
-		public Task<IdentityResult> UpdateAsync(MawRole role, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<IdentityResult> UpdateAsync(MawRole role, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
 
-		public async Task<IdentityResult> DeleteAsync(MawRole role, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IdentityResult> DeleteAsync(MawRole role, CancellationToken cancellationToken = default)
         {
-			if(role == null)
-			{
-				throw new ArgumentNullException(nameof(role));
-			}
+            if (role == null)
+            {
+                throw new ArgumentNullException(nameof(role));
+            }
 
-			var result = await _repo.RemoveRoleAsync(role.Name).ConfigureAwait(false);
+            var result = await _repo.RemoveRoleAsync(role.Name).ConfigureAwait(false);
 
-			return result ? IdentityResult.Success : IdentityResult.Failed();
+            return result ? IdentityResult.Success : IdentityResult.Failed();
         }
 
 
-        public Task<string> GetRoleIdAsync(MawRole role, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<string> GetRoleIdAsync(MawRole role, CancellationToken cancellationToken = default)
         {
-			if(role == null)
-			{
-				throw new ArgumentNullException(nameof(role));
-			}
+            if (role == null)
+            {
+                throw new ArgumentNullException(nameof(role));
+            }
 
-			return Task.FromResult(role.Id.ToString(CultureInfo.InvariantCulture));
+            return Task.FromResult(role.Id.ToString(CultureInfo.InvariantCulture));
         }
 
 
-		public Task<string> GetRoleNameAsync(MawRole role, CancellationToken cancellationToken = default(CancellationToken))
-		{
-			if(role == null)
-			{
-				throw new ArgumentNullException(nameof(role));
-			}
-
-			return Task.FromResult(role.Name);
-		}
-
-
-        public Task<string> GetNormalizedRoleNameAsync(MawRole role, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<string> GetRoleNameAsync(MawRole role, CancellationToken cancellationToken = default)
         {
-			if(role == null)
-			{
-				throw new ArgumentNullException(nameof(role));
-			}
+            if (role == null)
+            {
+                throw new ArgumentNullException(nameof(role));
+            }
 
-			return Task.FromResult(role.Name);
+            return Task.FromResult(role.Name);
         }
 
 
-		public Task SetNormalizedRoleNameAsync(MawRole role, string roleName, CancellationToken cancellationToken = default(CancellationToken))
-		{
-			if(role == null)
-			{
-				throw new ArgumentNullException(nameof(role));
-			}
-
-			return Task.FromResult(0);
-		}
-
-
-        public Task SetRoleNameAsync(MawRole role, string roleName, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<string> GetNormalizedRoleNameAsync(MawRole role, CancellationToken cancellationToken = default)
         {
-			if(role == null)
-			{
-				throw new ArgumentNullException(nameof(role));
-			}
+            if (role == null)
+            {
+                throw new ArgumentNullException(nameof(role));
+            }
 
-			if(string.IsNullOrEmpty(roleName))
-			{
-				throw new ArgumentException("roleName must not be null and have a value.", nameof(roleName));
-			}
-
-			role.Name = roleName;
-
-			return Task.FromResult(0);
+            return Task.FromResult(role.Name);
         }
 
 
-        public Task<MawRole> FindByIdAsync(string roleId, CancellationToken cancellationToken = default(CancellationToken))
+        public Task SetNormalizedRoleNameAsync(MawRole role, string roleName, CancellationToken cancellationToken = default)
         {
-			if(string.IsNullOrEmpty(roleId))
-			{
-				throw new ArgumentException("Invalid roleId", nameof(roleId));
-			}
+            if (role == null)
+            {
+                throw new ArgumentNullException(nameof(role));
+            }
 
-			short id;
-
-			if(short.TryParse(roleId, out id))
-			{
-				return _repo.GetRoleAsync(id);
-			}
-
-			throw new ArgumentException("roleId should be able to be parsed into a short.", nameof(roleId));
+            return Task.FromResult(0);
         }
 
 
-        public Task<MawRole> FindByNameAsync(string roleName, CancellationToken cancellationToken = default(CancellationToken))
+        public Task SetRoleNameAsync(MawRole role, string roleName, CancellationToken cancellationToken = default)
         {
-			if(string.IsNullOrEmpty(roleName))
-			{
-				throw new ArgumentException("Invalid roleName", nameof(roleName));
-			}
+            if (role == null)
+            {
+                throw new ArgumentNullException(nameof(role));
+            }
 
-			return _repo.GetRoleAsync(roleName);
+            if (string.IsNullOrEmpty(roleName))
+            {
+                throw new ArgumentException("roleName must not be null and have a value.", nameof(roleName));
+            }
+
+            role.Name = roleName;
+
+            return Task.FromResult(0);
         }
-		#endregion
 
 
-		#region IDisposable
+        public Task<MawRole> FindByIdAsync(string roleId, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(roleId))
+            {
+                throw new ArgumentException("Invalid roleId", nameof(roleId));
+            }
+
+            if (short.TryParse(roleId, out short id))
+            {
+                return _repo.GetRoleAsync(id);
+            }
+
+            throw new ArgumentException("roleId should be able to be parsed into a short.", nameof(roleId));
+        }
+
+
+        public Task<MawRole> FindByNameAsync(string roleName, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(roleName))
+            {
+                throw new ArgumentException("Invalid roleName", nameof(roleName));
+            }
+
+            return _repo.GetRoleAsync(roleName);
+        }
+        #endregion
+
+
+        #region IDisposable
         public void Dispose()
         {
             Dispose(true);
@@ -160,11 +158,12 @@ namespace Maw.Data.Identity
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing){
+            if (disposing)
+            {
                 // clean up managed resources
             }
         }
-		#endregion
+        #endregion
     }
 }
 

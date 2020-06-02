@@ -38,7 +38,7 @@ namespace Maw.Domain.Upload
 
         public FileOperationResult DeleteFile(ClaimsPrincipal user, string relativePath)
         {
-            FileLocation location = null;
+            FileLocation location;
 
             var result = new FileOperationResult() {
                 Operation = FileOperation.Delete,
@@ -147,7 +147,7 @@ namespace Maw.Domain.Upload
 
             foreach(var relativePath in relativePaths)
             {
-                FileLocation location = null;
+                FileLocation location;
 
                 try
                 {
@@ -288,7 +288,7 @@ namespace Maw.Domain.Upload
 
         public Stream GetThumbnail(ClaimsPrincipal user, string relativePath, int maxDimension)
         {
-            FileLocation location = null;
+            FileLocation location;
 
             location = GetValidatedLocation(user, relativePath, true);
 
@@ -299,33 +299,32 @@ namespace Maw.Domain.Upload
                 return null;
             }
 
-            using(var mw = new MagickWand(absolutePath))
+            using var mw = new MagickWand(absolutePath);
+
+            if(mw.ImageWidth > 256 || mw.ImageHeight > 256)
             {
-                if(mw.ImageWidth > 256 || mw.ImageHeight > 256)
-                {
-                    // crop 20%
-                    var xoffset = Convert.ToInt32(mw.ImageWidth * 0.1);
-                    var yoffset = Convert.ToInt32(mw.ImageHeight * 0.1);
-                    var newWidth = mw.ImageWidth - (2 * xoffset);
-                    var newHeight = mw.ImageHeight - (2 * yoffset);
+                // crop 20%
+                var xoffset = Convert.ToInt32(mw.ImageWidth * 0.1);
+                var yoffset = Convert.ToInt32(mw.ImageHeight * 0.1);
+                var newWidth = mw.ImageWidth - (2 * xoffset);
+                var newHeight = mw.ImageHeight - (2 * yoffset);
 
-                    mw.CropImage((uint)newWidth, (uint)newHeight, xoffset, yoffset);
-                }
-
-                var leftPos = (mw.ImageWidth / 2) - (maxDimension / 2);
-                var topPos = (mw.ImageHeight / 2) - (maxDimension / 2);
-
-                var ms = new MemoryStream();
-
-                mw.ResizeImage((uint)maxDimension, (uint)maxDimension, FilterTypes.Lanczos2SharpFilter, 1);
-                mw.Compression = CompressionType.JPEGCompression;
-                mw.CompressionQuality = 72;
-                mw.WriteImage(ms);
-
-                ms.Seek(0, SeekOrigin.Begin);
-
-                return ms;
+                mw.CropImage((uint)newWidth, (uint)newHeight, xoffset, yoffset);
             }
+
+            var leftPos = (mw.ImageWidth / 2) - (maxDimension / 2);
+            var topPos = (mw.ImageHeight / 2) - (maxDimension / 2);
+
+            var ms = new MemoryStream();
+
+            mw.ResizeImage((uint)maxDimension, (uint)maxDimension, FilterTypes.Lanczos2SharpFilter, 1);
+            mw.Compression = CompressionType.JPEGCompression;
+            mw.CompressionQuality = 72;
+            mw.WriteImage(ms);
+
+            ms.Seek(0, SeekOrigin.Begin);
+
+            return ms;
         }
 
 
@@ -427,7 +426,7 @@ namespace Maw.Domain.Upload
                 throw new ArgumentNullException(nameof(relativePath));
             }
 
-            FileLocation location = null;
+            FileLocation location;
 
             try
             {

@@ -12,27 +12,25 @@ namespace Maw.Domain.Utilities
 
         public static byte[] Hash(string value)
         {
-            using(var sha256 = SHA256.Create())
-            {
-                var input = Encoding.UTF8.GetBytes(value);
-                var output = sha256.ComputeHash(input);
+            using var sha256 = SHA256.Create();
+            var input = Encoding.UTF8.GetBytes(value);
+            var output = sha256.ComputeHash(input);
 
-                return output;
-            }
+            return output;
         }
 
 
         public static byte[] GenerateRandom(int size)
-		{
-			var randomBytes = new byte[size];
+        {
+            var randomBytes = new byte[size];
 
-            using(var rand = RandomNumberGenerator.Create())
+            using (var rand = RandomNumberGenerator.Create())
             {
                 rand.GetBytes(randomBytes);
             }
 
             return randomBytes;
-		}
+        }
 
 
 #pragma warning disable SCS0005

@@ -16,22 +16,16 @@ namespace MawMvcApp.ViewComponents
 
         public PrimaryNav(IAuthorizationService authorizationService)
         {
-            if(authorizationService == null)
-			{
-				throw new ArgumentNullException(nameof(authorizationService));
-			}
-
-            _authzService = authorizationService;
+            _authzService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
         }
 
 
         public async Task<IViewComponentResult> InvokeAsync(NavigationZone activeZone)
         {
-            var model = new PrimaryNavViewModel();
-
-            model.ActiveNavigationZone = activeZone;
-
-            model.AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawPolicy.AdminSite).ConfigureAwait(false)).Succeeded;
+            var model = new PrimaryNavViewModel {
+                ActiveNavigationZone = activeZone,
+                AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawPolicy.AdminSite).ConfigureAwait(false)).Succeeded
+            };
 
             return View(model);
         }

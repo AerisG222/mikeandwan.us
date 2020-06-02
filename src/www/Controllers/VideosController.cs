@@ -10,7 +10,7 @@ using Maw.Security;
 
 namespace MawMvcApp.Controllers
 {
-	[Authorize(MawPolicy.ViewVideos)]
+    [Authorize(MawPolicy.ViewVideos)]
     [Route("videos")]
     public class VideosController
         : MawBaseController<VideosController>
@@ -23,20 +23,20 @@ namespace MawMvcApp.Controllers
         readonly IImageCropper _imageCropper;
 
 
-		public VideosController(ILogger<VideosController> log,
+        public VideosController(ILogger<VideosController> log,
                                 IVideoService videoService,
                                 IImageCropper imageCropper)
-			: base(log)
+            : base(log)
         {
             _svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
-			_imageCropper = imageCropper ?? throw new ArgumentNullException(nameof(imageCropper));;
+            _imageCropper = imageCropper ?? throw new ArgumentNullException(nameof(imageCropper)); ;
         }
 
 
         [HttpGet("{*extra}")]
         public IActionResult Index()
         {
-			return Redirect("https://videos.mikeandwan.us");
+            return Redirect("https://videos.mikeandwan.us");
         }
 
 
@@ -62,7 +62,7 @@ namespace MawMvcApp.Controllers
         {
             var croppedImageStream = _imageCropper.CropImage(path, MOBILE_THUMB_SIZE);
 
-            if(croppedImageStream == null)
+            if (croppedImageStream == null)
             {
                 return NotFound();
             }

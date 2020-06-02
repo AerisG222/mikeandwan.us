@@ -7,7 +7,7 @@ namespace Maw.Domain.Photos
     {
         public short Id { get; set; }
         public string Name { get; set; }
-		public short Year { get; set; }
+        public short Year { get; set; }
         public DateTime CreateDate { get; set; }
         public float? Latitude { get; set; }
         public float? Longitude { get; set; }

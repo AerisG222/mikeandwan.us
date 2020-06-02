@@ -4,13 +4,13 @@ using System.Globalization;
 
 namespace MawMvcApp.ViewModels.Gps
 {
-    #pragma warning disable CA1721
+#pragma warning disable CA1721
     public class GpsCoordinate
     {
         public float LatitudeDegrees { get; private set; }
-		public float LongitudeDegrees { get; private set; }
-		public float LatitudeMinutes { get; private set; }
-		public float LongitudeMinutes { get; private set; }
+        public float LongitudeDegrees { get; private set; }
+        public float LatitudeMinutes { get; private set; }
+        public float LongitudeMinutes { get; private set; }
         public float LatitudeSeconds { get; private set; }
         public float LongitudeSeconds { get; private set; }
 
@@ -19,7 +19,7 @@ namespace MawMvcApp.ViewModels.Gps
         {
             get
             {
-                if(LatitudeDegrees < 0.0f)
+                if (LatitudeDegrees < 0.0f)
                 {
                     return LatitudeReference.South;
                 }
@@ -33,7 +33,7 @@ namespace MawMvcApp.ViewModels.Gps
         {
             get
             {
-                if(LongitudeDegrees < 0.0f)
+                if (LongitudeDegrees < 0.0f)
                 {
                     return LongitudeReference.West;
                 }
@@ -57,41 +57,33 @@ namespace MawMvcApp.ViewModels.Gps
 
         public GpsCoordinate(float latDegrees, float latMinutes, float lngDegrees, float lngMinutes)
         {
-			float degrees;
-			float minutes;
-			float seconds;
+            GetDegreesMinutesSeconds(latDegrees, latMinutes, out float degrees, out float minutes, out float seconds);
 
-            GetDegreesMinutesSeconds(latDegrees, latMinutes, out degrees, out minutes, out seconds);
-
-			LatitudeDegrees = degrees;
-			LatitudeMinutes = minutes;
-			LatitudeSeconds = seconds;
+            LatitudeDegrees = degrees;
+            LatitudeMinutes = minutes;
+            LatitudeSeconds = seconds;
 
             GetDegreesMinutesSeconds(lngDegrees, lngMinutes, out degrees, out minutes, out seconds);
 
-			LongitudeDegrees = degrees;
-			LongitudeMinutes = minutes;
-			LongitudeSeconds = seconds;
+            LongitudeDegrees = degrees;
+            LongitudeMinutes = minutes;
+            LongitudeSeconds = seconds;
         }
 
 
         public GpsCoordinate(float latDegrees, float lngDegrees)
         {
-			float degrees;
-			float minutes;
-			float seconds;
+            GetDegreesMinutesSeconds(latDegrees, out float degrees, out float minutes, out float seconds);
 
-            GetDegreesMinutesSeconds(latDegrees, out degrees, out minutes, out seconds);
-
-			LatitudeDegrees = degrees;
-			LatitudeMinutes = minutes;
-			LatitudeSeconds = seconds;
+            LatitudeDegrees = degrees;
+            LatitudeMinutes = minutes;
+            LatitudeSeconds = seconds;
 
             GetDegreesMinutesSeconds(lngDegrees, out degrees, out minutes, out seconds);
 
-			LongitudeDegrees = degrees;
-			LongitudeMinutes = minutes;
-			LongitudeSeconds = seconds;
+            LongitudeDegrees = degrees;
+            LongitudeMinutes = minutes;
+            LongitudeSeconds = seconds;
         }
 
 
@@ -99,7 +91,7 @@ namespace MawMvcApp.ViewModels.Gps
         {
             float sign = 1.0f;
 
-            if(degrees < 0.0f)
+            if (degrees < 0.0f)
             {
                 sign = -1.0f;
             }
@@ -112,7 +104,7 @@ namespace MawMvcApp.ViewModels.Gps
         {
             float sign = 1.0f;
 
-            if(degrees < 0.0f)
+            if (degrees < 0.0f)
             {
                 sign = -1.0f;
             }
@@ -123,7 +115,7 @@ namespace MawMvcApp.ViewModels.Gps
 
         public static void GetDegreesMinutes(float degreeDecimals, out float degrees, out float minutes)
         {
-            degrees = (float) Math.Truncate((double) degreeDecimals);
+            degrees = (float)Math.Truncate((double)degreeDecimals);
             minutes = (Math.Abs(degreeDecimals) - Math.Abs(degrees)) * 60.0f;
         }
 
@@ -138,18 +130,18 @@ namespace MawMvcApp.ViewModels.Gps
         public static void GetDegreesMinutesSeconds(float degreeDecimals, float minuteDecimals, out float degrees, out float minutes, out float seconds)
         {
             degrees = degreeDecimals;
-            minutes = Math.Abs((float) Math.Truncate((double) minuteDecimals));
+            minutes = Math.Abs((float)Math.Truncate((double)minuteDecimals));
             seconds = (Math.Abs(minuteDecimals) - minutes) * 60.0f;
         }
 
 
         public static void GetDegreesMinutesSeconds(float degreeDecimals, out float degrees, out float minutes, out float seconds)
         {
-            degrees = (float) Math.Truncate((double) degreeDecimals);
+            degrees = (float)Math.Truncate((double)degreeDecimals);
 
             float totalMinutes = (Math.Abs(degreeDecimals) - Math.Abs(degrees)) * 60.0f;
 
-            minutes = (float) Math.Truncate((double) totalMinutes);
+            minutes = (float)Math.Truncate((double)totalMinutes);
             seconds = (totalMinutes - minutes) * 60.0f;
         }
 
@@ -209,19 +201,16 @@ namespace MawMvcApp.ViewModels.Gps
         public static GpsCoordinate Parse(string latitude, string latitudeRef, string longitude, string longitudeRef)
         {
             // parse values that look like:  42 deg 16' 13.80"
-            float latDegrees, latMinutes, latSeconds;
-            float lngDegrees, lngMinutes, lngSeconds;
-
             LatitudeReference latRef = ParseLatitudeRef(latitudeRef);
             LongitudeReference lngRef = ParseLongitudeRef(longitudeRef);
-            ParseGpsCoordinate(latitude, out latDegrees, out latMinutes, out latSeconds);
-            ParseGpsCoordinate(longitude, out lngDegrees, out lngMinutes, out lngSeconds);
+            ParseGpsCoordinate(latitude, out float latDegrees, out float latMinutes, out float latSeconds);
+            ParseGpsCoordinate(longitude, out float lngDegrees, out float lngMinutes, out float lngSeconds);
 
-            if(latRef == LatitudeReference.South)
+            if (latRef == LatitudeReference.South)
             {
                 latDegrees *= -1.0f;
             }
-            if(lngRef == LongitudeReference.West)
+            if (lngRef == LongitudeReference.West)
             {
                 lngDegrees *= -1.0f;
             }
@@ -234,7 +223,7 @@ namespace MawMvcApp.ViewModels.Gps
         {
             LatitudeReference latRef;
 
-            if(string.Equals(latitudeRef, "north", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(latitudeRef, "north", StringComparison.OrdinalIgnoreCase))
             {
                 latRef = LatitudeReference.North;
             }
@@ -251,7 +240,7 @@ namespace MawMvcApp.ViewModels.Gps
         {
             LongitudeReference lngRef;
 
-            if(string.Equals(longitudeRef, "east", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(longitudeRef, "east", StringComparison.OrdinalIgnoreCase))
             {
                 lngRef = LongitudeReference.East;
             }
@@ -266,16 +255,16 @@ namespace MawMvcApp.ViewModels.Gps
 
         public static void ParseGpsCoordinate(string coord, out float degrees, out float minutes, out float seconds)
         {
-            if(coord == null)
+            if (coord == null)
             {
                 throw new ArgumentNullException(nameof(coord));
             }
 
-            string[] splitTerms = new string[] {" ", "'", "\"", "deg", "N", "S", "E", "W"};
+            string[] splitTerms = new string[] { " ", "'", "\"", "deg", "N", "S", "E", "W" };
 
             string[] parts = coord.Split(splitTerms, StringSplitOptions.RemoveEmptyEntries);
 
-            if(parts.Length != 3)
+            if (parts.Length != 3)
             {
                 throw new Exception("Expected to find deg, min, sec for the gps coord!");
             }
@@ -285,5 +274,5 @@ namespace MawMvcApp.ViewModels.Gps
             seconds = float.Parse(parts[2], CultureInfo.InvariantCulture);
         }
     }
-    #pragma warning restore CA1721
+#pragma warning restore CA1721
 }

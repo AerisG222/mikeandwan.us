@@ -5,54 +5,54 @@
 <h1>Create Blog Post</h1>
 
 @if(Model.Success) {
-	<p maw-alert-type="Success">The blog post was saved successfully.</p>
+    <p maw-alert-type="Success">The blog post was saved successfully.</p>
 }
 
 @if(!Model.Success) {
-	@if(Model.WasAttempted) {
-		<p maw-alert-type="Danger">Please correct the following issues with the blog post:</p>
-		<div class="text-danger" asp-validation-summary="All"></div>
-	}
+    @if(Model.WasAttempted) {
+        <p maw-alert-type="Danger">Please correct the following issues with the blog post:</p>
+        <div class="text-danger" asp-validation-summary="All"></div>
+    }
 
-	<form asp-controller="admin" asp-action="createblogpost" method="post" autocomplete="off" role="form">
-		<div class="form-group">
-			<label asp-for="Title" class="col-form-label"></label>
+    <form asp-controller="admin" asp-action="createblogpost" method="post" autocomplete="off" role="form">
+        <div class="form-group">
+            <label asp-for="Title" class="col-form-label"></label>
 
-			<div class="row">
-				<div class="col-sm-5">
-					<input asp-for="Title" class="form-control" autofocus="" />
-					@*<span asp-validation-for="Title" class="form-text"></span>*@
-				</div>
-			</div>
-		</div>
-	    <div class="form-group">
-			<label asp-for="PublishDate" class="col-form-label"></label>
+            <div class="row">
+                <div class="col-sm-5">
+                    <input asp-for="Title" class="form-control" autofocus="" />
+                    @*<span asp-validation-for="Title" class="form-text"></span>*@
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PublishDate" class="col-form-label"></label>
 
-			<div class="row">
-				<div class="col-sm-5">
-					<input asp-for="PublishDate" class="form-control" />
-					@*<span asp-validation-for="PublishDate" class="form-text"></span>*@
-				</div>
-			</div>
-		</div>
-	    <div class="form-group">
-			<label asp-for="Description" class="col-form-label"></label>
-	        <div class="row">
-				<div class="col">
-					<textarea asp-for="Description" rows="15" class="form-control"></textarea>
-					@*<span asp-validation-for="Description" class="form-text"></span>*@
-				</div>
-	        </div>
-		</div>
+            <div class="row">
+                <div class="col-sm-5">
+                    <input asp-for="PublishDate" class="form-control" />
+                    @*<span asp-validation-for="PublishDate" class="form-text"></span>*@
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="col-form-label"></label>
+            <div class="row">
+                <div class="col">
+                    <textarea asp-for="Description" rows="15" class="form-control"></textarea>
+                    @*<span asp-validation-for="Description" class="form-text"></span>*@
+                </div>
+            </div>
+        </div>
 
-	    <div class="form-group">
-			<button type="submit" class="btn btn-primary" name="Behavior" value="Save">Save</button>
-			<button type="submit" class="btn btn-primary" name="Behavior" value="Preview">Preview</button>
-	    </div>
-	</form>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" name="Behavior" value="Save">Save</button>
+            <button type="submit" class="btn btn-primary" name="Behavior" value="Preview">Preview</button>
+        </div>
+    </form>
 }
 
 @if(Model.Preview) {
-	<h3>@Model.Title</h3>
+    <h3>@Model.Title</h3>
     @Html.Raw(Model.Description)
 }

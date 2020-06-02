@@ -64,22 +64,20 @@ namespace MawMvcApp
 
             try
             {
-                using(var request = new HttpRequestMessage(HttpMethod.Post, path))
+                using var request = new HttpRequestMessage(HttpMethod.Post, path);
+                var response = await _client.SendAsync(request).ConfigureAwait(false);
+
+                if(response.IsSuccessStatusCode)
                 {
-                    var response = await _client.SendAsync(request).ConfigureAwait(false);
+                    _log.LogInformation("Successfully cleared cache on API endpoint");
 
-                    if(response.IsSuccessStatusCode)
-                    {
-                        _log.LogInformation("Successfully cleared cache on API endpoint");
+                    return true;
+                }
+                else
+                {
+                    _log.LogWarning("Failed to clear cache on API endpoint");
 
-                        return true;
-                    }
-                    else
-                    {
-                        _log.LogWarning("Failed to clear cache on API endpoint");
-
-                        return false;
-                    }
+                    return false;
                 }
             }
             catch(Exception ex)

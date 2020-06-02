@@ -1,7 +1,7 @@
 @{ Layout = "_LayoutBase"; }
 
 @section custom_head {
-	@await RenderSectionAsync("custom_head", required: false)
+    @await RenderSectionAsync("custom_head", required: false)
 }
 
 @section stylesheets {
@@ -9,7 +9,7 @@
 }
 
 @section scripts_head {
-	@await RenderSectionAsync("scripts_head", required: false)
+    @await RenderSectionAsync("scripts_head", required: false)
 }
 
 <partial name="_TopNav" model="true" />
@@ -21,11 +21,11 @@
         </div>
         <div class="col-sm-9 pl-0 order-1">
             @await RenderSectionAsync("header")
-	        @RenderBody()
+            @RenderBody()
         </div>
     </article>
 </div>
 
 @section scripts_footer {
-	@await RenderSectionAsync("scripts_footer", required: false)
+    @await RenderSectionAsync("scripts_footer", required: false)
 }

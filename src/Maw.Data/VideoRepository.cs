@@ -9,9 +9,9 @@ using Maw.Domain.Videos;
 
 namespace Maw.Data
 {
-	public class VideoRepository
+    public class VideoRepository
         : Repository, IVideoRepository
-	{
+    {
         public VideoRepository(string connectionString)
             : base(connectionString)
         {
@@ -19,27 +19,27 @@ namespace Maw.Data
         }
 
 
-		public Task<IEnumerable<short>> GetYearsAsync(bool allowPrivate)
-		{
+        public Task<IEnumerable<short>> GetYearsAsync(bool allowPrivate)
+        {
             return RunAsync(conn =>
                 conn.QueryAsync<short>(
                     "SELECT * FROM video.get_years(@allowPrivate);",
-                    new { allowPrivate = allowPrivate }
+                    new { allowPrivate }
                 )
             );
-		}
+        }
 
 
         public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
-		{
+        {
             return InternalGetCategoriesAsync(allowPrivate);
-		}
+        }
 
 
-		public Task<IEnumerable<Category>> GetCategoriesAsync(short year, bool allowPrivate)
-		{
+        public Task<IEnumerable<Category>> GetCategoriesAsync(short year, bool allowPrivate)
+        {
             return InternalGetCategoriesAsync(allowPrivate, year);
-		}
+        }
 
 
         public async Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
@@ -50,113 +50,119 @@ namespace Maw.Data
         }
 
 
-		public Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, bool allowPrivate)
-		{
+        public Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, bool allowPrivate)
+        {
             return InternalGetVideosAsync(allowPrivate, categoryId);
-		}
+        }
 
 
-		public async Task<Video> GetVideoAsync(short id, bool allowPrivate)
-		{
+        public async Task<Video> GetVideoAsync(short id, bool allowPrivate)
+        {
             var result = await InternalGetVideosAsync(allowPrivate, videoId: id).ConfigureAwait(false);
 
             return result.FirstOrDefault();
-		}
+        }
 
 
         public Task<IEnumerable<Comment>> GetCommentsAsync(short videoId)
-		{
+        {
             return RunAsync(conn =>
                 conn.QueryAsync<Comment>(
                     "SELECT * FROM video.get_comments(@videoId);",
-                    new { videoId = videoId }
+                    new { videoId }
                 )
             );
-		}
+        }
 
 
         public Task<GpsDetail> GetGpsDetailAsync(int videoId)
-		{
-            return RunAsync(async conn => {
+        {
+            return RunAsync(async conn =>
+            {
                 var result = await conn.QuerySingleOrDefaultAsync<GpsSourceOverride>(
                     "SELECT * FROM video.get_gps(@videoId);",
                     new { videoId }
                 ).ConfigureAwait(false);
 
-                if(result == null)
+                if (result == null)
                 {
                     return null;
                 }
 
                 var detail = new GpsDetail();
 
-                if(result.SourceLatitude != null && result.SourceLongitude != null)
+                if (result.SourceLatitude != null && result.SourceLongitude != null)
                 {
                     detail.Source = new GpsCoordinate()
                     {
-                        Latitude = (float) result.SourceLatitude,
-                        Longitude = (float) result.SourceLongitude
+                        Latitude = (float)result.SourceLatitude,
+                        Longitude = (float)result.SourceLongitude
                     };
                 }
 
-                if(result.OverrideLatitude != null && result.OverrideLongitude != null)
+                if (result.OverrideLatitude != null && result.OverrideLongitude != null)
                 {
                     detail.Override = new GpsCoordinate()
                     {
-                        Latitude = (float) result.OverrideLatitude,
-                        Longitude = (float) result.OverrideLongitude
+                        Latitude = (float)result.OverrideLatitude,
+                        Longitude = (float)result.OverrideLongitude
                     };
                 }
 
                 return detail;
             });
-		}
+        }
 
 
-		public Task<Rating> GetRatingsAsync(short videoId, string username)
-		{
+        public Task<Rating> GetRatingsAsync(short videoId, string username)
+        {
             return RunAsync(conn =>
                 conn.QuerySingleOrDefaultAsync<Rating>(
                     "SELECT * FROM video.get_ratings(@videoId, @username);",
-                    new {
-                        videoId = videoId,
+                    new
+                    {
+                        videoId,
                         username = username?.ToLowerInvariant()
                     }
                 )
             );
-		}
+        }
 
 
-		public Task<int> InsertCommentAsync(short videoId, string username, string comment)
+        public Task<int> InsertCommentAsync(short videoId, string username, string comment)
         {
-            return RunAsync(async conn => {
+            return RunAsync(async conn =>
+            {
                 var result = await conn.QuerySingleOrDefaultAsync<int>(
                     "SELECT * FROM video.save_comment(@username, @videoId, @message, @entryDate);",
-                    new {
+                    new
+                    {
                         username = username.ToLowerInvariant(),
-                        videoId = videoId,
+                        videoId,
                         message = comment,
                         entryDate = DateTime.Now
                     }
                 ).ConfigureAwait(false);
 
-                if(result <= 0)
-				{
-					throw new Exception("Did not save video comment!");
-				}
+                if (result <= 0)
+                {
+                    throw new Exception("Did not save video comment!");
+                }
 
                 return result;
             });
         }
 
 
-		public Task<float?> SaveRatingAsync(short videoId, string username, short rating)
+        public Task<float?> SaveRatingAsync(short videoId, string username, short rating)
         {
-            return RunAsync(async conn => {
+            return RunAsync(async conn =>
+            {
                 var result = await conn.QueryAsync<long>(
                     "SELECT * FROM video.save_rating(@videoId, @username, @score);",
-                    new {
-                        videoId = videoId,
+                    new
+                    {
+                        videoId,
                         username = username.ToLowerInvariant(),
                         score = rating
                     }
@@ -167,13 +173,15 @@ namespace Maw.Data
         }
 
 
-		public Task<float?> RemoveRatingAsync(short videoId, string username)
-		{
-            return RunAsync(async conn => {
+        public Task<float?> RemoveRatingAsync(short videoId, string username)
+        {
+            return RunAsync(async conn =>
+            {
                 var result = await conn.QueryAsync<long>(
                     @"SELECT * FROM video.save_rating(@videoId, @username, @score);",
-                    new {
-                        videoId = videoId,
+                    new
+                    {
+                        videoId,
                         username = username.ToLowerInvariant(),
                         score = 0
                     }
@@ -181,15 +189,16 @@ namespace Maw.Data
 
                 return (await GetRatingsAsync(videoId, username).ConfigureAwait(false))?.AverageRating;
             });
-		}
+        }
 
 
         public Task SetGpsOverrideAsync(int videoId, GpsCoordinate gps, string username)
-		{
+        {
             return RunAsync(conn =>
                 conn.QueryAsync<long>(
                     "SELECT * FROM video.set_gps_override(@videoId, @latitude, @longitude, @username, @updateDate);",
-                    new {
+                    new
+                    {
                         videoId,
                         latitude = gps.Latitude,
                         longitude = gps.Longitude,
@@ -198,7 +207,7 @@ namespace Maw.Data
                     }
                 )
             );
-		}
+        }
 
 
         public Task<long> SetCategoryTeaserAsync(short categoryId, int videoId)
@@ -206,7 +215,8 @@ namespace Maw.Data
             return RunAsync(conn =>
                 conn.QueryFirstAsync<long>(
                     @"SELECT * FROM video.set_category_teaser(@categoryId, @videoId);",
-                    new {
+                    new
+                    {
                         categoryId,
                         videoId
                     }
@@ -217,10 +227,12 @@ namespace Maw.Data
 
         Task<IEnumerable<Category>> InternalGetCategoriesAsync(bool allowPrivate, short? year = null, short? categoryId = null)
         {
-            return RunAsync(async conn => {
+            return RunAsync(async conn =>
+            {
                 var rows = await conn.QueryAsync(
                     "SELECT * FROM video.get_categories(@allowPrivate, @year, @categoryId);",
-                    new {
+                    new
+                    {
                         allowPrivate,
                         year,
                         categoryId
@@ -234,10 +246,12 @@ namespace Maw.Data
 
         Task<IEnumerable<Video>> InternalGetVideosAsync(bool allowPrivate, short? categoryId = null, short? videoId = null)
         {
-            return RunAsync(async conn => {
+            return RunAsync(async conn =>
+            {
                 var rows = await conn.QueryAsync(
                     "SELECT * FROM video.get_videos(@allowPrivate, @categoryId, @videoId);",
-                    new {
+                    new
+                    {
                         allowPrivate,
                         categoryId,
                         videoId
@@ -253,9 +267,9 @@ namespace Maw.Data
         {
             var category = new Category();
 
-            category.Id = (short) row.id;
-            category.Name = (string) row.name;
-            category.Year = (short) row.year;
+            category.Id = (short)row.id;
+            category.Name = (string)row.name;
+            category.Year = (short)row.year;
             category.CreateDate = GetValueOrDefault<DateTime>(row.create_date);
             category.Latitude = row.latitude;
             category.Longitude = row.longitude;
@@ -279,8 +293,8 @@ namespace Maw.Data
         {
             var video = new Video();
 
-            video.Id = (int) row.id;
-            video.CategoryId = (short) row.category_id;
+            video.Id = (int)row.id;
+            video.CategoryId = (short)row.category_id;
             video.CreateDate = GetValueOrDefault<DateTime>(row.create_date);
             video.Latitude = row.latitude;
             video.Longitude = row.longitude;
@@ -294,5 +308,5 @@ namespace Maw.Data
 
             return video;
         }
-	}
+    }
 }

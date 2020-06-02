@@ -116,9 +116,8 @@ namespace MawMvcApp.ViewModels.Tools
         {
             var code = NormalizeHexCode();
             var max = int.Parse("FFFFFF", NumberStyles.HexNumber, CultureInfo.InvariantCulture);
-            int val;
 
-            if(int.TryParse(code, NumberStyles.HexNumber, CultureInfo.InvariantCulture.NumberFormat, out val)) {
+            if(int.TryParse(code, NumberStyles.HexNumber, CultureInfo.InvariantCulture.NumberFormat, out int val)) {
                 if(val < 0 || val > max) {
                     return false;
                 }

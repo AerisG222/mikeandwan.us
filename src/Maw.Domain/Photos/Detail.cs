@@ -84,5 +84,5 @@ namespace Maw.Domain.Photos
         public double? LightValue { get; set; }
         public double? ScaleFactor35Efl { get; set; }
         public string ShutterSpeed { get; set; }
-	}
+    }
 }

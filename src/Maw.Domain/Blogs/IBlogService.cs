@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Maw.Domain.Blogs
 {
-	public interface IBlogService
+    public interface IBlogService
     {
         Task<IEnumerable<Blog>> GetBlogsAsync();
         Task<IEnumerable<Post>> GetAllPostsAsync(short blogId);

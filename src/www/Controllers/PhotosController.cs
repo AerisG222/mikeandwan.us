@@ -14,34 +14,31 @@ using Maw.Security;
 
 namespace MawMvcApp.Controllers
 {
-	[Authorize(MawPolicy.ViewPhotos)]
+    [Authorize(MawPolicy.ViewPhotos)]
     [Route("photos")]
     public class PhotosController
         : MawBaseController<PhotosController>
     {
-		const int MOBILE_THUMB_SIZE = 60;
+        const int MOBILE_THUMB_SIZE = 60;
 
         readonly IPhotoService _svc;
         readonly IImageCropper _imageCropper;
         readonly IPhotoZipper _photoZipper;
-        readonly IAntiforgery _antiForgery;
         readonly IFileProvider _fileProvider;
         readonly IContentTypeProvider _contentTypeProvider;
 
 
-		public PhotosController(ILogger<PhotosController> log,
+        public PhotosController(ILogger<PhotosController> log,
                                 IPhotoService photoService,
                                 IImageCropper imageCropper,
                                 IPhotoZipper photoZipper,
-                                IAntiforgery antiForgery,
                                 IFileProvider fileProvider,
                                 IContentTypeProvider contentTypeProvider)
-			: base(log)
+            : base(log)
         {
-			_svc = photoService ?? throw new ArgumentNullException(nameof(photoService));
-			_imageCropper = imageCropper ?? throw new ArgumentNullException(nameof(imageCropper));
+            _svc = photoService ?? throw new ArgumentNullException(nameof(photoService));
+            _imageCropper = imageCropper ?? throw new ArgumentNullException(nameof(imageCropper));
             _photoZipper = photoZipper ?? throw new ArgumentNullException(nameof(photoZipper));
-            _antiForgery = antiForgery ?? throw new ArgumentNullException(nameof(antiForgery));
             _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
             _contentTypeProvider = contentTypeProvider ?? throw new ArgumentNullException(nameof(contentTypeProvider));
         }
@@ -56,18 +53,18 @@ namespace MawMvcApp.Controllers
 
         [HttpGet("GetMobileThumbnail/{id:int}")]
         public async Task<IActionResult> GetMobileThumbnail(short id)
-		{
+        {
             var category = await _svc.GetCategoryAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
-			var thumbInfo = category.TeaserImage;
+            var thumbInfo = category.TeaserImage;
             var croppedImageStream = _imageCropper.CropImage(thumbInfo.Path, MOBILE_THUMB_SIZE);
 
-            if(croppedImageStream == null)
+            if (croppedImageStream == null)
             {
                 return NotFound();
             }
 
             return File(croppedImageStream, GetContentType(thumbInfo.Path));
-		}
+        }
 
 
         [HttpGet("download-category/{id:int}")]
@@ -77,12 +74,12 @@ namespace MawMvcApp.Controllers
             var photos = await _svc.GetPhotosForCategoryAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
             var stream = _photoZipper.Zip(photos);
 
-            if(stream == null)
+            if (stream == null)
             {
                 return NotFound();
             }
 
-			return File(stream, GetContentType(filename), filename);
+            return File(stream, GetContentType(filename), filename);
         }
 
 
@@ -92,10 +89,10 @@ namespace MawMvcApp.Controllers
         {
             Log.LogInformation($"Attempting to download photo with id: {id} and size: {size}");
 
-            string path = null;
+            string path;
             var photo = await _svc.GetPhotoAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
 
-            switch(size?.ToLower(CultureInfo.InvariantCulture))
+            switch (size?.ToLower(CultureInfo.InvariantCulture))
             {
                 case "xs":
                     path = photo.XsInfo.Path;
@@ -121,7 +118,7 @@ namespace MawMvcApp.Controllers
 
             var fi = _fileProvider.GetFileInfo(path);
 
-            if(!fi.Exists)
+            if (!fi.Exists)
             {
                 return BadRequest();
             }
@@ -137,7 +134,7 @@ namespace MawMvcApp.Controllers
 
         string GetContentType(string filename)
         {
-            if(_contentTypeProvider.TryGetContentType(filename, out var contentType))
+            if (_contentTypeProvider.TryGetContentType(filename, out var contentType))
             {
                 return contentType;
             }

@@ -9,62 +9,61 @@ using Microsoft.Extensions.Options;
 
 namespace Maw.Domain.Captcha
 {
-	//https://www.google.com/recaptcha/admin#site/318682987?setup
-	public class GoogleCaptchaService
-		: ICaptchaService
-	{
-		static readonly Uri URL = new Uri("https://www.google.com/recaptcha/api/siteverify");
-		readonly GoogleCaptchaConfig _config;
-		readonly ILogger _log;
+    //https://www.google.com/recaptcha/admin#site/318682987?setup
+    public class GoogleCaptchaService
+        : ICaptchaService
+    {
+        static readonly Uri URL = new Uri("https://www.google.com/recaptcha/api/siteverify");
+        readonly GoogleCaptchaConfig _config;
+        readonly ILogger _log;
 
 
-		public GoogleCaptchaService(IOptions<GoogleCaptchaConfig> config, ILogger<GoogleCaptchaService> log)
-		{
-			if(config == null)
-			{
-				throw new ArgumentNullException(nameof(config));
-			}
+        public GoogleCaptchaService(IOptions<GoogleCaptchaConfig> config, ILogger<GoogleCaptchaService> log)
+        {
+            if (config == null)
+            {
+                throw new ArgumentNullException(nameof(config));
+            }
 
-			_config = config.Value;
-			_log = log ?? throw new ArgumentNullException(nameof(log));
-		}
-
-
-		public virtual string SiteKey
-		{
-			get
-			{
-				return _config.SiteKey;
-			}
-		}
+            _config = config.Value;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+        }
 
 
-		public virtual async Task<bool> VerifyAsync(string recaptchaResponse)
-		{
-			if(string.IsNullOrEmpty(recaptchaResponse))
-			{
-				return false;
-			}
+        public virtual string SiteKey
+        {
+            get
+            {
+                return _config.SiteKey;
+            }
+        }
 
-			var parameters = new List<KeyValuePair<string, string>>();
 
-			parameters.Add(new KeyValuePair<string, string>("secret", _config.SecretKey));
-			parameters.Add(new KeyValuePair<string, string>("response", recaptchaResponse));
+        public virtual async Task<bool> VerifyAsync(string recaptchaResponse)
+        {
+            if (string.IsNullOrEmpty(recaptchaResponse))
+            {
+                return false;
+            }
 
-			using(var client = new HttpClient())
-			using(var content = new FormUrlEncodedContent(parameters))
-			{
-				var response = await client.PostAsync(URL, content).ConfigureAwait(false);
-				var val = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-				var result = JsonSerializer.Deserialize<GoogleCaptchaResponse>(val).success;
+            var parameters = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("secret", _config.SecretKey),
+                new KeyValuePair<string, string>("response", recaptchaResponse)
+            };
 
-				_log.LogInformation($"google recaptcha returned: {result}");
+            using var client = new HttpClient();
+            using var content = new FormUrlEncodedContent(parameters);
+            var response = await client.PostAsync(URL, content).ConfigureAwait(false);
+            var val = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var result = JsonSerializer.Deserialize<GoogleCaptchaResponse>(val).success;
 
-				response.Dispose();
+            _log.LogInformation($"google recaptcha returned: {result}");
 
-				return result;
-			}
-		}
-	}
+            response.Dispose();
+
+            return result;
+        }
+    }
 }
 

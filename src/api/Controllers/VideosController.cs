@@ -15,7 +15,7 @@ namespace MawApi.Controllers
 {
     [ApiController]
     [Authorize]
-	[Authorize(MawPolicy.ViewVideos)]
+    [Authorize(MawPolicy.ViewVideos)]
     [Route("videos")]
     public class VideosController
         : ControllerBase
@@ -24,11 +24,11 @@ namespace MawApi.Controllers
         readonly VideoAdapter _adapter;
 
 
-		public VideosController(
+        public VideosController(
             VideoAdapter videoAdapter,
             IVideoService videoService)
         {
-			_svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
+            _svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
             _adapter = videoAdapter ?? throw new ArgumentNullException(nameof(videoAdapter));
         }
 
@@ -42,7 +42,7 @@ namespace MawApi.Controllers
         {
             var video = await _svc.GetVideoAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
 
-            if(video == null)
+            if (video == null)
             {
                 return NotFound();
             }
@@ -69,7 +69,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ApiCollection<Comment>> AddCommentAsync(short id, CommentViewModel model)
         {
-            if(model == null)
+            if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
@@ -92,7 +92,7 @@ namespace MawApi.Controllers
         {
             var gps = await _svc.GetGpsDetailAsync(id).ConfigureAwait(false);
 
-            if(gps == null)
+            if (gps == null)
             {
                 return NotFound();
             }
@@ -109,7 +109,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<GpsDetail>> SetGpsOverrideAsync(int id, GpsCoordinate gps)
         {
-            if(gps == null)
+            if (gps == null)
             {
                 throw new ArgumentNullException(nameof(gps));
             }
@@ -118,7 +118,7 @@ namespace MawApi.Controllers
 
             var detail = await _svc.GetGpsDetailAsync(id).ConfigureAwait(false);
 
-            if(detail == null)
+            if (detail == null)
             {
                 return NotFound();
             }
@@ -136,7 +136,7 @@ namespace MawApi.Controllers
         {
             var rating = await InternalGetRatingAsync(id).ConfigureAwait(false);
 
-            if(rating == null)
+            if (rating == null)
             {
                 return NotFound();
             }
@@ -152,18 +152,18 @@ namespace MawApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<Rating>> RateVideoAsync(short id, UserRating userRating)
         {
-            if(userRating == null)
+            if (userRating == null)
             {
                 throw new ArgumentNullException(nameof(userRating));
             }
 
             // TODO: handle invalid photo id?
             // TODO: remove photoId from userPhotoRating?
-            if(userRating.Rating < 1)
+            if (userRating.Rating < 1)
             {
                 await _svc.RemoveRatingAsync(id, User.Identity.Name).ConfigureAwait(false);
             }
-            else if(userRating.Rating <= 5)
+            else if (userRating.Rating <= 5)
             {
                 await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating).ConfigureAwait(false);
             }
@@ -174,7 +174,7 @@ namespace MawApi.Controllers
 
             var rating = await InternalGetRatingAsync(id).ConfigureAwait(false);
 
-            if(rating == null)
+            if (rating == null)
             {
                 return NotFound();
             }

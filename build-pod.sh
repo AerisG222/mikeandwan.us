@@ -207,148 +207,201 @@ map_default_ports_to_container_ports() {
 
     # the following works for external access - run 2x for current runtime and to apply permanently
     sudo firewall-cmd --add-masquerade
-    sudo firewall-cmd --add-masquerade --permanent
+    #sudo firewall-cmd --add-masquerade --permanent
 
     sudo firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080
-    sudo firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080 --permanent
+    #sudo firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080 --permanent
 
     sudo firewall-cmd --add-forward-port=port=443:proto=tcp:toport=8443
-    sudo firewall-cmd --add-forward-port=port=443:proto=tcp:toport=8443 --permanent
+    #sudo firewall-cmd --add-forward-port=port=443:proto=tcp:toport=8443 --permanent
 
     # the following is for access on localhost
     sudo iptables -A OUTPUT -t nat -p tcp --destination 127.0.0.1 --dport 80 -j REDIRECT --to-port 8080
     sudo iptables -A OUTPUT -t nat -p tcp --destination 127.0.0.1 --dport 443 -j REDIRECT --to-port 8443
 
     # persist the iptables rules across reboots
-    sudo service iptables save
+    #sudo service iptables save
 
     echo "    - firewall is now forwarding requests from 80/443 to 8080/8443"
 }
 
 create_containers() {
     local ENV_NAME=${1}
+    local POD_NAME=${2}
 
     if [ ${ENV_NAME} = 'dev' ]; then
-        local C_SOLR='maw-solr-dev'
-        local C_PHOTOS='maw-photos-dev'
-        local C_FILES='maw-files-dev'
-        local C_AUTH='maw-auth-dev'
-        local C_API='maw-api-dev'
-        local C_WWW='maw-www-dev'
-        local C_GATEWAY='maw-gateway-dev'
+        local C_SOLR='localhost/maw-solr-dev:latest'
+        local C_PHOTOS='localhost/maw-photos-dev:latest'
+        local C_FILES='localhost/maw-files-dev:latest'
+        local C_AUTH='localhost/maw-auth-dev:latest'
+        local C_API='localhost/maw-api-dev:latest'
+        local C_WWW='localhost/maw-www-dev:latest'
+        local C_GATEWAY='localhost/maw-gateway-dev:latest'
     else
-        local C_SOLR='aerisg222/maw-solr:latest'
-        local C_PHOTOS='aerisg222/maw-photos:latest'
-        local C_FILES='aerisg222/maw-files:latest'
-        local C_AUTH='aerisg222/maw-auth:latest'
-        local C_API='aerisg222/maw-api:latest'
-        local C_WWW='aerisg222/maw-www:latest'
-        local C_GATEWAY='aerisg222/maw-gateway:latest'
+        local C_SOLR='docker.io/aerisg222/maw-solr:latest'
+        local C_PHOTOS='docker.io/aerisg222/maw-photos:latest'
+        local C_FILES='docker.io/aerisg222/maw-files:latest'
+        local C_AUTH='docker.io/aerisg222/maw-auth:latest'
+        local C_API='docker.io/aerisg222/maw-api:latest'
+        local C_WWW='docker.io/aerisg222/maw-www:latest'
+        local C_GATEWAY='docker.io/aerisg222/maw-gateway:latest'
     fi
 
-    # postgres
-    podman create \
-        --pod maw-pod \
-        --name maw-postgres \
-        --volume maw-postgres:/var/lib/postgresql/data:rw,z \
-        postgres:12.2
+    podman container inspect maw-postgres > /dev/null 2>&1
 
-    # solr
-    podman create \
-        --pod maw-pod \
-        --name maw-solr \
-        --volume maw-solr:/var/solr:rw,z \
-        --label "io.containers.autoupdate=image" \
-        "${C_SOLR}"
+    if [ $? -ne 0 ]; then
+        echo "    - creating maw-postgres container"
 
-    # photos
-    podman create \
-        --pod maw-pod \
-        --name maw-photos \
-        --volume maw-certs:/certs:ro,z \
-        --label "io.containers.autoupdate=image" \
-        "${C_PHOTOS}"
-
-    # files
-    podman create \
-        --pod maw-pod \
-        --name maw-files \
-        --volume maw-certs:/certs:ro,z \
-        --label "io.containers.autoupdate=image" \
-        "${C_FILES}"
-
-    # auth
-    podman create \
-        --pod maw-pod \
-        --name maw-auth \
-        --volume maw-certs:/certs:ro,z \
-        --volume maw-auth-dataprotection:/dataprotection:rw,Z \
-        --volume maw-google-creds:/google-creds:ro,z \
-        --label "io.containers.autoupdate=image" \
-        --env-file /home/mmorano/git/maw-auth.env \
-        "${C_AUTH}"
-
-    # api
-    podman create \
-        --pod maw-pod \
-        --name maw-api \
-        --volume maw-certs:/certs:ro,z \
-        --volume maw-api-dataprotection:/dataprotection:rw,Z \
-        --volume maw-uploads:/maw-uploads:rw,z \
-        --volume /srv/www/website_assets/images:/maw-www/wwwroot/images:ro \
-        --label "io.containers.autoupdate=image" \
-        --security-opt label=disable \
-        --env-file /home/mmorano/git/maw-api.env \
-        "${C_API}"
-
-    # www
-    podman create \
-        --pod maw-pod \
-        --name maw-www \
-        --volume maw-certs:/certs:ro,z \
-        --volume maw-www-dataprotection:/dataprotection:rw,Z \
-        --volume maw-google-creds:/google-creds:ro,z \
-        --volume /srv/www/website_assets/images:/maw-www/wwwroot/images:ro \
-        --volume /srv/www/website_assets/movies:/maw-www/wwwroot/movies:ro \
-        --label "io.containers.autoupdate=image" \
-        --security-opt label=disable \
-        --env-file /home/mmorano/git/maw-www.env \
-        "${C_WWW}"
-
-    if [ ${ENV_NAME} = 'dev' ]; then
-        # gateway
         podman create \
-            --pod maw-pod \
-            --name maw-gateway \
+            --pod "${POD_NAME}" \
+            --name maw-postgres \
+            --volume maw-postgres:/var/lib/postgresql/data:rw,z \
+            postgres:12.2
+    fi
+
+    podman container inspect maw-solr > /dev/null 2>&1
+
+    if [ $? -ne 0 ]; then
+        echo "    - creating maw-solr container"
+
+        podman create \
+            --pod "${POD_NAME}" \
+            --name maw-solr \
+            --volume maw-solr:/var/solr:rw,z \
+            --label "io.containers.autoupdate=image" \
+            "${C_SOLR}"
+    fi
+
+    podman container inspect maw-photos > /dev/null 2>&1
+
+    if [ $? -ne 0 ]; then
+        echo "    - creating maw-photos container"
+
+        podman create \
+            --pod "${POD_NAME}" \
+            --name maw-photos \
             --volume maw-certs:/certs:ro,z \
-            --volume /srv/www/website_assets:/assets:ro \
+            --label "io.containers.autoupdate=image" \
+            "${C_PHOTOS}"
+    fi
+
+    podman container inspect maw-files > /dev/null 2>&1
+
+    if [ $? -ne 0 ]; then
+        echo "    - creating maw-files container"
+
+        podman create \
+            --pod "${POD_NAME}" \
+            --name maw-files \
+            --volume maw-certs:/certs:ro,z \
+            --label "io.containers.autoupdate=image" \
+            "${C_FILES}"
+    fi
+
+    podman container inspect maw-auth > /dev/null 2>&1
+
+    if [ $? -ne 0 ]; then
+        echo "    - creating maw-auth container"
+
+        podman create \
+            --pod "${POD_NAME}" \
+            --name maw-auth \
+            --volume maw-certs:/certs:ro,z \
+            --volume maw-auth-dataprotection:/dataprotection:rw,Z \
+            --volume maw-google-creds:/google-creds:ro,z \
+            --label "io.containers.autoupdate=image" \
+            --env-file /home/mmorano/git/maw-auth.env \
+            "${C_AUTH}"
+    fi
+
+    podman container inspect maw-api > /dev/null 2>&1
+
+    if [ $? -ne 0 ]; then
+        echo "    - creating maw-api container"
+
+        podman create \
+            --pod "${POD_NAME}" \
+            --name maw-api \
+            --volume maw-certs:/certs:ro,z \
+            --volume maw-api-dataprotection:/dataprotection:rw,Z \
+            --volume maw-uploads:/maw-uploads:rw,z \
+            --volume /srv/www/website_assets/images:/maw-www/wwwroot/images:ro \
             --label "io.containers.autoupdate=image" \
             --security-opt label=disable \
-            "${C_GATEWAY}"
+            --env-file /home/mmorano/git/maw-api.env \
+            "${C_API}"
+    fi
+
+    podman container inspect maw-www > /dev/null 2>&1
+
+    if [ $? -ne 0 ]; then
+        echo "    - creating maw-www container"
+
+        podman create \
+            --pod "${POD_NAME}" \
+            --name maw-www \
+            --volume maw-certs:/certs:ro,z \
+            --volume maw-www-dataprotection:/dataprotection:rw,Z \
+            --volume maw-google-creds:/google-creds:ro,z \
+            --volume /srv/www/website_assets/images:/maw-www/wwwroot/images:ro \
+            --volume /srv/www/website_assets/movies:/maw-www/wwwroot/movies:ro \
+            --label "io.containers.autoupdate=image" \
+            --security-opt label=disable \
+            --env-file /home/mmorano/git/maw-www.env \
+            "${C_WWW}"
+    fi
+
+    if [ ${ENV_NAME} = 'dev' ]; then
+        podman container inspect maw-gateway > /dev/null 2>&1
+
+        if [ $? -ne 0 ]; then
+            echo "    - creating maw-gateway container"
+
+            podman create \
+                --pod "${POD_NAME}" \
+                --name maw-gateway \
+                --volume maw-certs:/certs:ro,z \
+                --volume /srv/www/website_assets:/assets:ro \
+                --label "io.containers.autoupdate=image" \
+                --security-opt label=disable \
+                "${C_GATEWAY}"
+        fi
     else
         # for prod, we need a slightly different setup for the gateway seeing we need to support
         # official certs from Let's Encrypt.  as such, run the gateway as follows:
-        podman create \
-            --pod maw-pod \
-            --name maw-gateway \
-            --volume maw-certs:/certs:ro,z \
-            --volume maw-certbot-validation:/var/www/certbot:ro,z \
-            --volume maw-certbot-certs:/etc/letsencrypt:ro,z \
-            --volume /srv/www/website_assets:/assets:ro \
-            --label "io.containers.autoupdate=image" \
-            --security-opt label=disable \
-            "${C_GATEWAY}"
 
-        # certbot container
-        podman create \
-            --pod maw-pod \
-            --name maw-certbot \
-            --volume maw-certbot-validation:/var/www/certbot:rw,z \
-            --volume maw-certbot-certs:/etc/letsencrypt:rw,z \
-            --label "io.containers.autoupdate=image" \
-            --entrypoint=sh \
-            certbot/certbot
-            /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait ${!}; done;'
+        podman container inspect maw-gateway > /dev/null 2>&1
+
+        if [ $? -ne 0 ]; then
+            echo "    - creating maw-gateway container"
+
+            podman create \
+                --pod "${POD_NAME}" \
+                --name maw-gateway \
+                --volume maw-certs:/certs:ro,z \
+                --volume maw-certbot-validation:/var/www/certbot:ro,z \
+                --volume maw-certbot-certs:/etc/letsencrypt:ro,z \
+                --volume /srv/www/website_assets:/assets:ro \
+                --label "io.containers.autoupdate=image" \
+                --security-opt label=disable \
+                "${C_GATEWAY}"
+        fi
+
+        podman container inspect maw-certbot > /dev/null 2>&1
+
+        if [ $? -ne 0 ]; then
+            echo "    - creating maw-certbot container"
+
+            podman create \
+                --pod "${POD_NAME}" \
+                --name maw-certbot \
+                --volume maw-certbot-validation:/var/www/certbot:rw,z \
+                --volume maw-certbot-certs:/etc/letsencrypt:rw,z \
+                --label "io.containers.autoupdate=image" \
+                --entrypoint=sh \
+                certbot/certbot
+                /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait ${!}; done;'
+        fi
     fi
 }
 
@@ -363,7 +416,7 @@ build_pod_dev() {
     init_certs 'localhost/maw-certs-dev'
     trust_dev_certs
     map_default_ports_to_container_ports
-    create_containers 'dev'
+    create_containers 'dev' "${POD_NAME}"
 
     echo "    - completed"
     echo
@@ -379,7 +432,7 @@ build_pod_prod() {
     create_volumes 'prod'
     init_certs 'aerisg222/maw-certs'
     map_default_ports_to_container_ports
-    create_containers 'prod'
+    create_containers 'prod' "${POD_NAME}"
 
     echo "    - completed"
     echo
@@ -387,17 +440,19 @@ build_pod_prod() {
 
 echo
 echo 'This script will initialize the container environment for mikeandwan.us'
+echo '  - this assumes *all* images are available - either local for dev or in dockerhub for prod'
+echo '  - run this script with the user the site should run as (i.e. svc_www_maw)'
 echo '  - to execute, please specify "dev" or "prod" to indicate which environment to create'
 echo '  - the script will automatically migrate current solr and postgres instances'
-echo '  - the script will also prepare the gdrive archive - but you must first place the containers.json file in ~'
+echo '  - the script will also prepare the gdrive archive - but you must first place the containers.json file in ~/'
 echo
 
 read -n 1 -r -s -p $'Press enter to continue...\n'
 
 
-if   [ ${1} = 'dev' ]; then
+if   [ "${1}" = 'dev' ]; then
     build_pod_dev
-elif [ ${1} = 'prod' ]; then
+elif [ "${1}" = 'prod' ]; then
     build_pod_prod
 else
     echo 'Please specify if you would like to build a "prod" or "dev" pod'

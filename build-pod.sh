@@ -14,9 +14,11 @@ create_pod() {
 create_volume() {
     local VOL_NAME=${1}
 
-    podman volume inspect "${VOL_NAME}" > /dev/null 2>&1
+    local VOL_INSPECTED=$(podman volume inspect "${VOL_NAME}" -f "{{.Name}}") 2> /dev/null
 
-    if [ $? -ne 0 ]; then
+    # volume inspect will match partial names - here we check that it was not found (first condition) or that the found name does not match (i.e. maw-postgres and maw-postgres-backups)
+    # fortunately we do not have a case where there are more than 2 with the same prefix (fingers will remain crossed)
+    if [ $? -ne 0 ] | [ "${VOL_INSPECTED}" != "${VOL_NAME}" ]; then
         echo "    - creating volume: ${VOL_NAME}"
         podman volume create "${VOL_NAME}"
 

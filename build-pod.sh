@@ -14,7 +14,7 @@ create_pod() {
 create_volume() {
     local VOL_NAME=${1}
 
-    local VOL_INSPECTED=$(podman volume inspect "${VOL_NAME}" -f "{{.Name}}") 2> /dev/null
+    local VOL_INSPECTED=$(podman volume inspect "${VOL_NAME}" -f "{{.Name}}" 2> /dev/null)
 
     # volume inspect will match partial names - here we check that it was not found (first condition) or that the found name does not match (i.e. maw-postgres and maw-postgres-backups)
     # fortunately we do not have a case where there are more than 2 with the same prefix (fingers will remain crossed)
@@ -68,7 +68,9 @@ create_volume_solr() {
         return
     fi
 
-    if [ ! -d /var/solr/data ]; then
+    local SRC_SOLR_EXISTS=$(sudo test -d /var/solr/data)
+
+    if [ $SRC_SOLR_EXISTS -eq 1 ]; then
         echo '    - /var/solr/data not found - not configuring solr volume'
         return
     fi

@@ -232,6 +232,7 @@ map_default_ports_to_container_ports() {
 create_containers() {
     local ENV_NAME=${1}
     local POD_NAME=${2}
+    local ENV_FILE_DIR=${3}
 
     if [ ${ENV_NAME} = 'dev' ]; then
         local C_SOLR='localhost/maw-solr-dev:latest'
@@ -314,7 +315,7 @@ create_containers() {
             --volume maw-auth-dataprotection:/dataprotection:rw,Z \
             --volume maw-google-creds:/google-creds:ro,z \
             --label "io.containers.autoupdate=image" \
-            --env-file /home/mmorano/git/maw-auth.env \
+            --env-file "${ENV_FILE_DIR}/maw-auth.env" \
             "${C_AUTH}"
     fi
 
@@ -332,7 +333,7 @@ create_containers() {
             --volume /srv/www/website_assets/images:/maw-www/wwwroot/images:ro \
             --label "io.containers.autoupdate=image" \
             --security-opt label=disable \
-            --env-file /home/mmorano/git/maw-api.env \
+            --env-file "${ENV_FILE_DIR}/maw-api.env" \
             "${C_API}"
     fi
 
@@ -351,7 +352,7 @@ create_containers() {
             --volume /srv/www/website_assets/movies:/maw-www/wwwroot/movies:ro \
             --label "io.containers.autoupdate=image" \
             --security-opt label=disable \
-            --env-file /home/mmorano/git/maw-www.env \
+            --env-file "${ENV_FILE_DIR}/maw-www.env" \
             "${C_WWW}"
     fi
 
@@ -420,7 +421,7 @@ build_pod_dev() {
     init_certs 'localhost/maw-certs-dev'
     trust_dev_certs
     map_default_ports_to_container_ports
-    create_containers 'dev' "${POD_NAME}"
+    create_containers 'dev' "${POD_NAME}" "/home/mmorano/git"
 
     echo "    - completed"
     echo
@@ -436,7 +437,7 @@ build_pod_prod() {
     create_volumes 'prod'
     init_certs 'aerisg222/maw-certs'
     map_default_ports_to_container_ports
-    create_containers 'prod' "${POD_NAME}"
+    create_containers 'prod' "${POD_NAME}" "/home/svc_www_maw"
 
     echo "    - completed"
     echo

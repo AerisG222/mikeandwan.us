@@ -14,9 +14,9 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.4" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="3.1.4" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.4" />
-        <PackageReference Include="NSwag.AspNetCore" Version="13.5.0" />
+        <PackageReference Include="NSwag.AspNetCore" Version="13.6.0" />
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
-        <PackageReference Include="RedHat.AspNetCore.Server.Kestrel.Transport.Linux" Version="3.1.0-200528.1406" />
+        <PackageReference Include="RedHat.AspNetCore.Server.Kestrel.Transport.Linux" Version="3.1.0-200605.1414" />
         <PackageReference Include="SolrNet" Version="1.0.19" />
         <PackageReference Include="SolrNet.Microsoft.DependencyInjection" Version="1.0.19" />
     </ItemGroup>

@@ -68,9 +68,9 @@ create_volume_solr() {
         return
     fi
 
-    local SRC_SOLR_EXISTS=$(sudo test -d /var/solr/data)
+    sudo test -d /var/solr/data
 
-    if [ "${SRC_SOLR_EXISTS}" -eq 1 ]; then
+    if [ $? -eq 1 ]; then
         echo '    - /var/solr/data not found - not configuring solr volume'
         return
     fi
@@ -156,7 +156,7 @@ create_volume_certbot_certs() {
     CERTBOT_VOL_MOUNT_POINT=$(podman volume inspect "${VOL_NAME}" | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['Mountpoint'])")
     CERTBOT_VOL_MOUNT_ROOT=$(dirname "${CERTBOT_VOL_MOUNT_POINT}")
 
-    sudo cp -R /etc/letsencrypt "${CERTBOT_VOL_MOUNT_POINT}"
+    sudo cp -R /etc/letsencrypt/* "${CERTBOT_VOL_MOUNT_POINT}"
     sudo chown -R "${USER}":"${USER}" "${CERTBOT_VOL_MOUNT_ROOT}"
     sudo chcon -R unconfined_u:object_r:container_file_t:s0 "${CERTBOT_VOL_MOUNT_POINT}"
 }
@@ -403,9 +403,7 @@ create_containers() {
                 --volume maw-certbot-validation:/var/www/certbot:rw,z \
                 --volume maw-certbot-certs:/etc/letsencrypt:rw,z \
                 --label "io.containers.autoupdate=image" \
-                --entrypoint=sh \
-                docker.io/certbot/certbot:latest \
-                /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait ${!}; done;'
+                docker.io/aerisg222/maw-certbot:latest
         fi
     fi
 }

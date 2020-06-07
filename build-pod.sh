@@ -70,7 +70,7 @@ create_volume_solr() {
 
     local SRC_SOLR_EXISTS=$(sudo test -d /var/solr/data)
 
-    if [ $SRC_SOLR_EXISTS -eq 1 ]; then
+    if [ "${SRC_SOLR_EXISTS}" -eq 1 ]; then
         echo '    - /var/solr/data not found - not configuring solr volume'
         return
     fi
@@ -404,7 +404,7 @@ create_containers() {
                 --volume maw-certbot-certs:/etc/letsencrypt:rw,z \
                 --label "io.containers.autoupdate=image" \
                 --entrypoint=sh \
-                certbot/certbot
+                docker.io/certbot/certbot:latest \
                 /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait ${!}; done;'
         fi
     fi

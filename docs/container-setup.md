@@ -2,6 +2,28 @@
 
 The following steps will walk through the process of configuring podman for hosting all the containers for mikeandwan.us.
 
+## PROD CONFIG
+
+- take db backups
+
+- add user/group to subuid and subgid mapping:
+  - `vi /etc/subuid`
+  - `vi /etc/subgid`
+  - add the following to both: `svc_www_maw:240000:6553`
+
+- https://github.com/containers/libpod/issues/5903
+- https://github.com/containers/libpod/issues/6084
+
+- add service account to sshd - they need a systemd user context:
+    - `vi /etc/ssh/sshd_config` - add user to AllowUsers
+    - `systemctl --user`: should return info and not an error message
+- login as service account directly via ssh - which will establish the systemctl session
+- run `loginctl enable-linger`
+- run `build-pod.sh prod`
+
+- enable service account to use sudo (for setup script)
+  - `vigr` - add user to wheel group
+
 ## SOLR
 
 After setting up the Solr container, it would not start because it kept on indicating there was a permission issue

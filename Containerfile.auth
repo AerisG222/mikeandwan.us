@@ -58,7 +58,6 @@ WORKDIR /maw-auth
 
 COPY --from=build /src/dist .
 COPY _start_site_in_container.sh /usr/local/bin/
-COPY etc/hosts /etc/hosts
 
 EXPOSE 5001
 

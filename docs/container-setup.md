@@ -24,6 +24,8 @@ The following steps will walk through the process of configuring podman for host
 - enable service account to use sudo (for setup script)
   - `vigr` - add user to wheel group
 
+- modify the postgres config pg_hba.conf in the volume to allow md5 auth for all ip connections
+
 ## SOLR
 
 After setting up the Solr container, it would not start because it kept on indicating there was a permission issue

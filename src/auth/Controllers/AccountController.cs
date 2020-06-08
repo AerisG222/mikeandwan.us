@@ -28,7 +28,7 @@ namespace MawAuth.Controllers
         const byte LOGIN_AREA_FORM = 1;
         const string EmailFrom = "webmaster@mikeandwan.us";
 
-        readonly ILogger<AccountController> _log;
+        readonly ILogger _log;
         readonly IIdentityServerInteractionService _interaction;
         readonly IUserRepository _repo;
         readonly SignInManager<MawUser> _signInManager;

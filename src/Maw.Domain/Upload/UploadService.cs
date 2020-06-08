@@ -19,7 +19,7 @@ namespace Maw.Domain.Upload
         const int TWENTY_MB = 20 * 1024 * 1024;
 
         readonly UploadConfig _cfg;
-        readonly ILogger<UploadService> _log;
+        readonly ILogger _log;
 
 
         public UploadService(IOptions<UploadConfig> uploadConfig,

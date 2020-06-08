@@ -9,7 +9,7 @@ namespace MawMvcApp.Controllers
     public class MawBaseController<T>
         : Controller
     {
-        protected ILogger<T> Log { get; }
+        protected ILogger Log { get; }
 
 
         public MawBaseController(ILogger<T> log)

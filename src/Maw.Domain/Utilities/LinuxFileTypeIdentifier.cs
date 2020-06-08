@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Medallion.Shell;
 
@@ -10,7 +9,7 @@ namespace Maw.Domain.Utilities
 {
     public class LinuxFileTypeIdentifier
     {
-        readonly ILogger<LinuxFileTypeIdentifier> _log;
+        readonly ILogger _log;
 
 
         public LinuxFileTypeIdentifier(ILogger<LinuxFileTypeIdentifier> log)

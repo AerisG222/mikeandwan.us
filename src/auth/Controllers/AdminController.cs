@@ -24,7 +24,7 @@ namespace MawAuth.Controllers
     public class AdminController
         : Controller
     {
-        readonly ILogger<AdminController> _log;
+        readonly ILogger _log;
         readonly IUserRepository _repo;
         readonly UserManager<MawUser> _userMgr;
         readonly RoleManager<MawRole> _roleMgr;

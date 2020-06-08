@@ -10,7 +10,7 @@ namespace MawAuth.Controllers
     public class ErrorController
         : Controller
     {
-        readonly ILogger<ErrorController> _log;
+        readonly ILogger _log;
 
 
         public ErrorController(ILogger<ErrorController> log)

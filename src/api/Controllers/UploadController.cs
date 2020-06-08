@@ -23,7 +23,7 @@ namespace MawMvcApp.Controllers
     public class UploadController
         : Controller
     {
-        readonly ILogger<UploadController> _log;
+        readonly ILogger _log;
         readonly IUploadService _uploadSvc;
         readonly IHubContext<UploadHub> _uploadHub;
         readonly IContentTypeProvider _contentTypeProvider;

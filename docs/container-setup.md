@@ -26,6 +26,8 @@ The following steps will walk through the process of configuring podman for host
 
 - modify the postgres config pg_hba.conf in the volume to allow md5 auth for all ip connections
 
+- finally, add all domain names to /etc/hosts *on host server* to 127.0.0.1
+
 ## SOLR
 
 After setting up the Solr container, it would not start because it kept on indicating there was a permission issue

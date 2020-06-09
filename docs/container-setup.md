@@ -26,7 +26,73 @@ The following steps will walk through the process of configuring podman for host
 
 - modify the postgres config pg_hba.conf in the volume to allow md5 auth for all ip connections
 
-- finally, add all domain names to /etc/hosts *on host server* to 127.0.0.1
+- finally, add all domain names to /etc/hosts *on host server* to 127.0.0.1 (including naked domain)
+
+- certbot was originally configured to obtain certs via nginx - however, we need to convert fron nginx to webroot
+  -  [great article showing these steps](https://www.linuxbabe.com/security/letsencrypt-webroot-tls-certificate)
+  -  run the following to reconfigure these to use the webroot method instead (so that certbot and the web server can share state via the volume):
+```
+podman run -it --rm \
+    --pod maw-pod \
+    --volume maw-certbot-validation:/var/www/certbot:rw,z \
+    --volume maw-certbot-certs:/etc/letsencrypt:rw,z \
+    docker.io/certbot/certbot:latest \
+    certonly \
+        --webroot \
+        --agree-tos \
+        --email mmorano@mikeandwan.us \
+        -d mikeandwan.us \
+        -d www.mikeandwan.us \
+        -w /var/www/certbot
+
+podman run -it --rm \
+    --pod maw-pod \
+    --volume maw-certbot-validation:/var/www/certbot:rw,z \
+    --volume maw-certbot-certs:/etc/letsencrypt:rw,z \
+    docker.io/certbot/certbot:latest \
+    certonly \
+        --webroot \
+        --agree-tos \
+        --email mmorano@mikeandwan.us \
+        -d api.mikeandwan.us \
+        -w /var/www/certbot
+
+podman run -it --rm \
+    --pod maw-pod \
+    --volume maw-certbot-validation:/var/www/certbot:rw,z \
+    --volume maw-certbot-certs:/etc/letsencrypt:rw,z \
+    docker.io/certbot/certbot:latest \
+    certonly \
+        --webroot \
+        --agree-tos \
+        --email mmorano@mikeandwan.us \
+        -d auth.mikeandwan.us \
+        -w /var/www/certbot
+
+podman run -it --rm \
+    --pod maw-pod \
+    --volume maw-certbot-validation:/var/www/certbot:rw,z \
+    --volume maw-certbot-certs:/etc/letsencrypt:rw,z \
+    docker.io/certbot/certbot:latest \
+    certonly \
+        --webroot \
+        --agree-tos \
+        --email mmorano@mikeandwan.us \
+        -d files.mikeandwan.us \
+        -w /var/www/certbot
+
+podman run -it --rm \
+    --pod maw-pod \
+    --volume maw-certbot-validation:/var/www/certbot:rw,z \
+    --volume maw-certbot-certs:/etc/letsencrypt:rw,z \
+    docker.io/certbot/certbot:latest \
+    certonly \
+        --webroot \
+        --agree-tos \
+        --email mmorano@mikeandwan.us \
+        -d photos.mikeandwan.us \
+        -w /var/www/certbot
+```
 
 ## SOLR
 

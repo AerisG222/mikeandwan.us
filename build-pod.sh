@@ -356,6 +356,42 @@ create_containers() {
             "${C_WWW}"
     fi
 
+    podman container inspect maw-postgres-maintenance > /dev/null 2>&1
+
+    if [ $? -ne 0 ]; then
+        echo "    - creating maw-posgres-maintenance container"
+
+        podman create \
+            --pod "${POD_NAME}" \
+            --name maw-postgres-maintenance \
+            --volume maw-postgres-backup:/pg_backup:rw,z \
+            --env-file "${ENV_FILE_DIR}/maw-postgres-backup.env" \
+            --label "io.containers.autoupdate=image" \
+            docker.io/aerisg222/maw-postgres-maintenance:latest
+    fi
+
+    podman container inspect maw-solr-reindex > /dev/null 2>&1
+
+    if [ $? -ne 0 ]; then
+        podman create \
+            --pod "${POD_NAME}" \
+            --name maw-solr-reindex \
+            --label "io.containers.autoupdate=image" \
+            docker.io/aerisg222/maw-solr-reindex:latest
+    fi
+
+    podman container inspect maw-reverse-geocode > /dev/null 2>&1
+
+    if [ $? -ne 0 ]; then
+        podman create \
+            --pod "${POD_NAME}" \
+            --name maw-reverse-geocode \
+            --volume maw-reverse-geocode:/results:rw,z \
+            --env-file "${ENV_FILE_DIR}/maw-reverse-geocode.env" \
+            --label "io.containers.autoupdate=image" \
+            docker.io/aerisg222/maw-reverse-geocode:latest
+    fi
+
     if [ ${ENV_NAME} = 'dev' ]; then
         podman container inspect maw-gateway > /dev/null 2>&1
 
@@ -411,8 +447,7 @@ create_containers() {
 build_pod_dev() {
     local POD_NAME="maw-pod-dev"
 
-    echo
-    echo "running all steps to create ${POD_NAME}"
+    show_info ${POD_NAME}
 
     create_pod "${POD_NAME}"
     create_volumes 'dev'
@@ -421,15 +456,13 @@ build_pod_dev() {
     map_default_ports_to_container_ports
     create_containers 'dev' "${POD_NAME}" "/home/mmorano/git"
 
-    echo "    - completed"
-    echo
+    show_done
 }
 
 build_pod_prod() {
     local POD_NAME="maw-pod"
 
-    echo
-    echo "running all steps to create ${POD_NAME}"
+    show_info ${POD_NAME}
 
     create_pod "${POD_NAME}"
     create_volumes 'prod'
@@ -437,21 +470,31 @@ build_pod_prod() {
     map_default_ports_to_container_ports
     create_containers 'prod' "${POD_NAME}" "/home/svc_www_maw"
 
+    show_done
+}
+
+show_info() {
+    local POD_NAME=$1
+
+    echo
+    echo "This script will initialize the container environment for mikeandwan.us in pod *** ${POD_NAME} ***"
+    echo '  - this assumes *all* images are available - either local for dev or in dockerhub for prod'
+    echo '  - run this script with the user the site should run as (i.e. svc_www_maw)'
+    echo '  - to execute, please specify "dev" or "prod" to indicate which environment to create'
+    echo '  - the script will automatically migrate current solr and postgres instances'
+    echo '  - the script will also prepare the gdrive archive - but you must first place the containers.json file in ~/'
+    echo
+
+    read -n 1 -r -s -p $'Press enter to continue...\n'
+
+    echo
+    echo "running all steps to create ${POD_NAME}"
+}
+
+show_done() {
     echo "    - completed"
     echo
 }
-
-echo
-echo 'This script will initialize the container environment for mikeandwan.us'
-echo '  - this assumes *all* images are available - either local for dev or in dockerhub for prod'
-echo '  - run this script with the user the site should run as (i.e. svc_www_maw)'
-echo '  - to execute, please specify "dev" or "prod" to indicate which environment to create'
-echo '  - the script will automatically migrate current solr and postgres instances'
-echo '  - the script will also prepare the gdrive archive - but you must first place the containers.json file in ~/'
-echo
-
-read -n 1 -r -s -p $'Press enter to continue...\n'
-
 
 if   [ "${1}" = 'dev' ]; then
     build_pod_dev

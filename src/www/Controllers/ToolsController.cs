@@ -282,25 +282,6 @@ namespace MawMvcApp.Controllers
         }
 
 
-        [HttpGet("browser-hell")]
-        public IActionResult BrowserHell()
-        {
-            ViewBag.NavigationZone = NavigationZone.Tools;
-
-            var model = new BrowserHellModel();
-            var fi = _fileProvider.GetFileInfo("img/tools/browser_hell.jpg");
-
-            if (fi.Exists)
-            {
-                ViewBag.ImageColors = model.GetColorArray(fi.PhysicalPath);
-
-                return View();
-            }
-
-            return NotFound();
-        }
-
-
         [HttpGet("byte-counter")]
         public IActionResult ByteCounter()
         {

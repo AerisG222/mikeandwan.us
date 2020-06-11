@@ -7,9 +7,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using Maw.Security;
-using NMagickWand;
-using NMagickWand.Enums;
 
 namespace Maw.Domain.Upload
 {
@@ -24,8 +24,8 @@ namespace Maw.Domain.Upload
 
         public UploadService(IOptions<UploadConfig> uploadConfig,
                              ILogger<UploadService> log) {
-            this._cfg = uploadConfig?.Value ?? throw new ArgumentNullException(nameof(uploadConfig));
-            this._log = log ?? throw new ArgumentNullException(nameof(log));
+            _cfg = uploadConfig?.Value ?? throw new ArgumentNullException(nameof(uploadConfig));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
 
             if(!Directory.Exists(_cfg.RootDirectory))
             {
@@ -299,28 +299,29 @@ namespace Maw.Domain.Upload
                 return null;
             }
 
-            using var mw = new MagickWand(absolutePath);
+            using var image = Image.Load(absolutePath);
 
-            if(mw.ImageWidth > 256 || mw.ImageHeight > 256)
+            if(image.Width > 256 || image.Height > 256)
             {
                 // crop 20%
-                var xoffset = Convert.ToInt32(mw.ImageWidth * 0.1);
-                var yoffset = Convert.ToInt32(mw.ImageHeight * 0.1);
-                var newWidth = mw.ImageWidth - (2 * xoffset);
-                var newHeight = mw.ImageHeight - (2 * yoffset);
+                var xOffset = Convert.ToInt32(image.Width * 0.1);
+                var yOffset = Convert.ToInt32(image.Height * 0.1);
+                var newWidth = image.Width - (2 * xOffset);
+                var newHeight = image.Height - (2 * yOffset);
 
-                mw.CropImage((uint)newWidth, (uint)newHeight, xoffset, yoffset);
+                var rect = new Rectangle(xOffset, yOffset, newWidth, newHeight);
+
+                image.Mutate(x => x.Crop(rect));
             }
 
-            var leftPos = (mw.ImageWidth / 2) - (maxDimension / 2);
-            var topPos = (mw.ImageHeight / 2) - (maxDimension / 2);
+            var leftPos = (image.Width / 2) - (maxDimension / 2);
+            var topPos = (image.Height / 2) - (maxDimension / 2);
 
             var ms = new MemoryStream();
 
-            mw.ResizeImage((uint)maxDimension, (uint)maxDimension, FilterTypes.Lanczos2SharpFilter, 1);
-            mw.Compression = CompressionType.JPEGCompression;
-            mw.CompressionQuality = 72;
-            mw.WriteImage(ms);
+            image.Mutate(x => x.Resize(maxDimension, maxDimension, KnownResamplers.Lanczos3));
+
+            image.SaveAsJpeg(ms);
 
             ms.Seek(0, SeekOrigin.Begin);
 

@@ -12,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
-using NMagickWand;
 using SolrNet;
 using Maw.Data;
 using Maw.Domain;
@@ -34,8 +33,6 @@ namespace MawApi
         public Startup(IConfiguration config)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
-
-            MagickWandEnvironment.Genesis();
         }
 
 

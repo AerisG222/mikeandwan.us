@@ -16,7 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using IdentityModel;
 using Mvc.RenderViewToString;
-using NMagickWand;
 using NWebsec.Core.Common.Middleware.Options;
 using Maw.Data;
 using Maw.Domain;
@@ -42,8 +41,6 @@ namespace MawMvcApp
         {
             _env = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
             _config = config ?? throw new ArgumentNullException(nameof(config));
-
-            MagickWandEnvironment.Genesis();
         }
 
 

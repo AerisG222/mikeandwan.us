@@ -1,7 +1,8 @@
 using System;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
-using NMagickWand;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 
 namespace Maw.Domain.Photos
@@ -24,14 +25,15 @@ namespace Maw.Domain.Photos
 
             if(fi.Exists)
             {
-                using var mw = new MagickWand(fi.PhysicalPath);
-                var leftPos = (mw.ImageWidth / 2) - (maxDimension / 2);
-                var topPos = (mw.ImageHeight / 2) - (maxDimension / 2);
+                using var image = Image.Load(fi.PhysicalPath);
+                var leftPos = (image.Width / 2) - (maxDimension / 2);
+                var topPos = (image.Height / 2) - (maxDimension / 2);
 
                 var ms = new MemoryStream();
 
-                mw.CropImage((uint)maxDimension, (uint)maxDimension, (int)leftPos, (int)topPos);
-                mw.WriteImage(ms);
+                var rect = new Rectangle(leftPos, topPos, maxDimension, maxDimension);
+                image.Mutate(x => x.Crop(rect));
+                image.SaveAsJpeg(ms);
 
                 ms.Seek(0, SeekOrigin.Begin);
 

@@ -211,20 +211,20 @@ map_default_ports_to_container_ports() {
 
     # the following works for external access - run 2x for current runtime and to apply permanently
     sudo firewall-cmd --add-masquerade
-    #sudo firewall-cmd --add-masquerade --permanent
+    sudo firewall-cmd --add-masquerade --permanent
 
     sudo firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080
-    #sudo firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080 --permanent
+    sudo firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080 --permanent
 
     sudo firewall-cmd --add-forward-port=port=443:proto=tcp:toport=8443
-    #sudo firewall-cmd --add-forward-port=port=443:proto=tcp:toport=8443 --permanent
+    sudo firewall-cmd --add-forward-port=port=443:proto=tcp:toport=8443 --permanent
 
     # the following is for access on localhost
     sudo iptables -A OUTPUT -t nat -p tcp --destination 127.0.0.1 --dport 80 -j REDIRECT --to-port 8080
     sudo iptables -A OUTPUT -t nat -p tcp --destination 127.0.0.1 --dport 443 -j REDIRECT --to-port 8443
 
     # persist the iptables rules across reboots
-    #sudo service iptables save
+    sudo service iptables save
 
     echo "    - firewall is now forwarding requests from 80/443 to 8080/8443"
 }
@@ -444,6 +444,22 @@ create_containers() {
     fi
 }
 
+configure_systemd() {
+    local POD_NAME=${1}
+
+    mkdir ~/.config/systemd/user
+
+    pushd ~/.config/systemd/user
+
+    podman generate systemd --files --name maw-po
+
+    popd
+
+    systemctl --user daemon-reload
+    systemctl --user start "pod-${POD_NAME}.service"
+    systemctl --user enable "pod-${POD_NAME}.service"
+}
+
 build_pod_dev() {
     local POD_NAME="maw-pod-dev"
 
@@ -469,6 +485,7 @@ build_pod_prod() {
     init_certs 'aerisg222/maw-certs'
     map_default_ports_to_container_ports
     create_containers 'prod' "${POD_NAME}" "/home/svc_www_maw"
+    configure_systemd "${POD_NAME}"
 
     show_done
 }

@@ -55,7 +55,6 @@ namespace MawAuth
                 .ConfigureWebHostDefaults(webBuilder => {
                     webBuilder
                         .CaptureStartupErrors(true)
-                        //.UseLinuxTransport()
                         .UseKestrel(opts =>
                         {
                             opts.Listen(IPAddress.Loopback, 5001, listenOptions =>

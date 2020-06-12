@@ -16,7 +16,6 @@
         <PackageReference Include="IdentityModel" Version="4.3.0" />
         <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.1.0" />
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
-        <PackageReference Include="RedHat.AspNetCore.Server.Kestrel.Transport.Linux" Version="3.1.0-200609.1418" />
     </ItemGroup>
 
     <ItemGroup>

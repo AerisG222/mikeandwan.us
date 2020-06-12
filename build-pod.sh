@@ -458,6 +458,9 @@ configure_systemd() {
     systemctl --user daemon-reload
     systemctl --user start "pod-${POD_NAME}.service"
     systemctl --user enable "pod-${POD_NAME}.service"
+
+    # allow services to run w/o user logged in
+    sudo loginctl enable-linger "${USER}"
 }
 
 build_pod_dev() {

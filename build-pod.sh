@@ -330,7 +330,7 @@ create_containers() {
             --volume maw-certs:/certs:ro,z \
             --volume maw-api-dataprotection:/dataprotection:rw,Z \
             --volume maw-uploads:/maw-uploads:rw,z \
-            --volume /srv/www/website_assets/images:/maw-www/wwwroot/images:ro \
+            --volume /srv/www/website_assets/images:/srv/www/website_assets/images:ro \
             --label "io.containers.autoupdate=image" \
             --security-opt label=disable \
             --env-file "${ENV_FILE_DIR}/maw-api.env" \
@@ -348,8 +348,8 @@ create_containers() {
             --volume maw-certs:/certs:ro,z \
             --volume maw-www-dataprotection:/dataprotection:rw,Z \
             --volume maw-google-creds:/google-creds:ro,z \
-            --volume /srv/www/website_assets/images:/maw-www/wwwroot/images:ro \
-            --volume /srv/www/website_assets/movies:/maw-www/wwwroot/movies:ro \
+            --volume /srv/www/website_assets/images:/srv/www/website_assets/images:ro \
+            --volume /srv/www/website_assets/movies:/srv/www/website_assets/movies:ro \
             --label "io.containers.autoupdate=image" \
             --security-opt label=disable \
             --env-file "${ENV_FILE_DIR}/maw-www.env" \

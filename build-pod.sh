@@ -356,16 +356,6 @@ create_containers() {
             "${C_WWW}"
     fi
 
-    podman container inspect maw-solr-reindex > /dev/null 2>&1
-
-    if [ $? -ne 0 ]; then
-        podman create \
-            --pod "${POD_NAME}" \
-            --name maw-solr-reindex \
-            --label "io.containers.autoupdate=image" \
-            docker.io/aerisg222/maw-solr-reindex:latest
-    fi
-
     if [ ${ENV_NAME} = 'dev' ]; then
         podman container inspect maw-gateway > /dev/null 2>&1
 
@@ -479,6 +469,30 @@ create_reverse_geocode_job() {
     echo "WantedBy=timers.target" >> ${TIMER}
 }
 
+create_solr_reindex_job() {
+    local POD_NAME=${1}
+    local SVC=~/.config/systemd/user/solr-reindex.service
+    local TIMER=~/.config/systemd/user/solr-reindex.timer
+
+    echo '    - creating solr reindex job!'
+
+    echo "[Unit]" > ${SVC}
+    echo "Description=Solr Reindex job for mikeandwan.us" >> ${SVC}
+    echo "" >> ${SVC}
+    echo "[Service]" >> ${SVC}
+    echo "Type=oneshot" >> ${SVC}
+    echo "ExecStart=podman run -it --rm --pod maw-pod docker.io/aerisg222/maw-solr-reindex:latest" >> ${SVC}
+
+    echo "[Unit]" > ${TIMER}
+    echo "Description=Run solr-reindex once a day" >> ${TIMER}
+    echo "" >> ${TIMER}
+    echo "[Timer]" >> ${TIMER}
+    echo "OnCalendar=02:30:00" >> ${TIMER}
+    echo "" >> ${TIMER}
+    echo "[Install]" >> ${TIMER}
+    echo "WantedBy=timers.target" >> ${TIMER}
+}
+
 start_enable_certbot_job() {
     systemctl --user start certbot-renew.service
     systemctl --user enable certbot-renew.service
@@ -494,6 +508,11 @@ start_enable_reverse_geocode_job() {
     systemctl --user enable reverse-geocode.service
 }
 
+start_enable_solr_reindex_job() {
+    systemctl --user start solr-reindex.service
+    systemctl --user enable solr-reindex.service
+}
+
 configure_systemd() {
     local POD_NAME=${1}
     local ENV_FILE_DIR=${2}
@@ -507,6 +526,7 @@ configure_systemd() {
     create_certbot_job "${POD_NAME}"
     create_postgres_job "${POD_NAME}" "${ENV_FILE_DIR}"
     create_reverse_geocode_job "${POD_NAME}" "${ENV_FILE_DIR}"
+    create_solr_reindex_job "${POD_NAME}"
 
     popd
 
@@ -517,6 +537,7 @@ configure_systemd() {
     start_enable_certbot_job
     start_enable_postgres_job
     start_enable_reverse_geocode_job
+    start_enable_solr_reindex_job
 
     # allow services to run w/o user logged in
     sudo loginctl enable-linger "${USER}"

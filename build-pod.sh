@@ -444,6 +444,37 @@ create_containers() {
     fi
 }
 
+create_certbot_job() {
+    local POD_NAME=${1}
+    local SVC=~/.config/systemd/user/certbot-renew.service
+    local TIMER=~/.config/systemd/user/certbot-renew.timer
+
+    echo 'creating job!'
+
+    echo "[Unit]" > ${SVC}
+    echo "Description=Renew Let's Encrypt certificates for mikeandwan.us" >> ${SVC}
+    echo "" >> ${SVC}
+    echo "[Service]" >> ${SVC}
+    echo "Type=oneshot" >> ${SVC}
+    echo "ExecStart=podman run -it --rm --pod maw-pod --volume maw-certbot-validation:/var/www/certbot:rw,z --volume maw-certbot-certs:/etc/letsencrypt:rw,z docker.io/certbot/certbot:latest renew --agree-tos" >> ${SVC}
+
+    echo "[Unit]" > ${TIMER}
+    echo "Description=Run certbot_renew twice a day" >> ${TIMER}
+    echo "" >> ${TIMER}
+    echo "[Timer]" >> ${TIMER}
+    echo "OnCalendar=0/12:00:00" >> ${TIMER}
+    echo "RandomizedDelaySec=1h" >> ${TIMER}
+    echo "Persistent=true" >> ${TIMER}
+    echo "" >> ${TIMER}
+    echo "[Install]" >> ${TIMER}
+    echo "WantedBy=timers.target" >> ${TIMER}
+}
+
+start_enable_certbot_job() {
+    systemctl --user start certbot-renew.service
+    systemctl --user enable certbot-renew.service
+}
+
 configure_systemd() {
     local POD_NAME=${1}
 
@@ -453,11 +484,15 @@ configure_systemd() {
 
     podman generate systemd --files --name maw-po
 
+    create_certbot_job "${POD_NAME}"
+
     popd
 
     systemctl --user daemon-reload
     systemctl --user start "pod-${POD_NAME}.service"
     systemctl --user enable "pod-${POD_NAME}.service"
+
+    start_enable_certbot_job
 
     # allow services to run w/o user logged in
     sudo loginctl enable-linger "${USER}"

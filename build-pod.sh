@@ -16,7 +16,7 @@ create_volume() {
 
     local VOL_INSPECTED=$(podman volume inspect "${VOL_NAME}" -f "{{.Name}}" 2> /dev/null)
 
-    # volume inspect will match partial names - here we check that it was not found (first condition) or that the found name does not match (i.e. maw-postgres and maw-postgres-backups)
+    # volume inspect will match partial names - here we check that it was not found (first condition) or that the found name does not match (i.e. maw-postgres and maw-postgres-backup)
     # fortunately we do not have a case where there are more than 2 with the same prefix (fingers will remain crossed)
     if [ $? -ne 0 ] | [ "${VOL_INSPECTED}" != "${VOL_NAME}" ]; then
         echo "    - creating volume: ${VOL_NAME}"
@@ -165,7 +165,7 @@ create_volumes() {
     local ENV_NAME=${1}
 
     create_volume maw-certs
-    create_volume maw-postgres-backups
+    create_volume maw-postgres-backup
     create_volume maw-uploads
     create_volume maw-api-dataprotection
     create_volume maw-auth-dataprotection
@@ -356,20 +356,6 @@ create_containers() {
             "${C_WWW}"
     fi
 
-    podman container inspect maw-postgres-maintenance > /dev/null 2>&1
-
-    if [ $? -ne 0 ]; then
-        echo "    - creating maw-posgres-maintenance container"
-
-        podman create \
-            --pod "${POD_NAME}" \
-            --name maw-postgres-maintenance \
-            --volume maw-postgres-backup:/pg_backup:rw,z \
-            --env-file "${ENV_FILE_DIR}/maw-postgres-backup.env" \
-            --label "io.containers.autoupdate=image" \
-            docker.io/aerisg222/maw-postgres-maintenance:latest
-    fi
-
     podman container inspect maw-solr-reindex > /dev/null 2>&1
 
     if [ $? -ne 0 ]; then
@@ -427,20 +413,6 @@ create_containers() {
                 --security-opt label=disable \
                 "${C_GATEWAY}"
         fi
-
-        podman container inspect maw-certbot > /dev/null 2>&1
-
-        if [ $? -ne 0 ]; then
-            echo "    - creating maw-certbot container"
-
-            podman create \
-                --pod "${POD_NAME}" \
-                --name maw-certbot \
-                --volume maw-certbot-validation:/var/www/certbot:rw,z \
-                --volume maw-certbot-certs:/etc/letsencrypt:rw,z \
-                --label "io.containers.autoupdate=image" \
-                docker.io/aerisg222/maw-certbot:latest
-        fi
     fi
 }
 
@@ -449,7 +421,7 @@ create_certbot_job() {
     local SVC=~/.config/systemd/user/certbot-renew.service
     local TIMER=~/.config/systemd/user/certbot-renew.timer
 
-    echo 'creating job!'
+    echo '    - creating certbot renew job!'
 
     echo "[Unit]" > ${SVC}
     echo "Description=Renew Let's Encrypt certificates for mikeandwan.us" >> ${SVC}
@@ -459,12 +431,36 @@ create_certbot_job() {
     echo "ExecStart=podman run -it --rm --pod maw-pod --volume maw-certbot-validation:/var/www/certbot:rw,z --volume maw-certbot-certs:/etc/letsencrypt:rw,z docker.io/certbot/certbot:latest renew --agree-tos" >> ${SVC}
 
     echo "[Unit]" > ${TIMER}
-    echo "Description=Run certbot_renew twice a day" >> ${TIMER}
+    echo "Description=Run certbot-renew twice a day" >> ${TIMER}
     echo "" >> ${TIMER}
     echo "[Timer]" >> ${TIMER}
     echo "OnCalendar=0/12:00:00" >> ${TIMER}
     echo "RandomizedDelaySec=1h" >> ${TIMER}
-    echo "Persistent=true" >> ${TIMER}
+    echo "" >> ${TIMER}
+    echo "[Install]" >> ${TIMER}
+    echo "WantedBy=timers.target" >> ${TIMER}
+}
+
+create_postgres_job() {
+    local POD_NAME=${1}
+    local ENV_FILE_DIR=${2}
+    local SVC=~/.config/systemd/user/postgres-maintenance.service
+    local TIMER=~/.config/systemd/user/postgres-maintenance.timer
+
+    echo '    - creating postgres maintenance job!'
+
+    echo "[Unit]" > ${SVC}
+    echo "Description=PostgreSQL backup and optimization jobs for mikeandwan.us databases" >> ${SVC}
+    echo "" >> ${SVC}
+    echo "[Service]" >> ${SVC}
+    echo "Type=oneshot" >> ${SVC}
+    echo "ExecStart=podman run -it --rm --pod maw-pod --volume maw-postgres-backup:/pg_backup:rw,z --env-file ${ENV_FILE_DIR}/maw-postgres-backup.env docker.io/aerisg222/maw-postgres-maintenance:latest" >> ${SVC}
+
+    echo "[Unit]" > ${TIMER}
+    echo "Description=Run postgres-maintenance once a day" >> ${TIMER}
+    echo "" >> ${TIMER}
+    echo "[Timer]" >> ${TIMER}
+    echo "OnCalendar=01:00:00" >> ${TIMER}
     echo "" >> ${TIMER}
     echo "[Install]" >> ${TIMER}
     echo "WantedBy=timers.target" >> ${TIMER}
@@ -475,8 +471,14 @@ start_enable_certbot_job() {
     systemctl --user enable certbot-renew.service
 }
 
+start_enable_postgres_job() {
+    systemctl --user start postgres-maintenance.service
+    systemctl --user enable postgres-maintenance.service
+}
+
 configure_systemd() {
     local POD_NAME=${1}
+    local ENV_FILE_DIR=${2}
 
     mkdir ~/.config/systemd/user
 
@@ -485,6 +487,7 @@ configure_systemd() {
     podman generate systemd --files --name maw-po
 
     create_certbot_job "${POD_NAME}"
+    create_postgres_job "${POD_NAME}" "${ENV_FILE_DIR}"
 
     popd
 
@@ -493,6 +496,7 @@ configure_systemd() {
     systemctl --user enable "pod-${POD_NAME}.service"
 
     start_enable_certbot_job
+    start_enable_postgres_job
 
     # allow services to run w/o user logged in
     sudo loginctl enable-linger "${USER}"
@@ -523,7 +527,7 @@ build_pod_prod() {
     init_certs 'aerisg222/maw-certs'
     map_default_ports_to_container_ports
     create_containers 'prod' "${POD_NAME}" "/home/svc_www_maw"
-    configure_systemd "${POD_NAME}"
+    configure_systemd "${POD_NAME}" "/home/svc_www_maw"
 
     show_done
 }
@@ -556,5 +560,6 @@ if   [ "${1}" = 'dev' ]; then
 elif [ "${1}" = 'prod' ]; then
     build_pod_prod
 else
+    create_postgres_job maw-pod "/home/svc_www_maw"
     echo 'Please specify if you would like to build a "prod" or "dev" pod'
 fi

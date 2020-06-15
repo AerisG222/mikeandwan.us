@@ -493,6 +493,59 @@ create_solr_reindex_job() {
     echo "WantedBy=timers.target" >> ${TIMER}
 }
 
+create_remote_archive_job_daily() {
+    local POD_NAME=${1}
+    local SVC=~/.config/systemd/user/remote-archive-daily.service
+    local TIMER=~/.config/systemd/user/remote-archive-daily.timer
+
+    echo '    - creating remote archive daily job!'
+
+    echo "[Unit]" > ${SVC}
+    echo "Description=Daily remote archive job for mikeandwan.us" >> ${SVC}
+    echo "" >> ${SVC}
+    echo "[Service]" >> ${SVC}
+    echo "Type=oneshot" >> ${SVC}
+    echo "ExecStart=/home/${USER}/remote-archive.sh daily" >> ${SVC}
+
+    echo "[Unit]" > ${TIMER}
+    echo "Description=Run remote archive once a day" >> ${TIMER}
+    echo "" >> ${TIMER}
+    echo "[Timer]" >> ${TIMER}
+    echo "OnCalendar=01:30:00" >> ${TIMER}
+    echo "" >> ${TIMER}
+    echo "[Install]" >> ${TIMER}
+    echo "WantedBy=timers.target" >> ${TIMER}
+}
+
+create_remote_archive_job_monthly() {
+    local POD_NAME=${1}
+    local SVC=~/.config/systemd/user/remote-archive-monthly.service
+    local TIMER=~/.config/systemd/user/remote-archive-monthly.timer
+
+    echo '    - creating remote archive monthly job!'
+
+    echo "[Unit]" > ${SVC}
+    echo "Description=Long term remote archive job for mikeandwan.us" >> ${SVC}
+    echo "" >> ${SVC}
+    echo "[Service]" >> ${SVC}
+    echo "Type=oneshot" >> ${SVC}
+    echo "ExecStart=/home/${USER}/remote-archive.sh monthly" >> ${SVC}
+
+    echo "[Unit]" > ${TIMER}
+    echo "Description=Run long term remote archive once a month" >> ${TIMER}
+    echo "" >> ${TIMER}
+    echo "[Timer]" >> ${TIMER}
+    echo "OnCalendar=*-*-01 01:45:00" >> ${TIMER}
+    echo "" >> ${TIMER}
+    echo "[Install]" >> ${TIMER}
+    echo "WantedBy=timers.target" >> ${TIMER}
+}
+
+create_remote_archive_job() {
+    create_remote_archive_job_daily ${POD_NAME}
+    create_remote_archive_job_monthly ${POD_NAME}
+}
+
 start_enable_certbot_job() {
     systemctl --user start certbot-renew.timer
     systemctl --user enable certbot-renew.timer
@@ -513,6 +566,14 @@ start_enable_solr_reindex_job() {
     systemctl --user enable solr-reindex.timer
 }
 
+start_enable_solr_reindex_job() {
+    systemctl --user start remote-archive-daily.timer
+    systemctl --user start remote-archive-monthly.timer
+
+    systemctl --user enable remote-archive-daily.timer
+    systemctl --user enable remote-archive-monthly.timer
+}
+
 configure_systemd() {
     local POD_NAME=${1}
     local ENV_FILE_DIR=${2}
@@ -527,6 +588,7 @@ configure_systemd() {
     create_postgres_job "${POD_NAME}" "${ENV_FILE_DIR}"
     create_reverse_geocode_job "${POD_NAME}" "${ENV_FILE_DIR}"
     create_solr_reindex_job "${POD_NAME}"
+    create_remote_archive_job "${POD_NAME}"
 
     popd
 
@@ -538,6 +600,7 @@ configure_systemd() {
     start_enable_postgres_job
     start_enable_reverse_geocode_job
     start_enable_solr_reindex_job
+    start_enable_remote_archive_job
 
     # allow services to run w/o user logged in
     sudo loginctl enable-linger "${USER}"
@@ -583,6 +646,7 @@ show_info() {
     echo '  - to execute, please specify "dev" or "prod" to indicate which environment to create'
     echo '  - the script will automatically migrate current solr and postgres instances'
     echo '  - the script will also prepare the gdrive archive - but you must first place the containers.json file in ~/'
+    echo '  - you should also copy the remote-archive.sh to the service accounts home directory, as this is referenced by the systemd service'
     echo
 
     read -n 1 -r -s -p $'Press enter to continue...\n'

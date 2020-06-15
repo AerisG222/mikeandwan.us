@@ -494,23 +494,23 @@ create_solr_reindex_job() {
 }
 
 start_enable_certbot_job() {
-    systemctl --user start certbot-renew.service
-    systemctl --user enable certbot-renew.service
+    systemctl --user start certbot-renew.timer
+    systemctl --user enable certbot-renew.timer
 }
 
 start_enable_postgres_job() {
-    systemctl --user start postgres-maintenance.service
-    systemctl --user enable postgres-maintenance.service
+    systemctl --user start postgres-maintenance.timer
+    systemctl --user enable postgres-maintenance.timer
 }
 
 start_enable_reverse_geocode_job() {
-    systemctl --user start reverse-geocode.service
-    systemctl --user enable reverse-geocode.service
+    systemctl --user start reverse-geocode.timer
+    systemctl --user enable reverse-geocode.timer
 }
 
 start_enable_solr_reindex_job() {
-    systemctl --user start solr-reindex.service
-    systemctl --user enable solr-reindex.service
+    systemctl --user start solr-reindex.timer
+    systemctl --user enable solr-reindex.timer
 }
 
 configure_systemd() {

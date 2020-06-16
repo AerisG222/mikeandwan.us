@@ -6,7 +6,7 @@
 ###################################################################################################
 DEBUG=y
 SSH_REMOTE_HOST=tifa
-SSH_USERNAME=mmorano
+SSH_USERNAME=svc_www_maw
 PATH_CONVERT_VIDEOS="/home/mmorano/git/ConvertVideos/src/ConvertVideos/bin/Release/netcoreapp3.1/ConvertVideos.dll"
 PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup/bin/Release/netcoreapp3.1/GlacierBackup.dll"
 PATH_ASSET_ROOT="/srv/www/website_assets"
@@ -190,8 +190,8 @@ ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
     sudo chmod -R go-w '${DEST_MOVIES_CATEGORY_ROOT}'
     sudo restorecon -R '${DEST_MOVIES_CATEGORY_ROOT}'
 
-    psql -d maw_website -f '${SQL_FILE}'
-    psql -d maw_website -f '${GLACIER_SQL_FILE}'
+    podman run -it --rm --pod maw-pod --env-file '/home/${SSH_USERNAME}/maw-postgres-backup.env' -v .:/tmp/context:ro --security-opt label=disable postgres:12.2 psql -h localhost -U postgres -d maw_website -f '/tmp/context/${SQL_FILE}'
+    podman run -it --rm --pod maw-pod --env-file '/home/${SSH_USERNAME}/maw-postgres-backup.env' -v .:/tmp/context:ro --security-opt label=disable postgres:12.2 psql -h localhost -U postgres -d maw_website -f '/tmp/context/${GLACIER_SQL_FILE}'
 
     rm '${SQL_FILE}'
     rm '${GLACIER_SQL_FILE}'

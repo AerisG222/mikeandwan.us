@@ -82,12 +82,11 @@ namespace MawMvcApp
                     opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
                 })
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opts => {
-                    opts.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     opts.Authority = authConfig.AuthorizationUrl;
 
                     opts.ClientId = authConfig.ClientId;
                     opts.ClientSecret = authConfig.Secret;
-                    opts.ResponseType = "code id_token";
+                    opts.ResponseType = "code";
 
                     opts.SaveTokens = true;
                     opts.GetClaimsFromUserInfoEndpoint = true;

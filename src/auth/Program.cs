@@ -32,7 +32,7 @@ namespace MawAuth
                         {
                             factory
                                 .AddConsole()
-                                .AddFilter("IdentityServer4", LogLevel.Information)
+                                .AddFilter("IdentityServer4", LogLevel.Debug)
                                 .AddFilter("Microsoft", LogLevel.Information)
                                 .AddFilter("System", LogLevel.Information)
                                 .AddFilter("Maw", LogLevel.Debug)

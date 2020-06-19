@@ -29,7 +29,18 @@ namespace MawAuth.Models
         {
             return new List<ApiResource>
             {
-                new ApiResource("maw_api",
+                new ApiResource("maw_api_resource", "APIs to access photo and video data within mikeandwan.us") {
+                    Scopes = new string[] { "maw_api" }
+                }
+            };
+        }
+
+        // scopes define the API resources in your system
+        public IEnumerable<ApiScope> GetApiScopes()
+        {
+            return new List<ApiScope>
+            {
+                new ApiScope("maw_api",
                                 "APIs to access photo and video data within mikeandwan.us",
                                 new [] { JwtClaimTypes.Name, JwtClaimTypes.Role })
             };
@@ -56,7 +67,7 @@ namespace MawAuth.Models
                 {
                     ClientId = "www.mikeandwan.us",
                     ClientName = "www.mikeandwan.us",
-                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                    AllowedGrantTypes = GrantTypes.Code,
                     RequireConsent = false,
 
                     ClientSecrets =
@@ -86,9 +97,7 @@ namespace MawAuth.Models
                     ClientId = "maw_photos_android",
                     ClientName = "MaW Photos - Android",
                     AllowedGrantTypes = GrantTypes.Code,
-                    RequireConsent = false,
                     RequireClientSecret = false,
-                    RequirePkce = true,
                     AllowOfflineAccess = true,
                     RedirectUris = { "us.mikeandwan.photos:/signin-oidc" },
                     AllowedScopes = new List<string>
@@ -110,8 +119,6 @@ namespace MawAuth.Models
                     ClientId = "maw-photos",
                     ClientName = "mikeandwan.us Photo Application",
                     AllowedGrantTypes = GrantTypes.Code,
-                    RequireConsent = false,
-                    RequirePkce = true,
                     RequireClientSecret = false,
                     AllowAccessTokensViaBrowser = true,
                     AllowOfflineAccess = true,
@@ -146,8 +153,6 @@ namespace MawAuth.Models
                     ClientId = "maw-files",
                     ClientName = "mikeandwan.us File Management Application",
                     AllowedGrantTypes = GrantTypes.Code,
-                    RequireConsent = false,
-                    RequirePkce = true,
                     RequireClientSecret = false,
                     AllowAccessTokensViaBrowser = true,
                     AllowOfflineAccess = true,

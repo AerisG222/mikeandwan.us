@@ -113,6 +113,7 @@ namespace MawAuth
                         opts.IssuerUri = _config["Environment:AuthUrl"];
                     })
                     .AddMawIdentityServerKeyMaterial(_config["SigningCertDir"])
+                    .AddInMemoryApiScopes(config.GetApiScopes())
                     .AddInMemoryApiResources(config.GetApiResources())
                     .AddInMemoryClients(config.GetClients())
                     .AddInMemoryIdentityResources(config.GetIdentityResources())

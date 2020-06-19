@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Primitives;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using SolrNet;
 using Maw.Data;
@@ -62,7 +63,7 @@ namespace MawApi
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opts => {
                         opts.Authority = urlConfig.Auth;
-                        opts.Audience = "maw_api";
+                        opts.Audience = "maw_api_resource";
 
                         opts.TokenValidationParameters = new TokenValidationParameters
                         {
@@ -122,6 +123,10 @@ namespace MawApi
             if(env.IsProduction())
             {
                 app.UseHsts(hsts => hsts.MaxAge(365 * 2).IncludeSubdomains().Preload());
+            }
+            else
+            {
+                IdentityModelEventSource.ShowPII = true;
             }
 
             app

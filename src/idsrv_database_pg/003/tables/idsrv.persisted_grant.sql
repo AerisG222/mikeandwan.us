@@ -1,0 +1,4 @@
+ALTER TABLE idsrv.persisted_grant
+  ADD COLUMN IF NOT EXISTS session_id TEXT,
+  ADD COLUMN IF NOT EXISTS description TEXT,
+  ADD COLUMN IF NOT EXISTS consumed_time TIMESTAMPTZ;

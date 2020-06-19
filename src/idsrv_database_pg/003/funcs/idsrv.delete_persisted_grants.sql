@@ -21,8 +21,8 @@ BEGIN
 
     DELETE
       FROM idsrv.persisted_grant
-     WHERE (_key IS NULL OR key = _key)
-       AND (_subject_id IS NULL OR subject_id = _subject_id)
+     WHERE (_subject_id IS NULL OR subject_id = _subject_id)
+       AND (_session_id IS NULL OR session_id = _session_id)
        AND (_client_id IS NULL OR client_id = _client_id)
        AND (_type IS NULL OR type = _type);
 

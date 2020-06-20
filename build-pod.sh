@@ -582,7 +582,7 @@ configure_systemd() {
 
     pushd ~/.config/systemd/user
 
-    podman generate systemd --files --name maw-po
+    podman generate systemd --files --name "${POD_NAME}"
 
     create_certbot_job "${POD_NAME}"
     create_postgres_job "${POD_NAME}" "${ENV_FILE_DIR}"

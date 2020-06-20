@@ -53,11 +53,6 @@ namespace MawMvcApp.Controllers
         {
             ViewBag.NavigationZone = NavigationZone.About;
 
-            foreach (var c in User?.Claims)
-            {
-                Log.LogInformation($"{c.Type}: {c.Value}");
-            }
-
             return View();
         }
 

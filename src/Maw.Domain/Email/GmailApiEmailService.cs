@@ -51,7 +51,7 @@ namespace Maw.Domain.Email
 
         async Task SendMessageAsync(string recipient, string from, string subject, string body, bool isHtml)
         {
-            _log.LogInformation($"sending email to: {recipient}, from: {from}, subject: {subject}");
+            _log.LogInformation("sending email to: {Recipient}, from: {From}, subject: {Subject}", recipient, from, subject);
 
             var msg = BuildMessage(recipient, from, subject, body, isHtml);
 

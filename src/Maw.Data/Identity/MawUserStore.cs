@@ -37,7 +37,7 @@ namespace Maw.Data.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            _log.LogInformation($"getting userid: {user.Id}");
+            _log.LogInformation("getting userid: {UserId}", user.Id);
 
             return Task.FromResult(user.Id.ToString(CultureInfo.InvariantCulture));
         }
@@ -94,7 +94,7 @@ namespace Maw.Data.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            _log.LogInformation($"creating new user: {user.Username} with hash: {user.HashedPassword}");
+            _log.LogInformation("creating new user: {Username}", user.Username);
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -157,7 +157,7 @@ namespace Maw.Data.Identity
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            _log.LogInformation($"attempting to find by ID: {userId}");
+            _log.LogDebug("attempting to find by user by ID: {UserId}", userId);
 
             if (short.TryParse(userId, out short id))
             {
@@ -179,7 +179,7 @@ namespace Maw.Data.Identity
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            _log.LogInformation($"attempting to find by NAME: {normalizedUserName}");
+            _log.LogInformation("attempting to find user by name: {Username}", normalizedUserName);
 
             var user = await _repo.GetUserAsync(normalizedUserName).ConfigureAwait(false);
 
@@ -266,7 +266,7 @@ namespace Maw.Data.Identity
                 throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
             }
 
-            _log.LogInformation($"removing {user.Username} from role {roleName}");
+            _log.LogInformation("removing user {Username} from role {Role}", user.Username, roleName);
 
             return _repo.RemoveUserFromRoleAsync(user.Username, roleName);
         }
@@ -281,13 +281,13 @@ namespace Maw.Data.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            _log.LogInformation($"getting roles for: {user.Username}");
+            _log.LogDebug("getting roles for: {Username}", user.Username);
 
             IList<string> list = user.GetRoles().ToList();
 
             foreach (var r in list)
             {
-                _log.LogInformation($"    in role: {r}");
+                _log.LogDebug("    in role: {Role}", r);
             }
 
             return Task.FromResult(list);
@@ -326,7 +326,7 @@ namespace Maw.Data.Identity
                 throw new ArgumentException("roleName can not be null or empty", nameof(roleName));
             }
 
-            _log.LogInformation($"getting users in role: {roleName}");
+            _log.LogDebug("getting users in role: {Role}", roleName);
 
             return (await _repo.GetUsersInRoleAsync(roleName).ConfigureAwait(false)).ToList();
         }
@@ -403,7 +403,7 @@ namespace Maw.Data.Identity
 
         public Task<MawUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            _log.LogInformation($"find email: {normalizedEmail}");
+            _log.LogDebug("finding user by email: {Email}", normalizedEmail);
 
             return _repo.GetUserByEmailAsync(normalizedEmail);
         }

@@ -39,7 +39,7 @@ namespace Maw.Domain.Photos
                 {
                     var path = _fileProvider.GetFileInfo(photo.LgInfo.Path).PhysicalPath;
 
-                    _log.LogInformation($"Adding file {path} to archive");
+                    _log.LogDebug("Adding file {Path} to archive", path);
 
                     za.CreateEntryFromFile(path, Path.GetFileName(path));
                 }

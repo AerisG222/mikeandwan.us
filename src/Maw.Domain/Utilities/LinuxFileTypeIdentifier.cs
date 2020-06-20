@@ -40,7 +40,7 @@ namespace Maw.Domain.Utilities
 
                 var mimeType = cmd.StandardOutput.GetLines().FirstOrDefault();
 
-                _log.LogInformation($"Linux file type for file [{filePath}] is [{mimeType}]");
+                _log.LogDebug("Linux file type for file [{File}] is [{MimeType}]", filePath, mimeType);
 
                 return mimeType;
             }

@@ -57,7 +57,7 @@ namespace MawApi.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            _log.LogDebug($"User [{Context.User.Identity.Name}] connected to the {nameof(UploadHub)}.");
+            _log.LogDebug("User [{Username}] connected to {Hub}.", Context.User.Identity.Name, nameof(UploadHub));
 
             if(Role.IsAdmin(Context.User))
             {
@@ -70,7 +70,7 @@ namespace MawApi.Hubs
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            _log.LogDebug($"User [{Context.User.Identity.Name}] disconnected from the {nameof(UploadHub)}.");
+            _log.LogDebug("User [{Username}] disconnected from {Hub}.", Context.User.Identity.Name, nameof(UploadHub));
 
             if(Role.IsAdmin(Context.User))
             {

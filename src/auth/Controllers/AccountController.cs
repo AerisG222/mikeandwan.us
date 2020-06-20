@@ -141,7 +141,7 @@ namespace MawAuth.Controllers
 
             if (email == null)
             {
-                _log.LogError($"Unable to obtain email from External Authentication Provider {provider}");
+                _log.LogError("Unable to obtain email from External Authentication Provider {Provider}", provider);
                 return View();
             }
 
@@ -158,7 +158,7 @@ namespace MawAuth.Controllers
                     // delete temporary cookie used during external authentication
                     await HttpContext.SignOutAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
 
-                    _log.LogInformation($"User {user.Username} logged in with {provider} provider.");
+                    _log.LogInformation("User {Username} logged in with {Provider} provider.", user.Username, provider);
 
                     // validate return URL and redirect back to authorization endpoint or a local page
                     var returnUrl = result.Properties.Items["returnUrl"];
@@ -176,7 +176,7 @@ namespace MawAuth.Controllers
                 }
                 else
                 {
-                    _log.LogError($"User {user.Username} unable to login with {provider} as they have not yet opted-in for this provider.");
+                    _log.LogError("User {Username} unable to login with {Provider} as they have not yet opted-in for this provider.", user.Username, provider);
                 }
             }
 
@@ -223,7 +223,7 @@ namespace MawAuth.Controllers
 
                 if (user == null)
                 {
-                    _log.LogInformation($"Unable to find user with email [{model.Email}].");
+                    _log.LogInformation("Unable to find user with email [{Email}].", model.Email);
 
                     return View(model);
                 }
@@ -237,9 +237,7 @@ namespace MawAuth.Controllers
                 var code = await _userMgr.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { user.Email, code }, Request.Scheme);
 
-                _log.LogInformation($"user: {user.Name}");
-                _log.LogInformation($"code: {code}");
-                _log.LogInformation($"reset url: {callbackUrl}");
+                _log.LogInformation("Sending password reset email to user: {User}", user.Name);
 
                 var emailModel = new ResetPasswordEmailModel
                 {

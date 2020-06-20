@@ -58,7 +58,7 @@ namespace Maw.Domain.Captcha
             var val = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var result = JsonSerializer.Deserialize<GoogleCaptchaResponse>(val).success;
 
-            _log.LogInformation($"google recaptcha returned: {result}");
+            _log.LogDebug("google recaptcha returned: {CaptchaResult}", result);
 
             response.Dispose();
 

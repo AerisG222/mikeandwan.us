@@ -501,7 +501,7 @@ namespace MawAuth.Controllers
 
                 foreach (var oldMember in toRemove)
                 {
-                    _log.LogInformation($"removing {oldMember.Username} from {model.Role}");
+                    _log.LogInformation("Removing user {Username} from role {Role}", oldMember.Username, model.Role);
                     var result = await _userMgr.RemoveFromRoleAsync(oldMember, model.Role).ConfigureAwait(false);
 
                     if (!result.Succeeded)

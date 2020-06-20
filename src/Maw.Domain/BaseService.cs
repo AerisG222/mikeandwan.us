@@ -65,7 +65,7 @@ namespace Maw.Domain
             }
 
             foreach(var key in keys) {
-                _log.LogDebug($"Removing cache entry with key: {key}");
+                _log.LogDebug("Removing cache entry with key: {Key}", key);
 
                 await _cache.RemoveAsync(key).ConfigureAwait(false);
             }
@@ -109,7 +109,7 @@ namespace Maw.Domain
         {
             var opts = new DistributedCacheEntryOptions { SlidingExpiration = slidingExpiration ?? _maxCacheTime};
 
-            _log.LogDebug($"Setting cache entry with key: {key}");
+            _log.LogDebug("Setting cache entry with key: {Key}", key);
 
             return _cache.SetStringAsync(key, JsonSerializer.Serialize(value), opts);
         }

@@ -29,7 +29,7 @@ namespace Maw.Domain.Upload
 
             if(!Directory.Exists(_cfg.RootDirectory))
             {
-                _log.LogError($"Upload root directory [{_cfg.RootDirectory}] does not exist!");
+                _log.LogError("Upload root directory [{Directory}] does not exist!", _cfg.RootDirectory);
 
                 throw new DirectoryNotFoundException($"Could not find File Upload root directory [{_cfg.RootDirectory}]");
             }
@@ -74,13 +74,13 @@ namespace Maw.Domain.Upload
 
                 result.WasSuccessful = true;
 
-                _log.LogInformation($"User [{location.Username}] successfully deleted [{location.RelativePath}].");
+                _log.LogInformation("User [{Username}] successfully deleted [{File}].", location.Username, location.RelativePath);
             }
             catch(Exception ex)
             {
                 result.Error = "Unable to delete file";
 
-                _log.LogError(ex, $"Unable to delete file for path [{absolutePath}]");
+                _log.LogError(ex, "Unable to delete file [{File}]", absolutePath);
             }
 
             return result;
@@ -125,7 +125,7 @@ namespace Maw.Domain.Upload
                 throw new UnauthorizedAccessException(msg);
             }
 
-            _log.LogInformation($"Delivering file [{location.RelativePath}] for user [{user.Identity.Name}].");
+            _log.LogDebug("Delivering file [{File}] for user [{Username}].", location.RelativePath, user.Identity.Name);
 
             return File.OpenRead(GetAbsoluteFilePath(location));
         }
@@ -155,7 +155,7 @@ namespace Maw.Domain.Upload
                 }
                 catch(IOException ex)
                 {
-                    _log.LogError(ex, $"Unable to parse relative path [{relativePath}].  This will not be added to the zip archive.");
+                    _log.LogError(ex, "Unable to parse relative path [{File}].  This will not be added to the zip archive.", relativePath);
 
                     continue;
                 }
@@ -166,7 +166,7 @@ namespace Maw.Domain.Upload
                 }
                 else
                 {
-                    _log.LogError($"User [{location.Username}] does not have access to the requested file [{location.RelativePath}].");
+                    _log.LogError("User [{Username}] does not have access to the requested file [{File}].", location.Username, location.RelativePath);
                 }
             }
 
@@ -181,7 +181,7 @@ namespace Maw.Domain.Upload
             {
                 foreach(var location in validLocations)
                 {
-                    _log.LogDebug($"Adding {location.RelativePath} to archive.");
+                    _log.LogDebug("Adding {File} to archive.", location.RelativePath);
 
                     za.CreateEntryFromFile(GetAbsoluteFilePath(location), location.RelativePath);
                 }
@@ -189,7 +189,7 @@ namespace Maw.Domain.Upload
 
             ms.Seek(0, SeekOrigin.Begin);
 
-            _log.LogInformation($"Zip file created for user {user.Identity.Name} with size {ms.Length / 1024 / 1024} MB");
+            _log.LogInformation("Zip file created for user {Username} with size {FileSize} MB", user.Identity.Name, ms.Length / 1024 / 1024);
 
             return ms;
         }
@@ -441,7 +441,7 @@ namespace Maw.Domain.Upload
             }
 
             if(verifyPermissions && !UserCanAccessFile(user, location)) {
-                _log.LogWarning($"User [{location.Username}] does not have access to [{location.RelativePath}].");
+                _log.LogWarning("User [{Username}] does not have access to [{File}].", location.Username, location.RelativePath);
 
                 throw new ApplicationException();
             }

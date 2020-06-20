@@ -74,7 +74,7 @@ namespace MawAuth.Services
         {
             foreach (var c in claims)
             {
-                _log.LogInformation($"{c.Type}: {c.Value}");
+                _log.LogDebug("{ClaimType}: {ClaimValue}", c.Type, c.Value);
             }
         }
     }

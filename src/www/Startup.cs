@@ -30,7 +30,6 @@ using MawMvcApp.ViewModels.About;
 namespace MawMvcApp
 {
     // TODO: googlemaps add async defer back and handle callback when it loads
-    // TODO: re-evaluate inline validation errors once html5 validation is in place (see: https://github.com/aspnet/Mvc/issues/7035)
     public class Startup
     {
         readonly IConfiguration _config;

@@ -1,5 +1,12 @@
-<div class="row" [hidden]="!isVisible">
-    <div class="col-sm-12">
-		<div #map class="map" (mouseenter)="enableMapEvents()" (mouseleave)="disableMapEvents()"></div>
-    </div>
-</div>
+<google-map
+    [options]="{ streetViewControl: false }"
+    [height]="'460px'"
+    [width]="'100%'"
+    [zoom]="zoom"
+    [center]="center"
+    (boundsChanged)="onBoundsChanged()"
+    (centerChanged)="onCenterChanged()"
+    #map>
+    <map-marker *ngIf="!!poi" [position]="poi"></map-marker>
+    <map-rectangle *ngIf="showRectangle" [options]="{ fillColor: '#c00', strokeColor: '#c00', clickable: false }" [bounds]="rectangleBounds"></map-rectangle>
+</google-map>

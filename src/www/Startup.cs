@@ -29,7 +29,6 @@ using MawMvcApp.ViewModels.About;
 
 namespace MawMvcApp
 {
-    // TODO: googlemaps add async defer back and handle callback when it loads
     public class Startup
     {
         readonly IConfiguration _config;

@@ -12,5 +12,28 @@
     <button type="submit" (click)="showAddress()" class="btn btn-primary" mawFocusRemover>Submit</button>
 </div>
 
-<app-map #map1 (updated)="map2.syncMap($event)"></app-map>
-<app-map #map2 (updated)="map1.syncMap($event)"></app-map>
+<div class="row map" *ngIf="showMaps">
+    <div class="col-sm-12">
+        <app-map
+            [center]="center"
+            [otherMapBounds]="map2Bounds"
+            [poi]="poi"
+            [zoom]="17"
+            (boundsChanged)="onMap1BoundsChanged($event)"
+            (centerChanged)="onCenterChanged($event)">
+        </app-map>
+    </div>
+</div>
+
+<div class="row map" *ngIf="showMaps">
+    <div class="col-sm-12">
+        <app-map
+            [center]="center"
+            [otherMapBounds]="map1Bounds"
+            [poi]="poi"
+            [zoom]="13"
+            (boundsChanged)="onMap2BoundsChanged($event)"
+            (centerChanged)="onCenterChanged($event)">
+        </app-map>
+    </div>
+</div>

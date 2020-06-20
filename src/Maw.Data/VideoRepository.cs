@@ -281,6 +281,7 @@ namespace Maw.Data
             category.TotalSizeFull = GetValueOrDefault<long>(row.total_size_full);
             category.TotalSizeRaw = GetValueOrDefault<long>(row.total_size_raw);
             category.TotalSize = GetValueOrDefault<long>(row.total_size);
+            category.IsMissingGpsData = GetValueOrDefault<bool>(row.is_missing_gps_data);
 
             category.TeaserImage = BuildMultimediaInfo(row.teaser_image_path, row.teaser_image_width, row.teaser_image_height, row.teaser_image_size);
             category.TeaserImageSq = BuildMultimediaInfo(row.teaser_image_sq_path, row.teaser_image_sq_width, row.teaser_image_sq_height, row.teaser_image_sq_size);

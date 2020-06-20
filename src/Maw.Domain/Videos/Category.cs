@@ -21,5 +21,6 @@ namespace Maw.Domain.Videos
         public long TotalSize { get; set; }
         public MultimediaInfo TeaserImage { get; set; }
         public MultimediaInfo TeaserImageSq { get; set; }
+        public bool IsMissingGpsData { get; set; }
     }
 }

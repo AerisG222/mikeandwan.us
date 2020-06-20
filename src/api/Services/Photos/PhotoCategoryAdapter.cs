@@ -49,7 +49,8 @@ namespace MawApi.Services.Photos
                 TeaserImageSq = _adapter.Adapt(c.TeaserImageSq),
                 Self = _urlSvc.GetCategoryUrl(c.Id),
                 PhotosLink = _urlSvc.GetPhotosUrl(c.Id),
-                DownloadLink = _urlSvc.GetCategoryDownloadUrl(c.Id)
+                DownloadLink = _urlSvc.GetCategoryDownloadUrl(c.Id),
+                IsMissingGpsData = c.IsMissingGpsData
             };
         }
 

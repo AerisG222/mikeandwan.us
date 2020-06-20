@@ -48,6 +48,7 @@ namespace MawApi.Services.Videos
                 TeaserImageSq = _adapter.Adapt(c.TeaserImageSq),
                 Self = _urlSvc.GetCategoryUrl(c.Id),
                 VideosLink = _urlSvc.GetVideosUrl(c.Id),
+                IsMissingGpsData = c.IsMissingGpsData
             };
         }
 

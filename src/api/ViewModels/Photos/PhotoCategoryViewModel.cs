@@ -25,5 +25,6 @@ namespace MawApi.ViewModels.Photos
         public string Self { get; set; }
         public string PhotosLink { get; set; }
         public string DownloadLink { get; set; }
+        public bool IsMissingGpsData { get; set; }
     }
 }

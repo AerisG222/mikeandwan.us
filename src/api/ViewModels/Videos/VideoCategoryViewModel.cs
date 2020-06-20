@@ -23,5 +23,6 @@ namespace MawApi.ViewModels.Videos
         public MultimediaAsset TeaserImageSq { get; set; }
         public string Self { get; set; }
         public string VideosLink { get; set; }
+        public bool IsMissingGpsData { get; set; }
     }
 }

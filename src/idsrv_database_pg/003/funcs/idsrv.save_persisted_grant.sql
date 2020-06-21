@@ -52,7 +52,19 @@ BEGIN
              _expiration,
              _consumed_time,
              _data
-         );
+         )
+    ON CONFLICT (key)
+    DO
+    UPDATE
+       SET type = EXCLUDED.type,
+           subject_id = EXCLUDED.subject_id,
+           session_id = EXCLUDED.session_id,
+           client_id = EXCLUDED.client_id,
+           description = EXCLUDED.description,
+           creation_time = EXCLUDED.creation_time,
+           expiration = EXCLUDED.expiration,
+           consumed_time = EXCLUDED.consumed_time,
+           data = EXCLUDED.data;
 
     GET DIAGNOSTICS _rowcount = ROW_COUNT;
 

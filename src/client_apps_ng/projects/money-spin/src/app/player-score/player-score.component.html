@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" *ngIf="!!player && !!currentPlayer">
     <div class="col text-center player disabled" [ngClass]="{selected : player === currentPlayer, red : player === currentPlayer}">
         <h4>{{player.character.name}}</h4>
         <img [src]="player.character.imagePath" class="border-rounded mb-4" style="width: 150px; height: 150px;" />

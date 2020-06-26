@@ -10,7 +10,7 @@ import { Character } from '../models/character.model';
 export class PlayerSelectComponent {
     @Input() characters: Array<Character> = [];
     @Output() characterSelected = new EventEmitter<Character>();
-    selected: Character = null;
+    selected?: Character;
 
     onSelect(character: Character): void {
         this.selected = character;

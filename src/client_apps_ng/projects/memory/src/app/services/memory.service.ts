@@ -7,8 +7,8 @@ import { IPlayer } from '../models/iplayer.model';
 
 @Injectable()
 export class MemoryService {
-    private playerOne: IPlayer = null;
-    private playerTwo: IPlayer = null;
+    private playerOne?: IPlayer;
+    private playerTwo?: IPlayer;
 
     private cards: Array<ICardInfo> = [
         { id: 1,  img: '/js/memory/assets/cards/card1.jpg' },
@@ -31,8 +31,24 @@ export class MemoryService {
         { name: 'Raphael',       color: 'red',    img: '/js/memory/assets/players/raphael.jpg' }
     ];
 
+    get player1(): IPlayer | undefined {
+        return this.playerOne;
+    }
+
+    set player1(player: IPlayer | undefined) {
+        this.playerOne = player;
+    }
+
+    get player2(): IPlayer | undefined {
+        return this.playerTwo;
+    }
+
+    set player2(player: IPlayer | undefined) {
+        this.playerTwo = player;
+    }
+
     constructor(private router: Router) {
-        this.initPlayers();
+
     }
 
     get allCards(): Array<ICardInfo> {
@@ -43,51 +59,22 @@ export class MemoryService {
         return this.characters.slice(0); // clone
     }
 
-    get player1(): IPlayer {
-        return this.playerOne;
-    }
-
-    set player1(player: IPlayer) {
-        this.playerOne = player;
-    }
-
-    get player2(): IPlayer {
-        return this.playerTwo;
-    }
-
-    set player2(player: IPlayer) {
-        this.playerTwo = player;
-    }
-
     startGame(): void {
-        this.playerOne.score = 0;
-        this.playerTwo.score = 0;
+        if (!!this.player1 && !!this.player2) {
+            this.player1.score = 0;
+            this.player2.score = 0;
 
-        this.router.navigateByUrl('/play');
+            this.router.navigateByUrl('/play');
+        }
     }
 
     isReadyToPlay(): boolean {
-        return this.playerOne != null &&
-               this.playerOne.character != null &&
-               this.playerTwo != null &&
-               this.playerTwo.character != null;
+        return !!this.player1 && !!this.player2;
     }
 
     resetGame(): void {
-        this.initPlayers();
+        this.player1 = undefined;
+        this.player2 = undefined;
         this.router.navigateByUrl('/');
-    }
-
-    initPlayers(): void {
-        this.playerOne = this.initPlayer();
-        this.playerTwo = this.initPlayer();
-    }
-
-    initPlayer(): IPlayer {
-        return {
-            character: null,
-            isPlayersTurn: false,
-            score: 0
-        };
     }
 }

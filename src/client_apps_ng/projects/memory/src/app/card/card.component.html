@@ -4,7 +4,7 @@
             <img src="/js/memory/assets/cards/back.jpg" />
         </div>
         <div class="back">
-            <img [src]="cardInfo.img" />
+            <img *ngIf="cardInfo" [src]="cardInfo.img" />
         </div>
     </div>
 </div>

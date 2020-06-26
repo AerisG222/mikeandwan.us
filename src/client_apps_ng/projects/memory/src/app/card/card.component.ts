@@ -10,7 +10,7 @@ import { ICardInfo } from '../models/icard-info.model';
 export class CardComponent {
     private cardIsFlipped = false;
     private cardIsRemoved = false;
-    @Input() cardInfo: ICardInfo;
+    @Input() cardInfo?: ICardInfo;
     @Output() cardSelected: EventEmitter<CardComponent> = new EventEmitter<CardComponent>();
 
     get isFlipped(): boolean {
@@ -29,7 +29,7 @@ export class CardComponent {
         this.cardIsRemoved = value;
     }
 
-    onClick() {
+    onClick(): void {
         this.cardSelected.next(this);
     }
 }

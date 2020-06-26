@@ -8,5 +8,5 @@ import { IPlayer } from '../models/iplayer.model';
     styleUrls: [ './turtle-score.component.scss' ]
 })
 export class TurtleScoreComponent {
-    @Input() player: IPlayer;
+    @Input() player?: IPlayer;
 }

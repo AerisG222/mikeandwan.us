@@ -12,7 +12,7 @@ export class WinnerComponent {
     winner: Player;
 
     constructor(private stateService: StateService) {
-        this.winner = this.stateService.currentPlayer;
+        this.winner = this.stateService.currentPlayer as Player;
     }
 
     newGame(): void {

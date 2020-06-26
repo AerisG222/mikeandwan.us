@@ -20,9 +20,9 @@ export class StateService {
         new Character('Leo',   '/js/money-spin/assets/p2leo.png'),
         new Character('Mikey', '/js/money-spin/assets/p2mikey.png')
     ];
-    player1: Player;
-    player2: Player;
-    currentPlayer: Player;
+    player1?: Player;
+    player2?: Player;
+    currentPlayer?: Player;
 
     constructor(private router: Router) {
 
@@ -37,29 +37,32 @@ export class StateService {
     }
 
     newGame(): void {
-        this.player1 = null;
-        this.player2 = null;
-        this.currentPlayer = null;
+        this.player1 = undefined;
+        this.player2 = undefined;
+        this.currentPlayer = undefined;
         this.router.navigate(['/choose']);
     }
 
     isReadyToPlay(): boolean {
-        return this.player1 != null &&
-               this.player1.character != null &&
-               this.player2 != null &&
-               this.player2.character != null;
+        return !!this.player1 && !!this.player2;
     }
 
     startGame(): void {
-        this.player1.resetScore();
-        this.player2.resetScore();
+        if (!!this.player1 && !!this.player2) {
+            this.player1.resetScore();
+            this.player2.resetScore();
 
-        this.currentPlayer = this.player1;
+            this.currentPlayer = this.player1;
 
-        this.router.navigate(['/play']);
+            this.router.navigate(['/play']);
+        }
     }
 
     evaluateTurn(dollarValue: number): boolean {
+        if (!!!this.currentPlayer) {
+            throw new Error('Current player not set');
+        }
+
         this.currentPlayer.addDollarAmount(dollarValue);
 
         if (this.currentPlayer.score >= this.winningScore) {
@@ -77,7 +80,7 @@ export class StateService {
     }
 
     private updateCurrentPlayer(): void {
-        if (this.currentPlayer == null) {
+        if (!!!this.currentPlayer) {
             this.currentPlayer = this.player1;
         } else if (this.currentPlayer === this.player1) {
             this.currentPlayer = this.player2;

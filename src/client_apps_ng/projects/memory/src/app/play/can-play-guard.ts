@@ -9,7 +9,7 @@ export class CanPlayGuard implements CanActivate {
 
     }
 
-    canActivate() {
+    canActivate(): boolean {
         if (this.memoryService.isReadyToPlay()) {
             return true;
         }

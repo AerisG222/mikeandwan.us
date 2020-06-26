@@ -1,11 +1,11 @@
 <div class="row d-flex align-items-center">
     <div class="col-sm-2">
-        <app-player-score [player]="player1" [currentPlayer]="currentPlayer"></app-player-score>
+        <app-player-score *ngIf="!!player1" [player]="player1" [currentPlayer]="currentPlayer"></app-player-score>
     </div>
     <div class="col-sm-8">
         <app-spinner (spinCompleted)="addScore($event)"></app-spinner>
     </div>
     <div class="col-sm-2">
-        <app-player-score [player]="player2" [currentPlayer]="currentPlayer"></app-player-score>
+        <app-player-score *ngIf="!!player1" [player]="player2" [currentPlayer]="currentPlayer"></app-player-score>
     </div>
 </div>

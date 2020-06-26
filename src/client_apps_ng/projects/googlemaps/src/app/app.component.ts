@@ -8,11 +8,11 @@ import { Component, NgZone } from '@angular/core';
 export class AppComponent {
     addressToMap = '';
     showMaps = false;
-    poi: google.maps.LatLng;
-    center: google.maps.LatLng;
+    poi?: google.maps.LatLng;
+    center?: google.maps.LatLng;
     geocoder: google.maps.Geocoder = new google.maps.Geocoder();
-    map1Bounds: google.maps.LatLngBounds;
-    map2Bounds: google.maps.LatLngBounds;
+    map1Bounds?: google.maps.LatLngBounds;
+    map2Bounds?: google.maps.LatLngBounds;
 
     constructor(private zone: NgZone) {
 
@@ -38,15 +38,15 @@ export class AppComponent {
         });
     }
 
-    onMap1BoundsChanged(bounds: google.maps.LatLngBounds) {
+    onMap1BoundsChanged(bounds: google.maps.LatLngBounds): void {
         this.map1Bounds = bounds;
     }
 
-    onMap2BoundsChanged(bounds: google.maps.LatLngBounds) {
+    onMap2BoundsChanged(bounds: google.maps.LatLngBounds): void {
         this.map2Bounds = bounds;
     }
 
-    onCenterChanged(center: google.maps.LatLng) {
+    onCenterChanged(center: google.maps.LatLng): void {
         this.center = center;
     }
 }

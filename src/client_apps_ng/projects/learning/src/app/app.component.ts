@@ -21,9 +21,9 @@ export class AppComponent {
     currentCharAudio = '';
     doRun = false;
     runButtonText = 'Start';
-    intervalId: number = null;
+    intervalId?: number;
     assetRoot = '/js/learning/assets';
-    @ViewChild('audio', { static: true }) audioElement: ElementRef;
+    @ViewChild('audio', { static: true }) audioElement?: ElementRef;
 
     toggleRunning(): void {
         this.doRun = !this.doRun;
@@ -32,7 +32,9 @@ export class AppComponent {
             this.run();  // immediately start first character
             this.intervalId = window.setInterval(() => this.run(), 3000);  // schedule additional letters
         } else {
-            clearInterval(this.intervalId);
+            if (!!this.intervalId) {
+                clearInterval(this.intervalId);
+            }
         }
 
         this.runButtonText = this.getButtonText();
@@ -54,7 +56,11 @@ export class AppComponent {
                 this.currentCharAudio = srcs.mp3;
             }
 
-            (this.audioElement.nativeElement as HTMLMediaElement).load();
+            const el = this.audioElement?.nativeElement as HTMLMediaElement;
+
+            if (!!el) {
+                el.load();
+            }
         }
     }
 

@@ -30,16 +30,16 @@ export class SpinnerComponent implements OnInit, OnDestroy {
     private static MAX_ADDITIONAL_DROPOFF = .003;
     private static MIN_TOP_SPEED_TIME_MS = 511;
     private static MAX_ADDITIONAL_TOP_SPEED_TIME_MS = 1511;
-    el: HTMLDivElement;
-    scene: Scene;
-    camera: OrthographicCamera;
-    renderer: Renderer;
-    board: Group;
-    arrow: Group;
+    el?: HTMLDivElement;
+    scene?: Scene;
+    camera?: OrthographicCamera;
+    renderer?: Renderer;
+    board = new Group();
+    arrow = new Group();
     arrowSpeed = 0;
     speedDropoff = 0;
     slowDown = true;
-    animationId: number;
+    animationId?: number;
     @Output() spinCompleted = new EventEmitter<number>();
 
     constructor(private elRef: ElementRef) {
@@ -52,18 +52,28 @@ export class SpinnerComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        // Stop the animation / cleanup
-        cancelAnimationFrame(this.animationId);
-        this.camera = null;
-        this.scene = null;
+        if (!!this.animationId) {
+            cancelAnimationFrame(this.animationId);
+        }
+
+        this.camera = undefined;
+        this.scene = undefined;
 
         // kill the rendering node
-        while (this.el.hasChildNodes()) {
-            this.el.removeChild(this.el.firstChild);
+        while (!!this.el && this.el.hasChildNodes()) {
+            const child = this.el.firstChild;
+
+            if (!!child) {
+                this.el.removeChild(child);
+            }
         }
     }
 
     prepareScene(): void {
+        if (!!!this.el) {
+            throw new Error('Unable to prepare scene as root element is not defined');
+        }
+
         // scene
         this.scene = new Scene();
 
@@ -136,7 +146,9 @@ export class SpinnerComponent implements OnInit, OnDestroy {
 
         this.arrow.rotateZ(this.arrowSpeed);
 
-        this.renderer.render(this.scene, this.camera);
+        if (!!this.renderer && !!this.scene && !!this.camera) {
+            this.renderer.render(this.scene, this.camera);
+        }
     }
 
     private getScore(deg: number): number {

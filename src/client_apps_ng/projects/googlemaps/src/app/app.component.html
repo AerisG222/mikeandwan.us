@@ -12,7 +12,7 @@
     <button type="submit" (click)="showAddress()" class="btn btn-primary" mawFocusRemover>Submit</button>
 </div>
 
-<div class="row map" *ngIf="showMaps">
+<div class="row map" *ngIf="showMaps && !!poi && !!center">
     <div class="col-sm-12">
         <app-map
             [center]="center"
@@ -25,7 +25,7 @@
     </div>
 </div>
 
-<div class="row map" *ngIf="showMaps">
+<div class="row map" *ngIf="showMaps && !!poi && !!center">
     <div class="col-sm-12">
         <app-map
             [center]="center"

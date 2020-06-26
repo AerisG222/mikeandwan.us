@@ -1,4 +1,5 @@
 <google-map
+    *ngIf="!!center && !!zoom"
     [options]="{ streetViewControl: false }"
     [height]="'460px'"
     [width]="'100%'"
@@ -8,5 +9,5 @@
     (centerChanged)="onCenterChanged()"
     #map>
     <map-marker *ngIf="!!poi" [position]="poi"></map-marker>
-    <map-rectangle *ngIf="showRectangle" [options]="{ fillColor: '#c00', strokeColor: '#c00', clickable: false }" [bounds]="rectangleBounds"></map-rectangle>
+    <map-rectangle *ngIf="showRectangle && !!rectangleBounds" [options]="{ fillColor: '#c00', strokeColor: '#c00', clickable: false }" [bounds]="rectangleBounds"></map-rectangle>
 </google-map>

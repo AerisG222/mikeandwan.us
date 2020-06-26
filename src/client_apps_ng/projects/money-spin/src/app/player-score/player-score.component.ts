@@ -8,6 +8,6 @@ import { Player } from '../models/player.model';
     styleUrls: [ './player-score.component.scss' ]
 })
 export class PlayerScoreComponent {
-    @Input() player: Player;
-    @Input() currentPlayer: Player;
+    @Input() player?: Player;
+    @Input() currentPlayer?: Player;
 }

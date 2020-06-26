@@ -7,30 +7,33 @@ import { GoogleMap } from '@angular/google-maps';
     styleUrls: [ './map.component.scss' ]
 })
 export class MapComponent {
-    options: google.maps.MapOptions;
+    options?: google.maps.MapOptions;
     showRectangle = false;
-    rectangleBounds: google.maps.LatLngBounds;
+    rectangleBounds?: google.maps.LatLngBounds;
 
-    @ViewChild(GoogleMap) map: GoogleMap;
+    @ViewChild(GoogleMap) map?: GoogleMap;
 
-    @Input() poi: google.maps.LatLng;
-    @Input() center: google.maps.LatLng;
-    @Input() zoom: number;
+    @Input() poi?: google.maps.LatLng;
+    @Input() center?: google.maps.LatLng;
+    @Input() zoom?: number;
 
     @Input()
-    set otherMapBounds(bounds: google.maps.LatLngBounds) {
+    set otherMapBounds(bounds: google.maps.LatLngBounds | undefined) {
         this.rectangleBounds = bounds;
 
         if (!!this.map)
         {
             const ourBounds = this.map.getBounds();
-            const ourSize = Math.abs(ourBounds.getSouthWest().lat() - ourBounds.getNorthEast().lat());
-            const theirSize = Math.abs(bounds.getSouthWest().lat() - bounds.getNorthEast().lat());
 
-            this.showRectangle = ourSize > theirSize;
+            if (!!ourBounds && !!bounds) {
+                const ourSize = Math.abs(ourBounds.getSouthWest().lat() - ourBounds.getNorthEast().lat());
+                const theirSize = Math.abs(bounds.getSouthWest().lat() - bounds.getNorthEast().lat());
+
+                this.showRectangle = ourSize > theirSize;
+            }
         }
     }
-    get otherMapBounds() { return this.rectangleBounds; }
+    get otherMapBounds(): google.maps.LatLngBounds | undefined { return this.rectangleBounds; }
 
     @Output() centerChanged = new EventEmitter<google.maps.LatLng>();
     @Output() boundsChanged = new EventEmitter<google.maps.LatLngBounds>();
@@ -38,7 +41,12 @@ export class MapComponent {
     onBoundsChanged(): void {
         if (!!this.map)
         {
-            this.boundsChanged.emit(this.map.getBounds());
+            const bounds = this.map.getBounds();
+
+            if (!!bounds)
+            {
+                this.boundsChanged.emit(bounds);
+            }
         }
     }
 

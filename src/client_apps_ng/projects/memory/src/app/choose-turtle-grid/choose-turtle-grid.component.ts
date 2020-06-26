@@ -9,8 +9,9 @@ import { MemoryService } from '../services/memory.service';
     styleUrls: [ './choose-turtle-grid.component.scss' ]
 })
 export class ChooseTurtleGridComponent {
-    private selectedCharacter: ICharacter = null;
+    private selectedCharacter?: ICharacter;
     allCharacters: Array<ICharacter>;
+
     @Output() selected: EventEmitter<ICharacter> = new EventEmitter<ICharacter>();
 
     constructor(private svc: MemoryService) {

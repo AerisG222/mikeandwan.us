@@ -8,16 +8,16 @@ import { IPlayer } from '../models/iplayer.model';
     styleUrls: [ './tie-screen.component.scss' ]
 })
 export class TieScreenComponent {
-    @Input() player1: IPlayer;
-    @Input() player2: IPlayer;
-    @Output() rematch: EventEmitter<any> = new EventEmitter<any>();
-    @Output() newgame: EventEmitter<any> = new EventEmitter<any>();
+    @Input() player1?: IPlayer;
+    @Input() player2?: IPlayer;
+    @Output() rematch = new EventEmitter<void>();
+    @Output() newgame = new EventEmitter<void>();
 
     onRematch(): void {
-        this.rematch.next(null);
+        this.rematch.next();
     }
 
     onNewGame(): void {
-        this.newgame.next(null);
+        this.newgame.next();
     }
 }

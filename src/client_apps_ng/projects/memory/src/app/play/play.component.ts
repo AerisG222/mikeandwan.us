@@ -9,14 +9,22 @@ import { MemoryService } from '../services/memory.service';
     styleUrls: [ './play.component.scss' ]
 })
 export class PlayComponent implements OnInit {
-    private activePlayer: IPlayer = null;
-    winningPlayer: IPlayer = null;
+    private activePlayer?: IPlayer;
+    winningPlayer?: IPlayer;
     player1: IPlayer;
     player2: IPlayer;
     isGameOver = false;
     isTie = false;
 
     constructor(private svc: MemoryService) {
+        if (!!!this.svc.player1) {
+            throw new Error('player1 cannot be null');
+        }
+
+        if (!!!this.svc.player2) {
+            throw new Error('player2 cannot be null');
+        }
+
         this.player1 = this.svc.player1;
         this.player2 = this.svc.player2;
     }
@@ -70,7 +78,9 @@ export class PlayComponent implements OnInit {
     }
 
     onHit(isGameOver: boolean): void {
-        this.activePlayer.score += 1;
+        if (!!this.activePlayer) {
+            this.activePlayer.score += 1;
+        }
 
         if (isGameOver) {
             this.endGame();

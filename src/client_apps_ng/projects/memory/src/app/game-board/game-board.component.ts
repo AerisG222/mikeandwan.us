@@ -17,21 +17,21 @@ export class GameBoardComponent {
     private matchedCards: Array<CardComponent> = [];
     private ignoreSelect = false;
 
-    board: Array<Array<ICardInfo>> = null;
+    board?: Array<Array<ICardInfo>>;
     @Output() match: EventEmitter<boolean> = new EventEmitter<boolean>();
-    @Output() nonmatch: EventEmitter<any> = new EventEmitter<any>();
+    @Output() nonmatch: EventEmitter<void> = new EventEmitter<void>();
 
     constructor(private svc: MemoryService) {
         this.board = this.generateGameBoard();
     }
 
-    removeCards(): void {
-        this.matchedCards.push(this.selectedCards.card1);
-        this.matchedCards.push(this.selectedCards.card2);
+    removeCards(card1: CardComponent, card2: CardComponent): void {
+        this.matchedCards.push(card1);
+        this.matchedCards.push(card2);
 
         setTimeout(() => {
-            this.selectedCards.card1.isRemoved = true;
-            this.selectedCards.card2.isRemoved = true;
+            card1.isRemoved = true;
+            card2.isRemoved = true;
         }, 700);
 
         setTimeout(() => {
@@ -41,8 +41,16 @@ export class GameBoardComponent {
 
     unFlipCards(): void {
         setTimeout(() => {
-            this.selectedCards.card1.isFlipped = false;
-            this.selectedCards.card2.isFlipped = false;
+            const card1 = this.selectedCards?.card1;
+            const card2 = this.selectedCards?.card2;
+
+            if (!!card1) {
+                card1.isFlipped = false;
+            }
+
+            if (!!card2) {
+                card2.isFlipped = false;
+            }
 
             this.prepareNextTurn(false);
         }, 800);
@@ -56,12 +64,15 @@ export class GameBoardComponent {
     }
 
     evaluateTurn(): void {
-        if (this.selectedCards.card1.cardInfo.id === this.selectedCards.card2.cardInfo.id) {
-            this.removeCards();
+        const card1 = this.selectedCards?.card1;
+        const card2 = this.selectedCards?.card2;
+
+        if (!!card1 && !!card2 && card1.cardInfo?.id === card2.cardInfo?.id) {
+            this.removeCards(card1, card2);
             this.match.next(this.matchedCards.length === GameBoardComponent.CARDS_IN_GAME);
         } else {
             this.unFlipCards();
-            this.nonmatch.next(null);
+            this.nonmatch.next();
         }
     }
 

@@ -9,21 +9,31 @@ import { MemoryService } from '../services/memory.service';
     styleUrls: [ './choose-turtle.component.scss' ]
 })
 export class ChooseTurtleComponent {
-    private character1: ICharacter = null;
-    private character2: ICharacter = null;
+    private character1?: ICharacter;
+    private character2?: ICharacter;
 
     constructor(private svc: MemoryService) {
 
     }
 
-    setCharacter1(character: ICharacter) {
+    setCharacter1(character: ICharacter): void {
         this.character1 = character;
-        this.svc.player1.character = character;
+
+        this.svc.player1 = {
+            character,
+            isPlayersTurn: false,
+            score: 0
+        };
     }
 
-    setCharacter2(character: ICharacter) {
+    setCharacter2(character: ICharacter): void {
         this.character2 = character;
-        this.svc.player2.character = character;
+
+        this.svc.player2 = {
+            character,
+            isPlayersTurn: false,
+            score: 0
+        };
     }
 
     get readyToPlay(): boolean {

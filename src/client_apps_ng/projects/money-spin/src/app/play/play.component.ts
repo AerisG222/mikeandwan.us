@@ -9,9 +9,9 @@ import { StateService } from '../services/state.service';
     styleUrls: [ './play.component.scss' ]
 })
 export class PlayComponent {
-    player1: Player;
-    player2: Player;
-    currentPlayer: Player;
+    player1?: Player;
+    player2?: Player;
+    currentPlayer?: Player;
 
     constructor(private stateService: StateService) {
         this.player1 = this.stateService.player1;

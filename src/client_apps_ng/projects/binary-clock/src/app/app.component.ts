@@ -8,20 +8,16 @@ declare var notick: boolean;
     styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent implements OnDestroy {
-    intervalId: number;
-    currentTime: Date;
-    h: number;
-    m: number;
-    s: number;
+    intervalId = -1;
+    currentTime = new Date();
+    h = 0;
+    m = 0;
+    s = 0;
     notick = false;
 
     constructor() {
-        if (typeof(notick) !== 'undefined') {
-            this.notick = notick;
-        }
-
         if (this.notick) {
-            this.updateDisplay(new Date(2016, 6, 26, 12, 56, 39));
+            this.setDate(new Date(2016, 6, 26, 12, 56, 39));
         } else {
             this.tick();
             this.intervalId = window.setInterval(() => this.tick(), 300);
@@ -47,15 +43,13 @@ export class AppComponent implements OnDestroy {
     }
 
     tick(): void {
-        this.updateDisplay(new Date());
+        this.setDate(new Date());
     }
 
-    updateDisplay(theDate: Date): void {
-        if (theDate.getSeconds() !== this.s) {
-            this.currentTime = theDate;
-            this.h = theDate.getHours();
-            this.m = theDate.getMinutes();
-            this.s = theDate.getSeconds();
-        }
+    setDate(theDate: Date): void {
+        this.currentTime = theDate;
+        this.h = theDate.getHours();
+        this.m = theDate.getMinutes();
+        this.s = theDate.getSeconds();
     }
 }

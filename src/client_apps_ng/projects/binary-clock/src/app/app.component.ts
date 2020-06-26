@@ -16,6 +16,11 @@ export class AppComponent implements OnDestroy {
     notick = false;
 
     constructor() {
+        // get the global value specified on the page
+        if (typeof(notick) !== 'undefined') {
+            this.notick = notick;
+        }
+
         if (this.notick) {
             this.setDate(new Date(2016, 6, 26, 12, 56, 39));
         } else {

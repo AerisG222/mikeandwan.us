@@ -7,7 +7,7 @@ function run_psql_script() {
     if [ "${PODNAME}" == "" ]; then
         psql -d "${DBNAME}" -q -f "$1";
     else
-        podman run -it --rm --pod "${PODNAME}" --env-file "${ENVFILE}" -v "$(pwd)":/tmp/context:ro --security-opt label=disable postgres:12.2 psql -h 127.0.0.1 -U postgres -d idsrv -f "/tmp/context/${1}"
+        podman run -it --rm --pod "${PODNAME}" --env-file "${ENVFILE}" -v "$(pwd)":/tmp/context:ro --security-opt label=disable postgres:12.2 psql -h 127.0.0.1 -U postgres -d "${DBNAME}" -f "/tmp/context/${1}"
     fi
 }
 

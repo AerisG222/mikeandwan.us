@@ -100,6 +100,7 @@ namespace MawAuth.Models
                     RequireClientSecret = false,
                     AllowOfflineAccess = true,
                     RedirectUris = { "us.mikeandwan.photos:/signin-oidc" },
+                    RefreshTokenUsage = TokenUsage.ReUse,
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.Email,

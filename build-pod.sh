@@ -604,6 +604,10 @@ configure_systemd() {
 
     # allow services to run w/o user logged in
     sudo loginctl enable-linger "${USER}"
+
+    echo '*********************'
+    echo ' Add Before entries to systemd container service units so postgres and solr start first and gateway starts last'
+    echo '*********************'
 }
 
 build_pod_dev() {

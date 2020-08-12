@@ -15,11 +15,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Google.Apis.Gmail.v1" Version="1.48.0.2013" />
+        <PackageReference Include="Google.Apis.Gmail.v1" Version="1.48.0.2041" />
         <PackageReference Include="IdentityModel" Version="4.3.1" />
         <PackageReference Include="MailKit" Version="2.8.0" />
         <PackageReference Include="MedallionShell" Version="1.6.1" />
-        <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-rc0003" />
+        <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0" />
         <PackageReference Include="SolrNet.Core" Version="1.0.19" />
     </ItemGroup>
 
@@ -29,7 +29,7 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>

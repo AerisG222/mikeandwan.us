@@ -186,7 +186,7 @@ namespace MawAuth
                 "https://accounts.google.com/o/oauth2/",
                 "https://login.microsoftonline.com/common/oauth2/",
                 "https://github.com/login/oauth/",
-                "https://api.twitter.com/oauth/"
+                "https://api.twitter.com/oauth/",
                 "us.mikeandwan.photos:/"
             };
         }

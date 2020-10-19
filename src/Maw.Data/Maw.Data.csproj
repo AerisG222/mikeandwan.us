@@ -13,7 +13,7 @@
     <ItemGroup>
         <PackageReference Include="Dapper" Version="2.0.35" />
         <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.1" />
-        <PackageReference Include="Npgsql" Version="4.1.4" />
+        <PackageReference Include="Npgsql" Version="4.1.5" />
     </ItemGroup>
 
     <ItemGroup>

@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev_build": "rm -rf dist && webpack && node_modules/tslint/bin/tslint --project .",
-    "prod_build": "rm -rf dist && webpack -p --config ./webpack.production.config.js",
+    "prod_build": "rm -rf dist && webpack --config ./webpack.production.config.js",
     "bundle-report": "webpack-bundle-analyzer dist/stats.json"
   },
   "dependencies": {

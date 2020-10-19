@@ -6,7 +6,7 @@ module.exports = {
     entry: './shader.ts',
     devtool: 'source-map',
     output: {
-        filename: 'main.[hash].bundle.js',
+        filename: 'main.[contenthash].bundle.js',
         library: 'WebGLDemo'
     },
     resolve: {

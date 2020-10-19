@@ -5,7 +5,7 @@ module.exports = {
     entry: './cube.ts',
     devtool: 'source-map',
     output: {
-        filename: 'main.[hash].bundle.js',
+        filename: 'main.[contenthash].bundle.js',
         library: 'WebGLDemo'
     },
     resolve: {
@@ -23,7 +23,7 @@ module.exports = {
                 use: [{
                     loader: 'file-loader',
                     options: {
-                        name: '[name].[hash].[ext]',
+                        name: '[name].[contenthash].[ext]',
                         publicPath: '/js/webgl_cube/'
                     }
                 }]

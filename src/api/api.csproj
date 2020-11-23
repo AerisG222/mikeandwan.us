@@ -3,7 +3,7 @@
         <AssemblyName>MawApi</AssemblyName>
         <VersionPrefix>1.2.2</VersionPrefix>
         <Authors>Mike Morano &lt;mmorano@mikeandwan.us&gt;</Authors>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <DebugType>portable</DebugType>
         <DefaultItemExcludes>**/node_modules/**;$(DefaultItemExcludes)</DefaultItemExcludes>
@@ -11,10 +11,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.9" />
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="3.1.9" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.9" />
-        <PackageReference Include="NSwag.AspNetCore" Version="13.8.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.0" />
+        <PackageReference Include="NSwag.AspNetCore" Version="13.9.4" />
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
         <PackageReference Include="SolrNet" Version="1.0.19" />
         <PackageReference Include="SolrNet.Microsoft.DependencyInjection" Version="1.0.19" />
@@ -26,7 +26,7 @@
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>

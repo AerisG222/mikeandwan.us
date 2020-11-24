@@ -18,9 +18,9 @@ import { MemoryService } from './services/memory.service';
     imports: [
         BrowserModule,
         RouterModule.forRoot([
-            { path: '',     component: ChooseTurtleComponent },
-            { path: 'play', component: PlayComponent, canActivate: [ CanPlayGuard ] },
-            { path: '**',   redirectTo: '/' }
+            { path: '', component: ChooseTurtleComponent },
+            { path: 'play', component: PlayComponent, canActivate: [CanPlayGuard] },
+            { path: '**', redirectTo: '/' }
         ])
     ],
     declarations: [

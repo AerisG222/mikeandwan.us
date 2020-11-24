@@ -17,11 +17,11 @@ import { StateService } from './services/state.service';
     imports: [
         BrowserModule,
         RouterModule.forRoot([
-            { path: '',       component: SplashScreenComponent },
+            { path: '', component: SplashScreenComponent },
             { path: 'choose', component: ChoosePlayerComponent },
-            { path: 'play',   component: PlayComponent, canActivate: [ CanPlayGuard ] },
+            { path: 'play', component: PlayComponent, canActivate: [CanPlayGuard] },
             { path: 'winner', component: WinnerComponent },
-            { path: '**',     redirectTo: '/' }
+            { path: '**', redirectTo: '/' }
         ])
     ],
     declarations: [

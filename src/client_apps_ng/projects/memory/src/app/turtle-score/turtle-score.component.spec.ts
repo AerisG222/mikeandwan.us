@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { TurtleScoreComponent } from './turtle-score.component';
 
 describe('Component: TurtleScore', () => {

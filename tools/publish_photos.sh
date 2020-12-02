@@ -7,8 +7,8 @@
 DEBUG=y
 SSH_REMOTE_HOST=tifa
 SSH_USERNAME=svc_www_maw
-PATH_SIZE_PHOTOS="/home/mmorano/git/SizePhotos/src/SizePhotos/bin/Release/netcoreapp3.1/SizePhotos.dll"
-PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup/bin/Release/netcoreapp3.1/GlacierBackup.dll"
+PATH_SIZE_PHOTOS="/home/mmorano/git/SizePhotos/src/SizePhotos/bin/Release/net5.0/SizePhotos.dll"
+PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup/bin/Release/net5.0/GlacierBackup.dll"
 PATH_ASSET_ROOT="/srv/www/website_assets"
 PATH_IMAGE_SOURCE=
 CAT_NAME=

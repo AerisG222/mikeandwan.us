@@ -7,8 +7,8 @@
 DEBUG=y
 SSH_REMOTE_HOST=tifa
 SSH_USERNAME=svc_www_maw
-PATH_CONVERT_VIDEOS="/home/mmorano/git/ConvertVideos/src/ConvertVideos/bin/Release/netcoreapp3.1/ConvertVideos.dll"
-PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup/bin/Release/netcoreapp3.1/GlacierBackup.dll"
+PATH_CONVERT_VIDEOS="/home/mmorano/git/ConvertVideos/src/ConvertVideos/bin/Release/net5.0/ConvertVideos.dll"
+PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup/bin/Release/net5.0/GlacierBackup.dll"
 PATH_ASSET_ROOT="/srv/www/website_assets"
 PATH_VIDEO_SOURCE=
 CAT_NAME=

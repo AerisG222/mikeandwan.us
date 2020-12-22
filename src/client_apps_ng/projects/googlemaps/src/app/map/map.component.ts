@@ -7,15 +7,18 @@ import { GoogleMap } from '@angular/google-maps';
     styleUrls: [ './map.component.scss' ]
 })
 export class MapComponent {
-    options?: google.maps.MapOptions;
-    showRectangle = false;
-    rectangleBounds?: google.maps.LatLngBounds;
-
     @ViewChild(GoogleMap) map?: GoogleMap;
 
     @Input() poi?: google.maps.LatLng;
     @Input() center?: google.maps.LatLng;
     @Input() zoom?: number;
+
+    @Output() centerChanged = new EventEmitter<google.maps.LatLng>();
+    @Output() boundsChanged = new EventEmitter<google.maps.LatLngBounds>();
+
+    options?: google.maps.MapOptions;
+    showRectangle = false;
+    rectangleBounds?: google.maps.LatLngBounds;
 
     @Input()
     set otherMapBounds(bounds: google.maps.LatLngBounds | undefined) {
@@ -34,9 +37,6 @@ export class MapComponent {
         }
     }
     get otherMapBounds(): google.maps.LatLngBounds | undefined { return this.rectangleBounds; }
-
-    @Output() centerChanged = new EventEmitter<google.maps.LatLng>();
-    @Output() boundsChanged = new EventEmitter<google.maps.LatLngBounds>();
 
     onBoundsChanged(): void {
         if (!!this.map)

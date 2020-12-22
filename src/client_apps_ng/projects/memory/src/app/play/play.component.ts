@@ -9,12 +9,13 @@ import { MemoryService } from '../services/memory.service';
     styleUrls: [ './play.component.scss' ]
 })
 export class PlayComponent implements OnInit {
-    private activePlayer?: IPlayer;
     winningPlayer?: IPlayer;
     player1: IPlayer;
     player2: IPlayer;
     isGameOver = false;
     isTie = false;
+
+    private activePlayer?: IPlayer;
 
     constructor(private svc: MemoryService) {
         if (!!!this.svc.player1) {

@@ -38,9 +38,9 @@ export class AppComponent implements OnDestroy {
         const paddedValue = `0${value}`;  // either will be 0x or 0xx
         const digit = parseInt(paddedValue.charAt(paddedValue.length - 1 - position), 10);
 
-        /* tslint:disable:no-bitwise */
+        /* eslint-disable no-bitwise */
         return (digit & compareBit) === compareBit;
-        /* tslint:enable:no-bitwise */
+        /* eslint-enable no-bitwise */
     }
 
     isOff(value: number, compareBit: number, isTens: boolean): boolean {

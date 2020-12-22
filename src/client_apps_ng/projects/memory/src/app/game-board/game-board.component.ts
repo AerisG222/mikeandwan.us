@@ -11,15 +11,15 @@ import { MemoryService } from '../services/memory.service';
     styleUrls: [ './game-board.component.scss' ]
 })
 export class GameBoardComponent {
-    private static CARDS_IN_GAME = 20;
+    private static readonly cardsInGame = 20;
+
+    @Output() match: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output() nonmatch: EventEmitter<void> = new EventEmitter<void>();
+    board?: Array<Array<ICardInfo>>;
 
     private selectedCards: ISelectedCards = { card1: null, card2: null };
     private matchedCards: Array<CardComponent> = [];
     private ignoreSelect = false;
-
-    board?: Array<Array<ICardInfo>>;
-    @Output() match: EventEmitter<boolean> = new EventEmitter<boolean>();
-    @Output() nonmatch: EventEmitter<void> = new EventEmitter<void>();
 
     constructor(private svc: MemoryService) {
         this.board = this.generateGameBoard();
@@ -69,7 +69,7 @@ export class GameBoardComponent {
 
         if (!!card1 && !!card2 && card1.cardInfo?.id === card2.cardInfo?.id) {
             this.removeCards(card1, card2);
-            this.match.next(this.matchedCards.length === GameBoardComponent.CARDS_IN_GAME);
+            this.match.next(this.matchedCards.length === GameBoardComponent.cardsInGame);
         } else {
             this.unFlipCards();
             this.nonmatch.next();

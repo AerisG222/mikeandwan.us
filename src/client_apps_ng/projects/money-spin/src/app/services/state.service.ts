@@ -6,8 +6,8 @@ import { Player } from '../models/player.model';
 
 @Injectable()
 export class StateService {
-    private winningScore = 25;
-    private splashShown = false;
+    private static readonly winningScore = 25;
+
     player1Characters = [
         new Character('C3P0',  '/js/money-spin/assets/p1c3p0.png'),
         new Character('R2D2',  '/js/money-spin/assets/p1r2d2.png'),
@@ -65,7 +65,7 @@ export class StateService {
 
         this.currentPlayer.addDollarAmount(dollarValue);
 
-        if (this.currentPlayer.score >= this.winningScore) {
+        if (this.currentPlayer.score >= StateService.winningScore) {
             this.router.navigate(['/winner']);
             return true;
         }
@@ -73,10 +73,6 @@ export class StateService {
         this.updateCurrentPlayer();
 
         return false;
-    }
-
-    setSplashShown(): void {
-        this.splashShown = true;
     }
 
     private updateCurrentPlayer(): void {

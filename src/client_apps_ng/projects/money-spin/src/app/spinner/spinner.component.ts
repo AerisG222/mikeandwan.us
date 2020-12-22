@@ -12,7 +12,7 @@ import { BoardSector } from '../models/board-sector.model';
     styleUrls: [ './spinner.component.scss' ]
 })
 export class SpinnerComponent implements OnInit, OnDestroy {
-    private static SECTORS = [
+    private static readonly sectors = [
         new BoardSector(37, 8),
         new BoardSector(97, 6),
         new BoardSector(128, 4),
@@ -24,12 +24,15 @@ export class SpinnerComponent implements OnInit, OnDestroy {
         new BoardSector(313, 2),
         new BoardSector(362, 10), // last degree inflated to catch any possible overflow condition
     ];
-    private static MIN_TOP_SPEED = 0.2;
-    private static MAX_ADDITIONAL_TOP_SPEED = 0.4;
-    private static MIN_DROPOFF = .002;
-    private static MAX_ADDITIONAL_DROPOFF = .003;
-    private static MIN_TOP_SPEED_TIME_MS = 511;
-    private static MAX_ADDITIONAL_TOP_SPEED_TIME_MS = 1511;
+    private static readonly minTopSpeed = 0.2;
+    private static readonly maxAdditionalTopSpeed = 0.4;
+    private static readonly minDropoff = .002;
+    private static readonly maxAdditionalDropoff = .003;
+    private static readonly minTopSpeedTimeMs = 511;
+    private static readonly maxAdditionalTopSpeedTimeMs = 1511;
+
+    @Output() spinCompleted = new EventEmitter<number>();
+
     el?: HTMLDivElement;
     scene?: Scene;
     camera?: OrthographicCamera;
@@ -40,7 +43,6 @@ export class SpinnerComponent implements OnInit, OnDestroy {
     speedDropoff = 0;
     slowDown = true;
     animationId?: number;
-    @Output() spinCompleted = new EventEmitter<number>();
 
     constructor(private elRef: ElementRef) {
 
@@ -119,9 +121,9 @@ export class SpinnerComponent implements OnInit, OnDestroy {
 
         // randomize full speed, duration, and dropoff speed each spin
         this.slowDown = false;
-        this.arrowSpeed = SpinnerComponent.MIN_TOP_SPEED + (Math.random() * SpinnerComponent.MAX_ADDITIONAL_TOP_SPEED);
-        this.speedDropoff = SpinnerComponent.MIN_DROPOFF + (Math.random() * SpinnerComponent.MAX_ADDITIONAL_DROPOFF);
-        const fullSpeedTime = SpinnerComponent.MIN_TOP_SPEED_TIME_MS + (Math.random() * SpinnerComponent.MAX_ADDITIONAL_TOP_SPEED_TIME_MS);
+        this.arrowSpeed = SpinnerComponent.minTopSpeed + (Math.random() * SpinnerComponent.maxAdditionalTopSpeed);
+        this.speedDropoff = SpinnerComponent.minDropoff + (Math.random() * SpinnerComponent.maxAdditionalDropoff);
+        const fullSpeedTime = SpinnerComponent.minTopSpeedTimeMs + (Math.random() * SpinnerComponent.maxAdditionalTopSpeedTimeMs);
 
         setTimeout(() => {
             this.slowDown = true;
@@ -156,7 +158,7 @@ export class SpinnerComponent implements OnInit, OnDestroy {
             deg = 360 + deg;
         }
 
-        for (const score of SpinnerComponent.SECTORS) {
+        for (const score of SpinnerComponent.sectors) {
             if (deg <= score.minDegree) {
                 return score.value;
             }

@@ -8,6 +8,8 @@ import { AudioSource } from './audio-source.model';
     styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent {
+    @ViewChild('audio', { static: true }) audioElement?: ElementRef;
+
     letters: string[] = [
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
@@ -23,7 +25,6 @@ export class AppComponent {
     runButtonText = 'Start';
     intervalId?: number;
     assetRoot = '/js/learning/assets';
-    @ViewChild('audio', { static: true }) audioElement?: ElementRef;
 
     toggleRunning(): void {
         this.doRun = !this.doRun;

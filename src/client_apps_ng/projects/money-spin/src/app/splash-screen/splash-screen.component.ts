@@ -9,7 +9,7 @@ import { StateService } from '../services/state.service';
 })
 export class SplashScreenComponent implements AfterViewInit {
     constructor(private stateService: StateService) {
-        stateService.setSplashShown();
+
     }
 
     ngAfterViewInit(): void {

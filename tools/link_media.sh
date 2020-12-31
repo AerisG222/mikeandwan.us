@@ -7,3 +7,7 @@ fi
 if [ ! -L "${SRCDIR}/www/wwwroot/movies" ]; then
     ln -s "${MEDIADIR}/movies" "${SRCDIR}/www/wwwroot/movies"
 fi
+
+echo '** MEDIA LINKED **'
+echo
+

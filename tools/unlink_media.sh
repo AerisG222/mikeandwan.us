@@ -6,3 +6,7 @@ fi
 if [ -L "${SRCDIR}/www/wwwroot/movies" ]; then
     rm "${SRCDIR}/www/wwwroot/movies"
 fi
+
+echo '** MEDIA UNLINKED **'
+echo
+

@@ -1,3 +1,5 @@
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "CA1002")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "CA1014")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "CA1031")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "CA1055")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "CA1056")]

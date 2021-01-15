@@ -1,4 +1,3 @@
-using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -33,19 +32,16 @@ namespace Maw.Domain.Utilities
         }
 
 
-#pragma warning disable SCS0005
         public static string GeneratePassword(int length)
         {
             var sb = new StringBuilder();
-            var rnd = new Random();
 
             while (0 < length--)
             {
-                sb.Append(_passwordChars[rnd.Next(_passwordChars.Length)]);
+                sb.Append(_passwordChars[RandomNumberGenerator.GetInt32(_passwordChars.Length - 1)]);
             }
 
             return sb.ToString();
         }
-#pragma warning restore SCS0005
     }
 }

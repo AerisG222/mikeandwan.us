@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -39,7 +40,7 @@ namespace MawApi.Hubs
 
 
         [HubMethodName("DeleteFiles")]
-        public async Task<IEnumerable<FileOperationResult>> DeleteFilesAsync(List<string> files)
+        public async Task<IEnumerable<FileOperationResult>> DeleteFilesAsync(ReadOnlyCollection<string> files)
         {
             var results = _uploadSvc.DeleteFiles(Context.User, files);
 

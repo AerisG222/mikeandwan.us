@@ -8,23 +8,19 @@
         <DebugType>portable</DebugType>
         <DefaultItemExcludes>**/node_modules/**;$(DefaultItemExcludes)</DefaultItemExcludes>
         <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
+        <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.0" />
-        <PackageReference Include="IdentityModel" Version="4.5.0" />
-        <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.1" />
+        <PackageReference Include="IdentityModel" Version="5.0.0" />
+        <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.22" />
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="AsyncFixer" Version="1.3.0">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-
-        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>

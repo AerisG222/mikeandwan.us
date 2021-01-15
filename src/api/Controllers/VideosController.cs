@@ -56,7 +56,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public Task<ApiCollection<Comment>> GetCommentsAsync(short id)
+        public Task<ApiCollectionResult<Comment>> GetCommentsAsync(short id)
         {
             return InternalGetCommentsAsync(id);
         }
@@ -67,7 +67,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ApiCollection<Comment>> AddCommentAsync(short id, CommentViewModel model)
+        public async Task<ApiCollectionResult<Comment>> AddCommentAsync(short id, CommentViewModel model)
         {
             if (model == null)
             {
@@ -183,11 +183,11 @@ namespace MawApi.Controllers
         }
 
 
-        async Task<ApiCollection<Comment>> InternalGetCommentsAsync(short id)
+        async Task<ApiCollectionResult<Comment>> InternalGetCommentsAsync(short id)
         {
             var comments = await _svc.GetCommentsAsync(id).ConfigureAwait(false);
 
-            return new ApiCollection<Comment>(comments.ToList());
+            return new ApiCollectionResult<Comment>(comments.ToList());
         }
 
 

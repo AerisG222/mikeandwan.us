@@ -304,6 +304,11 @@ namespace MawAuth.Controllers
 
             var user = await _userMgr.FindByNameAsync(id).ConfigureAwait(false);
 
+            if(user == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             var model = new EditProfileModel
             {
                 Username = user.Username,
@@ -312,14 +317,7 @@ namespace MawAuth.Controllers
                 Email = user.Email
             };
 
-            if (model != null)
-            {
-                return View(model);
-            }
-            else
-            {
-                return RedirectToAction(nameof(Index));
-            }
+            return View(model);
         }
 
 

@@ -15,7 +15,7 @@ namespace Maw.Data
         readonly string _connString;
 
 
-        public Repository(string connectionString)
+        protected Repository(string connectionString)
         {
             if(string.IsNullOrWhiteSpace(connectionString))
             {

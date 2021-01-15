@@ -39,12 +39,12 @@ namespace MawApi.Controllers
         [HttpOptions]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<ApiCollection<PhotoCategoryViewModel>>> GetAll()
+        public async Task<ActionResult<ApiCollectionResult<PhotoCategoryViewModel>>> GetAll()
         {
             var categories = await _svc.GetAllCategoriesAsync(Role.IsAdmin(User)).ConfigureAwait(false);
             var result = _categoryAdapter.Adapt(categories);
 
-            return new ApiCollection<PhotoCategoryViewModel>(result.ToList());
+            return new ApiCollectionResult<PhotoCategoryViewModel>(result.ToList());
         }
 
 
@@ -52,12 +52,12 @@ namespace MawApi.Controllers
         [HttpOptions("recent/{sinceId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<ApiCollection<PhotoCategoryViewModel>>> GetRecent(short sinceId)
+        public async Task<ActionResult<ApiCollectionResult<PhotoCategoryViewModel>>> GetRecent(short sinceId)
         {
             var categories = await _svc.GetRecentCategoriesAsync(sinceId, Role.IsAdmin(User)).ConfigureAwait(false);
             var result = _categoryAdapter.Adapt(categories);
 
-            return new ApiCollection<PhotoCategoryViewModel>(result.ToList());
+            return new ApiCollectionResult<PhotoCategoryViewModel>(result.ToList());
         }
 
 
@@ -77,7 +77,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<ApiCollection<MawApi.ViewModels.Photos.PhotoViewModel>>> GetPhotos(short id)
+        public async Task<ActionResult<ApiCollectionResult<MawApi.ViewModels.Photos.PhotoViewModel>>> GetPhotos(short id)
         {
             var photos = await _svc.GetPhotosForCategoryAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
 
@@ -88,7 +88,7 @@ namespace MawApi.Controllers
 
             var results = _photoAdapter.Adapt(photos);
 
-            return new ApiCollection<PhotoViewModel>(results.ToList());
+            return new ApiCollectionResult<PhotoViewModel>(results.ToList());
         }
 
 

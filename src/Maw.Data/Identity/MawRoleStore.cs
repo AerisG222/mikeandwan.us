@@ -91,7 +91,7 @@ namespace Maw.Data.Identity
         }
 
 
-        public Task SetNormalizedRoleNameAsync(MawRole role, string roleName, CancellationToken cancellationToken = default)
+        public Task SetNormalizedRoleNameAsync(MawRole role, string normalizedName, CancellationToken cancellationToken = default)
         {
             if (role == null)
             {
@@ -136,14 +136,14 @@ namespace Maw.Data.Identity
         }
 
 
-        public Task<MawRole> FindByNameAsync(string roleName, CancellationToken cancellationToken = default)
+        public Task<MawRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrEmpty(roleName))
+            if (string.IsNullOrEmpty(normalizedRoleName))
             {
-                throw new ArgumentException("Invalid roleName", nameof(roleName));
+                throw new ArgumentException("Invalid roleName", nameof(normalizedRoleName));
             }
 
-            return _repo.GetRoleAsync(roleName);
+            return _repo.GetRoleAsync(normalizedRoleName);
         }
         #endregion
 

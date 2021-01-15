@@ -39,12 +39,12 @@ namespace MawApi.Controllers
         [HttpOptions]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<ApiCollection<VideoCategoryViewModel>>> GetAll()
+        public async Task<ActionResult<ApiCollectionResult<VideoCategoryViewModel>>> GetAll()
         {
             var categories = await _svc.GetAllCategoriesAsync(Role.IsAdmin(User)).ConfigureAwait(false);
             var result = _categoryAdapter.Adapt(categories);
 
-            return new ApiCollection<VideoCategoryViewModel>(result.ToList());
+            return new ApiCollectionResult<VideoCategoryViewModel>(result.ToList());
         }
 
 
@@ -64,7 +64,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<ApiCollection<MawApi.ViewModels.Videos.VideoViewModel>>> GetVideos(short id)
+        public async Task<ActionResult<ApiCollectionResult<MawApi.ViewModels.Videos.VideoViewModel>>> GetVideos(short id)
         {
             var photos = await _svc.GetVideosInCategoryAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
 
@@ -75,7 +75,7 @@ namespace MawApi.Controllers
 
             var results = _videoAdapter.Adapt(photos);
 
-            return new ApiCollection<VideoViewModel>(results.ToList());
+            return new ApiCollectionResult<VideoViewModel>(results.ToList());
         }
 
 

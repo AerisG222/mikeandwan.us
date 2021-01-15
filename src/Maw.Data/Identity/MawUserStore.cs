@@ -78,7 +78,7 @@ namespace Maw.Data.Identity
         }
 
 
-        public virtual Task SetNormalizedUserNameAsync(MawUser user, string userName, CancellationToken cancellationToken = default)
+        public virtual Task SetNormalizedUserNameAsync(MawUser user, string normalizedName, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

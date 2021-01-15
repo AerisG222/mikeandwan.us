@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 
@@ -67,11 +68,10 @@ namespace MawMvcApp.ViewModels.Tools
         public void ThrowDice()
         {
             ThrowCounts = new List<int>(new int[NumberOfSides]);
-            var rnd = new Random();
 
             for (int i = 0; i < NumberOfThrows; i++)
             {
-                ThrowCounts[rnd.Next(0, NumberOfSides)]++;
+                ThrowCounts[RandomNumberGenerator.GetInt32(NumberOfSides)]++;
             }
 
             Executed = true;

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace MawApi.ViewModels
 {
-    public class ApiCollection<T>
+    public class ApiCollectionResult<T>
     {
         public List<T> Items { get; }
         public long Count => Items.Count;
 
 
-        public ApiCollection(List<T> items)
+        public ApiCollectionResult(List<T> items)
         {
             Items = items;
         }

@@ -51,7 +51,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<ApiCollection<PhotoViewModel>>> GetRandomPhotosAsync(byte count)
+        public async Task<ActionResult<ApiCollectionResult<PhotoViewModel>>> GetRandomPhotosAsync(byte count)
         {
             if(count > 50) {
                 return BadRequest();
@@ -59,7 +59,7 @@ namespace MawApi.Controllers
 
             var photos = await _svc.GetRandomAsync(count, Role.IsAdmin(User)).ConfigureAwait(false);
 
-            return new ApiCollection<PhotoViewModel>(_photoAdapter.Adapt(photos).ToList());
+            return new ApiCollectionResult<PhotoViewModel>(_photoAdapter.Adapt(photos).ToList());
         }
 
 
@@ -86,7 +86,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public Task<ApiCollection<Comment>> GetCommentsAsync(int id)
+        public Task<ApiCollectionResult<Comment>> GetCommentsAsync(int id)
         {
             return InternalGetCommentsAsync(id);
         }
@@ -97,7 +97,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        public async Task<ApiCollection<Comment>> AddCommentAsync(int id, CommentViewModel model)
+        public async Task<ApiCollectionResult<Comment>> AddCommentAsync(int id, CommentViewModel model)
         {
             if(model == null)
             {
@@ -231,11 +231,11 @@ namespace MawApi.Controllers
         }
 
 
-        async Task<ApiCollection<Comment>> InternalGetCommentsAsync(int id)
+        async Task<ApiCollectionResult<Comment>> InternalGetCommentsAsync(int id)
         {
             var comments = await _svc.GetCommentsAsync(id).ConfigureAwait(false);
 
-            return new ApiCollection<Comment>(comments.ToList());
+            return new ApiCollectionResult<Comment>(comments.ToList());
         }
 
 

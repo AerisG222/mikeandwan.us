@@ -97,7 +97,7 @@ namespace MawMvcApp.ViewModels.Gps
         }
 
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext context)
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var resultList = new List<ValidationResult>();
 

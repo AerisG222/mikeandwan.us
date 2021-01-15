@@ -14,7 +14,7 @@ using Maw.Domain.Identity;
 using MawAuth.ViewModels.Account;
 using SignInRes = Microsoft.AspNetCore.Identity.SignInResult;
 using Microsoft.AspNetCore.Authentication;
-using IdentityServer4.Services;
+using Duende.IdentityServer.Services;
 using MawAuth.ViewModels.Email;
 using Mvc.RenderViewToString;
 
@@ -127,7 +127,7 @@ namespace MawAuth.Controllers
         [HttpGet("external-login-callback")]
         public async Task<IActionResult> ExternalLoginCallback()
         {
-            var result = await HttpContext.AuthenticateAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
+            var result = await HttpContext.AuthenticateAsync(Duende.IdentityServer.IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
             var items = result?.Properties?.Items;
 
             if (result?.Succeeded != true || items == null || !items.ContainsKey("scheme"))
@@ -156,7 +156,7 @@ namespace MawAuth.Controllers
                     await _loginService.LogExternalLoginAttemptAsync(email.Value, provider, true).ConfigureAwait(false);
 
                     // delete temporary cookie used during external authentication
-                    await HttpContext.SignOutAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
+                    await HttpContext.SignOutAsync(Duende.IdentityServer.IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
 
                     _log.LogInformation("User {Username} logged in with {Provider} provider.", user.Username, provider);
 

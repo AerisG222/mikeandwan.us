@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using IdentityServer4;
+using Duende.IdentityServer;
 using Mvc.RenderViewToString;
 using NWebsec.Core.Common.Middleware.Options;
 using Maw.Data;

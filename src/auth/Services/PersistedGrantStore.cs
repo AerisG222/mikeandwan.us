@@ -1,37 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Dapper;
-using IdentityServer4.Extensions;
-using IdentityServer4.Models;
-using IdentityServer4.Stores;
-using Npgsql;
+using Duende.IdentityServer.Extensions;
+using Duende.IdentityServer.Models;
+using Duende.IdentityServer.Stores;
 using MawAuth.Models;
-
 
 namespace MawAuth.Services
 {
     public class PersistedGrantStore
-        : IPersistedGrantStore
+        : BaseStore, IPersistedGrantStore
     {
-        readonly string _connString;
-        readonly ILogger _log;
-
-
-        public PersistedGrantStore(StoreConfig config, ILogger<IdentityServerProfileService> log)
+        public PersistedGrantStore(StoreConfig config, ILogger<PersistedGrantStore> log)
+            : base(config, log)
         {
-            if (config == null)
-            {
-                throw new ArgumentNullException(nameof(config));
-            }
 
-            _connString = config.ConnectionString;
-            _log = log ?? throw new ArgumentNullException(nameof(log));
         }
-
 
         public Task<IEnumerable<PersistedGrant>> GetAllAsync(PersistedGrantFilter filter)
         {
@@ -42,7 +28,7 @@ namespace MawAuth.Services
 
             filter.Validate();
 
-            _log.LogDebug("getting all grants for subject: {SubjectId}, client: {ClientId}, session: {SessionId}, type: {Type}",
+            Log.LogDebug("getting all grants for subject: {SubjectId}, client: {ClientId}, session: {SessionId}, type: {Type}",
                 filter.SubjectId,
                 filter.ClientId,
                 filter.SessionId,
@@ -56,7 +42,6 @@ namespace MawAuth.Services
             );
         }
 
-
         public Task<PersistedGrant> GetAsync(string key)
         {
             if(string.IsNullOrWhiteSpace(key))
@@ -64,7 +49,7 @@ namespace MawAuth.Services
                 throw new ArgumentNullException(nameof(key));
             }
 
-            _log.LogDebug("getting grant for key: {Key}", key);
+            Log.LogDebug("getting grant for key: {Key}", key);
 
             return RunAsync(conn =>
                 conn.QuerySingleOrDefaultAsync<PersistedGrant>(
@@ -77,7 +62,6 @@ namespace MawAuth.Services
             );
         }
 
-
         public Task RemoveAllAsync(PersistedGrantFilter filter)
         {
             if(filter == null)
@@ -87,7 +71,7 @@ namespace MawAuth.Services
 
             filter.Validate();
 
-            _log.LogDebug("removing all grants for subject: {SubjectId}, client: {ClientId}, session: {SessionId}, type: {Type}",
+            Log.LogDebug("removing all grants for subject: {SubjectId}, client: {ClientId}, session: {SessionId}, type: {Type}",
                 filter.SubjectId,
                 filter.ClientId,
                 filter.SessionId,
@@ -101,7 +85,6 @@ namespace MawAuth.Services
             );
         }
 
-
         public Task RemoveAsync(string key)
         {
             if(string.IsNullOrWhiteSpace(key))
@@ -109,7 +92,7 @@ namespace MawAuth.Services
                 throw new ArgumentNullException(nameof(key));
             }
 
-            _log.LogDebug("removing grant for key: {Key}", key);
+            Log.LogDebug("removing grant for key: {Key}", key);
 
             return RunAsync(conn =>
                 conn.QuerySingleOrDefaultAsync<long>(
@@ -122,7 +105,6 @@ namespace MawAuth.Services
             );
         }
 
-
         public Task StoreAsync(PersistedGrant grant)
         {
             if (grant == null)
@@ -130,7 +112,7 @@ namespace MawAuth.Services
                 throw new ArgumentNullException(nameof(grant));
             }
 
-            _log.LogDebug("storing grant for key: {Key}, type: {Type}, subject: {SubjectId}, client: {ClientId}, session: {SessionId}",
+            Log.LogDebug("storing grant for key: {Key}, type: {Type}, subject: {SubjectId}, client: {ClientId}, session: {SessionId}",
                 grant.Key,
                 grant.Type,
                 grant.SubjectId,
@@ -144,32 +126,6 @@ namespace MawAuth.Services
                     grant
                 )
             );
-        }
-
-
-        async Task<T> RunAsync<T>(Func<IDbConnection, Task<T>> queryData)
-        {
-            using var conn = GetConnection();
-
-            await conn.OpenAsync().ConfigureAwait(false);
-
-            return await queryData(conn).ConfigureAwait(false);
-        }
-
-
-        async Task RunAsync(Func<IDbConnection, Task> executeStatement)
-        {
-            using var conn = GetConnection();
-
-            await conn.OpenAsync().ConfigureAwait(false);
-
-            await executeStatement(conn).ConfigureAwait(false);
-        }
-
-
-        DbConnection GetConnection()
-        {
-            return new NpgsqlConnection(_connString);
         }
     }
 }

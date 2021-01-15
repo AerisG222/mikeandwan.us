@@ -1,4 +1,4 @@
-using IdentityServer4.Stores;
+using Duende.IdentityServer.Stores;
 using MawAuth.Models;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,7 +14,8 @@ namespace MawAuth.Services
 
             services
                 .AddSingleton<StoreConfig>(new StoreConfig(connString))
-                .AddScoped<IPersistedGrantStore, PersistedGrantStore>();
+                .AddScoped<IPersistedGrantStore, PersistedGrantStore>()
+                .AddScoped<ISigningKeyStore, SigningKeyStore>();
 
             return services;
         }

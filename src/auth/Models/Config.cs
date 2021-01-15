@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using IdentityServer4.Models;
-using IdentityServer4;
+using Duende.IdentityServer.Models;
+using Duende.IdentityServer;
 using IdentityModel;
 
 

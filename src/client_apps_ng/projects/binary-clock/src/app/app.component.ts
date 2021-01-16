@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 
-declare var notick: boolean;
+declare let notick: boolean;
 
 @Component({
     selector: 'app-root',

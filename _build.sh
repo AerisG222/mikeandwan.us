@@ -193,7 +193,7 @@ build_site() {
 
     echo "Running dotnet publish from ${PWD} and outputing to ${DIST_ROOT}"
 
-    dotnet publish -o "${DIST_ROOT}" -c Release
+    dotnet publish -o "${DIST_ROOT}" -c release -r linux-musl-x64 --self-contained false
     popd
 }
 

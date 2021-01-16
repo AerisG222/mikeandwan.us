@@ -1,6 +1,6 @@
 # https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-3.1
 # https://github.com/dotnet/dotnet-docker/blob/master/samples/aspnetapp/Dockerfile.alpine-x64
-FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine-amd64 AS build
 
 RUN apk --no-cache add \
     bash \
@@ -18,14 +18,14 @@ RUN npm install -g \
 
 WORKDIR /src
 
-COPY _client_app_vars.sh                                      .
-COPY _build.sh                                                .
-COPY build_client_apps.sh                                     .
-COPY mikeandwan.us.sln                                        .
-COPY nuget.config                                             .
-#COPY src/.                                                    src/
-RUN cp -r /tmp/context/src                                    .
-COPY tests/.                                                  tests/
+COPY _client_app_vars.sh   .
+COPY _build.sh             .
+COPY build_client_apps.sh  .
+COPY mikeandwan.us.sln     .
+COPY nuget.config          .
+#COPY src/.                 src/
+RUN cp -r /tmp/context/src .
+COPY tests/.               tests/
 
 # build with:  buildah bud -v "$(pwd)":/tmp/context:ro,Z -f Containerfile.api -t maw-api-dev
 
@@ -35,7 +35,7 @@ RUN ./_build.sh api
 
 
 # build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine-amd64
 
 RUN apk --no-cache add \
     bash \

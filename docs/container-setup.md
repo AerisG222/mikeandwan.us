@@ -255,3 +255,12 @@ Once that executes, you should see this volume as a new directory under /srv/pod
 Once verified, remove the test volume with the following command:
 
 `podman volume rm testvol`
+
+
+## Upgrade Postgres to New Version
+
+Currently the pg_upgrade utility requires both versions of pg to perform an upgrade.  There is an interesting
+repository https://github.com/tianon/docker-postgres-upgrade that might help, but for now, am following a more
+conservative approach of dumping the live db and pumping it into a new instance.
+
+The script in postgres_upgrade.sh walks through the details for this process.

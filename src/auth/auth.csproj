@@ -12,8 +12,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Duende.IdentityServer" Version="5.0.0" />
-        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="5.0.0" />
+        <PackageReference Include="Duende.IdentityServer" Version="5.0.1" />
+        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="5.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="5.0.2" />
@@ -25,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AsyncFixer" Version="1.4.1">
+        <PackageReference Include="AsyncFixer" Version="1.5.1">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>

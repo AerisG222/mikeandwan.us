@@ -150,6 +150,8 @@ namespace MawMvcApp
                 .UseXContentTypeOptions()
                 .UseReferrerPolicy(opts => opts.StrictOriginWhenCrossOrigin())
 
+                .UseCors()
+
                 .UseStaticFiles(new StaticFileOptions {
                     ContentTypeProvider = GetCustomMimeTypeProvider()
                 })
@@ -162,7 +164,6 @@ namespace MawMvcApp
                 .UseCsp(DefineContentSecurityPolicy)
 
                 .UseRouting()
-                .UseCors()
                 .UseForwardedHeaders(new ForwardedHeadersOptions
                     {
                         ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto

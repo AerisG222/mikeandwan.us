@@ -234,8 +234,8 @@ create_containers() {
         podman create \
             --pod "${POD_NAME}" \
             --name maw-postgres \
-            --volume maw-postgres:/var/lib/postgresql/data:rw,z \
-            postgres:12.2
+            --volume maw-postgres.13.2:/var/lib/postgresql/data:rw,z \
+            postgres:13.2
     fi
 
     podman container inspect maw-solr > /dev/null 2>&1

@@ -6,8 +6,8 @@ POD="maw-pod-dev"
 # note: at the end we will reuse the same container name so that the systemd startup scripts continue to work
 PG_OLD="maw-postgres"
 PG_OLD_IMG="postgres:12.2"
-PG_NEW="maw-postgres.13.1"
-PG_NEW_IMG="postgres:13.1-alpine"
+PG_NEW="maw-postgres.13.2"
+PG_NEW_IMG="postgres:13.2-alpine"
 PG_ENV_FILE="/home/mmorano/podman-env-files/maw-postgres.env"
 PG_DUMP_FILE="__pg.dump"
 LOCALHOST_IP="$(hostname -I | cut -d ' ' -f 1)"
@@ -79,7 +79,7 @@ podman run \
     --rm \
     --env-file "${PG_ENV_FILE}" \
     "${PG_NEW_IMG}" \
-    reindexdb -h "${LOCALHOST_IP}" -p 9432 -U postgres -d postgres -w -d postgres && vacuumdb -h "${LOCALHOST_IP}" -p 9432 -U postgres --all --analyze -w
+    reindexdb -h "${LOCALHOST_IP}" -p 9432 -U postgres -a -w && vacuumdb -h "${LOCALHOST_IP}" -p 9432 -U postgres --all --analyze -w
 echo 'optimization complete'
 echo
 

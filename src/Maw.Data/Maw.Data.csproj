@@ -14,7 +14,7 @@
     <ItemGroup>
         <PackageReference Include="Dapper" Version="2.0.78" />
         <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.22" />
-        <PackageReference Include="Npgsql" Version="5.0.3" />
+        <PackageReference Include="Npgsql" Version="5.0.4" />
     </ItemGroup>
 
     <ItemGroup>
@@ -23,7 +23,7 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="SecurityCodeScan.VS2019" Version="5.0.0">
+        <PackageReference Include="SecurityCodeScan.VS2019" Version="5.1.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>

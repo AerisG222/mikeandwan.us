@@ -16,9 +16,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Google.Apis.Gmail.v1" Version="1.50.0.2251" />
-        <PackageReference Include="IdentityModel" Version="5.0.1" />
-        <PackageReference Include="MailKit" Version="2.11.0" />
+        <PackageReference Include="Google.Apis.Gmail.v1" Version="1.51.0.2251" />
+        <PackageReference Include="IdentityModel" Version="5.1.0" />
+        <PackageReference Include="MailKit" Version="2.11.1" />
         <PackageReference Include="MedallionShell" Version="1.6.2" />
         <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
         <PackageReference Include="SolrNet.Core" Version="1.0.19" />
@@ -30,7 +30,7 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="SecurityCodeScan.VS2019" Version="5.0.0">
+        <PackageReference Include="SecurityCodeScan.VS2019" Version="5.1.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>

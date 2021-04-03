@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using NWebsec.Core.Common.Middleware.Options;
 using SolrNet;
 using Maw.Data;
 using Maw.Domain;
@@ -138,12 +139,12 @@ namespace MawApi
                 .UseXfo(xfo => xfo.Deny())
                 .UseXXssProtection(opts => opts.EnabledWithBlockMode())
                 .UseRedirectValidation()
-                .UseCsp(csp => csp.DefaultSources(s => s.None()))
+                .UseCsp(DefineContentSecurityPolicy)
 
                 .UseRouting()
                 .UseCors()
                 .UseOpenApi()
-                .UseSwaggerUi3()
+                .UseReDoc()
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseEndpoints(endpoints => {
@@ -163,6 +164,45 @@ namespace MawApi
                     .AddDataProtection()
                     .PersistKeysToFileSystem(new DirectoryInfo(dpPath));
             }
+        }
+
+        void DefineContentSecurityPolicy(IFluentCspOptions csp)
+        {
+            var fontSources = new string[] {
+                "https://fonts.gstatic.com"
+            };
+
+            var imageSources = new string[] {
+                "data:"
+            };
+
+            var scriptSources = new string[] {
+                "https://cdn.jsdelivr.net"
+            };
+
+            var styleSources = new string[] {
+                "https://fonts.googleapis.com"
+            };
+
+            var workerSources = new string[] {
+                "blob:"
+            };
+
+            csp
+                .DefaultSources(s => s.None())
+                .BaseUris(s => s.Self())
+                .ConnectSources(s => s.Self())
+                .FontSources(s => s.CustomSources(fontSources))
+                .ImageSources(s => s.CustomSources(imageSources))
+                .ScriptSources(s => {
+                    s.UnsafeInline();
+                    s.CustomSources(scriptSources);
+                })
+                .StyleSources(s => {
+                    s.UnsafeInline();
+                    s.CustomSources(styleSources);
+                })
+                .WorkerSources(s => s.CustomSources(workerSources));
         }
     }
 }

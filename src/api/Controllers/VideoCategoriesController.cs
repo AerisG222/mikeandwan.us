@@ -36,7 +36,6 @@ namespace MawApi.Controllers
 
 
         [HttpGet]
-        [HttpOptions]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         public async Task<ActionResult<ApiCollectionResult<VideoCategoryViewModel>>> GetAll()
@@ -49,7 +48,6 @@ namespace MawApi.Controllers
 
 
         [HttpGet("{id}")]
-        [HttpOptions("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
@@ -60,7 +58,6 @@ namespace MawApi.Controllers
 
 
         [HttpGet("{id}/videos")]
-        [HttpOptions("{id}/videos")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]

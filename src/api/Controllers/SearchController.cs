@@ -27,7 +27,6 @@ namespace MawApi.Controllers
 
 
         [HttpGet("multimedia-categories")]
-        [HttpOptions("multimedia-categories")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         public async Task<ActionResult<SearchResults<MultimediaCategory>>> SearchMultimediaCategories(string query, int start = 0)

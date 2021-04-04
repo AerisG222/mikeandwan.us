@@ -113,6 +113,7 @@ namespace MawApi
                     });
                 })
                 .AddOpenApiDocument(doc => {
+                    doc.DocumentName = "openapi";
                     doc.Title = "mikeandwan.us APIs";
                     doc.Description = "Full suite of APIs for interacting with data hosted at mikeandwan.us";
                 });
@@ -143,8 +144,14 @@ namespace MawApi
 
                 .UseRouting()
                 .UseCors()
-                .UseOpenApi()
-                .UseReDoc()
+                .UseOpenApi(opts => {
+                    opts.DocumentName = "openapi";
+                    opts.Path = "/openapi/v1/openapi.json";
+                })
+                .UseReDoc(opts => {
+                    opts.Path = "/openapi";
+                    opts.DocumentPath = "/openapi/v1/openapi.json";
+                })
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseEndpoints(endpoints => {

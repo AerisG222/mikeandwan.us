@@ -25,9 +25,7 @@
             "main": "projects/binary-clock/src/main.ts",
             "polyfills": "projects/binary-clock/src/polyfills.ts",
             "tsConfig": "projects/binary-clock/tsconfig.app.json",
-            "vendorChunk": false,
             "statsJson": true,
-            "aot": true,
             "assets": [
               "projects/binary-clock/src/favicon.ico",
               "projects/binary-clock/src/assets"
@@ -35,7 +33,12 @@
             "styles": [
               "projects/binary-clock/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -50,7 +53,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {
@@ -146,9 +148,7 @@
             "main": "projects/googlemaps/src/main.ts",
             "polyfills": "projects/googlemaps/src/polyfills.ts",
             "tsConfig": "projects/googlemaps/tsconfig.app.json",
-            "vendorChunk": false,
             "statsJson": true,
-            "aot": true,
             "assets": [
               "projects/googlemaps/src/favicon.ico",
               "projects/googlemaps/src/assets"
@@ -156,7 +156,12 @@
             "styles": [
               "projects/googlemaps/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -171,7 +176,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {
@@ -267,9 +271,7 @@
             "main": "projects/learning/src/main.ts",
             "polyfills": "projects/learning/src/polyfills.ts",
             "tsConfig": "projects/learning/tsconfig.app.json",
-            "vendorChunk": false,
             "statsJson": true,
-            "aot": true,
             "assets": [
               "projects/learning/src/favicon.ico",
               "projects/learning/src/assets"
@@ -277,7 +279,12 @@
             "styles": [
               "projects/learning/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -292,7 +299,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {
@@ -388,9 +394,7 @@
             "main": "projects/memory/src/main.ts",
             "polyfills": "projects/memory/src/polyfills.ts",
             "tsConfig": "projects/memory/tsconfig.app.json",
-            "vendorChunk": false,
             "statsJson": true,
-            "aot": true,
             "assets": [
               "projects/memory/src/favicon.ico",
               "projects/memory/src/assets"
@@ -398,7 +402,12 @@
             "styles": [
               "projects/memory/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -413,7 +422,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {
@@ -509,9 +517,7 @@
             "main": "projects/money-spin/src/main.ts",
             "polyfills": "projects/money-spin/src/polyfills.ts",
             "tsConfig": "projects/money-spin/tsconfig.app.json",
-            "vendorChunk": false,
             "statsJson": true,
-            "aot": true,
             "assets": [
               "projects/money-spin/src/favicon.ico",
               "projects/money-spin/src/assets"
@@ -519,7 +525,12 @@
             "styles": [
               "projects/money-spin/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -534,7 +545,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {
@@ -630,9 +640,7 @@
             "main": "projects/weekend-countdown/src/main.ts",
             "polyfills": "projects/weekend-countdown/src/polyfills.ts",
             "tsConfig": "projects/weekend-countdown/tsconfig.app.json",
-            "vendorChunk": false,
             "statsJson": true,
-            "aot": true,
             "assets": [
               "projects/weekend-countdown/src/favicon.ico",
               "projects/weekend-countdown/src/assets"
@@ -640,7 +648,12 @@
             "styles": [
               "projects/weekend-countdown/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -655,7 +668,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {

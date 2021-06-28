@@ -58,7 +58,7 @@ namespace MawAuth.Services
             return RunAsync(conn =>
                 conn.QuerySingleOrDefaultAsync<long>(
                     "SELECT * FROM idsrv.delete_signing_key(@id);",
-                    id
+                    new { id }
                 )
             );
         }

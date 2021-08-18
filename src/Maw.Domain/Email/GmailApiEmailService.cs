@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Gmail.v1;
@@ -84,24 +85,22 @@ namespace Maw.Domain.Email
 
             return new Message
             {
-                Raw = Encode(msg.ToString())
+                Raw = Base64UrlEncode(msg)
             };
         }
 
-
-        static string Encode(string text)
+        // https://stackoverflow.com/questions/35655019/gmail-draft-html-with-attachment-with-mimekit-c-sharp-winforms-and-google-api
+        static string Base64UrlEncode (MimeMessage message)
         {
-            var bytes = System.Text.Encoding.UTF8.GetBytes(text);
+            using (var stream = new MemoryStream ()) {
+                message.WriteTo(stream);
 
-            string s = Convert.ToBase64String(bytes); // Standard base64 encoder
-
-            s = s.Split('=')[0]; // Remove any trailing '='s
-            s = s.Replace('+', '-'); // 62nd char of encoding
-            s = s.Replace('/', '_'); // 63rd char of encoding
-
-            return s;
+                return Convert.ToBase64String(stream.GetBuffer(), 0, (int) stream.Length)
+                    .Replace ('+', '-')
+                    .Replace ('/', '_')
+                    .Replace ("=", "", StringComparison.Ordinal);
+            }
         }
-
 
         async Task<GmailService> GetService()
         {

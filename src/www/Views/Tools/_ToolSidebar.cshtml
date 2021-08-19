@@ -11,9 +11,9 @@
 <div id="sidebarAccordion" class="sidebar-accordion">
     <div class="card mb-2">
         <div class="card-header">
-            <button class="btn btn-link btn-block text-left p-0" type="button"  data-toggle="collapse" data-target="#general">General</button>
+            <button class="btn btn-link btn-block p-0" type="button"  data-bs-toggle="collapse" data-bs-target="#general">General</button>
         </div>
-        <div id="general" class="@generalClass" data-parent="#sidebarAccordion">
+        <div id="general" class="@generalClass" data-bs-parent="#sidebarAccordion">
             <div class="list-group list-group-flush">
                 <a asp-controller="tools" asp-action="RollTheDice" maw-active="@string.Equals(Model.Item, "roll-the-dice", StringComparison.OrdinalIgnoreCase)">Roll the Dice</a>
                 <a asp-controller="tools" asp-action="GoogleMaps" maw-active="@string.Equals(Model.Item, "google-maps", StringComparison.OrdinalIgnoreCase)">Google Maps</a>
@@ -26,9 +26,9 @@
     </div>
     <div class="card mb-2">
         <div class="card-header">
-            <button class="btn btn-link btn-block text-left p-0" type="button"  data-toggle="collapse" data-target="#networking">Networking</button>
+            <button class="btn btn-link btn-block p-0" type="button"  data-bs-toggle="collapse" data-bs-target="#networking">Networking</button>
         </div>
-        <div id="networking" class="@networkingClass" data-parent="#sidebarAccordion">
+        <div id="networking" class="@networkingClass" data-bs-parent="#sidebarAccordion">
             <div class="list-group list-group-flush">
                 <a asp-controller="tools" asp-action="NetworkingBandwidth" maw-active="@string.Equals(Model.Item, "networking-bandwidth", StringComparison.OrdinalIgnoreCase)">Bandwidth Calculator</a>
                 <a asp-controller="tools" asp-action="NetworkingFileSize" maw-active="@string.Equals(Model.Item, "networking-file-size", StringComparison.OrdinalIgnoreCase)">File Size</a>
@@ -38,9 +38,9 @@
     </div>
     <div class="card mb-2">
         <div class="card-header">
-            <button class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" data-target="#binaryClock">Binary Clock</button>
+            <button class="btn btn-link btn-block p-0" type="button" data-bs-toggle="collapse" data-bs-target="#binaryClock">Binary Clock</button>
         </div>
-        <div id="binaryClock" class="@binaryClockClass" data-parent="#sidebarAccordion">
+        <div id="binaryClock" class="@binaryClockClass" data-bs-parent="#sidebarAccordion">
             <div class="list-group list-group-flush">
                 <a asp-controller="tools" asp-action="BinaryClock" maw-active="@string.Equals(Model.Item, "binary-clock", StringComparison.OrdinalIgnoreCase)">Binary Clock</a>
                 <a asp-controller="tools" asp-action="BinaryClockAbout" maw-active="@string.Equals(Model.Item, "binary-clock-about", StringComparison.OrdinalIgnoreCase)">About Binary Clock</a>
@@ -49,9 +49,9 @@
     </div>
     <div class="card mb-2">
         <div class="card-header">
-            <button class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" data-target="#dotnet">.Net</button>
+            <button class="btn btn-link btn-block p-0" type="button" data-bs-toggle="collapse" data-bs-target="#dotnet">.Net</button>
         </div>
-        <div id="dotnet" class="@dotnetClass" data-parent="#sidebarAccordion">
+        <div id="dotnet" class="@dotnetClass" data-bs-parent="#sidebarAccordion">
             <div class="list-group list-group-flush">
                 <a asp-controller="tools" asp-action="DotnetRegex" maw-active="@string.Equals(Model.Item, "dotnet-regex", StringComparison.OrdinalIgnoreCase)">Regular Expressions</a>
                 <a asp-controller="tools" asp-action="DotnetFormattingDates" maw-active="@string.Equals(Model.Item, "dotnet-formatting-dates", StringComparison.OrdinalIgnoreCase)">Date Formatting</a>
@@ -71,9 +71,9 @@
     </div>
     <div class="card mb-2">
         <div class="card-header">
-            <button class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" data-target="#learning">Learning</button>
+            <button class="btn btn-link btn-block p-0" type="button" data-bs-toggle="collapse" data-bs-target="#learning">Learning</button>
         </div>
-        <div id="learning" class="@learningClass" data-parent="#sidebarAccordion">
+        <div id="learning" class="@learningClass" data-bs-parent="#sidebarAccordion">
             <div class="list-group list-group-flush">
                 <a asp-controller="tools" asp-action="Learning" maw-active="@string.Equals(Model.Item, "learning", StringComparison.OrdinalIgnoreCase)">Letters and Numbers</a>
             </div>

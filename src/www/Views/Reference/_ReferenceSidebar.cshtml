@@ -10,9 +10,9 @@
 <div id="sidebarAccordion" class="sidebar-accordion">
     <div class="card mb-2">
         <div class="card-header">
-            <button class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" data-target="#html">HTML</button>
+            <button class="btn btn-link btn-block p-0" type="button" data-bs-toggle="collapse" data-bs-target="#html">HTML</button>
         </div>
-        <div id="html" class="@htmlClass" data-parent="#sidebarAccordion">
+        <div id="html" class="@htmlClass" data-bs-parent="#sidebarAccordion">
             <div class="list-group list-group-flush">
                 <a class="list-group-item" asp-controller="reference" asp-action="HtmlColors" maw-active="@string.Equals(Model.Item, "html-colors", StringComparison.OrdinalIgnoreCase)">Colors</a>
                 <a class="list-group-item" asp-controller="reference" asp-action="HtmlDoctypes" maw-active="@string.Equals(Model.Item, "html-doctypes", StringComparison.OrdinalIgnoreCase)">Doctypes</a>
@@ -22,9 +22,9 @@
     </div>
     <div class="card mb-2">
         <div class="card-header">
-            <button class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" data-target="#http">HTTP</button>
+            <button class="btn btn-link btn-block p-0" type="button" data-bs-toggle="collapse" data-bs-target="#http">HTTP</button>
         </div>
-        <div id="http" class="@httpClass" data-parent="#sidebarAccordion">
+        <div id="http" class="@httpClass" data-bs-parent="#sidebarAccordion">
             <div class="list-gdoup list-group-flush">
                 <a class="list-group-item" asp-controller="reference" asp-action="httpStatusCodes" maw-active="@string.Equals(Model.Item, "http-status-codes", StringComparison.OrdinalIgnoreCase)">Status Codes</a>
                 <a class="list-group-item" asp-controller="reference" asp-action="httpRfcs" maw-active="@string.Equals(Model.Item, "http-rfcs", StringComparison.OrdinalIgnoreCase)">RFCs</a>
@@ -33,9 +33,9 @@
     </div>
     <div class="card mb-2">
         <div class="card-header">
-            <button class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" data-target="#dotnet">.Net Design Guidelines</button>
+            <button class="btn btn-link btn-block p-0" type="button" data-bs-toggle="collapse" data-bs-target="#dotnet">.Net Design Guidelines</button>
         </div>
-        <div id="dotnet" class="@dotnetClass" data-parent="#sidebarAccordion">
+        <div id="dotnet" class="@dotnetClass" data-bs-parent="#sidebarAccordion">
             <div class="list-group list-group-flush">
                 <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesFundamentals" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-fundamentals", StringComparison.OrdinalIgnoreCase)">Fundamentals</a>
                 <a class="list-group-item" asp-controller="reference" asp-action="DotnetGuidelinesNaming" maw-active="@string.Equals(Model.Item, "dotnet-guidelines-naming", StringComparison.OrdinalIgnoreCase)">Naming</a>
@@ -50,9 +50,9 @@
     </div>
     <div class="card mb-2">
         <div class="card-header">
-            <button class="btn btn-link btn-block text-left p-0" type="button" data-toggle="collapse" data-target="#presentation">Presentations</button>
+            <button class="btn btn-link btn-block p-0" type="button" data-bs-toggle="collapse" data-bs-target="#presentation">Presentations</button>
         </div>
-        <div id="presentation" class="@presentationClass" data-parent="#sidebarAccordion">
+        <div id="presentation" class="@presentationClass" data-bs-parent="#sidebarAccordion">
             <div class="list-group list-group-flush">
                 <a class="list-group-item" asp-controller="reference" asp-action="aspnet5" maw-active="@string.Equals(Model.Item, "aspnet5", StringComparison.OrdinalIgnoreCase)">ASPNET5 / MVC6</a>
                 <a class="list-group-item" asp-controller="reference" asp-action="angular2" maw-active="@string.Equals(Model.Item, "angular2", StringComparison.OrdinalIgnoreCase)">Angular2</a>

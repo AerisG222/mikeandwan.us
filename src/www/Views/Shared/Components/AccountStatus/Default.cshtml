@@ -4,7 +4,7 @@
 <ul class="navbar-nav">
     @if(Model.IsAuthenticated) {
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"><svg-icon icon="Person"></svg-icon></a>
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"><svg-icon icon="Person"></svg-icon></a>
             <div class="dropdown-menu">
                 <a class="dropdown-item" maw-auth-url="/account/change-password">change password</a>
                 <a class="dropdown-item" maw-auth-url="/account/edit-profile">edit profile</a>

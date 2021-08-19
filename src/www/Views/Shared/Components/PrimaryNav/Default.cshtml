@@ -3,7 +3,7 @@
 @inject IOptions<UrlConfig> urlConfig
 @model PrimaryNavViewModel
 
-<ul class="navbar-nav mr-auto">
+<ul class="navbar-nav me-auto">
     <li class="nav-item" maw-action="Index" maw-controller="About" maw-text="about" maw-active="@Model.ActiveNavigationZone == NavigationZone.About"></li>
     <li class="nav-item" maw-action="Index" maw-controller="Reference" maw-text="reference" maw-active="@Model.ActiveNavigationZone == NavigationZone.Reference"></li>
     <li class="nav-item" maw-action="Index" maw-controller="Tools" maw-text="tools" maw-active="@Model.ActiveNavigationZone == NavigationZone.Tools"></li>

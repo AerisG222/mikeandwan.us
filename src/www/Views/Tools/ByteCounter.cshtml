@@ -23,12 +23,12 @@
 
 <section>
     <form asp-controller="tools" asp-action="ByteCounter" method="post" autocomplete="off" role="form">
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="Text" class="col-form-label"></label>
             <textarea asp-for="Text" rows="12" class="form-control" autofocus></textarea>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
             <button type="submit" class="btn btn-primary">Count</button>
             <button type="reset" class="btn btn-primary">Clear</button>
         </div>

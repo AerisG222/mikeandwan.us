@@ -27,18 +27,18 @@
 </p>
 
 <form asp-controller="tools" asp-action="xsltransform" method="post" autocomplete="off" role="form">
-    <div class="form-group">
+    <div class="mb-3">
 		<label asp-for="XmlSource" class="col-form-label"></label>
 		<textarea asp-for="XmlSource" rows="10" class="form-control" autofocus=""></textarea>
 		@*<span asp-validation-for="XmlSource" class="form-text"></span>*@
 	</div>
-	<div class="form-group">
+	<div class="mb-3">
 		<label asp-for="XsltSource" class="col-form-label"></label>
 		<textarea asp-for="XsltSource" rows="10" class="form-control"></textarea>
 		@*<span asp-validation-for="XsltSource" class="form-text"></span>*@
 	</div>
 
-    <div class="form-group">
+    <div class="mb-3">
 		<button type="submit" class="btn btn-primary">Transform</button>
     </div>
 </form>

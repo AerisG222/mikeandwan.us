@@ -27,16 +27,16 @@
     }
 
     <form asp-controller="tools" asp-action="NetworkingTime" method="post" autocomplete="off" role="form">
-        <div class="form-row">
-            <div class="form-group col-sm-3">
+        <div class="row mb-3">
+            <div class="col-sm-3">
                 <label asp-for="LengthOfTime" class="col-form-label">Length of time</label>
             </div>
 
-            <div class="form-group col-sm-3">
+            <div class="col-sm-3">
                 <input asp-for="LengthOfTime" type="text" class="form-control" autofocus />
             </div>
 
-            <div class="form-group col-sm-3">
+            <div class="col-sm-3">
                 <select class="form-control w-100" asp-for="TimeUnit">
                     <option value="seconds">Seconds</option>
                     <option value="minutes">Minutes</option>
@@ -46,7 +46,7 @@
                 </select>
             </div>
 
-            <div class="form-group col-sm-3">
+            <div class="col-sm-3">
                 <button type="submit" class="btn btn-primary">Calculate</button>
             </div>
         </div>

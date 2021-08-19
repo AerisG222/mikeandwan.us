@@ -30,72 +30,66 @@
 </p>
 
 <form asp-controller="tools" asp-action="dotnetregex" method="post" autocomplete="off" role="form">
-	<div class="form-group">
+	<div class="mb-3">
         <label asp-for="Pattern" class="col-form-label"></label>
         <textarea asp-for="Pattern" rows="2" class="form-control" autofocus=""></textarea>
         @*<span asp-validation-for="Pattern" class="form-text"></span>*@
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
         <label asp-for="Input" class="col-form-label"></label>
         <textarea asp-for="Input" rows="4" class="form-control" autofocus=""></textarea>
         @*<span asp-validation-for="Input" class="form-text"></span>*@
 	</div>
 
-    <div class="row">
+    <div class="row mb-3">
         <div class="col">
-            <div class="form-group">
-                <div class="form-check">
-                    <input type="checkbox" asp-for="OptionCultureInvariant" class="form-check-input" />
-                    <label class="form-check-label" asp-for="OptionCultureInvariant">Culture Invariant</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" asp-for="OptionEcmaScript" class="form-check-input" />
-                    <label class="form-check-label" asp-for="OptionEcmaScript">ECMA Script</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" asp-for="OptionExplicitCapture" class="form-check-input" />
-                    <label class="form-check-label" asp-for="OptionExplicitCapture">Explicit Capture</label>
-                </div>
+            <div class="form-check">
+                <input type="checkbox" asp-for="OptionCultureInvariant" class="form-check-input" />
+                <label class="form-check-label" asp-for="OptionCultureInvariant">Culture Invariant</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" asp-for="OptionEcmaScript" class="form-check-input" />
+                <label class="form-check-label" asp-for="OptionEcmaScript">ECMA Script</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" asp-for="OptionExplicitCapture" class="form-check-input" />
+                <label class="form-check-label" asp-for="OptionExplicitCapture">Explicit Capture</label>
             </div>
         </div>
 
         <div class="col">
-            <div class="form-group">
-                <div class="form-check">
-                    <input type="checkbox" asp-for="OptionIgnoreCase" class="form-check-input" />
-                    <label class="form-check-label" asp-for="OptionIgnoreCase">Ignore Case</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" asp-for="OptionIgnorePatternWhitespace" class="form-check-input" />
-                    <label class="form-check-label" asp-for="OptionIgnorePatternWhitespace">Ignore Pattern Whitespace</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" asp-for="OptionMultiline" class="form-check-input" />
-                    <label class="form-check-label" asp-for="OptionMultiline">Multiline</label>
-                </div>
+            <div class="form-check">
+                <input type="checkbox" asp-for="OptionIgnoreCase" class="form-check-input" />
+                <label class="form-check-label" asp-for="OptionIgnoreCase">Ignore Case</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" asp-for="OptionIgnorePatternWhitespace" class="form-check-input" />
+                <label class="form-check-label" asp-for="OptionIgnorePatternWhitespace">Ignore Pattern Whitespace</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" asp-for="OptionMultiline" class="form-check-input" />
+                <label class="form-check-label" asp-for="OptionMultiline">Multiline</label>
             </div>
         </div>
 
         <div class="col">
-            <div class="form-group">
-                <div class="form-check">
-                    <input type="checkbox" asp-for="OptionNone" class="form-check-input" />
-                    <label class="form-check-label" asp-for="OptionNone">None</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" asp-for="OptionRightToLeft" class="form-check-input" />
-                    <label class="form-check-label" asp-for="OptionRightToLeft">Right to Left</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" asp-for="OptionSingleLine" class="form-check-input" />
-                    <label class="form-check-label" asp-for="OptionSingleLine">Single Line</label>
-                </div>
+            <div class="form-check">
+                <input type="checkbox" asp-for="OptionNone" class="form-check-input" />
+                <label class="form-check-label" asp-for="OptionNone">None</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" asp-for="OptionRightToLeft" class="form-check-input" />
+                <label class="form-check-label" asp-for="OptionRightToLeft">Right to Left</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" asp-for="OptionSingleLine" class="form-check-input" />
+                <label class="form-check-label" asp-for="OptionSingleLine">Single Line</label>
             </div>
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>

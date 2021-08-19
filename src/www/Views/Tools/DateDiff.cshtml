@@ -23,27 +23,23 @@
 }
 
 <form asp-controller="tools" asp-action="datediff" method="post" autocomplete="off" role="form">
-	<div class="form-group">
-        <label asp-for="StartDate" class="col-form-label"></label>
-        <div class="row">
-            <div class="col-sm-5">
-                <input asp-for="StartDate" class="form-control" autofocus="" />
-                @*<span asp-validation-for="StartDate" class="form-text"></span>*@
-            </div>
+	<div class="row mb-3">
+        <div class="col-sm-5">
+            <label asp-for="StartDate" class="col-form-label"></label>
+            <input asp-for="StartDate" class="form-control" autofocus="" />
+            @*<span asp-validation-for="StartDate" class="form-text"></span>*@
         </div>
 	</div>
 
-    <div class="form-group">
-        <label asp-for="EndDate" class="col-form-label"></label>
-        <div class="row">
-            <div class="col-sm-5">
-                <input asp-for="EndDate" class="form-control" />
-                @*<span asp-validation-for="EndDate" class="form-text"></span>*@
-            </div>
+    <div class="row mb-3">
+        <div class="col-sm-5">
+            <label asp-for="EndDate" class="col-form-label"></label>
+            <input asp-for="EndDate" class="form-control" />
+            @*<span asp-validation-for="EndDate" class="form-text"></span>*@
         </div>
 	</div>
 
-    <div class="form-group">
+    <div class="mb-3">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>

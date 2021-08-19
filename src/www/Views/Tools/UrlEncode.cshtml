@@ -27,26 +27,26 @@
 
 <form asp-controller="tools" asp-action="urlencode" method="post" autocomplete="off" role="form">
 	<input type="hidden" name="Mode" value="@EncodeMode.Encode" />
-	<div class="form-group">
+	<div class="mb-3">
         <label asp-for="DecodedString" class="col-form-label"></label>
         <textarea asp-for="DecodedString" rows="8" class="form-control" autofocus=""></textarea>
         @*<span asp-validation-for="DecodedString" class="form-text"></span>*@
 	</div>
 
-    <div class="form-group">
+    <div class="mb-3">
         <button type="submit" class="btn btn-primary">Encode</button>
     </div>
 </form>
 
 <form asp-controller="tools" asp-action="urlencode" method="post" autocomplete="off" role="form">
 	<input type="hidden" name="Mode" value="@EncodeMode.Decode" />
-    <div class="form-group">
+    <div class="mb-3">
         <label asp-for="EncodedString" class="col-form-label"></label>
         <textarea asp-for="EncodedString" rows="8" class="form-control"></textarea>
         @*<span asp-validation-for="EncodedString" class="form-text"></span>*@
 	</div>
 
-    <div class="form-group">
+    <div class="mb-3">
         <button type="submit" class="btn btn-primary">Decode</button>
     </div>
 </form>

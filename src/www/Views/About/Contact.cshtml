@@ -33,68 +33,48 @@
     <p>Have something on your mind?  Let us know!</p>
 
     <form asp-controller="about" asp-action="contact" method="post" autocomplete="off" role="form">
-        <div class="form-group">
-            <div class="row">
-                <label asp-for="FirstName" class="col col-form-label"></label>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <input asp-for="FirstName" class="form-control" autofocus="" />
-                    @*<span asp-validation-for="FirstName" class="form-text"></span>*@
-                </div>
-            </div>
-    	</div>
-
-        <div class="form-group">
-            <div class="row">
-                <label asp-for="LastName" class="col col-form-label"></label>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <input asp-for="LastName" class="form-control" />
-                    @*<span asp-validation-for="LastName" class="form-text"></span>*@
-                </div>
-            </div>
-    	</div>
-
-        <div class="form-group">
-            <div class="row">
-                <label asp-for="Email" class="col col-form-label"></label>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <input asp-for="Email" class="form-control" />
-                    @*<span asp-validation-for="Email" class="form-text"></span>*@
-                </div>
-            </div>
-    	</div>
-
-        <div class="form-group">
-            <div class="row">
-                <label asp-for="Message" class="col col-form-label"></label>
-            </div>
-            <div class="row">
-                <div class="col-sm-9">
-                    <textarea asp-for="Message" rows="10" class="form-control"></textarea>
-                    @*<span asp-validation-for="Message" class="form-text"></span>*@
-                </div>
-            </div>
-    	</div>
-
-        <div class="form-group">
-            <div class="row">
-                <div class="col">
-                    <partial name="_GoogleRecaptcha" for="RecaptchaSiteKey" />
-                    @*<span asp-validation-for="IsHuman" class="form-text"></span>*@
-                </div>
+        <div class="row mb-3">
+            <div class="col-sm-6">
+                <label asp-for="FirstName" class="form-label"></label>
+                <input asp-for="FirstName" class="form-control col-sm-6" autofocus="" />
+                @*<span asp-validation-for="FirstName" class="form-text text-danger"></span>*@
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="row">
-                <div class="col">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
+        <div class="row mb-3">
+            <div class="col-sm-6">
+                <label asp-for="LastName" class="col col-form-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                @*<span asp-validation-for="LastName" class="form-text"></span>*@
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-sm-6">
+                <label asp-for="Email" class="col col-form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                @*<span asp-validation-for="Email" class="form-text"></span>*@
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-sm-9">
+                <label asp-for="Message" class="col col-form-label"></label>
+                <textarea asp-for="Message" rows="10" class="form-control"></textarea>
+                @*<span asp-validation-for="Message" class="form-text"></span>*@
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <partial name="_GoogleRecaptcha" for="RecaptchaSiteKey" />
+                @*<span asp-validation-for="IsHuman" class="form-text"></span>*@
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
     </form>

@@ -1,21 +1,21 @@
 <div>
 	<audio #audio [src]="currentCharAudio" autoplay></audio>
 
-	<div class="form-group">
+	<div class="mb-3">
 		<div class="learning-letter-container">
 			<div class="learning-letter" [innerHTML]="currentChar"></div>
 		</div>
 	</div>
 
-	<div class="row">
-		<div class="form-group col">
+	<div class="row mb-3">
+		<div class="col">
 			<div class="form-check" *ngFor="let speaker of speakers">
 				<input class="form-check-input" [id]="'speaker_' + speaker" type="radio" name="speaker" [checked]="currentSpeaker === speaker" (change)="currentSpeaker = speaker" />
 				<label class="form-check-label" [htmlFor]="'speaker_' + speaker">{{speaker}}</label>
 			</div>
 		</div>
 
-		<div class="form-group col">
+		<div class="col">
 			<div class="form-check" *ngFor="let lesson of lessons">
 				<input class="form-check-input" [id]="'lesson_' + lesson" type="radio" name="lesson" [checked]="currentLesson === lesson" (change)="currentLesson = lesson" />
 				<label class="form-check-label" [htmlFor]="'lesson_' + lesson">{{lesson}}</label>
@@ -23,7 +23,7 @@
 		</div>
 	</div>
 
-	<div class="form-group">
+	<div class="mb-3">
 		<button type="submit" class="btn btn-primary" (click)="toggleRunning()" mawFocusRemover>{{runButtonText}}</button>
 	</div>
 </div>

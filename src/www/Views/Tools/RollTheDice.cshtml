@@ -33,42 +33,30 @@ In an effort to facilitate decisions, this tool allows you to <i>roll the dice</
 </p>
 
 <form asp-controller="tools" asp-action="rollthedice" method="post" autocomplete="off" role="form">
-	<div class="form-group">
-		<div class="row">
+	<div class="row mb-3">
+        <div class="col-sm-4">
 			<label asp-for="NumberOfSides" class="col col-form-label"></label>
-		</div>
-		<div class="row">
-			<div class="col-sm-4">
-				<input asp-for="NumberOfSides" class="form-control" autofocus="" />
-				@*<span asp-validation-for="NumberOfSides" class="form-text"></span>*@
-			</div>
+            <input asp-for="NumberOfSides" class="form-control" autofocus="" />
+            @*<span asp-validation-for="NumberOfSides" class="form-text"></span>*@
 		</div>
     </div>
 
-    <div class="form-group">
-		<div class="row">
+    <div class="row mb-3">
+        <div class="col-sm-4">
 			<label asp-for="NumberOfThrows" class="col col-form-label"></label>
-		</div>
-		<div class="row">
-			<div class="col-sm-4">
-				<input asp-for="NumberOfThrows" class="form-control" />
-				@*<span asp-validation-for="NumberOfThrows" class="form-text"></span>*@
-			</div>
+            <input asp-for="NumberOfThrows" class="form-control" />
+            @*<span asp-validation-for="NumberOfThrows" class="form-text"></span>*@
 		</div>
 	</div>
 
-    <div class="form-group">
-		<div class="row">
-            <div class="col">
-   	    		<button type="submit" class="btn btn-primary">Roll</button>
-			</div>
-		</div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Roll</button>
     </div>
 </form>
 
 @if(Model.Executed) {
 	<div class="row">
-		<div class="col-sm-12">
+		<div class="col">
 			<h2>Winners</h2>
 
 			<ul>

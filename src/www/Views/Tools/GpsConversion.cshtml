@@ -34,14 +34,14 @@ This page allows you to convert between different GPS coordinate representations
 	    </div>
 	    <div class="card-body">
             <input type="hidden" name="ConversionMode" value="@GpsConversionMode.FromDegreesMinutesSeconds" />
-            <div class="form-row">
+            <div class="row">
                 <label class="offset-2 col-2 col-form-label">Degrees</label>
                 <label class="col-2 col-form-label">Minutes</label>
                 <label class="col-2 col-form-label">Seconds</label>
                 <label class="col-2 col-form-label">Reference</label>
                 <label class="col-2 col-form-label">Formatted</label>
             </div>
-            <div class="form-row d-flex align-items-center">
+            <div class="row d-flex align-items-center">
                 <label class="col-2 col-form-label">Latitude</label>
                 <div class="col-2">
                     <input asp-for="DmsLatDegrees" class="form-control form-control-sm" step="any" autofocus="" />
@@ -57,7 +57,7 @@ This page allows you to convert between different GPS coordinate representations
                 </div>
                 <label class="col-2 col-form-label">@Model.DmsLatString</label>
             </div>
-            <div class="form-row d-flex align-items-center">
+            <div class="row mb-3 d-flex align-items-center">
                 <label class="col-2 col-form-label">Longitude</label>
                 <div class="col-2">
                     <input asp-for="DmsLngDegrees" class="form-control form-control-sm" step="any" />
@@ -74,8 +74,8 @@ This page allows you to convert between different GPS coordinate representations
                 <label class="col-2 col-form-label">@Model.DmsLngString</label>
             </div>
 
-            <div class="form-row">
-                <div class="offset-2 col-10">
+            <div class="row mb-1">
+                <div class="offset-2 col">
                     <button type="submit" class="btn btn-primary">Convert From Degrees, Minutes and Seconds</button>
                 </div>
             </div>
@@ -90,13 +90,13 @@ This page allows you to convert between different GPS coordinate representations
 	    </div>
 	    <div class="card-body">
         	<input type="hidden" name="ConversionMode" value="@GpsConversionMode.FromDegreesMinutes" />
-    	    <div class="form-row">
+    	    <div class="row">
     			<label class="offset-2 col-2 col-form-label">Degrees</label>
     			<label class="col-2 col-form-label">Minutes</label>
     			<label class="col-2 col-form-label">Reference</label>
     			<label class="col-4 col-form-label">Formatted</label>
     		</div>
-            <div class="form-row d-flex align-items-center">
+            <div class="row d-flex align-items-center">
     		    <label class="col-2 col-form-label">Latitude</label>
                 <div class="col-2">
                     <input asp-for="DmLatDegrees" class="form-control form-control-sm" step="any" />
@@ -109,7 +109,7 @@ This page allows you to convert between different GPS coordinate representations
                 </div>
     			<label class="col-4 col-form-label">@Model.DmLatString</label>
     		</div>
-            <div class="form-row d-flex align-items-center">
+            <div class="row mb-3 d-flex align-items-center">
     		    <label class="col-2 col-form-label">Longitude</label>
                 <div class="col-2">
                     <input asp-for="DmLngDegrees" class="form-control form-control-sm" step="any" />
@@ -123,7 +123,7 @@ This page allows you to convert between different GPS coordinate representations
     			<label class="col-4 col-form-label">@Model.DmLngString</label>
     		</div>
 
-            <div class="form-row">
+            <div class="row mb-1">
                 <div class="offset-2 col-10">
                     <button type="submit" class="btn btn-primary">Convert From Degrees and Minutes</button>
                 </div>
@@ -139,12 +139,12 @@ This page allows you to convert between different GPS coordinate representations
 	    </div>
 	    <div class="card-body">
         	<input type="hidden" name="ConversionMode" value="@GpsConversionMode.FromDegrees" />
-    	    <div class="form-row">
+    	    <div class="row">
     			<label class="offset-2 col-2 col-form-label">Degrees</label>
     			<label class="col-2 col-form-label">Reference</label>
     			<label class="col-2 col-form-label">Formatted</label>
     		</div>
-            <div class="form-row d-flex align-items-center">
+            <div class="row d-flex align-items-center">
     		    <label class="col-2 col-form-label">Latitude</label>
                 <div class="col-2">
                     <input asp-for="DLatDegrees" class="form-control form-control-sm" step="any" />
@@ -154,7 +154,7 @@ This page allows you to convert between different GPS coordinate representations
                 </div>
     			<label class="col-6 col-form-label">@Model.DLatString</label>
     		</div>
-            <div class="form-row d-flex align-items-center">
+            <div class="row mb-3 d-flex align-items-center">
     		    <label class="col-2 col-form-label">Longitude</label>
                 <div class="col-2">
                     <input asp-for="DLngDegrees" class="form-control form-control-sm" step="any" />
@@ -165,7 +165,7 @@ This page allows you to convert between different GPS coordinate representations
     			<label class="col-6 col-form-label">@Model.DLngString</label>
     		</div>
 
-            <div class="form-row">
+            <div class="row mb-1">
                 <div class="offset-2 col-10">
                     <button type="submit" class="btn btn-primary">Convert from Degrees</button>
                 </div>

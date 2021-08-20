@@ -28,6 +28,8 @@
             <input asp-for="LastName" class="form-control" placeholder="Last Name" />
             @*<span asp-validation-for="LastName" class="form-text"></span>*@
         </div>
+    </div>
+    <div class="row mb-3">
         <div class="col-12">
             <div class="input-group">
                 <div class="input-group-text">
@@ -39,7 +41,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-3">
         <div class="col">
             <h4>Enable External Login</h4>
             <p maw-alert-type="Info">
@@ -51,7 +53,7 @@
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" asp-for="EnableGithubAuth" />
                         <label class="form-check-label" asp-for="EnableGithubAuth">
-                            <svg-icon icon="Github" class="ml-2 mr-1"></svg-icon> GitHub
+                            <svg-icon icon="Github" class="ms-2 me-1"></svg-icon> GitHub
                         </label>
                     </div>
                 </div>
@@ -59,7 +61,7 @@
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" asp-for="EnableGoogleAuth" />
                         <label class="form-check-label" asp-for="EnableGoogleAuth">
-                            <svg-icon icon="GooglePlus" class="ml-2 mr-1"></svg-icon> Google
+                            <svg-icon icon="GooglePlus" class="ms-2 me-1"></svg-icon> Google
                         </label>
                     </div>
                 </div>
@@ -67,7 +69,7 @@
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" asp-for="EnableMicrosoftAuth" />
                         <label class="form-check-label" asp-for="EnableMicrosoftAuth">
-                            <svg-icon icon="Windows" class="ml-2 mr-1"></svg-icon> Microsoft
+                            <svg-icon icon="Windows" class="ms-2 me-1"></svg-icon> Microsoft
                         </label>
                     </div>
                 </div>
@@ -75,7 +77,7 @@
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" asp-for="EnableTwitterAuth" />
                         <label class="form-check-label" asp-for="EnableTwitterAuth">
-                            <svg-icon icon="Twitter" class="ml-2 mr-1"></svg-icon> Twitter
+                            <svg-icon icon="Twitter" class="ms-2 me-1"></svg-icon> Twitter
                         </label>
                     </div>
                 </div>
@@ -83,7 +85,9 @@
         </div>
     </div>
 
-    <div class="mb-3">
-        <button type="submit" class="btn btn-primary btn-block">Update Profile</button>
+    <div class="row mb-1">
+        <div class="col">
+            <button type="submit" class="col-12 btn btn-primary btn-block">Update Profile</button>
+        </div>
     </div>
 </form>

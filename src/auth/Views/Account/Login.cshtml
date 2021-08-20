@@ -57,7 +57,7 @@
         <div class="col-sm-6 mt-2">
             <a class="btn btn-primary d-block" asp-action="ExternalLogin" asp-route-provider="@scheme.ExternalAuth.Name" asp-route-returnUrl="@Model.ReturnUrl">
                 @if(scheme.Icon != null) {
-                <svg-icon class="mr-2" icon="@((SvgIcon)scheme.Icon)"></svg-icon>
+                <svg-icon class="me-2" icon="@((SvgIcon)scheme.Icon)"></svg-icon>
                 } @scheme.ExternalAuth.DisplayName
             </a>
         </div>

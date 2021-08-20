@@ -15,10 +15,10 @@ body {
 
 a {
     color: $body-color;
+    text-decoration: none;
 
     &:hover {
         color: $link-hover-color;
-        text-decoration: none;
 
         & svg {
             fill: $link-color;
@@ -41,10 +41,6 @@ footer {
     font-family: Tangerine, cursive;
     font-size: 4rem;
     text-align: center;
-
-    & a {
-        text-decoration: none;
-    }
 }
 
 /* https://blog.prototypr.io/align-svg-icons-to-text-and-say-goodbye-to-font-icons-d44b3d7b26b4 */

@@ -246,6 +246,7 @@ namespace MawMvcApp
                 "https://maps.googleapis.com",
                 "https://www.google-analytics.com",
                 "https://ssl.google-analytics.com",
+                "https://www.googletagmanager.com",
                 "https://www.accuweather.com",
                 "https://oap.accuweather.com",
                 "https://vortex.accuweather.com"

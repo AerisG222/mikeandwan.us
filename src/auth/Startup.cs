@@ -198,6 +198,10 @@ namespace MawAuth
                 "https://fonts.gstatic.com"
             };
 
+            var imageSources = new string[] {
+                "data:"
+            };
+
             var reportUris = new string[] {
                 "https://mikeandwanus.report-uri.com/r/d/csp/enforce"
             };
@@ -215,7 +219,10 @@ namespace MawAuth
             csp
                 .DefaultSources(s => s.None())
                 .FontSources(s => s.CustomSources(fontSources))
-                .ImageSources(s => s.Self())
+                .ImageSources(s => {
+                    s.Self();
+                    s.CustomSources(imageSources);
+                })
                 .ManifestSources(s => s.Self())
                 .ObjectSources(s => s.None())
                 .ReportUris(s => s.Uris(reportUris))

@@ -17,21 +17,21 @@
     <form asp-controller="admin" asp-action="createblogpost" method="post" autocomplete="off" role="form">
         <div class="row mb-3">
             <div class="col-sm-5">
-                <label asp-for="Title" class="col-form-label"></label>
+                <label asp-for="Title" class="form-label"></label>
                 <input asp-for="Title" class="form-control" autofocus="" />
                 @*<span asp-validation-for="Title" class="form-text"></span>*@
             </div>
         </div>
         <div class="row mb-3">
             <div class="col-sm-5">
-                <label asp-for="PublishDate" class="col-form-label"></label>
+                <label asp-for="PublishDate" class="form-label"></label>
                 <input asp-for="PublishDate" class="form-control" />
                 @*<span asp-validation-for="PublishDate" class="form-text"></span>*@
             </div>
         </div>
         <div class="row mb-3">
             <div class="col">
-                <label asp-for="Description" class="col-form-label"></label>
+                <label asp-for="Description" class="form-label"></label>
                 <textarea asp-for="Description" rows="15" class="form-control"></textarea>
                 @*<span asp-validation-for="Description" class="form-text"></span>*@
             </div>

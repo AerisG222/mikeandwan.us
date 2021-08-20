@@ -43,7 +43,7 @@
         <form asp-controller="tools" asp-action="colorconverter" method="post" autocomplete="off" role="form">
             <input type="hidden" asp-for="ConversionMode" value="FromHex" />
             <div class="mb-3">
-                <label asp-for="HexColorCode" class="col-form-label"></label>
+                <label asp-for="HexColorCode" class="form-label"></label>
                 <input asp-for="HexColorCode" class="form-control" autofocus="" />
                 @*<span asp-validation-for="HexColorCode" class="form-text"></span>*@
             </div>
@@ -58,19 +58,19 @@
         <form asp-controller="tools" asp-action="colorconverter" method="post" autocomplete="off" role="form">
             <input type="hidden" asp-for="ConversionMode" value="FromComponents" />
             <div class="mb-3">
-                <label asp-for="RedComponent" class="col-form-label"></label>
+                <label asp-for="RedComponent" class="form-label"></label>
                 <input asp-for="RedComponent" class="form-control" />
                 @*<span asp-validation-for="RedComponent" class="form-text"></span>*@
             </div>
 
             <div class="mb-3">
-                <label asp-for="GreenComponent" class="col-form-label"></label>
+                <label asp-for="GreenComponent" class="form-label"></label>
                 <input asp-for="GreenComponent" class="form-control" />
                 @*<span asp-validation-for="GreenComponent" class="form-text"></span>*@
             </div>
 
             <div class="mb-3">
-                <label asp-for="BlueComponent" class="col-form-label"></label>
+                <label asp-for="BlueComponent" class="form-label"></label>
                 <input asp-for="BlueComponent" class="form-control" />
                 @*<span asp-validation-for="BlueComponent" class="form-text"></span>*@
             </div>

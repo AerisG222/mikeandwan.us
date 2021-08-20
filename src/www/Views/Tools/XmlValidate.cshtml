@@ -29,12 +29,12 @@
 
 <form asp-controller="tools" asp-action="xmlvalidate" method="post" autocomplete="off" role="form">
 	<div class="mb-3">
-		<label asp-for="XmlSource" class="col-form-label"></label>
+		<label asp-for="XmlSource" class="form-label"></label>
 		<textarea asp-for="XmlSource" rows="8" class="form-control" autofocus=""></textarea>
 		@*<span asp-validation-for="XmlSource" class="form-text"></span>*@
 	</div>
     <div class="mb-3">
-		<label asp-for="SchemaOrDtdSource" class="col-form-label"></label>
+		<label asp-for="SchemaOrDtdSource" class="form-label"></label>
 		<textarea asp-for="SchemaOrDtdSource" rows="8" class="form-control"></textarea>
 		@*<span asp-validation-for="SchemaOrDtdSource" class="form-text"></span>*@
 	</div>

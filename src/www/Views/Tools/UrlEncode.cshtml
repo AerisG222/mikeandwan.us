@@ -28,7 +28,7 @@
 <form asp-controller="tools" asp-action="urlencode" method="post" autocomplete="off" role="form">
 	<input type="hidden" name="Mode" value="@EncodeMode.Encode" />
 	<div class="mb-3">
-        <label asp-for="DecodedString" class="col-form-label"></label>
+        <label asp-for="DecodedString" class="form-label"></label>
         <textarea asp-for="DecodedString" rows="8" class="form-control" autofocus=""></textarea>
         @*<span asp-validation-for="DecodedString" class="form-text"></span>*@
 	</div>
@@ -41,7 +41,7 @@
 <form asp-controller="tools" asp-action="urlencode" method="post" autocomplete="off" role="form">
 	<input type="hidden" name="Mode" value="@EncodeMode.Decode" />
     <div class="mb-3">
-        <label asp-for="EncodedString" class="col-form-label"></label>
+        <label asp-for="EncodedString" class="form-label"></label>
         <textarea asp-for="EncodedString" rows="8" class="form-control"></textarea>
         @*<span asp-validation-for="EncodedString" class="form-text"></span>*@
 	</div>

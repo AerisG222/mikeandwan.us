@@ -23,12 +23,12 @@
 	<form asp-controller="admin" asp-action="deleteuser" method="post" autocomplete="off" role="form">
 		<input asp-for="Username" type="hidden" />
 
-        <div class="row">
-            <div class="col">
-                <button type="submit" name="delete" class="btn btn-primary btn-block">Yes</button>
+        <div class="row mb-3">
+            <div class="col-6">
+                <button type="submit" name="delete" class="col-12 btn btn-primary">Yes</button>
             </div>
-            <div class="col">
-                <button type="submit" class="btn btn-primary btn-block">No</button>
+            <div class="col-6">
+                <button type="submit" class="col-12 btn btn-primary">No</button>
             </div>
         </div>
 	</form>

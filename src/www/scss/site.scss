@@ -6,6 +6,10 @@ $input-btn-padding-y: 0.5rem !default;
 
 a {
     outline: none;
+
+    &.h2 {
+        text-decoration: none;
+    }
 }
 
 pre {

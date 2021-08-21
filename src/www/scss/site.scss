@@ -7,7 +7,7 @@ $input-btn-padding-y: 0.5rem !default;
 a {
     outline: none;
 
-    &.h2 {
+    &.h2 { /* stylelint-disable-line selector-no-qualifying-type */
         text-decoration: none;
     }
 }

@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "bootstrap": "^5.1.0",
-    "bootswatch": "^5.1.0"
+    "bootstrap": "^5.1.1",
+    "bootswatch": "^5.1.1"
   },
   "devDependencies": {
     "chokidar-cli": "^3.0.0",

@@ -1,7 +1,10 @@
 import { Scene, PerspectiveCamera, Renderer, Mesh, Object3D, AmbientLight, SpotLight, Font, Fog, WebGLRenderer,
-         AxesHelper, DirectionalLight, TextureLoader, PlaneGeometry, TextGeometry, RepeatWrapping, DoubleSide,
-         FontLoader, MeshPhongMaterial, MeshBasicMaterial
+         AxesHelper, DirectionalLight, TextureLoader, PlaneGeometry, RepeatWrapping, DoubleSide,
+         MeshPhongMaterial, MeshBasicMaterial
        } from 'three';
+
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 
 import * as Stats from 'stats.js';
 

@@ -16,6 +16,10 @@ export class ChooseTurtleComponent {
 
     }
 
+    get readyToPlay(): boolean {
+        return this.character1 != null && this.character2 != null;
+    }
+
     setCharacter1(character: ICharacter): void {
         this.character1 = character;
 
@@ -34,10 +38,6 @@ export class ChooseTurtleComponent {
             isPlayersTurn: false,
             score: 0
         };
-    }
-
-    get readyToPlay(): boolean {
-        return this.character1 != null && this.character2 != null;
     }
 
     play(): void {

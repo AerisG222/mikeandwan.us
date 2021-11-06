@@ -47,16 +47,16 @@ export class MemoryService {
         this.playerTwo = player;
     }
 
-    constructor(private router: Router) {
-
-    }
-
     get allCards(): Array<ICardInfo> {
         return this.cards.slice(0); // clone
     }
 
     get allCharacters(): Array<ICharacter> {
         return this.characters.slice(0); // clone
+    }
+
+    constructor(private router: Router) {
+
     }
 
     startGame(): void {

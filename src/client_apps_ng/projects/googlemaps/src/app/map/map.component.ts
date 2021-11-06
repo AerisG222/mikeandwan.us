@@ -20,6 +20,8 @@ export class MapComponent {
     showRectangle = false;
     rectangleBounds?: google.maps.LatLngBounds;
 
+    get otherMapBounds(): google.maps.LatLngBounds | undefined { return this.rectangleBounds; }
+
     @Input()
     set otherMapBounds(bounds: google.maps.LatLngBounds | undefined) {
         this.rectangleBounds = bounds;
@@ -36,7 +38,6 @@ export class MapComponent {
             }
         }
     }
-    get otherMapBounds(): google.maps.LatLngBounds | undefined { return this.rectangleBounds; }
 
     onBoundsChanged(): void {
         if (!!this.map)

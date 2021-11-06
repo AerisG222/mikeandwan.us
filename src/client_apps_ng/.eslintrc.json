@@ -43,7 +43,8 @@
                 "no-var": "warn",
                 "@typescript-eslint/no-shadow": [
                     "error"
-                ]
+                ],
+                "@typescript-eslint/member-ordering": "off"
             }
         },
         {

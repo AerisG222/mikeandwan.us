@@ -30,7 +30,10 @@ export class AppComponent {
                 if (status !== google.maps.GeocoderStatus.OK) {
                     alert(`There was an error geocoding the address: ${this.addressToMap}].  Reported error code = ${status}`);
                 } else {
-                    this.poi = results[0].geometry.location;
+                    if(results != null) {
+                        this.poi = results[0].geometry.location;
+                    }
+
                     this.center = this.poi;
                     this.showMaps = true;
                 }

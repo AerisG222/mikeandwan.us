@@ -23,5 +23,13 @@ namespace MawMvcApp.Controllers
 
             return View();
         }
+
+        [HttpGet("privacy")]
+        public IActionResult Privacy()
+        {
+            ViewBag.NavigationZone = NavigationZone.Home;
+
+            return View();
+        }
     }
 }

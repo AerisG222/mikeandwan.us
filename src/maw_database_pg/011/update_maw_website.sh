@@ -21,6 +21,11 @@ echo 'seeding tables...';
 run_psql_script "seed/photo.category_role.sql";
 run_psql_script "seed/video.category_role.sql";
 
+echo 'updating functions...';
+
+run_psql_script "funcs/photo.get_categories.sql";
+run_psql_script "funcs/video.get_categories.sql";
+
 echo "...${DBNAME} updated.";
 
 # for podman - run as:

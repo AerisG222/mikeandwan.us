@@ -17,7 +17,7 @@ DECLARE
 BEGIN
 
     SELECT MAX(p.id) INTO _authorized_photo_id
-      FROM maw.photo p
+      FROM photo.photo p
      INNER JOIN photo.category_role cr ON p.category_id = cr.category_id
      INNER JOIN maw.role r ON cr.role_id = r.id
      WHERE p.id = _photo_id
@@ -49,7 +49,7 @@ BEGIN
                 _user_id,
                 _score
             )
-        ON CONFLICT (_authorized_photo_id, user_id)
+        ON CONFLICT (photo_id, user_id)
         DO UPDATE
            SET score = _score;
 

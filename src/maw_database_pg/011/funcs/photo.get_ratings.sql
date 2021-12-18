@@ -21,7 +21,8 @@ AS $$
           FROM photo.photo p
          INNER JOIN photo.category_role cr ON p.category_id = cr.category_id
          INNER JOIN maw.role r ON cr.role_id = r.id
-         WHERE r.name = ANY(_roles)
+         WHERE p.id = _photo_id
+           AND r.name = ANY(_roles)
     )
     SELECT (
                SELECT AVG(r.score)

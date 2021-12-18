@@ -19,69 +19,77 @@ namespace Maw.Data
         }
 
 
-        public Task<IEnumerable<short>> GetYearsAsync(bool allowPrivate)
+        public Task<IEnumerable<short>> GetYearsAsync(string[] roles)
         {
             return RunAsync(conn =>
                 conn.QueryAsync<short>(
-                    "SELECT * FROM video.get_years(@allowPrivate);",
-                    new { allowPrivate }
+                    "SELECT * FROM video.get_years(@roles);",
+                    new { roles }
                 )
             );
         }
 
 
-        public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
+        public Task<IEnumerable<Category>> GetAllCategoriesAsync(string[] roles)
         {
-            return InternalGetCategoriesAsync(allowPrivate);
+            return InternalGetCategoriesAsync(roles);
         }
 
 
-        public Task<IEnumerable<Category>> GetCategoriesAsync(short year, bool allowPrivate)
+        public Task<IEnumerable<Category>> GetCategoriesAsync(short year, string[] roles)
         {
-            return InternalGetCategoriesAsync(allowPrivate, year);
+            return InternalGetCategoriesAsync(roles, year);
         }
 
 
-        public async Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
+        public async Task<Category> GetCategoryAsync(short categoryId, string[] roles)
         {
-            var result = await InternalGetCategoriesAsync(allowPrivate, categoryId: categoryId).ConfigureAwait(false);
+            var result = await InternalGetCategoriesAsync(roles, categoryId: categoryId).ConfigureAwait(false);
 
             return result.FirstOrDefault();
         }
 
 
-        public Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, bool allowPrivate)
+        public Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, string[] roles)
         {
-            return InternalGetVideosAsync(allowPrivate, categoryId);
+            return InternalGetVideosAsync(roles, categoryId);
         }
 
 
-        public async Task<Video> GetVideoAsync(short id, bool allowPrivate)
+        public async Task<Video> GetVideoAsync(short id, string[] roles)
         {
-            var result = await InternalGetVideosAsync(allowPrivate, videoId: id).ConfigureAwait(false);
+            var result = await InternalGetVideosAsync(roles, videoId: id).ConfigureAwait(false);
 
             return result.FirstOrDefault();
         }
 
 
-        public Task<IEnumerable<Comment>> GetCommentsAsync(short videoId)
+        public Task<IEnumerable<Comment>> GetCommentsAsync(short videoId, string[] roles)
         {
             return RunAsync(conn =>
                 conn.QueryAsync<Comment>(
-                    "SELECT * FROM video.get_comments(@videoId);",
-                    new { videoId }
+                    "SELECT * FROM video.get_comments(@videoId, @roles);",
+                    new
+                    {
+                        videoId,
+                        roles
+                    }
                 )
             );
         }
 
 
-        public Task<GpsDetail> GetGpsDetailAsync(int videoId)
+        public Task<GpsDetail> GetGpsDetailAsync(int videoId, string[] roles)
         {
             return RunAsync(async conn =>
             {
                 var result = await conn.QuerySingleOrDefaultAsync<GpsSourceOverride>(
-                    "SELECT * FROM video.get_gps(@videoId);",
-                    new { videoId }
+                    "SELECT * FROM video.get_gps(@videoId, @roles);",
+                    new
+                    {
+                        videoId,
+                        roles
+                    }
                 ).ConfigureAwait(false);
 
                 if (result == null)
@@ -114,33 +122,35 @@ namespace Maw.Data
         }
 
 
-        public Task<Rating> GetRatingsAsync(short videoId, string username)
+        public Task<Rating> GetRatingsAsync(short videoId, string username, string[] roles)
         {
             return RunAsync(conn =>
                 conn.QuerySingleOrDefaultAsync<Rating>(
-                    "SELECT * FROM video.get_ratings(@videoId, @username);",
+                    "SELECT * FROM video.get_ratings(@videoId, @username, @roles);",
                     new
                     {
                         videoId,
-                        username = username?.ToLowerInvariant()
+                        username = username?.ToLowerInvariant(),
+                        roles
                     }
                 )
             );
         }
 
 
-        public Task<int> InsertCommentAsync(short videoId, string username, string comment)
+        public Task<int> InsertCommentAsync(short videoId, string username, string comment, string[] roles)
         {
             return RunAsync(async conn =>
             {
                 var result = await conn.QuerySingleOrDefaultAsync<int>(
-                    "SELECT * FROM video.save_comment(@username, @videoId, @message, @entryDate);",
+                    "SELECT * FROM video.save_comment(@username, @videoId, @message, @entryDate, @roles);",
                     new
                     {
                         username = username.ToLowerInvariant(),
                         videoId,
                         message = comment,
-                        entryDate = DateTime.Now
+                        entryDate = DateTime.Now,
+                        roles
                     }
                 ).ConfigureAwait(false);
 
@@ -154,40 +164,42 @@ namespace Maw.Data
         }
 
 
-        public Task<float?> SaveRatingAsync(short videoId, string username, short rating)
+        public Task<float?> SaveRatingAsync(short videoId, string username, short rating, string[] roles)
         {
             return RunAsync(async conn =>
             {
                 var result = await conn.QueryAsync<long>(
-                    "SELECT * FROM video.save_rating(@videoId, @username, @score);",
+                    "SELECT * FROM video.save_rating(@videoId, @username, @score, @roles);",
                     new
                     {
                         videoId,
                         username = username.ToLowerInvariant(),
-                        score = rating
+                        score = rating,
+                        roles
                     }
                 ).ConfigureAwait(false);
 
-                return (await GetRatingsAsync(videoId, username).ConfigureAwait(false))?.AverageRating;
+                return (await GetRatingsAsync(videoId, username, roles).ConfigureAwait(false))?.AverageRating;
             });
         }
 
 
-        public Task<float?> RemoveRatingAsync(short videoId, string username)
+        public Task<float?> RemoveRatingAsync(short videoId, string username, string[] roles)
         {
             return RunAsync(async conn =>
             {
                 var result = await conn.QueryAsync<long>(
-                    @"SELECT * FROM video.save_rating(@videoId, @username, @score);",
+                    @"SELECT * FROM video.save_rating(@videoId, @username, @score, @roles);",
                     new
                     {
                         videoId,
                         username = username.ToLowerInvariant(),
-                        score = 0
+                        score = 0,
+                        roles
                     }
                 ).ConfigureAwait(false);
 
-                return (await GetRatingsAsync(videoId, username).ConfigureAwait(false))?.AverageRating;
+                return (await GetRatingsAsync(videoId, username, roles).ConfigureAwait(false))?.AverageRating;
             });
         }
 
@@ -225,15 +237,15 @@ namespace Maw.Data
         }
 
 
-        Task<IEnumerable<Category>> InternalGetCategoriesAsync(bool allowPrivate, short? year = null, short? categoryId = null)
+        Task<IEnumerable<Category>> InternalGetCategoriesAsync(string[] roles, short? year = null, short? categoryId = null)
         {
             return RunAsync(async conn =>
             {
                 var rows = await conn.QueryAsync(
-                    "SELECT * FROM video.get_categories(@allowPrivate, @year, @categoryId);",
+                    "SELECT * FROM video.get_categories(@roles, @year, @categoryId);",
                     new
                     {
-                        allowPrivate,
+                        roles,
                         year,
                         categoryId
                     }
@@ -244,15 +256,15 @@ namespace Maw.Data
         }
 
 
-        Task<IEnumerable<Video>> InternalGetVideosAsync(bool allowPrivate, short? categoryId = null, short? videoId = null)
+        Task<IEnumerable<Video>> InternalGetVideosAsync(string[] roles, short? categoryId = null, short? videoId = null)
         {
             return RunAsync(async conn =>
             {
                 var rows = await conn.QueryAsync(
-                    "SELECT * FROM video.get_videos(@allowPrivate, @categoryId, @videoId);",
+                    "SELECT * FROM video.get_videos(@roles, @categoryId, @videoId);",
                     new
                     {
-                        allowPrivate,
+                        roles,
                         categoryId,
                         videoId
                     }

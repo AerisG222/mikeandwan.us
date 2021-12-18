@@ -22,87 +22,87 @@ namespace Maw.Domain.Videos
         }
 
 
-        public Task<IEnumerable<short>> GetYearsAsync(bool allowPrivate)
+        public Task<IEnumerable<short>> GetYearsAsync(string[] roles)
         {
-            var key = $"{nameof(GetYearsAsync)}_{allowPrivate}";
+            var key = $"{nameof(GetYearsAsync)}_{GetRoleCacheKeyComponent(roles)}";
 
-            return GetCachedValueAsync(key, () => _repo.GetYearsAsync(allowPrivate));
+            return GetCachedValueAsync(key, () => _repo.GetYearsAsync(roles));
         }
 
 
-        public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
+        public Task<IEnumerable<Category>> GetAllCategoriesAsync(string[] roles)
         {
-            var key = $"{nameof(GetAllCategoriesAsync)}_{allowPrivate}";
+            var key = $"{nameof(GetAllCategoriesAsync)}_{GetRoleCacheKeyComponent(roles)}";
 
-            return GetCachedValueAsync(key, () => _repo.GetAllCategoriesAsync(allowPrivate));
+            return GetCachedValueAsync(key, () => _repo.GetAllCategoriesAsync(roles));
         }
 
 
-        public Task<IEnumerable<Category>> GetCategoriesAsync(short year, bool allowPrivate)
+        public Task<IEnumerable<Category>> GetCategoriesAsync(short year, string[] roles)
         {
-            var key = $"{nameof(GetCategoriesAsync)}_{year}_{allowPrivate}";
+            var key = $"{nameof(GetCategoriesAsync)}_{year}_{GetRoleCacheKeyComponent(roles)}";
 
-            return GetCachedValueAsync(key, () => _repo.GetCategoriesAsync(year, allowPrivate));
+            return GetCachedValueAsync(key, () => _repo.GetCategoriesAsync(year, roles));
         }
 
 
-        public Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, bool allowPrivate)
+        public Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, string[] roles)
         {
-            var key = $"{nameof(GetVideosInCategoryAsync)}_{categoryId}_{allowPrivate}";
+            var key = $"{nameof(GetVideosInCategoryAsync)}_{categoryId}_{GetRoleCacheKeyComponent(roles)}";
 
-            return GetCachedValueAsync(key, () => _repo.GetVideosInCategoryAsync(categoryId, allowPrivate), TimeSpan.FromHours(2));
+            return GetCachedValueAsync(key, () => _repo.GetVideosInCategoryAsync(categoryId, roles), TimeSpan.FromHours(2));
         }
 
 
-        public Task<Video> GetVideoAsync(short id, bool allowPrivate)
+        public Task<Video> GetVideoAsync(short id, string[] roles)
         {
-            var key = $"{nameof(GetVideoAsync)}_{id}_{allowPrivate}";
+            var key = $"{nameof(GetVideoAsync)}_{id}_{GetRoleCacheKeyComponent(roles)}";
 
-            return GetCachedValueAsync(key, () => _repo.GetVideoAsync(id, allowPrivate), TimeSpan.FromHours(2));
+            return GetCachedValueAsync(key, () => _repo.GetVideoAsync(id, roles), TimeSpan.FromHours(2));
         }
 
 
-        public Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
+        public Task<Category> GetCategoryAsync(short categoryId, string[] roles)
         {
-            var key = $"{nameof(GetCategoryAsync)}_{categoryId}_{allowPrivate}";
+            var key = $"{nameof(GetCategoryAsync)}_{categoryId}_{GetRoleCacheKeyComponent(roles)}";
 
-            return GetCachedValueAsync(key, () => _repo.GetCategoryAsync(categoryId, allowPrivate), TimeSpan.FromHours(2));
+            return GetCachedValueAsync(key, () => _repo.GetCategoryAsync(categoryId, roles), TimeSpan.FromHours(2));
         }
 
 
-        public Task<IEnumerable<Comment>> GetCommentsAsync(short videoId)
+        public Task<IEnumerable<Comment>> GetCommentsAsync(short videoId, string[] roles)
         {
-            return _repo.GetCommentsAsync(videoId);
+            return _repo.GetCommentsAsync(videoId, roles);
         }
 
 
-        public Task<GpsDetail> GetGpsDetailAsync(int videoId)
+        public Task<GpsDetail> GetGpsDetailAsync(int videoId, string[] roles)
         {
-            return _repo.GetGpsDetailAsync(videoId);
+            return _repo.GetGpsDetailAsync(videoId, roles);
         }
 
 
-        public Task<Rating> GetRatingsAsync(short videoId, string username)
+        public Task<Rating> GetRatingsAsync(short videoId, string username, string[] roles)
         {
-            return _repo.GetRatingsAsync(videoId, username);
+            return _repo.GetRatingsAsync(videoId, username, roles);
         }
 
 
-        public Task<int> InsertCommentAsync(short videoId, string username, string comment)
+        public Task<int> InsertCommentAsync(short videoId, string username, string comment, string[] roles)
         {
-            return _repo.InsertCommentAsync(videoId, username, comment);
+            return _repo.InsertCommentAsync(videoId, username, comment, roles);
         }
 
 
-        public Task<float?> SaveRatingAsync(short videoId, string username, short rating)
+        public Task<float?> SaveRatingAsync(short videoId, string username, short rating, string[] roles)
         {
-            return _repo.SaveRatingAsync(videoId, username, rating);
+            return _repo.SaveRatingAsync(videoId, username, rating, roles);
         }
 
 
-        public Task<float?> RemoveRatingAsync(short videoId, string username)
+        public Task<float?> RemoveRatingAsync(short videoId, string username, string[] roles)
         {
-            return _repo.RemoveRatingAsync(videoId, username);
+            return _repo.RemoveRatingAsync(videoId, username, roles);
         }
 
 
@@ -128,6 +128,11 @@ namespace Maw.Domain.Videos
         public Task ClearCacheAsync()
         {
             return InternalClearCacheAsync();
+        }
+
+        static string GetRoleCacheKeyComponent(string[] roles)
+        {
+            return string.Join("_", roles);
         }
     }
 }

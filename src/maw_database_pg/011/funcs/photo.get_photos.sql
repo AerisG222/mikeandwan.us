@@ -45,7 +45,8 @@ RETURNS TABLE
 LANGUAGE SQL
 AS $$
 
-    SELECT p.id,
+    SELECT DISTINCT
+           p.id,
            p.category_id,
            p.create_date,
            COALESCE(pgo.latitude, p.gps_latitude) AS latitude,
@@ -81,8 +82,7 @@ AS $$
       FROM photo.photo p
      INNER JOIN photo.category_role cr ON p.category_id = cr.category_id
      INNER JOIN maw.role r ON cr.role_id = r.id
-      LEFT OUTER JOIN photo.gps_override pgo
-              ON p.id = pgo.photo_id
+      LEFT OUTER JOIN photo.gps_override pgo ON p.id = pgo.photo_id
      WHERE r.name = ANY(_roles)
        AND (_category_id IS NULL OR p.category_id = _category_id)
        AND (_id IS NULL OR p.id = _id)

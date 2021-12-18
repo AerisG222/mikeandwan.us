@@ -35,6 +35,13 @@ run_psql_script "funcs/photo.save_comment.sql";
 run_psql_script "funcs/photo.save_rating.sql";
 
 run_psql_script "funcs/video.get_categories.sql";
+run_psql_script "funcs/video.get_comments.sql";
+run_psql_script "funcs/video.get_gps.sql";
+run_psql_script "funcs/video.get_ratings.sql";
+run_psql_script "funcs/video.get_videos.sql";
+run_psql_script "funcs/video.get_years.sql";
+run_psql_script "funcs/video.save_comment.sql";
+run_psql_script "funcs/video.save_rating.sql";
 
 echo "...${DBNAME} updated.";
 

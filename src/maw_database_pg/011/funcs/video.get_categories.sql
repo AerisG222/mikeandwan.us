@@ -1,5 +1,4 @@
 DROP FUNCTION IF EXISTS video.get_categories(BOOLEAN, SMALLINT, SMALLINT);
-DROP FUNCTION IF EXISTS video.get_categories(TEXT[], SMALLINT, SMALLINT);
 
 CREATE OR REPLACE FUNCTION video.get_categories
 (

@@ -6,7 +6,6 @@ using Dapper;
 using Maw.Domain;
 using Maw.Domain.Photos;
 
-
 namespace Maw.Data
 {
     public class PhotoRepository
@@ -18,74 +17,69 @@ namespace Maw.Data
 
         }
 
-
-        public Task<IEnumerable<short>> GetYearsAsync()
+        public Task<IEnumerable<short>> GetYearsAsync(string[] roles)
         {
             return RunAsync(conn =>
                 conn.QueryAsync<short>(
-                    "SELECT * FROM photo.get_years();"
+                    "SELECT * FROM photo.get_years(@roles);",
+                    new
+                    {
+                        roles
+                    }
                 )
             );
         }
 
-
-        public Task<IEnumerable<Category>> GetAllCategoriesAsync(bool allowPrivate)
+        public Task<IEnumerable<Category>> GetAllCategoriesAsync(string[] roles)
         {
-            return InternalGetCategoriesAsync(allowPrivate);
+            return InternalGetCategoriesAsync(roles);
         }
 
-
-        public Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, bool allowPrivate)
+        public Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, string[] roles)
         {
-            return InternalGetCategoriesAsync(allowPrivate, year);
+            return InternalGetCategoriesAsync(roles, year);
         }
 
-
-        public Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, bool allowPrivate)
+        public Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, string[] roles)
         {
-            return InternalGetCategoriesAsync(allowPrivate, sinceCategoryId: sinceId);
+            return InternalGetCategoriesAsync(roles, sinceCategoryId: sinceId);
         }
 
-
-        public async Task<Category> GetCategoryAsync(short categoryId, bool allowPrivate)
+        public async Task<Category> GetCategoryAsync(short categoryId, string[] roles)
         {
-            var result = await InternalGetCategoriesAsync(allowPrivate, categoryId: categoryId).ConfigureAwait(false);
+            var result = await InternalGetCategoriesAsync(roles, categoryId: categoryId).ConfigureAwait(false);
 
             return result.FirstOrDefault();
         }
 
-
-        public Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, bool allowPrivate)
+        public Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, string[] roles)
         {
-            return InternalGetPhotosAsync(allowPrivate, categoryId);
+            return InternalGetPhotosAsync(roles, categoryId);
         }
 
-
-        public async Task<Photo> GetPhotoAsync(int photoId, bool allowPrivate)
+        public async Task<Photo> GetPhotoAsync(int photoId, string[] roles)
         {
-            var result = await InternalGetPhotosAsync(allowPrivate, photoId: photoId).ConfigureAwait(false);
+            var result = await InternalGetPhotosAsync(roles, photoId: photoId).ConfigureAwait(false);
 
             return result.FirstOrDefault();
         }
 
-
-        public async Task<Photo> GetRandomAsync(bool allowPrivate)
+        public async Task<Photo> GetRandomAsync(string[] roles)
         {
-            var results = await GetRandomAsync(1, allowPrivate).ConfigureAwait(false);
+            var results = await GetRandomAsync(1, roles).ConfigureAwait(false);
 
             return results.First();
         }
 
-
-        public Task<IEnumerable<Photo>> GetRandomAsync(byte count, bool allowPrivate)
+        public Task<IEnumerable<Photo>> GetRandomAsync(byte count, string[] roles)
         {
             return RunAsync(async conn =>
             {
                 var rows = await conn.QueryAsync(
-                    "SELECT * FROM photo.get_random_photos(@allowPrivate, @count)",
+                    "SELECT * FROM photo.get_random_photos(@roles, @count)",
                     new
                     {
-                        allowPrivate,
+                        roles,
                         count
                     }
                 ).ConfigureAwait(false);
@@ -94,55 +88,60 @@ namespace Maw.Data
             });
         }
 
-
-        public Task<Detail> GetDetailAsync(int photoId, bool allowPrivate)
+        public Task<Detail> GetDetailAsync(int photoId, string[] roles)
         {
             return RunAsync(conn =>
                 conn.QuerySingleOrDefaultAsync<Detail>(
-                    "SELECT * FROM photo.get_photo_metadata(@allowPrivate, @photoId);",
+                    "SELECT * FROM photo.get_photo_metadata(@roles, @photoId);",
                     new
                     {
-                        allowPrivate,
+                        roles,
                         photoId
                     }
                 )
             );
         }
 
-
-        public Task<IEnumerable<Comment>> GetCommentsAsync(int photoId)
+        public Task<IEnumerable<Comment>> GetCommentsAsync(int photoId, string[] roles)
         {
             return RunAsync(conn =>
                 conn.QueryAsync<Comment>(
-                    "SELECT * FROM photo.get_comments(@photoId);",
-                    new { photoId }
-                )
-            );
-        }
-
-
-        public Task<Rating> GetRatingsAsync(int photoId, string username)
-        {
-            return RunAsync(conn =>
-                conn.QuerySingleOrDefaultAsync<Rating>(
-                    "SELECT * FROM photo.get_ratings(@photoId, @username);",
+                    "SELECT * FROM photo.get_comments(@photoId, @roles);",
                     new
                     {
                         photoId,
-                        username = username?.ToLowerInvariant()
+                        roles
                     }
                 )
             );
         }
 
+        public Task<Rating> GetRatingsAsync(int photoId, string username, string[] roles)
+        {
+            return RunAsync(conn =>
+                conn.QuerySingleOrDefaultAsync<Rating>(
+                    "SELECT * FROM photo.get_ratings(@photoId, @username, @roles);",
+                    new
+                    {
+                        photoId,
+                        username = username?.ToLowerInvariant(),
+                        roles
+                    }
+                )
+            );
+        }
 
-        public Task<GpsDetail> GetGpsDetailAsync(int photoId)
+        public Task<GpsDetail> GetGpsDetailAsync(int photoId, string[] roles)
         {
             return RunAsync(async conn =>
             {
                 var result = await conn.QuerySingleOrDefaultAsync<GpsSourceOverride>(
-                    "SELECT * FROM photo.get_gps(@photoId);",
-                    new { photoId }
+                    "SELECT * FROM photo.get_gps(@photoId, @roles);",
+                    new
+                    {
+                        photoId,
+                        roles
+                    }
                 ).ConfigureAwait(false);
 
                 if (result == null)
@@ -174,19 +173,19 @@ namespace Maw.Data
             });
         }
 
-
-        public Task<int> InsertCommentAsync(int photoId, string username, string comment)
+        public Task<int> InsertCommentAsync(int photoId, string username, string comment, string[] roles)
         {
             return RunAsync(async conn =>
             {
                 var result = await conn.QuerySingleOrDefaultAsync<int>(
-                    "SELECT * FROM photo.save_comment(@username, @photoId, @message, @entryDate);",
+                    "SELECT * FROM photo.save_comment(@username, @photoId, @message, @entryDate, @roles);",
                     new
                     {
                         username = username.ToLowerInvariant(),
                         photoId,
                         message = comment,
-                        entryDate = DateTime.Now
+                        entryDate = DateTime.Now,
+                        roles
                     }
                 ).ConfigureAwait(false);
 
@@ -199,44 +198,43 @@ namespace Maw.Data
             });
         }
 
-
-        public Task<float?> SaveRatingAsync(int photoId, string username, short rating)
+        public Task<float?> SaveRatingAsync(int photoId, string username, short rating, string[] roles)
         {
             return RunAsync(async conn =>
             {
                 var result = await conn.QueryAsync<long>(
-                    "SELECT * FROM photo.save_rating(@photoId, @username, @score);",
+                    "SELECT * FROM photo.save_rating(@photoId, @username, @score, @roles);",
                     new
                     {
                         photoId,
                         username = username.ToLowerInvariant(),
-                        score = rating
+                        score = rating,
+                        roles
                     }
                 ).ConfigureAwait(false);
 
-                return (await GetRatingsAsync(photoId, username).ConfigureAwait(false))?.AverageRating;
+                return (await GetRatingsAsync(photoId, username, roles).ConfigureAwait(false))?.AverageRating;
             });
         }
 
-
-        public Task<float?> RemoveRatingAsync(int photoId, string username)
+        public Task<float?> RemoveRatingAsync(int photoId, string username, string[] roles)
         {
             return RunAsync(async conn =>
             {
                 var result = await conn.QueryAsync<long>(
-                    "SELECT * FROM photo.save_rating(@photoId, @username, @score);",
+                    "SELECT * FROM photo.save_rating(@photoId, @username, @score, @roles);",
                     new
                     {
                         photoId,
                         username = username.ToLowerInvariant(),
-                        score = 0
+                        score = 0,
+                        roles
                     }
                 ).ConfigureAwait(false);
 
-                return (await GetRatingsAsync(photoId, username).ConfigureAwait(false))?.AverageRating;
+                return (await GetRatingsAsync(photoId, username, roles).ConfigureAwait(false))?.AverageRating;
             });
         }
-
 
         public Task SetGpsOverrideAsync(int photoId, GpsCoordinate gps, string username)
         {
@@ -255,7 +253,6 @@ namespace Maw.Data
             );
         }
 
-
         public Task<long> SetCategoryTeaserAsync(short categoryId, int photoId)
         {
             return RunAsync(conn =>
@@ -270,16 +267,15 @@ namespace Maw.Data
             );
         }
 
-
-        Task<IEnumerable<Category>> InternalGetCategoriesAsync(bool allowPrivate, short? year = null, short? categoryId = null, short? sinceCategoryId = null)
+        Task<IEnumerable<Category>> InternalGetCategoriesAsync(string[] roles, short? year = null, short? categoryId = null, short? sinceCategoryId = null)
         {
             return RunAsync(async conn =>
             {
                 var rows = await conn.QueryAsync(
-                    "SELECT * FROM photo.get_categories(@allowPrivate, @year, @categoryId, @sinceCategoryId);",
+                    "SELECT * FROM photo.get_categories(@roles, @year, @categoryId, @sinceCategoryId);",
                     new
                     {
-                        allowPrivate,
+                        roles,
                         year,
                         categoryId,
                         sinceCategoryId
@@ -290,16 +286,15 @@ namespace Maw.Data
             });
         }
 
-
-        Task<IEnumerable<Photo>> InternalGetPhotosAsync(bool allowPrivate, short? categoryId = null, int? photoId = null)
+        Task<IEnumerable<Photo>> InternalGetPhotosAsync(string[] roles, short? categoryId = null, int? photoId = null)
         {
             return RunAsync(async conn =>
             {
                 var rows = await conn.QueryAsync(
-                    "SELECT * FROM photo.get_photos(@allowPrivate, @categoryId, @photoId);",
+                    "SELECT * FROM photo.get_photos(@roles, @categoryId, @photoId);",
                     new
                     {
-                        allowPrivate,
+                        roles,
                         categoryId,
                         photoId
                     }
@@ -308,7 +303,6 @@ namespace Maw.Data
                 return rows.Select(BuildPhoto);
             });
         }
-
 
         Category BuildCategory(dynamic row)
         {
@@ -336,7 +330,6 @@ namespace Maw.Data
 
             return category;
         }
-
 
         Photo BuildPhoto(dynamic row)
         {

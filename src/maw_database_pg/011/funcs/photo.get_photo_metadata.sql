@@ -83,7 +83,8 @@ RETURNS TABLE
 LANGUAGE SQL
 AS $$
 
-    SELECT p.bits_per_sample,
+    SELECT DISTINCT
+           p.bits_per_sample,
            cm.name AS compression,
            cn.name AS contrast,
            create_date,

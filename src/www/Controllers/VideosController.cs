@@ -43,7 +43,7 @@ namespace MawMvcApp.Controllers
         [HttpGet("GetMobileCategoryThumbnail/{id:int}")]
         public async Task<IActionResult> GetMobileCategoryThumbnail(short id)
         {
-            var category = await _svc.GetCategoryAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
+            var category = await _svc.GetCategoryAsync(id, User.GetAllRoles()).ConfigureAwait(false);
 
             return GetScaledImage(category.TeaserImage.Path);
         }
@@ -52,7 +52,7 @@ namespace MawMvcApp.Controllers
         [HttpGet("GetMobileVideoThumbnail/{id:int}")]
         public async Task<IActionResult> GetMobileVideoThumbnail(short id)
         {
-            var video = await _svc.GetVideoAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
+            var video = await _svc.GetVideoAsync(id, User.GetAllRoles()).ConfigureAwait(false);
 
             return GetScaledImage(video.Thumbnail.Path);
         }

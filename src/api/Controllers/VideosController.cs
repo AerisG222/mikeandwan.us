@@ -39,7 +39,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<MawApi.ViewModels.Videos.VideoViewModel>> GetByIdAsync(short id)
         {
-            var video = await _svc.GetVideoAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
+            var video = await _svc.GetVideoAsync(id, User.GetAllRoles()).ConfigureAwait(false);
 
             if (video == null)
             {
@@ -74,7 +74,7 @@ namespace MawApi.Controllers
 
             // TODO: handle invalid photo id?
             // TODO: remove photoId from commentViewModel?
-            await _svc.InsertCommentAsync(id, User.Identity.Name, model.Comment).ConfigureAwait(false);
+            await _svc.InsertCommentAsync(id, User.Identity.Name, model.Comment, User.GetAllRoles()).ConfigureAwait(false);
 
             return await InternalGetCommentsAsync(id).ConfigureAwait(false);
         }
@@ -87,7 +87,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<GpsDetail>> GetGpsDetailAsync(int id)
         {
-            var gps = await _svc.GetGpsDetailAsync(id).ConfigureAwait(false);
+            var gps = await _svc.GetGpsDetailAsync(id, User.GetAllRoles()).ConfigureAwait(false);
 
             if (gps == null)
             {
@@ -113,7 +113,7 @@ namespace MawApi.Controllers
 
             await _svc.SetGpsOverrideAsync(id, gps, User.Identity.Name).ConfigureAwait(false);
 
-            var detail = await _svc.GetGpsDetailAsync(id).ConfigureAwait(false);
+            var detail = await _svc.GetGpsDetailAsync(id, User.GetAllRoles()).ConfigureAwait(false);
 
             if (detail == null)
             {
@@ -157,11 +157,11 @@ namespace MawApi.Controllers
             // TODO: remove photoId from userPhotoRating?
             if (userRating.Rating < 1)
             {
-                await _svc.RemoveRatingAsync(id, User.Identity.Name).ConfigureAwait(false);
+                await _svc.RemoveRatingAsync(id, User.Identity.Name, User.GetAllRoles()).ConfigureAwait(false);
             }
             else if (userRating.Rating <= 5)
             {
-                await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating).ConfigureAwait(false);
+                await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating, User.GetAllRoles()).ConfigureAwait(false);
             }
             else
             {
@@ -181,7 +181,7 @@ namespace MawApi.Controllers
 
         async Task<ApiCollectionResult<Comment>> InternalGetCommentsAsync(short id)
         {
-            var comments = await _svc.GetCommentsAsync(id).ConfigureAwait(false);
+            var comments = await _svc.GetCommentsAsync(id, User.GetAllRoles()).ConfigureAwait(false);
 
             return new ApiCollectionResult<Comment>(comments.ToList());
         }
@@ -189,7 +189,7 @@ namespace MawApi.Controllers
 
         Task<Rating> InternalGetRatingAsync(short id)
         {
-            return _svc.GetRatingsAsync(id, User.Identity.Name);
+            return _svc.GetRatingsAsync(id, User.Identity.Name, User.GetAllRoles());
         }
     }
 }

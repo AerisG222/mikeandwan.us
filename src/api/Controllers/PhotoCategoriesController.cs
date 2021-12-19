@@ -40,7 +40,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(401)]
         public async Task<ActionResult<ApiCollectionResult<PhotoCategoryViewModel>>> GetAll()
         {
-            var categories = await _svc.GetAllCategoriesAsync(Role.IsAdmin(User)).ConfigureAwait(false);
+            var categories = await _svc.GetAllCategoriesAsync(User.GetAllRoles()).ConfigureAwait(false);
             var result = _categoryAdapter.Adapt(categories);
 
             return new ApiCollectionResult<PhotoCategoryViewModel>(result.ToList());
@@ -52,7 +52,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(401)]
         public async Task<ActionResult<ApiCollectionResult<PhotoCategoryViewModel>>> GetRecent(short sinceId)
         {
-            var categories = await _svc.GetRecentCategoriesAsync(sinceId, Role.IsAdmin(User)).ConfigureAwait(false);
+            var categories = await _svc.GetRecentCategoriesAsync(sinceId, User.GetAllRoles()).ConfigureAwait(false);
             var result = _categoryAdapter.Adapt(categories);
 
             return new ApiCollectionResult<PhotoCategoryViewModel>(result.ToList());
@@ -75,7 +75,7 @@ namespace MawApi.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<ApiCollectionResult<MawApi.ViewModels.Photos.PhotoViewModel>>> GetPhotos(short id)
         {
-            var photos = await _svc.GetPhotosForCategoryAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
+            var photos = await _svc.GetPhotosForCategoryAsync(id, User.GetAllRoles()).ConfigureAwait(false);
 
             if(photos == null)
             {
@@ -116,7 +116,7 @@ namespace MawApi.Controllers
 
         async Task<ActionResult<PhotoCategoryViewModel>> GetCategoryInternalAsync(short id)
         {
-            var category = await _svc.GetCategoryAsync(id, Role.IsAdmin(User)).ConfigureAwait(false);
+            var category = await _svc.GetCategoryAsync(id, User.GetAllRoles()).ConfigureAwait(false);
 
             if(category == null)
             {

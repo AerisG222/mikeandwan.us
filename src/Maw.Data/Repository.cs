@@ -88,7 +88,11 @@ namespace Maw.Data
         {
             DbConnection dbConn = new NpgsqlConnection(_connString);
 
-            return new ProfiledDbConnection(dbConn, MiniProfiler.Current);
+            // TODO: the wrapped connection causes pgsql queries w/ arrays to fail so we comment this out for now
+            // https://github.com/MiniProfiler/dotnet/issues/319
+            // return new ProfiledDbConnection(dbConn, MiniProfiler.Current);
+
+            return dbConn;
         }
 #pragma warning restore CA2000
     }

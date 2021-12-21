@@ -19,6 +19,15 @@ namespace Maw.Security
 
             return roles;
         }
-    }
 
+        public static bool IsAdmin(this ClaimsPrincipal user)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            return user.IsInRole(Role.Admin);
+        }
+    }
 }

@@ -202,7 +202,7 @@ namespace Maw.Domain.Upload
                 throw new ArgumentNullException(nameof(user));
             }
 
-            if(Role.IsAdmin(user))
+            if(user.IsAdmin())
             {
                 return GetAllFiles();
             }
@@ -398,7 +398,7 @@ namespace Maw.Domain.Upload
 
 
         static bool UserCanAccessFile(ClaimsPrincipal user, FileLocation location) {
-            return Role.IsAdmin(user) ||
+            return user.IsAdmin() ||
                 string.Equals(location.Username, user.Identity.Name, StringComparison.OrdinalIgnoreCase);
         }
 

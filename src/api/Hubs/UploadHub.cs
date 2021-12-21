@@ -59,7 +59,7 @@ namespace MawApi.Hubs
         {
             _log.LogDebug("User [{Username}] connected to {Hub}.", Context.User.Identity.Name, nameof(UploadHub));
 
-            if(Role.IsAdmin(Context.User))
+            if(Context.User.IsAdmin())
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, GROUP_ADMINS).ConfigureAwait(false);
             }
@@ -72,7 +72,7 @@ namespace MawApi.Hubs
         {
             _log.LogDebug("User [{Username}] disconnected from {Hub}.", Context.User.Identity.Name, nameof(UploadHub));
 
-            if(Role.IsAdmin(Context.User))
+            if(Context.User.IsAdmin())
             {
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, GROUP_ADMINS).ConfigureAwait(false);
             }
@@ -95,7 +95,7 @@ namespace MawApi.Hubs
 
             //_log.LogDebug($"Sending [{CALL_FILE_ADDED}] for file [{file.Location.RelativePath}].");
 
-            if(!Role.IsAdmin(user))
+            if(!user.IsAdmin())
             {
                 await ctx.Clients.User(file.Location.Username).SendAsync(CALL_FILE_ADDED, file).ConfigureAwait(false);
             }
@@ -118,7 +118,7 @@ namespace MawApi.Hubs
 
             //_log.LogDebug($"Sending [{CALL_FILE_DELETED}] for file [{file.Location.RelativePath}].");
 
-            if(!Role.IsAdmin(user))
+            if(!user.IsAdmin())
             {
                 await ctx.Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
             }
@@ -129,7 +129,7 @@ namespace MawApi.Hubs
 
         async Task FileDeletedAsync(UploadedFile file)
         {
-            if(!Role.IsAdmin(Context.User))
+            if(!Context.User.IsAdmin())
             {
                 await Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
             }

@@ -18,6 +18,7 @@ run_psql_script "tables/video.category_role.sql";
 
 echo 'seeding tables...';
 
+run_psql_script "seed/maw.role.sql";
 run_psql_script "seed/photo.category_role.sql";
 run_psql_script "seed/video.category_role.sql";
 

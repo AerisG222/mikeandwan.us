@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using SolrNet;
 using SolrNet.Commands.Parameters;
@@ -18,9 +19,9 @@ namespace Maw.Domain.Search
         }
 
 
-        public async Task<SearchResults<MultimediaCategory>> SearchAsync(bool allowPrivate, string query, int start)
+        public async Task<SearchResults<MultimediaCategory>> SearchAsync(string[] roles, string query, int start)
         {
-            var opts = GetQueryOptions(allowPrivate, start);
+            var opts = GetQueryOptions(roles, start);
 
             var solrResults = await _solr.QueryAsync(new SolrQuery(query), opts).ConfigureAwait(false);
 
@@ -32,7 +33,7 @@ namespace Maw.Domain.Search
         }
 
 
-        static QueryOptions GetQueryOptions(bool allowPrivate, int start)
+        static QueryOptions GetQueryOptions(string[] roles, int start)
         {
             var opts = new QueryOptions
             {
@@ -41,13 +42,10 @@ namespace Maw.Domain.Search
                 Rows = 24
             };
 
-            if(!allowPrivate)
-            {
-                opts.FilterQueries = new ISolrQuery[]
-                    {
-                        new SolrQueryByField("is_private", "false")
-                    };
-            };
+            opts.FilterQueries = new ISolrQuery[]
+                {
+                    new SolrQueryInList("allowed_roles", roles)
+                };
 
             return opts;
         }

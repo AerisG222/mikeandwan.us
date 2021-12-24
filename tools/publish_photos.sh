@@ -13,7 +13,7 @@ PATH_ASSET_ROOT="/srv/www/website_assets"
 PATH_IMAGE_SOURCE=
 CAT_NAME=
 YEAR=
-PRIVATE_FLAG=
+ALLOWED_ROLES=
 PREVIEW_MODE=
 
 get_value() {
@@ -71,11 +71,11 @@ if [ "${YEAR}" = "" ]; then
     YEAR=$(get_value 'Category year: ' 'n')
 fi
 
-priv=$(get_value 'Is Private [y/n]: ' 'n')
+roles=($(get_value 'Allowed roles (space delimited list): '))
 
-if [ "${priv}" = 'y' ]; then
-    PRIVATE_FLAG="-x"
-fi
+for i in "${roles[@]}"; do
+    ALLOWED_ROLES="-r ${ALLOWED_ROLES}${i} "
+done
 
 # determine sql filename
 ASSET_ROOT=`dirname "${PATH_IMAGE_SOURCE}"`
@@ -111,7 +111,7 @@ if [ "${DEBUG}" = "y" ]; then
     echo "            PATH_ASSET_ROOT: ${PATH_ASSET_ROOT}"
     echo "                   CAT_NAME: ${CAT_NAME}"
     echo "                       YEAR: ${YEAR}"
-    echo "               PRIVATE_FLAG: ${PRIVATE_FLAG}"
+    echo "              ALLOWED_ROLES: ${ALLOWED_ROLES}"
     echo ''
     echo "                 ASSET_ROOT: ${ASSET_ROOT}"
     echo "    CATEGORY_DIRECTORY_NAME: ${CATEGORY_DIRECTORY_NAME}"
@@ -154,7 +154,7 @@ fi
 
 echo '* processing photos...'
 
-dotnet "${PATH_SIZE_PHOTOS}" -i -c "${CAT_NAME}" -o "${PATH_LOCAL_SQL_FILE}" -p "${PATH_IMAGE_SOURCE}" -w "images" -y ${YEAR} ${PRIVATE_FLAG}
+dotnet "${PATH_SIZE_PHOTOS}" -i -c "${CAT_NAME}" -o "${PATH_LOCAL_SQL_FILE}" -p "${PATH_IMAGE_SOURCE}" -w "images" -y ${YEAR} ${ALLOWED_ROLES}
 
 # after processing the first time, we typically want to manually review all the photos to make sure
 # we keep the good ones and toss the bad / dupes /etc.  This check allows the user to bail if this

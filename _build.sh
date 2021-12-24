@@ -233,8 +233,6 @@ rm -r "${SRC_ROOT}/auth/wwwroot/js/libs/bootstrap"
 rm -r "${SRC_ROOT}/www/wwwroot/css/libs"
 rm -r "${SRC_ROOT}/www/wwwroot/js/libs/bootstrap"
 rm -r "${SRC_ROOT}/www/wwwroot/js/libs/highlight"
-rm -r "${SRC_ROOT}/www/wwwroot/js/libs/jquery"
-rm -r "${SRC_ROOT}/www/wwwroot/js/libs/popper"
 rm -r "${SRC_ROOT}/www/wwwroot/js/libs/reveal"
 
 if   [ ${1} = 'api' ]; then

@@ -14,7 +14,9 @@ function run_psql_script() {
 echo 'updating tables...';
 
 run_psql_script "tables/photo.category.sql";
+run_psql_script "tables/photo.photo.sql";
 run_psql_script "tables/video.category.sql";
+run_psql_script "tables/video.video.sql";
 
 echo "...${DBNAME} updated.";
 

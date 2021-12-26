@@ -53,7 +53,7 @@ fi
 roles=($(get_value 'Allowed roles (space delimited list): '))
 
 for i in "${roles[@]}"; do
-    ALLOWED_ROLES="-r ${ALLOWED_ROLES}${i} "
+    ALLOWED_ROLES="${ALLOWED_ROLES} -r ${i} "
 done
 
 # determine sql filename

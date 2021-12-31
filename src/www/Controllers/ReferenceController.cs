@@ -139,22 +139,6 @@ namespace MawMvcApp.Controllers
 
             return View();
         }
-
-        [HttpGet("aspnet5")]
-        public IActionResult Aspnet5()
-        {
-            ViewBag.NavigationZone = NavigationZone.Reference;
-
-            return View();
-        }
-
-        [HttpGet("angular2")]
-        public IActionResult Angular2()
-        {
-            ViewBag.NavigationZone = NavigationZone.Reference;
-
-            return View();
-        }
     }
 }
 

@@ -48,15 +48,4 @@
             </div>
         </div>
     </div>
-    <div class="card mb-2">
-        <div class="card-header d-grid">
-            <button class="btn border-0 text-start p-0" type="button" data-bs-toggle="collapse" data-bs-target="#presentation">Presentations</button>
-        </div>
-        <div id="presentation" class="@presentationClass" data-bs-parent="#sidebarAccordion">
-            <div class="list-group list-group-flush">
-                <a class="list-group-item" asp-controller="reference" asp-action="aspnet5" maw-active="@string.Equals(Model.Item, "aspnet5", StringComparison.OrdinalIgnoreCase)">ASPNET5 / MVC6</a>
-                <a class="list-group-item" asp-controller="reference" asp-action="angular2" maw-active="@string.Equals(Model.Item, "angular2", StringComparison.OrdinalIgnoreCase)">Angular2</a>
-            </div>
-        </div>
-    </div>
 </div>

@@ -1,0 +1,11 @@
+{
+    "classPrefix": "",
+    "enableClasses": true,
+    "enableJSClass": true,
+    "scriptGlobalName": "window",
+    "usePrefixes": true,
+    "minify": true,
+    "feature-detects": [
+        "audio"
+    ]
+}

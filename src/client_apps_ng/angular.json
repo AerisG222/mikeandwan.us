@@ -279,7 +279,9 @@
             "styles": [
               "projects/learning/src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+                "projects/learning/src/modernizr.js"
+            ],
             "extractLicenses": false,
             "buildOptimizer": false,
             "sourceMap": true,

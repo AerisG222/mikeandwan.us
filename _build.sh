@@ -230,10 +230,7 @@ build_www() {
 # remove css / js libs that are replaced with cdns in prod
 rm -r "${SRC_ROOT}/auth/wwwroot/js/libs/bootstrap"
 
-rm -r "${SRC_ROOT}/www/wwwroot/css/libs"
 rm -r "${SRC_ROOT}/www/wwwroot/js/libs/bootstrap"
-rm -r "${SRC_ROOT}/www/wwwroot/js/libs/highlight"
-rm -r "${SRC_ROOT}/www/wwwroot/js/libs/reveal"
 
 if   [ ${1} = 'api' ]; then
     build_api

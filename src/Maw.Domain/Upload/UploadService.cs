@@ -118,9 +118,13 @@ namespace Maw.Domain.Upload
 
             if(!UserCanAccessFile(user, location))
             {
-                var msg = $"User [{location.Username}] does not have access to the requested file [{location.RelativePath}].";
+                _log.LogError(
+                    "User [{Username}] does not have access to the requested file [{RelativePath}].",
+                    location.Username,
+                    location.RelativePath
+                );
 
-                _log.LogError(msg);
+                var msg = $"User [{location.Username}] does not have access to the requested file [{location.RelativePath}].";
 
                 throw new UnauthorizedAccessException(msg);
             }
@@ -257,7 +261,7 @@ namespace Maw.Domain.Upload
             }
             catch(IOException ex)
             {
-                _log.LogError(ex, $"Could not create user directory {userDir}");
+                _log.LogError(ex, "Could not create user directory {UserDirectory}", userDir);
 
                 result.WasSuccessful = false;
                 result.Error = $"There was an error trying to save {filename}";
@@ -276,7 +280,12 @@ namespace Maw.Domain.Upload
                 }
                 catch(IOException ex)
                 {
-                    _log.LogError(ex, $"Unable to save file upload for {location.Username} with filename {location.Filename}, and absolute path {destPath}.");
+                    _log.LogError(
+                        ex,
+                        "Unable to save file upload for {Username} with filename {Filename}, and absolute path {DestinationPath}.",
+                        location.Username,
+                        location.Filename,
+                        destPath);
 
                     result.Error = $"There was an error trying to save {filename}.";
                 }
@@ -435,7 +444,7 @@ namespace Maw.Domain.Upload
             }
             catch(Exception ex)
             {
-                _log.LogError(ex, $"Unable to parse relative path [{relativePath}].");
+                _log.LogError(ex, "Unable to parse relative path [{RelativePath}].", relativePath);
 
                 throw;
             }

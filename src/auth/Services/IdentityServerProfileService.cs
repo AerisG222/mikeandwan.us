@@ -36,7 +36,7 @@ namespace MawAuth.Services
 
             foreach (var c in context.RequestedClaimTypes)
             {
-                _log.LogDebug(c);
+                _log.LogDebug("{RequestedClaimType}", c);
             }
 
             _log.LogDebug("src subject claims:");
@@ -63,7 +63,7 @@ namespace MawAuth.Services
                 throw new ArgumentNullException(nameof(context));
             }
 
-            _log.LogDebug("IsActive called from: {caller}", context.Caller);
+            _log.LogDebug("IsActive called from: {Caller}", context.Caller);
 
             context.IsActive = true;
             return Task.CompletedTask;

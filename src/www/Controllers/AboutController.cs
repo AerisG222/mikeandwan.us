@@ -120,7 +120,7 @@ namespace MawMvcApp.Controllers
                     }
                     catch (Exception ex)
                     {
-                        Log.LogError(ex, "There was an error sending an email: " + ex.Message);
+                        Log.LogError(ex, "There was an error sending an email: {ErrorMessage}", ex.Message);
 
                         model.SubmitSuccess = false;
                     }

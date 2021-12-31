@@ -296,7 +296,7 @@ namespace MawAuth.Controllers
                 }
                 else
                 {
-                    _log.LogWarning(result.ToString());
+                    _log.LogWarning("reset password result: {Result}", result.ToString());
 
                     AddErrors(result);
                 }
@@ -343,7 +343,7 @@ namespace MawAuth.Controllers
                 }
                 else
                 {
-                    _log.LogWarning(result.ToString());
+                    _log.LogWarning("change password result: {Result}", result.ToString());
 
                     AddErrors(result);
                 }
@@ -493,7 +493,7 @@ namespace MawAuth.Controllers
 
             foreach (var err in errs)
             {
-                _log.LogWarning(err.ErrorMessage);
+                _log.LogWarning("validation error: {ValidationError}", err.ErrorMessage);
             }
         }
     }

@@ -25,12 +25,11 @@ namespace Maw.TagHelpers
         const string RouteValuesDictionaryName = "maw-all-route-data";
         const string RouteValuesPrefix = "maw-route-";
         readonly IHtmlGenerator _htmlGenerator;
-
+        IDictionary<string, string> _routeValues;
 
         [HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }
-
 
         [HtmlAttributeName(ControllerAttributeName)]
         public string Controller { get; set; }
@@ -49,8 +48,22 @@ namespace Maw.TagHelpers
 
 
         [HtmlAttributeName(RouteValuesDictionaryName, DictionaryAttributePrefix = RouteValuesPrefix)]
-        public IDictionary<string, string> RouteValues { get; } =
-            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        public IDictionary<string, string> RouteValues
+        {
+            get
+            {
+                if (_routeValues == null)
+                {
+                    _routeValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                }
+
+                return _routeValues;
+            }
+            set
+            {
+                _routeValues = value;
+            }
+        }
 
 
         public PrimaryNavTagHelper(IHtmlGenerator htmlGenerator)

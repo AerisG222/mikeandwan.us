@@ -308,7 +308,7 @@ namespace Maw.Data.Identity
                 throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
             }
 
-            _log.LogInformation("is user in role: " + user.Username + " : " + roleName);
+            _log.LogInformation("is user {Username} in role: {Role}", user.Username, roleName);
 
             var roles = await GetRolesAsync(user, cancellationToken).ConfigureAwait(false);
             var role = roles.SingleOrDefault(x => string.Equals(x, roleName, StringComparison.OrdinalIgnoreCase));

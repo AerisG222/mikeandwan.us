@@ -36,7 +36,7 @@ namespace MawAuth.Services
                 throw new ArgumentNullException(nameof(key));
             }
 
-            Log.LogDebug($"Storing signing key with id: { key.Id }");
+            Log.LogDebug("Storing signing key with id: {SigningKeyId}", key.Id);
 
             return RunAsync(conn =>
                 conn.QuerySingleOrDefaultAsync<long>(
@@ -53,7 +53,7 @@ namespace MawAuth.Services
                 throw new ArgumentNullException(nameof(id));
             }
 
-            Log.LogDebug($"Deleting signing key with id: { id }");
+            Log.LogDebug("Deleting signing key with id: {SigningKeyId}", id);
 
             return RunAsync(conn =>
                 conn.QuerySingleOrDefaultAsync<long>(

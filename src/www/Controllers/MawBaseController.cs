@@ -24,7 +24,7 @@ namespace MawMvcApp.Controllers
 
             foreach (var err in errs)
             {
-                Log.LogWarning(err.ErrorMessage);
+                Log.LogWarning("validation error: {ValidationError}", err.ErrorMessage);
             }
         }
     }

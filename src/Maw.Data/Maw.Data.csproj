@@ -3,7 +3,7 @@
         <Description>Data layer bound to Postgres for www.mikeandwan.us</Description>
         <VersionPrefix>1.1.0</VersionPrefix>
         <Authors>Mike Morano &lt;mmorano@mikeandwan.us&gt;</Authors>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <DebugType>portable</DebugType>
         <AssemblyName>Maw.Data</AssemblyName>
@@ -23,7 +23,7 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="SecurityCodeScan.VS2019" Version="5.2.1">
+        <PackageReference Include="SecurityCodeScan.VS2019" Version="5.6.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>

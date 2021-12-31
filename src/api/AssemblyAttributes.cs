@@ -6,6 +6,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "CA1303")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "CA1801")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "CA1822")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "CA1848")]
 
 // we don't use cookies for this site, csrf is not possible
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "SCS0016")]

@@ -6,5 +6,6 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "CA1303")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "CA1801")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "CA1822")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "CA1848")]
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("", "SCS0012")]

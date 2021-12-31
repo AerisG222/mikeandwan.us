@@ -160,7 +160,7 @@ namespace MawMvcApp.Controllers
 
                 var stream = _uploadSvc.GetThumbnail(User, relativePath, 48);
 
-                _log.LogDebug("STREAM NULL?: " + (stream == null));
+                _log.LogDebug("is stream null: {StreamIsNull}", stream == null);
 
                 if (stream != null)
                 {

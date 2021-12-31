@@ -35,14 +35,14 @@ namespace Maw.Domain.Identity
 
                 if (result == SignInResult.Success)
                 {
-                    _log.LogInformation(string.Concat(username, " logged in successfully against new authentication system"));
+                    _log.LogInformation("{Username} logged in successfully against new authentication system", username);
                 }
 
                 return result;
             }
             catch (Exception ex)
             {
-                _log.LogWarning(ex, string.Concat("Unable to authenticate user [", username, "]."));
+                _log.LogWarning(ex, "Unable to authenticate user {Username}.", username);
             }
 
             return SignInResult.Failed;

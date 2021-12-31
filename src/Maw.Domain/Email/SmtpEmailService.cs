@@ -59,7 +59,7 @@ namespace Maw.Domain.Email
                 builder.TextBody = body;
             }
 
-            var msg = new MimeMessage();
+            using var msg = new MimeMessage();
             msg.From.Add(new MailboxAddress((string)null, from));
             msg.To.Add(new MailboxAddress((string)null, recipient));
             msg.Subject = subject;

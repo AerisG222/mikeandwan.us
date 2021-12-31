@@ -17,7 +17,7 @@ namespace Maw.Domain.Utilities
 
             foreach (byte b in byteArray)
             {
-                builder.Append($"{b:X}");
+                builder.Append(FormattableString.Invariant($"{b:X}"));
             }
 
             return builder.ToString();

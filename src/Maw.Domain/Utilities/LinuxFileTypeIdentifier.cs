@@ -46,7 +46,7 @@ namespace Maw.Domain.Utilities
             }
             catch(Exception ex)
             {
-                _log.LogWarning(ex, $"Error trying to determine mime type for file [{filePath}].  This likely only works on Linux, so the error may be ignored.");
+                _log.LogWarning(ex, "Error trying to determine mime type for file [{FilePath}].  This likely only works on Linux, so the error may be ignored.", filePath);
             }
 
             return null;

@@ -2,9 +2,10 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.Navigation;
 using Maw.Security;
-
 
 namespace MawMvcApp.ViewComponents
 {
@@ -12,11 +13,12 @@ namespace MawMvcApp.ViewComponents
         : ViewComponent
     {
         readonly IAuthorizationService _authzService;
+        readonly UrlConfig _urlConfig;
 
-
-        public PrimaryNav(IAuthorizationService authorizationService)
+        public PrimaryNav(IAuthorizationService authorizationService, IOptions<UrlConfig> urlConfig)
         {
             _authzService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
+            _urlConfig = urlConfig?.Value ?? throw new ArgumentNullException(nameof(urlConfig));
         }
 
 
@@ -24,7 +26,8 @@ namespace MawMvcApp.ViewComponents
         {
             var model = new PrimaryNavViewModel {
                 ActiveNavigationZone = activeZone,
-                AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawPolicy.AdminSite).ConfigureAwait(false)).Succeeded
+                AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawPolicy.AdminSite).ConfigureAwait(false)).Succeeded,
+                UrlConfig = _urlConfig
             };
 
             return View(model);

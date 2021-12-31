@@ -407,7 +407,7 @@ namespace MawAuth.Controllers
             var toAdd = newRoleList.Where(nm => !currRoles.Any(cm => string.Equals(cm, nm, StringComparison.OrdinalIgnoreCase)));
             var errs = new List<IdentityError>();
 
-            _log.LogInformation("new roles: " + string.Join(", ", newRoleList));
+            _log.LogInformation("new roles: {Roles}", string.Join(", ", newRoleList));
 
             foreach (var role in toRemove)
             {
@@ -535,7 +535,7 @@ namespace MawAuth.Controllers
 
             foreach (var err in errs)
             {
-                _log.LogWarning(err.ErrorMessage);
+                _log.LogWarning("Validation error: {ValidationError}", err.ErrorMessage);
             }
         }
 

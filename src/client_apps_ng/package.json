@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-learning-modernizr": "npx modernizr -c projects/learning/modernizr-config.json -d projects/learning/src/assets",
+    "build-learning-modernizr": "npx modernizr -c projects/learning/modernizr-config.json -d projects/learning/src",
     "build-dev:binary-clock": "ng build binary-clock && ng lint binary-clock",
     "build-dev:googlemaps": "ng build googlemaps && ng lint googlemaps",
     "build-dev:learning": "npm run build-learning-modernizr & ng build learning && ng lint learning",

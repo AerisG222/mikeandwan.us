@@ -4,26 +4,25 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "bootstrap": "^5.1.1",
-    "bootswatch": "^5.1.1"
+    "bootstrap": "^5.1.3",
+    "bootswatch": "^5.1.3"
   },
   "devDependencies": {
     "chokidar-cli": "^3.0.0",
-    "node-sass": "^6.0.1",
-    "node-sass-chokidar": "^1.5.0",
     "npm-run-all": "^4.1.5",
     "run-p": "0.0.0",
-    "stylelint": "^13.13.1",
-    "stylelint-config-recommended-scss": "^4.3.0",
-    "stylelint-config-standard": "^22.0.0",
-    "stylelint-order": "^4.1.0",
-    "stylelint-scss": "^3.20.1"
+    "sass": "^1.45.2",
+    "stylelint": "^14.2.0",
+    "stylelint-config-recommended-scss": "^5.0.2",
+    "stylelint-config-standard": "^24.0.0",
+    "stylelint-order": "^5.0.0",
+    "stylelint-scss": "^4.1.0"
   },
   "scripts": {
     "all": "run-p sass",
     "sass": "run-p sass:lint sass:site",
-    "sass:lint": "stylelint scss/*.scss --syntax scss 2> /dev/null",
-    "sass:site": "node-sass --output wwwroot/css --include-path node_modules scss/site.scss",
+    "sass:lint": "stylelint scss/*.scss 2> /dev/null",
+    "sass:site": "sass --load-path node_modules scss/site.scss wwwroot/css/site.css",
     "sass:watch": "chokidar 'scss/**/*.scss' -c 'npm run sass'"
   },
   "author": "",

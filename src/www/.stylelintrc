@@ -245,6 +245,9 @@
       "fill",
       "stroke"
     ],
+    "alpha-value-notation": "number",
+    "color-function-notation": "legacy",
+    "keyframes-name-pattern": ".+",
     "property-no-vendor-prefix": true,
     "rule-empty-line-before": null,
     "scss/dollar-variable-default": [true, { "ignore": "local" }],
@@ -253,6 +256,7 @@
     "selector-list-comma-newline-before": "never-multi-line",
     "selector-list-comma-space-after": "always-single-line",
     "selector-list-comma-space-before": "never-single-line",
+    "selector-class-pattern": ".+",
     "selector-max-attribute": 2,
     "selector-max-class": 4,
     "selector-max-combinators": 4,

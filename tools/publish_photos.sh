@@ -211,8 +211,8 @@ ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
     sudo chmod -R go-w '${DEST_IMAGES_CATEGORY_ROOT}'
     sudo restorecon -R '${DEST_IMAGES_CATEGORY_ROOT}'
 
-    podman run -it --rm --pod maw-pod --env-file '/home/${SSH_USERNAME}/maw-postgres-backup.env' -v .:/tmp/context:ro --security-opt label=disable postgres:13.2 psql -h localhost -U postgres -d maw_website -f '/tmp/context/${SQL_FILE}'
-    podman run -it --rm --pod maw-pod --env-file '/home/${SSH_USERNAME}/maw-postgres-backup.env' -v .:/tmp/context:ro --security-opt label=disable postgres:13.2 psql -h localhost -U postgres -d maw_website -f '/tmp/context/${GLACIER_SQL_FILE}'
+    podman run -it --rm --pod maw-pod --env-file '/home/${SSH_USERNAME}/maw-postgres-backup.env' -v .:/tmp/context:ro --security-opt label=disable postgres:13.4 psql -h localhost -U postgres -d maw_website -f '/tmp/context/${SQL_FILE}'
+    podman run -it --rm --pod maw-pod --env-file '/home/${SSH_USERNAME}/maw-postgres-backup.env' -v .:/tmp/context:ro --security-opt label=disable postgres:13.4 psql -h localhost -U postgres -d maw_website -f '/tmp/context/${GLACIER_SQL_FILE}'
 
     rm '${SQL_FILE}'
     rm '${GLACIER_SQL_FILE}'

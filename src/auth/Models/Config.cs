@@ -4,186 +4,181 @@ using Duende.IdentityServer.Models;
 using Duende.IdentityServer;
 using IdentityModel;
 
+namespace MawAuth.Models;
 
-namespace MawAuth.Models
+public class Config
 {
-    public class Config
+    readonly string _wwwUrl;
+    readonly string _wwwSecret;
+    readonly string _photosUrl;
+    readonly string _filesUrl;
+
+    public Config(string wwwUrl, string wwwSecret, string photosUrl, string filesUrl)
     {
-        readonly string _wwwUrl;
-        readonly string _wwwSecret;
-        readonly string _photosUrl;
-        readonly string _filesUrl;
+        _wwwUrl = wwwUrl ?? throw new ArgumentNullException(nameof(wwwUrl));
+        _wwwSecret = wwwSecret ?? throw new ArgumentNullException(nameof(wwwSecret));
+        _photosUrl = photosUrl ?? throw new ArgumentNullException(nameof(photosUrl));
+        _filesUrl = filesUrl ?? throw new ArgumentNullException(nameof(filesUrl));
+    }
 
-
-        public Config(string wwwUrl, string wwwSecret, string photosUrl, string filesUrl)
+    // scopes define the API resources in your system
+    public IEnumerable<ApiResource> GetApiResources()
+    {
+        return new List<ApiResource>
         {
-            _wwwUrl = wwwUrl ?? throw new ArgumentNullException(nameof(wwwUrl));
-            _wwwSecret = wwwSecret ?? throw new ArgumentNullException(nameof(wwwSecret));
-            _photosUrl = photosUrl ?? throw new ArgumentNullException(nameof(photosUrl));
-            _filesUrl = filesUrl ?? throw new ArgumentNullException(nameof(filesUrl));
-        }
+            new ApiResource("maw_api_resource", "APIs to access photo and video data within mikeandwan.us") {
+                Scopes = new string[] { "maw_api" }
+            }
+        };
+    }
 
-
-        // scopes define the API resources in your system
-        public IEnumerable<ApiResource> GetApiResources()
+    // scopes define the API resources in your system
+    public IEnumerable<ApiScope> GetApiScopes()
+    {
+        return new List<ApiScope>
         {
-            return new List<ApiResource>
+            new ApiScope("maw_api",
+                            "APIs to access photo and video data within mikeandwan.us",
+                            new [] { JwtClaimTypes.Name, JwtClaimTypes.Role })
+        };
+    }
+
+    public IEnumerable<IdentityResource> GetIdentityResources()
+    {
+        return new List<IdentityResource>
+        {
+            new IdentityResources.OpenId(),
+            new IdentityResources.Profile(),
+            new IdentityResources.Email(),
+            new IdentityResource(JwtClaimTypes.Role, "mikeandwan.us Roles", new[] { JwtClaimTypes.Role }),
+        };
+    }
+
+    // clients want to access resources (aka scopes)
+    public IEnumerable<Client> GetClients()
+    {
+        return new List<Client>
+        {
+            new Client
             {
-                new ApiResource("maw_api_resource", "APIs to access photo and video data within mikeandwan.us") {
-                    Scopes = new string[] { "maw_api" }
+                ClientId = "www.mikeandwan.us",
+                ClientName = "www.mikeandwan.us",
+                AllowedGrantTypes = GrantTypes.Code,
+                RequireConsent = false,
+
+                ClientSecrets =
+                {
+                    new Secret(_wwwSecret.Sha256())
+                },
+
+                RedirectUris = { $"{_wwwUrl}/signin-oidc" },
+                PostLogoutRedirectUris = { $"{_wwwUrl}/signout-callback-oidc" },
+                AllowedScopes = new List<string>
+                {
+                    IdentityServerConstants.StandardScopes.Email,
+                    IdentityServerConstants.StandardScopes.OfflineAccess,
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+
+                    // apis
+                    "maw_api",
+
+                    // identity resources
+                    JwtClaimTypes.Role
+                },
+                AllowOfflineAccess = true
+            },
+            new Client
+            {
+                ClientId = "maw_photos_android",
+                ClientName = "MaW Photos - Android",
+                AllowedGrantTypes = GrantTypes.Code,
+                RequireClientSecret = false,
+                AllowOfflineAccess = true,
+                RedirectUris = { "us.mikeandwan.photos:/signin-oidc" },
+                RefreshTokenUsage = TokenUsage.ReUse,
+                AllowedScopes = new List<string>
+                {
+                    IdentityServerConstants.StandardScopes.Email,
+                    IdentityServerConstants.StandardScopes.OfflineAccess,
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+
+                    // apis
+                    "maw_api",
+
+                    // identity resources
+                    JwtClaimTypes.Role
                 }
-            };
-        }
-
-        // scopes define the API resources in your system
-        public IEnumerable<ApiScope> GetApiScopes()
-        {
-            return new List<ApiScope>
+            },
+            new Client
             {
-                new ApiScope("maw_api",
-                                "APIs to access photo and video data within mikeandwan.us",
-                                new [] { JwtClaimTypes.Name, JwtClaimTypes.Role })
-            };
-        }
-
-        public IEnumerable<IdentityResource> GetIdentityResources()
-        {
-            return new List<IdentityResource>
-            {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
-                new IdentityResources.Email(),
-                new IdentityResource(JwtClaimTypes.Role, "mikeandwan.us Roles", new[] { JwtClaimTypes.Role }),
-            };
-        }
-
-
-        // clients want to access resources (aka scopes)
-        public IEnumerable<Client> GetClients()
-        {
-            return new List<Client>
-            {
-                new Client
+                ClientId = "maw-photos",
+                ClientName = "mikeandwan.us Photo Application",
+                AllowedGrantTypes = GrantTypes.Code,
+                RequireClientSecret = false,
+                AllowAccessTokensViaBrowser = true,
+                AllowOfflineAccess = true,
+                RedirectUris = new List<string>
                 {
-                    ClientId = "www.mikeandwan.us",
-                    ClientName = "www.mikeandwan.us",
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RequireConsent = false,
-
-                    ClientSecrets =
-                    {
-                        new Secret(_wwwSecret.Sha256())
-                    },
-
-                    RedirectUris = { $"{_wwwUrl}/signin-oidc" },
-                    PostLogoutRedirectUris = { $"{_wwwUrl}/signout-callback-oidc" },
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.Email,
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-
-                        // apis
-                        "maw_api",
-
-                        // identity resources
-                        JwtClaimTypes.Role
-                    },
-                    AllowOfflineAccess = true
+                    $"{_photosUrl}/login",
+                    $"{_photosUrl}/silent-refresh.html"
                 },
-                new Client
+                PostLogoutRedirectUris = new List<string>
                 {
-                    ClientId = "maw_photos_android",
-                    ClientName = "MaW Photos - Android",
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RequireClientSecret = false,
-                    AllowOfflineAccess = true,
-                    RedirectUris = { "us.mikeandwan.photos:/signin-oidc" },
-                    RefreshTokenUsage = TokenUsage.ReUse,
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.Email,
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-
-                        // apis
-                        "maw_api",
-
-                        // identity resources
-                        JwtClaimTypes.Role
-                    }
+                    $"{_photosUrl}/signout-callback.html"
                 },
-                new Client
+                AllowedCorsOrigins = new List<string>
                 {
-                    ClientId = "maw-photos",
-                    ClientName = "mikeandwan.us Photo Application",
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RequireClientSecret = false,
-                    AllowAccessTokensViaBrowser = true,
-                    AllowOfflineAccess = true,
-                    RedirectUris = new List<string>
-                    {
-                        $"{_photosUrl}/login",
-                        $"{_photosUrl}/silent-refresh.html"
-                    },
-                    PostLogoutRedirectUris = new List<string>
-                    {
-                        $"{_photosUrl}/signout-callback.html"
-                    },
-                    AllowedCorsOrigins = new List<string>
-                    {
-                        _photosUrl
-                    },
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-
-                        // apis
-                        "maw_api",
-
-                        // identity resources
-                        JwtClaimTypes.Role
-                    }
+                    _photosUrl
                 },
-                new Client
+                AllowedScopes = new List<string>
                 {
-                    ClientId = "maw-files",
-                    ClientName = "mikeandwan.us File Management Application",
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RequireClientSecret = false,
-                    AllowAccessTokensViaBrowser = true,
-                    AllowOfflineAccess = true,
-                    RedirectUris = new List<string>
-                    {
-                        $"{_filesUrl}/login",
-                        $"{_filesUrl}/silent-refresh.html"
-                    },
-                    PostLogoutRedirectUris = new List<string>
-                    {
-                        $"{_filesUrl}/signout-callback.html"
-                    },
-                    AllowedCorsOrigins = new List<string>
-                    {
-                        _filesUrl
-                    },
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.OfflineAccess,
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
 
-                        // apis
-                        "maw_api",
+                    // apis
+                    "maw_api",
 
-                        // identity resources
-                        JwtClaimTypes.Role
-                    }
+                    // identity resources
+                    JwtClaimTypes.Role
                 }
-            };
-        }
+            },
+            new Client
+            {
+                ClientId = "maw-files",
+                ClientName = "mikeandwan.us File Management Application",
+                AllowedGrantTypes = GrantTypes.Code,
+                RequireClientSecret = false,
+                AllowAccessTokensViaBrowser = true,
+                AllowOfflineAccess = true,
+                RedirectUris = new List<string>
+                {
+                    $"{_filesUrl}/login",
+                    $"{_filesUrl}/silent-refresh.html"
+                },
+                PostLogoutRedirectUris = new List<string>
+                {
+                    $"{_filesUrl}/signout-callback.html"
+                },
+                AllowedCorsOrigins = new List<string>
+                {
+                    _filesUrl
+                },
+                AllowedScopes = new List<string>
+                {
+                    IdentityServerConstants.StandardScopes.OfflineAccess,
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+
+                    // apis
+                    "maw_api",
+
+                    // identity resources
+                    JwtClaimTypes.Role
+                }
+            }
+        };
     }
 }

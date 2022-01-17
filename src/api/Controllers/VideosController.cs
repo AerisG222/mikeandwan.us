@@ -10,186 +10,174 @@ using MawApi.Models.Videos;
 using MawApi.Services.Videos;
 using MawApi.ViewModels;
 
+namespace MawApi.Controllers;
 
-namespace MawApi.Controllers
+[ApiController]
+[Authorize]
+[Authorize(MawPolicy.ViewVideos)]
+[Route("videos")]
+public class VideosController
+    : ControllerBase
 {
-    [ApiController]
-    [Authorize]
-    [Authorize(MawPolicy.ViewVideos)]
-    [Route("videos")]
-    public class VideosController
-        : ControllerBase
+    readonly IVideoService _svc;
+    readonly VideoAdapter _adapter;
+
+    public VideosController(
+        VideoAdapter videoAdapter,
+        IVideoService videoService)
     {
-        readonly IVideoService _svc;
-        readonly VideoAdapter _adapter;
+        _svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
+        _adapter = videoAdapter ?? throw new ArgumentNullException(nameof(videoAdapter));
+    }
 
+    [HttpGet("{id}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<ActionResult<MawApi.ViewModels.Videos.VideoViewModel>> GetByIdAsync(short id)
+    {
+        var video = await _svc.GetVideoAsync(id, User.GetAllRoles()).ConfigureAwait(false);
 
-        public VideosController(
-            VideoAdapter videoAdapter,
-            IVideoService videoService)
+        if (video == null)
         {
-            _svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
-            _adapter = videoAdapter ?? throw new ArgumentNullException(nameof(videoAdapter));
+            return NotFound();
         }
 
+        return _adapter.Adapt(video);
+    }
 
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<MawApi.ViewModels.Videos.VideoViewModel>> GetByIdAsync(short id)
+    [HttpGet("{id}/comments")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public Task<ApiCollectionResult<Comment>> GetCommentsAsync(short id)
+    {
+        return InternalGetCommentsAsync(id);
+    }
+
+    [HttpPost("{id}/comments")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<ApiCollectionResult<Comment>> AddCommentAsync(short id, CommentViewModel model)
+    {
+        if (model == null)
         {
-            var video = await _svc.GetVideoAsync(id, User.GetAllRoles()).ConfigureAwait(false);
-
-            if (video == null)
-            {
-                return NotFound();
-            }
-
-            return _adapter.Adapt(video);
+            throw new ArgumentNullException(nameof(model));
         }
 
+        // TODO: handle invalid photo id?
+        // TODO: remove photoId from commentViewModel?
+        await _svc.InsertCommentAsync(id, User.Identity.Name, model.Comment, User.GetAllRoles()).ConfigureAwait(false);
 
-        [HttpGet("{id}/comments")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(404)]
-        public Task<ApiCollectionResult<Comment>> GetCommentsAsync(short id)
+        return await InternalGetCommentsAsync(id).ConfigureAwait(false);
+    }
+
+    [HttpGet("{id}/gps")]
+    [Authorize(MawPolicy.AdminVideos)]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<ActionResult<GpsDetail>> GetGpsDetailAsync(int id)
+    {
+        var gps = await _svc.GetGpsDetailAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+
+        if (gps == null)
         {
-            return InternalGetCommentsAsync(id);
+            return NotFound();
         }
 
+        return gps;
+    }
 
-        [HttpPost("{id}/comments")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(404)]
-        public async Task<ApiCollectionResult<Comment>> AddCommentAsync(short id, CommentViewModel model)
+    [HttpPatch("{id}/gps")]
+    [Authorize(MawPolicy.AdminVideos)]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<ActionResult<GpsDetail>> SetGpsOverrideAsync(int id, GpsCoordinate gps)
+    {
+        if (gps == null)
         {
-            if (model == null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
-            // TODO: handle invalid photo id?
-            // TODO: remove photoId from commentViewModel?
-            await _svc.InsertCommentAsync(id, User.Identity.Name, model.Comment, User.GetAllRoles()).ConfigureAwait(false);
-
-            return await InternalGetCommentsAsync(id).ConfigureAwait(false);
+            throw new ArgumentNullException(nameof(gps));
         }
 
+        await _svc.SetGpsOverrideAsync(id, gps, User.Identity.Name).ConfigureAwait(false);
 
-        [HttpGet("{id}/gps")]
-        [Authorize(MawPolicy.AdminVideos)]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<GpsDetail>> GetGpsDetailAsync(int id)
+        var detail = await _svc.GetGpsDetailAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+
+        if (detail == null)
         {
-            var gps = await _svc.GetGpsDetailAsync(id, User.GetAllRoles()).ConfigureAwait(false);
-
-            if (gps == null)
-            {
-                return NotFound();
-            }
-
-            return gps;
+            return NotFound();
         }
 
+        return detail;
+    }
 
-        [HttpPatch("{id}/gps")]
-        [Authorize(MawPolicy.AdminVideos)]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<GpsDetail>> SetGpsOverrideAsync(int id, GpsCoordinate gps)
+    [HttpGet("{id}/rating")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<ActionResult<Rating>> GetRatingAsync(short id)
+    {
+        var rating = await InternalGetRatingAsync(id).ConfigureAwait(false);
+
+        if (rating == null)
         {
-            if (gps == null)
-            {
-                throw new ArgumentNullException(nameof(gps));
-            }
-
-            await _svc.SetGpsOverrideAsync(id, gps, User.Identity.Name).ConfigureAwait(false);
-
-            var detail = await _svc.GetGpsDetailAsync(id, User.GetAllRoles()).ConfigureAwait(false);
-
-            if (detail == null)
-            {
-                return NotFound();
-            }
-
-            return detail;
+            return NotFound();
         }
 
+        return rating;
+    }
 
-        [HttpGet("{id}/rating")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<Rating>> GetRatingAsync(short id)
+    [HttpPatch("{id}/rating")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<ActionResult<Rating>> RateVideoAsync(short id, UserRating userRating)
+    {
+        if (userRating == null)
         {
-            var rating = await InternalGetRatingAsync(id).ConfigureAwait(false);
-
-            if (rating == null)
-            {
-                return NotFound();
-            }
-
-            return rating;
+            throw new ArgumentNullException(nameof(userRating));
         }
 
-
-        [HttpPatch("{id}/rating")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<Rating>> RateVideoAsync(short id, UserRating userRating)
+        // TODO: handle invalid photo id?
+        // TODO: remove photoId from userPhotoRating?
+        if (userRating.Rating < 1)
         {
-            if (userRating == null)
-            {
-                throw new ArgumentNullException(nameof(userRating));
-            }
-
-            // TODO: handle invalid photo id?
-            // TODO: remove photoId from userPhotoRating?
-            if (userRating.Rating < 1)
-            {
-                await _svc.RemoveRatingAsync(id, User.Identity.Name, User.GetAllRoles()).ConfigureAwait(false);
-            }
-            else if (userRating.Rating <= 5)
-            {
-                await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating, User.GetAllRoles()).ConfigureAwait(false);
-            }
-            else
-            {
-                return BadRequest();
-            }
-
-            var rating = await InternalGetRatingAsync(id).ConfigureAwait(false);
-
-            if (rating == null)
-            {
-                return NotFound();
-            }
-
-            return rating;
+            await _svc.RemoveRatingAsync(id, User.Identity.Name, User.GetAllRoles()).ConfigureAwait(false);
+        }
+        else if (userRating.Rating <= 5)
+        {
+            await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating, User.GetAllRoles()).ConfigureAwait(false);
+        }
+        else
+        {
+            return BadRequest();
         }
 
+        var rating = await InternalGetRatingAsync(id).ConfigureAwait(false);
 
-        async Task<ApiCollectionResult<Comment>> InternalGetCommentsAsync(short id)
+        if (rating == null)
         {
-            var comments = await _svc.GetCommentsAsync(id, User.GetAllRoles()).ConfigureAwait(false);
-
-            return new ApiCollectionResult<Comment>(comments.ToList());
+            return NotFound();
         }
 
+        return rating;
+    }
 
-        Task<Rating> InternalGetRatingAsync(short id)
-        {
-            return _svc.GetRatingsAsync(id, User.Identity.Name, User.GetAllRoles());
-        }
+    async Task<ApiCollectionResult<Comment>> InternalGetCommentsAsync(short id)
+    {
+        var comments = await _svc.GetCommentsAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+
+        return new ApiCollectionResult<Comment>(comments.ToList());
+    }
+
+    Task<Rating> InternalGetRatingAsync(short id)
+    {
+        return _svc.GetRatingsAsync(id, User.Identity.Name, User.GetAllRoles());
     }
 }

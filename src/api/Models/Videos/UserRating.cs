@@ -1,8 +1,7 @@
-﻿namespace MawApi.Models.Videos
+﻿namespace MawApi.Models.Videos;
+
+public class UserRating
 {
-    public class UserRating
-    {
-        public int VideoId { get; set; }
-        public short Rating { get; set; }
-    }
+    public int VideoId { get; set; }
+    public short Rating { get; set; }
 }

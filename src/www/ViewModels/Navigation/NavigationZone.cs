@@ -1,19 +1,18 @@
-namespace MawMvcApp.ViewModels.Navigation
+namespace MawMvcApp.ViewModels.Navigation;
+
+public enum NavigationZone
 {
-    public enum NavigationZone
-    {
-        None = 0,
-        Home,
-        About,
-        Reference,
-        Tools,
-        Photos,
-        Administration,
-        Account,
-        FlashVideos,
-        Videos,
-        Games,
-        Webgl,
-        Upload
-    }
+    None = 0,
+    Home,
+    About,
+    Reference,
+    Tools,
+    Photos,
+    Administration,
+    Account,
+    FlashVideos,
+    Videos,
+    Games,
+    Webgl,
+    Upload
 }

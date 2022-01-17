@@ -1,8 +1,7 @@
-namespace Maw.Domain
+namespace Maw.Domain;
+
+public class Rating
 {
-    public class Rating
-    {
-        public short UserRating { get; set; }
-        public float AverageRating { get; set; }
-    }
+    public short UserRating { get; set; }
+    public float AverageRating { get; set; }
 }

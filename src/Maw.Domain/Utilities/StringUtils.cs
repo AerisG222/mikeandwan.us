@@ -1,26 +1,24 @@
 using System;
 using System.Text;
 
+namespace Maw.Domain.Utilities;
 
-namespace Maw.Domain.Utilities
+public static class StringUtils
 {
-    public static class StringUtils
+    public static string ToHexString(byte[] byteArray)
     {
-        public static string ToHexString(byte[] byteArray)
+        if (byteArray == null)
         {
-            if (byteArray == null)
-            {
-                throw new ArgumentNullException(nameof(byteArray));
-            }
-
-            StringBuilder builder = new StringBuilder(byteArray.Length);
-
-            foreach (byte b in byteArray)
-            {
-                builder.Append(FormattableString.Invariant($"{b:X}"));
-            }
-
-            return builder.ToString();
+            throw new ArgumentNullException(nameof(byteArray));
         }
+
+        StringBuilder builder = new StringBuilder(byteArray.Length);
+
+        foreach (byte b in byteArray)
+        {
+            builder.Append(FormattableString.Invariant($"{b:X}"));
+        }
+
+        return builder.ToString();
     }
 }

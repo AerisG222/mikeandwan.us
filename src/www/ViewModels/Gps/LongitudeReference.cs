@@ -1,14 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace MawMvcApp.ViewModels.Gps;
 
-namespace MawMvcApp.ViewModels.Gps
+public enum LongitudeReference
 {
-    public enum LongitudeReference
-    {
-        [Display(Name = "East")]
-        East,
+    [Display(Name = "East")]
+    East,
 
-        [Display(Name = "West (-)")]
-        West
-    }
+    [Display(Name = "West (-)")]
+    West
 }

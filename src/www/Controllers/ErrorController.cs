@@ -3,32 +3,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MawMvcApp.ViewModels.Navigation;
 
+namespace MawMvcApp.Controllers;
 
-namespace MawMvcApp.Controllers
+[Route("error")]
+public class ErrorController
+    : MawBaseController<ErrorController>
 {
-    [Route("error")]
-    public class ErrorController
-        : MawBaseController<ErrorController>
+    public ErrorController(ILogger<ErrorController> log)
+        : base(log)
     {
-        public ErrorController(ILogger<ErrorController> log)
-            : base(log)
-        {
 
-        }
+    }
 
+    [HttpGet("")]
+    public IActionResult Index()
+    {
+        ViewBag.NavigationZone = NavigationZone.None;
 
-        [HttpGet("")]
-        public IActionResult Index()
-        {
-            ViewBag.NavigationZone = NavigationZone.None;
+        var feature = HttpContext.Features.Get<IExceptionHandlerFeature>();
 
-            var feature = HttpContext.Features.Get<IExceptionHandlerFeature>();
+        Log.LogError("There was an error in the application: ", feature?.Error);
+        Log.LogError("Inner Exception: ", feature?.Error?.InnerException);
 
-            Log.LogError("There was an error in the application: ", feature?.Error);
-            Log.LogError("Inner Exception: ", feature?.Error?.InnerException);
-
-            return View();
-        }
+        return View();
     }
 }
-

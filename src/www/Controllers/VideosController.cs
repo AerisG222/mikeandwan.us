@@ -7,67 +7,59 @@ using Maw.Domain.Videos;
 using Maw.Domain.Photos;
 using Maw.Security;
 
+namespace MawMvcApp.Controllers;
 
-namespace MawMvcApp.Controllers
+[Authorize(MawPolicy.ViewVideos)]
+[Route("videos")]
+public class VideosController
+    : MawBaseController<VideosController>
 {
-    [Authorize(MawPolicy.ViewVideos)]
-    [Route("videos")]
-    public class VideosController
-        : MawBaseController<VideosController>
+    const string MOBILE_THUMB_MIME_TYPE = "image/png";
+    const int MOBILE_THUMB_SIZE = 60;
+
+    readonly IVideoService _svc;
+    readonly IImageCropper _imageCropper;
+
+    public VideosController(ILogger<VideosController> log,
+                            IVideoService videoService,
+                            IImageCropper imageCropper)
+        : base(log)
     {
-        const string MOBILE_THUMB_MIME_TYPE = "image/png";
-        const int MOBILE_THUMB_SIZE = 60;
+        _svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
+        _imageCropper = imageCropper ?? throw new ArgumentNullException(nameof(imageCropper)); ;
+    }
 
+    [HttpGet("{*extra}")]
+    public IActionResult Index()
+    {
+        return Redirect("https://videos.mikeandwan.us");
+    }
 
-        readonly IVideoService _svc;
-        readonly IImageCropper _imageCropper;
+    [HttpGet("GetMobileCategoryThumbnail/{id:int}")]
+    public async Task<IActionResult> GetMobileCategoryThumbnail(short id)
+    {
+        var category = await _svc.GetCategoryAsync(id, User.GetAllRoles()).ConfigureAwait(false);
 
+        return GetScaledImage(category.TeaserImage.Path);
+    }
 
-        public VideosController(ILogger<VideosController> log,
-                                IVideoService videoService,
-                                IImageCropper imageCropper)
-            : base(log)
+    [HttpGet("GetMobileVideoThumbnail/{id:int}")]
+    public async Task<IActionResult> GetMobileVideoThumbnail(short id)
+    {
+        var video = await _svc.GetVideoAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+
+        return GetScaledImage(video.Thumbnail.Path);
+    }
+
+    IActionResult GetScaledImage(string path)
+    {
+        var croppedImageStream = _imageCropper.CropImage(path, MOBILE_THUMB_SIZE);
+
+        if (croppedImageStream == null)
         {
-            _svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
-            _imageCropper = imageCropper ?? throw new ArgumentNullException(nameof(imageCropper)); ;
+            return NotFound();
         }
 
-
-        [HttpGet("{*extra}")]
-        public IActionResult Index()
-        {
-            return Redirect("https://videos.mikeandwan.us");
-        }
-
-
-        [HttpGet("GetMobileCategoryThumbnail/{id:int}")]
-        public async Task<IActionResult> GetMobileCategoryThumbnail(short id)
-        {
-            var category = await _svc.GetCategoryAsync(id, User.GetAllRoles()).ConfigureAwait(false);
-
-            return GetScaledImage(category.TeaserImage.Path);
-        }
-
-
-        [HttpGet("GetMobileVideoThumbnail/{id:int}")]
-        public async Task<IActionResult> GetMobileVideoThumbnail(short id)
-        {
-            var video = await _svc.GetVideoAsync(id, User.GetAllRoles()).ConfigureAwait(false);
-
-            return GetScaledImage(video.Thumbnail.Path);
-        }
-
-
-        IActionResult GetScaledImage(string path)
-        {
-            var croppedImageStream = _imageCropper.CropImage(path, MOBILE_THUMB_SIZE);
-
-            if (croppedImageStream == null)
-            {
-                return NotFound();
-            }
-
-            return File(croppedImageStream, MOBILE_THUMB_MIME_TYPE);
-        }
+        return File(croppedImageStream, MOBILE_THUMB_MIME_TYPE);
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace MawApi.Models.Photos
+﻿namespace MawApi.Models.Photos;
+
+public class UserRating
 {
-    public class UserRating
-    {
-        public int PhotoId { get; set; }
-        public short Rating { get; set; }
-    }
+    public int PhotoId { get; set; }
+    public short Rating { get; set; }
 }

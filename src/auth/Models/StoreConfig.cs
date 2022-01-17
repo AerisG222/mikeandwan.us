@@ -1,16 +1,13 @@
 using System;
 
+namespace MawAuth.Models;
 
-namespace MawAuth.Models
+public class StoreConfig
 {
-    public class StoreConfig
+    public string ConnectionString { get; }
+
+    public StoreConfig(string connString)
     {
-        public string ConnectionString { get; }
-
-
-        public StoreConfig(string connString)
-        {
-            ConnectionString = connString ?? throw new ArgumentNullException(nameof(connString));
-        }
+        ConnectionString = connString ?? throw new ArgumentNullException(nameof(connString));
     }
 }

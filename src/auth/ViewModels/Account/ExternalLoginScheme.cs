@@ -2,35 +2,31 @@ using System;
 using Microsoft.AspNetCore.Authentication;
 using Maw.TagHelpers;
 
+namespace MawAuth.ViewModels.Account;
 
-namespace MawAuth.ViewModels.Account
+public class ExternalLoginScheme
 {
-    public class ExternalLoginScheme
+    public AuthenticationScheme ExternalAuth { get; }
+
+    public SvgIcon? Icon
     {
-        public AuthenticationScheme ExternalAuth { get; }
-
-
-        public SvgIcon? Icon
+        get
         {
-            get
+            var scheme = ExternalAuth.Name.ToUpperInvariant();
+
+            return scheme switch
             {
-                var scheme = ExternalAuth.Name.ToUpperInvariant();
-
-                return scheme switch
-                {
-                    "GITHUB" => SvgIcon.Github,
-                    "GOOGLE" => SvgIcon.GooglePlus,
-                    "MICROSOFT" => SvgIcon.Windows,
-                    "TWITTER" => SvgIcon.Twitter,
-                    _ => null
-                };
-            }
+                "GITHUB" => SvgIcon.Github,
+                "GOOGLE" => SvgIcon.GooglePlus,
+                "MICROSOFT" => SvgIcon.Windows,
+                "TWITTER" => SvgIcon.Twitter,
+                _ => null
+            };
         }
+    }
 
-
-        public ExternalLoginScheme(AuthenticationScheme authScheme)
-        {
-            ExternalAuth = authScheme ?? throw new ArgumentNullException(nameof(authScheme));
-        }
+    public ExternalLoginScheme(AuthenticationScheme authScheme)
+    {
+        ExternalAuth = authScheme ?? throw new ArgumentNullException(nameof(authScheme));
     }
 }

@@ -1,11 +1,7 @@
-using System;
+namespace MawAuth.ViewModels.Email;
 
-
-namespace MawAuth.ViewModels.Email
+public class ResetPasswordEmailModel
+    : BaseEmailModel
 {
-    public class ResetPasswordEmailModel
-        : BaseEmailModel
-    {
-        public string CallbackUrl { get; set; }
-    }
+    public string CallbackUrl { get; set; }
 }

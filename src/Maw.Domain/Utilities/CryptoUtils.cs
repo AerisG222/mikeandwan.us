@@ -1,47 +1,42 @@
 using System.Security.Cryptography;
 using System.Text;
 
+namespace Maw.Domain.Utilities;
 
-namespace Maw.Domain.Utilities
+public static class CryptoUtils
 {
-    public static class CryptoUtils
+    const string _passwordChars = "~!@#$%^&*{}[];<>/?\\abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
+    public static byte[] Hash(string value)
     {
-        const string _passwordChars = "~!@#$%^&*{}[];<>/?\\abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        using var sha256 = SHA256.Create();
+        var input = Encoding.UTF8.GetBytes(value);
+        var output = sha256.ComputeHash(input);
 
+        return output;
+    }
 
-        public static byte[] Hash(string value)
+    public static byte[] GenerateRandom(int size)
+    {
+        var randomBytes = new byte[size];
+
+        using (var rand = RandomNumberGenerator.Create())
         {
-            using var sha256 = SHA256.Create();
-            var input = Encoding.UTF8.GetBytes(value);
-            var output = sha256.ComputeHash(input);
-
-            return output;
+            rand.GetBytes(randomBytes);
         }
 
+        return randomBytes;
+    }
 
-        public static byte[] GenerateRandom(int size)
+    public static string GeneratePassword(int length)
+    {
+        var sb = new StringBuilder();
+
+        while (0 < length--)
         {
-            var randomBytes = new byte[size];
-
-            using (var rand = RandomNumberGenerator.Create())
-            {
-                rand.GetBytes(randomBytes);
-            }
-
-            return randomBytes;
+            sb.Append(_passwordChars[RandomNumberGenerator.GetInt32(_passwordChars.Length - 1)]);
         }
 
-
-        public static string GeneratePassword(int length)
-        {
-            var sb = new StringBuilder();
-
-            while (0 < length--)
-            {
-                sb.Append(_passwordChars[RandomNumberGenerator.GetInt32(_passwordChars.Length - 1)]);
-            }
-
-            return sb.ToString();
-        }
+        return sb.ToString();
     }
 }

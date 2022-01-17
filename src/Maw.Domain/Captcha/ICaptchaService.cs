@@ -1,12 +1,9 @@
 ﻿using System.Threading.Tasks;
 
+namespace Maw.Domain.Captcha;
 
-namespace Maw.Domain.Captcha
+public interface ICaptchaService
 {
-    public interface ICaptchaService
-    {
-        string SiteKey { get; }
-        Task<bool> VerifyAsync(string recaptchaResponse);
-    }
+    string SiteKey { get; }
+    Task<bool> VerifyAsync(string recaptchaResponse);
 }
-

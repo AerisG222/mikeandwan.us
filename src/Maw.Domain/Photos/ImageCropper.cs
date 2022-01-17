@@ -4,43 +4,39 @@ using Microsoft.Extensions.FileProviders;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 
+namespace Maw.Domain.Photos;
 
-namespace Maw.Domain.Photos
+public class ImageCropper
+    : IImageCropper
 {
-    public class ImageCropper
-        : IImageCropper
+    readonly IFileProvider _fileProvider;
+
+    public ImageCropper(IFileProvider fileProvider)
     {
-        readonly IFileProvider _fileProvider;
+        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+    }
 
+    public Stream CropImage(string path, int maxDimension)
+    {
+        var fi = _fileProvider.GetFileInfo(path);
 
-        public ImageCropper(IFileProvider fileProvider)
+        if (fi.Exists)
         {
-            _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+            using var image = Image.Load(fi.PhysicalPath);
+            var leftPos = (image.Width / 2) - (maxDimension / 2);
+            var topPos = (image.Height / 2) - (maxDimension / 2);
+
+            var ms = new MemoryStream();
+
+            var rect = new Rectangle(leftPos, topPos, maxDimension, maxDimension);
+            image.Mutate(x => x.Crop(rect));
+            image.SaveAsJpeg(ms);
+
+            ms.Seek(0, SeekOrigin.Begin);
+
+            return ms;
         }
 
-
-        public Stream CropImage(string path, int maxDimension)
-        {
-            var fi = _fileProvider.GetFileInfo(path);
-
-            if(fi.Exists)
-            {
-                using var image = Image.Load(fi.PhysicalPath);
-                var leftPos = (image.Width / 2) - (maxDimension / 2);
-                var topPos = (image.Height / 2) - (maxDimension / 2);
-
-                var ms = new MemoryStream();
-
-                var rect = new Rectangle(leftPos, topPos, maxDimension, maxDimension);
-                image.Mutate(x => x.Crop(rect));
-                image.SaveAsJpeg(ms);
-
-                ms.Seek(0, SeekOrigin.Begin);
-
-                return ms;
-            }
-
-            return null;
-        }
+        return null;
     }
 }

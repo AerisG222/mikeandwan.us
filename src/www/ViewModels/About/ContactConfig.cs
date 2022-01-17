@@ -1,8 +1,7 @@
-namespace MawMvcApp.ViewModels.About
+namespace MawMvcApp.ViewModels.About;
+
+public class ContactConfig
 {
-    public class ContactConfig
-    {
-        public string To { get; set; }
-        public string Subject { get; set; }
-    }
+    public string To { get; set; }
+    public string Subject { get; set; }
 }

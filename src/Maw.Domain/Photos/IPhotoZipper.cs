@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 
+namespace Maw.Domain.Photos;
 
-namespace Maw.Domain.Photos
+public interface IPhotoZipper
 {
-    public interface IPhotoZipper
-    {
-        Stream Zip(IEnumerable<Photo> photos);
-    }
+    Stream Zip(IEnumerable<Photo> photos);
 }

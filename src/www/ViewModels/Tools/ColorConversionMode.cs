@@ -1,8 +1,7 @@
-namespace MawMvcApp.ViewModels.Tools
+namespace MawMvcApp.ViewModels.Tools;
+
+public enum ColorConversionMode
 {
-    public enum ColorConversionMode
-    {
-        FromHex,
-        FromComponents
-    }
+    FromHex,
+    FromComponents
 }

@@ -1,14 +1,13 @@
-namespace MawMvcApp.ViewModels.Tools.FileSize
+namespace MawMvcApp.ViewModels.Tools.FileSize;
+
+public class Result
 {
-    public class Result {
-        public string Name { get; }
-        public double SizeInUnits { get; }
+    public string Name { get; }
+    public double SizeInUnits { get; }
 
-
-        public Result(string name, double sizeInUnits)
-        {
-            Name = name;
-            SizeInUnits = sizeInUnits;
-        }
+    public Result(string name, double sizeInUnits)
+    {
+        Name = name;
+        SizeInUnits = sizeInUnits;
     }
 }

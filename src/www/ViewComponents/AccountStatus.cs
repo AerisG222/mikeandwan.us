@@ -2,20 +2,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MawMvcApp.ViewModels.Navigation;
 
+namespace MawMvcApp.ViewComponents;
 
-namespace MawMvcApp.ViewComponents
+public class AccountStatus
+    : ViewComponent
 {
-    public class AccountStatus
-        : ViewComponent
+    public Task<IViewComponentResult> InvokeAsync(NavigationZone activeZone)
     {
-        public Task<IViewComponentResult> InvokeAsync(NavigationZone activeZone)
+        var model = new AccountStatusViewModel
         {
-            var model = new AccountStatusViewModel {
-                ActiveNavigationZone = activeZone,
-                IsAuthenticated = HttpContext.User.Identity.IsAuthenticated
-            };
+            ActiveNavigationZone = activeZone,
+            IsAuthenticated = HttpContext.User.Identity.IsAuthenticated
+        };
 
-            return Task.FromResult<IViewComponentResult>(View(model));
-        }
+        return Task.FromResult<IViewComponentResult>(View(model));
     }
 }

@@ -1,12 +1,10 @@
 using System;
 
+namespace Maw.Domain;
 
-namespace Maw.Domain
+public class Comment
 {
-    public class Comment
-    {
-        public DateTime EntryDate { get; set; }
-        public string CommentText { get; set; }
-        public string Username { get; set; }
-    }
+    public DateTime EntryDate { get; set; }
+    public string CommentText { get; set; }
+    public string Username { get; set; }
 }

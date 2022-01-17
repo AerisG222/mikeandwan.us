@@ -1,8 +1,7 @@
-namespace Maw.Domain.Upload
+namespace Maw.Domain.Upload;
+
+public enum FileOperation
 {
-    public enum FileOperation
-    {
-        Upload,
-        Delete
-    }
+    Upload,
+    Delete
 }

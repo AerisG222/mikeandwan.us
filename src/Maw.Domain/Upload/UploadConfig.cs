@@ -1,7 +1,6 @@
-namespace Maw.Domain.Upload
+namespace Maw.Domain.Upload;
+
+public class UploadConfig
 {
-    public class UploadConfig
-    {
-        public string RootDirectory { get; set; }
-    }
+    public string RootDirectory { get; set; }
 }

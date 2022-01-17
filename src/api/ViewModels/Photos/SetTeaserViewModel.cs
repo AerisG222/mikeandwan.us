@@ -1,7 +1,6 @@
-namespace MawApi.ViewModels.Photos
+namespace MawApi.ViewModels.Photos;
+
+public class SetTeaserViewModel
 {
-    public class SetTeaserViewModel
-    {
-        public int PhotoId { get; set; }
-    }
+    public int PhotoId { get; set; }
 }

@@ -8,133 +8,123 @@ using Microsoft.Extensions.Logging;
 using Maw.Domain.Upload;
 using Maw.Security;
 
+namespace MawApi.Hubs;
 
-namespace MawApi.Hubs
+[Authorize]
+[Authorize(MawPolicy.CanUpload)]
+public class UploadHub
+    : Hub
 {
-    [Authorize]
-    [Authorize(MawPolicy.CanUpload)]
-    public class UploadHub
-        : Hub
+    const string GROUP_ADMINS = "Admins";
+    const string CALL_FILE_ADDED = "FileAdded";
+    const string CALL_FILE_DELETED = "FileDeleted";
+
+    readonly ILogger _log;
+    readonly IUploadService _uploadSvc;
+
+    public UploadHub(ILogger<UploadHub> log,
+                        IUploadService uploadService)
     {
-        const string GROUP_ADMINS = "Admins";
-        const string CALL_FILE_ADDED = "FileAdded";
-        const string CALL_FILE_DELETED = "FileDeleted";
+        _log = log ?? throw new ArgumentNullException(nameof(log));
+        _uploadSvc = uploadService ?? throw new ArgumentNullException(nameof(uploadService));
+    }
 
-        readonly ILogger _log;
-        readonly IUploadService _uploadSvc;
+    public IEnumerable<UploadedFile> GetAllFiles()
+    {
+        return _uploadSvc.GetFileList(Context.User);
+    }
 
+    [HubMethodName("DeleteFiles")]
+    public async Task<IEnumerable<FileOperationResult>> DeleteFilesAsync(List<string> files)
+    {
+        var results = _uploadSvc.DeleteFiles(Context.User, files);
 
-        public UploadHub(ILogger<UploadHub> log,
-                         IUploadService uploadService)
+        foreach(var result in results)
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            _uploadSvc = uploadService ?? throw new ArgumentNullException(nameof(uploadService));
+            if(result.WasSuccessful)
+            {
+                await FileDeletedAsync(result.UploadedFile).ConfigureAwait(false);
+            }
         }
 
+        return results;
+    }
 
-        public IEnumerable<UploadedFile> GetAllFiles()
+    public override async Task OnConnectedAsync()
+    {
+        _log.LogDebug("User [{Username}] connected to {Hub}.", Context.User.Identity.Name, nameof(UploadHub));
+
+        if(Context.User.IsAdmin())
         {
-            return _uploadSvc.GetFileList(Context.User);
+            await Groups.AddToGroupAsync(Context.ConnectionId, GROUP_ADMINS).ConfigureAwait(false);
         }
 
+        await base.OnConnectedAsync().ConfigureAwait(false);
+    }
 
-        [HubMethodName("DeleteFiles")]
-        public async Task<IEnumerable<FileOperationResult>> DeleteFilesAsync(List<string> files)
+    public override async Task OnDisconnectedAsync(Exception exception)
+    {
+        _log.LogDebug("User [{Username}] disconnected from {Hub}.", Context.User.Identity.Name, nameof(UploadHub));
+
+        if(Context.User.IsAdmin())
         {
-            var results = _uploadSvc.DeleteFiles(Context.User, files);
-
-            foreach(var result in results)
-            {
-                if(result.WasSuccessful)
-                {
-                    await FileDeletedAsync(result.UploadedFile).ConfigureAwait(false);
-                }
-            }
-
-            return results;
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, GROUP_ADMINS).ConfigureAwait(false);
         }
 
+        await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
+    }
 
-        public override async Task OnConnectedAsync()
+    public static async Task FileAddedAsync(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
+    {
+        if(ctx == null)
         {
-            _log.LogDebug("User [{Username}] connected to {Hub}.", Context.User.Identity.Name, nameof(UploadHub));
-
-            if(Context.User.IsAdmin())
-            {
-                await Groups.AddToGroupAsync(Context.ConnectionId, GROUP_ADMINS).ConfigureAwait(false);
-            }
-
-            await base.OnConnectedAsync().ConfigureAwait(false);
+            throw new ArgumentNullException(nameof(ctx));
         }
 
-
-        public override async Task OnDisconnectedAsync(Exception exception)
+        if(file == null)
         {
-            _log.LogDebug("User [{Username}] disconnected from {Hub}.", Context.User.Identity.Name, nameof(UploadHub));
-
-            if(Context.User.IsAdmin())
-            {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, GROUP_ADMINS).ConfigureAwait(false);
-            }
-
-            await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
+            throw new ArgumentNullException(nameof(file));
         }
 
+        //_log.LogDebug($"Sending [{CALL_FILE_ADDED}] for file [{file.Location.RelativePath}].");
 
-        public static async Task FileAddedAsync(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
+        if(!user.IsAdmin())
         {
-            if(ctx == null)
-            {
-                throw new ArgumentNullException(nameof(ctx));
-            }
-
-            if(file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
-
-            //_log.LogDebug($"Sending [{CALL_FILE_ADDED}] for file [{file.Location.RelativePath}].");
-
-            if(!user.IsAdmin())
-            {
-                await ctx.Clients.User(file.Location.Username).SendAsync(CALL_FILE_ADDED, file).ConfigureAwait(false);
-            }
-
-            await ctx.Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_ADDED, file).ConfigureAwait(false);
+            await ctx.Clients.User(file.Location.Username).SendAsync(CALL_FILE_ADDED, file).ConfigureAwait(false);
         }
 
+        await ctx.Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_ADDED, file).ConfigureAwait(false);
+    }
 
-        public static async Task FileDeletedAsync(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
+    public static async Task FileDeletedAsync(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
+    {
+        if(ctx == null)
         {
-            if(ctx == null)
-            {
-                throw new ArgumentNullException(nameof(ctx));
-            }
-
-            if(file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
-
-            //_log.LogDebug($"Sending [{CALL_FILE_DELETED}] for file [{file.Location.RelativePath}].");
-
-            if(!user.IsAdmin())
-            {
-                await ctx.Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
-            }
-
-            await ctx.Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
+            throw new ArgumentNullException(nameof(ctx));
         }
 
-
-        async Task FileDeletedAsync(UploadedFile file)
+        if(file == null)
         {
-            if(!Context.User.IsAdmin())
-            {
-                await Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
-            }
-
-            await Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
+            throw new ArgumentNullException(nameof(file));
         }
+
+        //_log.LogDebug($"Sending [{CALL_FILE_DELETED}] for file [{file.Location.RelativePath}].");
+
+        if(!user.IsAdmin())
+        {
+            await ctx.Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
+        }
+
+        await ctx.Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
+    }
+
+    async Task FileDeletedAsync(UploadedFile file)
+    {
+        if(!Context.User.IsAdmin())
+        {
+            await Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
+        }
+
+        await Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
     }
 }

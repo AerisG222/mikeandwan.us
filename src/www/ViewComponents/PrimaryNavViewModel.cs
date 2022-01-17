@@ -1,12 +1,11 @@
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.Navigation;
 
-namespace MawMvcApp.ViewComponents
+namespace MawMvcApp.ViewComponents;
+
+public class PrimaryNavViewModel
 {
-    public class PrimaryNavViewModel
-    {
-        public NavigationZone ActiveNavigationZone { get; set; }
-        public bool AuthorizedForAdmin { get; set; }
-        public UrlConfig UrlConfig { get; set; }
-    }
+    public NavigationZone ActiveNavigationZone { get; set; }
+    public bool AuthorizedForAdmin { get; set; }
+    public UrlConfig UrlConfig { get; set; }
 }

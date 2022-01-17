@@ -1,11 +1,8 @@
 using System.IO;
-using Microsoft.Extensions.FileProviders;
 
+namespace Maw.Domain.Photos;
 
-namespace Maw.Domain.Photos
+public interface IImageCropper
 {
-    public interface IImageCropper
-    {
-        Stream CropImage(string path, int maxDimension);
-    }
+    Stream CropImage(string path, int maxDimension);
 }

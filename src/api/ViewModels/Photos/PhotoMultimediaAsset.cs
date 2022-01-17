@@ -1,8 +1,7 @@
-namespace MawApi.ViewModels
+namespace MawApi.ViewModels;
+
+public class PhotoMultimediaAsset
+    : MultimediaAsset
 {
-    public class PhotoMultimediaAsset
-        : MultimediaAsset
-    {
-        public string DownloadUrl { get; set; }
-    }
+    public string DownloadUrl { get; set; }
 }

@@ -1,60 +1,54 @@
 using System;
 using MawApi.Models;
 
+namespace MawApi.Services;
 
-namespace MawApi.Services
+public class UrlBuilderService
 {
-    public class UrlBuilderService
+    readonly UrlConfig _cfg;
+
+    public UrlBuilderService(UrlConfig cfg)
     {
-        readonly UrlConfig _cfg;
+        _cfg = cfg ?? throw new ArgumentNullException(nameof(cfg));
+    }
 
-
-        public UrlBuilderService(UrlConfig cfg)
+    public string BuildApiUrl(string relativePath)
+    {
+        if(relativePath == null)
         {
-            _cfg = cfg ?? throw new ArgumentNullException(nameof(cfg));
+            throw new ArgumentNullException(nameof(relativePath));
         }
 
+        return BuildAbsoluteUrl(_cfg.Api, relativePath);
+    }
 
-        public string BuildApiUrl(string relativePath)
+    public string BuildWwwUrl(string relativePath)
+    {
+        if(relativePath == null)
         {
-            if(relativePath == null)
-            {
-                throw new ArgumentNullException(nameof(relativePath));
-            }
-
-            return BuildAbsoluteUrl(_cfg.Api, relativePath);
+            throw new ArgumentNullException(nameof(relativePath));
         }
 
+        return BuildAbsoluteUrl(_cfg.Www, relativePath);
+    }
 
-        public string BuildWwwUrl(string relativePath)
+    string BuildAbsoluteUrl(string host, string relativePath)
+    {
+        if(host.EndsWith('/'))
         {
-            if(relativePath == null)
-            {
-                throw new ArgumentNullException(nameof(relativePath));
-            }
-
-            return BuildAbsoluteUrl(_cfg.Www, relativePath);
-        }
-
-
-        string BuildAbsoluteUrl(string host, string relativePath)
-        {
-            if(host.EndsWith('/'))
-            {
-                if(relativePath.StartsWith('/'))
-                {
-                    relativePath = relativePath.Substring(1);
-                }
-
-                return $"{host}{relativePath}";
-            }
-
             if(relativePath.StartsWith('/'))
             {
-                return $"{host}{relativePath}";
+                relativePath = relativePath.Substring(1);
             }
 
-            return $"{host}/{relativePath}";
+            return $"{host}{relativePath}";
         }
+
+        if(relativePath.StartsWith('/'))
+        {
+            return $"{host}{relativePath}";
+        }
+
+        return $"{host}/{relativePath}";
     }
 }

@@ -1,11 +1,9 @@
 using MawMvcApp.ViewModels.Navigation;
 
+namespace MawMvcApp.ViewComponents;
 
-namespace MawMvcApp.ViewComponents
+public class AccountStatusViewModel
 {
-    public class AccountStatusViewModel
-    {
-        public NavigationZone ActiveNavigationZone { get; set; }
-        public bool IsAuthenticated { get; set; }
-    }
+    public NavigationZone ActiveNavigationZone { get; set; }
+    public bool IsAuthenticated { get; set; }
 }

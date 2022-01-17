@@ -26,204 +26,204 @@ using Maw.TagHelpers;
 using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.About;
 
+namespace MawMvcApp;
 
-namespace MawMvcApp
+public class Startup
 {
-    public class Startup
+    readonly IConfiguration _config;
+    readonly IWebHostEnvironment _env;
+
+    public Startup(IConfiguration config, IWebHostEnvironment hostingEnvironment)
     {
-        readonly IConfiguration _config;
-        readonly IWebHostEnvironment _env;
+        _env = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
+        _config = config ?? throw new ArgumentNullException(nameof(config));
+    }
 
+    public void ConfigureServices(IServiceCollection services)
+    {
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-        public Startup(IConfiguration config, IWebHostEnvironment hostingEnvironment)
-        {
-            _env = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
-            _config = config ?? throw new ArgumentNullException(nameof(config));
-        }
+        var authConfig = new AuthConfig();
+        _config.GetSection("AuthConfig").Bind(authConfig);
 
+        services
+            .Configure<ContactConfig>(_config.GetSection("ContactUs"))
+            .Configure<GmailApiEmailConfig>(_config.GetSection("Gmail"))
+            .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
+            .Configure<GoogleCaptchaConfig>(_config.GetSection("GoogleRecaptcha"))
+            .Configure<UrlConfig>(_config.GetSection("UrlConfig"))
+            .ConfigureMawTagHelpers(opts =>
+            {
+                opts.AuthUrl = AddTrailingSlash(_config["UrlConfig:Auth"]);
+                opts.WwwUrl = AddTrailingSlash(_config["UrlConfig:Www"]);
+            })
+            .AddLogging()
+            .AddHttpContextAccessor()
+            .AddResponseCompression()
+            .AddHttpClient<MawApiService>()
+            .Services
+            .AddMawDataServices(_config["Environment:DbConnectionString"])
+            .AddMawDomainServices()
+            .AddTransient<RazorViewToStringRenderer>()
+            .AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>()
+            .AddSingleton<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
+            .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
+            .AddAuthentication(opts =>
+            {
+                opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                opts.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts =>
+            {
+                opts.AccessDeniedPath = "/account/access-denied";
+                opts.LogoutPath = "/account/logout";
+                opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+            })
+            .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opts =>
+            {
+                opts.Authority = authConfig.AuthorizationUrl;
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+                opts.ClientId = authConfig.ClientId;
+                opts.ClientSecret = authConfig.Secret;
+                opts.ResponseType = "code";
 
-            var authConfig = new AuthConfig();
-            _config.GetSection("AuthConfig").Bind(authConfig);
-
-            services
-                .Configure<ContactConfig>(_config.GetSection("ContactUs"))
-                .Configure<GmailApiEmailConfig>(_config.GetSection("Gmail"))
-                .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
-                .Configure<GoogleCaptchaConfig>(_config.GetSection("GoogleRecaptcha"))
-                .Configure<UrlConfig>(_config.GetSection("UrlConfig"))
-                .ConfigureMawTagHelpers(opts => {
-                    opts.AuthUrl = AddTrailingSlash(_config["UrlConfig:Auth"]);
-                    opts.WwwUrl = AddTrailingSlash(_config["UrlConfig:Www"]);
-                })
-                .AddLogging()
-                .AddHttpContextAccessor()
-                .AddResponseCompression()
-                .AddHttpClient<MawApiService>()
-                .Services
-                .AddMawDataServices(_config["Environment:DbConnectionString"])
-                .AddMawDomainServices()
-                .AddTransient<RazorViewToStringRenderer>()
-                .AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>()
-                .AddSingleton<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
-                .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
-                .AddAuthentication(opts => {
-                    opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    opts.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-                })
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts => {
-                    opts.AccessDeniedPath = "/account/access-denied";
-                    opts.LogoutPath = "/account/logout";
-                    opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
-                })
-                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opts => {
-                    opts.Authority = authConfig.AuthorizationUrl;
-
-                    opts.ClientId = authConfig.ClientId;
-                    opts.ClientSecret = authConfig.Secret;
-                    opts.ResponseType = "code";
-
-                    opts.SaveTokens = true;
-                    opts.GetClaimsFromUserInfoEndpoint = true;
+                opts.SaveTokens = true;
+                opts.GetClaimsFromUserInfoEndpoint = true;
 
                     // core
                     opts.Scope.Add("openid");
-                    opts.Scope.Add("profile");
-                    opts.Scope.Add("offline_access");
+                opts.Scope.Add("profile");
+                opts.Scope.Add("offline_access");
 
                     // apis
                     opts.Scope.Add("maw_api");
 
                     // identity resources
                     opts.Scope.Add(JwtClaimTypes.Role);
-                    opts.Scope.Add("email");
+                opts.Scope.Add("email");
 
                     // https://github.com/IdentityServer/IdentityServer4/issues/1786
                     opts.ClaimActions.MapJsonKey("role", "role", "role");
 
-                    opts.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
-                    opts.TokenValidationParameters.RoleClaimType = JwtClaimTypes.Role;
-                })
-                .Services
-                .AddAuthorization(opts =>
-                    {
-                        MawPolicyBuilder.AddMawPolicies(opts);
-                    })
-                .AddCors(opts => {
-                    opts.AddDefaultPolicy(builder => {
-                        builder
-                            .WithOrigins(GetCorsOrigins())
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
-                    });
-                })
-                .AddControllersWithViews();
-
-                if(_env.IsDevelopment())
+                opts.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
+                opts.TokenValidationParameters.RoleClaimType = JwtClaimTypes.Role;
+            })
+            .Services
+            .AddAuthorization(opts =>
                 {
-                    services.AddMiniProfiler();
-                }
-        }
-
-
-        public void Configure(IApplicationBuilder app)
-        {
-            if (_env.IsDevelopment())
-            {
-                app
-                    .UseMiniProfiler()
-                    .UseDeveloperExceptionPage();
-
-                AddDevPathMappings(app);
-            }
-            else
-            {
-                app
-                    .UseExceptionHandler("/error/")
-                    .UseHsts(hsts => hsts.MaxAge(365 * 2).IncludeSubdomains().Preload());
-            }
-
-            app
-                .UseXContentTypeOptions()
-                .UseReferrerPolicy(opts => opts.StrictOriginWhenCrossOrigin())
-
-                .UseCors()
-
-                .UseStaticFiles(new StaticFileOptions {
-                    ContentTypeProvider = GetCustomMimeTypeProvider()
+                    MawPolicyBuilder.AddMawPolicies(opts);
                 })
-
-                .UseResponseCompression()
-                .UseNoCacheHttpHeaders()
-                // .UseXfo(xfo => xfo.Deny())  // needed for recaptcha
-                .UseXXssProtection(opts => opts.EnabledWithBlockMode())
-                .UseRedirectValidation(opts => opts.AllowedDestinations(GetAllowedRedirectUrls()))
-                .UseCsp(DefineContentSecurityPolicy)
-
-                .UseRouting()
-                .UseForwardedHeaders(new ForwardedHeadersOptions
-                    {
-                        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-                    })
-                .UseAuthentication()
-                .UseAuthorization()
-                .UseEndpoints(endpoints => {
-                    endpoints.MapControllers();
-                });
-        }
-
-
-        void ConfigureDataProtection(IServiceCollection services)
-        {
-            var dpPath = _config["DataProtection:Path"];
-
-            if(!string.IsNullOrWhiteSpace(dpPath))
+            .AddCors(opts =>
             {
-                services
-                    .AddDataProtection()
-                    .PersistKeysToFileSystem(new DirectoryInfo(dpPath));
-            }
+                opts.AddDefaultPolicy(builder =>
+                {
+                    builder
+                        .WithOrigins(GetCorsOrigins())
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            })
+            .AddControllersWithViews();
+
+        if (_env.IsDevelopment())
+        {
+            services.AddMiniProfiler();
+        }
+    }
+
+    public void Configure(IApplicationBuilder app)
+    {
+        if (_env.IsDevelopment())
+        {
+            app
+                .UseMiniProfiler()
+                .UseDeveloperExceptionPage();
+
+            AddDevPathMappings(app);
+        }
+        else
+        {
+            app
+                .UseExceptionHandler("/error/")
+                .UseHsts(hsts => hsts.MaxAge(365 * 2).IncludeSubdomains().Preload());
         }
 
+        app
+            .UseXContentTypeOptions()
+            .UseReferrerPolicy(opts => opts.StrictOriginWhenCrossOrigin())
 
-        string[] GetCorsOrigins()
+            .UseCors()
+
+            .UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = GetCustomMimeTypeProvider()
+            })
+
+            .UseResponseCompression()
+            .UseNoCacheHttpHeaders()
+            // .UseXfo(xfo => xfo.Deny())  // needed for recaptcha
+            .UseXXssProtection(opts => opts.EnabledWithBlockMode())
+            .UseRedirectValidation(opts => opts.AllowedDestinations(GetAllowedRedirectUrls()))
+            .UseCsp(DefineContentSecurityPolicy)
+
+            .UseRouting()
+            .UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            })
+            .UseAuthentication()
+            .UseAuthorization()
+            .UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+    }
+
+    void ConfigureDataProtection(IServiceCollection services)
+    {
+        var dpPath = _config["DataProtection:Path"];
+
+        if (!string.IsNullOrWhiteSpace(dpPath))
         {
-            return new string[] {
+            services
+                .AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(dpPath));
+        }
+    }
+
+    string[] GetCorsOrigins()
+    {
+        return new string[] {
                 _config["UrlConfig:Api"],
                 _config["UrlConfig:Photos"]
             };
-        }
+    }
 
-
-        string[] GetAllowedRedirectUrls()
-        {
-            return new string[] {
+    string[] GetAllowedRedirectUrls()
+    {
+        return new string[] {
                 AddTrailingSlash(_config["UrlConfig:Auth"]),
                 AddTrailingSlash(_config["UrlConfig:Files"]),
                 AddTrailingSlash(_config["UrlConfig:Photos"])
             };
-        }
+    }
 
-
-        void DefineContentSecurityPolicy(IFluentCspOptions csp)
-        {
-            var connectSources = new string[] {
+    void DefineContentSecurityPolicy(IFluentCspOptions csp)
+    {
+        var connectSources = new string[] {
                 "https://www.google-analytics.com"
             };
 
-            var fontSources = new string[] {
+        var fontSources = new string[] {
                 "https://fonts.gstatic.com",
                 "https://cdnjs.cloudflare.com"
             };
 
-            var frameSources = new string[] {
+        var frameSources = new string[] {
                 "https://www.google.com/recaptcha/"
             };
 
-            var imageSources = new string[] {
+        var imageSources = new string[] {
                 "data:",
                 "https://maps.gstatic.com",
                 "https://*.googleapis.com",
@@ -231,11 +231,11 @@ namespace MawMvcApp
                 "https://vortex.accuweather.com"
             };
 
-            var reportUris = new string[] {
+        var reportUris = new string[] {
                 "https://mikeandwanus.report-uri.com/r/d/csp/enforce"
             };
 
-            var scriptSources = new string[] {
+        var scriptSources = new string[] {
                 // bootstrap
                 "https://code.jquery.com",
                 "https://cdn.jsdelivr.net",
@@ -252,86 +252,86 @@ namespace MawMvcApp
                 "https://vortex.accuweather.com"
             };
 
-            var styleSources = new string[] {
+        var styleSources = new string[] {
                 "https://cdnjs.cloudflare.com",
                 "https://fonts.googleapis.com",
                 "https://vortex.accuweather.com"
             };
 
-            csp
-                .DefaultSources(s => s.None())
-                .BaseUris(s => s.Self())
-                .ConnectSources(s => {
-                    s.Self();
-                    s.CustomSources(connectSources);
-                })
-                .FontSources(s => s.CustomSources(fontSources))
-                .FrameSources(s => s.CustomSources(frameSources))
-                .ImageSources(s => {
-                    s.Self();
-                    s.CustomSources(imageSources);
-                })
-                .ManifestSources(s => s.Self())
-                .MediaSources(s => s.Self())
-                .ObjectSources(s => s.None())
-                .ReportUris(s => s.Uris(reportUris))
-                .ScriptSources(s => {
-                    s.Self();
-                    s.UnsafeInline();
-                    s.CustomSources(scriptSources);
-                })
-                .StyleSources(s => {
-                    s.Self();
-                    s.UnsafeInline();
-                    s.CustomSources(styleSources);
-                });
-        }
-
-
-        void AddDevPathMappings(IApplicationBuilder app)
-        {
-            AddDevPathMapping(app, "../client_apps_ng/dist/binary-clock",        "/js/binary-clock");
-            AddDevPathMapping(app, "../client_apps_ng/dist/googlemaps",          "/js/googlemaps");
-            AddDevPathMapping(app, "../client_apps_ng/dist/learning",            "/js/learning");
-            AddDevPathMapping(app, "../client_apps_ng/dist/memory",              "/js/memory");
-            AddDevPathMapping(app, "../client_apps_ng/dist/money-spin",          "/js/money-spin");
-            AddDevPathMapping(app, "../client_apps_ng/dist/weekend-countdown",   "/js/weekend-countdown");
-
-            AddDevPathMapping(app, "../client_apps/webgl_blender_model/dist", "/js/webgl_blender_model");
-            AddDevPathMapping(app, "../client_apps/webgl_cube/dist",          "/js/webgl_cube");
-            AddDevPathMapping(app, "../client_apps/webgl_shader/dist",        "/js/webgl_shader");
-            AddDevPathMapping(app, "../client_apps/webgl_text/dist",          "/js/webgl_text");
-        }
-
-
-        void AddDevPathMapping(IApplicationBuilder app, string localRelativePath, string urlPath)
-        {
-            app.UseStaticFiles(new StaticFileOptions
+        csp
+            .DefaultSources(s => s.None())
+            .BaseUris(s => s.Self())
+            .ConnectSources(s =>
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), localRelativePath)),
-                RequestPath = new PathString(urlPath),
-                ContentTypeProvider = GetCustomMimeTypeProvider()
+                s.Self();
+                s.CustomSources(connectSources);
+            })
+            .FontSources(s => s.CustomSources(fontSources))
+            .FrameSources(s => s.CustomSources(frameSources))
+            .ImageSources(s =>
+            {
+                s.Self();
+                s.CustomSources(imageSources);
+            })
+            .ManifestSources(s => s.Self())
+            .MediaSources(s => s.Self())
+            .ObjectSources(s => s.None())
+            .ReportUris(s => s.Uris(reportUris))
+            .ScriptSources(s =>
+            {
+                s.Self();
+                s.UnsafeInline();
+                s.CustomSources(scriptSources);
+            })
+            .StyleSources(s =>
+            {
+                s.Self();
+                s.UnsafeInline();
+                s.CustomSources(styleSources);
             });
-        }
+    }
 
+    void AddDevPathMappings(IApplicationBuilder app)
+    {
+        AddDevPathMapping(app, "../client_apps_ng/dist/binary-clock", "/js/binary-clock");
+        AddDevPathMapping(app, "../client_apps_ng/dist/googlemaps", "/js/googlemaps");
+        AddDevPathMapping(app, "../client_apps_ng/dist/learning", "/js/learning");
+        AddDevPathMapping(app, "../client_apps_ng/dist/memory", "/js/memory");
+        AddDevPathMapping(app, "../client_apps_ng/dist/money-spin", "/js/money-spin");
+        AddDevPathMapping(app, "../client_apps_ng/dist/weekend-countdown", "/js/weekend-countdown");
 
-        FileExtensionContentTypeProvider GetCustomMimeTypeProvider()
+        AddDevPathMapping(app, "../client_apps/webgl_blender_model/dist", "/js/webgl_blender_model");
+        AddDevPathMapping(app, "../client_apps/webgl_cube/dist", "/js/webgl_cube");
+        AddDevPathMapping(app, "../client_apps/webgl_shader/dist", "/js/webgl_shader");
+        AddDevPathMapping(app, "../client_apps/webgl_text/dist", "/js/webgl_text");
+    }
+
+    void AddDevPathMapping(IApplicationBuilder app, string localRelativePath, string urlPath)
+    {
+        app.UseStaticFiles(new StaticFileOptions
         {
-            var provider = new FileExtensionContentTypeProvider();
+            FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), localRelativePath)),
+            RequestPath = new PathString(urlPath),
+            ContentTypeProvider = GetCustomMimeTypeProvider()
+        });
+    }
 
-            provider.Mappings[".gltf"] = "model/gltf+json";
+    FileExtensionContentTypeProvider GetCustomMimeTypeProvider()
+    {
+        var provider = new FileExtensionContentTypeProvider();
 
-            return provider;
-        }
+        provider.Mappings[".gltf"] = "model/gltf+json";
 
+        return provider;
+    }
 
-        string AddTrailingSlash(string val)
+    string AddTrailingSlash(string val)
+    {
+        if (val == null)
         {
-            if(val == null) {
-                return val;
-            }
-
-            return val.EndsWith('/') ? val : $"{val}/";
+            return val;
         }
+
+        return val.EndsWith('/') ? val : $"{val}/";
     }
 }

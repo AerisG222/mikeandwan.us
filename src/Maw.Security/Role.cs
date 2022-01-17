@@ -1,11 +1,7 @@
-using System;
-using System.Security.Claims;
+namespace Maw.Security;
 
-namespace Maw.Security
+public static class Role
 {
-    public static class Role
-    {
-        public const string Admin = "admin";
-        public const string Friend = "friend";
-    }
+    public const string Admin = "admin";
+    public const string Friend = "friend";
 }

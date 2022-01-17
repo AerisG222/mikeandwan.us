@@ -1,8 +1,7 @@
-namespace Maw.Domain.Email
+namespace Maw.Domain.Email;
+
+public class GmailApiEmailConfig
 {
-    public class GmailApiEmailConfig
-    {
-        public string ApplicationName { get; set; }
-        public string FromEmailAddress { get; set; }
-    }
+    public string ApplicationName { get; set; }
+    public string FromEmailAddress { get; set; }
 }

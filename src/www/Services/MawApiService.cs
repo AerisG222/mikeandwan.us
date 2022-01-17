@@ -8,84 +8,78 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MawMvcApp.ViewModels;
 
+namespace MawMvcApp;
 
-namespace MawMvcApp
+public class MawApiService
 {
-    public class MawApiService
+    readonly ILogger _log;
+    readonly IHttpContextAccessor _httpContextAccessor;
+    readonly HttpClient _client;
+
+    public MawApiService(
+        HttpClient client,
+        IOptions<UrlConfig> urlConfig,
+        IHttpContextAccessor httpContextAccessor,
+        ILogger<MawApiService> log)
     {
-        readonly ILogger _log;
-        readonly IHttpContextAccessor _httpContextAccessor;
-        readonly HttpClient _client;
+        _client = client ?? throw new ArgumentNullException(nameof(client));
+        _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+        _log = log ?? throw new ArgumentNullException(nameof(log));
 
-
-        public MawApiService(
-            HttpClient client,
-            IOptions<UrlConfig> urlConfig,
-            IHttpContextAccessor httpContextAccessor,
-            ILogger<MawApiService> log)
+        if (urlConfig == null)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-
-            if(urlConfig == null)
-            {
-                throw new ArgumentNullException(nameof(urlConfig));
-            }
-
-            _client.BaseAddress = new Uri(urlConfig.Value.Api);
+            throw new ArgumentNullException(nameof(urlConfig));
         }
 
+        _client.BaseAddress = new Uri(urlConfig.Value.Api);
+    }
 
-        public Task<bool> ClearPhotoCacheAsync()
+    public Task<bool> ClearPhotoCacheAsync()
+    {
+        return ExecuteApiCall("admin/clear-photo-cache");
+    }
+
+    public Task<bool> ClearVideoCacheAsync()
+    {
+        return ExecuteApiCall("admin/clear-video-cache");
+    }
+
+    async Task<bool> ExecuteApiCall(string path)
+    {
+        var ctx = _httpContextAccessor.HttpContext;
+
+        if (ctx.User == null)
         {
-            return ExecuteApiCall("admin/clear-photo-cache");
+            throw new ArgumentException("Authenticated user is required");
         }
 
+        var jwt = await ctx.GetTokenAsync("access_token").ConfigureAwait(false);
 
-        public Task<bool> ClearVideoCacheAsync()
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+        try
         {
-            return ExecuteApiCall("admin/clear-video-cache");
-        }
+            using var request = new HttpRequestMessage(HttpMethod.Post, path);
+            var response = await _client.SendAsync(request).ConfigureAwait(false);
 
-
-        async Task<bool> ExecuteApiCall(string path)
-        {
-            var ctx = _httpContextAccessor.HttpContext;
-
-            if(ctx.User == null)
+            if (response.IsSuccessStatusCode)
             {
-                throw new ArgumentException("Authenticated user is required");
+                _log.LogInformation("Successfully cleared cache on API endpoint");
+
+                return true;
             }
-
-            var jwt = await ctx.GetTokenAsync("access_token").ConfigureAwait(false);
-
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-
-            try
+            else
             {
-                using var request = new HttpRequestMessage(HttpMethod.Post, path);
-                var response = await _client.SendAsync(request).ConfigureAwait(false);
-
-                if(response.IsSuccessStatusCode)
-                {
-                    _log.LogInformation("Successfully cleared cache on API endpoint");
-
-                    return true;
-                }
-                else
-                {
-                    _log.LogWarning("Failed to clear cache on API endpoint");
-
-                    return false;
-                }
-            }
-            catch(Exception ex)
-            {
-                _log.LogError(ex, "Failed to clear cache on API endpoint");
+                _log.LogWarning("Failed to clear cache on API endpoint");
 
                 return false;
             }
+        }
+        catch (Exception ex)
+        {
+            _log.LogError(ex, "Failed to clear cache on API endpoint");
+
+            return false;
         }
     }
 }

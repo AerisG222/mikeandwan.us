@@ -1,8 +1,7 @@
-namespace MawMvcApp.ViewModels
+namespace MawMvcApp.ViewModels;
+
+public static class MawConstants
 {
-    public static class MawConstants
-    {
-        public const byte MawBlogId = 1;
-        public const string HttpClientMawApi = "mawapi";
-    }
+    public const byte MawBlogId = 1;
+    public const string HttpClientMawApi = "mawapi";
 }

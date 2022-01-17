@@ -8,74 +8,68 @@ using Maw.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
+namespace MawAuth.Services;
 
-namespace MawAuth.Services
+public class IdentityServerProfileService
+        : IProfileService
 {
-    public class IdentityServerProfileService
-          : IProfileService
+    readonly UserManager<MawUser> _usrMgr;
+    readonly ILogger _log;
+
+    public IdentityServerProfileService(ILogger<IdentityServerProfileService> log, UserManager<MawUser> userManager)
     {
-        readonly UserManager<MawUser> _usrMgr;
-        readonly ILogger _log;
+        _log = log ?? throw new ArgumentNullException(nameof(log));
+        _usrMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
+    }
 
-
-        public IdentityServerProfileService(ILogger<IdentityServerProfileService> log, UserManager<MawUser> userManager)
+    public async Task GetProfileDataAsync(ProfileDataRequestContext context)
+    {
+        if (context == null)
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            _usrMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            throw new ArgumentNullException(nameof(context));
         }
 
+        _log.LogDebug("requested claims:");
 
-        public async Task GetProfileDataAsync(ProfileDataRequestContext context)
+        foreach (var c in context.RequestedClaimTypes)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            _log.LogDebug("requested claims:");
-
-            foreach (var c in context.RequestedClaimTypes)
-            {
-                _log.LogDebug("{RequestedClaimType}", c);
-            }
-
-            _log.LogDebug("src subject claims:");
-            PrintClaims(context.Subject.Claims);
-
-            var u = await _usrMgr.GetUserAsync(context.Subject).ConfigureAwait(false);
-
-            _log.LogDebug("user subject claims:");
-            PrintClaims(u?.Claims);
-
-            context.LogProfileRequest(_log);
-            context.AddRequestedClaims(u?.Claims);
-            context.LogIssuedClaims(_log);
-
-            _log.LogDebug("issued claims:");
-            PrintClaims(context.IssuedClaims);
+            _log.LogDebug("{RequestedClaimType}", c);
         }
 
+        _log.LogDebug("src subject claims:");
+        PrintClaims(context.Subject.Claims);
 
-        public virtual Task IsActiveAsync(IsActiveContext context)
+        var u = await _usrMgr.GetUserAsync(context.Subject).ConfigureAwait(false);
+
+        _log.LogDebug("user subject claims:");
+        PrintClaims(u?.Claims);
+
+        context.LogProfileRequest(_log);
+        context.AddRequestedClaims(u?.Claims);
+        context.LogIssuedClaims(_log);
+
+        _log.LogDebug("issued claims:");
+        PrintClaims(context.IssuedClaims);
+    }
+
+    public virtual Task IsActiveAsync(IsActiveContext context)
+    {
+        if (context == null)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            _log.LogDebug("IsActive called from: {Caller}", context.Caller);
-
-            context.IsActive = true;
-            return Task.CompletedTask;
+            throw new ArgumentNullException(nameof(context));
         }
 
+        _log.LogDebug("IsActive called from: {Caller}", context.Caller);
 
-        void PrintClaims(IEnumerable<Claim> claims)
+        context.IsActive = true;
+        return Task.CompletedTask;
+    }
+
+    void PrintClaims(IEnumerable<Claim> claims)
+    {
+        foreach (var c in claims)
         {
-            foreach (var c in claims)
-            {
-                _log.LogDebug("{ClaimType}: {ClaimValue}", c.Type, c.Value);
-            }
+            _log.LogDebug("{ClaimType}: {ClaimValue}", c.Type, c.Value);
         }
     }
 }

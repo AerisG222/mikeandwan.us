@@ -1,10 +1,9 @@
-﻿namespace Maw.TagHelpers
+﻿namespace Maw.TagHelpers;
+
+public enum AlertType
 {
-    public enum AlertType
-    {
-        Success,
-        Danger,
-        Info,
-        Warning
-    }
+    Success,
+    Danger,
+    Info,
+    Warning
 }

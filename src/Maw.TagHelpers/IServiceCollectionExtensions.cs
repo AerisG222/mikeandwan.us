@@ -1,25 +1,23 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 
+namespace Maw.TagHelpers;
 
-namespace Maw.TagHelpers
+public static class IServiceCollectionExtensions
 {
-    public static class IServiceCollectionExtensions
+    public static IServiceCollection ConfigureMawTagHelpers(this IServiceCollection services, Action<TagHelperConfig> configureOpts)
     {
-        public static IServiceCollection ConfigureMawTagHelpers(this IServiceCollection services, Action<TagHelperConfig> configureOpts)
+        if (configureOpts == null)
         {
-            if(configureOpts == null)
-            {
-                throw new ArgumentNullException(nameof(configureOpts));
-            }
-
-            var config = new TagHelperConfig();
-
-            configureOpts(config);
-
-            services.AddSingleton<TagHelperConfig>(config);
-
-            return services;
+            throw new ArgumentNullException(nameof(configureOpts));
         }
+
+        var config = new TagHelperConfig();
+
+        configureOpts(config);
+
+        services.AddSingleton<TagHelperConfig>(config);
+
+        return services;
     }
 }

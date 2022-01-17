@@ -1,7 +1,6 @@
-namespace MawMvcApp.ViewModels.Email
+namespace MawMvcApp.ViewModels.Email;
+
+public class BaseEmailModel
 {
-    public class BaseEmailModel
-    {
-        public string Title { get; set; }
-    }
+    public string Title { get; set; }
 }

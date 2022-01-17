@@ -7,30 +7,29 @@ using MawMvcApp.ViewModels;
 using MawMvcApp.ViewModels.Navigation;
 using Maw.Security;
 
-namespace MawMvcApp.ViewComponents
+namespace MawMvcApp.ViewComponents;
+
+public class PrimaryNav
+    : ViewComponent
 {
-    public class PrimaryNav
-        : ViewComponent
+    readonly IAuthorizationService _authzService;
+    readonly UrlConfig _urlConfig;
+
+    public PrimaryNav(IAuthorizationService authorizationService, IOptions<UrlConfig> urlConfig)
     {
-        readonly IAuthorizationService _authzService;
-        readonly UrlConfig _urlConfig;
+        _authzService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
+        _urlConfig = urlConfig?.Value ?? throw new ArgumentNullException(nameof(urlConfig));
+    }
 
-        public PrimaryNav(IAuthorizationService authorizationService, IOptions<UrlConfig> urlConfig)
+    public async Task<IViewComponentResult> InvokeAsync(NavigationZone activeZone)
+    {
+        var model = new PrimaryNavViewModel
         {
-            _authzService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
-            _urlConfig = urlConfig?.Value ?? throw new ArgumentNullException(nameof(urlConfig));
-        }
+            ActiveNavigationZone = activeZone,
+            AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawPolicy.AdminSite).ConfigureAwait(false)).Succeeded,
+            UrlConfig = _urlConfig
+        };
 
-
-        public async Task<IViewComponentResult> InvokeAsync(NavigationZone activeZone)
-        {
-            var model = new PrimaryNavViewModel {
-                ActiveNavigationZone = activeZone,
-                AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawPolicy.AdminSite).ConfigureAwait(false)).Succeeded,
-                UrlConfig = _urlConfig
-            };
-
-            return View(model);
-        }
+        return View(model);
     }
 }

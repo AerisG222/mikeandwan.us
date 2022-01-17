@@ -6,56 +6,55 @@ using Microsoft.Extensions.Logging;
 using Npgsql;
 using MawAuth.Models;
 
-namespace MawAuth.Services
+namespace MawAuth.Services;
+
+public abstract class BaseStore
 {
-    public abstract class BaseStore
+    readonly string _connString;
+
+    protected ILogger Log { get; }
+
+    protected BaseStore(StoreConfig config, ILogger log)
     {
-        readonly string _connString;
-
-        protected ILogger Log { get; }
-
-        protected BaseStore(StoreConfig config, ILogger log)
+        if (config == null)
         {
-            if (config == null)
-            {
-                throw new ArgumentNullException(nameof(config));
-            }
-
-            _connString = config.ConnectionString;
-            Log = log ?? throw new ArgumentNullException(nameof(log));
+            throw new ArgumentNullException(nameof(config));
         }
 
-        protected async Task<T> RunAsync<T>(Func<IDbConnection, Task<T>> queryData)
+        _connString = config.ConnectionString;
+        Log = log ?? throw new ArgumentNullException(nameof(log));
+    }
+
+    protected async Task<T> RunAsync<T>(Func<IDbConnection, Task<T>> queryData)
+    {
+        if(queryData == null)
         {
-            if(queryData == null)
-            {
-                throw new ArgumentNullException(nameof(queryData));
-            }
-
-            using var conn = GetConnection();
-
-            await conn.OpenAsync().ConfigureAwait(false);
-
-            return await queryData(conn).ConfigureAwait(false);
+            throw new ArgumentNullException(nameof(queryData));
         }
 
-        protected async Task RunAsync(Func<IDbConnection, Task> executeStatement)
+        using var conn = GetConnection();
+
+        await conn.OpenAsync().ConfigureAwait(false);
+
+        return await queryData(conn).ConfigureAwait(false);
+    }
+
+    protected async Task RunAsync(Func<IDbConnection, Task> executeStatement)
+    {
+        if(executeStatement == null)
         {
-            if(executeStatement == null)
-            {
-                throw new ArgumentNullException(nameof(executeStatement));
-            }
-
-            using var conn = GetConnection();
-
-            await conn.OpenAsync().ConfigureAwait(false);
-
-            await executeStatement(conn).ConfigureAwait(false);
+            throw new ArgumentNullException(nameof(executeStatement));
         }
 
-        DbConnection GetConnection()
-        {
-            return new NpgsqlConnection(_connString);
-        }
+        using var conn = GetConnection();
+
+        await conn.OpenAsync().ConfigureAwait(false);
+
+        await executeStatement(conn).ConfigureAwait(false);
+    }
+
+    DbConnection GetConnection()
+    {
+        return new NpgsqlConnection(_connString);
     }
 }

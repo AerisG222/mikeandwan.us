@@ -2,16 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
+namespace MawAuth.ViewModels.Admin;
 
-namespace MawAuth.ViewModels.Admin
+public class DeleteRoleModel
 {
-	public class DeleteRoleModel
-	{
-		[Required]
-		public string Role { get; set; }
+    [Required]
+    public string Role { get; set; }
 
-		[BindNever]
-		public IdentityResult Result { get; set; }
-	}
+    [BindNever]
+    public IdentityResult Result { get; set; }
 }
-

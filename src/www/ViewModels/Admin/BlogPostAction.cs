@@ -1,8 +1,7 @@
-namespace MawMvcApp.ViewModels.Admin
+namespace MawMvcApp.ViewModels.Admin;
+
+public enum BlogPostAction
 {
-    public enum BlogPostAction
-    {
-        Preview,
-        Save
-    }
+    Preview,
+    Save
 }

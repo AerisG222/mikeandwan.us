@@ -67,7 +67,7 @@ public class UserRepository
             throw new ArgumentException("username must not be null or empty", nameof(username));
         }
 
-        var roles = await InternalGetRolesForUserAsync(username).ConfigureAwait(false);
+        var roles = await InternalGetRolesForUserAsync(username);
 
         return roles.Select(r => r.Name);
     }
@@ -86,7 +86,7 @@ public class UserRepository
                     username = user.Username.ToLowerInvariant(),
                     hashedPassword = user.HashedPassword
                 }
-            ).ConfigureAwait(false);
+            );
 
             return result == 1;
         });
@@ -116,7 +116,7 @@ public class UserRepository
                     enableMicrosoftAuth = updatedUser.IsMicrosoftAuthEnabled,
                     enableTwitterAuth = updatedUser.IsTwitterAuthEnabled
                 }
-            ).ConfigureAwait(false);
+            );
 
             if(result != 1)
             {
@@ -228,11 +228,11 @@ public class UserRepository
             var users = await conn.QueryAsync<MawUser>(
                 "SELECT * FROM maw.get_users_in_role(@roleName);",
                 new { roleName = roleName.ToLowerInvariant() }
-            ).ConfigureAwait(false);
+            );
 
             foreach(var user in users)
             {
-                await AddRolesForUser(user).ConfigureAwait(false);
+                await AddRolesForUser(user);
             }
 
             return users;
@@ -253,7 +253,7 @@ public class UserRepository
                     name = roleName.ToLowerInvariant(),
                     description
                 }
-            ).ConfigureAwait(false);
+            );
 
             return result > 0;
         });
@@ -270,7 +270,7 @@ public class UserRepository
             var result = await conn.QuerySingleAsync<long>(
                 "SELECT * FROM maw.remove_role(@name);",
                 new { name = roleName.ToLowerInvariant() }
-            ).ConfigureAwait(false);
+            );
 
             return result == 1;
         });
@@ -295,7 +295,7 @@ public class UserRepository
                     username = username.ToLowerInvariant(),
                     role = roleName.ToLowerInvariant()
                 }
-            ).ConfigureAwait(false);
+            );
 
             return result == 1;
         });
@@ -320,7 +320,7 @@ public class UserRepository
                     username = username.ToLowerInvariant(),
                     role = roleName.ToLowerInvariant()
                 }
-            ).ConfigureAwait(false);
+            );
 
             return result == 1;
         });
@@ -340,7 +340,7 @@ public class UserRepository
                     username = username.ToLowerInvariant(),
                     securityStamp
                 }
-            ).ConfigureAwait(false);
+            );
 
             return result == 1;
         });
@@ -371,11 +371,11 @@ public class UserRepository
                         username,
                         email
                     }
-                ).ConfigureAwait(false);
+                );
 
             if(mawUser != null)
             {
-                await AddRolesForUser(mawUser).ConfigureAwait(false);
+                await AddRolesForUser(mawUser);
             }
 
             return mawUser;
@@ -407,7 +407,7 @@ public class UserRepository
 
     async Task AddRolesForUser(MawUser user)
     {
-        var rolesResult = await InternalGetRolesForUserAsync(user.Username).ConfigureAwait(false);
+        var rolesResult = await InternalGetRolesForUserAsync(user.Username);
 
         foreach(var role in rolesResult)
         {
@@ -426,7 +426,7 @@ public class UserRepository
                 username,
                 email
             }
-        ).ConfigureAwait(false);
+        );
 
         return result == 1;
     }

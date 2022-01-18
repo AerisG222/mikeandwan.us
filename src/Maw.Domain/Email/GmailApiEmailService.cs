@@ -50,11 +50,11 @@ public class GmailApiEmailService
 
         var msg = BuildMessage(recipient, from, subject, body, isHtml);
 
-        using var svc = await GetService().ConfigureAwait(false);
+        using var svc = await GetService();
 
         var req = svc.Users.Messages.Send(msg, "me");
 
-        var result = await req.ExecuteAsync().ConfigureAwait(false);
+        var result = await req.ExecuteAsync();
     }
 
     static Message BuildMessage(string recipient, string from, string subject, string body, bool isHtml)
@@ -98,7 +98,7 @@ public class GmailApiEmailService
 
     async Task<GmailService> GetService()
     {
-        var cred = await GoogleCredential.GetApplicationDefaultAsync().ConfigureAwait(false);
+        var cred = await GoogleCredential.GetApplicationDefaultAsync();
 
         cred = cred.CreateScoped(Scopes)
                    .CreateWithUser(_config.FromEmailAddress);

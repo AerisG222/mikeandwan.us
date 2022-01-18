@@ -36,7 +36,7 @@ public class PhotosController
     [ProducesResponseType(401)]
     public async Task<ActionResult<PhotoViewModel>> GetRandomPhotoAsync()
     {
-        var photo = await _svc.GetRandomAsync(User.GetAllRoles()).ConfigureAwait(false);
+        var photo = await _svc.GetRandomAsync(User.GetAllRoles());
 
         return _photoAdapter.Adapt(photo);
     }
@@ -51,7 +51,7 @@ public class PhotosController
             return BadRequest();
         }
 
-        var photos = await _svc.GetRandomAsync(count, User.GetAllRoles()).ConfigureAwait(false);
+        var photos = await _svc.GetRandomAsync(count, User.GetAllRoles());
 
         return new ApiCollectionResult<PhotoViewModel>(_photoAdapter.Adapt(photos).ToList());
     }
@@ -62,7 +62,7 @@ public class PhotosController
     [ProducesResponseType(404)]
     public async Task<ActionResult<MawApi.ViewModels.Photos.PhotoViewModel>> GetByIdAsync(int id)
     {
-        var photo = await _svc.GetPhotoAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var photo = await _svc.GetPhotoAsync(id, User.GetAllRoles());
 
         if(photo == null)
         {
@@ -95,9 +95,9 @@ public class PhotosController
 
         // TODO: handle invalid photo id?
         // TODO: remove photoId from commentViewModel?
-        await _svc.InsertCommentAsync(id, User.Identity.Name, model.Comment, User.GetAllRoles()).ConfigureAwait(false);
+        await _svc.InsertCommentAsync(id, User.Identity.Name, model.Comment, User.GetAllRoles());
 
-        return await InternalGetCommentsAsync(id).ConfigureAwait(false);
+        return await InternalGetCommentsAsync(id);
     }
 
     [HttpGet("{id}/exif")]
@@ -106,7 +106,7 @@ public class PhotosController
     [ProducesResponseType(404)]
     public async Task<ActionResult<Detail>> GetExifAsync(int id)
     {
-        var data = await _svc.GetDetailAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var data = await _svc.GetDetailAsync(id, User.GetAllRoles());
 
         if(data == null)
         {
@@ -123,7 +123,7 @@ public class PhotosController
     [ProducesResponseType(404)]
     public async Task<ActionResult<GpsDetail>> GetGpsAsync(int id)
     {
-        var gps = await _svc.GetGpsDetailAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var gps = await _svc.GetGpsDetailAsync(id, User.GetAllRoles());
 
         if(gps == null)
         {
@@ -146,9 +146,9 @@ public class PhotosController
             throw new ArgumentNullException(nameof(gps));
         }
 
-        await _svc.SetGpsOverrideAsync(id, gps, User.Identity.Name).ConfigureAwait(false);
+        await _svc.SetGpsOverrideAsync(id, gps, User.Identity.Name);
 
-        var detail = await _svc.GetGpsDetailAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var detail = await _svc.GetGpsDetailAsync(id, User.GetAllRoles());
 
         if(detail == null)
         {
@@ -164,7 +164,7 @@ public class PhotosController
     [ProducesResponseType(404)]
     public async Task<ActionResult<Rating>> GetRatingAsync(int id)
     {
-        var rating = await InternalGetRatingAsync(id).ConfigureAwait(false);
+        var rating = await InternalGetRatingAsync(id);
 
         if(rating == null)
         {
@@ -190,18 +190,18 @@ public class PhotosController
         // TODO: remove photoId from userPhotoRating?
         if(userRating.Rating < 1)
         {
-            await _svc.RemoveRatingAsync(id, User.Identity.Name, User.GetAllRoles()).ConfigureAwait(false);
+            await _svc.RemoveRatingAsync(id, User.Identity.Name, User.GetAllRoles());
         }
         else if(userRating.Rating <= 5)
         {
-            await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating, User.GetAllRoles()).ConfigureAwait(false);
+            await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating, User.GetAllRoles());
         }
         else
         {
             return BadRequest();
         }
 
-        var rating = await InternalGetRatingAsync(id).ConfigureAwait(false);
+        var rating = await InternalGetRatingAsync(id);
 
         if(rating == null)
         {
@@ -213,7 +213,7 @@ public class PhotosController
 
     async Task<ApiCollectionResult<Comment>> InternalGetCommentsAsync(int id)
     {
-        var comments = await _svc.GetCommentsAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var comments = await _svc.GetCommentsAsync(id, User.GetAllRoles());
 
         return new ApiCollectionResult<Comment>(comments.ToList());
     }

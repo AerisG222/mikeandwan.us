@@ -38,7 +38,7 @@ public class VideosController
     [HttpGet("GetMobileCategoryThumbnail/{id:int}")]
     public async Task<IActionResult> GetMobileCategoryThumbnail(short id)
     {
-        var category = await _svc.GetCategoryAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var category = await _svc.GetCategoryAsync(id, User.GetAllRoles());
 
         return GetScaledImage(category.TeaserImage.Path);
     }
@@ -46,7 +46,7 @@ public class VideosController
     [HttpGet("GetMobileVideoThumbnail/{id:int}")]
     public async Task<IActionResult> GetMobileVideoThumbnail(short id)
     {
-        var video = await _svc.GetVideoAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var video = await _svc.GetVideoAsync(id, User.GetAllRoles());
 
         return GetScaledImage(video.Thumbnail.Path);
     }

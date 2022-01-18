@@ -26,7 +26,7 @@ public class PrimaryNav
         var model = new PrimaryNavViewModel
         {
             ActiveNavigationZone = activeZone,
-            AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawPolicy.AdminSite).ConfigureAwait(false)).Succeeded,
+            AuthorizedForAdmin = (await _authzService.AuthorizeAsync(HttpContext.User, null, MawPolicy.AdminSite)).Succeeded,
             UrlConfig = _urlConfig
         };
 

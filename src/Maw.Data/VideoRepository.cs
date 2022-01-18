@@ -39,7 +39,7 @@ public class VideoRepository
 
     public async Task<Category> GetCategoryAsync(short categoryId, string[] roles)
     {
-        var result = await InternalGetCategoriesAsync(roles, categoryId: categoryId).ConfigureAwait(false);
+        var result = await InternalGetCategoriesAsync(roles, categoryId: categoryId);
 
         return result.FirstOrDefault();
     }
@@ -51,7 +51,7 @@ public class VideoRepository
 
     public async Task<Video> GetVideoAsync(short id, string[] roles)
     {
-        var result = await InternalGetVideosAsync(roles, videoId: id).ConfigureAwait(false);
+        var result = await InternalGetVideosAsync(roles, videoId: id);
 
         return result.FirstOrDefault();
     }
@@ -81,7 +81,7 @@ public class VideoRepository
                     videoId,
                     roles
                 }
-            ).ConfigureAwait(false);
+            );
 
             if (result == null)
             {
@@ -141,7 +141,7 @@ public class VideoRepository
                     entryDate = DateTime.Now,
                     roles
                 }
-            ).ConfigureAwait(false);
+            );
 
             if (result <= 0)
             {
@@ -165,9 +165,9 @@ public class VideoRepository
                     score = rating,
                     roles
                 }
-            ).ConfigureAwait(false);
+            );
 
-            return (await GetRatingsAsync(videoId, username, roles).ConfigureAwait(false))?.AverageRating;
+            return (await GetRatingsAsync(videoId, username, roles))?.AverageRating;
         });
     }
 
@@ -184,9 +184,9 @@ public class VideoRepository
                     score = 0,
                     roles
                 }
-            ).ConfigureAwait(false);
+            );
 
-            return (await GetRatingsAsync(videoId, username, roles).ConfigureAwait(false))?.AverageRating;
+            return (await GetRatingsAsync(videoId, username, roles))?.AverageRating;
         });
     }
 
@@ -233,7 +233,7 @@ public class VideoRepository
                     year,
                     categoryId
                 }
-            ).ConfigureAwait(false);
+            );
 
             return rows.Select(BuildCategory);
         });
@@ -251,7 +251,7 @@ public class VideoRepository
                     categoryId,
                     videoId
                 }
-            ).ConfigureAwait(false);
+            );
 
             return rows.Select(BuildVideo);
         });

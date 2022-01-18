@@ -98,14 +98,14 @@ public class VideoService
 
     public async Task SetCategoryTeaserAsync(short categoryId, int videoId)
     {
-        var count = await _repo.SetCategoryTeaserAsync(categoryId, videoId).ConfigureAwait(false);
+        var count = await _repo.SetCategoryTeaserAsync(categoryId, videoId);
 
         if (count != 1)
         {
             throw new ApplicationException("Did not update category teaser!");
         }
 
-        await ClearCacheAsync().ConfigureAwait(false);
+        await ClearCacheAsync();
     }
 
     public Task ClearCacheAsync()

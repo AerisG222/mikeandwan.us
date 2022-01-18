@@ -31,7 +31,7 @@ public class AdminController
     [ProducesResponseType(401)]
     public async Task<bool> ClearPhotoCache()
     {
-        await _photoSvc.ClearCacheAsync().ConfigureAwait(false);
+        await _photoSvc.ClearCacheAsync();
 
         return true;
     }
@@ -41,7 +41,7 @@ public class AdminController
     [ProducesResponseType(401)]
     public async Task<bool> ClearVideoCache()
     {
-        await _videoSvc.ClearCacheAsync().ConfigureAwait(false);
+        await _videoSvc.ClearCacheAsync();
 
         return true;
     }

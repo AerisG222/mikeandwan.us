@@ -37,7 +37,7 @@ public class VideoCategoriesController
     [ProducesResponseType(401)]
     public async Task<ActionResult<ApiCollectionResult<VideoCategoryViewModel>>> GetAll()
     {
-        var categories = await _svc.GetAllCategoriesAsync(User.GetAllRoles()).ConfigureAwait(false);
+        var categories = await _svc.GetAllCategoriesAsync(User.GetAllRoles());
         var result = _categoryAdapter.Adapt(categories);
 
         return new ApiCollectionResult<VideoCategoryViewModel>(result.ToList());
@@ -58,7 +58,7 @@ public class VideoCategoriesController
     [ProducesResponseType(404)]
     public async Task<ActionResult<ApiCollectionResult<MawApi.ViewModels.Videos.VideoViewModel>>> GetVideos(short id)
     {
-        var photos = await _svc.GetVideosInCategoryAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var photos = await _svc.GetVideosInCategoryAsync(id, User.GetAllRoles());
 
         if(photos == null)
         {
@@ -85,19 +85,19 @@ public class VideoCategoriesController
 
         try
         {
-            await _svc.SetCategoryTeaserAsync(id, model.VideoId).ConfigureAwait(false);
+            await _svc.SetCategoryTeaserAsync(id, model.VideoId);
         }
         catch
         {
             return BadRequest();
         }
 
-        return await GetCategoryInternalAsync(id).ConfigureAwait(false);
+        return await GetCategoryInternalAsync(id);
     }
 
     async Task<ActionResult<VideoCategoryViewModel>> GetCategoryInternalAsync(short id)
     {
-        var category = await _svc.GetCategoryAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var category = await _svc.GetCategoryAsync(id, User.GetAllRoles());
 
         if(category == null)
         {

@@ -53,14 +53,14 @@ public class MawApiService
             throw new ArgumentException("Authenticated user is required");
         }
 
-        var jwt = await ctx.GetTokenAsync("access_token").ConfigureAwait(false);
+        var jwt = await ctx.GetTokenAsync("access_token");
 
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
         try
         {
             using var request = new HttpRequestMessage(HttpMethod.Post, path);
-            var response = await _client.SendAsync(request).ConfigureAwait(false);
+            var response = await _client.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
             {

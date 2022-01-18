@@ -36,7 +36,7 @@ public class VideosController
     [ProducesResponseType(404)]
     public async Task<ActionResult<MawApi.ViewModels.Videos.VideoViewModel>> GetByIdAsync(short id)
     {
-        var video = await _svc.GetVideoAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var video = await _svc.GetVideoAsync(id, User.GetAllRoles());
 
         if (video == null)
         {
@@ -69,9 +69,9 @@ public class VideosController
 
         // TODO: handle invalid photo id?
         // TODO: remove photoId from commentViewModel?
-        await _svc.InsertCommentAsync(id, User.Identity.Name, model.Comment, User.GetAllRoles()).ConfigureAwait(false);
+        await _svc.InsertCommentAsync(id, User.Identity.Name, model.Comment, User.GetAllRoles());
 
-        return await InternalGetCommentsAsync(id).ConfigureAwait(false);
+        return await InternalGetCommentsAsync(id);
     }
 
     [HttpGet("{id}/gps")]
@@ -81,7 +81,7 @@ public class VideosController
     [ProducesResponseType(404)]
     public async Task<ActionResult<GpsDetail>> GetGpsDetailAsync(int id)
     {
-        var gps = await _svc.GetGpsDetailAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var gps = await _svc.GetGpsDetailAsync(id, User.GetAllRoles());
 
         if (gps == null)
         {
@@ -104,9 +104,9 @@ public class VideosController
             throw new ArgumentNullException(nameof(gps));
         }
 
-        await _svc.SetGpsOverrideAsync(id, gps, User.Identity.Name).ConfigureAwait(false);
+        await _svc.SetGpsOverrideAsync(id, gps, User.Identity.Name);
 
-        var detail = await _svc.GetGpsDetailAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var detail = await _svc.GetGpsDetailAsync(id, User.GetAllRoles());
 
         if (detail == null)
         {
@@ -122,7 +122,7 @@ public class VideosController
     [ProducesResponseType(404)]
     public async Task<ActionResult<Rating>> GetRatingAsync(short id)
     {
-        var rating = await InternalGetRatingAsync(id).ConfigureAwait(false);
+        var rating = await InternalGetRatingAsync(id);
 
         if (rating == null)
         {
@@ -148,18 +148,18 @@ public class VideosController
         // TODO: remove photoId from userPhotoRating?
         if (userRating.Rating < 1)
         {
-            await _svc.RemoveRatingAsync(id, User.Identity.Name, User.GetAllRoles()).ConfigureAwait(false);
+            await _svc.RemoveRatingAsync(id, User.Identity.Name, User.GetAllRoles());
         }
         else if (userRating.Rating <= 5)
         {
-            await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating, User.GetAllRoles()).ConfigureAwait(false);
+            await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating, User.GetAllRoles());
         }
         else
         {
             return BadRequest();
         }
 
-        var rating = await InternalGetRatingAsync(id).ConfigureAwait(false);
+        var rating = await InternalGetRatingAsync(id);
 
         if (rating == null)
         {
@@ -171,7 +171,7 @@ public class VideosController
 
     async Task<ApiCollectionResult<Comment>> InternalGetCommentsAsync(short id)
     {
-        var comments = await _svc.GetCommentsAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var comments = await _svc.GetCommentsAsync(id, User.GetAllRoles());
 
         return new ApiCollectionResult<Comment>(comments.ToList());
     }

@@ -80,13 +80,13 @@ public class AboutController
         ViewBag.NavigationZone = NavigationZone.About;
 
         var model = new ContactModel();
-        await TryUpdateModelAsync<ContactModel>(model).ConfigureAwait(false);
+        await TryUpdateModelAsync<ContactModel>(model);
         model.RecaptchaSiteKey = _captchaService.SiteKey;
         model.SubmitAttempted = true;
 
         if (ModelState.IsValid)
         {
-            model.IsHuman = await _captchaService.VerifyAsync(collection["g-recaptcha-response"]).ConfigureAwait(false);
+            model.IsHuman = await _captchaService.VerifyAsync(collection["g-recaptcha-response"]);
 
             if (!model.IsHuman)
             {
@@ -109,9 +109,9 @@ public class AboutController
                         Message = model.Message
                     };
 
-                    var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ContactUs.cshtml", emailModel).ConfigureAwait(false);
+                    var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ContactUs.cshtml", emailModel);
 
-                    await _emailService.SendHtmlAsync(to, from, subject, body).ConfigureAwait(false);
+                    await _emailService.SendHtmlAsync(to, from, subject, body);
 
                     model.SubmitSuccess = true;
                 }
@@ -135,7 +135,7 @@ public class AboutController
     public async Task<IActionResult> News()
     {
         ViewBag.NavigationZone = NavigationZone.About;
-        var blogs = await _blogService.GetLatestPostsAsync(MawConstants.MawBlogId, 10).ConfigureAwait(false);
+        var blogs = await _blogService.GetLatestPostsAsync(MawConstants.MawBlogId, 10);
 
         return View(blogs);
     }

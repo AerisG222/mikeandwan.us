@@ -43,7 +43,7 @@ public class UploadHub
         {
             if(result.WasSuccessful)
             {
-                await FileDeletedAsync(result.UploadedFile).ConfigureAwait(false);
+                await FileDeletedAsync(result.UploadedFile);
             }
         }
 
@@ -56,10 +56,10 @@ public class UploadHub
 
         if(Context.User.IsAdmin())
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, GROUP_ADMINS).ConfigureAwait(false);
+            await Groups.AddToGroupAsync(Context.ConnectionId, GROUP_ADMINS);
         }
 
-        await base.OnConnectedAsync().ConfigureAwait(false);
+        await base.OnConnectedAsync();
     }
 
     public override async Task OnDisconnectedAsync(Exception exception)
@@ -68,10 +68,10 @@ public class UploadHub
 
         if(Context.User.IsAdmin())
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, GROUP_ADMINS).ConfigureAwait(false);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, GROUP_ADMINS);
         }
 
-        await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
+        await base.OnDisconnectedAsync(exception);
     }
 
     public static async Task FileAddedAsync(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
@@ -90,10 +90,10 @@ public class UploadHub
 
         if(!user.IsAdmin())
         {
-            await ctx.Clients.User(file.Location.Username).SendAsync(CALL_FILE_ADDED, file).ConfigureAwait(false);
+            await ctx.Clients.User(file.Location.Username).SendAsync(CALL_FILE_ADDED, file);
         }
 
-        await ctx.Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_ADDED, file).ConfigureAwait(false);
+        await ctx.Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_ADDED, file);
     }
 
     public static async Task FileDeletedAsync(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
@@ -112,19 +112,19 @@ public class UploadHub
 
         if(!user.IsAdmin())
         {
-            await ctx.Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
+            await ctx.Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file);
         }
 
-        await ctx.Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
+        await ctx.Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_DELETED, file);
     }
 
     async Task FileDeletedAsync(UploadedFile file)
     {
         if(!Context.User.IsAdmin())
         {
-            await Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
+            await Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file);
         }
 
-        await Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_DELETED, file).ConfigureAwait(false);
+        await Clients.Group(GROUP_ADMINS).SendAsync(CALL_FILE_DELETED, file);
     }
 }

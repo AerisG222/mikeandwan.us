@@ -51,8 +51,8 @@ public class GoogleCaptchaService
 
         using var client = new HttpClient();
         using var content = new FormUrlEncodedContent(parameters);
-        var response = await client.PostAsync(URL, content).ConfigureAwait(false);
-        var val = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var response = await client.PostAsync(URL, content);
+        var val = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<GoogleCaptchaResponse>(val).success;
 
         _log.LogDebug("google recaptcha returned: {CaptchaResult}", result);

@@ -91,7 +91,7 @@ public class PrimaryNavTagHelper
         var action = Action.Replace("-", string.Empty, StringComparison.OrdinalIgnoreCase);
         var anchor = _htmlGenerator.GenerateActionLink(ViewContext, LinkText, action, Controller, null, null, null, routeValues, new { @class = "nav-link px-3" });
 
-        anchor.InnerHtml.AppendHtml(await output.GetChildContentAsync().ConfigureAwait(false));
+        anchor.InnerHtml.AppendHtml(await output.GetChildContentAsync());
         output.Content.AppendHtml(anchor);
     }
 }

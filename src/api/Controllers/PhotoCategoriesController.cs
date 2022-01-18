@@ -37,7 +37,7 @@ public class PhotoCategoriesController
     [ProducesResponseType(401)]
     public async Task<ActionResult<ApiCollectionResult<PhotoCategoryViewModel>>> GetAll()
     {
-        var categories = await _svc.GetAllCategoriesAsync(User.GetAllRoles()).ConfigureAwait(false);
+        var categories = await _svc.GetAllCategoriesAsync(User.GetAllRoles());
         var result = _categoryAdapter.Adapt(categories);
 
         return new ApiCollectionResult<PhotoCategoryViewModel>(result.ToList());
@@ -48,7 +48,7 @@ public class PhotoCategoriesController
     [ProducesResponseType(401)]
     public async Task<ActionResult<ApiCollectionResult<PhotoCategoryViewModel>>> GetRecent(short sinceId)
     {
-        var categories = await _svc.GetRecentCategoriesAsync(sinceId, User.GetAllRoles()).ConfigureAwait(false);
+        var categories = await _svc.GetRecentCategoriesAsync(sinceId, User.GetAllRoles());
         var result = _categoryAdapter.Adapt(categories);
 
         return new ApiCollectionResult<PhotoCategoryViewModel>(result.ToList());
@@ -69,7 +69,7 @@ public class PhotoCategoriesController
     [ProducesResponseType(404)]
     public async Task<ActionResult<ApiCollectionResult<MawApi.ViewModels.Photos.PhotoViewModel>>> GetPhotos(short id)
     {
-        var photos = await _svc.GetPhotosForCategoryAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var photos = await _svc.GetPhotosForCategoryAsync(id, User.GetAllRoles());
 
         if(photos == null)
         {
@@ -96,19 +96,19 @@ public class PhotoCategoriesController
 
         try
         {
-            await _svc.SetCategoryTeaserAsync(id, model.PhotoId).ConfigureAwait(false);
+            await _svc.SetCategoryTeaserAsync(id, model.PhotoId);
         }
         catch
         {
             return BadRequest();
         }
 
-        return await GetCategoryInternalAsync(id).ConfigureAwait(false);
+        return await GetCategoryInternalAsync(id);
     }
 
     async Task<ActionResult<PhotoCategoryViewModel>> GetCategoryInternalAsync(short id)
     {
-        var category = await _svc.GetCategoryAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var category = await _svc.GetCategoryAsync(id, User.GetAllRoles());
 
         if(category == null)
         {

@@ -36,14 +36,14 @@ public class BaseService
         }
 
         var normalizedKey = NormalizeKey(key);
-        var cachedValue = await _cache.GetAsync(normalizedKey).ConfigureAwait(false);
+        var cachedValue = await _cache.GetAsync(normalizedKey);
 
         if (cachedValue == null)
         {
-            var result = await func().ConfigureAwait(false);
+            var result = await func();
 
-            await SetCachedValueAsync(normalizedKey, result, slidingExpiration).ConfigureAwait(false);
-            await AddCachedKeyAsync(normalizedKey).ConfigureAwait(false);
+            await SetCachedValueAsync(normalizedKey, result, slidingExpiration);
+            await AddCachedKeyAsync(normalizedKey);
 
             return result;
         }
@@ -53,7 +53,7 @@ public class BaseService
 
     protected async Task InternalClearCacheAsync()
     {
-        var keys = await GetCachedKeysAsync().ConfigureAwait(false);
+        var keys = await GetCachedKeysAsync();
 
         if (keys == null)
         {
@@ -64,10 +64,10 @@ public class BaseService
         {
             _log.LogDebug("Removing cache entry with key: {Key}", key);
 
-            await _cache.RemoveAsync(key).ConfigureAwait(false);
+            await _cache.RemoveAsync(key);
         }
 
-        await ClearCachedKeysAsync().ConfigureAwait(false);
+        await ClearCachedKeysAsync();
     }
 
     string NormalizeKey(string key)
@@ -77,7 +77,7 @@ public class BaseService
 
     async Task<List<string>> GetCachedKeysAsync()
     {
-        var cachedValue = await _cache.GetStringAsync(BuildCachedKeysKey()).ConfigureAwait(false);
+        var cachedValue = await _cache.GetStringAsync(BuildCachedKeysKey());
 
         if (cachedValue == null)
         {
@@ -108,13 +108,13 @@ public class BaseService
 
     async Task AddCachedKeyAsync(string key)
     {
-        var keys = await GetCachedKeysAsync().ConfigureAwait(false);
+        var keys = await GetCachedKeysAsync();
 
         if (keys == null)
         {
             keys = new List<string> { key };
 
-            await SetCachedValueAsync(BuildCachedKeysKey(), keys, null).ConfigureAwait(false);
+            await SetCachedValueAsync(BuildCachedKeysKey(), keys, null);
         }
         else
         {
@@ -122,7 +122,7 @@ public class BaseService
             {
                 keys.Add(key);
 
-                await SetCachedValueAsync(BuildCachedKeysKey(), keys, null).ConfigureAwait(false);
+                await SetCachedValueAsync(BuildCachedKeysKey(), keys, null);
             }
         }
     }

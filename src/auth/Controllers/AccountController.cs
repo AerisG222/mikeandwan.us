@@ -62,7 +62,7 @@ public class AccountController
         var vm = new LoginModel()
         {
             ReturnUrl = returnUrl,
-            ExternalSchemes = await GetExternalLoginSchemes().ConfigureAwait(false)
+            ExternalSchemes = await GetExternalLoginSchemes()
         };
 
         return View(vm);
@@ -78,7 +78,7 @@ public class AccountController
         }
 
         model.WasAttempted = true;
-        model.ExternalSchemes = await GetExternalLoginSchemes().ConfigureAwait(false);
+        model.ExternalSchemes = await GetExternalLoginSchemes();
 
         if (!ModelState.IsValid)
         {
@@ -87,7 +87,7 @@ public class AccountController
             return View(model);
         }
 
-        var result = await _loginService.AuthenticateAsync(model.Username, model.Password, LOGIN_AREA_FORM).ConfigureAwait(false);
+        var result = await _loginService.AuthenticateAsync(model.Username, model.Password, LOGIN_AREA_FORM);
 
         _log.LogInformation("Login complete");
 
@@ -122,7 +122,7 @@ public class AccountController
     [HttpGet("external-login-callback")]
     public async Task<IActionResult> ExternalLoginCallback()
     {
-        var result = await HttpContext.AuthenticateAsync(Duende.IdentityServer.IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
+        var result = await HttpContext.AuthenticateAsync(Duende.IdentityServer.IdentityServerConstants.ExternalCookieAuthenticationScheme);
         var items = result?.Properties?.Items;
 
         if (result?.Succeeded != true || items == null || !items.ContainsKey("scheme"))
@@ -140,18 +140,18 @@ public class AccountController
             return View();
         }
 
-        var user = await _userMgr.FindByEmailAsync(email.Value).ConfigureAwait(false);
+        var user = await _userMgr.FindByEmailAsync(email.Value);
 
         if (user != null)
         {
             if (user.IsExternalAuthEnabled(provider))
             {
                 // now sign in the local user
-                await _signInManager.SignInAsync(user, false).ConfigureAwait(false);
-                await _loginService.LogExternalLoginAttemptAsync(email.Value, provider, true).ConfigureAwait(false);
+                await _signInManager.SignInAsync(user, false);
+                await _loginService.LogExternalLoginAttemptAsync(email.Value, provider, true);
 
                 // delete temporary cookie used during external authentication
-                await HttpContext.SignOutAsync(Duende.IdentityServer.IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
+                await HttpContext.SignOutAsync(Duende.IdentityServer.IdentityServerConstants.ExternalCookieAuthenticationScheme);
 
                 _log.LogInformation("User {Username} logged in with {Provider} provider.", user.Username, provider);
 
@@ -175,7 +175,7 @@ public class AccountController
             }
         }
 
-        await _loginService.LogExternalLoginAttemptAsync(email.Value, provider, false).ConfigureAwait(false);
+        await _loginService.LogExternalLoginAttemptAsync(email.Value, provider, false);
 
         return View();
     }
@@ -183,9 +183,9 @@ public class AccountController
     [HttpGet("logout")]
     public async Task<IActionResult> Logout(string logoutId)
     {
-        var logout = await _interaction.GetLogoutContextAsync(logoutId).ConfigureAwait(false);
+        var logout = await _interaction.GetLogoutContextAsync(logoutId);
 
-        await _signInManager.SignOutAsync().ConfigureAwait(false);
+        await _signInManager.SignOutAsync();
 
 #pragma warning disable SCS0027
         return Redirect(logout.PostLogoutRedirectUri);
@@ -211,7 +211,7 @@ public class AccountController
 
         if (ModelState.IsValid)
         {
-            var user = await _userMgr.FindByEmailAsync(model.Email).ConfigureAwait(false);
+            var user = await _userMgr.FindByEmailAsync(model.Email);
 
             if (user == null)
             {
@@ -223,10 +223,10 @@ public class AccountController
             // legacy users might not have the security stamp set.  if so, set it here, as a non-null security stamp is required for this to work
             if (string.IsNullOrEmpty(user.SecurityStamp))
             {
-                await _userMgr.UpdateSecurityStampAsync(user).ConfigureAwait(false);
+                await _userMgr.UpdateSecurityStampAsync(user);
             }
 
-            var code = await _userMgr.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
+            var code = await _userMgr.GeneratePasswordResetTokenAsync(user);
             var callbackUrl = Url.Action("ResetPassword", "Account", new { user.Email, code }, Request.Scheme);
 
             _log.LogInformation("Sending password reset email to user: {User}", user.Name);
@@ -237,9 +237,9 @@ public class AccountController
                 CallbackUrl = callbackUrl
             };
 
-            var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ResetPassword.cshtml", emailModel).ConfigureAwait(false);
+            var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ResetPassword.cshtml", emailModel);
 
-            await _emailService.SendHtmlAsync(user.Email, EmailFrom, "Reset Password for mikeandwan.us", body).ConfigureAwait(false);
+            await _emailService.SendHtmlAsync(user.Email, EmailFrom, "Reset Password for mikeandwan.us", body);
 
             model.WasSuccessful = true;
 
@@ -258,7 +258,7 @@ public class AccountController
     {
         var model = new ResetPasswordModel();
 
-        await TryUpdateModelAsync<ResetPasswordModel>(model, string.Empty, x => x.Email, x => x.Code).ConfigureAwait(false);
+        await TryUpdateModelAsync<ResetPasswordModel>(model, string.Empty, x => x.Email, x => x.Code);
         ModelState.Clear();
 
         return View(model);
@@ -277,8 +277,8 @@ public class AccountController
 
         if (ModelState.IsValid)
         {
-            var user = await _repo.GetUserByEmailAsync(model.Email).ConfigureAwait(false);
-            var result = await _userMgr.ResetPasswordAsync(user, model.Code, model.NewPassword).ConfigureAwait(false);
+            var user = await _repo.GetUserByEmailAsync(model.Email);
+            var result = await _userMgr.ResetPasswordAsync(user, model.Code, model.NewPassword);
 
             if (result.Succeeded)
             {
@@ -322,8 +322,8 @@ public class AccountController
 
         if (ModelState.IsValid)
         {
-            var user = await _repo.GetUserAsync(User.Identity.Name).ConfigureAwait(false);
-            var result = await _userMgr.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword).ConfigureAwait(false);
+            var user = await _repo.GetUserAsync(User.Identity.Name);
+            var result = await _userMgr.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 
             if (result.Succeeded)
             {
@@ -354,10 +354,10 @@ public class AccountController
     [HttpGet("edit-profile")]
     public async Task<IActionResult> EditProfile()
     {
-        ViewBag.States = await GetStateSelectListItemsAsync().ConfigureAwait(false);
-        ViewBag.Countries = await GetCountrySelectListItemsAsync().ConfigureAwait(false);
+        ViewBag.States = await GetStateSelectListItemsAsync();
+        ViewBag.Countries = await GetCountrySelectListItemsAsync();
 
-        var user = await _userMgr.FindByNameAsync(User.Identity.Name).ConfigureAwait(false);
+        var user = await _userMgr.FindByNameAsync(User.Identity.Name);
 
         var model = new ProfileModel
         {
@@ -384,15 +384,15 @@ public class AccountController
             throw new ArgumentNullException(nameof(model));
         }
 
-        ViewBag.States = await GetStateSelectListItemsAsync().ConfigureAwait(false);
-        ViewBag.Countries = await GetCountrySelectListItemsAsync().ConfigureAwait(false);
+        ViewBag.States = await GetStateSelectListItemsAsync();
+        ViewBag.Countries = await GetCountrySelectListItemsAsync();
 
         model.WasAttempted = true;
         model.Username = User.Identity.Name;
 
         if (ModelState.IsValid)
         {
-            var user = await _userMgr.FindByNameAsync(User.Identity.Name).ConfigureAwait(false);
+            var user = await _userMgr.FindByNameAsync(User.Identity.Name);
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
@@ -402,7 +402,7 @@ public class AccountController
             user.IsMicrosoftAuthEnabled = model.EnableMicrosoftAuth;
             user.IsTwitterAuthEnabled = model.EnableTwitterAuth;
 
-            await _repo.UpdateUserAsync(user).ConfigureAwait(false);
+            await _repo.UpdateUserAsync(user);
 
             model.WasUpdated = true;
         }
@@ -416,7 +416,7 @@ public class AccountController
 
     async Task<IEnumerable<SelectListItem>> GetStateSelectListItemsAsync()
     {
-        var states = await _repo.GetStatesAsync().ConfigureAwait(false);
+        var states = await _repo.GetStatesAsync();
 
         return states.Select(x => new SelectListItem
         {
@@ -427,7 +427,7 @@ public class AccountController
 
     async Task<IEnumerable<SelectListItem>> GetCountrySelectListItemsAsync()
     {
-        var countries = await _repo.GetCountriesAsync().ConfigureAwait(false);
+        var countries = await _repo.GetCountriesAsync();
 
         return countries.Select(x => new SelectListItem
         {
@@ -438,7 +438,7 @@ public class AccountController
 
     async Task<IEnumerable<ExternalLoginScheme>> GetExternalLoginSchemes()
     {
-        var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync().ConfigureAwait(false);
+        var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
 
         return schemes
             .Select(x => new ExternalLoginScheme(x))

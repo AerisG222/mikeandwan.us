@@ -19,7 +19,7 @@ public class SearchService
     {
         var opts = GetQueryOptions(roles, start);
 
-        var solrResults = await _solr.QueryAsync(new SolrQuery(query), opts).ConfigureAwait(false);
+        var solrResults = await _solr.QueryAsync(new SolrQuery(query), opts);
 
         return new SearchResults<MultimediaCategory>()
         {

@@ -39,7 +39,7 @@ public class IdentityServerProfileService
         _log.LogDebug("src subject claims:");
         PrintClaims(context.Subject.Claims);
 
-        var u = await _usrMgr.GetUserAsync(context.Subject).ConfigureAwait(false);
+        var u = await _usrMgr.GetUserAsync(context.Subject);
 
         _log.LogDebug("user subject claims:");
         PrintClaims(u?.Claims);

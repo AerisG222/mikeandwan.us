@@ -88,7 +88,7 @@ public class AdminController
                     PublishDate = model.PublishDate
                 };
 
-                await _blogSvc.AddPostAsync(post).ConfigureAwait(false);
+                await _blogSvc.AddPostAsync(post);
 
                 model.Success = true;
             }
@@ -124,8 +124,8 @@ public class AdminController
     {
         ViewBag.NavigationZone = NavigationZone.Administration;
 
-        await _photoSvc.ClearCacheAsync().ConfigureAwait(false);
-        await _apiSvc.ClearPhotoCacheAsync().ConfigureAwait(false);
+        await _photoSvc.ClearCacheAsync();
+        await _apiSvc.ClearPhotoCacheAsync();
 
         return View(true);
     }
@@ -144,8 +144,8 @@ public class AdminController
     {
         ViewBag.NavigationZone = NavigationZone.Administration;
 
-        await _videoSvc.ClearCacheAsync().ConfigureAwait(false);
-        await _apiSvc.ClearVideoCacheAsync().ConfigureAwait(false);
+        await _videoSvc.ClearCacheAsync();
+        await _apiSvc.ClearVideoCacheAsync();
 
         return View(true);
     }

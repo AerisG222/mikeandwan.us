@@ -60,9 +60,9 @@ public class SmtpEmailService
         msg.Body = builder.ToMessageBody();
 
         // http://stackoverflow.com/questions/33496290/how-to-send-email-by-using-mailkit
-        await smtp.ConnectAsync(_config.Server, _config.Port, SecureSocketOptions.StartTls).ConfigureAwait(false);
-        await smtp.AuthenticateAsync(_config.User, _config.Password).ConfigureAwait(false);
-        await smtp.SendAsync(msg).ConfigureAwait(false);
-        await smtp.DisconnectAsync(true).ConfigureAwait(false);
+        await smtp.ConnectAsync(_config.Server, _config.Port, SecureSocketOptions.StartTls);
+        await smtp.AuthenticateAsync(_config.User, _config.Password);
+        await smtp.SendAsync(msg);
+        await smtp.DisconnectAsync(true);
     }
 }

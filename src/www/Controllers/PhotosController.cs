@@ -50,7 +50,7 @@ public class PhotosController
     [HttpGet("GetMobileThumbnail/{id:int}")]
     public async Task<IActionResult> GetMobileThumbnail(short id)
     {
-        var category = await _svc.GetCategoryAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var category = await _svc.GetCategoryAsync(id, User.GetAllRoles());
         var thumbInfo = category.TeaserImage;
         var croppedImageStream = _imageCropper.CropImage(thumbInfo.Path, MOBILE_THUMB_SIZE);
 
@@ -66,7 +66,7 @@ public class PhotosController
     public async Task<IActionResult> DownloadCategory(short id)
     {
         var filename = "photos.zip";
-        var photos = await _svc.GetPhotosForCategoryAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var photos = await _svc.GetPhotosForCategoryAsync(id, User.GetAllRoles());
         var stream = _photoZipper.Zip(photos);
 
         if (stream == null)
@@ -84,7 +84,7 @@ public class PhotosController
         Log.LogDebug("Attempting to download photo with id: {PhotoId} and size: {Size}", id, size);
 
         string path;
-        var photo = await _svc.GetPhotoAsync(id, User.GetAllRoles()).ConfigureAwait(false);
+        var photo = await _svc.GetPhotoAsync(id, User.GetAllRoles());
 
         switch (size?.ToLower(CultureInfo.InvariantCulture))
         {

@@ -25,10 +25,10 @@ public class LoginService
     {
         try
         {
-            var result = await _signInManager.PasswordSignInAsync(username, password, isPersistent: false, lockoutOnFailure: false).ConfigureAwait(false);
+            var result = await _signInManager.PasswordSignInAsync(username, password, isPersistent: false, lockoutOnFailure: false);
             var activityType = result == SignInResult.Success ? (short)1 : (short)2;
 
-            await _repo.AddLoginHistoryAsync(username, activityType, loginArea).ConfigureAwait(false);
+            await _repo.AddLoginHistoryAsync(username, activityType, loginArea);
 
             if (result == SignInResult.Success)
             {

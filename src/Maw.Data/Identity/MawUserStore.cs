@@ -88,7 +88,7 @@ public class MawUserStore
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        var result = await _repo.AddUserAsync(user).ConfigureAwait(false);
+        var result = await _repo.AddUserAsync(user);
 
         if (result > 0)
         {
@@ -109,7 +109,7 @@ public class MawUserStore
             throw new ArgumentNullException(nameof(user));
         }
 
-        var success = await _repo.UpdateUserAsync(user).ConfigureAwait(false);
+        var success = await _repo.UpdateUserAsync(user);
 
         if (success)
         {
@@ -130,7 +130,7 @@ public class MawUserStore
             throw new ArgumentNullException(nameof(user));
         }
 
-        if (1 == await _repo.RemoveUserAsync(user.Username).ConfigureAwait(false))
+        if (1 == await _repo.RemoveUserAsync(user.Username))
         {
             return IdentityResult.Success;
         }
@@ -148,7 +148,7 @@ public class MawUserStore
 
         if (short.TryParse(userId, out short id))
         {
-            var user = await _repo.GetUserAsync(id).ConfigureAwait(false);
+            var user = await _repo.GetUserAsync(id);
 
             if (user == null)
             {
@@ -167,7 +167,7 @@ public class MawUserStore
 
         _log.LogInformation("attempting to find user by name: {Username}", normalizedUserName);
 
-        var user = await _repo.GetUserAsync(normalizedUserName).ConfigureAwait(false);
+        var user = await _repo.GetUserAsync(normalizedUserName);
 
         return user;
     }
@@ -289,7 +289,7 @@ public class MawUserStore
 
         _log.LogInformation("is user {Username} in role: {Role}", user.Username, roleName);
 
-        var roles = await GetRolesAsync(user, cancellationToken).ConfigureAwait(false);
+        var roles = await GetRolesAsync(user, cancellationToken);
         var role = roles.SingleOrDefault(x => string.Equals(x, roleName, StringComparison.OrdinalIgnoreCase));
 
         return role != null;
@@ -306,7 +306,7 @@ public class MawUserStore
 
         _log.LogDebug("getting users in role: {Role}", roleName);
 
-        return (await _repo.GetUsersInRoleAsync(roleName).ConfigureAwait(false)).ToList();
+        return (await _repo.GetUsersInRoleAsync(roleName)).ToList();
     }
     #endregion
 

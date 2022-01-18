@@ -35,7 +35,7 @@ public class BlogRepository
 
     public async Task<Post> GetPostAsync(short id)
     {
-        var result = await InternalGetPostsAsync(postId: id).ConfigureAwait(false);
+        var result = await InternalGetPostsAsync(postId: id);
 
         return result.FirstOrDefault();
     }
@@ -57,7 +57,7 @@ public class BlogRepository
                     title = post.Title,
                     description = post.Description,
                     publishDate = post.PublishDate
-                }).ConfigureAwait(false);
+                });
 
             if (result <= 0)
             {

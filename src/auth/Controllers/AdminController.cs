@@ -61,7 +61,7 @@ public class AdminController
     [HttpGet("manage-users")]
     public async Task<IActionResult> ManageUsers()
     {
-        var result = await _repo.GetUsersToManageAsync().ConfigureAwait(false);
+        var result = await _repo.GetUsersToManageAsync();
 
         var model = result.Select(x => new ManageUserModel
         {
@@ -78,7 +78,7 @@ public class AdminController
     [HttpGet("manage-roles")]
     public async Task<IActionResult> ManageRoles()
     {
-        return View(await _repo.GetAllRoleNamesAsync().ConfigureAwait(false));
+        return View(await _repo.GetAllRoleNamesAsync());
     }
 
     [HttpGet("create-user")]
@@ -106,13 +106,13 @@ public class AdminController
                 Email = model.Email
             };
 
-            var password = await GeneratePassword().ConfigureAwait(false);
+            var password = await GeneratePassword();
 
             model.Result = IdentityResult.Failed();
 
             try
             {
-                model.Result = await _userMgr.CreateAsync(user, password).ConfigureAwait(false);
+                model.Result = await _userMgr.CreateAsync(user, password);
 
                 if (model.Result == IdentityResult.Success)
                 {
@@ -124,9 +124,9 @@ public class AdminController
                         Password = password
                     };
 
-                    var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/CreateUser.cshtml", emailModel).ConfigureAwait(false);
+                    var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/CreateUser.cshtml", emailModel);
 
-                    await _emailSvc.SendHtmlAsync(model.Email, _emailSvc.FromAddress, "Account Created for mikeandwan.us", body).ConfigureAwait(false);
+                    await _emailSvc.SendHtmlAsync(model.Email, _emailSvc.FromAddress, "Account Created for mikeandwan.us", body);
                 }
             }
             catch (Exception ex)
@@ -173,11 +173,11 @@ public class AdminController
         {
             if (collection.Any(x => string.Equals(x.Key, "delete", StringComparison.OrdinalIgnoreCase)))
             {
-                var user = await _userMgr.FindByNameAsync(model.Username).ConfigureAwait(false);
+                var user = await _userMgr.FindByNameAsync(model.Username);
 
                 try
                 {
-                    model.Result = await _userMgr.DeleteAsync(user).ConfigureAwait(false);
+                    model.Result = await _userMgr.DeleteAsync(user);
                     return RedirectToAction(nameof(ManageUsers));
                 }
                 catch (Exception ex)
@@ -222,7 +222,7 @@ public class AdminController
                 Description = model.Description
             };
 
-            model.Result = await _roleMgr.CreateAsync(role).ConfigureAwait(false);
+            model.Result = await _roleMgr.CreateAsync(role);
         }
         else
         {
@@ -262,8 +262,8 @@ public class AdminController
         {
             if (collection.Any(x => string.Equals(x.Key, "delete", StringComparison.OrdinalIgnoreCase)))
             {
-                var r = await _roleMgr.FindByNameAsync(model.Role).ConfigureAwait(false);
-                model.Result = await _roleMgr.DeleteAsync(r).ConfigureAwait(false);
+                var r = await _roleMgr.FindByNameAsync(model.Role);
+                model.Result = await _roleMgr.DeleteAsync(r);
 
                 return RedirectToAction(nameof(ManageRoles));
             }
@@ -289,7 +289,7 @@ public class AdminController
             return RedirectToAction(nameof(Index));
         }
 
-        var user = await _userMgr.FindByNameAsync(id).ConfigureAwait(false);
+        var user = await _userMgr.FindByNameAsync(id);
 
         if(user == null)
         {
@@ -318,18 +318,18 @@ public class AdminController
 
         if (ModelState.IsValid)
         {
-            var user = await _userMgr.FindByNameAsync(model.Username).ConfigureAwait(false);
+            var user = await _userMgr.FindByNameAsync(model.Username);
 
             if (string.IsNullOrEmpty(user.SecurityStamp))
             {
-                await _userMgr.UpdateSecurityStampAsync(user).ConfigureAwait(false);
+                await _userMgr.UpdateSecurityStampAsync(user);
             }
 
             user.Email = model.Email;
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
 
-            model.Result = await _userMgr.UpdateAsync(user).ConfigureAwait(false);
+            model.Result = await _userMgr.UpdateAsync(user);
         }
         else
         {
@@ -348,14 +348,14 @@ public class AdminController
             return RedirectToAction(nameof(Index));
         }
 
-        var user = await _userMgr.FindByNameAsync(id).ConfigureAwait(false);
-        var userRoles = await _userMgr.GetRolesAsync(user).ConfigureAwait(false);
+        var user = await _userMgr.FindByNameAsync(id);
+        var userRoles = await _userMgr.GetRolesAsync(user);
 
         var model = new ManageRolesForUserModel {
             Username = id
         };
 
-        model.AllRoles.AddRange(await _repo.GetAllRoleNamesAsync().ConfigureAwait(false));
+        model.AllRoles.AddRange(await _repo.GetAllRoleNamesAsync());
         model.GrantedRoles.AddRange(userRoles);
 
         return View(model);
@@ -376,10 +376,10 @@ public class AdminController
             Username = username
         };
 
-        model.AllRoles.AddRange(await _repo.GetAllRoleNamesAsync().ConfigureAwait(false));
+        model.AllRoles.AddRange(await _repo.GetAllRoleNamesAsync());
 
-        var user = await _userMgr.FindByNameAsync(username).ConfigureAwait(false);
-        var currRoles = await _userMgr.GetRolesAsync(user).ConfigureAwait(false);
+        var user = await _userMgr.FindByNameAsync(username);
+        var currRoles = await _userMgr.GetRolesAsync(user);
         var newRoleList = new List<string>();
 
         if (!string.IsNullOrEmpty(collection["role"]))
@@ -395,7 +395,7 @@ public class AdminController
 
         foreach (var role in toRemove)
         {
-            var result = await _userMgr.RemoveFromRoleAsync(user, role).ConfigureAwait(false);
+            var result = await _userMgr.RemoveFromRoleAsync(user, role);
 
             if (!result.Succeeded)
             {
@@ -405,7 +405,7 @@ public class AdminController
 
         foreach (var role in toAdd)
         {
-            var result = await _userMgr.AddToRoleAsync(user, role).ConfigureAwait(false);
+            var result = await _userMgr.AddToRoleAsync(user, role);
 
             if (!result.Succeeded)
             {
@@ -423,8 +423,8 @@ public class AdminController
         }
 
         // after the changes, get the new membership info (we are now
-        user = await _userMgr.FindByNameAsync(username).ConfigureAwait(false);
-        currRoles = await _userMgr.GetRolesAsync(user).ConfigureAwait(false);
+        user = await _userMgr.FindByNameAsync(username);
+        currRoles = await _userMgr.GetRolesAsync(user);
         model.GrantedRoles.AddRange(currRoles);
 
         return View(model);
@@ -443,8 +443,8 @@ public class AdminController
             Role = id
         };
 
-        model.Members = (await _userMgr.GetUsersInRoleAsync(model.Role).ConfigureAwait(false)).Select(x => x.Username);
-        model.AllUsers = await _repo.GetAllUsernamesAsync().ConfigureAwait(false);
+        model.Members = (await _userMgr.GetUsersInRoleAsync(model.Role)).Select(x => x.Username);
+        model.AllUsers = await _repo.GetAllUsernamesAsync();
 
         return View(model);
     }
@@ -461,8 +461,8 @@ public class AdminController
         // this follows the same logic as ManageRolesForUser, so see that for more info
         if (ModelState.IsValid)
         {
-            var currentMembers = await _userMgr.GetUsersInRoleAsync(model.Role).ConfigureAwait(false);
-            model.AllUsers = await _repo.GetAllUsernamesAsync().ConfigureAwait(false);
+            var currentMembers = await _userMgr.GetUsersInRoleAsync(model.Role);
+            model.AllUsers = await _repo.GetAllUsernamesAsync();
 
             var toRemove = currentMembers.Where(cm => !model.NewMembers.Any(nm => string.Equals(cm.Username, nm, StringComparison.OrdinalIgnoreCase)));
             var toAdd = model.NewMembers.Where(nm => !currentMembers.Any(cm => string.Equals(cm.Username, nm, StringComparison.OrdinalIgnoreCase)));
@@ -470,8 +470,8 @@ public class AdminController
 
             foreach (var newMember in toAdd)
             {
-                var newUser = await _userMgr.FindByNameAsync(newMember).ConfigureAwait(false);
-                var result = await _userMgr.AddToRoleAsync(newUser, model.Role).ConfigureAwait(false);
+                var newUser = await _userMgr.FindByNameAsync(newMember);
+                var result = await _userMgr.AddToRoleAsync(newUser, model.Role);
 
                 if (!result.Succeeded)
                 {
@@ -482,7 +482,7 @@ public class AdminController
             foreach (var oldMember in toRemove)
             {
                 _log.LogInformation("Removing user {Username} from role {Role}", oldMember.Username, model.Role);
-                var result = await _userMgr.RemoveFromRoleAsync(oldMember, model.Role).ConfigureAwait(false);
+                var result = await _userMgr.RemoveFromRoleAsync(oldMember, model.Role);
 
                 if (!result.Succeeded)
                 {
@@ -505,7 +505,7 @@ public class AdminController
             LogValidationErrors();
         }
 
-        model.Members = (await _userMgr.GetUsersInRoleAsync(model.Role).ConfigureAwait(false)).Select(x => x.Username);
+        model.Members = (await _userMgr.GetUsersInRoleAsync(model.Role)).Select(x => x.Username);
 
         return View(model);
     }
@@ -526,7 +526,7 @@ public class AdminController
         for (int i = 0; i < 100; i++)
         {
             var password = CryptoUtils.GeneratePassword(12);
-            var isValid = await _pwdValidator.ValidateAsync(_userMgr, null, password).ConfigureAwait(false);
+            var isValid = await _pwdValidator.ValidateAsync(_userMgr, null, password);
 
             if (isValid == IdentityResult.Success)
             {

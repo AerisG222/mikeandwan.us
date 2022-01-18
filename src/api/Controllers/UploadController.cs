@@ -60,11 +60,11 @@ public class UploadController
             throw new ArgumentNullException(nameof(file));
         }
 
-        var result = await _uploadSvc.SaveFileAsync(User, file.FileName, file.OpenReadStream()).ConfigureAwait(false);
+        var result = await _uploadSvc.SaveFileAsync(User, file.FileName, file.OpenReadStream());
 
         if (result.WasSuccessful)
         {
-            await UploadHub.FileAddedAsync(_uploadHub, User, result.UploadedFile).ConfigureAwait(false);
+            await UploadHub.FileAddedAsync(_uploadHub, User, result.UploadedFile);
         }
 
         return Ok(result);
@@ -81,7 +81,7 @@ public class UploadController
         {
             if (result.WasSuccessful)
             {
-                await UploadHub.FileDeletedAsync(_uploadHub, User, result.UploadedFile).ConfigureAwait(false);
+                await UploadHub.FileDeletedAsync(_uploadHub, User, result.UploadedFile);
             }
         }
 

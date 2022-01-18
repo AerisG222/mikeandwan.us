@@ -34,9 +34,9 @@ public abstract class BaseStore
 
         using var conn = GetConnection();
 
-        await conn.OpenAsync().ConfigureAwait(false);
+        await conn.OpenAsync();
 
-        return await queryData(conn).ConfigureAwait(false);
+        return await queryData(conn);
     }
 
     protected async Task RunAsync(Func<IDbConnection, Task> executeStatement)
@@ -48,9 +48,9 @@ public abstract class BaseStore
 
         using var conn = GetConnection();
 
-        await conn.OpenAsync().ConfigureAwait(false);
+        await conn.OpenAsync();
 
-        await executeStatement(conn).ConfigureAwait(false);
+        await executeStatement(conn);
     }
 
     DbConnection GetConnection()

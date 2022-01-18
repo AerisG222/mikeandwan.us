@@ -47,7 +47,7 @@ public class PhotoRepository
 
     public async Task<Category> GetCategoryAsync(short categoryId, string[] roles)
     {
-        var result = await InternalGetCategoriesAsync(roles, categoryId: categoryId).ConfigureAwait(false);
+        var result = await InternalGetCategoriesAsync(roles, categoryId: categoryId);
 
         return result.FirstOrDefault();
     }
@@ -59,14 +59,14 @@ public class PhotoRepository
 
     public async Task<Photo> GetPhotoAsync(int photoId, string[] roles)
     {
-        var result = await InternalGetPhotosAsync(roles, photoId: photoId).ConfigureAwait(false);
+        var result = await InternalGetPhotosAsync(roles, photoId: photoId);
 
         return result.FirstOrDefault();
     }
 
     public async Task<Photo> GetRandomAsync(string[] roles)
     {
-        var results = await GetRandomAsync(1, roles).ConfigureAwait(false);
+        var results = await GetRandomAsync(1, roles);
 
         return results.First();
     }
@@ -82,7 +82,7 @@ public class PhotoRepository
                     roles,
                     count
                 }
-            ).ConfigureAwait(false);
+            );
 
             return rows.Select(BuildPhoto);
         });
@@ -142,7 +142,7 @@ public class PhotoRepository
                     photoId,
                     roles
                 }
-            ).ConfigureAwait(false);
+            );
 
             if (result == null)
             {
@@ -187,7 +187,7 @@ public class PhotoRepository
                     entryDate = DateTime.Now,
                     roles
                 }
-            ).ConfigureAwait(false);
+            );
 
             if (result <= 0)
             {
@@ -211,9 +211,9 @@ public class PhotoRepository
                     score = rating,
                     roles
                 }
-            ).ConfigureAwait(false);
+            );
 
-            return (await GetRatingsAsync(photoId, username, roles).ConfigureAwait(false))?.AverageRating;
+            return (await GetRatingsAsync(photoId, username, roles))?.AverageRating;
         });
     }
 
@@ -230,9 +230,9 @@ public class PhotoRepository
                     score = 0,
                     roles
                 }
-            ).ConfigureAwait(false);
+            );
 
-            return (await GetRatingsAsync(photoId, username, roles).ConfigureAwait(false))?.AverageRating;
+            return (await GetRatingsAsync(photoId, username, roles))?.AverageRating;
         });
     }
 
@@ -280,7 +280,7 @@ public class PhotoRepository
                     categoryId,
                     sinceCategoryId
                 }
-            ).ConfigureAwait(false);
+            );
 
             return rows.Select(BuildCategory);
         });
@@ -298,7 +298,7 @@ public class PhotoRepository
                     categoryId,
                     photoId
                 }
-            ).ConfigureAwait(false);
+            );
 
             return rows.Select(BuildPhoto);
         });

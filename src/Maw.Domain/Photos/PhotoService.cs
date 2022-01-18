@@ -118,14 +118,14 @@ public class PhotoService
 
     public async Task SetCategoryTeaserAsync(short categoryId, int photoId)
     {
-        var count = await _repo.SetCategoryTeaserAsync(categoryId, photoId).ConfigureAwait(false);
+        var count = await _repo.SetCategoryTeaserAsync(categoryId, photoId);
 
         if (count != 1)
         {
             throw new ApplicationException("Did not update category teaser!");
         }
 
-        await ClearCacheAsync().ConfigureAwait(false);
+        await ClearCacheAsync();
     }
 
     public Task ClearCacheAsync()

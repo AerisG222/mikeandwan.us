@@ -28,7 +28,7 @@ public class SearchController
     [ProducesResponseType(401)]
     public async Task<ActionResult<SearchResults<MultimediaCategory>>> SearchMultimediaCategories(string query, int start = 0)
     {
-        var results = await _svc.SearchAsync(User.GetAllRoles(), query, start).ConfigureAwait(false);
+        var results = await _svc.SearchAsync(User.GetAllRoles(), query, start);
 
         return results;
     }

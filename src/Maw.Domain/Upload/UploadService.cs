@@ -270,7 +270,7 @@ public class UploadService
         {
             try
             {
-                await stream.CopyToAsync(outputStream).ConfigureAwait(false);
+                await stream.CopyToAsync(outputStream);
 
                 result.UploadedFile = GetFileDetails(location);
                 result.WasSuccessful = true;

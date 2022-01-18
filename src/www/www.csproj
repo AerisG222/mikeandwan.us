@@ -8,7 +8,7 @@
         <DebugType>portable</DebugType>
         <DefaultItemExcludes>**/node_modules/**;$(DefaultItemExcludes)</DefaultItemExcludes>
         <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
-        <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+        <AnalysisMode>Recommended</AnalysisMode>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,18 +17,6 @@
         <PackageReference Include="IdentityModel" Version="6.0.0" />
         <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.22" />
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="AsyncFixer" Version="1.5.1">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-
-        <PackageReference Include="SecurityCodeScan.VS2019" Version="5.6.0">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>

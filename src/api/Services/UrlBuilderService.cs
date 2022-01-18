@@ -32,7 +32,7 @@ public class UrlBuilderService
         return BuildAbsoluteUrl(_cfg.Www, relativePath);
     }
 
-    string BuildAbsoluteUrl(string host, string relativePath)
+    static string BuildAbsoluteUrl(string host, string relativePath)
     {
         if(host.EndsWith('/'))
         {

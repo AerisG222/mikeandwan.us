@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.StaticFiles;
@@ -12,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
+using NSwag.Generation.AspNetCore;
 using NWebsec.Core.Common.Middleware.Options;
 using SolrNet;
 using Maw.Data;
@@ -37,16 +38,14 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var urlConfig = new UrlConfig();
-
-        _config.GetSection("UrlConfig").Bind(urlConfig);
+        var urlConfig = _config.GetSection("UrlConfig").Get<UrlConfig>();
 
         ConfigureDataProtection(services);
 
         services
             .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
             .Configure<UploadConfig>(_config.GetSection("FileUpload"))
-            .AddSingleton<UrlConfig>(urlConfig)
+            .Configure<UrlConfig>(_config.GetSection("UrlConfig"))
             .AddMawDataServices(_config["Environment:DbConnectionString"])
             .AddSolrNet<MultimediaCategory>(_config["Search:CoreUrl"])
             .AddMawDomainServices()
@@ -59,61 +58,11 @@ public class Startup
             .AddSignalR()
                 .Services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(opts => {
-                    opts.Authority = urlConfig.Auth;
-                    opts.Audience = "maw_api_resource";
-
-                    opts.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        NameClaimType = "name"
-                    };
-
-                    // https://damienbod.com/2017/10/16/securing-an-angular-signalr-client-using-jwt-tokens-with-asp-net-core-and-identityserver4/
-                    opts.Events = new JwtBearerEvents {
-                        OnMessageReceived = context =>
-                        {
-                            if (context.Request.Path.Value.StartsWith("/uploadr", true, CultureInfo.InvariantCulture) &&
-                                context.Request.Query.TryGetValue("token", out StringValues token)
-                            )
-                            {
-                                context.Token = token;
-                            }
-
-                            return Task.CompletedTask;
-                        },
-                        OnAuthenticationFailed = context =>
-                        {
-                            var te = context.Exception;
-                            return Task.CompletedTask;
-                        }
-                    };
-                })
+                .AddJwtBearer(opts => ConfigureJwtBearerOptions(opts, urlConfig))
                 .Services
-            .AddAuthorization(opts => {
-                MawPolicyBuilder.AddMawPolicies(opts);
-            })
-            .AddCors(opts => {
-                opts.AddDefaultPolicy(policy => {
-                    var origins = new string[] {
-                        urlConfig.Www,
-                        urlConfig.Photos,
-                        urlConfig.Files
-                    };
-
-                    policy.WithOrigins(origins)
-                        .WithExposedHeaders(new string[] {
-                            "Content-Disposition"
-                        })
-                        .AllowCredentials()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
-            })
-            .AddOpenApiDocument(doc => {
-                doc.DocumentName = "openapi";
-                doc.Title = "mikeandwan.us APIs";
-                doc.Description = "Full suite of APIs for interacting with data hosted at mikeandwan.us";
-            });
+            .AddAuthorization(opts => MawPolicyBuilder.AddMawPolicies(opts))
+            .AddCors(opts => ConfigureDefaultCorsPolicy(opts, urlConfig))
+            .AddOpenApiDocument(doc => ConfigureOpenApiDocumentOptions(doc));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -154,6 +103,58 @@ public class Startup
                 endpoints.MapHub<UploadHub>("/uploadr");
                 endpoints.MapControllers();
             });
+    }
+
+    static void ConfigureOpenApiDocumentOptions(AspNetCoreOpenApiDocumentGeneratorSettings doc)
+    {
+        doc.DocumentName = "openapi";
+        doc.Title = "mikeandwan.us APIs";
+        doc.Description = "Full suite of APIs for interacting with data hosted at mikeandwan.us";
+    }
+
+    static void ConfigureJwtBearerOptions(JwtBearerOptions opts, UrlConfig urlConfig)
+    {
+        opts.Authority = urlConfig.Auth;
+        opts.Audience = "maw_api_resource";
+
+        // https://damienbod.com/2017/10/16/securing-an-angular-signalr-client-using-jwt-tokens-with-asp-net-core-and-identityserver4/
+        opts.Events = new JwtBearerEvents {
+            OnMessageReceived = context =>
+            {
+                if (context.Request.Path.Value.StartsWith("/uploadr", true, CultureInfo.InvariantCulture) &&
+                    context.Request.Query.TryGetValue("token", out StringValues token)
+                )
+                {
+                    context.Token = token;
+                }
+
+                return Task.CompletedTask;
+            },
+            OnAuthenticationFailed = context =>
+            {
+                var te = context.Exception;
+                return Task.CompletedTask;
+            }
+        };
+    }
+
+    static void ConfigureDefaultCorsPolicy(CorsOptions opts, UrlConfig urlConfig)
+    {
+        opts.AddDefaultPolicy(policy => {
+            var origins = new string[] {
+                urlConfig.Www,
+                urlConfig.Photos,
+                urlConfig.Files
+            };
+
+            policy.WithOrigins(origins)
+                .WithExposedHeaders(new string[] {
+                    "Content-Disposition"
+                })
+                .AllowCredentials()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
     }
 
     void ConfigureDataProtection(IServiceCollection services)

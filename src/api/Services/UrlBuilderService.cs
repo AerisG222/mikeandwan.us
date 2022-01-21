@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Options;
 using MawApi.Models;
 
 namespace MawApi.Services;
@@ -7,9 +8,9 @@ public class UrlBuilderService
 {
     readonly UrlConfig _cfg;
 
-    public UrlBuilderService(UrlConfig cfg)
+    public UrlBuilderService(IOptions<UrlConfig> cfg)
     {
-        _cfg = cfg ?? throw new ArgumentNullException(nameof(cfg));
+        _cfg = cfg.Value ?? throw new ArgumentNullException(nameof(cfg));
     }
 
     public string BuildApiUrl(string relativePath)

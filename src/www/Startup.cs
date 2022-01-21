@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -43,8 +44,9 @@ public class Startup
     {
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-        var authConfig = new AuthConfig();
-        _config.GetSection("AuthConfig").Bind(authConfig);
+        var authConfig = _config.GetSection("AuthConfig").Get<AuthConfig>();
+
+        ConfigureDataProtection(services);
 
         services
             .Configure<ContactConfig>(_config.GetSection("ContactUs"))
@@ -61,68 +63,19 @@ public class Startup
             .AddHttpContextAccessor()
             .AddResponseCompression()
             .AddHttpClient<MawApiService>()
-            .Services
+                .Services
             .AddMawDataServices(_config["Environment:DbConnectionString"])
             .AddMawDomainServices()
             .AddTransient<RazorViewToStringRenderer>()
             .AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>()
             .AddSingleton<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
             .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
-            .AddAuthentication(opts =>
-            {
-                opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                opts.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            })
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts =>
-            {
-                opts.AccessDeniedPath = "/account/access-denied";
-                opts.LogoutPath = "/account/logout";
-                opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
-            })
-            .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opts =>
-            {
-                opts.Authority = authConfig.AuthorizationUrl;
-
-                opts.ClientId = authConfig.ClientId;
-                opts.ClientSecret = authConfig.Secret;
-                opts.ResponseType = "code";
-
-                opts.SaveTokens = true;
-                opts.GetClaimsFromUserInfoEndpoint = true;
-
-                    // core
-                    opts.Scope.Add("openid");
-                opts.Scope.Add("profile");
-                opts.Scope.Add("offline_access");
-
-                    // apis
-                    opts.Scope.Add("maw_api");
-
-                    // identity resources
-                    opts.Scope.Add(JwtClaimTypes.Role);
-                opts.Scope.Add("email");
-
-                    // https://github.com/IdentityServer/IdentityServer4/issues/1786
-                    opts.ClaimActions.MapJsonKey("role", "role", "role");
-
-                opts.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
-                opts.TokenValidationParameters.RoleClaimType = JwtClaimTypes.Role;
-            })
-            .Services
-            .AddAuthorization(opts =>
-                {
-                    MawPolicyBuilder.AddMawPolicies(opts);
-                })
-            .AddCors(opts =>
-            {
-                opts.AddDefaultPolicy(builder =>
-                {
-                    builder
-                        .WithOrigins(GetCorsOrigins())
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
-            })
+            .AddAuthentication(opts => ConfigureAuthenticationOptions(opts))
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts => ConfigureCookieOptions(opts))
+                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opts => ConfigureOidcOptions(opts, authConfig))
+                .Services
+            .AddAuthorization(opts => MawPolicyBuilder.AddMawPolicies(opts))
+            .AddCors(opts => ConfigureDefaultCorsPolicy(opts))
             .AddControllersWithViews();
 
         if (_env.IsDevelopment())
@@ -189,6 +142,60 @@ public class Startup
                 .AddDataProtection()
                 .PersistKeysToFileSystem(new DirectoryInfo(dpPath));
         }
+    }
+
+    void ConfigureAuthenticationOptions(AuthenticationOptions opts)
+    {
+        opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        opts.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+    }
+
+    void ConfigureCookieOptions(CookieAuthenticationOptions opts)
+    {
+        opts.AccessDeniedPath = "/account/access-denied";
+        opts.LogoutPath = "/account/logout";
+        opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+    }
+
+    void ConfigureOidcOptions(OpenIdConnectOptions opts, AuthConfig authConfig)
+    {
+        opts.Authority = authConfig.AuthorizationUrl;
+
+        opts.ClientId = authConfig.ClientId;
+        opts.ClientSecret = authConfig.Secret;
+        opts.ResponseType = "code";
+
+        opts.SaveTokens = true;
+        opts.GetClaimsFromUserInfoEndpoint = true;
+
+        // core
+        opts.Scope.Add("openid");
+        opts.Scope.Add("profile");
+        opts.Scope.Add("offline_access");
+
+        // apis
+        opts.Scope.Add("maw_api");
+
+        // identity resources
+        opts.Scope.Add(JwtClaimTypes.Role);
+        opts.Scope.Add("email");
+
+        // https://github.com/IdentityServer/IdentityServer4/issues/1786
+        opts.ClaimActions.MapJsonKey("role", "role", "role");
+
+        opts.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
+        opts.TokenValidationParameters.RoleClaimType = JwtClaimTypes.Role;
+    }
+
+    void ConfigureDefaultCorsPolicy(CorsOptions opts)
+    {
+        opts.AddDefaultPolicy(builder =>
+        {
+            builder
+                .WithOrigins(GetCorsOrigins())
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
     }
 
     string[] GetCorsOrigins()

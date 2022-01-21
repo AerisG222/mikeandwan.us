@@ -3,6 +3,9 @@ using System.IO;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
+using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using AspNet.Security.OAuth.GitHub;
 using Duende.IdentityServer;
 using Mvc.RenderViewToString;
 using NWebsec.Core.Common.Middleware.Options;
@@ -61,48 +65,12 @@ public class Startup
             .AddIdentity<MawUser, MawRole>()
                 .AddDefaultTokenProviders()
                 .Services
-            .ConfigureApplicationCookie(opts => {
-                opts.AccessDeniedPath = "/account/access-denied";
-                opts.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-                opts.LoginPath = "/account/login";
-                opts.LogoutPath = "/account/logout";
-            })
+            .ConfigureApplicationCookie(opts => ConfigureCookieOptions(opts))
             .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddGitHub(opts =>
-                {
-                    opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    opts.ClientId = _config["GitHub:ClientId"];
-                    opts.ClientSecret = _config["GitHub:ClientSecret"];
-                    opts.Scope.Add("user:email");
-                })
-            .AddGoogle(opts =>
-                {
-                    // https://github.com/aspnet/AspNetCore/issues/6486
-                    opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    opts.ClientId = _config["GooglePlus:ClientId"];
-                    opts.ClientSecret = _config["GooglePlus:ClientSecret"];
-                    opts.UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
-                    opts.ClaimActions.Clear();
-                    opts.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
-                    opts.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
-                    opts.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
-                    opts.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
-                    opts.ClaimActions.MapJsonKey("urn:google:profile", "link");
-                    opts.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-                })
-            .AddMicrosoftAccount(opts =>
-                {
-                    opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    opts.ClientId = _config["Microsoft:ApplicationId"];
-                    opts.ClientSecret = _config["Microsoft:Secret"];
-                })
-            .AddTwitter(opts =>
-                {
-                    opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    opts.ConsumerKey = _config["Twitter:ConsumerKey"];
-                    opts.ConsumerSecret = _config["Twitter:ConsumerSecret"];
-                    opts.RetrieveUserDetails = true;
-                })
+                .AddGitHub(opts => ConfigureGithubAuthOptions(opts))
+                .AddGoogle(opts => ConfigureGoogleAuthOptions(opts))
+                .AddMicrosoftAccount(opts => ConfigureMicrosoftAuthOptions(opts))
+                .AddTwitter(opts => ConfigureTwitterAuthOptions(opts))
                 .Services
             .AddIdentityServer(opts =>
                 {
@@ -117,10 +85,7 @@ public class Startup
                 .AddAspNetIdentity<MawUser>()
                 .AddProfileService<IdentityServerProfileService>()
                 .Services
-            .AddAuthorization(opts =>
-                {
-                    MawPolicyBuilder.AddMawPolicies(opts);
-                })
+            .AddAuthorization(opts => MawPolicyBuilder.AddMawPolicies(opts))
             .AddResponseCompression()
             .AddControllersWithViews();
     }
@@ -170,6 +135,53 @@ public class Startup
                 .AddDataProtection()
                 .PersistKeysToFileSystem(new DirectoryInfo(dpPath));
         }
+    }
+
+    void ConfigureCookieOptions(CookieAuthenticationOptions opts)
+    {
+        opts.AccessDeniedPath = "/account/access-denied";
+        opts.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        opts.LoginPath = "/account/login";
+        opts.LogoutPath = "/account/logout";
+    }
+
+    void ConfigureGithubAuthOptions(GitHubAuthenticationOptions opts)
+    {
+        opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+        opts.ClientId = _config["GitHub:ClientId"];
+        opts.ClientSecret = _config["GitHub:ClientSecret"];
+        opts.Scope.Add("user:email");
+    }
+
+    void ConfigureGoogleAuthOptions(GoogleOptions opts)
+    {
+        // https://github.com/aspnet/AspNetCore/issues/6486
+        opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+        opts.ClientId = _config["GooglePlus:ClientId"];
+        opts.ClientSecret = _config["GooglePlus:ClientSecret"];
+        opts.UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
+        opts.ClaimActions.Clear();
+        opts.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+        opts.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+        opts.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+        opts.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+        opts.ClaimActions.MapJsonKey("urn:google:profile", "link");
+        opts.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+    }
+
+    void ConfigureMicrosoftAuthOptions(MicrosoftAccountOptions opts)
+    {
+        opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+        opts.ClientId = _config["Microsoft:ApplicationId"];
+        opts.ClientSecret = _config["Microsoft:Secret"];
+    }
+
+    void ConfigureTwitterAuthOptions(TwitterOptions opts)
+    {
+        opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+        opts.ConsumerKey = _config["Twitter:ConsumerKey"];
+        opts.ConsumerSecret = _config["Twitter:ConsumerSecret"];
+        opts.RetrieveUserDetails = true;
     }
 
     string[] GetAllowedRedirectUrls()

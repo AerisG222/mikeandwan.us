@@ -246,10 +246,6 @@ public class Startup
 
     string AddTrailingSlash(string val)
     {
-        if(val == null) {
-            return val;
-        }
-
         return val.EndsWith('/') ? val : $"{val}/";
     }
 }

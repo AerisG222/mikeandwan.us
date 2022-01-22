@@ -4,6 +4,10 @@
     ViewBag.Title = "about | contact";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section scripts_head {
     <partial name="_js_GoogleRecaptcha" />
 }

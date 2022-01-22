@@ -5,6 +5,10 @@
     ViewBag.Title = "admin | delete role";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section body_head {
     <strong>Delete Role (@Model.Role)</strong>
 }

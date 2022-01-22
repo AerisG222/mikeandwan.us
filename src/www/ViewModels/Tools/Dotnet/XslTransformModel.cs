@@ -11,23 +11,23 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet;
 
 public class XslTransformModel
 {
-    private StringBuilder Errors { get; set; }
+    private readonly StringBuilder _errors = new();
 
     [Required(ErrorMessage = "Please enter the XML source")]
     [Display(Name = "XML Source")]
     [DataType(DataType.MultilineText)]
-    public string XmlSource { get; set; }
+    public string XmlSource { get; set; } = null!;
 
     [Required(ErrorMessage = "Please enter the XSLT source")]
     [Display(Name = "XSLT Source")]
     [DataType(DataType.MultilineText)]
-    public string XsltSource { get; set; }
+    public string XsltSource { get; set; } = null!;
 
     [BindNever]
     public bool AttemptedTransform { get; set; }
 
     [BindNever]
-    public string TransformResult { get; set; }
+    public string? TransformResult { get; set; }
 
     [BindNever]
     public bool HasErrors { get; set; }
@@ -37,7 +37,7 @@ public class XslTransformModel
     {
         get
         {
-            return Errors != null && Errors.Length > 0;
+            return _errors != null && _errors.Length > 0;
         }
     }
 
@@ -46,12 +46,12 @@ public class XslTransformModel
     {
         get
         {
-            if (Errors == null || Errors.Length == 0)
+            if (_errors == null || _errors.Length == 0)
             {
                 return string.Empty;
             }
 
-            return Errors.ToString();
+            return _errors.ToString();
         }
     }
 
@@ -69,27 +69,26 @@ public class XslTransformModel
         }
 
         int currErr = 0;
-        Errors = new StringBuilder();
         Stream xmlStream = StreamUtils.ConvertStringToStream(XmlSource);
         Stream xslStream = StreamUtils.ConvertStringToStream(XsltSource);
 
-        XmlReader xmlReader = null;
-        XmlReader xslReader = null;
-        MemoryStream ms = null;
-        XmlWriter xmlWriter = null;
-        TextReader tr = null;
+        XmlReader? xmlReader = null;
+        XmlReader? xslReader = null;
+        MemoryStream? ms = null;
+        XmlWriter? xmlWriter = null;
+        TextReader? tr = null;
 
         try
         {
-            XmlReaderSettings settings = new XmlReaderSettings();
+            var settings = new XmlReaderSettings();
 
             xmlReader = XmlReader.Create(xmlStream, settings);
             xslReader = XmlReader.Create(xslStream, settings);
 
-            XslCompiledTransform xslTransform = new XslCompiledTransform(true);
+            var xslTransform = new XslCompiledTransform(true);
             xslTransform.Load(xslReader);
 
-            XmlWriterSettings xmlWriterSettings = new XmlWriterSettings
+            var xmlWriterSettings = new XmlWriterSettings
             {
                 Indent = true,
                 NewLineHandling = NewLineHandling.Replace
@@ -108,27 +107,27 @@ public class XslTransformModel
         catch (XsltException ex)
         {
             currErr++;
-            Errors.Append(string.Concat("[", currErr, "] Error Executing XSLT:\n"));
-            Errors.Append(string.Concat("[", currErr, "] ", ex.Source, "\n"));
-            Errors.Append(string.Concat("[", currErr, "] Line: ", ex.LineNumber, "\n"));
-            Errors.Append(string.Concat("[", currErr, "] Position: ", ex.LinePosition, "\n"));
-            Errors.Append(string.Concat("[", currErr, "] Message: ", ex.Message, "\n\n"));
+            _errors.Append(string.Concat("[", currErr, "] Error Executing XSLT:\n"));
+            _errors.Append(string.Concat("[", currErr, "] ", ex.Source, "\n"));
+            _errors.Append(string.Concat("[", currErr, "] Line: ", ex.LineNumber, "\n"));
+            _errors.Append(string.Concat("[", currErr, "] Position: ", ex.LinePosition, "\n"));
+            _errors.Append(string.Concat("[", currErr, "] Message: ", ex.Message, "\n\n"));
         }
         catch (XmlException ex)
         {
             currErr++;
 
-            Errors.Append(string.Concat("[", currErr, "] Error Parsing XSL:\n"));
-            Errors.Append(string.Concat("[", currErr, "] ", ex.Source, "\n"));
-            Errors.Append(string.Concat("[", currErr, "] Line: ", ex.LineNumber, "\n"));
-            Errors.Append(string.Concat("[", currErr, "] Position: ", ex.LinePosition, "\n"));
-            Errors.Append(string.Concat("[", currErr, "] Message: ", ex.Message, "\n\n"));
+            _errors.Append(string.Concat("[", currErr, "] Error Parsing XSL:\n"));
+            _errors.Append(string.Concat("[", currErr, "] ", ex.Source, "\n"));
+            _errors.Append(string.Concat("[", currErr, "] Line: ", ex.LineNumber, "\n"));
+            _errors.Append(string.Concat("[", currErr, "] Position: ", ex.LinePosition, "\n"));
+            _errors.Append(string.Concat("[", currErr, "] Message: ", ex.Message, "\n\n"));
         }
         catch (Exception ex)
         {
             currErr++;
 
-            Errors.Append(string.Concat("[", currErr, "] Error Executing transform: ", ex.Message, "\n"));
+            _errors.Append(string.Concat("[", currErr, "] Error Executing transform: ", ex.Message, "\n"));
         }
         finally
         {

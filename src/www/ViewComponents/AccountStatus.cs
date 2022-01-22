@@ -12,7 +12,7 @@ public class AccountStatus
         var model = new AccountStatusViewModel
         {
             ActiveNavigationZone = activeZone,
-            IsAuthenticated = HttpContext.User.Identity.IsAuthenticated
+            IsAuthenticated = HttpContext?.User?.Identity?.IsAuthenticated ?? false
         };
 
         return Task.FromResult<IViewComponentResult>(View(model));

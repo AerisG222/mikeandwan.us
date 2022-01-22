@@ -23,7 +23,7 @@ public class BaseService
         _log = log ?? throw new ArgumentNullException(nameof(log));
     }
 
-    protected async Task<T> GetCachedValueAsync<T>(string key, Func<Task<T>> func, TimeSpan? slidingExpiration = null)
+    protected async Task<T?> GetCachedValueAsync<T>(string key, Func<Task<T>> func, TimeSpan? slidingExpiration = null)
     {
         if (string.IsNullOrEmpty(key))
         {
@@ -75,7 +75,7 @@ public class BaseService
         return $"{_cachePrefix}_{key}";
     }
 
-    async Task<List<string>> GetCachedKeysAsync()
+    async Task<List<string>?> GetCachedKeysAsync()
     {
         var cachedValue = await _cache.GetStringAsync(BuildCachedKeysKey());
 

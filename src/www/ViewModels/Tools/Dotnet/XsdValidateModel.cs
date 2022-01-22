@@ -10,13 +10,13 @@ namespace MawMvcApp.ViewModels.Tools.Dotnet;
 
 public class XsdValidateModel
 {
-    private StringBuilder Errors { get; set; }
+    private readonly StringBuilder _errors = new();
     private int CurrErr { get; set; }
 
     [Required(ErrorMessage = "Please enter the XML schema source")]
     [Display(Name = "XML Schema Source")]
     [DataType(DataType.MultilineText)]
-    public string XmlSchemaSource { get; set; }
+    public string XmlSchemaSource { get; set; } = null!;
 
     [BindNever]
     public bool ValidationAttempted { get; set; }
@@ -38,22 +38,20 @@ public class XsdValidateModel
     {
         get
         {
-            if (Errors == null || Errors.Length == 0)
+            if (_errors.Length == 0)
             {
                 return string.Empty;
             }
 
-            return Errors.ToString();
+            return _errors.ToString();
         }
     }
 
     public void ValidateSchema()
     {
         ValidationAttempted = true;
-        Errors = new StringBuilder();
-
-        Stream xsdStream = null;
-        XmlReader reader = null;
+        Stream? xsdStream = null;
+        XmlReader? reader = null;
 
         try
         {
@@ -68,19 +66,19 @@ public class XsdValidateModel
         catch (XmlSchemaException ex)
         {
             CurrErr++;
-            Errors.Append(string.Concat("[", CurrErr, "] Error Parsing XML Schema\n"));
-            Errors.Append(string.Concat("[", CurrErr, "] Line: ", ex.LineNumber, "\n"));
-            Errors.Append(string.Concat("[", CurrErr, "] Position: ", ex.LinePosition, "\n"));
-            Errors.Append(string.Concat("[", CurrErr, "] Message: ", ex.Message, "\n\n"));
+            _errors.Append(string.Concat("[", CurrErr, "] Error Parsing XML Schema\n"));
+            _errors.Append(string.Concat("[", CurrErr, "] Line: ", ex.LineNumber, "\n"));
+            _errors.Append(string.Concat("[", CurrErr, "] Position: ", ex.LinePosition, "\n"));
+            _errors.Append(string.Concat("[", CurrErr, "] Message: ", ex.Message, "\n\n"));
         }
         catch (XmlException ex)
         {
             CurrErr++;
 
-            Errors.Append(string.Concat("[", CurrErr, "] Error Validating XSD:\n"));
-            Errors.Append(string.Concat("[", CurrErr, "] Line: ", ex.LineNumber, "\n"));
-            Errors.Append(string.Concat("[", CurrErr, "] Position: ", ex.LinePosition, "\n"));
-            Errors.Append(string.Concat("[", CurrErr, "] Message: ", ex.Message, "\n\n"));
+            _errors.Append(string.Concat("[", CurrErr, "] Error Validating XSD:\n"));
+            _errors.Append(string.Concat("[", CurrErr, "] Line: ", ex.LineNumber, "\n"));
+            _errors.Append(string.Concat("[", CurrErr, "] Position: ", ex.LinePosition, "\n"));
+            _errors.Append(string.Concat("[", CurrErr, "] Message: ", ex.Message, "\n\n"));
         }
         finally
         {
@@ -95,13 +93,13 @@ public class XsdValidateModel
         }
     }
 
-    void ValidationHandler(object sender, ValidationEventArgs e)
+    void ValidationHandler(object? sender, ValidationEventArgs e)
     {
         CurrErr++;
 
-        Errors.Append(string.Concat("[", CurrErr, "] Error Validating XSD:\n"));
-        Errors.Append(string.Concat("[", CurrErr, "] Line: ", e.Exception.LineNumber, "\n"));
-        Errors.Append(string.Concat("[", CurrErr, "] Position: ", e.Exception.LinePosition, "\n"));
-        Errors.Append(string.Concat("[", CurrErr, "] Message: ", e.Exception.Message, "\n\n"));
+        _errors.Append(string.Concat("[", CurrErr, "] Error Validating XSD:\n"));
+        _errors.Append(string.Concat("[", CurrErr, "] Line: ", e.Exception.LineNumber, "\n"));
+        _errors.Append(string.Concat("[", CurrErr, "] Position: ", e.Exception.LinePosition, "\n"));
+        _errors.Append(string.Concat("[", CurrErr, "] Message: ", e.Exception.Message, "\n\n"));
     }
 }

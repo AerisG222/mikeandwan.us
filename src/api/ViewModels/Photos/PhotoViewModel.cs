@@ -9,16 +9,16 @@ public class PhotoViewModel
     public DateTime CreateDate { get; set; }
     public float? Latitude { get; set; }
     public float? Longitude { get; set; }
-    public PhotoMultimediaAsset ImageXsSq { get; set; }
-    public PhotoMultimediaAsset ImageXs { get; set; }
-    public PhotoMultimediaAsset ImageSm { get; set; }
-    public PhotoMultimediaAsset ImageMd { get; set; }
-    public PhotoMultimediaAsset ImageLg { get; set; }
-    public PhotoMultimediaAsset ImagePrt { get; set; }
-    public PhotoMultimediaAsset ImageSrc { get; set; }
-    public string Self { get; set; }
-    public string CategoryLink { get; set; }
-    public string CommentsLink { get; set; }
-    public string ExifLink { get; set; }
-    public string RatingLink { get; set; }
+    public PhotoMultimediaAsset ImageXsSq { get; set; } = null!;
+    public PhotoMultimediaAsset ImageXs { get; set; } = null!;
+    public PhotoMultimediaAsset ImageSm { get; set; } = null!;
+    public PhotoMultimediaAsset ImageMd { get; set; } = null!;
+    public PhotoMultimediaAsset ImageLg { get; set; } = null!;
+    public PhotoMultimediaAsset ImagePrt { get; set; } = null!;
+    public PhotoMultimediaAsset ImageSrc { get; set; } = null!;
+    public string Self { get; set; } = null!;
+    public string CategoryLink { get; set; } = null!;
+    public string CommentsLink { get; set; } = null!;
+    public string ExifLink { get; set; } = null!;
+    public string RatingLink { get; set; } = null!;
 }

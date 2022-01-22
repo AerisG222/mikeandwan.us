@@ -5,8 +5,14 @@ namespace Maw.Domain.Upload;
 
 public class FileLocation
 {
-    public string Username { get; set; }
-    public string Filename { get; set; }
+    public string Username { get; init; }
+    public string Filename { get; init; }
+
+    public FileLocation(string username, string filename)
+    {
+        Username = username ?? throw new ArgumentNullException(nameof(username));
+        Filename = filename ?? throw new ArgumentNullException(nameof(filename));
+    }
 
     public string RelativePath
     {
@@ -35,10 +41,6 @@ public class FileLocation
             throw new ArgumentException("Invalid file path");
         }
 
-        return new FileLocation
-        {
-            Username = parts[0],
-            Filename = parts[1]
-        };
+        return new FileLocation(parts[0], parts[1]);
     }
 }

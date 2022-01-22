@@ -4,6 +4,10 @@
     ViewBag.Title = "tools | .net path methods";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section header {
     <h1>Path Related API Examples</h1>
 }

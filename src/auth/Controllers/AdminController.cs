@@ -117,12 +117,12 @@ public class AdminController
                 if (model.Result == IdentityResult.Success)
                 {
                     var emailModel = new CreateUserEmailModel
-                    {
-                        Title = "User Account Created",
-                        Username = model.Username,
-                        FirstName = model.FirstName,
-                        Password = password
-                    };
+                    (
+                        "User Account Created",
+                        model.Username,
+                        model.FirstName,
+                        password
+                    );
 
                     var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/CreateUser.cshtml", emailModel);
 
@@ -299,9 +299,9 @@ public class AdminController
         var model = new EditProfileModel
         {
             Username = user.Username,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email
+            FirstName = user.FirstName!,
+            LastName = user.LastName!,
+            Email = user.Email!
         };
 
         return View(model);
@@ -522,11 +522,13 @@ public class AdminController
 
     async Task<string> GeneratePassword()
     {
+        var dummyUser = new MawUser();
+
         // limit to 100 tries
         for (int i = 0; i < 100; i++)
         {
             var password = CryptoUtils.GeneratePassword(12);
-            var isValid = await _pwdValidator.ValidateAsync(_userMgr, null, password);
+            var isValid = await _pwdValidator.ValidateAsync(_userMgr, dummyUser, password);
 
             if (isValid == IdentityResult.Success)
             {

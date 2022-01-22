@@ -13,10 +13,10 @@ public class RandomBytesModel
     public int Size { get; set; }
 
     [Display(Name = "Random Bytes (hex)")]
-    public string RandomBytes { get; private set; }
+    public string? RandomBytes { get; private set; }
 
     [Display(Name = "Random Bytes (base64)")]
-    public string RandomBytesBase64 { get; private set; }
+    public string? RandomBytesBase64 { get; private set; }
 
     [BindNever]
     public bool HasErrors { get; set; }

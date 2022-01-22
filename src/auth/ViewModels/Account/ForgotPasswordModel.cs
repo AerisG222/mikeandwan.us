@@ -8,7 +8,7 @@ public class ForgotPasswordModel
     [Required(ErrorMessage = "Please enter your email address")]
     [EmailAddress(ErrorMessage = "Please enter a valid email address")]
     [DataType(DataType.EmailAddress)]
-    public string Email { get; set; }
+    public string Email { get; set; } = null!;
 
     [BindNever]
     public bool WasEmailAttempted { get; set; }

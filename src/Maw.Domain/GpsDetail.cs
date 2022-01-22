@@ -2,6 +2,6 @@ namespace Maw.Domain;
 
 public class GpsDetail
 {
-    public GpsCoordinate Source { get; set; }
-    public GpsCoordinate Override { get; set; }
+    public GpsCoordinate Source { get; set; } = null!;
+    public GpsCoordinate Override { get; set; } = null!;
 }

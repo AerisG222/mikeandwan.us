@@ -4,6 +4,10 @@
     ViewBag.Title = "tools | networking | file size";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section header {
     <h1>File Size Calculator</h1>
 }

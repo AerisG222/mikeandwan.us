@@ -45,7 +45,7 @@ public class PhotoRepository
         return InternalGetCategoriesAsync(roles, sinceCategoryId: sinceId);
     }
 
-    public async Task<Category> GetCategoryAsync(short categoryId, string[] roles)
+    public async Task<Category?> GetCategoryAsync(short categoryId, string[] roles)
     {
         var result = await InternalGetCategoriesAsync(roles, categoryId: categoryId);
 
@@ -57,14 +57,14 @@ public class PhotoRepository
         return InternalGetPhotosAsync(roles, categoryId);
     }
 
-    public async Task<Photo> GetPhotoAsync(int photoId, string[] roles)
+    public async Task<Photo?> GetPhotoAsync(int photoId, string[] roles)
     {
         var result = await InternalGetPhotosAsync(roles, photoId: photoId);
 
         return result.FirstOrDefault();
     }
 
-    public async Task<Photo> GetRandomAsync(string[] roles)
+    public async Task<Photo?> GetRandomAsync(string[] roles)
     {
         var results = await GetRandomAsync(1, roles);
 
@@ -88,10 +88,10 @@ public class PhotoRepository
         });
     }
 
-    public Task<Detail> GetDetailAsync(int photoId, string[] roles)
+    public Task<Detail?> GetDetailAsync(int photoId, string[] roles)
     {
         return RunAsync(conn =>
-            conn.QuerySingleOrDefaultAsync<Detail>(
+            conn.QuerySingleOrDefaultAsync<Detail?>(
                 "SELECT * FROM photo.get_photo_metadata(@roles, @photoId);",
                 new
                 {
@@ -116,10 +116,10 @@ public class PhotoRepository
         );
     }
 
-    public Task<Rating> GetRatingsAsync(int photoId, string username, string[] roles)
+    public Task<Rating?> GetRatingsAsync(int photoId, string username, string[] roles)
     {
         return RunAsync(conn =>
-            conn.QuerySingleOrDefaultAsync<Rating>(
+            conn.QuerySingleOrDefaultAsync<Rating?>(
                 "SELECT * FROM photo.get_ratings(@photoId, @username, @roles);",
                 new
                 {
@@ -131,7 +131,7 @@ public class PhotoRepository
         );
     }
 
-    public Task<GpsDetail> GetGpsDetailAsync(int photoId, string[] roles)
+    public Task<GpsDetail?> GetGpsDetailAsync(int photoId, string[] roles)
     {
         return RunAsync(async conn =>
         {
@@ -173,7 +173,7 @@ public class PhotoRepository
         });
     }
 
-    public Task<int> InsertCommentAsync(int photoId, string username, string comment, string[] roles)
+    public Task InsertCommentAsync(int photoId, string username, string comment, string[] roles)
     {
         return RunAsync(async conn =>
         {
@@ -193,8 +193,6 @@ public class PhotoRepository
             {
                 throw new Exception("Did not save photo comment!");
             }
-
-            return result;
         });
     }
 

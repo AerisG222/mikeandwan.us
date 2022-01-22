@@ -4,6 +4,10 @@
     ViewBag.Title = "tools | html encoder / decoder";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section header {
     <h1>HTML Encoder / Decoder</h1>
 }

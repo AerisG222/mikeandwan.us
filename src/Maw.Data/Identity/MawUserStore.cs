@@ -169,7 +169,9 @@ public class MawUserStore
 
         var user = await _repo.GetUserAsync(normalizedUserName);
 
+#nullable disable
         return user;
+#nullable restore
     }
     #endregion
 
@@ -197,7 +199,9 @@ public class MawUserStore
             throw new ArgumentNullException(nameof(user));
         }
 
+#nullable disable
         return Task.FromResult(user.HashedPassword);
+#nullable restore
     }
 
     public virtual Task<bool> HasPasswordAsync(MawUser user, CancellationToken cancellationToken = default)
@@ -335,7 +339,9 @@ public class MawUserStore
             throw new ArgumentNullException(nameof(user));
         }
 
+#nullable disable
         return Task.FromResult(user.SecurityStamp);
+#nullable restore
     }
     #endregion
 
@@ -359,7 +365,9 @@ public class MawUserStore
             throw new ArgumentNullException(nameof(user));
         }
 
+#nullable disable
         return Task.FromResult(user.Email);
+#nullable restore
     }
 
     public Task<bool> GetEmailConfirmedAsync(MawUser user, CancellationToken cancellationToken)
@@ -377,7 +385,9 @@ public class MawUserStore
     {
         _log.LogDebug("finding user by email: {Email}", normalizedEmail);
 
+#nullable disable
         return _repo.GetUserByEmailAsync(normalizedEmail);
+#nullable restore
     }
 
     public Task<string> GetNormalizedEmailAsync(MawUser user, CancellationToken cancellationToken)
@@ -387,7 +397,9 @@ public class MawUserStore
             throw new ArgumentNullException(nameof(user));
         }
 
+#nullable disable
         return Task.FromResult(user.Email);
+#nullable restore
     }
 
     public Task SetNormalizedEmailAsync(MawUser user, string normalizedEmail, CancellationToken cancellationToken)

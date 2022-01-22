@@ -8,12 +8,12 @@ public class CreateRoleModel
 {
     [Required(ErrorMessage = "Please enter the name")]
     [Display(Name = "Role Name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [Required(ErrorMessage = "Please enter the description")]
     [Display(Name = "Description")]
-    public string Description { get; set; }
+    public string Description { get; set; } = null!;
 
     [BindNever]
-    public IdentityResult Result { get; set; }
+    public IdentityResult? Result { get; set; }
 }

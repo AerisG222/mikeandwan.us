@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -57,7 +58,13 @@ public static class Program
                     {
                         opts.Listen(IPAddress.Loopback, 5001, listenOptions =>
                             {
-                                var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
+                                var config = (IConfiguration?)opts.ApplicationServices.GetService(typeof(IConfiguration));
+
+                                if(config == null)
+                                {
+                                    throw new InvalidOperationException("Did not find IConfiguration in application services!");
+                                }
+
                                 var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
 
                                 listenOptions.UseHttps(config["KestrelPfxFile"], pwd);

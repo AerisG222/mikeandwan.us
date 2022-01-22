@@ -334,10 +334,7 @@ public class Startup
 
     string AddTrailingSlash(string val)
     {
-        if (val == null)
-        {
-            return val;
-        }
+        _ = val ?? throw new ArgumentNullException(nameof(val));
 
         return val.EndsWith('/') ? val : $"{val}/";
     }

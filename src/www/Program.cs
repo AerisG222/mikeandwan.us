@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using Microsoft.AspNetCore.Builder;
@@ -59,7 +60,13 @@ public static class Program
                     {
                         opts.Listen(IPAddress.Loopback, 5021, listenOptions =>
                             {
-                                var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
+                                var config = (IConfiguration?)opts.ApplicationServices.GetService(typeof(IConfiguration));
+
+                                if(config == null)
+                                {
+                                    throw new InvalidOperationException("IConfiguration not available!");
+                                }
+
                                 var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
 
                                 listenOptions.UseHttps(config["KestrelPfxFile"], pwd);

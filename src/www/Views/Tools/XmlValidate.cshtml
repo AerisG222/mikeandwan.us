@@ -4,6 +4,10 @@
     ViewBag.Title = "tools | xml validator";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section header {
     <h1>XML Validator</h1>
 }

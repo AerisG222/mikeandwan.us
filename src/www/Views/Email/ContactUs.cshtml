@@ -1,6 +1,10 @@
 @model MawMvcApp.ViewModels.Email.ContactUsEmailModel
 @{ Layout = "~/Views/Email/_Layout.cshtml"; }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 <strong><font size="4">Contact Us Form Submission</font></strong>
 
 <p/>

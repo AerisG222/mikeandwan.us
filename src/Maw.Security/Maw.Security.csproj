@@ -4,6 +4,7 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <DebugType>portable</DebugType>
         <AnalysisMode>Recommended</AnalysisMode>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>

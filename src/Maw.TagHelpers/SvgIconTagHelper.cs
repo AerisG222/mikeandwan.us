@@ -12,7 +12,7 @@ public class SvgIconTagHelper
     public SvgIcon Icon { get; set; }
 
     [HtmlAttributeNameAttribute("class")]
-    public string Klass { get; set; }
+    public string? Klass { get; set; }
 
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {

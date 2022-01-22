@@ -1,5 +1,9 @@
 ﻿@model SidebarModel
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @{
     var htmlClass = string.Equals(Model.Group, "html", StringComparison.OrdinalIgnoreCase) ? "show" : "collapse";
     var httpClass = string.Equals(Model.Group, "http", StringComparison.OrdinalIgnoreCase) ? "show" : "collapse";

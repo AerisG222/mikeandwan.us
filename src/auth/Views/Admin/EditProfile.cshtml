@@ -5,6 +5,10 @@
     ViewBag.Title = "admin | edit profile";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section body_head {
     <strong>Edit User Profile (@Model.Username)</strong>
 }

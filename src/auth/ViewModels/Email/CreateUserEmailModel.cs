@@ -1,9 +1,9 @@
 namespace MawAuth.ViewModels.Email;
 
-public class CreateUserEmailModel
-    : BaseEmailModel
-{
-    public string Username { get; set; }
-    public string Password { get; set; }
-    public string FirstName { get; set; }
-}
+public record class CreateUserEmailModel
+(
+    string Title,
+    string Username,
+    string Password,
+    string FirstName
+);

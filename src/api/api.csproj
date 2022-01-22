@@ -9,6 +9,7 @@
         <DefaultItemExcludes>**/node_modules/**;$(DefaultItemExcludes)</DefaultItemExcludes>
         <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
         <AnalysisMode>Recommended</AnalysisMode>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>

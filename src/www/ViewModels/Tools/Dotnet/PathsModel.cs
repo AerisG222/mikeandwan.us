@@ -23,10 +23,10 @@ public class PathsModel
         Paths.Add(new string[] { @"Path.Combine(""etc"", ""passwd"")", Path.Combine("etc", "passwd") });
         Paths.Add(new string[] { @"Path.Combine(""/etc"", ""/usr"")", Path.Combine("/etc", "/usr") });
 
-        Paths.Add(new string[] { @"Path.GetDirectoryName(""/etc/passwd"")", Path.GetDirectoryName("/etc/passwd") });
-        Paths.Add(new string[] { @"Path.GetDirectoryName(""/etc/passwd/"")", Path.GetDirectoryName("/etc/passwd/") });
-        Paths.Add(new string[] { @"Path.GetDirectoryName(""C:\windows\system32"")", Path.GetDirectoryName(@"C:\windows\system32") });
-        Paths.Add(new string[] { @"Path.GetDirectoryName(""C:\windows\system32\"")", Path.GetDirectoryName(@"C:\windows\system32\") });
+        Paths.Add(new string[] { @"Path.GetDirectoryName(""/etc/passwd"")", Path.GetDirectoryName("/etc/passwd")! });
+        Paths.Add(new string[] { @"Path.GetDirectoryName(""/etc/passwd/"")", Path.GetDirectoryName("/etc/passwd/")! });
+        Paths.Add(new string[] { @"Path.GetDirectoryName(""C:\windows\system32"")", Path.GetDirectoryName(@"C:\windows\system32")! });
+        Paths.Add(new string[] { @"Path.GetDirectoryName(""C:\windows\system32\"")", Path.GetDirectoryName(@"C:\windows\system32\")! });
 
         Paths.Add(new string[] { @"Path.GetExtension(""/etc/passwd"")", Path.GetExtension("/etc/passwd") });
         Paths.Add(new string[] { @"Path.GetExtension(""/etc/passwd/"")", Path.GetExtension("/etc/passwd/") });
@@ -54,11 +54,11 @@ public class PathsModel
 
         Paths.Add(new string[] { @"Path.GetInvalidPathChars()", string.Join(",", CharArrayToStringArray(Path.GetInvalidPathChars())) });
 
-        Paths.Add(new string[] { @"Path.GetPathRoot(""/etc/passwd"")", Path.GetPathRoot("/etc/passwd") });
-        Paths.Add(new string[] { @"Path.GetPathRoot(""/etc/passwd/"")", Path.GetPathRoot("/etc/passwd/") });
-        Paths.Add(new string[] { @"Path.GetPathRoot(""/etc/passwd/.txt"")", Path.GetPathRoot("/etc/passwd/.txt") });
-        Paths.Add(new string[] { @"Path.GetPathRoot(""etc/passwd"")", Path.GetPathRoot("etc/passwd") });
-        Paths.Add(new string[] { @"Path.GetPathRoot(""C:\windows\test.txt"")", Path.GetPathRoot(@"C:\windows\test.txt") });
+        Paths.Add(new string[] { @"Path.GetPathRoot(""/etc/passwd"")", Path.GetPathRoot("/etc/passwd")! });
+        Paths.Add(new string[] { @"Path.GetPathRoot(""/etc/passwd/"")", Path.GetPathRoot("/etc/passwd/")! });
+        Paths.Add(new string[] { @"Path.GetPathRoot(""/etc/passwd/.txt"")", Path.GetPathRoot("/etc/passwd/.txt")! });
+        Paths.Add(new string[] { @"Path.GetPathRoot(""etc/passwd"")", Path.GetPathRoot("etc/passwd")! });
+        Paths.Add(new string[] { @"Path.GetPathRoot(""C:\windows\test.txt"")", Path.GetPathRoot(@"C:\windows\test.txt")! });
 
         Paths.Add(new string[] { @"Path.GetRandomFileName()", Path.GetRandomFileName() });
 

@@ -11,11 +11,11 @@ public class UrlWwwTagHelper
     readonly Uri _wwwUri;
 
     [HtmlAttributeName(AttributeName)]
-    public string Url { get; set; }
+    public string? Url { get; set; }
 
     public UrlWwwTagHelper(TagHelperConfig config)
     {
-        if (config == null)
+        if (config.WwwUrl == null)
         {
             throw new ArgumentNullException(nameof(config));
         }

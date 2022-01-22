@@ -15,7 +15,7 @@ public class LinuxFileTypeIdentifier
         _log = log ?? throw new ArgumentNullException(nameof(log));
     }
 
-    public string GetMimeType(string filePath)
+    public string? GetMimeType(string filePath)
     {
         if (string.IsNullOrWhiteSpace(filePath))
         {

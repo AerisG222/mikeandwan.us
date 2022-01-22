@@ -1,5 +1,9 @@
 @model IEnumerable<MawMvcApp.ViewModels.Tools.Dotnet.FormatExampleGroup>
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @foreach(var group in Model)
 {
     <div class="card mb-3">

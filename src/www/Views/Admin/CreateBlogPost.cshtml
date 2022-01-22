@@ -2,6 +2,10 @@
 @model BlogPostModel
 @{ ViewBag.Title = "admin | create blog post"; }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 <h1>Create Blog Post</h1>
 
 @if(Model.Success) {

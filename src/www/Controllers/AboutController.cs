@@ -101,13 +101,13 @@ public class AboutController
                     var subject = _config.Subject;
 
                     var emailModel = new ContactUsEmailModel
-                    {
-                        Title = _config.Subject,
-                        FirstName = model.FirstName,
-                        LastName = model.LastName,
-                        EmailAddress = model.Email,
-                        Message = model.Message
-                    };
+                    (
+                        _config.Subject,
+                        model.Email,
+                        model.FirstName,
+                        model.LastName,
+                        model.Message
+                    );
 
                     var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ContactUs.cshtml", emailModel);
 

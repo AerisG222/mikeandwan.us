@@ -121,9 +121,9 @@ public class Startup
         opts.Events = new JwtBearerEvents {
             OnMessageReceived = context =>
             {
-                if (context.Request.Path.Value.StartsWith("/uploadr", true, CultureInfo.InvariantCulture) &&
-                    context.Request.Query.TryGetValue("token", out StringValues token)
-                )
+                var isUploadr = context.Request.Path.Value?.StartsWith("/uploadr", true, CultureInfo.InvariantCulture) ?? false;
+
+                if (isUploadr && context.Request.Query.TryGetValue("token", out StringValues token))
                 {
                     context.Token = token;
                 }

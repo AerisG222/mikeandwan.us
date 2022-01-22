@@ -1,5 +1,9 @@
 ﻿@model SidebarModel
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @{
     var generalClass = string.Equals(Model.Group, "general", StringComparison.OrdinalIgnoreCase) ? "show" : "collapse";
     var networkingClass = string.Equals(Model.Group, "networking", StringComparison.OrdinalIgnoreCase) ? "show" : "collapse";

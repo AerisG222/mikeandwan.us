@@ -4,6 +4,10 @@
     ViewBag.Title = "tools | xsd validator";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section header {
     <h1>XSD Validator</h1>
 }

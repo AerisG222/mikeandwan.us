@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Maw.Domain;
 using Maw.Domain.Upload;
 using Maw.Security;
 
@@ -22,8 +23,9 @@ public class UploadHub
     readonly ILogger _log;
     readonly IUploadService _uploadSvc;
 
-    public UploadHub(ILogger<UploadHub> log,
-                        IUploadService uploadService)
+    public UploadHub(
+        ILogger<UploadHub> log,
+        IUploadService uploadService)
     {
         _log = log ?? throw new ArgumentNullException(nameof(log));
         _uploadSvc = uploadService ?? throw new ArgumentNullException(nameof(uploadService));
@@ -31,12 +33,16 @@ public class UploadHub
 
     public IEnumerable<UploadedFile> GetAllFiles()
     {
+        NullHelper.ThrowIfNull(Context.User);
+
         return _uploadSvc.GetFileList(Context.User);
     }
 
     [HubMethodName("DeleteFiles")]
     public async Task<IEnumerable<FileOperationResult>> DeleteFilesAsync(List<string> files)
     {
+        NullHelper.ThrowIfNull(Context.User);
+
         var results = _uploadSvc.DeleteFiles(Context.User, files);
 
         foreach(var result in results)
@@ -52,6 +58,8 @@ public class UploadHub
 
     public override async Task OnConnectedAsync()
     {
+        NullHelper.ThrowIfNull(Context.User?.Identity);
+
         _log.LogDebug("User [{Username}] connected to {Hub}.", Context.User.Identity.Name, nameof(UploadHub));
 
         if(Context.User.IsAdmin())
@@ -62,8 +70,10 @@ public class UploadHub
         await base.OnConnectedAsync();
     }
 
-    public override async Task OnDisconnectedAsync(Exception exception)
+    public override async Task OnDisconnectedAsync(Exception? exception)
     {
+        NullHelper.ThrowIfNull(Context.User?.Identity);
+
         _log.LogDebug("User [{Username}] disconnected from {Hub}.", Context.User.Identity.Name, nameof(UploadHub));
 
         if(Context.User.IsAdmin())
@@ -120,6 +130,8 @@ public class UploadHub
 
     async Task FileDeletedAsync(UploadedFile file)
     {
+        NullHelper.ThrowIfNull(Context.User);
+
         if(!Context.User.IsAdmin())
         {
             await Clients.User(file.Location.Username).SendAsync(CALL_FILE_DELETED, file);

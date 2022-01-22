@@ -11,41 +11,48 @@ public class PhotoService
 {
     readonly IPhotoRepository _repo;
 
-    public PhotoService(IPhotoRepository photoRepository,
-                        ILogger<PhotoService> log,
-                        IDistributedCache cache)
+    public PhotoService(
+        IPhotoRepository photoRepository,
+        ILogger<PhotoService> log,
+        IDistributedCache cache)
         : base("photos", log, cache)
     {
         _repo = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
     }
 
-    public Task<Photo> GetRandomAsync(string[] roles)
+    public Task<Photo?> GetRandomAsync(string[] roles)
     {
         return _repo.GetRandomAsync(roles);
     }
 
-    public Task<IEnumerable<Photo>> GetRandomAsync(byte count, string[] roles)
+    public async Task<IEnumerable<Photo>> GetRandomAsync(byte count, string[] roles)
     {
-        return _repo.GetRandomAsync(count, roles);
+        var photos = await _repo.GetRandomAsync(count, roles);
+
+        return photos ?? new List<Photo>();
     }
 
-    public Task<IEnumerable<short>> GetYearsAsync(string[] roles)
+    public async Task<IEnumerable<short>> GetYearsAsync(string[] roles)
     {
-        return GetCachedValueAsync(nameof(GetYearsAsync), () => _repo.GetYearsAsync(roles));
+        var years = await GetCachedValueAsync(nameof(GetYearsAsync), () => _repo.GetYearsAsync(roles));
+
+        return years ?? new List<short>();
     }
 
-    public Task<IEnumerable<Category>> GetAllCategoriesAsync(string[] roles)
+    public async Task<IEnumerable<Category>> GetAllCategoriesAsync(string[] roles)
     {
         var key = $"{nameof(GetAllCategoriesAsync)}_{GetRoleCacheKeyComponent(roles)}";
+        var categories = await GetCachedValueAsync(key, () => _repo.GetAllCategoriesAsync(roles));
 
-        return GetCachedValueAsync(key, () => _repo.GetAllCategoriesAsync(roles));
+        return categories ?? new List<Category>();
     }
 
-    public Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, string[] roles)
+    public async Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, string[] roles)
     {
         var key = $"{nameof(GetCategoriesForYearAsync)}_{year}_{GetRoleCacheKeyComponent(roles)}";
+        var categories = await GetCachedValueAsync(key, () => _repo.GetCategoriesForYearAsync(year, roles));
 
-        return GetCachedValueAsync(key, () => _repo.GetCategoriesForYearAsync(year, roles));
+        return categories ?? new List<Category>();
     }
 
     public Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, string[] roles)
@@ -53,28 +60,29 @@ public class PhotoService
         return _repo.GetRecentCategoriesAsync(sinceId, roles);
     }
 
-    public Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, string[] roles)
+    public async Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, string[] roles)
     {
         var key = $"{nameof(GetPhotosForCategoryAsync)}_{categoryId}_{GetRoleCacheKeyComponent(roles)}";
+        var photos = await GetCachedValueAsync(key, () => _repo.GetPhotosForCategoryAsync(categoryId, roles), TimeSpan.FromHours(2));
 
-        return GetCachedValueAsync(key, () => _repo.GetPhotosForCategoryAsync(categoryId, roles), TimeSpan.FromHours(2));
+        return photos ?? new List<Photo>();
     }
 
-    public Task<Category> GetCategoryAsync(short categoryId, string[] roles)
+    public Task<Category?> GetCategoryAsync(short categoryId, string[] roles)
     {
         var key = $"{nameof(GetCategoryAsync)}_{categoryId}_{GetRoleCacheKeyComponent(roles)}";
 
         return GetCachedValueAsync(key, () => _repo.GetCategoryAsync(categoryId, roles), TimeSpan.FromHours(2));
     }
 
-    public Task<Photo> GetPhotoAsync(int photoId, string[] roles)
+    public Task<Photo?> GetPhotoAsync(int photoId, string[] roles)
     {
         var key = $"{nameof(GetPhotoAsync)}_{photoId}_{GetRoleCacheKeyComponent(roles)}";
 
         return GetCachedValueAsync(key, () => _repo.GetPhotoAsync(photoId, roles), TimeSpan.FromHours(2));
     }
 
-    public Task<Detail> GetDetailAsync(int photoId, string[] roles)
+    public Task<Detail?> GetDetailAsync(int photoId, string[] roles)
     {
         var key = $"{nameof(GetDetailAsync)}_{photoId}_{GetRoleCacheKeyComponent(roles)}";
 
@@ -86,17 +94,17 @@ public class PhotoService
         return _repo.GetCommentsAsync(photoId, roles);
     }
 
-    public Task<Rating> GetRatingsAsync(int photoId, string username, string[] roles)
+    public Task<Rating?> GetRatingsAsync(int photoId, string username, string[] roles)
     {
         return _repo.GetRatingsAsync(photoId, username, roles);
     }
 
-    public Task<GpsDetail> GetGpsDetailAsync(int photoId, string[] roles)
+    public Task<GpsDetail?> GetGpsDetailAsync(int photoId, string[] roles)
     {
         return _repo.GetGpsDetailAsync(photoId, roles);
     }
 
-    public Task<int> InsertCommentAsync(int photoId, string username, string comment, string[] roles)
+    public Task InsertCommentAsync(int photoId, string username, string comment, string[] roles)
     {
         return _repo.InsertCommentAsync(photoId, username, comment, roles);
     }

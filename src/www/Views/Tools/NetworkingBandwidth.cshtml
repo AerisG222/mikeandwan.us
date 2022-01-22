@@ -4,6 +4,10 @@
     ViewBag.Title = "tools | networking | bandwidth";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section header {
     <h1>Bandwidth Calculator</h1>
 }

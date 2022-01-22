@@ -7,10 +7,10 @@ namespace MawMvcApp.ViewModels.Admin;
 public class BlogPostModel
 {
     [Required(ErrorMessage = "Please enter the title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = null!;
 
     [Required(ErrorMessage = "Please enter the description")]
-    public string Description { get; set; }
+    public string Description { get; set; } = null!;
 
     [Required(ErrorMessage = "Please enter the publish date")]
     [Display(Name = "Publish Date")]

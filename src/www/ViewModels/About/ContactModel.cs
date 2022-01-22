@@ -5,26 +5,26 @@ namespace MawMvcApp.ViewModels.About;
 
 public class ContactModel
 {
-    public string RecaptchaSiteKey { get; set; }
+    public string? RecaptchaSiteKey { get; set; }
 
     [Required(ErrorMessage = "Please enter your email address")]
     [Display(Name = "Email")]
     [EmailAddress(ErrorMessage = "Please enter a valid email address")]
     [DataType(DataType.EmailAddress)]
-    public string Email { get; set; }
+    public string Email { get; set; } = null!;
 
     [Required(ErrorMessage = "Please enter your first name")]
     [Display(Name = "First Name")]
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = null!;
 
     [Required(ErrorMessage = "Please enter your last name")]
     [Display(Name = "Last Name")]
-    public string LastName { get; set; }
+    public string LastName { get; set; } = null!;
 
     [Required(ErrorMessage = "Please enter your message")]
     [DataType(DataType.MultilineText)]
     [Display(Name = "Message")]
-    public string Message { get; set; }
+    public string Message { get; set; } = null!;
 
     [BindNever]
     public bool IsHuman { get; set; }

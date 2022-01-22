@@ -8,17 +8,16 @@ namespace MawMvcApp.ViewModels.Tools.FileSize;
 public class FileSizeViewModel
 {
     public double Size { get; set; }
-    public string SizeScale { get; set; }
+    public string? SizeScale { get; set; }
 
     [BindNever]
-    public List<Result> Results { get; private set; }
+    public List<Result> Results { get; private set; } = new();
 
     [BindNever]
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
     public void Calculate()
     {
-        var results = new List<Result>();
         var unit = FileSizeUnit.AllUnits
             .SingleOrDefault(x => string.Equals(x.Name, SizeScale, StringComparison.OrdinalIgnoreCase));
 
@@ -32,9 +31,7 @@ public class FileSizeViewModel
 
         foreach (var u in FileSizeUnit.AllUnits)
         {
-            results.Add(new Result(u.Name, sizeInBytes / u.BytesInUnit));
+            Results.Add(new Result(u.Name, sizeInBytes / u.BytesInUnit));
         }
-
-        Results = results;
     }
 }

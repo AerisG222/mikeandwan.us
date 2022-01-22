@@ -3,6 +3,10 @@
     ViewBag.Title = "account | login";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section body_head {
     <strong>Login</strong>
 }

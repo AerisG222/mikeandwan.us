@@ -11,11 +11,11 @@ public class UrlAuthTagHelper
     readonly Uri _authUri;
 
     [HtmlAttributeName(AttributeName)]
-    public string Url { get; set; }
+    public string? Url { get; set; }
 
     public UrlAuthTagHelper(TagHelperConfig config)
     {
-        if (config == null)
+        if (config.AuthUrl == null)
         {
             throw new ArgumentNullException(nameof(config));
         }

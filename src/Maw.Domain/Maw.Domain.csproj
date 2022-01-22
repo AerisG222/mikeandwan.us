@@ -9,6 +9,7 @@
         <AssemblyName>Maw.Domain</AssemblyName>
         <PackageId>Maw.Domain</PackageId>
         <AnalysisMode>Recommended</AnalysisMode>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>

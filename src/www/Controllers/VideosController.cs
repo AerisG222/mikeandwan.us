@@ -40,6 +40,11 @@ public class VideosController
     {
         var category = await _svc.GetCategoryAsync(id, User.GetAllRoles());
 
+        if(category == null)
+        {
+            return NotFound();
+        }
+
         return GetScaledImage(category.TeaserImage.Path);
     }
 
@@ -47,6 +52,11 @@ public class VideosController
     public async Task<IActionResult> GetMobileVideoThumbnail(short id)
     {
         var video = await _svc.GetVideoAsync(id, User.GetAllRoles());
+
+        if(video == null)
+        {
+            return NotFound();
+        }
 
         return GetScaledImage(video.Thumbnail.Path);
     }

@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -9,12 +10,12 @@ public class RegexViewModel
     [Required(ErrorMessage = "Please enter the regex pattern")]
     [DataType(DataType.MultilineText)]
     [Display(Name = "Regular Expression Pattern")]
-    public string Pattern { get; set; }
+    public string Pattern { get; set; } = null!;
 
     [Required(ErrorMessage = "Please enter the input string")]
     [DataType(DataType.MultilineText)]
     [Display(Name = "Input String")]
-    public string Input { get; set; }
+    public string Input { get; set; } = null!;
 
     [Display(Name = "Culture Invariant")]
     public bool OptionCultureInvariant { get; set; }
@@ -47,18 +48,30 @@ public class RegexViewModel
     public bool HasErrors { get; set; }
 
     [BindNever]
-    public MatchCollection RegexMatches { get; private set; }
+    public bool InvalidRegexOptions { get; set; }
 
     [BindNever]
-    public Regex Regex { get; set; }
+    public MatchCollection? RegexMatches { get; private set; }
+
+    [BindNever]
+    public Regex? Regex { get; set; }
 
     public void Execute()
     {
         Regex = PrepareRegex();
-        RegexMatches = Regex.Matches(Input.Trim());
+
+        if(Regex == null)
+        {
+            HasErrors = true;
+            InvalidRegexOptions = true;
+        }
+        else
+        {
+            RegexMatches = Regex.Matches(Input.Trim());
+        }
     }
 
-    Regex PrepareRegex()
+    Regex? PrepareRegex()
     {
         RegexOptions options = RegexOptions.None;
 
@@ -96,6 +109,13 @@ public class RegexViewModel
             options |= RegexOptions.Singleline;
         }
 
-        return new Regex(Pattern, options);
+        try
+        {
+            return new Regex(Pattern, options);
+        }
+        catch(ArgumentOutOfRangeException)
+        {
+            return null;
+        }
     }
 }

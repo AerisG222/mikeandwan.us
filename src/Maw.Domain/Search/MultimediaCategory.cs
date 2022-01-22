@@ -5,7 +5,7 @@ namespace Maw.Domain.Search;
 public class MultimediaCategory
 {
     [SolrUniqueKey("solr_id")]
-    public string SolrId { get; set; }
+    public string SolrId { get; set; } = null!;
 
     [SolrField("id")]
     public int Id { get; set; }
@@ -14,10 +14,10 @@ public class MultimediaCategory
     public int Year { get; set; }
 
     [SolrField("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [SolrField("type")]
-    public string MultimediaType { get; set; }
+    public string MultimediaType { get; set; } = null!;
 
     [SolrField("teaser_photo_height")]
     public int TeaserPhotoHeight { get; set; }
@@ -26,7 +26,7 @@ public class MultimediaCategory
     public int TeaserPhotoWidth { get; set; }
 
     [SolrField("teaser_photo_path")]
-    public string TeaserPhotoPath { get; set; }
+    public string TeaserPhotoPath { get; set; } = null!;
 
     [SolrField("teaser_photo_sq_height")]
     public int TeaserPhotoSqHeight { get; set; }
@@ -35,7 +35,7 @@ public class MultimediaCategory
     public int TeaserPhotoSqWidth { get; set; }
 
     [SolrField("teaser_photo_sq_path")]
-    public string TeaserPhotoSqPath { get; set; }
+    public string TeaserPhotoSqPath { get; set; } = null!;
 
     [SolrField("score")]
     public double Score { get; set; }

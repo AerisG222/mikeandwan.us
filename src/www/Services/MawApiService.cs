@@ -48,7 +48,7 @@ public class MawApiService
     {
         var ctx = _httpContextAccessor.HttpContext;
 
-        if (ctx.User == null)
+        if (ctx?.User == null)
         {
             throw new ArgumentException("Authenticated user is required");
         }

@@ -24,41 +24,30 @@ public class PrimaryNavTagHelper
     const string RouteValuesDictionaryName = "maw-all-route-data";
     const string RouteValuesPrefix = "maw-route-";
     readonly IHtmlGenerator _htmlGenerator;
-    IDictionary<string, string> _routeValues;
+    IDictionary<string, string> _routeValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
     [HtmlAttributeNotBound]
     [ViewContext]
-    public ViewContext ViewContext { get; set; }
+    public ViewContext? ViewContext { get; set; }
 
     [HtmlAttributeName(ControllerAttributeName)]
-    public string Controller { get; set; }
+    public string? Controller { get; set; }
 
     [HtmlAttributeName(ActionAttributeName)]
-    public string Action { get; set; }
+    public string? Action { get; set; }
 
     [HtmlAttributeName(LinkTextAttributeName)]
-    public string LinkText { get; set; }
+    public string? LinkText { get; set; }
 
     [HtmlAttributeName(IsActiveAttributeName)]
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } = false;
 
 
     [HtmlAttributeName(RouteValuesDictionaryName, DictionaryAttributePrefix = RouteValuesPrefix)]
     public IDictionary<string, string> RouteValues
     {
-        get
-        {
-            if (_routeValues == null)
-            {
-                _routeValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            }
-
-            return _routeValues;
-        }
-        set
-        {
-            _routeValues = value;
-        }
+        get { return _routeValues; }
+        set { _routeValues = value; }
     }
 
     public PrimaryNavTagHelper(IHtmlGenerator htmlGenerator)
@@ -71,6 +60,11 @@ public class PrimaryNavTagHelper
         if (output == null)
         {
             throw new ArgumentNullException(nameof(output));
+        }
+
+        if (Action == null)
+        {
+            throw new InvalidOperationException("Action must be specified");
         }
 
         if (LinkText == null)

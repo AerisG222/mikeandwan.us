@@ -53,13 +53,13 @@ public abstract class Repository
     }
 
 #pragma warning disable CA1822
-    protected T GetValueOrDefault<T>(object value)
+    protected T? GetValueOrDefault<T>(object value)
     {
         return value == null ? default : (T)value;
     }
 #pragma warning restore CA1822
 
-    protected MultimediaInfo BuildMultimediaInfo(dynamic path, dynamic width, dynamic height, dynamic size)
+    protected MultimediaInfo? BuildMultimediaInfo(dynamic path, dynamic width, dynamic height, dynamic size)
     {
         if(path == null)
         {

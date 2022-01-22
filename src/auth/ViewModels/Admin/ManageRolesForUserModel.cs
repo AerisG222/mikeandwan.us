@@ -7,15 +7,15 @@ namespace MawAuth.ViewModels.Admin;
 
 public class ManageRolesForUserModel
 {
-    readonly List<string> _allRoles = new List<string>();
-    readonly List<string> _grantedRoles = new List<string>();
+    readonly List<string> _allRoles = new();
+    readonly List<string> _grantedRoles = new();
 
     [Required(ErrorMessage = "Please enter the username")]
     [Display(Name = "Username")]
-    public string Username { get; set; }
+    public string Username { get; set; } = null!;
 
     [BindNever]
-    public IdentityResult Result { get; set; }
+    public IdentityResult? Result { get; set; }
 
     [BindNever]
     public List<string> AllRoles

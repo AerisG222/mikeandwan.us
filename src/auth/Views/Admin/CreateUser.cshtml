@@ -6,6 +6,10 @@
     ViewBag.Title = "admin | create user";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section body_head {
     <strong>Create User</strong>
 }

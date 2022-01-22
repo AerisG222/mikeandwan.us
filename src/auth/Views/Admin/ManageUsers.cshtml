@@ -6,6 +6,10 @@
     ViewBag.width = "col-12";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section body_head {
     <strong>Manage Users</strong>
 }

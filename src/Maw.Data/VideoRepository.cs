@@ -37,7 +37,7 @@ public class VideoRepository
         return InternalGetCategoriesAsync(roles, year);
     }
 
-    public async Task<Category> GetCategoryAsync(short categoryId, string[] roles)
+    public async Task<Category?> GetCategoryAsync(short categoryId, string[] roles)
     {
         var result = await InternalGetCategoriesAsync(roles, categoryId: categoryId);
 
@@ -49,7 +49,7 @@ public class VideoRepository
         return InternalGetVideosAsync(roles, categoryId);
     }
 
-    public async Task<Video> GetVideoAsync(short id, string[] roles)
+    public async Task<Video?> GetVideoAsync(short id, string[] roles)
     {
         var result = await InternalGetVideosAsync(roles, videoId: id);
 
@@ -70,7 +70,7 @@ public class VideoRepository
         );
     }
 
-    public Task<GpsDetail> GetGpsDetailAsync(int videoId, string[] roles)
+    public Task<GpsDetail?> GetGpsDetailAsync(int videoId, string[] roles)
     {
         return RunAsync(async conn =>
         {
@@ -112,10 +112,10 @@ public class VideoRepository
         });
     }
 
-    public Task<Rating> GetRatingsAsync(short videoId, string username, string[] roles)
+    public Task<Rating?> GetRatingsAsync(short videoId, string username, string[] roles)
     {
         return RunAsync(conn =>
-            conn.QuerySingleOrDefaultAsync<Rating>(
+            conn.QuerySingleOrDefaultAsync<Rating?>(
                 "SELECT * FROM video.get_ratings(@videoId, @username, @roles);",
                 new
                 {
@@ -127,7 +127,7 @@ public class VideoRepository
         );
     }
 
-    public Task<int> InsertCommentAsync(short videoId, string username, string comment, string[] roles)
+    public Task InsertCommentAsync(short videoId, string username, string comment, string[] roles)
     {
         return RunAsync(async conn =>
         {
@@ -147,8 +147,6 @@ public class VideoRepository
             {
                 throw new Exception("Did not save video comment!");
             }
-
-            return result;
         });
     }
 

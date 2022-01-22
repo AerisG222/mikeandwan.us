@@ -35,7 +35,7 @@ public class UserRepository
         );
     }
 
-    public Task<MawUser> GetUserAsync(string username)
+    public Task<MawUser?> GetUserAsync(string username)
     {
         if(string.IsNullOrEmpty(username))
         {
@@ -45,12 +45,12 @@ public class UserRepository
         return InternalGetUserAsync(username: username.ToLowerInvariant());
     }
 
-    public Task<MawUser> GetUserAsync(short id)
+    public Task<MawUser?> GetUserAsync(short id)
     {
         return InternalGetUserAsync(id: id);
     }
 
-    public Task<MawUser> GetUserByEmailAsync(string email)
+    public Task<MawUser?> GetUserByEmailAsync(string email)
     {
         if(string.IsNullOrEmpty(email))
         {
@@ -361,7 +361,7 @@ public class UserRepository
         return InternalGetRoleAsync(id: id);
     }
 
-    Task<MawUser> InternalGetUserAsync(short? id = null, string username = null, string email = null)
+    Task<MawUser?> InternalGetUserAsync(short? id = null, string? username = null, string? email = null)
     {
         return RunAsync(async conn => {
             var mawUser = await conn.QuerySingleOrDefaultAsync<MawUser>(
@@ -382,7 +382,7 @@ public class UserRepository
         });
     }
 
-    Task<MawRole> InternalGetRoleAsync(short? id = null, string name = null)
+    Task<MawRole> InternalGetRoleAsync(short? id = null, string? name = null)
     {
         return RunAsync(conn =>
             conn.QuerySingleOrDefaultAsync<MawRole>(
@@ -415,7 +415,7 @@ public class UserRepository
         }
     }
 
-    static async Task<bool> AddLoginHistoryAsync(IDbConnection conn, string username, string email, short loginActivityTypeId, short loginAreaId)
+    static async Task<bool> AddLoginHistoryAsync(IDbConnection conn, string? username, string? email, short loginActivityTypeId, short loginAreaId)
     {
         var result = await conn.QuerySingleAsync<long>(
             "SELECT * FROM maw.add_login_history(@loginActivityTypeId, @loginAreaId, @attemptTime, @username, @email);",

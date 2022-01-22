@@ -65,8 +65,15 @@ public class IdentityServerProfileService
         return Task.CompletedTask;
     }
 
-    void PrintClaims(IEnumerable<Claim> claims)
+    void PrintClaims(IEnumerable<Claim>? claims)
     {
+        if(claims == null)
+        {
+            _log.LogDebug("Claims are null");
+
+            return;
+        }
+
         foreach (var c in claims)
         {
             _log.LogDebug("{ClaimType}: {ClaimValue}", c.Type, c.Value);

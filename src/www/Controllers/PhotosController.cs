@@ -51,6 +51,12 @@ public class PhotosController
     public async Task<IActionResult> GetMobileThumbnail(short id)
     {
         var category = await _svc.GetCategoryAsync(id, User.GetAllRoles());
+
+        if(category == null)
+        {
+            return NotFound();
+        }
+
         var thumbInfo = category.TeaserImage;
         var croppedImageStream = _imageCropper.CropImage(thumbInfo.Path, MOBILE_THUMB_SIZE);
 
@@ -85,6 +91,11 @@ public class PhotosController
 
         string path;
         var photo = await _svc.GetPhotoAsync(id, User.GetAllRoles());
+
+        if(photo == null)
+        {
+            return NotFound();
+        }
 
         switch (size?.ToLower(CultureInfo.InvariantCulture))
         {

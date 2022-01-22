@@ -10,7 +10,7 @@ public class ColorConverterModel
     : IValidatableObject
 {
     [Display(Name = "Color Code (hex)")]
-    public string HexColorCode { get; set; }
+    public string? HexColorCode { get; set; }
 
     [Display(Name = "Red (0-255)")]
     public byte? RedComponent { get; set; }
@@ -27,10 +27,10 @@ public class ColorConverterModel
     public bool HasErrors { get; set; }
 
     [BindNever]
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
     [BindNever]
-    public string HtmlColorCode { get; set; }
+    public string? HtmlColorCode { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -130,11 +130,31 @@ public class ColorConverterModel
 
     string GetHtmlColorCodeFromComponents()
     {
-        return string.Concat("#", ToHex(RedComponent), ToHex(GreenComponent), ToHex(BlueComponent));
+        if(RedComponent == null)
+        {
+            throw new InvalidOperationException(nameof(RedComponent));
+        }
+
+        if(GreenComponent == null)
+        {
+            throw new InvalidOperationException(nameof(GreenComponent));
+        }
+
+        if(BlueComponent == null)
+        {
+            throw new InvalidOperationException(nameof(BlueComponent));
+        }
+
+        return string.Concat("#", ToHex((byte)RedComponent), ToHex((byte)GreenComponent), ToHex((byte)BlueComponent));
     }
 
     string NormalizeHexCode()
     {
+        if(HexColorCode == null)
+        {
+            throw new InvalidOperationException($"{nameof(HexColorCode)} should not be null");
+        }
+
         if (HexColorCode.StartsWith("#", true, CultureInfo.InvariantCulture))
         {
             return HexColorCode.Substring(1);
@@ -148,8 +168,8 @@ public class ColorConverterModel
         return (byte)int.Parse(hex, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
     }
 
-    string ToHex(byte? val)
+    string ToHex(byte val)
     {
-        return ((byte)val).ToString("X2", CultureInfo.InvariantCulture).ToLowerInvariant();
+        return val.ToString("X2", CultureInfo.InvariantCulture).ToLowerInvariant();
     }
 }

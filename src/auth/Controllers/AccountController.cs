@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Maw.Domain;
 using Maw.Domain.Email;
 using Maw.Domain.Identity;
 using MawAuth.ViewModels.Account;
@@ -93,7 +94,7 @@ public class AccountController
 
         if (result == SignInRes.Success)
         {
-            return RedirectToLocal(model.ReturnUrl);
+            return RedirectToLocal(model.ReturnUrl ?? "/");
         }
         else
         {
@@ -156,11 +157,11 @@ public class AccountController
                 _log.LogInformation("User {Username} logged in with {Provider} provider.", user.Username, provider);
 
                 // validate return URL and redirect back to authorization endpoint or a local page
-                var returnUrl = result.Properties.Items["returnUrl"];
+                var returnUrl = result.Properties?.Items["returnUrl"];
 
                 if (_interaction.IsValidReturnUrl(returnUrl) || Url.IsLocalUrl(returnUrl))
                 {
-                    return Redirect(returnUrl);
+                    return Redirect(returnUrl!);
                 }
                 else
                 {
@@ -175,7 +176,7 @@ public class AccountController
             }
         }
 
-        await _loginService.LogExternalLoginAttemptAsync(email.Value, provider, false);
+        await _loginService.LogExternalLoginAttemptAsync(email.Value, provider ?? "NULL PROVIDER", false);
 
         return View();
     }
@@ -227,19 +228,13 @@ public class AccountController
             }
 
             var code = await _userMgr.GeneratePasswordResetTokenAsync(user);
-            var callbackUrl = Url.Action("ResetPassword", "Account", new { user.Email, code }, Request.Scheme);
+            var callbackUrl = Url.Action("ResetPassword", "Account", new { model.Email, code }, Request.Scheme);
+            var emailModel = new ResetPasswordEmailModel("Reset Password", callbackUrl!);
+            var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ResetPassword.cshtml", emailModel);
 
             _log.LogInformation("Sending password reset email to user: {User}", user.Name);
 
-            var emailModel = new ResetPasswordEmailModel
-            {
-                Title = "Reset Password",
-                CallbackUrl = callbackUrl
-            };
-
-            var body = await _razorRenderer.RenderViewToStringAsync("~/Views/Email/ResetPassword.cshtml", emailModel);
-
-            await _emailService.SendHtmlAsync(user.Email, EmailFrom, "Reset Password for mikeandwan.us", body);
+            await _emailService.SendHtmlAsync(model.Email, EmailFrom, "Reset Password for mikeandwan.us", body);
 
             model.WasSuccessful = true;
 
@@ -258,7 +253,7 @@ public class AccountController
     {
         var model = new ResetPasswordModel();
 
-        await TryUpdateModelAsync<ResetPasswordModel>(model, string.Empty, x => x.Email, x => x.Code);
+        await TryUpdateModelAsync(model, string.Empty, x => x.Email, x => x.Code);
         ModelState.Clear();
 
         return View(model);
@@ -277,7 +272,13 @@ public class AccountController
 
         if (ModelState.IsValid)
         {
-            var user = await _repo.GetUserByEmailAsync(model.Email);
+            var user = await _repo.GetUserByEmailAsync(model.Email!);
+
+            if(user == null)
+            {
+                return NotFound();
+            }
+
             var result = await _userMgr.ResetPasswordAsync(user, model.Code, model.NewPassword);
 
             if (result.Succeeded)
@@ -322,7 +323,13 @@ public class AccountController
 
         if (ModelState.IsValid)
         {
-            var user = await _repo.GetUserAsync(User.Identity.Name);
+            var user = await _repo.GetUserAsync(User.GetUsername());
+
+            if(user == null)
+            {
+                return NotFound();
+            }
+
             var result = await _userMgr.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 
             if (result.Succeeded)
@@ -357,14 +364,14 @@ public class AccountController
         ViewBag.States = await GetStateSelectListItemsAsync();
         ViewBag.Countries = await GetCountrySelectListItemsAsync();
 
-        var user = await _userMgr.FindByNameAsync(User.Identity.Name);
+        var user = await _userMgr.FindByNameAsync(User.GetUsername());
 
         var model = new ProfileModel
         {
             Username = user.Username,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
+            FirstName = user.FirstName!,
+            LastName = user.LastName!,
+            Email = user.Email!,
             EnableGithubAuth = user.IsGithubAuthEnabled,
             EnableGoogleAuth = user.IsGoogleAuthEnabled,
             EnableMicrosoftAuth = user.IsMicrosoftAuthEnabled,
@@ -388,11 +395,11 @@ public class AccountController
         ViewBag.Countries = await GetCountrySelectListItemsAsync();
 
         model.WasAttempted = true;
-        model.Username = User.Identity.Name;
+        model.Username = User.GetUsername();
 
         if (ModelState.IsValid)
         {
-            var user = await _userMgr.FindByNameAsync(User.Identity.Name);
+            var user = await _userMgr.FindByNameAsync(model.Username);
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;

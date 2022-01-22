@@ -106,7 +106,7 @@ public class UploadController
 
         Stream stream;
         string filename;
-        string fullPath = null;
+        string? fullPath = null;
 
         try
         {

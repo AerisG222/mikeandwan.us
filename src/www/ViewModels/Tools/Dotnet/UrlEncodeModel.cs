@@ -11,21 +11,16 @@ public class UrlEncodeModel
 {
     [Display(Name = "Encoded String")]
     [DataType(DataType.MultilineText)]
-    public string EncodedString { get; set; }
+    public string? EncodedString { get; set; }
 
     [Display(Name = "Decoded String")]
     [DataType(DataType.MultilineText)]
-    public string DecodedString { get; set; }
+    public string? DecodedString { get; set; }
 
     public EncodeMode Mode { get; set; }
 
     [BindNever]
     public bool HasErrors { get; set; }
-
-    public UrlEncodeModel()
-    {
-        // do nothing
-    }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

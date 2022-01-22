@@ -21,7 +21,7 @@ public class GmailApiEmailService
     readonly GmailApiEmailConfig _config;
     readonly ILogger _log;
 
-    public string FromAddress => _config.FromEmailAddress;
+    public string FromAddress => _config?.FromEmailAddress ?? throw new InvalidOperationException("FromEmailAddress should not be null!");
 
     public GmailApiEmailService(ILogger<GmailApiEmailService> log, IOptions<GmailApiEmailConfig> config)
     {
@@ -71,8 +71,8 @@ public class GmailApiEmailService
         }
 
         using var msg = new MimeMessage();
-        msg.From.Add(new MailboxAddress((string)null, from));
-        msg.To.Add(new MailboxAddress((string)null, recipient));
+        msg.From.Add(new MailboxAddress(null, from));
+        msg.To.Add(new MailboxAddress(null, recipient));
         msg.Subject = subject;
         msg.Body = builder.ToMessageBody();
 

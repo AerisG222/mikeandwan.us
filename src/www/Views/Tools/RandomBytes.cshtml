@@ -4,6 +4,10 @@
     ViewBag.Title = "tools | random bytes";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section header {
     <h1>Random Bytes</h1>
 }

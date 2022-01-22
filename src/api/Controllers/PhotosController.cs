@@ -34,9 +34,15 @@ public class PhotosController
     [HttpGet("random")]
     [ProducesResponseType(200)]
     [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
     public async Task<ActionResult<PhotoViewModel>> GetRandomPhotoAsync()
     {
         var photo = await _svc.GetRandomAsync(User.GetAllRoles());
+
+        if(photo == null)
+        {
+            return NotFound();
+        }
 
         return _photoAdapter.Adapt(photo);
     }
@@ -60,7 +66,7 @@ public class PhotosController
     [ProducesResponseType(200)]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<MawApi.ViewModels.Photos.PhotoViewModel>> GetByIdAsync(int id)
+    public async Task<ActionResult<PhotoViewModel>> GetByIdAsync(int id)
     {
         var photo = await _svc.GetPhotoAsync(id, User.GetAllRoles());
 
@@ -95,7 +101,7 @@ public class PhotosController
 
         // TODO: handle invalid photo id?
         // TODO: remove photoId from commentViewModel?
-        await _svc.InsertCommentAsync(id, User.Identity.Name, model.Comment, User.GetAllRoles());
+        await _svc.InsertCommentAsync(id, User.GetUsername(), model.Comment, User.GetAllRoles());
 
         return await InternalGetCommentsAsync(id);
     }
@@ -146,7 +152,7 @@ public class PhotosController
             throw new ArgumentNullException(nameof(gps));
         }
 
-        await _svc.SetGpsOverrideAsync(id, gps, User.Identity.Name);
+        await _svc.SetGpsOverrideAsync(id, gps, User.GetUsername());
 
         var detail = await _svc.GetGpsDetailAsync(id, User.GetAllRoles());
 
@@ -186,15 +192,17 @@ public class PhotosController
             throw new ArgumentNullException(nameof(userRating));
         }
 
+        var username = User.GetUsername();
+
         // TODO: handle invalid photo id?
         // TODO: remove photoId from userPhotoRating?
         if(userRating.Rating < 1)
         {
-            await _svc.RemoveRatingAsync(id, User.Identity.Name, User.GetAllRoles());
+            await _svc.RemoveRatingAsync(id, username, User.GetAllRoles());
         }
         else if(userRating.Rating <= 5)
         {
-            await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating, User.GetAllRoles());
+            await _svc.SaveRatingAsync(id, username, userRating.Rating, User.GetAllRoles());
         }
         else
         {
@@ -218,8 +226,8 @@ public class PhotosController
         return new ApiCollectionResult<Comment>(comments.ToList());
     }
 
-    Task<Rating> InternalGetRatingAsync(int id)
+    Task<Rating?> InternalGetRatingAsync(int id)
     {
-        return _svc.GetRatingsAsync(id, User.Identity.Name, User.GetAllRoles());
+        return _svc.GetRatingsAsync(id, User.GetUsername(), User.GetAllRoles());
     }
 }

@@ -19,8 +19,9 @@ public class ToolsController
 {
     readonly IFileProvider _fileProvider;
 
-    public ToolsController(ILogger<ToolsController> log,
-                           IWebHostEnvironment env)
+    public ToolsController(
+        ILogger<ToolsController> log,
+        IWebHostEnvironment env)
         : base(log)
     {
         _fileProvider = env?.WebRootFileProvider ?? throw new ArgumentNullException(nameof(env));
@@ -142,6 +143,11 @@ public class ToolsController
         if (ModelState.IsValid)
         {
             model.Execute();
+
+            if(model.InvalidRegexOptions)
+            {
+                ModelState.AddModelError("options", "Invalid combination of RegEx options (most likely due to ECMA Script)");
+            }
         }
         else
         {

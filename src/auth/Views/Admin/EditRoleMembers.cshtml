@@ -5,6 +5,10 @@
     ViewBag.Title = "admin | edit role members";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section body_head {
     <strong>Edit Role Members (@Model.Role)</strong>
 }

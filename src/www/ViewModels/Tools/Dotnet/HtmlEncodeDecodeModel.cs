@@ -11,11 +11,11 @@ public class HtmlEncodeDecodeModel
 {
     [DataType(DataType.MultilineText)]
     [Display(Name = "Encoded String")]
-    public string EncodedString { get; set; }
+    public string? EncodedString { get; set; }
 
     [DataType(DataType.MultilineText)]
     [Display(Name = "Decoded String")]
-    public string DecodedString { get; set; }
+    public string? DecodedString { get; set; }
 
     public EncodeMode Mode { get; set; }
 

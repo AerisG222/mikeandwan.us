@@ -21,8 +21,9 @@ public class UploadService
     readonly UploadConfig _cfg;
     readonly ILogger _log;
 
-    public UploadService(IOptions<UploadConfig> uploadConfig,
-                         ILogger<UploadService> log)
+    public UploadService(
+        IOptions<UploadConfig> uploadConfig,
+        ILogger<UploadService> log)
     {
         _cfg = uploadConfig?.Value ?? throw new ArgumentNullException(nameof(uploadConfig));
         _log = log ?? throw new ArgumentNullException(nameof(log));
@@ -112,13 +113,14 @@ public class UploadService
 
     public Stream GetFile(ClaimsPrincipal user, string relativePath)
     {
+        var username = user.GetUsername();
         var location = GetValidatedLocation(user, relativePath, true);
 
         if (!UserCanAccessFile(user, location))
         {
             _log.LogError(
                 "User [{Username}] does not have access to the requested file [{RelativePath}].",
-                location.Username,
+                username,
                 location.RelativePath
             );
 
@@ -127,18 +129,13 @@ public class UploadService
             throw new UnauthorizedAccessException(msg);
         }
 
-        _log.LogDebug("Delivering file [{File}] for user [{Username}].", location.RelativePath, user.Identity.Name);
+        _log.LogDebug("Delivering file [{File}] for user [{Username}].", location.RelativePath, username);
 
         return File.OpenRead(GetAbsoluteFilePath(location));
     }
 
     public Stream GetFiles(ClaimsPrincipal user, IEnumerable<string> relativePaths)
     {
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
-
         if (relativePaths == null || !relativePaths.Any())
         {
             throw new ArgumentNullException(nameof(relativePaths));
@@ -190,17 +187,14 @@ public class UploadService
 
         ms.Seek(0, SeekOrigin.Begin);
 
-        _log.LogInformation("Zip file created for user {Username} with size {FileSize} MB", user.Identity.Name, ms.Length / 1024 / 1024);
+        _log.LogInformation("Zip file created for user {Username} with size {FileSize} MB", user.GetUsername(), ms.Length / 1024 / 1024);
 
         return ms;
     }
 
     public IEnumerable<UploadedFile> GetFileList(ClaimsPrincipal user)
     {
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        var username = user.GetUsername();
 
         if (user.IsAdmin())
         {
@@ -208,16 +202,13 @@ public class UploadService
         }
         else
         {
-            return GetUserFiles(user.Identity.Name);
+            return GetUserFiles(username);
         }
     }
 
     public async Task<FileOperationResult> SaveFileAsync(ClaimsPrincipal user, string filename, Stream stream)
     {
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        var username = user.GetUsername();
 
         if (string.IsNullOrWhiteSpace(filename))
         {
@@ -230,11 +221,7 @@ public class UploadService
             RelativePathSpecified = filename
         };
 
-        var location = new FileLocation
-        {
-            Username = user.Identity.Name,
-            Filename = Path.GetFileName(filename)
-        };
+        var location = new FileLocation(username, Path.GetFileName(filename));
         var userDir = GetAbsoluteUserDirectory(location.Username);
         var destPath = GetAbsoluteFilePath(location);
 
@@ -291,7 +278,7 @@ public class UploadService
         return result;
     }
 
-    public Stream GetThumbnail(ClaimsPrincipal user, string relativePath, int maxDimension)
+    public Stream? GetThumbnail(ClaimsPrincipal user, string relativePath, int maxDimension)
     {
         FileLocation location;
 
@@ -367,11 +354,7 @@ public class UploadService
             .EnumerateFiles()
             .Select(fi => new UploadedFile
             {
-                Location = new FileLocation
-                {
-                    Username = fi.Directory.Name,
-                    Filename = fi.Name
-                },
+                Location = new FileLocation(dir.Name, fi.Name),
                 CreationTime = fi.CreationTime,
                 SizeInBytes = fi.Length
             })
@@ -399,7 +382,7 @@ public class UploadService
     static bool UserCanAccessFile(ClaimsPrincipal user, FileLocation location)
     {
         return user.IsAdmin() ||
-            string.Equals(location.Username, user.Identity.Name, StringComparison.OrdinalIgnoreCase);
+            string.Equals(location.Username, user.Identity?.Name, StringComparison.OrdinalIgnoreCase);
     }
 
     UploadedFile GetFileDetails(FileLocation location)
@@ -416,11 +399,6 @@ public class UploadService
 
     FileLocation GetValidatedLocation(ClaimsPrincipal user, string relativePath, bool verifyPermissions)
     {
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
-
         if (string.IsNullOrWhiteSpace(relativePath))
         {
             throw new ArgumentNullException(nameof(relativePath));

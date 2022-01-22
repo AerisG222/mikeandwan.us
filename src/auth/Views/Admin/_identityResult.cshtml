@@ -1,15 +1,17 @@
 ﻿@model MawAuth.ViewModels.Admin.IdentityResultModel
-@if(Model.Result != null) {
-	if(Model.Result.Succeeded) {
-		<p class="alert alert-success">
-		    The @Model.EntityName was created successfully.
-		</p>
-	}
-	else {
-		<div class="alert alert-danger">
-		    There was an error trying to edit or create the @Model.EntityName:
-		</div>
-        <partial name="_identityErrors" for="Result.Errors" />
-		<div class="text-danger" asp-validation-summary="All"></div>
-	}
+@if(Model?.Result != null) {
+    if(Model.Result.Succeeded) {
+        <p class="alert alert-success">
+            The @Model.EntityName was created successfully.
+        </p>
+    }
+    else {
+        var errs = Model.Result.Errors;
+
+        <div class="alert alert-danger">
+            There was an error trying to edit or create the @Model.EntityName:
+        </div>
+        <partial name="_identityErrors" model="errs" />
+        <div class="text-danger" asp-validation-summary="All"></div>
+    }
 }

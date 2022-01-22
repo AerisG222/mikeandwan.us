@@ -5,6 +5,10 @@
     ViewBag.Title = "tools | .net regular expressions ";
 }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 @section header {
     <h1>.Net Regular Expressions</h1>
 }
@@ -95,7 +99,7 @@
 </form>
 
 @if(Model.RegexMatches != null) {
-	string results = null;
+	string? results = null;
 
 	switch(Model.RegexMatches.Count) 	{
 		case 0:
@@ -119,7 +123,7 @@
 
 			<ul>
 			@foreach(Group group in match.Groups) {
-				string name = string.Concat("[", groupid, " : ", Model.Regex.GroupNameFromNumber(groupid), "]");
+				string name = string.Concat("[", groupid, " : ", Model.Regex?.GroupNameFromNumber(groupid), "]");
 
 				<li>Group: @name : @group.Value
 				@if(group.Captures != null && group.Captures.Count > 1) {

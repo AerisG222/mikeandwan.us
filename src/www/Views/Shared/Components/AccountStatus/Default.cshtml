@@ -1,6 +1,10 @@
 @using MawMvcApp.ViewComponents
 @model AccountStatusViewModel
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 <ul class="navbar-nav">
     @if(Model.IsAuthenticated) {
         <li class="nav-item dropdown">

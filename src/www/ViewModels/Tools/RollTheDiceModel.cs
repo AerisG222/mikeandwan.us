@@ -22,13 +22,13 @@ public class RollTheDiceModel
     public bool Executed { get; private set; }
 
     [BindNever]
-    public List<int> ThrowCounts { get; private set; }
+    public List<int>? ThrowCounts { get; private set; }
 
     [BindNever]
     public bool HasErrors { get; set; }
 
     [BindNever]
-    public IEnumerable<int> WinnerList
+    public IEnumerable<int>? WinnerList
     {
         get
         {
@@ -62,7 +62,6 @@ public class RollTheDiceModel
         }
     }
 
-#pragma warning disable SCS0005
     public void ThrowDice()
     {
         ThrowCounts = new List<int>(new int[NumberOfSides]);

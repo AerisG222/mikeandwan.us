@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -53,7 +54,13 @@ public static class Program
                     .CaptureStartupErrors(true)
                     .UseKestrel(opts =>
                     {
-                        var config = (IConfiguration)opts.ApplicationServices.GetService(typeof(IConfiguration));
+                        var config = (IConfiguration?) opts.ApplicationServices.GetService(typeof(IConfiguration));
+
+                        if(config == null)
+                        {
+                            throw new InvalidOperationException("Config was not found in application services");
+                        }
+
                         var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
 
                         opts.Listen(IPAddress.Loopback, 5011, listenOptions =>

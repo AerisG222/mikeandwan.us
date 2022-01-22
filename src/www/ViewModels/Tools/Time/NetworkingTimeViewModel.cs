@@ -11,18 +11,17 @@ public class NetworkingTimeViewModel
     [Display(Name = "Length of Time")]
     public double LengthOfTime { get; set; }
     [Display(Name = "Time Unit")]
-    public string TimeUnit { get; set; }
+    public string? TimeUnit { get; set; }
 
     [BindNever]
-    public List<Result> Results { get; private set; }
+    public List<Result> Results { get; private set; } = new();
 
     [BindNever]
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
     public void Calculate()
     {
         double timeInSeconds = 0;
-        var results = new List<Result>();
 
         var timeScale = TimeScale.AllScales
             .SingleOrDefault(x => string.Equals(x.Name, TimeUnit, StringComparison.OrdinalIgnoreCase));
@@ -37,9 +36,7 @@ public class NetworkingTimeViewModel
 
         foreach (var scale in TimeScale.AllScales)
         {
-            results.Add(new Result(scale.Name, timeInSeconds / scale.SecondsInUnit));
+            Results.Add(new Result(scale.Name, timeInSeconds / scale.SecondsInUnit));
         }
-
-        Results = results;
     }
 }

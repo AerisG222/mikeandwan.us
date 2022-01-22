@@ -54,8 +54,8 @@ public class SmtpEmailService
         }
 
         using var msg = new MimeMessage();
-        msg.From.Add(new MailboxAddress((string)null, from));
-        msg.To.Add(new MailboxAddress((string)null, recipient));
+        msg.From.Add(new MailboxAddress(null, from));
+        msg.To.Add(new MailboxAddress(null, recipient));
         msg.Subject = subject;
         msg.Body = builder.ToMessageBody();
 

@@ -12,16 +12,15 @@ public class BandwidthViewModel
     public char TimeScale { get; set; }
 
     [BindNever]
-    public List<BandwidthSizeResult> Results { get; private set; }
+    public List<BandwidthSizeResult> Results { get; private set; } = new();
 
     [BindNever]
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
     public void Calculate()
     {
         double timeInSeconds;
         double sizeInBytes;
-        var results = new List<BandwidthSizeResult>();
 
         // determine the divisor based on the time interval
         switch (TimeScale)
@@ -66,9 +65,7 @@ public class BandwidthViewModel
 
         foreach (var size in BandwidthSizeInfo.AllSizes)
         {
-            results.Add(new BandwidthSizeResult(size.Name, size.Speed, (sizeInBytes / size.Bps) / timeInSeconds));
+            Results.Add(new BandwidthSizeResult(size.Name, size.Speed, (sizeInBytes / size.Bps) / timeInSeconds));
         }
-
-        Results = results;
     }
 }

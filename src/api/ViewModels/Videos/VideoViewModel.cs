@@ -10,13 +10,13 @@ public class VideoViewModel
     public float? Latitude { get; set; }
     public float? Longitude { get; set; }
     public int Duration { get; set; }
-    public MultimediaAsset ThumbnailSq { get; set; }
-    public MultimediaAsset Thumbnail { get; set; }
-    public MultimediaAsset VideoScaled { get; set; }
-    public MultimediaAsset VideoFull { get; set; }
-    public MultimediaAsset VideoRaw { get; set; }
-    public string Self { get; set; }
-    public string CategoryLink { get; set; }
-    public string CommentsLink { get; set; }
-    public string RatingLink { get; set; }
+    public MultimediaAsset ThumbnailSq { get; set; } = null!;
+    public MultimediaAsset Thumbnail { get; set; } = null!;
+    public MultimediaAsset VideoScaled { get; set; } = null!;
+    public MultimediaAsset VideoFull { get; set; } = null!;
+    public MultimediaAsset VideoRaw { get; set; } = null!;
+    public string Self { get; set; } = null!;
+    public string CategoryLink { get; set; } = null!;
+    public string CommentsLink { get; set; } = null!;
+    public string RatingLink { get; set; } = null!;
 }

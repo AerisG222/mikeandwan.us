@@ -19,42 +19,46 @@ public class VideoService
         _repo = videoRepository ?? throw new ArgumentNullException(nameof(videoRepository));
     }
 
-    public Task<IEnumerable<short>> GetYearsAsync(string[] roles)
+    public async Task<IEnumerable<short>> GetYearsAsync(string[] roles)
     {
         var key = $"{nameof(GetYearsAsync)}_{GetRoleCacheKeyComponent(roles)}";
+        var years = await GetCachedValueAsync(key, () => _repo.GetYearsAsync(roles));
 
-        return GetCachedValueAsync(key, () => _repo.GetYearsAsync(roles));
+        return years ?? new List<short>();
     }
 
-    public Task<IEnumerable<Category>> GetAllCategoriesAsync(string[] roles)
+    public async Task<IEnumerable<Category>> GetAllCategoriesAsync(string[] roles)
     {
         var key = $"{nameof(GetAllCategoriesAsync)}_{GetRoleCacheKeyComponent(roles)}";
+        var categories = await GetCachedValueAsync(key, () => _repo.GetAllCategoriesAsync(roles));
 
-        return GetCachedValueAsync(key, () => _repo.GetAllCategoriesAsync(roles));
+        return categories ?? new List<Category>();
     }
 
-    public Task<IEnumerable<Category>> GetCategoriesAsync(short year, string[] roles)
+    public async Task<IEnumerable<Category>> GetCategoriesAsync(short year, string[] roles)
     {
         var key = $"{nameof(GetCategoriesAsync)}_{year}_{GetRoleCacheKeyComponent(roles)}";
+        var categories = await GetCachedValueAsync(key, () => _repo.GetCategoriesAsync(year, roles));
 
-        return GetCachedValueAsync(key, () => _repo.GetCategoriesAsync(year, roles));
+        return categories ?? new List<Category>();
     }
 
-    public Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, string[] roles)
+    public async Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, string[] roles)
     {
         var key = $"{nameof(GetVideosInCategoryAsync)}_{categoryId}_{GetRoleCacheKeyComponent(roles)}";
+        var videos = await GetCachedValueAsync(key, () => _repo.GetVideosInCategoryAsync(categoryId, roles), TimeSpan.FromHours(2));
 
-        return GetCachedValueAsync(key, () => _repo.GetVideosInCategoryAsync(categoryId, roles), TimeSpan.FromHours(2));
+        return videos ?? new List<Video>();
     }
 
-    public Task<Video> GetVideoAsync(short id, string[] roles)
+    public Task<Video?> GetVideoAsync(short id, string[] roles)
     {
         var key = $"{nameof(GetVideoAsync)}_{id}_{GetRoleCacheKeyComponent(roles)}";
 
         return GetCachedValueAsync(key, () => _repo.GetVideoAsync(id, roles), TimeSpan.FromHours(2));
     }
 
-    public Task<Category> GetCategoryAsync(short categoryId, string[] roles)
+    public Task<Category?> GetCategoryAsync(short categoryId, string[] roles)
     {
         var key = $"{nameof(GetCategoryAsync)}_{categoryId}_{GetRoleCacheKeyComponent(roles)}";
 
@@ -66,17 +70,17 @@ public class VideoService
         return _repo.GetCommentsAsync(videoId, roles);
     }
 
-    public Task<GpsDetail> GetGpsDetailAsync(int videoId, string[] roles)
+    public Task<GpsDetail?> GetGpsDetailAsync(int videoId, string[] roles)
     {
         return _repo.GetGpsDetailAsync(videoId, roles);
     }
 
-    public Task<Rating> GetRatingsAsync(short videoId, string username, string[] roles)
+    public Task<Rating?> GetRatingsAsync(short videoId, string username, string[] roles)
     {
         return _repo.GetRatingsAsync(videoId, username, roles);
     }
 
-    public Task<int> InsertCommentAsync(short videoId, string username, string comment, string[] roles)
+    public Task InsertCommentAsync(short videoId, string username, string comment, string[] roles)
     {
         return _repo.InsertCommentAsync(videoId, username, comment, roles);
     }

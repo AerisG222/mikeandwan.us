@@ -7,9 +7,9 @@ public interface IUserRepository
 {
     Task<IEnumerable<State>> GetStatesAsync();
     Task<IEnumerable<Country>> GetCountriesAsync();
-    Task<MawUser> GetUserAsync(string username);
-    Task<MawUser> GetUserAsync(short id);
-    Task<MawUser> GetUserByEmailAsync(string email);
+    Task<MawUser?> GetUserAsync(string username);
+    Task<MawUser?> GetUserAsync(short id);
+    Task<MawUser?> GetUserByEmailAsync(string email);
     Task<IEnumerable<string>> GetRoleNamesForUserAsync(string username);
     Task<bool> UpdateUserAsync(MawUser updatedUser);
     Task<bool> UpdateUserPasswordAsync(MawUser user);

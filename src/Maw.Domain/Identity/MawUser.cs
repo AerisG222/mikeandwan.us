@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -26,57 +27,61 @@ public class MawUser
 
     public string Username
     {
-        get { return GetSingleClaim(JwtClaimTypes.Name); }
+        get { return GetSingleClaim(JwtClaimTypes.Name) ?? throw new InvalidOperationException("Name claim is null!"); }
         set { SetSingleClaim(JwtClaimTypes.Name, value); }
     }
 
-    public string Email
+    [DisallowNull]
+    public string? Email
     {
         get { return GetSingleClaim(JwtClaimTypes.Email); }
         set { SetSingleClaim(JwtClaimTypes.Email, value); }
     }
 
-    public string HashedPassword
+    [DisallowNull]
+    public string? HashedPassword
     {
         get { return GetSingleClaim(ClaimTypes.Hash); }
         set { SetSingleClaim(ClaimTypes.Hash, value); }
     }
 
-    public string FirstName
+    [DisallowNull]
+    public string? FirstName
     {
         get { return GetSingleClaim(JwtClaimTypes.GivenName); }
         set { SetSingleClaim(JwtClaimTypes.GivenName, value); }
     }
 
-    public string LastName
+    [DisallowNull]
+    public string? LastName
     {
         get { return GetSingleClaim(JwtClaimTypes.FamilyName); }
         set { SetSingleClaim(JwtClaimTypes.FamilyName, value); }
     }
 
-    public string SecurityStamp { get; set; }
+    public string? SecurityStamp { get; set; }
 
     public bool IsGithubAuthEnabled
     {
-        get { return bool.Parse(GetSingleClaim(MawClaimTypes.EnableGithubAuth)); }
+        get { return GetBooleanClaim(MawClaimTypes.EnableGithubAuth, false); }
         set { SetSingleClaim(MawClaimTypes.EnableGithubAuth, value.ToString(CultureInfo.InvariantCulture)); }
     }
 
     public bool IsGoogleAuthEnabled
     {
-        get { return bool.Parse(GetSingleClaim(MawClaimTypes.EnableGoogleAuth)); }
+        get { return GetBooleanClaim(MawClaimTypes.EnableGoogleAuth, false); }
         set { SetSingleClaim(MawClaimTypes.EnableGoogleAuth, value.ToString(CultureInfo.InvariantCulture)); }
     }
 
     public bool IsMicrosoftAuthEnabled
     {
-        get { return bool.Parse(GetSingleClaim(MawClaimTypes.EnableMicrosoftAuth)); }
+        get { return GetBooleanClaim(MawClaimTypes.EnableMicrosoftAuth, false); }
         set { SetSingleClaim(MawClaimTypes.EnableMicrosoftAuth, value.ToString(CultureInfo.InvariantCulture)); }
     }
 
     public bool IsTwitterAuthEnabled
     {
-        get { return bool.Parse(GetSingleClaim(MawClaimTypes.EnableTwitterAuth)); }
+        get { return GetBooleanClaim(MawClaimTypes.EnableTwitterAuth, false); }
         set { SetSingleClaim(MawClaimTypes.EnableTwitterAuth, value.ToString(CultureInfo.InvariantCulture)); }
     }
 
@@ -109,7 +114,7 @@ public class MawUser
         return mawUser;
     }
 
-    public bool IsExternalAuthEnabled(string provider)
+    public bool IsExternalAuthEnabled([NotNullWhen(true)] string? provider)
     {
         if (string.IsNullOrWhiteSpace(provider))
         {
@@ -126,11 +131,23 @@ public class MawUser
         };
     }
 
-    string GetSingleClaim(string claimType)
+    string? GetSingleClaim(string claimType)
     {
         var val = FindFirst(claimType);
 
         return val?.Value;
+    }
+
+    bool GetBooleanClaim(string claimType, bool defaultValue)
+    {
+        var val = GetSingleClaim(claimType);
+
+        if(bool.TryParse(val, out var result))
+        {
+            return result;
+        }
+
+        return defaultValue;
     }
 
     void SetSingleClaim(string claimType, string value)

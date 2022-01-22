@@ -8,18 +8,11 @@ namespace MawAuth.ViewModels.Admin;
 public class EditRoleMembersModel
 {
     [Required(ErrorMessage = "Please enter the role")]
-    public string Role { get; set; }
-    public IEnumerable<string> AllUsers { get; set; }
-    public IEnumerable<string> Members { get; set; }
-    public IEnumerable<string> NewMembers { get; set; }
+    public string Role { get; set; } = null!;
+    public IEnumerable<string> AllUsers { get; set; } = new List<string>();
+    public IEnumerable<string> Members { get; set; } = new List<string>();
+    public IEnumerable<string> NewMembers { get; set; } = new List<string>();
 
     [BindNever]
-    public IdentityResult Result { get; set; }
-
-    public EditRoleMembersModel()
-    {
-        AllUsers = new List<string>();
-        Members = new List<string>();
-        NewMembers = new List<string>();
-    }
+    public IdentityResult? Result { get; set; }
 }

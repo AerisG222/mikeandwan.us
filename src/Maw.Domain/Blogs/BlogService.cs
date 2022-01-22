@@ -19,23 +19,27 @@ public class BlogService
         _repo = blogRepository ?? throw new ArgumentNullException(nameof(blogRepository));
     }
 
-    public Task<IEnumerable<Blog>> GetBlogsAsync()
+    public async Task<IEnumerable<Blog>> GetBlogsAsync()
     {
-        return GetCachedValueAsync(nameof(GetBlogsAsync), () => _repo.GetBlogsAsync());
+        var blogs = await GetCachedValueAsync(nameof(GetBlogsAsync), () => _repo.GetBlogsAsync());
+
+        return blogs ?? new List<Blog>();
     }
 
-    public Task<IEnumerable<Post>> GetAllPostsAsync(short blogId)
+    public async Task<IEnumerable<Post>> GetAllPostsAsync(short blogId)
     {
         var key = $"{nameof(GetAllPostsAsync)}_{blogId}";
+        var posts = await GetCachedValueAsync(key, () => _repo.GetAllPostsAsync(blogId));
 
-        return GetCachedValueAsync(key, () => _repo.GetAllPostsAsync(blogId));
+        return posts ?? new List<Post>();
     }
 
-    public Task<IEnumerable<Post>> GetLatestPostsAsync(short blogId, short postCount)
+    public async Task<IEnumerable<Post>> GetLatestPostsAsync(short blogId, short postCount)
     {
         var key = $"{nameof(GetLatestPostsAsync)}_{blogId}_{postCount}";
+        var posts = await GetCachedValueAsync(key, () => _repo.GetLatestPostsAsync(blogId, postCount));
 
-        return GetCachedValueAsync(key, () => _repo.GetLatestPostsAsync(blogId, postCount));
+        return posts ?? new List<Post>();
     }
 
     public Task AddPostAsync(Post post)

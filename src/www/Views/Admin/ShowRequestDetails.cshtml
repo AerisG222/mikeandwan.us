@@ -1,6 +1,10 @@
 @model Microsoft.AspNetCore.Http.HttpContext
 @{ ViewBag.Title = "admin | request details"; }
 
+@if(Model == null) {
+    throw new InvalidOperationException("Model should not be null!");
+}
+
 <h1>Request Details</h1>
 
 <h2>Basic</h2>

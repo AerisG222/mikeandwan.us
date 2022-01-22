@@ -62,14 +62,14 @@ public class VideosController
     [ProducesResponseType(404)]
     public async Task<ApiCollectionResult<Comment>> AddCommentAsync(short id, CommentViewModel model)
     {
-        if (model == null)
+        if (model?.Comment == null)
         {
             throw new ArgumentNullException(nameof(model));
         }
 
         // TODO: handle invalid photo id?
         // TODO: remove photoId from commentViewModel?
-        await _svc.InsertCommentAsync(id, User.Identity.Name, model.Comment, User.GetAllRoles());
+        await _svc.InsertCommentAsync(id, User.GetUsername(), model.Comment, User.GetAllRoles());
 
         return await InternalGetCommentsAsync(id);
     }
@@ -104,7 +104,7 @@ public class VideosController
             throw new ArgumentNullException(nameof(gps));
         }
 
-        await _svc.SetGpsOverrideAsync(id, gps, User.Identity.Name);
+        await _svc.SetGpsOverrideAsync(id, gps, User.GetUsername());
 
         var detail = await _svc.GetGpsDetailAsync(id, User.GetAllRoles());
 
@@ -144,15 +144,17 @@ public class VideosController
             throw new ArgumentNullException(nameof(userRating));
         }
 
+        var username = User.GetUsername();
+
         // TODO: handle invalid photo id?
         // TODO: remove photoId from userPhotoRating?
         if (userRating.Rating < 1)
         {
-            await _svc.RemoveRatingAsync(id, User.Identity.Name, User.GetAllRoles());
+            await _svc.RemoveRatingAsync(id, username, User.GetAllRoles());
         }
         else if (userRating.Rating <= 5)
         {
-            await _svc.SaveRatingAsync(id, User.Identity.Name, userRating.Rating, User.GetAllRoles());
+            await _svc.SaveRatingAsync(id, username, userRating.Rating, User.GetAllRoles());
         }
         else
         {
@@ -176,8 +178,8 @@ public class VideosController
         return new ApiCollectionResult<Comment>(comments.ToList());
     }
 
-    Task<Rating> InternalGetRatingAsync(short id)
+    Task<Rating?> InternalGetRatingAsync(short id)
     {
-        return _svc.GetRatingsAsync(id, User.Identity.Name, User.GetAllRoles());
+        return _svc.GetRatingsAsync(id, User.GetUsername(), User.GetAllRoles());
     }
 }

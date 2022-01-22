@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace MawMvcApp.ViewModels.Gps;
@@ -11,48 +12,50 @@ public class GpsConversionModel
     public float? DmsLatDegrees { get; set; }
     public float? DmsLatMinutes { get; set; }
     public float? DmsLatSeconds { get; set; }
-    public string DmsLatString { get; set; }
+    public string? DmsLatString { get; set; }
     public LatitudeReference? DmsLatReference { get; set; }
     public float? DmsLngDegrees { get; set; }
     public float? DmsLngMinutes { get; set; }
     public float? DmsLngSeconds { get; set; }
-    public string DmsLngString { get; set; }
+    public string? DmsLngString { get; set; }
     public LongitudeReference? DmsLngReference { get; set; }
 
     public float? DmLatDegrees { get; set; }
     public float? DmLatMinutes { get; set; }
-    public string DmLatString { get; set; }
+    public string? DmLatString { get; set; }
     public LatitudeReference? DmLatReference { get; set; }
     public float? DmLngDegrees { get; set; }
     public float? DmLngMinutes { get; set; }
-    public string DmLngString { get; set; }
+    public string? DmLngString { get; set; }
     public LongitudeReference? DmLngReference { get; set; }
 
     public float? DLatDegrees { get; set; }
-    public string DLatString { get; set; }
+    public string? DLatString { get; set; }
     public LatitudeReference? DLatReference { get; set; }
     public float? DLngDegrees { get; set; }
-    public string DLngString { get; set; }
+    public string? DLngString { get; set; }
     public LongitudeReference? DLngReference { get; set; }
 
-    public GpsConversionMode ConversionMode { get; set; }
+    public GpsConversionMode? ConversionMode { get; set; }
 
     public void Convert()
     {
-        GpsCoordinate coord = null;
-
-        switch (ConversionMode)
+        GpsCoordinate coord = ConversionMode switch
         {
-            case GpsConversionMode.FromDegrees:
-                coord = new GpsCoordinate(GetLatitudeDegrees((float)DLatDegrees, (LatitudeReference)DLatReference), GetLongitudeDegrees((float)DLngDegrees, (LongitudeReference)DLngReference));
-                break;
-            case GpsConversionMode.FromDegreesMinutes:
-                coord = new GpsCoordinate(GetLatitudeDegrees((float)DmLatDegrees, (LatitudeReference)DmLatReference), (float)DmLatMinutes, GetLongitudeDegrees((float)DmLngDegrees, (LongitudeReference)DmLngReference), (float)DmLngMinutes);
-                break;
-            case GpsConversionMode.FromDegreesMinutesSeconds:
-                coord = new GpsCoordinate(GetLatitudeDegrees((float)DmsLatDegrees, (LatitudeReference)DmsLatReference), (float)DmsLatMinutes, (float)DmsLatSeconds, GetLongitudeDegrees((float)DmsLngDegrees, (LongitudeReference)DmsLngReference), (float)DmsLngMinutes, (float)DmsLngSeconds);
-                break;
-        }
+            GpsConversionMode.FromDegrees => new GpsCoordinate(
+                GetLatitudeDegrees(DLatDegrees, DLatReference),
+                GetLongitudeDegrees(DLngDegrees, DLngReference)
+            ),
+            GpsConversionMode.FromDegreesMinutes => new GpsCoordinate(
+                GetLatitudeDegrees(DmLatDegrees, DmLatReference), GetFloat(DmLatMinutes),
+                GetLongitudeDegrees(DmLngDegrees, DmLngReference), GetFloat(DmLngMinutes)
+            ),
+            GpsConversionMode.FromDegreesMinutesSeconds => new GpsCoordinate(
+                GetLatitudeDegrees(DmsLatDegrees, DmsLatReference), GetFloat(DmsLatMinutes), GetFloat(DmsLatSeconds),
+                GetLongitudeDegrees(DmsLngDegrees, DmsLngReference), GetFloat(DmsLngMinutes), GetFloat(DmsLngSeconds)
+            ),
+            _ => throw new InvalidOperationException($"Specified conversion mode [{ ConversionMode }] is not supported")
+        };
 
         // prepare degree portion
         coord.GetLatitudeDegrees(out float degrees);
@@ -153,23 +156,48 @@ public class GpsConversionModel
         }
     }
 
-    float GetLatitudeDegrees(float degree, LatitudeReference latRef)
+    float GetLatitudeDegrees(float? degree, LatitudeReference? latRef)
     {
+        if (degree == null)
+        {
+            throw new ArgumentNullException(nameof(degree));
+        }
+
+        if (latRef == null)
+        {
+            throw new ArgumentNullException(nameof(latRef));
+        }
+
         if (latRef == LatitudeReference.South)
         {
-            return degree * -1.0f;
+            return (float)degree * -1.0f;
         }
 
-        return degree;
+        return (float)degree;
     }
 
-    float GetLongitudeDegrees(float degree, LongitudeReference lngRef)
+    float GetLongitudeDegrees(float? degree, LongitudeReference? lngRef)
     {
-        if (lngRef == LongitudeReference.West)
+        if (degree == null)
         {
-            return degree * -1.0f;
+            throw new ArgumentNullException(nameof(degree));
         }
 
-        return degree;
+        if (lngRef == null)
+        {
+            throw new ArgumentNullException(nameof(lngRef));
+        }
+
+        if (lngRef == LongitudeReference.West)
+        {
+            return (float)degree * -1.0f;
+        }
+
+        return (float)degree;
+    }
+
+    float GetFloat([NotNull] float? val)
+    {
+        return val ?? throw new ArgumentNullException(nameof(val));
     }
 }

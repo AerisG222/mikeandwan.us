@@ -33,7 +33,7 @@ public class BlogRepository
         return InternalGetPostsAsync(blogId, postCount: postCount);
     }
 
-    public async Task<Post> GetPostAsync(short id)
+    public async Task<Post?> GetPostAsync(short id)
     {
         var result = await InternalGetPostsAsync(postId: id);
 

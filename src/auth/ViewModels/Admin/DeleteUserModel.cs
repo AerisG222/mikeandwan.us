@@ -7,8 +7,8 @@ namespace MawAuth.ViewModels.Admin;
 public class DeleteUserModel
 {
     [Required]
-    public string Username { get; set; }
+    public string Username { get; set; } = null!;
 
     [BindNever]
-    public IdentityResult Result { get; set; }
+    public IdentityResult? Result { get; set; }
 }

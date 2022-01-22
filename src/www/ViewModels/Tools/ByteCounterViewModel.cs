@@ -6,7 +6,7 @@ namespace MawMvcApp.ViewModels.Tools;
 public class ByteCounterViewModel
 {
     [Display(Name = "Text to Count")]
-    public string Text { get; set; }
+    public string? Text { get; set; }
 
     [BindNever]
     public int Bytes { get; set; }

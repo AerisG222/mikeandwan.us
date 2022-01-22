@@ -1,35 +1,35 @@
 @{ Layout = "_LayoutMinimal"; }
 
 @section custom_head {
-	@await RenderSectionAsync("custom_head", required: false)
-	<partial name="_Favicons" />
-	<meta name="theme-color" content="#272b30">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine:bold&display=swap" />
-	<partial name="_css_site" />
-	@await RenderSectionAsync("stylesheets", required: false)
-	@await RenderSectionAsync("scripts_head", required: false)
+    @await RenderSectionAsync("custom_head", required: false)
+    <partial name="_Favicons" />
+    <meta name="theme-color" content="#272b30">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine:bold&display=swap" />
+    <partial name="_css_site" />
+    @await RenderSectionAsync("stylesheets", required: false)
+    @await RenderSectionAsync("scripts_head", required: false)
 }
 
 @RenderBody()
 
 <footer class="container-fluid">
-	<div class="row social">
-		<div class="col text-center">
-			<a class="hover-bright" target="_blank" rel="noopener" href="https://play.google.com/store/apps/developer?id=mmorano"><svg-icon icon="Android"></svg-icon></a>
-			<a class="hover-bright" target="_blank" rel="noopener" href="https://twitter.com/AerisG222"><svg-icon icon="Twitter"></svg-icon></a>
-			<a class="hover-bright" target="_blank" rel="noopener" href="https://www.linkedin.com/pub/mike-morano/0/b51/805"><svg-icon icon="LinkedIn"></svg-icon></a>
-			<a class="hover-bright" target="_blank" rel="noopener" href="https://github.com/AerisG222"><svg-icon icon="Github"></svg-icon></a>
-			<a class="hover-bright" target="_blank" rel="noopener" href="https://steamcommunity.com/profiles/76561197974977949/"><svg-icon icon="Steam"></svg-icon></a>
-		</div>
-	</div>
+    <div class="row social">
+        <div class="col text-center">
+            <a class="hover-bright" target="_blank" rel="noopener" href="https://play.google.com/store/apps/developer?id=mmorano"><svg-icon icon="Android"></svg-icon></a>
+            <a class="hover-bright" target="_blank" rel="noopener" href="https://twitter.com/AerisG222"><svg-icon icon="Twitter"></svg-icon></a>
+            <a class="hover-bright" target="_blank" rel="noopener" href="https://www.linkedin.com/pub/mike-morano/0/b51/805"><svg-icon icon="LinkedIn"></svg-icon></a>
+            <a class="hover-bright" target="_blank" rel="noopener" href="https://github.com/AerisG222"><svg-icon icon="Github"></svg-icon></a>
+            <a class="hover-bright" target="_blank" rel="noopener" href="https://steamcommunity.com/profiles/76561197974977949/"><svg-icon icon="Steam"></svg-icon></a>
+        </div>
+    </div>
     <div class="row copyright">
-		<div class="col-4 offset-4 text-center">
-			<span>copyright &copy; @(DateTime.Now.Year) mike morano | all rights reserved</span>
-		</div>
+        <div class="col-4 offset-4 text-center">
+            <span>copyright &copy; @(DateTime.Now.Year) mike morano | all rights reserved</span>
+        </div>
         <div class="col-4 text-end">
             <a href="/privacy" style="text-decoration: none;">privacy policy</a>
         </div>
-	</div>
+    </div>
 </footer>
 
 <mini-profiler />

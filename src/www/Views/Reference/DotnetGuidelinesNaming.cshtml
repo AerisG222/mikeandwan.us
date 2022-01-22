@@ -17,79 +17,79 @@
 <h2>Naming Guidelines</h2>
 
 <table class="table table-responsive table-striped table-hover table-sm">
-  	<tbody>
-	    <tr><td>Do</td><td>Use PascalCasing for namespace, type, and member names consisting of multiple words.</td></tr>
-	    <tr><td>Do</td><td>Use camelCasing for parameter names.</td></tr>
-	    <tr><td>Do</td><td>Capitalize both characters of two-character acronyms except the first word of a camel-cased identifier.</td></tr>
-	    <tr><td>Do</td><td>Capitalize only the first character of acronyms with three or more characters except the first word of a camel-cased identifier.</td></tr>
-	    <tr><td>Do Not</td><td>Capitalize any of the characters of any acronyms, whatever their length, at the beginning of a camel-cased identifier.</td></tr>
-	    <tr><td>Do Not</td><td>Capitalize each word in so-called closed-form compound words.</td></tr>
-	    <tr><td>Do Not</td><td>Assume that all programming languages are case sensitive.</td></tr>
-	    <tr><td>Do</td><td>Choose easily readable identifier names</td></tr>
-	    <tr><td>Do</td><td>Favor readability over brevity.</td></tr>
-	    <tr><td>Do Not</td><td>Use underscores, hyphens, or any other non alphanumeric characters.</td></tr>
-	    <tr><td>Do Not</td><td>Use Hungarian notation.</td></tr>
-	    <tr><td>Avoid</td><td>Using identifiers that conflict with keywords of widely used programming languages.</td></tr>
-	    <tr><td>Do Not</td><td>Use abbreviations or contractions as part of identifier names.</td></tr>
-	    <tr><td>Do Not</td><td>Use any acronyms that are not widely accepted, and even if they are, only when necessary.</td></tr>
-	    <tr><td>Do</td><td>Use semantically interesting names rather than language-specific keywords for type names.</td></tr>
-	    <tr><td>Do</td><td>Use a generic CLR type name, rather than a language-specific name, in the rare cases when an identifier has no semantic meaning beyond its type.</td></tr>
-	    <tr><td>Do</td><td>Use a common name, such as <i>value</i> <span style="font-style: normal">or</span> <i>item</i><span style="font-style: normal">, rather than repeating the type name, in the rare cases when an identifier has no semantic meaning and the type of the parameter is not important.</span></td></tr>
-	    <tr><td>Do</td><td>Use a name similar to the old API when creating new version of an existing API.</td></tr>
-	    <tr><td>Do</td><td>Prefer adding a suffix rather than a prefix to indicate a new version of an existing API.</td></tr>
-	    <tr><td>Consider</td><td>Using a brand new, but meaningful identifier, instead of adding a suffix or a prefix.</td></tr>
-	    <tr><td>Do</td><td>Use a numeric suffix to indicate a new version of an existing API, if the existing name of the API is the only name that makes sense (i.e., it is an industry standard), and adding any meaningful suffix (or changing the name) is not an appropriate option.</td></tr>
-	    <tr><td>Do Not</td><td>Use the &ldquo;Ex&rdquo; (or similar) suffix for an identifier to distinguish it from an earlier version of the same API.</td></tr>
-	    <tr><td>Do</td><td>Use the &ldquo;64&rdquo; suffix when introducing versions of APIs that operate on a 64-bit integer (a long) instead of a 32-bit integer.</td></tr>
-	    <tr><td>Do</td><td>Choose names for your assembly DLLs that suggest large chunks of functionality such as System.Data.</td></tr>
-	    <tr><td>Consider</td><td>Naming DLLs according to the following pattern: &lt;Company&gt;.&lt;Component&gt;.dll</td></tr>
-	    <tr><td>Do</td><td>Prefix namespace names with a company name to prevent namespaces from different companies from having the same name.</td></tr>
-	    <tr><td>Do</td><td>Use stable, version-independent product name at the second level of a namespace name.</td></tr>
-	    <tr><td>Do Not</td><td>Use organizational hierarchies as the basis for names in namespace hierarchies, because group names within corporations tend to be short-lived.</td></tr>
-	    <tr><td>Do</td><td>Use PascalCasing and separate namespace components with periods (e.g., Microsoft.Office.PowerPoint).</td></tr>
-	    <tr><td>Consider</td><td>Using plural namespace names where appropriate.</td></tr>
-	    <tr><td>Do Not</td><td>Use the same name for a namespace and a type in that namespace.</td></tr>
-	    <tr><td>Do Not</td><td>Introduce generic type names such as Element, Node, Log, and Message.</td></tr>
-	    <tr><td>Do Not</td><td>Give the same name to types in namespaces within a single application model.</td></tr>
-	    <tr><td>Do Not</td><td>Give types names that would conflict with any type in the Core namespaces.</td></tr>
-	    <tr><td>Do Not</td><td>Assign type names that would conflict with other types within a single technology.</td></tr>
-	    <tr><td>Do Not</td><td>Introduce type name conflicts between types in technology namespaces and an application model namespace (unless the technology is not intended to be used with the application model).</td></tr>
-	    <tr><td>Do</td><td>Name types with nouns, noun phrases, or, occasionally, adjective phrases, using PascalCasing.</td></tr>
-	    <tr><td>Do Not</td><td>Give class names a prefix (e.g., &ldquo;C&rdquo;).</td></tr>
-	    <tr><td>Consider</td><td>Ending the name of derived classes with the name of the base class.</td></tr>
-	    <tr><td>Do</td><td>Prefix interface names with the letter I, to indicate that the type is an interface.</td></tr>
-	    <tr><td>Do</td><td>Ensure that when defining a class &ndash; interface pair where the class is a standard implementation of the interface, the names differ only by the &ldquo;I&rdquo; prefix on the interface name.</td></tr>
-	    <tr><td>Do</td><td>Name generic type parameters with descriptive names, unless a single-letter name is completely self-explanatory and a descriptive name would not add value.</td></tr>
-	    <tr><td>Consider</td><td>Using T as the type parameter name for types with one single-letter type parameter.</td></tr>
-	    <tr><td>Do</td><td>Prefix descriptive type parameter names with T.</td></tr>
-	    <tr><td>Consider</td><td>Indicating constraints placed on a type parameter in the name of the parameter.</td></tr>
-	    <tr><td>Do</td><td>Follow the guidelines described in Table 3-4 (page 58) when naming types derived from or implementing certain .Net Framework types.</td></tr>
-	    <tr><td>Do</td><td>Use a singular type name for an enumeration, unless its values are bit fields.</td></tr>
-	    <tr><td>Do</td><td>Use a plural type name for an enumeration with bit fields as values, also called flags enum.</td></tr>
-	    <tr><td>Do Not</td><td>Use an &ldquo;Enum&rdquo; suffix in enum type names.</td></tr>
-	    <tr><td>Do Not</td><td>Use &ldquo;Flag&rdquo; or &ldquo;Flags&rdquo; suffixes in enum type names.</td></tr>
-	    <tr><td>Do Not</td><td>Use a prefix on enumeration value names (e.g., &ldquo;ad&rdquo; for ADO enums, &ldquo;rtf&rdquo; for rich text enums, etc).</td></tr>
-	    <tr><td>Do</td><td>Give methods names that are verbs or verb phrases.</td></tr>
-	    <tr><td>Do</td><td>Name properties using a noun, noun phrase, or adjective.</td></tr>
-	    <tr><td>Do Not</td><td>Have properties that match the name of &ldquo;Get&rdquo; methods.</td></tr>
-	    <tr><td>Do</td><td>Name Boolean properties with an affirmative phrase (CanSeek instead of CantSeek).</td></tr>
-	    <tr><td>Consider</td><td>Giving a property the same name as its type.</td></tr>
-	    <tr><td>Do</td><td>Name events with a verb or a verb phrase.</td></tr>
-	    <tr><td>Do</td><td>Give events names with a concept of before and after, using the present and past tense.</td></tr>
-	    <tr><td>Do Not</td><td>Use &ldquo;Before&rdquo; or &ldquo;After&rdquo; prefixes or postfixes to indicate pre and post events.</td></tr>
-	    <tr><td>Do</td><td>Name event handlers (delegates used as types of events) with the &ldquo;EventHandler&rdquo; suffix.</td></tr>
-	    <tr><td>Do</td><td>Use two parameters name <i>sender</i> <span style="font-style: normal">and</span> <i>e</i> <span style="font-style: normal">in event handlers.</span></td></tr>
-	    <tr><td>Do</td><td>Name event argument classes with the &ldquo;EventArgs&rdquo; suffix.</td></tr>
-	    <tr><td>Do</td><td>Use PascalCasing in field names.</td></tr>
-	    <tr><td>Do</td><td>Name fields with nouns or noun phrases.</td></tr>
-	    <tr><td>Do Not</td><td>Use a prefix for field names, (e.g., &ldquo;g_&rdquo; or &ldquo;s_&rdquo;).</td></tr>
-	    <tr><td>Do</td><td>Use camelCasing in parameter names.</td></tr>
-	    <tr><td>Do</td><td>Use descriptive parameter names.</td></tr>
-	    <tr><td>Do</td><td>Use PascalCasing in resource keys.</td></tr>
-	    <tr><td>Do</td><td>Provide descriptive rather than short identifiers.</td></tr>
-	    <tr><td>Do Not</td><td>Use language-specific keywords of the main CLR languages.</td></tr>
-	    <tr><td>Do</td><td>Use only alphanumeric characters and underscores in naming resources.</td></tr>
-	    <tr><td>Do</td><td>Use the dot separator to nest identifiers with a clear hierarchy.</td></tr>
-	    <tr><td>Do</td><td>Use naming conventions for naming exception messages as indicated on page 65.</td></tr>
-	</tbody>
+      <tbody>
+        <tr><td>Do</td><td>Use PascalCasing for namespace, type, and member names consisting of multiple words.</td></tr>
+        <tr><td>Do</td><td>Use camelCasing for parameter names.</td></tr>
+        <tr><td>Do</td><td>Capitalize both characters of two-character acronyms except the first word of a camel-cased identifier.</td></tr>
+        <tr><td>Do</td><td>Capitalize only the first character of acronyms with three or more characters except the first word of a camel-cased identifier.</td></tr>
+        <tr><td>Do Not</td><td>Capitalize any of the characters of any acronyms, whatever their length, at the beginning of a camel-cased identifier.</td></tr>
+        <tr><td>Do Not</td><td>Capitalize each word in so-called closed-form compound words.</td></tr>
+        <tr><td>Do Not</td><td>Assume that all programming languages are case sensitive.</td></tr>
+        <tr><td>Do</td><td>Choose easily readable identifier names</td></tr>
+        <tr><td>Do</td><td>Favor readability over brevity.</td></tr>
+        <tr><td>Do Not</td><td>Use underscores, hyphens, or any other non alphanumeric characters.</td></tr>
+        <tr><td>Do Not</td><td>Use Hungarian notation.</td></tr>
+        <tr><td>Avoid</td><td>Using identifiers that conflict with keywords of widely used programming languages.</td></tr>
+        <tr><td>Do Not</td><td>Use abbreviations or contractions as part of identifier names.</td></tr>
+        <tr><td>Do Not</td><td>Use any acronyms that are not widely accepted, and even if they are, only when necessary.</td></tr>
+        <tr><td>Do</td><td>Use semantically interesting names rather than language-specific keywords for type names.</td></tr>
+        <tr><td>Do</td><td>Use a generic CLR type name, rather than a language-specific name, in the rare cases when an identifier has no semantic meaning beyond its type.</td></tr>
+        <tr><td>Do</td><td>Use a common name, such as <i>value</i> <span style="font-style: normal">or</span> <i>item</i><span style="font-style: normal">, rather than repeating the type name, in the rare cases when an identifier has no semantic meaning and the type of the parameter is not important.</span></td></tr>
+        <tr><td>Do</td><td>Use a name similar to the old API when creating new version of an existing API.</td></tr>
+        <tr><td>Do</td><td>Prefer adding a suffix rather than a prefix to indicate a new version of an existing API.</td></tr>
+        <tr><td>Consider</td><td>Using a brand new, but meaningful identifier, instead of adding a suffix or a prefix.</td></tr>
+        <tr><td>Do</td><td>Use a numeric suffix to indicate a new version of an existing API, if the existing name of the API is the only name that makes sense (i.e., it is an industry standard), and adding any meaningful suffix (or changing the name) is not an appropriate option.</td></tr>
+        <tr><td>Do Not</td><td>Use the &ldquo;Ex&rdquo; (or similar) suffix for an identifier to distinguish it from an earlier version of the same API.</td></tr>
+        <tr><td>Do</td><td>Use the &ldquo;64&rdquo; suffix when introducing versions of APIs that operate on a 64-bit integer (a long) instead of a 32-bit integer.</td></tr>
+        <tr><td>Do</td><td>Choose names for your assembly DLLs that suggest large chunks of functionality such as System.Data.</td></tr>
+        <tr><td>Consider</td><td>Naming DLLs according to the following pattern: &lt;Company&gt;.&lt;Component&gt;.dll</td></tr>
+        <tr><td>Do</td><td>Prefix namespace names with a company name to prevent namespaces from different companies from having the same name.</td></tr>
+        <tr><td>Do</td><td>Use stable, version-independent product name at the second level of a namespace name.</td></tr>
+        <tr><td>Do Not</td><td>Use organizational hierarchies as the basis for names in namespace hierarchies, because group names within corporations tend to be short-lived.</td></tr>
+        <tr><td>Do</td><td>Use PascalCasing and separate namespace components with periods (e.g., Microsoft.Office.PowerPoint).</td></tr>
+        <tr><td>Consider</td><td>Using plural namespace names where appropriate.</td></tr>
+        <tr><td>Do Not</td><td>Use the same name for a namespace and a type in that namespace.</td></tr>
+        <tr><td>Do Not</td><td>Introduce generic type names such as Element, Node, Log, and Message.</td></tr>
+        <tr><td>Do Not</td><td>Give the same name to types in namespaces within a single application model.</td></tr>
+        <tr><td>Do Not</td><td>Give types names that would conflict with any type in the Core namespaces.</td></tr>
+        <tr><td>Do Not</td><td>Assign type names that would conflict with other types within a single technology.</td></tr>
+        <tr><td>Do Not</td><td>Introduce type name conflicts between types in technology namespaces and an application model namespace (unless the technology is not intended to be used with the application model).</td></tr>
+        <tr><td>Do</td><td>Name types with nouns, noun phrases, or, occasionally, adjective phrases, using PascalCasing.</td></tr>
+        <tr><td>Do Not</td><td>Give class names a prefix (e.g., &ldquo;C&rdquo;).</td></tr>
+        <tr><td>Consider</td><td>Ending the name of derived classes with the name of the base class.</td></tr>
+        <tr><td>Do</td><td>Prefix interface names with the letter I, to indicate that the type is an interface.</td></tr>
+        <tr><td>Do</td><td>Ensure that when defining a class &ndash; interface pair where the class is a standard implementation of the interface, the names differ only by the &ldquo;I&rdquo; prefix on the interface name.</td></tr>
+        <tr><td>Do</td><td>Name generic type parameters with descriptive names, unless a single-letter name is completely self-explanatory and a descriptive name would not add value.</td></tr>
+        <tr><td>Consider</td><td>Using T as the type parameter name for types with one single-letter type parameter.</td></tr>
+        <tr><td>Do</td><td>Prefix descriptive type parameter names with T.</td></tr>
+        <tr><td>Consider</td><td>Indicating constraints placed on a type parameter in the name of the parameter.</td></tr>
+        <tr><td>Do</td><td>Follow the guidelines described in Table 3-4 (page 58) when naming types derived from or implementing certain .Net Framework types.</td></tr>
+        <tr><td>Do</td><td>Use a singular type name for an enumeration, unless its values are bit fields.</td></tr>
+        <tr><td>Do</td><td>Use a plural type name for an enumeration with bit fields as values, also called flags enum.</td></tr>
+        <tr><td>Do Not</td><td>Use an &ldquo;Enum&rdquo; suffix in enum type names.</td></tr>
+        <tr><td>Do Not</td><td>Use &ldquo;Flag&rdquo; or &ldquo;Flags&rdquo; suffixes in enum type names.</td></tr>
+        <tr><td>Do Not</td><td>Use a prefix on enumeration value names (e.g., &ldquo;ad&rdquo; for ADO enums, &ldquo;rtf&rdquo; for rich text enums, etc).</td></tr>
+        <tr><td>Do</td><td>Give methods names that are verbs or verb phrases.</td></tr>
+        <tr><td>Do</td><td>Name properties using a noun, noun phrase, or adjective.</td></tr>
+        <tr><td>Do Not</td><td>Have properties that match the name of &ldquo;Get&rdquo; methods.</td></tr>
+        <tr><td>Do</td><td>Name Boolean properties with an affirmative phrase (CanSeek instead of CantSeek).</td></tr>
+        <tr><td>Consider</td><td>Giving a property the same name as its type.</td></tr>
+        <tr><td>Do</td><td>Name events with a verb or a verb phrase.</td></tr>
+        <tr><td>Do</td><td>Give events names with a concept of before and after, using the present and past tense.</td></tr>
+        <tr><td>Do Not</td><td>Use &ldquo;Before&rdquo; or &ldquo;After&rdquo; prefixes or postfixes to indicate pre and post events.</td></tr>
+        <tr><td>Do</td><td>Name event handlers (delegates used as types of events) with the &ldquo;EventHandler&rdquo; suffix.</td></tr>
+        <tr><td>Do</td><td>Use two parameters name <i>sender</i> <span style="font-style: normal">and</span> <i>e</i> <span style="font-style: normal">in event handlers.</span></td></tr>
+        <tr><td>Do</td><td>Name event argument classes with the &ldquo;EventArgs&rdquo; suffix.</td></tr>
+        <tr><td>Do</td><td>Use PascalCasing in field names.</td></tr>
+        <tr><td>Do</td><td>Name fields with nouns or noun phrases.</td></tr>
+        <tr><td>Do Not</td><td>Use a prefix for field names, (e.g., &ldquo;g_&rdquo; or &ldquo;s_&rdquo;).</td></tr>
+        <tr><td>Do</td><td>Use camelCasing in parameter names.</td></tr>
+        <tr><td>Do</td><td>Use descriptive parameter names.</td></tr>
+        <tr><td>Do</td><td>Use PascalCasing in resource keys.</td></tr>
+        <tr><td>Do</td><td>Provide descriptive rather than short identifiers.</td></tr>
+        <tr><td>Do Not</td><td>Use language-specific keywords of the main CLR languages.</td></tr>
+        <tr><td>Do</td><td>Use only alphanumeric characters and underscores in naming resources.</td></tr>
+        <tr><td>Do</td><td>Use the dot separator to nest identifiers with a clear hierarchy.</td></tr>
+        <tr><td>Do</td><td>Use naming conventions for naming exception messages as indicated on page 65.</td></tr>
+    </tbody>
 </table>

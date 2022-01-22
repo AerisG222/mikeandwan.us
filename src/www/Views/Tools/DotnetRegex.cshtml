@@ -34,7 +34,7 @@
 </p>
 
 <form asp-controller="tools" asp-action="dotnetregex" method="post" autocomplete="off" role="form">
-	<div class="mb-3">
+    <div class="mb-3">
         <label asp-for="Pattern" class="form-label"></label>
         <textarea asp-for="Pattern" rows="2" class="form-control" autofocus=""></textarea>
         @*<span asp-validation-for="Pattern" class="form-text"></span>*@
@@ -44,7 +44,7 @@
         <label asp-for="Input" class="form-label"></label>
         <textarea asp-for="Input" rows="4" class="form-control" autofocus=""></textarea>
         @*<span asp-validation-for="Input" class="form-text"></span>*@
-	</div>
+    </div>
 
     <div class="row mb-3">
         <div class="col">
@@ -99,49 +99,49 @@
 </form>
 
 @if(Model.RegexMatches != null) {
-	string? results = null;
+    string? results = null;
 
-	switch(Model.RegexMatches.Count) 	{
-		case 0:
-			results = "No matches found.";
-			break;
-		case 1:
-			results = "1 match found.";
-			break;
-		default:
-			results = string.Concat(Model.RegexMatches.Count, " matches found.");
-			break;
-	}
+    switch(Model.RegexMatches.Count)     {
+        case 0:
+            results = "No matches found.";
+            break;
+        case 1:
+            results = "1 match found.";
+            break;
+        default:
+            results = string.Concat(Model.RegexMatches.Count, " matches found.");
+            break;
+    }
 
-	<strong>@results</strong>
+    <strong>@results</strong>
 
-	<ul>
-	@foreach(Match match in Model.RegexMatches) {
-		<li>Match: @match.Value
-		@if(match.Groups != null && match.Groups.Count > 0) {
-			int groupid = 0;
+    <ul>
+    @foreach(Match match in Model.RegexMatches) {
+        <li>Match: @match.Value
+        @if(match.Groups != null && match.Groups.Count > 0) {
+            int groupid = 0;
 
-			<ul>
-			@foreach(Group group in match.Groups) {
-				string name = string.Concat("[", groupid, " : ", Model.Regex?.GroupNameFromNumber(groupid), "]");
+            <ul>
+            @foreach(Group group in match.Groups) {
+                string name = string.Concat("[", groupid, " : ", Model.Regex?.GroupNameFromNumber(groupid), "]");
 
-				<li>Group: @name : @group.Value
-				@if(group.Captures != null && group.Captures.Count > 1) {
-					int captureid = 0;
-					<ul>
-					@foreach(Capture capture in group.Captures) {
-						<li>Capture: @capture.Value</li>
-						captureid++;
-					}
-					</ul>
-				}
-				</li>
+                <li>Group: @name : @group.Value
+                @if(group.Captures != null && group.Captures.Count > 1) {
+                    int captureid = 0;
+                    <ul>
+                    @foreach(Capture capture in group.Captures) {
+                        <li>Capture: @capture.Value</li>
+                        captureid++;
+                    }
+                    </ul>
+                }
+                </li>
 
-				groupid++;
-			}
-			</ul>
-		}
-		</li>
-	}
-	</ul>
+                groupid++;
+            }
+            </ul>
+        }
+        </li>
+    }
+    </ul>
 }

@@ -18,72 +18,72 @@
 <h2>Common Design Patterns</h2>
 
 <table class="table table-responsive table-striped table-hover table-sm">
-  	<tbody>
-	    <tr><td>Consider</td><td>Providing aggregate components for commonly used feature areas.</td></tr>
-	    <tr><td>Do</td><td>Model high-level concepts (physical objects) rather than system-level tasks with aggregate components.</td></tr>
-	    <tr><td>Do</td><td>Increase visibility of aggregate components by giving them names that correspond to well-known entities of the system, such as MessageQueue, Process, or EventLog.</td></tr>
-	    <tr><td>Do</td><td>Design aggregate components so they can be used after very simple initialization.</td></tr>
-	    <tr><td>Do Not</td><td>Require the users of aggregate components to explicitly instantiate multiple objects in a single scenario.</td></tr>
-	    <tr><td>Do</td><td>Make sure aggregate components support the Create-Set-Call usage pattern, where developers expect to be able to implement most scenarios by instantiating the component, setting its properties, and calling simple methods.</td></tr>
-	    <tr><td>Do</td><td>Provide a default or a very simple constructor for all aggregate components.</td></tr>
-	    <tr><td>Do</td><td>Provide properties with getters and setters corresponding to all parameters of aggregate component constructors.</td></tr>
-	    <tr><td>Do</td><td>Use events instead of delegate-based APIs in aggregate components.</td></tr>
-	    <tr><td>Consider</td><td>Using events instead of virtual members that need to be overridden.</td></tr>
-	    <tr><td>Do Not</td><td>Require users of aggregate components to inherit, override methods, or implement any interfaces in common scenarios.</td></tr>
-	    <tr><td>Do Not</td><td>Require users of aggregate components to do anything besides writing code in common scenarios.</td></tr>
-	    <tr><td>Consider</td><td>Making changes to aggregate components' modes automatic.</td></tr>
-	    <tr><td>Do Not</td><td>Design factored types that have modes.</td></tr>
-	    <tr><td>Consider</td><td>Integrating your aggregate components with Visual Studio Designers.</td></tr>
-	    <tr><td>Consider</td><td>Separating aggregate components and factored types into different assemblies.</td></tr>
-	    <tr><td>Consider</td><td>Exposing access to internal factored types of an aggregate component.</td></tr>
-	    <tr><td>Do</td><td>Use the following convention for defining APIs for asynchronous operations: 1. public &lt;return&gt; Operation(&lt;parameters&gt;, &lt;out params&gt;) 2. public IAsyncResult BeginOperation(&lt;parameters&gt;, AsyncCallback callback, object state) 3. public &lt;return&gt; EndOperation(IAsyncResult asyncResult, &lt;out params&gt;)</td></tr>
-	    <tr><td>Do</td><td>Ensure that the return type of the Begin method implements IAsyncResult.</td></tr>
-	    <tr><td>Do</td><td>Ensure that any by-value and ref parameters of the synchronous method are represented as by-value parameters of the Begin method.</td></tr>
-	    <tr><td>Do</td><td>Ensure that the return type of the End method is the same as the return type of the synchronous method.</td></tr>
-	    <tr><td>Do</td><td>Ensure that any out and ref parameters of the synchronous method are represented as out parameters of the End method.</td></tr>
-	    <tr><td>Do Not</td><td>Continue the asynchronous operation if the Begin method throws an exception.</td></tr>
-	    <tr><td>Do</td><td>Notify the caller that the asynchronous operation completed via all of the following mechanisms in this order: 1. Set IAsyncResult.IsCompleted to true. 2. Call the async callback.</td></tr>
-	    <tr><td>Do</td><td>Throw from the End method to indicate that the asynchronous operation could not complete successfully.</td></tr>
-	    <tr><td>Do</td><td>Complete all remaining work synchronously once the End method is called.</td></tr>
-	    <tr><td>Consider</td><td>Throwing an InvalidOperationException if the End method is called with the same IAsyncResult twice, or if the IAsyncResult was returned from an unrelated Begin method.</td></tr>
-	    <tr><td>Do</td><td>Set IAsyncResult.CompletedSynchronously to true if and only if the async callback will be run on the thread that called Begin.</td></tr>
-	    <tr><td>Do</td><td>Implement the Basic Dispose Pattern on types containing instances of disposable types.</td></tr>
-	    <tr><td>Do</td><td>Implement the Basic Dispose Pattern and provide a finalizer on types holding resources that need to be freed explicitly and that do not have finalizers.</td></tr>
-	    <tr><td>Consider</td><td>Implementing the Basic Dispose Pattern on classes that themselves don't hold unmanaged resources or disposable objects but are likely to have subtypes that do.</td></tr>
-	    <tr><td>Do</td><td>Declare a protected virtual void Dispose(bool disposing) method to centralize all logic related to releasing unmanaged resources.</td></tr>
-	    <tr><td>Do</td><td>Implement the IDisposable interface by simply calling Dispose(true) followed by GC.SupressFinalize(this).</td></tr>
-	    <tr><td>Do Not</td><td>Make the parameterless Dispose method virtual.</td></tr>
-	    <tr><td>Do Not</td><td>Declare any overloads of the Dispose method other than Dispose() and Dispose(bool).</td></tr>
-	    <tr><td>Do</td><td>Allow the Dispose(bool) method to be called more than once.</td></tr>
-	    <tr><td>Avoid</td><td>Throwing an exception from within Dispose(bool) except under critical situations where the containing process has been corrupted (leaks, inconsistent shared state, etc.).</td></tr>
-	    <tr><td>Do</td><td>Throw an ObjectDisposedException from any member that can not be used after the object has been disposed.</td></tr>
-	    <tr><td>Consider</td><td>Providing method Close(), in addition to the Dispose(), if close is standard terminology in the area.</td></tr>
-	    <tr><td>Avoid</td><td>Making types finalizable.</td></tr>
-	    <tr><td>Do Not</td><td>Make value types finalizable.</td></tr>
-	    <tr><td>Do</td><td>Make a type finalizable, if the type is responsible for releasing an unmanaged resource that does not have its own finalizer</td></tr>
-	    <tr><td>Do</td><td>Implement the Basic Dispose Pattern on every finalizable type.</td></tr>
-	    <tr><td>Do Not</td><td>Access any finalizable objects in the finalizer code path, as there is significant risk that they will have already been finalized.</td></tr>
-	    <tr><td>Do</td><td>Make your Finalize method protected.</td></tr>
-	    <tr><td>Do Not</td><td>Let exceptions escape from the finalizer logic, except for system-critical failures.</td></tr>
-	    <tr><td>Consider</td><td>Creating and using a critical finalizable object (a type with a hierarchy that contains CriticalFinalizerObject) for situations in which a finalizer absolutely must execute even in the face of forced application domain unloads and thread aborts.</td></tr>
-	    <tr><td>Do</td><td>Prefer constructors to factories, as they are generally more usable, consistent, and convenient than specialized construction mechanisms.</td></tr>
-	    <tr><td>Consider</td><td>Using a factory if you need more control than can be provided by constructors of the creation of the instances.</td></tr>
-	    <tr><td>Do</td><td>Use a factory in cases where a developer might not know which type to construct, such as wen coding against a base type or interface.</td></tr>
-	    <tr><td>Consider</td><td>Using a factory if having a named method is the only way to make the operation self-explanatory.</td></tr>
-	    <tr><td>Do</td><td>Use a factory for conversion-style operations.</td></tr>
-	    <tr><td>Do</td><td>Prefer implementing factory operations as methods, rather than properties.</td></tr>
-	    <tr><td>Do</td><td>Return created instances as method return values, not as out parameters.</td></tr>
-	    <tr><td>Consider</td><td>Naming factory methods by concatenating Create and the name of the type being created.</td></tr>
-	    <tr><td>Consider</td><td>Naming factory types by concatenating the name of the type being created and Factory.</td></tr>
-	    <tr><td>Consider</td><td>Using the Optional Feature Pattern for optional features in abstractions.</td></tr>
-	    <tr><td>Do</td><td>Provide a simple Boolean property that clients can use to determine whether an optional feature is supported.</td></tr>
-	    <tr><td>Do</td><td>Use virtual methods on the base class that throw NotSupportedException to define optional features.</td></tr>
-	    <tr><td>Avoid</td><td>Making public members virtual.</td></tr>
-	    <tr><td>Consider</td><td>The Template Method Pattern to provide more controlled extensibility.</td></tr>
-	    <tr><td>Consider</td><td>Naming protected virtual members that provide extensibility points for nonvirtual members by suffixing the nonvirtual member name with &ldquo;Core&rdquo;.</td></tr>
-	    <tr><td>Do</td><td>Prefer method parameters as the mechanism for users to provide timeout time.</td></tr>
-	    <tr><td>Do</td><td>Prefer using TimeSpan to represent timeout time.</td></tr>
-	    <tr><td>Do</td><td>Throw System.TimeoutException when a timeout elapses.</td></tr>
-	    <tr><td>Do Not</td><td>Return error codes to indicate timeout expiration.</td></tr>
+      <tbody>
+        <tr><td>Consider</td><td>Providing aggregate components for commonly used feature areas.</td></tr>
+        <tr><td>Do</td><td>Model high-level concepts (physical objects) rather than system-level tasks with aggregate components.</td></tr>
+        <tr><td>Do</td><td>Increase visibility of aggregate components by giving them names that correspond to well-known entities of the system, such as MessageQueue, Process, or EventLog.</td></tr>
+        <tr><td>Do</td><td>Design aggregate components so they can be used after very simple initialization.</td></tr>
+        <tr><td>Do Not</td><td>Require the users of aggregate components to explicitly instantiate multiple objects in a single scenario.</td></tr>
+        <tr><td>Do</td><td>Make sure aggregate components support the Create-Set-Call usage pattern, where developers expect to be able to implement most scenarios by instantiating the component, setting its properties, and calling simple methods.</td></tr>
+        <tr><td>Do</td><td>Provide a default or a very simple constructor for all aggregate components.</td></tr>
+        <tr><td>Do</td><td>Provide properties with getters and setters corresponding to all parameters of aggregate component constructors.</td></tr>
+        <tr><td>Do</td><td>Use events instead of delegate-based APIs in aggregate components.</td></tr>
+        <tr><td>Consider</td><td>Using events instead of virtual members that need to be overridden.</td></tr>
+        <tr><td>Do Not</td><td>Require users of aggregate components to inherit, override methods, or implement any interfaces in common scenarios.</td></tr>
+        <tr><td>Do Not</td><td>Require users of aggregate components to do anything besides writing code in common scenarios.</td></tr>
+        <tr><td>Consider</td><td>Making changes to aggregate components' modes automatic.</td></tr>
+        <tr><td>Do Not</td><td>Design factored types that have modes.</td></tr>
+        <tr><td>Consider</td><td>Integrating your aggregate components with Visual Studio Designers.</td></tr>
+        <tr><td>Consider</td><td>Separating aggregate components and factored types into different assemblies.</td></tr>
+        <tr><td>Consider</td><td>Exposing access to internal factored types of an aggregate component.</td></tr>
+        <tr><td>Do</td><td>Use the following convention for defining APIs for asynchronous operations: 1. public &lt;return&gt; Operation(&lt;parameters&gt;, &lt;out params&gt;) 2. public IAsyncResult BeginOperation(&lt;parameters&gt;, AsyncCallback callback, object state) 3. public &lt;return&gt; EndOperation(IAsyncResult asyncResult, &lt;out params&gt;)</td></tr>
+        <tr><td>Do</td><td>Ensure that the return type of the Begin method implements IAsyncResult.</td></tr>
+        <tr><td>Do</td><td>Ensure that any by-value and ref parameters of the synchronous method are represented as by-value parameters of the Begin method.</td></tr>
+        <tr><td>Do</td><td>Ensure that the return type of the End method is the same as the return type of the synchronous method.</td></tr>
+        <tr><td>Do</td><td>Ensure that any out and ref parameters of the synchronous method are represented as out parameters of the End method.</td></tr>
+        <tr><td>Do Not</td><td>Continue the asynchronous operation if the Begin method throws an exception.</td></tr>
+        <tr><td>Do</td><td>Notify the caller that the asynchronous operation completed via all of the following mechanisms in this order: 1. Set IAsyncResult.IsCompleted to true. 2. Call the async callback.</td></tr>
+        <tr><td>Do</td><td>Throw from the End method to indicate that the asynchronous operation could not complete successfully.</td></tr>
+        <tr><td>Do</td><td>Complete all remaining work synchronously once the End method is called.</td></tr>
+        <tr><td>Consider</td><td>Throwing an InvalidOperationException if the End method is called with the same IAsyncResult twice, or if the IAsyncResult was returned from an unrelated Begin method.</td></tr>
+        <tr><td>Do</td><td>Set IAsyncResult.CompletedSynchronously to true if and only if the async callback will be run on the thread that called Begin.</td></tr>
+        <tr><td>Do</td><td>Implement the Basic Dispose Pattern on types containing instances of disposable types.</td></tr>
+        <tr><td>Do</td><td>Implement the Basic Dispose Pattern and provide a finalizer on types holding resources that need to be freed explicitly and that do not have finalizers.</td></tr>
+        <tr><td>Consider</td><td>Implementing the Basic Dispose Pattern on classes that themselves don't hold unmanaged resources or disposable objects but are likely to have subtypes that do.</td></tr>
+        <tr><td>Do</td><td>Declare a protected virtual void Dispose(bool disposing) method to centralize all logic related to releasing unmanaged resources.</td></tr>
+        <tr><td>Do</td><td>Implement the IDisposable interface by simply calling Dispose(true) followed by GC.SupressFinalize(this).</td></tr>
+        <tr><td>Do Not</td><td>Make the parameterless Dispose method virtual.</td></tr>
+        <tr><td>Do Not</td><td>Declare any overloads of the Dispose method other than Dispose() and Dispose(bool).</td></tr>
+        <tr><td>Do</td><td>Allow the Dispose(bool) method to be called more than once.</td></tr>
+        <tr><td>Avoid</td><td>Throwing an exception from within Dispose(bool) except under critical situations where the containing process has been corrupted (leaks, inconsistent shared state, etc.).</td></tr>
+        <tr><td>Do</td><td>Throw an ObjectDisposedException from any member that can not be used after the object has been disposed.</td></tr>
+        <tr><td>Consider</td><td>Providing method Close(), in addition to the Dispose(), if close is standard terminology in the area.</td></tr>
+        <tr><td>Avoid</td><td>Making types finalizable.</td></tr>
+        <tr><td>Do Not</td><td>Make value types finalizable.</td></tr>
+        <tr><td>Do</td><td>Make a type finalizable, if the type is responsible for releasing an unmanaged resource that does not have its own finalizer</td></tr>
+        <tr><td>Do</td><td>Implement the Basic Dispose Pattern on every finalizable type.</td></tr>
+        <tr><td>Do Not</td><td>Access any finalizable objects in the finalizer code path, as there is significant risk that they will have already been finalized.</td></tr>
+        <tr><td>Do</td><td>Make your Finalize method protected.</td></tr>
+        <tr><td>Do Not</td><td>Let exceptions escape from the finalizer logic, except for system-critical failures.</td></tr>
+        <tr><td>Consider</td><td>Creating and using a critical finalizable object (a type with a hierarchy that contains CriticalFinalizerObject) for situations in which a finalizer absolutely must execute even in the face of forced application domain unloads and thread aborts.</td></tr>
+        <tr><td>Do</td><td>Prefer constructors to factories, as they are generally more usable, consistent, and convenient than specialized construction mechanisms.</td></tr>
+        <tr><td>Consider</td><td>Using a factory if you need more control than can be provided by constructors of the creation of the instances.</td></tr>
+        <tr><td>Do</td><td>Use a factory in cases where a developer might not know which type to construct, such as wen coding against a base type or interface.</td></tr>
+        <tr><td>Consider</td><td>Using a factory if having a named method is the only way to make the operation self-explanatory.</td></tr>
+        <tr><td>Do</td><td>Use a factory for conversion-style operations.</td></tr>
+        <tr><td>Do</td><td>Prefer implementing factory operations as methods, rather than properties.</td></tr>
+        <tr><td>Do</td><td>Return created instances as method return values, not as out parameters.</td></tr>
+        <tr><td>Consider</td><td>Naming factory methods by concatenating Create and the name of the type being created.</td></tr>
+        <tr><td>Consider</td><td>Naming factory types by concatenating the name of the type being created and Factory.</td></tr>
+        <tr><td>Consider</td><td>Using the Optional Feature Pattern for optional features in abstractions.</td></tr>
+        <tr><td>Do</td><td>Provide a simple Boolean property that clients can use to determine whether an optional feature is supported.</td></tr>
+        <tr><td>Do</td><td>Use virtual methods on the base class that throw NotSupportedException to define optional features.</td></tr>
+        <tr><td>Avoid</td><td>Making public members virtual.</td></tr>
+        <tr><td>Consider</td><td>The Template Method Pattern to provide more controlled extensibility.</td></tr>
+        <tr><td>Consider</td><td>Naming protected virtual members that provide extensibility points for nonvirtual members by suffixing the nonvirtual member name with &ldquo;Core&rdquo;.</td></tr>
+        <tr><td>Do</td><td>Prefer method parameters as the mechanism for users to provide timeout time.</td></tr>
+        <tr><td>Do</td><td>Prefer using TimeSpan to represent timeout time.</td></tr>
+        <tr><td>Do</td><td>Throw System.TimeoutException when a timeout elapses.</td></tr>
+        <tr><td>Do Not</td><td>Return error codes to indicate timeout expiration.</td></tr>
     </tbody>
 </table>

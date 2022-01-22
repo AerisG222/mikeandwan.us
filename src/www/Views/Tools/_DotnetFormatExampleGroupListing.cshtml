@@ -8,26 +8,26 @@
 {
     <div class="card mb-3">
         <div class="card-header">
-	        <strong class="card-title">@group.Name</strong>
-	    </div>
-    	<table class="table table-striped table-hover table-sm">
-    		<thead>
-    	        <tr>
-    	            <th>Format String</th>
-    	            <th>Result</th>
-    	        </tr>
+            <strong class="card-title">@group.Name</strong>
+        </div>
+        <table class="table table-striped table-hover table-sm">
+            <thead>
+                <tr>
+                    <th>Format String</th>
+                    <th>Result</th>
+                </tr>
             </thead>
             <tbody>
 
-    		@foreach(var example in group.FormatExampleList)
-    		{
-    			<tr>
-    				<td>@example.FunctionCall</td>
-    				<td>@example.Result</td>
-    			</tr>
-    		}
+            @foreach(var example in group.FormatExampleList)
+            {
+                <tr>
+                    <td>@example.FunctionCall</td>
+                    <td>@example.Result</td>
+                </tr>
+            }
 
-    		</tbody>
-    	</table>
+            </tbody>
+        </table>
     </div>
 }

@@ -20,20 +20,20 @@
 }
 
 <table class="table table-responsive table-striped table-hover table-sm">
-	<thead>
-		<tr>
-	        <th>API Call</th>
-	        <th>Result</th>
-	    </tr>
+    <thead>
+        <tr>
+            <th>API Call</th>
+            <th>Result</th>
+        </tr>
     </thead>
     <tbody>
 
-	@foreach(var item in Model.Paths) {
-		<tr>
-			<td>@item[0]</td>
-			<td>@item[1]</td>
-		</tr>
-	}
+    @foreach(var item in Model.Paths) {
+        <tr>
+            <td>@item[0]</td>
+            <td>@item[1]</td>
+        </tr>
+    }
 
-	</tbody>
+    </tbody>
 </table>

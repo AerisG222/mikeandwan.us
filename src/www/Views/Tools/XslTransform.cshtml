@@ -27,41 +27,41 @@
 }
 
 <p>
-	This page allows you to view the output of an XSL Transform when applied to an XML document.
+    This page allows you to view the output of an XSL Transform when applied to an XML document.
 </p>
 
 <form asp-controller="tools" asp-action="xsltransform" method="post" autocomplete="off" role="form">
     <div class="mb-3">
-		<label asp-for="XmlSource" class="form-label"></label>
-		<textarea asp-for="XmlSource" rows="10" class="form-control" autofocus=""></textarea>
-		@*<span asp-validation-for="XmlSource" class="form-text"></span>*@
-	</div>
-	<div class="mb-3">
-		<label asp-for="XsltSource" class="form-label"></label>
-		<textarea asp-for="XsltSource" rows="10" class="form-control"></textarea>
-		@*<span asp-validation-for="XsltSource" class="form-text"></span>*@
-	</div>
+        <label asp-for="XmlSource" class="form-label"></label>
+        <textarea asp-for="XmlSource" rows="10" class="form-control" autofocus=""></textarea>
+        @*<span asp-validation-for="XmlSource" class="form-text"></span>*@
+    </div>
+    <div class="mb-3">
+        <label asp-for="XsltSource" class="form-label"></label>
+        <textarea asp-for="XsltSource" rows="10" class="form-control"></textarea>
+        @*<span asp-validation-for="XsltSource" class="form-text"></span>*@
+    </div>
 
     <div class="mb-3">
-		<button type="submit" class="btn btn-primary">Transform</button>
+        <button type="submit" class="btn btn-primary">Transform</button>
     </div>
 </form>
 
 @if(Model.AttemptedTransform) {
-	<div class="row">
-		<div class="col-sm-12">
-			<h2>Transform Results:</h2>
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Transform Results:</h2>
 
-			@if(Model.AreErrors) {
-				<pre><code>
+            @if(Model.AreErrors) {
+                <pre><code>
 @Model.TransformErrors
-				</code></pre>
-			}
-			else {
-				<pre><code>
+                </code></pre>
+            }
+            else {
+                <pre><code>
 @Model.TransformResult
-				</code></pre>
-			}
-		</div>
+                </code></pre>
+            }
+        </div>
     </div>
 }

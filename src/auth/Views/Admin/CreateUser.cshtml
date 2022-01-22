@@ -25,38 +25,38 @@
 <partial name="_identityResult" model="resultModel" />
 
 @if(Model.Result == null || !Model.Result.Succeeded) {
-	<form asp-controller="admin" asp-action="createuser" method="post" autocomplete="off" role="form">
-		<div class="mb-3">
-			<div class="input-group">
+    <form asp-controller="admin" asp-action="createuser" method="post" autocomplete="off" role="form">
+        <div class="mb-3">
+            <div class="input-group">
                 <div class="input-group-text">
                     <svg-icon icon="Person"></svg-icon>
                 </div>
                 <input asp-for="Username" class="form-control" autofocus="" placeholder="Username" />
                 @*<span asp-validation-for="Username" class="form-text"></span>*@
-			</div>
-		</div>
-	    <div class="mb-3">
+            </div>
+        </div>
+        <div class="mb-3">
             <input asp-for="FirstName" class="form-control" placeholder="First Name" />
             @*<span asp-validation-for="FirstName" class="form-text"></span>*@
-		</div>
-	    <div class="mb-3">
+        </div>
+        <div class="mb-3">
             <input asp-for="LastName" class="form-control" placeholder="Last Name" />
             @*<span asp-validation-for="LastName" class="form-text"></span>*@
-		</div>
-	    <div class="mb-3">
+        </div>
+        <div class="mb-3">
             <div class="input-group">
                 <div class="input-group-text">
                     <svg-icon icon="At"></svg-icon>
                 </div>
                 <input asp-for="Email" class="form-control" placeholder="Email" />
                 @*<span asp-validation-for="Email" class="form-text"></span>*@
-			</div>
-		</div>
+            </div>
+        </div>
 
-	    <div class="row mb-3">
+        <div class="row mb-3">
             <div class="col d-grid">
                 <button type="submit" class="btn btn-primary">Create User</button>
             </div>
-	    </div>
-	</form>
+        </div>
+    </form>
 }

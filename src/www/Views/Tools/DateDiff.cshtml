@@ -27,13 +27,13 @@
 }
 
 <form asp-controller="tools" asp-action="datediff" method="post" autocomplete="off" role="form">
-	<div class="row mb-3">
+    <div class="row mb-3">
         <div class="col-sm-5">
             <label asp-for="StartDate" class="form-label"></label>
             <input asp-for="StartDate" class="form-control" autofocus="" />
             @*<span asp-validation-for="StartDate" class="form-text"></span>*@
         </div>
-	</div>
+    </div>
 
     <div class="row mb-3">
         <div class="col-sm-5">
@@ -41,7 +41,7 @@
             <input asp-for="EndDate" class="form-control" />
             @*<span asp-validation-for="EndDate" class="form-text"></span>*@
         </div>
-	</div>
+    </div>
 
     <div class="mb-3">
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -49,7 +49,7 @@
 </form>
 
 @if(Model.ShowResults) {
-	<h2>Results</h2>
+    <h2>Results</h2>
 
     <table class="table table-striped table-hover table-sm">
         <tr>

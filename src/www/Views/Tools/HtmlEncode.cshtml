@@ -29,12 +29,12 @@
 <p>This page allows you to encode and decode values suitable for HTML content.</p>
 
 <form asp-controller="tools" asp-action="htmlencode" method="post" autocomplete="off" role="form">
-	<input type="hidden" asp-for="Mode" value="Encode" />
-	<div class="mb-3">
+    <input type="hidden" asp-for="Mode" value="Encode" />
+    <div class="mb-3">
         <label asp-for="DecodedString" class="form-label"></label>
         <textarea asp-for="DecodedString" rows="8" class="form-control" autofocus=""></textarea>
         @*<span asp-validation-for="DecodedString" class="form-text"></span>*@
-	</div>
+    </div>
 
     <div class="mb-3">
         <button type="submit" class="btn btn-primary">Encode</button>
@@ -42,12 +42,12 @@
 </form>
 
 <form asp-controller="tools" asp-action="htmlencode" method="post" autocomplete="off" role="form">
-	<input type="hidden" asp-for="Mode" value="Decode" />
+    <input type="hidden" asp-for="Mode" value="Decode" />
     <div class="mb-3">
         <label asp-for="EncodedString" class="form-label"></label>
         <textarea asp-for="EncodedString" rows="8" class="form-control"></textarea>
         @*<span asp-validation-for="EncodedString" class="form-text"></span>*@
-	</div>
+    </div>
 
     <div class="mb-3">
         <button type="submit" class="btn btn-primary">Decode</button>

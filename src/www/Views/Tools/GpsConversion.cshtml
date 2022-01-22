@@ -34,9 +34,9 @@ This page allows you to convert between different GPS coordinate representations
 <form asp-controller="tools" asp-action="gpsconversion" method="post" autocomplete="off" role="form">
     <div class="card mb-4">
         <div class="card-header">
-	        <strong class="card-title">Degrees Minutes Seconds Format</strong>
-	    </div>
-	    <div class="card-body">
+            <strong class="card-title">Degrees Minutes Seconds Format</strong>
+        </div>
+        <div class="card-body">
             <input type="hidden" name="ConversionMode" value="@GpsConversionMode.FromDegreesMinutesSeconds" />
             <div class="row">
                 <label class="offset-2 col-2 form-label">Degrees</label>
@@ -88,20 +88,20 @@ This page allows you to convert between different GPS coordinate representations
 </form>
 
 <form asp-controller="tools" asp-action="gpsconversion" method="post" autocomplete="off" role="form">
-	<div class="card mb-4">
+    <div class="card mb-4">
         <div class="card-header">
-	        <strong class="card-title">Degrees Minutes Format</strong>
-	    </div>
-	    <div class="card-body">
-        	<input type="hidden" name="ConversionMode" value="@GpsConversionMode.FromDegreesMinutes" />
-    	    <div class="row">
-    			<label class="offset-2 col-2 form-label">Degrees</label>
-    			<label class="col-2 form-label">Minutes</label>
-    			<label class="col-2 form-label">Reference</label>
-    			<label class="col-4 form-label">Formatted</label>
-    		</div>
+            <strong class="card-title">Degrees Minutes Format</strong>
+        </div>
+        <div class="card-body">
+            <input type="hidden" name="ConversionMode" value="@GpsConversionMode.FromDegreesMinutes" />
+            <div class="row">
+                <label class="offset-2 col-2 form-label">Degrees</label>
+                <label class="col-2 form-label">Minutes</label>
+                <label class="col-2 form-label">Reference</label>
+                <label class="col-4 form-label">Formatted</label>
+            </div>
             <div class="row d-flex align-items-center">
-    		    <label class="col-2 col-form-label">Latitude</label>
+                <label class="col-2 col-form-label">Latitude</label>
                 <div class="col-2">
                     <input asp-for="DmLatDegrees" class="form-control form-control-sm" step="any" />
                 </div>
@@ -111,10 +111,10 @@ This page allows you to convert between different GPS coordinate representations
                 <div class="col-2">
                     <select class="form-control form-control-sm w-100" asp-for="DmLatReference" asp-items="Html.GetEnumSelectList<LatitudeReference>()"></select>
                 </div>
-    			<label class="col-4 col-form-label">@Model.DmLatString</label>
-    		</div>
+                <label class="col-4 col-form-label">@Model.DmLatString</label>
+            </div>
             <div class="row mb-3 d-flex align-items-center">
-    		    <label class="col-2 col-form-label">Longitude</label>
+                <label class="col-2 col-form-label">Longitude</label>
                 <div class="col-2">
                     <input asp-for="DmLngDegrees" class="form-control form-control-sm" step="any" />
                 </div>
@@ -124,8 +124,8 @@ This page allows you to convert between different GPS coordinate representations
                 <div class="col-2">
                     <select class="form-control form-control-sm w-100" asp-for="DmLngReference" asp-items="Html.GetEnumSelectList<LongitudeReference>()"></select>
                 </div>
-    			<label class="col-4 col-form-label">@Model.DmLngString</label>
-    		</div>
+                <label class="col-4 col-form-label">@Model.DmLngString</label>
+            </div>
 
             <div class="row mb-1">
                 <div class="offset-2 col-10">
@@ -137,37 +137,37 @@ This page allows you to convert between different GPS coordinate representations
 </form>
 
 <form asp-controller="tools" asp-action="gpsconversion" method="post" autocomplete="off" role="form">
-	<div class="card mb-4">
+    <div class="card mb-4">
         <div class="card-header">
-	        <strong class="card-title">Degrees Format</strong>
-	    </div>
-	    <div class="card-body">
-        	<input type="hidden" name="ConversionMode" value="@GpsConversionMode.FromDegrees" />
-    	    <div class="row">
-    			<label class="offset-2 col-2 form-label">Degrees</label>
-    			<label class="col-2 form-label">Reference</label>
-    			<label class="col-2 form-label">Formatted</label>
-    		</div>
+            <strong class="card-title">Degrees Format</strong>
+        </div>
+        <div class="card-body">
+            <input type="hidden" name="ConversionMode" value="@GpsConversionMode.FromDegrees" />
+            <div class="row">
+                <label class="offset-2 col-2 form-label">Degrees</label>
+                <label class="col-2 form-label">Reference</label>
+                <label class="col-2 form-label">Formatted</label>
+            </div>
             <div class="row d-flex align-items-center">
-    		    <label class="col-2 col-form-label">Latitude</label>
+                <label class="col-2 col-form-label">Latitude</label>
                 <div class="col-2">
                     <input asp-for="DLatDegrees" class="form-control form-control-sm" step="any" />
                 </div>
                 <div class="col-2">
                     <select class="form-control form-control-sm w-100" asp-for="DLatReference" asp-items="Html.GetEnumSelectList<LatitudeReference>()"></select>
                 </div>
-    			<label class="col-6 col-form-label">@Model.DLatString</label>
-    		</div>
+                <label class="col-6 col-form-label">@Model.DLatString</label>
+            </div>
             <div class="row mb-3 d-flex align-items-center">
-    		    <label class="col-2 col-form-label">Longitude</label>
+                <label class="col-2 col-form-label">Longitude</label>
                 <div class="col-2">
                     <input asp-for="DLngDegrees" class="form-control form-control-sm" step="any" />
                 </div>
                 <div class="col-2">
                     <select class="form-control form-control-sm w-100" asp-for="DLngReference" asp-items="Html.GetEnumSelectList<LongitudeReference>()"></select>
                 </div>
-    			<label class="col-6 col-form-label">@Model.DLngString</label>
-    		</div>
+                <label class="col-6 col-form-label">@Model.DLngString</label>
+            </div>
 
             <div class="row mb-1">
                 <div class="offset-2 col-10">
@@ -175,5 +175,5 @@ This page allows you to convert between different GPS coordinate representations
                 </div>
             </div>
         </div>
-	</div>
+    </div>
 </form>

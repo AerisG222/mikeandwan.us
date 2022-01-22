@@ -2,9 +2,9 @@
 @model IEnumerable<IdentityError>
 
 @if(Model?.Count() > 0) {
-	<ul class="text-danger">
-	@foreach(var err in Model) {
-		<li>@err.Description</li>
-	}
-	</ul>
+    <ul class="text-danger">
+    @foreach(var err in Model) {
+        <li>@err.Description</li>
+    }
+    </ul>
 }

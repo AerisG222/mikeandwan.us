@@ -27,39 +27,39 @@
 }
 
 <p>
-	This page allows you to validate the contents of an XML document, to make sure it is
-	well formed, and optionally, that it adheres to the supplied DTD / XSD.
+    This page allows you to validate the contents of an XML document, to make sure it is
+    well formed, and optionally, that it adheres to the supplied DTD / XSD.
 </p>
 
 <form asp-controller="tools" asp-action="xmlvalidate" method="post" autocomplete="off" role="form">
-	<div class="mb-3">
-		<label asp-for="XmlSource" class="form-label"></label>
-		<textarea asp-for="XmlSource" rows="8" class="form-control" autofocus=""></textarea>
-		@*<span asp-validation-for="XmlSource" class="form-text"></span>*@
-	</div>
     <div class="mb-3">
-		<label asp-for="SchemaOrDtdSource" class="form-label"></label>
-		<textarea asp-for="SchemaOrDtdSource" rows="8" class="form-control"></textarea>
-		@*<span asp-validation-for="SchemaOrDtdSource" class="form-text"></span>*@
-	</div>
+        <label asp-for="XmlSource" class="form-label"></label>
+        <textarea asp-for="XmlSource" rows="8" class="form-control" autofocus=""></textarea>
+        @*<span asp-validation-for="XmlSource" class="form-text"></span>*@
+    </div>
+    <div class="mb-3">
+        <label asp-for="SchemaOrDtdSource" class="form-label"></label>
+        <textarea asp-for="SchemaOrDtdSource" rows="8" class="form-control"></textarea>
+        @*<span asp-validation-for="SchemaOrDtdSource" class="form-text"></span>*@
+    </div>
 
     <div class="mb-3">
-		<button type="submit" class="btn btn-primary">Validate</button>
+        <button type="submit" class="btn btn-primary">Validate</button>
     </div>
 </form>
 
 <br/>
 
 @if(Model.ValidationAttempted) {
-	if(!Model.AreErrors) {
-		<p>
-			<strong>The XML document is VALID!</strong>
-		</p>
-	}
-	else {
-		<p>Your XML document is not well formed.  The following outlines the errors encountered:</p>
-		<pre><code>
+    if(!Model.AreErrors) {
+        <p>
+            <strong>The XML document is VALID!</strong>
+        </p>
+    }
+    else {
+        <p>Your XML document is not well formed.  The following outlines the errors encountered:</p>
+        <pre><code>
 @Model.ValidationErrors
-		</code></pre>
-	}
+        </code></pre>
+    }
 }

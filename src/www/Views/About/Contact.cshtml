@@ -24,13 +24,13 @@
 }
 
 @if(Model.SubmitAttempted) {
-	if(Model.SubmitSuccess) {
+    if(Model.SubmitSuccess) {
         <p maw-alert-type="Success">Thank you, your submission was successful.</p>
-	}
-	else {
+    }
+    else {
         <p maw-alert-type="Danger">Sorry, there was an error submitting your request, please try again later.</p>
         <div class="text-danger" asp-validation-summary="All"></div>
-	}
+    }
 }
 
 @if(!Model.SubmitSuccess) {

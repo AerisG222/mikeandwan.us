@@ -17,62 +17,62 @@
 <h2>Type Design Guidelines</h2>
 
 <table class="table table-responsive table-striped table-hover table-sm">
-  	<tbody>
-	    <tr><td>Do</td><td>Ensure that each type is a well-defined set of related members, not just a random collection of unrelated functionality.</td></tr>
-	    <tr><td>Do</td><td>Use namespaces to organize types into a hierarchy of related feature areas.</td></tr>
-	    <tr><td>Avoid</td><td>Very deep namespace hierarchies.</td></tr>
-	    <tr><td>Avoid</td><td>Having too many namespaces.</td></tr>
-	    <tr><td>Avoid</td><td>Having types designed for advanced scenarios in the same namespace as types intended for common programming tasks.</td></tr>
-	    <tr><td>Do Not</td><td>Define types without specifying their namespaces.</td></tr>
-	    <tr><td>Do</td><td>Use a namespace with the &ldquo;.Design&rdquo; suffix to contain types that provide design-time functionality for a base namespace.</td></tr>
-	    <tr><td>Do</td><td>Use a namespace with the &ldquo;.Permissions&rdquo; suffix to contain types that provide custom permissions for a base namespace.</td></tr>
-	    <tr><td>Do</td><td>Use a namespace with the &ldquo;.Interop&rdquo; suffix to contain types that provide interop functionality for a base namespace.</td></tr>
-	    <tr><td>Do</td><td>Use a namespace with the &ldquo;.Interop&rdquo; suffix for all code in a Primary Interop Assembly (PIA).</td></tr>
-	    <tr><td>Consider</td><td>Defining a struct instead of a class if instances of the type are small and commonly short-lived or are commonly embedded in other objects.</td></tr>
-	    <tr><td>Do Not</td><td>Define a struct unless the type has all of the following characteristics: 1. Logically represents a single value. 2. Has an instance size under 16 bytes. 3. Is immutable. 4. Itwill not have to be boxed frequently.</td></tr>
-	    <tr><td>Do</td><td>Favor defining classes over interfaces.</td></tr>
-	    <tr><td>Do</td><td>Use abstract classes instead of interfaces to decouple the contract from implementations.</td></tr>
-	    <tr><td>Do</td><td>Define an interface if you need to provide a polymorphic hierarchy of value types.</td></tr>
-	    <tr><td>Consider</td><td>Defining interfaces to achieve a similar effect to that of multiple inheritance.</td></tr>
-	    <tr><td>Do Not</td><td>Define public or protected-internal constructors in abstract types.</td></tr>
-	    <tr><td>Do</td><td>Define a protected or an internal constructor on abstract classes.</td></tr>
-	    <tr><td>Do</td><td>Provide at least one concrete type that inherits from each abstract class that you ship.</td></tr>
-	    <tr><td>Do</td><td>Use static classes sparingly.</td></tr>
-	    <tr><td>Do Not</td><td>Treat static classes as a miscellaneous bucket.</td></tr>
-	    <tr><td>Do Not</td><td>Declare or override instance members in static classes.</td></tr>
-	    <tr><td>Do</td><td>Declare static classes as sealed, abstract, and add a private instance constructor, if your programming language does not have built in support for static classes.</td></tr>
-	    <tr><td>Do</td><td>Define an interface if you need some common API to be supported by a set of types that includes value types.</td></tr>
-	    <tr><td>Consider</td><td>Defining an interface if you need to support its functionality on types that already inherit from some other type.</td></tr>
-	    <tr><td>Avoid</td><td>Using marker interfaces (interfaces with no members).</td></tr>
-	    <tr><td>Do</td><td>Provide at least one type that is an implementation of an interface.</td></tr>
-	    <tr><td>Do</td><td>Provide at least one API consuming each interface you define (a method taking the interface as a parameter or a property typed as the interface).</td></tr>
-	    <tr><td>Do Not</td><td>Add members to an interface that has previously shipped.</td></tr>
-	    <tr><td>Do Not</td><td>Provide a default constructor for a struct.</td></tr>
-	    <tr><td>Do</td><td>Ensure that a state where all instance data is set to zero, false, or null (as appropriate) is valid.</td></tr>
-	    <tr><td>Do</td><td>Implement IEquatable&lt;T&gt; on value types.</td></tr>
-	    <tr><td>Do Not</td><td>Explicitly extend System.ValueType.</td></tr>
-	    <tr><td>Do</td><td>Use an enum to strongly type parameters, properties, and return values that represent sets of values.</td></tr>
-	    <tr><td>Do</td><td>Favor using an enum over static constants.</td></tr>
-	    <tr><td>Do Not</td><td>Use an enum for open sets (such as the operating system version, names of your friends, etc.).</td></tr>
-	    <tr><td>Do Not</td><td>Provide reserved enum values that are intended for future use.</td></tr>
-	    <tr><td>Avoid</td><td>Publicly exposing enums with only one value.</td></tr>
-	    <tr><td>Do Not</td><td>Include sentinel values in enums.</td></tr>
-	    <tr><td>Do</td><td>Provide a value of zero on simple enums.</td></tr>
-	    <tr><td>Consider</td><td>Using Int32 (the default in most programming languages) as the underlying type of an enum unless any of the following are true: 1. The enum is a flags enum, and you have more than 32 values. 2. The underlying type needs to be different than Int32 for easier interoperability with unmanaged code expecting different size enums. 3. A smaller underlying type would result in substantial savings in space.</td></tr>
-	    <tr><td>Do</td><td>Name flag enums with plural nouns or noun phrases and simple enums with singular nouns or noun phrases.</td></tr>
-	    <tr><td>Do Not</td><td>Extend System.Enum directly.</td></tr>
-	    <tr><td>Do</td><td>Apply the System.FlagAttribute to flag enums.</td></tr>
-	    <tr><td>Do</td><td>Use powers of two for the flags enum values so they can be freely combined using the bitwise OR operation.</td></tr>
-	    <tr><td>Consider</td><td>Providing special enum values for commonly used combinations of flags.</td></tr>
-	    <tr><td>Avoid</td><td>Creating flag enums where certain combinations of values are invalid.</td></tr>
-	    <tr><td>Avoid</td><td>Using flag enum values of zero, unless the value represents &ldquo;all flags are cleared&rdquo; and is named appropriately as prescribed on page 99.</td></tr>
-	    <tr><td>Do</td><td>Name the zero-value of flag enums None.</td></tr>
-	    <tr><td>Consider</td><td>Adding values to enums, despite a small compatibility risk.</td></tr>
-	    <tr><td>Do</td><td>Use nested types when the relationship between the nested type and its outer type is such that member-accessibility semantics are desirable.</td></tr>
-	    <tr><td>Do Not</td><td>Use public nested types as a logical grouping construct; use namespaces for this.</td></tr>
-	    <tr><td>Avoid</td><td>Publicly exposed nested types.</td></tr>
-	    <tr><td>Do Not</td><td>Use nested types if the type is likely to be referenced outside of the containing type.</td></tr>
-	    <tr><td>Do Not</td><td>Use nested types if they need to be instantiated by client code.</td></tr>
-	    <tr><td>Do Not</td><td>Define a nested type as a member of an interface.</td></tr>
-	</tbody>
+      <tbody>
+        <tr><td>Do</td><td>Ensure that each type is a well-defined set of related members, not just a random collection of unrelated functionality.</td></tr>
+        <tr><td>Do</td><td>Use namespaces to organize types into a hierarchy of related feature areas.</td></tr>
+        <tr><td>Avoid</td><td>Very deep namespace hierarchies.</td></tr>
+        <tr><td>Avoid</td><td>Having too many namespaces.</td></tr>
+        <tr><td>Avoid</td><td>Having types designed for advanced scenarios in the same namespace as types intended for common programming tasks.</td></tr>
+        <tr><td>Do Not</td><td>Define types without specifying their namespaces.</td></tr>
+        <tr><td>Do</td><td>Use a namespace with the &ldquo;.Design&rdquo; suffix to contain types that provide design-time functionality for a base namespace.</td></tr>
+        <tr><td>Do</td><td>Use a namespace with the &ldquo;.Permissions&rdquo; suffix to contain types that provide custom permissions for a base namespace.</td></tr>
+        <tr><td>Do</td><td>Use a namespace with the &ldquo;.Interop&rdquo; suffix to contain types that provide interop functionality for a base namespace.</td></tr>
+        <tr><td>Do</td><td>Use a namespace with the &ldquo;.Interop&rdquo; suffix for all code in a Primary Interop Assembly (PIA).</td></tr>
+        <tr><td>Consider</td><td>Defining a struct instead of a class if instances of the type are small and commonly short-lived or are commonly embedded in other objects.</td></tr>
+        <tr><td>Do Not</td><td>Define a struct unless the type has all of the following characteristics: 1. Logically represents a single value. 2. Has an instance size under 16 bytes. 3. Is immutable. 4. Itwill not have to be boxed frequently.</td></tr>
+        <tr><td>Do</td><td>Favor defining classes over interfaces.</td></tr>
+        <tr><td>Do</td><td>Use abstract classes instead of interfaces to decouple the contract from implementations.</td></tr>
+        <tr><td>Do</td><td>Define an interface if you need to provide a polymorphic hierarchy of value types.</td></tr>
+        <tr><td>Consider</td><td>Defining interfaces to achieve a similar effect to that of multiple inheritance.</td></tr>
+        <tr><td>Do Not</td><td>Define public or protected-internal constructors in abstract types.</td></tr>
+        <tr><td>Do</td><td>Define a protected or an internal constructor on abstract classes.</td></tr>
+        <tr><td>Do</td><td>Provide at least one concrete type that inherits from each abstract class that you ship.</td></tr>
+        <tr><td>Do</td><td>Use static classes sparingly.</td></tr>
+        <tr><td>Do Not</td><td>Treat static classes as a miscellaneous bucket.</td></tr>
+        <tr><td>Do Not</td><td>Declare or override instance members in static classes.</td></tr>
+        <tr><td>Do</td><td>Declare static classes as sealed, abstract, and add a private instance constructor, if your programming language does not have built in support for static classes.</td></tr>
+        <tr><td>Do</td><td>Define an interface if you need some common API to be supported by a set of types that includes value types.</td></tr>
+        <tr><td>Consider</td><td>Defining an interface if you need to support its functionality on types that already inherit from some other type.</td></tr>
+        <tr><td>Avoid</td><td>Using marker interfaces (interfaces with no members).</td></tr>
+        <tr><td>Do</td><td>Provide at least one type that is an implementation of an interface.</td></tr>
+        <tr><td>Do</td><td>Provide at least one API consuming each interface you define (a method taking the interface as a parameter or a property typed as the interface).</td></tr>
+        <tr><td>Do Not</td><td>Add members to an interface that has previously shipped.</td></tr>
+        <tr><td>Do Not</td><td>Provide a default constructor for a struct.</td></tr>
+        <tr><td>Do</td><td>Ensure that a state where all instance data is set to zero, false, or null (as appropriate) is valid.</td></tr>
+        <tr><td>Do</td><td>Implement IEquatable&lt;T&gt; on value types.</td></tr>
+        <tr><td>Do Not</td><td>Explicitly extend System.ValueType.</td></tr>
+        <tr><td>Do</td><td>Use an enum to strongly type parameters, properties, and return values that represent sets of values.</td></tr>
+        <tr><td>Do</td><td>Favor using an enum over static constants.</td></tr>
+        <tr><td>Do Not</td><td>Use an enum for open sets (such as the operating system version, names of your friends, etc.).</td></tr>
+        <tr><td>Do Not</td><td>Provide reserved enum values that are intended for future use.</td></tr>
+        <tr><td>Avoid</td><td>Publicly exposing enums with only one value.</td></tr>
+        <tr><td>Do Not</td><td>Include sentinel values in enums.</td></tr>
+        <tr><td>Do</td><td>Provide a value of zero on simple enums.</td></tr>
+        <tr><td>Consider</td><td>Using Int32 (the default in most programming languages) as the underlying type of an enum unless any of the following are true: 1. The enum is a flags enum, and you have more than 32 values. 2. The underlying type needs to be different than Int32 for easier interoperability with unmanaged code expecting different size enums. 3. A smaller underlying type would result in substantial savings in space.</td></tr>
+        <tr><td>Do</td><td>Name flag enums with plural nouns or noun phrases and simple enums with singular nouns or noun phrases.</td></tr>
+        <tr><td>Do Not</td><td>Extend System.Enum directly.</td></tr>
+        <tr><td>Do</td><td>Apply the System.FlagAttribute to flag enums.</td></tr>
+        <tr><td>Do</td><td>Use powers of two for the flags enum values so they can be freely combined using the bitwise OR operation.</td></tr>
+        <tr><td>Consider</td><td>Providing special enum values for commonly used combinations of flags.</td></tr>
+        <tr><td>Avoid</td><td>Creating flag enums where certain combinations of values are invalid.</td></tr>
+        <tr><td>Avoid</td><td>Using flag enum values of zero, unless the value represents &ldquo;all flags are cleared&rdquo; and is named appropriately as prescribed on page 99.</td></tr>
+        <tr><td>Do</td><td>Name the zero-value of flag enums None.</td></tr>
+        <tr><td>Consider</td><td>Adding values to enums, despite a small compatibility risk.</td></tr>
+        <tr><td>Do</td><td>Use nested types when the relationship between the nested type and its outer type is such that member-accessibility semantics are desirable.</td></tr>
+        <tr><td>Do Not</td><td>Use public nested types as a logical grouping construct; use namespaces for this.</td></tr>
+        <tr><td>Avoid</td><td>Publicly exposed nested types.</td></tr>
+        <tr><td>Do Not</td><td>Use nested types if the type is likely to be referenced outside of the containing type.</td></tr>
+        <tr><td>Do Not</td><td>Use nested types if they need to be instantiated by client code.</td></tr>
+        <tr><td>Do Not</td><td>Define a nested type as a member of an interface.</td></tr>
+    </tbody>
 </table>

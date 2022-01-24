@@ -11,7 +11,9 @@ namespace Maw.Data;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddMawDataServices(this IServiceCollection services, string connString)
+    public static IServiceCollection AddMawDataServices(
+        this IServiceCollection services,
+        string connString)
     {
         DefaultTypeMap.MatchNamesWithUnderscores = true;
         SqlMapper.AddTypeMap(typeof(string), System.Data.DbType.AnsiString);

@@ -15,7 +15,9 @@ public class MawRoleStore
     readonly ILogger _log;
 
     #region ctor
-    public MawRoleStore(IUserRepository repo, ILogger<MawRoleStore> log)
+    public MawRoleStore(
+        IUserRepository repo,
+        ILogger<MawRoleStore> log)
     {
         _repo = repo ?? throw new ArgumentNullException(nameof(repo));
         _log = log ?? throw new ArgumentNullException(nameof(log));

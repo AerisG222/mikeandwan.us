@@ -15,7 +15,9 @@ public class PhotoZipper
     readonly ILogger _log;
     readonly IFileProvider _fileProvider;
 
-    public PhotoZipper(ILogger<PhotoZipper> log, IFileProvider fileProvider)
+    public PhotoZipper(
+        ILogger<PhotoZipper> log,
+        IFileProvider fileProvider)
     {
         _log = log ?? throw new ArgumentNullException(nameof(log));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));

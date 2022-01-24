@@ -28,11 +28,12 @@ public class UploadController
     readonly IContentTypeProvider _contentTypeProvider;
     readonly LinuxFileTypeIdentifier _linuxFileTypeIdentifier;
 
-    public UploadController(ILogger<UploadController> log,
-                            IUploadService uploadSvc,
-                            IHubContext<UploadHub> uploadHubCtx,
-                            IContentTypeProvider contentTypeProvider,
-                            LinuxFileTypeIdentifier linuxFileTypeIdentifier)
+    public UploadController(
+        ILogger<UploadController> log,
+        IUploadService uploadSvc,
+        IHubContext<UploadHub> uploadHubCtx,
+        IContentTypeProvider contentTypeProvider,
+        LinuxFileTypeIdentifier linuxFileTypeIdentifier)
     {
         _log = log ?? throw new ArgumentNullException(nameof(log));
         _uploadSvc = uploadSvc ?? throw new ArgumentNullException(nameof(uploadSvc));

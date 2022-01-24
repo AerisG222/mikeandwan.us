@@ -6,7 +6,10 @@ namespace MawAuth.Services;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddMawIdentityServerServices(this IServiceCollection services, string connString, string signingCertDir)
+    public static IServiceCollection AddMawIdentityServerServices(
+        this IServiceCollection services,
+        string connString,
+        string signingCertDir)
     {
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
         Dapper.SqlMapper.AddTypeMap(typeof(string), System.Data.DbType.AnsiString);

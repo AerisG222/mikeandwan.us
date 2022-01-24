@@ -16,7 +16,9 @@ public class SmtpEmailService
 
     public string FromAddress => _config.User;
 
-    public SmtpEmailService(ILogger<SmtpEmailService> log, IOptions<SmtpEmailConfig> config)
+    public SmtpEmailService(
+        ILogger<SmtpEmailService> log,
+        IOptions<SmtpEmailConfig> config)
     {
         if (config == null)
         {

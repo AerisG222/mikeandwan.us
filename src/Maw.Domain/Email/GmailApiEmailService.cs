@@ -23,7 +23,9 @@ public class GmailApiEmailService
 
     public string FromAddress => _config?.FromEmailAddress ?? throw new InvalidOperationException("FromEmailAddress should not be null!");
 
-    public GmailApiEmailService(ILogger<GmailApiEmailService> log, IOptions<GmailApiEmailConfig> config)
+    public GmailApiEmailService(
+        ILogger<GmailApiEmailService> log,
+        IOptions<GmailApiEmailConfig> config)
     {
         if (config == null)
         {

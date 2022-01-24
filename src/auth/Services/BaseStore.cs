@@ -14,7 +14,9 @@ public abstract class BaseStore
 
     protected ILogger Log { get; }
 
-    protected BaseStore(StoreConfig config, ILogger log)
+    protected BaseStore(
+        StoreConfig config,
+        ILogger log)
     {
         if (config == null)
         {

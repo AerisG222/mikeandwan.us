@@ -20,9 +20,10 @@ public class VideosController
     readonly IVideoService _svc;
     readonly IImageCropper _imageCropper;
 
-    public VideosController(ILogger<VideosController> log,
-                            IVideoService videoService,
-                            IImageCropper imageCropper)
+    public VideosController(
+        ILogger<VideosController> log,
+        IVideoService videoService,
+        IImageCropper imageCropper)
         : base(log)
     {
         _svc = videoService ?? throw new ArgumentNullException(nameof(videoService));

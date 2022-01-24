@@ -17,7 +17,9 @@ public class GoogleCaptchaService
     readonly GoogleCaptchaConfig _config;
     readonly ILogger _log;
 
-    public GoogleCaptchaService(IOptions<GoogleCaptchaConfig> config, ILogger<GoogleCaptchaService> log)
+    public GoogleCaptchaService(
+        IOptions<GoogleCaptchaConfig> config,
+        ILogger<GoogleCaptchaService> log)
     {
         if (config == null)
         {

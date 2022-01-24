@@ -16,7 +16,9 @@ public class MawUserStore
     readonly IUserRepository _repo;
     readonly ILogger _log;
 
-    public MawUserStore(IUserRepository repo, ILogger<MawUserStore> log)
+    public MawUserStore(
+        IUserRepository repo,
+        ILogger<MawUserStore> log)
     {
         _repo = repo ?? throw new ArgumentNullException(nameof(repo));
         _log = log ?? throw new ArgumentNullException(nameof(log));

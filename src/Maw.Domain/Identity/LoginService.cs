@@ -12,9 +12,10 @@ public class LoginService
     readonly SignInManager<MawUser> _signInManager;
     readonly ILogger _log;
 
-    public LoginService(IUserRepository repo,
-                        SignInManager<MawUser> signInManager,
-                        ILogger<LoginService> log)
+    public LoginService(
+        IUserRepository repo,
+        SignInManager<MawUser> signInManager,
+        ILogger<LoginService> log)
     {
         _repo = repo ?? throw new ArgumentNullException(nameof(repo));
         _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));

@@ -11,9 +11,10 @@ public class VideoService
 {
     readonly IVideoRepository _repo;
 
-    public VideoService(IVideoRepository videoRepository,
-                        ILogger<VideoService> log,
-                        IDistributedCache cache)
+    public VideoService(
+        IVideoRepository videoRepository,
+        ILogger<VideoService> log,
+        IDistributedCache cache)
         : base("videos", log, cache)
     {
         _repo = videoRepository ?? throw new ArgumentNullException(nameof(videoRepository));

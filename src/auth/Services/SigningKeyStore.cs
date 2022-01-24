@@ -12,7 +12,9 @@ namespace MawAuth.Services;
 public class SigningKeyStore
     : BaseStore, ISigningKeyStore
 {
-    public SigningKeyStore(StoreConfig config, ILogger<SigningKeyStore> log)
+    public SigningKeyStore(
+        StoreConfig config,
+        ILogger<SigningKeyStore> log)
         : base(config, log)
     {
 

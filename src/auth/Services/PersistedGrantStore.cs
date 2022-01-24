@@ -13,7 +13,9 @@ namespace MawAuth.Services;
 public class PersistedGrantStore
     : BaseStore, IPersistedGrantStore
 {
-    public PersistedGrantStore(StoreConfig config, ILogger<PersistedGrantStore> log)
+    public PersistedGrantStore(
+        StoreConfig config,
+        ILogger<PersistedGrantStore> log)
         : base(config, log)
     {
 

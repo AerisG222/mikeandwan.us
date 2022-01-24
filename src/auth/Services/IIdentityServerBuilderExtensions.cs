@@ -6,7 +6,9 @@ namespace MawAuth.Services;
 
 public static class IIdentityServerBuilderExtensions
 {
-    public static IIdentityServerBuilder AddMawIdentityServerKeyMaterial(this IIdentityServerBuilder builder, string signingCertDir)
+    public static IIdentityServerBuilder AddMawIdentityServerKeyMaterial(
+        this IIdentityServerBuilder builder,
+        string signingCertDir)
     {
 #pragma warning disable CA2000
         builder = builder.AddSigningCredential(LoadCertificate(Path.Combine(signingCertDir, "signing.pfx")));
@@ -15,7 +17,9 @@ public static class IIdentityServerBuilderExtensions
         return AddValidationCertificates(builder, signingCertDir);
     }
 
-    static IIdentityServerBuilder AddValidationCertificates(IIdentityServerBuilder builder, string signingCertDir)
+    static IIdentityServerBuilder AddValidationCertificates(
+        IIdentityServerBuilder builder,
+        string signingCertDir)
     {
         var files = Directory.EnumerateFiles(signingCertDir, "*.pfx");
 

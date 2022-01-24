@@ -11,9 +11,10 @@ public class BlogService
 {
     readonly IBlogRepository _repo;
 
-    public BlogService(IBlogRepository blogRepository,
-                        ILogger<BlogService> log,
-                        IDistributedCache cache)
+    public BlogService(
+        IBlogRepository blogRepository,
+        ILogger<BlogService> log,
+        IDistributedCache cache)
         : base("blog", log, cache)
     {
         _repo = blogRepository ?? throw new ArgumentNullException(nameof(blogRepository));

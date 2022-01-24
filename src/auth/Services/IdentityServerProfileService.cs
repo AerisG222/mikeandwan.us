@@ -16,7 +16,9 @@ public class IdentityServerProfileService
     readonly UserManager<MawUser> _usrMgr;
     readonly ILogger _log;
 
-    public IdentityServerProfileService(ILogger<IdentityServerProfileService> log, UserManager<MawUser> userManager)
+    public IdentityServerProfileService(
+        ILogger<IdentityServerProfileService> log,
+        UserManager<MawUser> userManager)
     {
         _log = log ?? throw new ArgumentNullException(nameof(log));
         _usrMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));

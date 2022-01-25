@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace MawMvcApp.ViewModels.Tools.Dotnet;
 
 public class FormatExampleGroup

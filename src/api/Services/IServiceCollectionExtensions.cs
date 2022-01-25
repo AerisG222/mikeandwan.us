@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using MawApi.Services.Photos;
 using MawApi.Services.Videos;
 

@@ -1,4 +1,3 @@
-using System;
 using Maw.Domain.Models;
 using MawApi.Services.Photos;
 using MawApi.ViewModels;

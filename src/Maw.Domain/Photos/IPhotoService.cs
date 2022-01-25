@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Maw.Domain.Models;
 using Maw.Domain.Models.Photos;
 

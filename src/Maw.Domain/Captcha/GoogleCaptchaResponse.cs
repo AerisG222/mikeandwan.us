@@ -1,6 +1,3 @@
-using System;
-
-
 // don't follow conventions for google responses
 #pragma warning disable IDE1006
 #pragma warning disable CA1707

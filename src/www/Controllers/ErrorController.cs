@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using MawMvcApp.ViewModels.Navigation;
 
 namespace MawMvcApp.Controllers;

@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using Maw.Domain.Utilities;
 using Microsoft.AspNetCore.Mvc.ModelBinding;

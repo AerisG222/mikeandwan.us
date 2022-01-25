@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Maw.Domain.Models.Blogs;
+﻿using Maw.Domain.Models.Blogs;
 
 namespace Maw.Data.Abstractions;
 

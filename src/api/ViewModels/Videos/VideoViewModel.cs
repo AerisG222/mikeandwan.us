@@ -1,5 +1,3 @@
-using System;
-
 namespace MawApi.ViewModels.Videos;
 
 public class VideoViewModel

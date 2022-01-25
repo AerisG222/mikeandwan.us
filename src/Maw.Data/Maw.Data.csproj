@@ -9,6 +9,7 @@
         <AssemblyName>Maw.Data</AssemblyName>
         <PackageId>Maw.Data</PackageId>
         <AnalysisMode>Recommended</AnalysisMode>
+        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 

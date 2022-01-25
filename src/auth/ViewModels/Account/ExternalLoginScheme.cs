@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Authentication;
 using Maw.TagHelpers;
 

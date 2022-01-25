@@ -1,5 +1,3 @@
-using System;
-
 namespace Maw.Domain.Models.Photos;
 
 public class Photo

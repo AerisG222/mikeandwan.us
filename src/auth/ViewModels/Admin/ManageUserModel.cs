@@ -1,5 +1,3 @@
-using System;
-
 namespace MawAuth.ViewModels.Admin;
 
 public class ManageUserModel

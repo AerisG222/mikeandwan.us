@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Maw.Domain.Models.Blogs;
+﻿namespace Maw.Domain.Models.Blogs;
 
 public class Blog
 {

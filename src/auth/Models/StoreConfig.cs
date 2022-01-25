@@ -1,5 +1,3 @@
-using System;
-
 namespace MawAuth.Models;
 
 public class StoreConfig

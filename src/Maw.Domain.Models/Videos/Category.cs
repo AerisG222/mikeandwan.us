@@ -1,5 +1,3 @@
-using System;
-
 namespace Maw.Domain.Models.Videos;
 
 public class Category

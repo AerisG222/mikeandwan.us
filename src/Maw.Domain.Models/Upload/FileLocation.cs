@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-
 namespace Maw.Domain.Models.Upload;
 
 public class FileLocation

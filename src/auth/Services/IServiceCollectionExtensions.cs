@@ -1,6 +1,5 @@
 using Duende.IdentityServer.Stores;
 using MawAuth.Models;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace MawAuth.Services;
 

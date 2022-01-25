@@ -1,8 +1,5 @@
-using System;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Logging;
 using MawMvcApp.ViewModels.Gps;
 using MawMvcApp.ViewModels.Navigation;
 using MawMvcApp.ViewModels.Tools;

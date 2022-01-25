@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Maw.Domain.Captcha;
+﻿namespace Maw.Domain.Captcha;
 
 public interface ICaptchaService
 {

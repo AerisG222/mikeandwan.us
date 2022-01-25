@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Maw.Domain.Models.Identity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 
 namespace MawAuth.Services;
 

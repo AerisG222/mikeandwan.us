@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Maw.Domain.Models.Identity;
+﻿namespace Maw.Domain.Models.Identity;
 
 public class UserAndLastLogin
 {

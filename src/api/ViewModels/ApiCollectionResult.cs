@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace MawApi.ViewModels;
 
 public class ApiCollectionResult<T>

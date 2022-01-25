@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace Maw.Domain.Photos;
 
 public interface IImageCropper

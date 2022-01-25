@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Maw.Domain.Email;
+﻿namespace Maw.Domain.Email;
 
 public interface IEmailService
 {

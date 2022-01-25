@@ -1,9 +1,5 @@
-using System;
 using System.Data;
 using System.Data.Common;
-using System.Threading.Tasks;
-using StackExchange.Profiling;
-using StackExchange.Profiling.Data;
 using Npgsql;
 using Maw.Domain.Models;
 

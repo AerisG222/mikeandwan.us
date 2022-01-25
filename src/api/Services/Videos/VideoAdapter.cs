@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Maw.Domain.Models;
 using Maw.Domain.Models.Videos;
 
 namespace MawApi.Services.Videos;

@@ -1,5 +1,3 @@
-using System;
-
 namespace Maw.Domain.Models;
 
 public class Comment

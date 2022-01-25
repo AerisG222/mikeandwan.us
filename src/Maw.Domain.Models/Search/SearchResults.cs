@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Maw.Domain.Search;
 
 public class SearchResults<T>

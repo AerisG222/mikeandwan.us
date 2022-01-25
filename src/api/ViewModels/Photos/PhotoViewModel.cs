@@ -1,5 +1,3 @@
-using System;
-
 namespace MawApi.ViewModels.Photos;
 
 public class PhotoViewModel

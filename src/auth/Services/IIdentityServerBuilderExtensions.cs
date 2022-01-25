@@ -1,6 +1,4 @@
-using System.IO;
 using System.Security.Cryptography.X509Certificates;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace MawAuth.Services;
 

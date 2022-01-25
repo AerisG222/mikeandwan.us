@@ -1,5 +1,3 @@
-using System;
-
 namespace MawApi.Services.Videos;
 
 public class VideoUrlBuilderService

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Maw.Domain;
+using Maw.Domain.Models;
 using Maw.Domain.Videos;
 using Maw.Security;
 using MawApi.Models.Videos;

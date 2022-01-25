@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Maw.Domain;
 using Maw.Domain.Upload;
+using Maw.Domain.Models.Upload;
 using Maw.Security;
 
 namespace MawApi.Hubs;

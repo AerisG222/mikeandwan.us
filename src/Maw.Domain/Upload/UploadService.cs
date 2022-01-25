@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using Maw.Security;
+using Maw.Domain.Models.Upload;
 
 namespace Maw.Domain.Upload;
 

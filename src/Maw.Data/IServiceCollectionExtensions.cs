@@ -2,10 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Dapper;
 using Maw.Data.Identity;
-using Maw.Domain.Blogs;
-using Maw.Domain.Identity;
-using Maw.Domain.Photos;
-using Maw.Domain.Videos;
+using Maw.Data.Abstractions;
+using Maw.Domain.Models.Identity;
 
 namespace Maw.Data;
 

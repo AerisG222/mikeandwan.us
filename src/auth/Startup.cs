@@ -20,7 +20,7 @@ using NWebsec.Core.Common.Middleware.Options;
 using Maw.Data;
 using Maw.Domain;
 using Maw.Domain.Email;
-using Maw.Domain.Identity;
+using Maw.Domain.Models.Identity;
 using Maw.Security;
 using Maw.TagHelpers;
 using MawAuth.Models;

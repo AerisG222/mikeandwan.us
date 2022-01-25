@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using StackExchange.Profiling;
 using StackExchange.Profiling.Data;
 using Npgsql;
-using Maw.Domain;
+using Maw.Domain.Models;
 
 namespace Maw.Data;
 

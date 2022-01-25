@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
-using Maw.Domain.Identity;
+using Maw.Domain.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 

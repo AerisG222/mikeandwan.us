@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using Maw.Domain;
-using Maw.Domain.Videos;
+using Maw.Data.Abstractions;
+using Maw.Domain.Models;
+using Maw.Domain.Models.Videos;
 
 namespace Maw.Data;
 

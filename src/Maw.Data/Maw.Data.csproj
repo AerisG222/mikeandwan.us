@@ -19,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../Maw.Domain/Maw.Domain.csproj" />
+        <ProjectReference Include="..\Maw.Domain.Models\Maw.Domain.Models.csproj" />
+        <ProjectReference Include="..\Maw.Data.Abstractions\Maw.Data.Abstractions.csproj" />
     </ItemGroup>
 </Project>

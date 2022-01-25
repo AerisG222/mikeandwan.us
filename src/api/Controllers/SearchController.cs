@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Maw.Domain.Models.Search;
 using Maw.Domain.Search;
 using Maw.Security;
 

@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using SolrNet;
 using SolrNet.Commands.Parameters;
+using Maw.Domain.Models.Search;
 
 namespace Maw.Domain.Search;
 

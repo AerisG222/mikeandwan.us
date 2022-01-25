@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Maw.Domain;
+using Maw.Domain.Models;
+using Maw.Domain.Models.Photos;
 using Maw.Domain.Photos;
 using Maw.Security;
 using MawApi.Models.Photos;

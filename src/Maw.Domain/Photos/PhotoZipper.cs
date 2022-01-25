@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
+using Maw.Domain.Models.Photos;
 
 namespace Maw.Domain.Photos;
 

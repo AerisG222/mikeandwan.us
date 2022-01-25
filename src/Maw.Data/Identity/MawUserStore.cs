@@ -6,7 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Maw.Domain.Identity;
+using Maw.Data.Abstractions;
+using Maw.Domain.Models.Identity;
 
 namespace Maw.Data.Identity;
 

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Maw.Domain.Photos;
+using Maw.Domain.Models.Photos;
 
 namespace MawApi.Services.Photos;
 

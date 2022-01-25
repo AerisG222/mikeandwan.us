@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Maw.Domain.Models.Blogs;
 using Maw.Domain.Blogs;
 using Maw.Domain.Photos;
 using Maw.Domain.Videos;

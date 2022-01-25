@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Maw.Domain.Models.Search;
 
 namespace Maw.Domain.Search;
 

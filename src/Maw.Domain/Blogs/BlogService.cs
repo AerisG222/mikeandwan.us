@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using Maw.Data.Abstractions;
+using Maw.Domain.Models.Blogs;
 
 namespace Maw.Domain.Blogs;
 

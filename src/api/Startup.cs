@@ -18,6 +18,7 @@ using NWebsec.Core.Common.Middleware.Options;
 using SolrNet;
 using Maw.Data;
 using Maw.Domain;
+using Maw.Domain.Models.Search;
 using Maw.Domain.Search;
 using Maw.Domain.Upload;
 using Maw.Security;

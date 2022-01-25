@@ -4,7 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using Maw.Domain.Identity;
+using Maw.Data.Abstractions;
+using Maw.Domain.Models.Identity;
 
 namespace Maw.Data.Identity;
 

@@ -21,4 +21,5 @@ public interface IVideoRepository
     // admin functions
     Task SetGpsOverrideAsync(int videoId, GpsCoordinate gps, string username);
     Task<long> SetCategoryTeaserAsync(short categoryId, int videoId);
+    Task<IEnumerable<CategoryAndRoles>> GetCategoriesAndRolesAsync();
 }

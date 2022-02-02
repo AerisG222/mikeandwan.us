@@ -136,6 +136,11 @@ public class PhotoService
         await ClearCacheAsync();
     }
 
+    public Task<IEnumerable<CategoryAndRoles>> GetCategoriesAndRolesAsync()
+    {
+        return _repo.GetCategoriesAndRolesAsync();
+    }
+
     public Task ClearCacheAsync()
     {
         return InternalClearCacheAsync();

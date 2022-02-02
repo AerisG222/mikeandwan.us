@@ -31,6 +31,17 @@ public class PhotoRepositoryTests
         Assert.NotNull(photos.First().XsInfo.Path);
     }
 
+    [Fact]
+    public async Task GetCategoriesAndRoles_ShouldReturnPopulatedObjects()
+    {
+        var repo = GetRepo();
+
+        var cats = await repo.GetCategoriesAndRolesAsync();
+
+        Assert.NotNull(cats);
+        Assert.NotEmpty(cats.First().Roles);
+    }
+
     PhotoRepository GetRepo()
     {
         return new PhotoRepository(GetConnectionString());

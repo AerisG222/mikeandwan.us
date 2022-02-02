@@ -118,6 +118,11 @@ public class VideoService
         return InternalClearCacheAsync();
     }
 
+    public Task<IEnumerable<CategoryAndRoles>> GetCategoriesAndRolesAsync()
+    {
+        return _repo.GetCategoriesAndRolesAsync();
+    }
+
     static string GetRoleCacheKeyComponent(string[] roles)
     {
         return string.Join("_", roles);

@@ -262,6 +262,11 @@ public class PhotoRepository
         );
     }
 
+    public Task<IEnumerable<CategoryAndRoles>> GetCategoriesAndRolesAsync()
+    {
+        return RunAsync(conn => conn.QueryAsync<CategoryAndRoles>("SELECT * FROM photo.get_category_roles();"));
+    }
+
     Task<IEnumerable<Category>> InternalGetCategoriesAsync(string[] roles, short? year = null, short? categoryId = null, short? sinceCategoryId = null)
     {
         return RunAsync(async conn =>

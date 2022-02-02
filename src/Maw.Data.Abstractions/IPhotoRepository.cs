@@ -25,4 +25,5 @@ public interface IPhotoRepository
     // admin functions
     Task SetGpsOverrideAsync(int photoId, GpsCoordinate gps, string username);
     Task<long> SetCategoryTeaserAsync(short categoryId, int photoId);
+    Task<IEnumerable<CategoryAndRoles>> GetCategoriesAndRolesAsync();
 }

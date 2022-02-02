@@ -216,6 +216,11 @@ public class VideoRepository
         );
     }
 
+    public Task<IEnumerable<CategoryAndRoles>> GetCategoriesAndRolesAsync()
+    {
+        return RunAsync(conn => conn.QueryAsync<CategoryAndRoles>("SELECT * FROM video.get_category_roles();"));
+    }
+
     Task<IEnumerable<Category>> InternalGetCategoriesAsync(string[] roles, short? year = null, short? categoryId = null)
     {
         return RunAsync(async conn =>

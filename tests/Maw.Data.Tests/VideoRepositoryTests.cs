@@ -31,6 +31,17 @@ public class VideoRepositoryTests
         Assert.NotNull(videos.First().VideoScaled.Path);
     }
 
+    [Fact]
+    public async Task GetCategoriesAndRoles_ShouldReturnPopulatedObjects()
+    {
+        var repo = GetRepo();
+
+        var cats = await repo.GetCategoriesAndRolesAsync();
+
+        Assert.NotNull(cats);
+        Assert.NotEmpty(cats.First().Roles);
+    }
+
     VideoRepository GetRepo()
     {
         return new VideoRepository(GetConnectionString());

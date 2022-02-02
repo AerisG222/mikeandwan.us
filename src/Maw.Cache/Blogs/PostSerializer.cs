@@ -6,7 +6,6 @@ namespace Maw.Cache.Blogs;
 class PostSerializer
     : BaseSerializer<Post>
 {
-    const string KEY_ID = "id";
     const string KEY_BLOG_ID = "blog-id";
     const string KEY_TITLE = "title";
     const string KEY_DESCRIPTION = "description";
@@ -14,7 +13,7 @@ class PostSerializer
 
     static readonly RedisValue[] _sortLookup = new RedisValue[]
     {
-        GetSortExternalLookup(BlogKeys.POST_HASH_KEY_PATTERN, KEY_ID),
+        "#",
         GetSortExternalLookup(BlogKeys.POST_HASH_KEY_PATTERN, KEY_BLOG_ID),
         GetSortExternalLookup(BlogKeys.POST_HASH_KEY_PATTERN, KEY_TITLE),
         GetSortExternalLookup(BlogKeys.POST_HASH_KEY_PATTERN, KEY_DESCRIPTION),
@@ -27,7 +26,6 @@ class PostSerializer
     {
         return new HashEntry[]
         {
-            new HashEntry(KEY_ID, item.Id),
             new HashEntry(KEY_BLOG_ID, item.BlogId),
             new HashEntry(KEY_TITLE, item.Title),
             new HashEntry(KEY_DESCRIPTION, item.Description),

@@ -7,7 +7,6 @@ namespace Maw.Cache.Videos;
 class CategorySerializer
     : BaseSerializer<Category>
 {
-    const string KEY_ID = "id";
     const string KEY_NAME = "name";
     const string KEY_YEAR = "year";
     const string KEY_CREATE_DATE = "create-date";
@@ -33,7 +32,7 @@ class CategorySerializer
 
     static readonly RedisValue[] _sortLookup = new RedisValue[]
     {
-        GetSortExternalLookup(VideoKeys.CATEGORY_HASH_KEY_PATTERN, KEY_ID),
+        "#",
         GetSortExternalLookup(VideoKeys.CATEGORY_HASH_KEY_PATTERN, KEY_NAME),
         GetSortExternalLookup(VideoKeys.CATEGORY_HASH_KEY_PATTERN, KEY_YEAR),
         GetSortExternalLookup(VideoKeys.CATEGORY_HASH_KEY_PATTERN, KEY_CREATE_DATE),
@@ -71,7 +70,6 @@ class CategorySerializer
     {
         List<HashEntry> entries = new();
 
-        entries.Add(new HashEntry(KEY_ID, item.Id));
         entries.Add(new HashEntry(KEY_NAME, item.Name));
         entries.Add(new HashEntry(KEY_YEAR, item.Year));
 

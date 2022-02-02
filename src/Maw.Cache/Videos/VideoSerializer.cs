@@ -7,7 +7,6 @@ namespace Maw.Cache.Videos;
 class VideoSerializer
     : BaseSerializer<Video>
 {
-    const string KEY_ID = "id";
     const string KEY_CATEGORY_ID = "category-id";
     const string KEY_CREATE_DATE = "create-date";
     const string KEY_LATITUDE = "latitude";
@@ -36,7 +35,7 @@ class VideoSerializer
 
     static readonly RedisValue[] _sortLookup = new RedisValue[]
     {
-        GetSortExternalLookup(VideoKeys.VIDEO_HASH_KEY_PATTERN, KEY_ID),
+        "#",
         GetSortExternalLookup(VideoKeys.VIDEO_HASH_KEY_PATTERN, KEY_CATEGORY_ID),
         GetSortExternalLookup(VideoKeys.VIDEO_HASH_KEY_PATTERN, KEY_CREATE_DATE),
         GetSortExternalLookup(VideoKeys.VIDEO_HASH_KEY_PATTERN, KEY_LATITUDE),
@@ -70,7 +69,6 @@ class VideoSerializer
     {
         List<HashEntry> entries = new();
 
-        entries.Add(new HashEntry(KEY_ID, item.Id));
         entries.Add(new HashEntry(KEY_CATEGORY_ID, item.CategoryId));
 
         if(item.CreateDate != null)

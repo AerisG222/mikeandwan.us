@@ -6,8 +6,10 @@ static class PhotoKeys
 {
     const string ROOT = "maw:photos";
     const string CATEGORY_ROOT = $"{ROOT}:categories";
+    const string EXIF_ROOT = $"{ROOT}:exif";
     public const string PHOTO_HASH_KEY_PATTERN = $"{ROOT}:*";
     public const string CATEGORY_HASH_KEY_PATTERN = $"{CATEGORY_ROOT}:*";
+    public const string EXIF_HASH_KEY_PATTERN = $"{EXIF_ROOT}:*";
     public const string PHOTO_SINGLE_SET_KEY = $"{ROOT}:single";
     public const string CATEGORY_SINGLE_SET_KEY = $"{CATEGORY_ROOT}:single";
     public const string CATEGORY_SINGLE_ACCESSIBLE_SET_KEY = $"{CATEGORY_ROOT}:single-accessible";

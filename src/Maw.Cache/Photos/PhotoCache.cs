@@ -258,6 +258,16 @@ public class PhotoCache
         return AddPhotosAsync(new Photo[] { photo });
     }
 
+    public Task<Detail?> GetPhotoDetailsAsync(string[] roles, int photoId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task AddPhotoDetailsAsync(int photoId, Detail detail)
+    {
+        throw new NotImplementedException();
+    }
+
     static string PrepareAccessibleCategoriesSet(ITransaction tran, string[] roles)
     {
         if(roles.Length == 1)

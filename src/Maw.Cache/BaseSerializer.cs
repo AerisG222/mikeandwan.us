@@ -31,6 +31,7 @@ abstract class BaseSerializer<T>
         return DateTime.Parse(value, CultureInfo.InvariantCulture);
     }
 
+    public abstract RedisValue[] HashFields { get; }
     public abstract RedisValue[] SortLookupFields { get; }
     public abstract HashEntry[] BuildHashSet(T item);
 

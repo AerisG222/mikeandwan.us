@@ -14,7 +14,7 @@ public interface IVideoCache
     Task AddCategoryAsync(SecuredResource<Category> securedCategory);
 
     Task<IEnumerable<Video>> GetVideosAsync(string[] roles, short categoryId);
-    Task<Video?> GetVideoAsync(string[] roles, short videoId);
-    Task AddVideosAsync(IEnumerable<Video> videos);
-    Task AddVideoAsync(Video video);
+    Task<Video?> GetVideoAsync(string[] roles, int videoId);
+    Task AddVideosAsync(IEnumerable<SecuredResource<Video>> securedVideos);
+    Task AddVideoAsync(SecuredResource<Video> securedVideo);
 }

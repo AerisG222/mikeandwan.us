@@ -8,9 +8,6 @@ static class VideoKeys
     const string CATEGORY_ROOT = $"{ROOT}:categories";
     public const string VIDEO_HASH_KEY_PATTERN = $"{ROOT}:*";
     public const string CATEGORY_HASH_KEY_PATTERN = $"{CATEGORY_ROOT}:*";
-    public const string VIDEO_SINGLE_SET_KEY = $"{ROOT}:single";
-    public const string CATEGORY_SINGLE_SET_KEY = $"{CATEGORY_ROOT}:single";
-    public const string CATEGORY_SINGLE_ACCESSIBLE_SET_KEY = $"{CATEGORY_ROOT}:single-accessible";
 
     public static string GetVideoHashKey(Video video) => GetVideoHashKey(video.Id);
     public static string GetVideoHashKey(int videoId) => $"{ROOT}:{videoId}";
@@ -23,4 +20,6 @@ static class VideoKeys
     public static string GetAccessibleCategoriesInYearSetKey(string[] roles, short year) => $"{GetCategoriesForYearSetKey(year)}:roles:{string.Join("+", roles)}";
     public static string GetVideosForCategorySetKey(Category category) => GetVideosForCategorySetKey(category.Id);
     public static string GetVideosForCategorySetKey(short categoryId) => $"{GetCategoryHashKey(categoryId)}:photos";
+    public static string GetVideosInRoleSetKey(string role) => $"{ROOT}:roles:{role}";
+    public static string GetVideosInRoleSetKey(string[] roles) => GetVideosInRoleSetKey(string.Join("+", roles));
 }

@@ -60,8 +60,9 @@ public class VideoTests
     public async Task Videos_CacheMatchesData()
     {
         var dbVideos = await TestHelper.VideoRepository.GetVideosInCategoryAsync(123, TestHelper.Roles);
+        var securedVideos = dbVideos.Select(x => new SecuredResource<Video>(x, TestHelper.Roles));
 
-        await TestHelper.VideoCache.AddVideosAsync(dbVideos);
+        await TestHelper.VideoCache.AddVideosAsync(securedVideos);
 
         var cacheVideos = await TestHelper.VideoCache.GetVideosAsync(TestHelper.Roles, 123);
 
@@ -96,5 +97,35 @@ public class VideoTests
         Assert.Equal(dbFirst.VideoScaled.Width, cacheFirst.VideoScaled.Width);
         Assert.Equal(dbFirst.VideoScaled.Path, cacheFirst.VideoScaled.Path);
         Assert.Equal(dbFirst.VideoScaled.Size, cacheFirst.VideoScaled.Size);
+
+        var singleCachedVideo = await TestHelper.VideoCache.GetVideoAsync(TestHelper.Roles, cacheFirst.Id);
+
+        Assert.NotNull(singleCachedVideo);
+        Assert.Equal(cacheFirst.CategoryId, singleCachedVideo!.CategoryId);
+        Assert.Equal(cacheFirst.CreateDate, singleCachedVideo!.CreateDate);
+        Assert.Equal(cacheFirst.Duration, singleCachedVideo!.Duration);
+        Assert.Equal(cacheFirst.Id, singleCachedVideo!.Id);
+        Assert.Equal(cacheFirst.Latitude, singleCachedVideo!.Latitude);
+        Assert.Equal(cacheFirst.Longitude, singleCachedVideo!.Longitude);
+        Assert.Equal(cacheFirst.Thumbnail.Height, singleCachedVideo!.Thumbnail.Height);
+        Assert.Equal(cacheFirst.Thumbnail.Width, singleCachedVideo!.Thumbnail.Width);
+        Assert.Equal(cacheFirst.Thumbnail.Path, singleCachedVideo!.Thumbnail.Path);
+        Assert.Equal(cacheFirst.Thumbnail.Size, singleCachedVideo!.Thumbnail.Size);
+        Assert.Equal(cacheFirst.ThumbnailSq.Height, singleCachedVideo!.ThumbnailSq.Height);
+        Assert.Equal(cacheFirst.ThumbnailSq.Width, singleCachedVideo!.ThumbnailSq.Width);
+        Assert.Equal(cacheFirst.ThumbnailSq.Path, singleCachedVideo!.ThumbnailSq.Path);
+        Assert.Equal(cacheFirst.ThumbnailSq.Size, singleCachedVideo!.ThumbnailSq.Size);
+        Assert.Equal(cacheFirst.VideoFull.Height, singleCachedVideo!.VideoFull.Height);
+        Assert.Equal(cacheFirst.VideoFull.Width, singleCachedVideo!.VideoFull.Width);
+        Assert.Equal(cacheFirst.VideoFull.Path, singleCachedVideo!.VideoFull.Path);
+        Assert.Equal(cacheFirst.VideoFull.Size, singleCachedVideo!.VideoFull.Size);
+        Assert.Equal(cacheFirst.VideoRaw.Height, singleCachedVideo!.VideoRaw.Height);
+        Assert.Equal(cacheFirst.VideoRaw.Width, singleCachedVideo!.VideoRaw.Width);
+        Assert.Equal(cacheFirst.VideoRaw.Path, singleCachedVideo!.VideoRaw.Path);
+        Assert.Equal(cacheFirst.VideoRaw.Size, singleCachedVideo!.VideoRaw.Size);
+        Assert.Equal(cacheFirst.VideoScaled.Height, singleCachedVideo!.VideoScaled.Height);
+        Assert.Equal(cacheFirst.VideoScaled.Width, singleCachedVideo!.VideoScaled.Width);
+        Assert.Equal(cacheFirst.VideoScaled.Path, singleCachedVideo!.VideoScaled.Path);
+        Assert.Equal(cacheFirst.VideoScaled.Size, singleCachedVideo!.VideoScaled.Size);
     }
 }

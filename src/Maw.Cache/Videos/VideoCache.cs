@@ -63,28 +63,21 @@ public class VideoCache
 
     public async Task<Category?> GetCategoryAsync(string[] roles, short categoryId)
     {
+        if(!await CanAccessCategoryAsync(categoryId, roles))
+        {
+            return null;
+        }
+
         var tran = Db.CreateTransaction();
-        var accessibleCategoriesSetKey = PrepareAccessibleCategoriesSet(tran, roles);
-        var singleSetKey = VideoKeys.CATEGORY_SINGLE_SET_KEY;
-        var singleAccessibleSetKey = VideoKeys.CATEGORY_SINGLE_ACCESSIBLE_SET_KEY;
 
-#pragma warning disable CS4014
-        tran.SetAddAsync(
-            singleSetKey,
-            categoryId
+        var category = tran.HashGetAsync(
+            VideoKeys.GetCategoryHashKey(categoryId),
+            _categorySerializer.HashFields
         );
 
-        tran.SetCombineAndStoreAsync(
-            SetOperation.Intersect,
-            singleAccessibleSetKey,
-            singleSetKey,
-            accessibleCategoriesSetKey
-        );
-#pragma warning restore CS4014
+        await tran.ExecuteAsync();
 
-        var categories = await GetCategoriesInternalAsync(tran, singleAccessibleSetKey);
-
-        return categories.Any() ? categories.First() : null;
+        return _categorySerializer.ParseSingleOrDefault(await category);
     }
 
     public Task AddCategoriesAsync(IEnumerable<SecuredResource<Category>> securedCategories)
@@ -130,52 +123,54 @@ public class VideoCache
         return new List<Video>();
     }
 
-    public async Task<Video?> GetVideoAsync(string[] roles, short videoId)
+    public async Task<Video?> GetVideoAsync(string[] roles, int videoId)
     {
-        var tran = Db.CreateTransaction();
-        var setKey = VideoKeys.VIDEO_SINGLE_SET_KEY;
-
-#pragma warning disable CS4014
-        tran.SetAddAsync(
-            setKey,
-            videoId
-        );
-#pragma warning restore CS4014
-
-        var videos = await GetVideosInternalAsync(tran, setKey);
-
-        if(videos.Count() != 1)
+        if(!await CanAccessVideoAsync(videoId, roles))
         {
             return null;
         }
 
-        var video = videos.First();
+        var tran = Db.CreateTransaction();
 
-        return await CanAccessCategoryAsync(video.CategoryId, roles) ? video : null;
+        var video = tran.HashGetAsync(
+            VideoKeys.GetVideoHashKey(videoId),
+            _videoSerializer.HashFields
+        );
+
+        await tran.ExecuteAsync();
+
+        return _videoSerializer.ParseSingleOrDefault(await video);
     }
 
-    public Task AddVideosAsync(IEnumerable<Video> videos)
+    public Task AddVideosAsync(IEnumerable<SecuredResource<Video>> securedVideos)
     {
         return ExecuteAsync(tran =>
         {
-            foreach(var video in videos)
+            foreach(var securedVideo in securedVideos)
             {
                 tran.HashSetAsync(
-                    VideoKeys.GetVideoHashKey(video),
-                    _videoSerializer.BuildHashSet(video)
+                    VideoKeys.GetVideoHashKey(securedVideo.Item),
+                    _videoSerializer.BuildHashSet(securedVideo.Item)
                 );
 
                 tran.SetAddAsync(
-                    VideoKeys.GetVideosForCategorySetKey(video.CategoryId),
-                    video.Id
+                    VideoKeys.GetVideosForCategorySetKey(securedVideo.Item.CategoryId),
+                    securedVideo.Item.Id
                 );
+
+                foreach(var role in securedVideo.Roles) {
+                    tran.SetAddAsync(
+                        VideoKeys.GetVideosInRoleSetKey(role),
+                        securedVideo.Item.Id
+                    );
+                }
             }
         });
     }
 
-    public Task AddVideoAsync(Video video)
+    public Task AddVideoAsync(SecuredResource<Video> securedVideo)
     {
-        return AddVideosAsync(new Video[] { video });
+        return AddVideosAsync(new SecuredResource<Video>[] { securedVideo });
     }
 
     async Task<IEnumerable<Category>> GetCategoriesInternalAsync(ITransaction tran, string setKey)
@@ -229,5 +224,14 @@ public class VideoCache
             .ToArray();
 
         return await IsMemberOfAnySet(categoryId, accessibleSetKeys);
+    }
+
+    async Task<bool> CanAccessVideoAsync(int videoId, string[] roles)
+    {
+        var accessibleSetKeys = roles
+            .Select(role => VideoKeys.GetVideosInRoleSetKey(role))
+            .ToArray();
+
+        return await IsMemberOfAnySet(videoId, accessibleSetKeys);
     }
 }

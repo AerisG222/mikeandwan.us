@@ -18,7 +18,7 @@ public interface IPhotoCache
     Task<IEnumerable<Photo>> GetRandomPhotosAsync(string[] roles, short count);
     Task<Photo?> GetPhotoAsync(string[] roles, int photoId);
     Task<Detail?> GetPhotoDetailsAsync(string[] roles, int photoId);
-    Task AddPhotosAsync(IEnumerable<Photo> photos);
-    Task AddPhotoAsync(Photo photo);
+    Task AddPhotosAsync(IEnumerable<SecuredResource<Photo>> securedPhotos);
+    Task AddPhotoAsync(SecuredResource<Photo> securedPhoto);
     Task AddPhotoDetailsAsync(int photoId, Detail detail);
 }

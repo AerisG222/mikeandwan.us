@@ -9,6 +9,7 @@ public class PhotoCache
     : BaseCache, IPhotoCache
 {
     readonly CategorySerializer _categorySerializer = new();
+    readonly PhotoDetailSerializer _detailSerializer = new();
     readonly PhotoSerializer _photoSerializer = new();
 
     public PhotoCache(IDatabase redisDatabase)
@@ -61,6 +62,7 @@ public class PhotoCache
         return await GetCategoriesInternalAsync(tran, accessibleCategoriesInYearSetKey);
     }
 
+    // TODO: consider using a sorted set for accessible categories so we can then use zrange to simplify the logic below?
     public async Task<IEnumerable<Category>> GetRecentCategoriesAsync(string[] roles, short sinceId)
     {
         var tran = Db.CreateTransaction();
@@ -96,28 +98,21 @@ public class PhotoCache
 
     public async Task<Category?> GetCategoryAsync(string[] roles, short categoryId)
     {
+        if(!await CanAccessCategoryAsync(categoryId, roles))
+        {
+            return null;
+        }
+
         var tran = Db.CreateTransaction();
-        var accessibleCategoriesSetKey = PrepareAccessibleCategoriesSet(tran, roles);
-        var singleSetKey = PhotoKeys.CATEGORY_SINGLE_SET_KEY;
-        var singleAccessibleSetKey = PhotoKeys.CATEGORY_SINGLE_ACCESSIBLE_SET_KEY;
 
-#pragma warning disable CS4014
-        tran.SetAddAsync(
-            singleSetKey,
-            categoryId
+        var category = tran.HashGetAsync(
+            PhotoKeys.GetCategoryHashKey(categoryId),
+            _categorySerializer.HashFields
         );
 
-        tran.SetCombineAndStoreAsync(
-            SetOperation.Intersect,
-            singleAccessibleSetKey,
-            singleSetKey,
-            accessibleCategoriesSetKey
-        );
-#pragma warning restore CS4014
+        await tran.ExecuteAsync();
 
-        var categories = await GetCategoriesInternalAsync(tran, singleAccessibleSetKey);
-
-        return categories.Any() ? categories.First() : null;
+        return _categorySerializer.ParseSingleOrDefault(await category);
     }
 
     public Task AddCategoriesAsync(IEnumerable<SecuredResource<Category>> securedCategories)
@@ -166,31 +161,8 @@ public class PhotoCache
     public async Task<IEnumerable<Photo>> GetRandomPhotosAsync(string[] roles, short count)
     {
         var tran = Db.CreateTransaction();
-        var accessibleCategoriesSetKey = PrepareAccessibleCategoriesSet(tran, roles);
-        var allCats = tran.SetMembersAsync(accessibleCategoriesSetKey);
-
-        await tran.ExecuteAsync();
-
-        var photoSetKeys = new List<string>();
-
-        foreach(var catId in await allCats)
-        {
-            photoSetKeys.Add(PhotoKeys.GetPhotosForCategorySetKey((short)catId));
-        }
-
-        tran = Db.CreateTransaction();
-
-#pragma warning disable CS4014
-        tran.KeyDeleteAsync(PhotoKeys.RANDOM_PHOTO_CANDIDATE_SET_KEY);
-
-        tran.SetCombineAndStoreAsync(
-            SetOperation.Union,
-            PhotoKeys.RANDOM_PHOTO_CANDIDATE_SET_KEY,
-            photoSetKeys.Select(k => new RedisKey(k)).ToArray()
-        );
-#pragma warning restore CS4014
-
-        var randomKeys = tran.SetRandomMembersAsync(PhotoKeys.RANDOM_PHOTO_CANDIDATE_SET_KEY, count);
+        var accessiblePhotosSetKey = PrepareAccessiblePhotosSet(tran, roles);
+        var randomPhotoIds = tran.SetRandomMembersAsync(accessiblePhotosSetKey, count);
 
         await tran.ExecuteAsync();
 
@@ -200,10 +172,10 @@ public class PhotoCache
         tran.KeyDeleteAsync(PhotoKeys.RANDOM_PHOTO_SET_KEY);
 #pragma warning restore CS4014
 
-        foreach(var photoKey in await randomKeys)
+        foreach(var photoId in await randomPhotoIds)
         {
 #pragma warning disable CS4014
-            tran.SetAddAsync(PhotoKeys.RANDOM_PHOTO_SET_KEY, photoKey);
+            tran.SetAddAsync(PhotoKeys.RANDOM_PHOTO_SET_KEY, photoId);
 #pragma warning restore CS4014
         }
 
@@ -212,60 +184,82 @@ public class PhotoCache
 
     public async Task<Photo?> GetPhotoAsync(string[] roles, int photoId)
     {
-        var tran = Db.CreateTransaction();
-        var setKey = PhotoKeys.PHOTO_SINGLE_SET_KEY;
-
-#pragma warning disable CS4014
-        tran.SetAddAsync(
-            setKey,
-            photoId
-        );
-#pragma warning restore CS4014
-
-        var photos = await GetPhotosInternalAsync(tran, setKey);
-
-        if(photos.Count() != 1)
+        if(!await CanAccessPhotoAsync(photoId, roles))
         {
             return null;
         }
 
-        var photo = photos.First();
+        var tran = Db.CreateTransaction();
 
-        return await CanAccessCategoryAsync(photo.CategoryId, roles) ? photo : null;
+        var photo = tran.HashGetAsync(
+            PhotoKeys.GetPhotoHashKey(photoId),
+            _photoSerializer.HashFields
+        );
+
+        await tran.ExecuteAsync();
+
+        return _photoSerializer.ParseSingleOrDefault(await photo);
     }
 
-    public Task AddPhotosAsync(IEnumerable<Photo> photos)
+    public Task AddPhotosAsync(IEnumerable<SecuredResource<Photo>> securedPhotos)
     {
         return ExecuteAsync(tran =>
         {
-            foreach(var photo in photos)
+            foreach(var securedPhoto in securedPhotos)
             {
                 tran.HashSetAsync(
-                    PhotoKeys.GetPhotoHashKey(photo),
-                    _photoSerializer.BuildHashSet(photo)
+                    PhotoKeys.GetPhotoHashKey(securedPhoto.Item),
+                    _photoSerializer.BuildHashSet(securedPhoto.Item)
                 );
 
                 tran.SetAddAsync(
-                    PhotoKeys.GetPhotosForCategorySetKey(photo.CategoryId),
-                    photo.Id
+                    PhotoKeys.GetPhotosForCategorySetKey(securedPhoto.Item.CategoryId),
+                    securedPhoto.Item.Id
                 );
+
+                foreach(var role in securedPhoto.Roles) {
+                    tran.SetAddAsync(
+                        PhotoKeys.GetPhotosInRoleSetKey(role),
+                        securedPhoto.Item.Id
+                    );
+                }
             }
         });
     }
 
-    public Task AddPhotoAsync(Photo photo)
+    public Task AddPhotoAsync(SecuredResource<Photo> securedPhoto)
     {
-        return AddPhotosAsync(new Photo[] { photo });
+        return AddPhotosAsync(new SecuredResource<Photo>[] { securedPhoto });
     }
 
-    public Task<Detail?> GetPhotoDetailsAsync(string[] roles, int photoId)
+    public async Task<Detail?> GetPhotoDetailsAsync(string[] roles, int photoId)
     {
-        throw new NotImplementedException();
+        if(!await CanAccessPhotoAsync(photoId, roles))
+        {
+            return null;
+        }
+
+        var tran = Db.CreateTransaction();
+
+        var detail = tran.HashGetAsync(
+            PhotoKeys.GetExifHashKey(photoId),
+            _detailSerializer.HashFields
+        );
+
+        await tran.ExecuteAsync();
+
+        return _detailSerializer.ParseSingleOrDefault(await detail);
     }
 
     public Task AddPhotoDetailsAsync(int photoId, Detail detail)
     {
-        throw new NotImplementedException();
+        return ExecuteAsync(tran =>
+        {
+            tran.HashSetAsync(
+                PhotoKeys.GetExifHashKey(photoId),
+                _detailSerializer.BuildHashSet(detail)
+            );
+        });
     }
 
     static string PrepareAccessibleCategoriesSet(ITransaction tran, string[] roles)
@@ -285,6 +279,26 @@ public class PhotoCache
             );
 
             return accessibleCategoriesSetKey;
+        }
+    }
+
+    static string PrepareAccessiblePhotosSet(ITransaction tran, string[] roles)
+    {
+        if(roles.Length == 1)
+        {
+            return PhotoKeys.GetPhotosInRoleSetKey(roles[0]);
+        }
+        else
+        {
+            var accessiblePhotosSetKey = PhotoKeys.GetPhotosInRoleSetKey(roles);
+
+            tran.SetCombineAndStoreAsync(
+                SetOperation.Union,
+                accessiblePhotosSetKey,
+                roles.Select(r => new RedisKey(PhotoKeys.GetPhotosInRoleSetKey(r))).ToArray()
+            );
+
+            return accessiblePhotosSetKey;
         }
     }
 
@@ -315,9 +329,18 @@ public class PhotoCache
     async Task<bool> CanAccessCategoryAsync(short categoryId, string[] roles)
     {
         var accessibleSetKeys = roles
-            .Select(role => PhotoKeys.GetCategoriesInRoleSetKey(roles))
+            .Select(role => PhotoKeys.GetCategoriesInRoleSetKey(role))
             .ToArray();
 
         return await IsMemberOfAnySet(categoryId, accessibleSetKeys);
+    }
+
+    async Task<bool> CanAccessPhotoAsync(int photoId, string[] roles)
+    {
+        var accessibleSetKeys = roles
+            .Select(role => PhotoKeys.GetPhotosInRoleSetKey(role))
+            .ToArray();
+
+        return await IsMemberOfAnySet(photoId, accessibleSetKeys);
     }
 }

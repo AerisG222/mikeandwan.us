@@ -7,6 +7,7 @@ namespace Maw.Cache.Videos;
 class CategorySerializer
     : BaseSerializer<Category>
 {
+    const string KEY_ID = "id";
     const string KEY_NAME = "name";
     const string KEY_YEAR = "year";
     const string KEY_CREATE_DATE = "create-date";
@@ -29,6 +30,33 @@ class CategorySerializer
     const string KEY_TOTAL_SIZE_SCALED = "total-size-scaled";
     const string KEY_TOTAL_SIZE_FULL = "total-size-full";
     const string KEY_TOTAL_SIZE_RAW = "total-size-raw";
+
+    static readonly RedisValue[] _hashFields = new RedisValue[]
+    {
+        KEY_ID,
+        KEY_NAME,
+        KEY_YEAR,
+        KEY_CREATE_DATE,
+        KEY_IS_MISSING_GPS_DATA,
+        KEY_LATITUDE,
+        KEY_LONGITUDE,
+        KEY_VIDEO_COUNT,
+        KEY_TEASER_IMAGE_HEIGHT,
+        KEY_TEASER_IMAGE_WIDTH,
+        KEY_TEASER_IMAGE_PATH,
+        KEY_TEASER_IMAGE_SIZE,
+        KEY_TEASER_SQ_IMAGE_HEIGHT,
+        KEY_TEASER_SQ_IMAGE_WIDTH,
+        KEY_TEASER_SQ_IMAGE_PATH,
+        KEY_TEASER_SQ_IMAGE_SIZE,
+        KEY_TOTAL_DURATION,
+        KEY_TOTAL_SIZE,
+        KEY_TOTAL_SIZE_THUMBNAIL,
+        KEY_TOTAL_SIZE_THUMBNAIL_SQ,
+        KEY_TOTAL_SIZE_SCALED,
+        KEY_TOTAL_SIZE_FULL,
+        KEY_TOTAL_SIZE_RAW
+    };
 
     static readonly RedisValue[] _sortLookup = new RedisValue[]
     {
@@ -62,6 +90,8 @@ class CategorySerializer
         GetSortExternalLookup(VideoKeys.CATEGORY_HASH_KEY_PATTERN, KEY_YEAR)
     };
 
+    public override RedisValue[] HashFields { get => _hashFields; }
+
     public override RedisValue[] SortLookupFields { get => _sortLookup; }
 
     public static RedisValue[] YearLookupField { get => _yearLookup; }
@@ -70,6 +100,7 @@ class CategorySerializer
     {
         List<HashEntry> entries = new();
 
+        entries.Add(new HashEntry(KEY_ID, item.Id));
         entries.Add(new HashEntry(KEY_NAME, item.Name));
         entries.Add(new HashEntry(KEY_YEAR, item.Year));
 

@@ -69,8 +69,9 @@ public class PhotoTests
     public async Task Photos_CacheMatchesData()
     {
         var dbPhotos = await TestHelper.PhotoRepository.GetPhotosForCategoryAsync(123, TestHelper.Roles);
+        var securedPhotos = dbPhotos.Select(x => new SecuredResource<Photo>(x, TestHelper.Roles));
 
-        await TestHelper.PhotoCache.AddPhotosAsync(dbPhotos);
+        await TestHelper.PhotoCache.AddPhotosAsync(securedPhotos);
 
         var cachePhotos = await TestHelper.PhotoCache.GetPhotosAsync(TestHelper.Roles, 123);
 
@@ -116,5 +117,125 @@ public class PhotoTests
         var cacheRandomPhotos = await TestHelper.PhotoCache.GetRandomPhotosAsync(TestHelper.Roles, 2);
 
         Assert.Equal(2, cacheRandomPhotos.Count());
+
+        var singleCachedPhoto = await TestHelper.PhotoCache.GetPhotoAsync(TestHelper.Roles, cacheFirst.Id);
+
+        Assert.NotNull(singleCachedPhoto);
+        Assert.Equal(cacheFirst.Id, singleCachedPhoto!.Id);
+        Assert.Equal(cacheFirst.CategoryId, singleCachedPhoto!.CategoryId);
+        Assert.Equal(cacheFirst.CreateDate, singleCachedPhoto!.CreateDate);
+        Assert.Equal(cacheFirst.Id, singleCachedPhoto!.Id);
+        Assert.Equal(cacheFirst.Latitude, singleCachedPhoto!.Latitude);
+        Assert.Equal(cacheFirst.Longitude, singleCachedPhoto!.Longitude);
+        Assert.Equal(cacheFirst.LgInfo.Height, singleCachedPhoto!.LgInfo.Height);
+        Assert.Equal(cacheFirst.LgInfo.Width, singleCachedPhoto!.LgInfo.Width);
+        Assert.Equal(cacheFirst.LgInfo.Path, singleCachedPhoto!.LgInfo.Path);
+        Assert.Equal(cacheFirst.LgInfo.Size, singleCachedPhoto!.LgInfo.Size);
+        Assert.Equal(cacheFirst.MdInfo.Height, singleCachedPhoto!.MdInfo.Height);
+        Assert.Equal(cacheFirst.MdInfo.Width, singleCachedPhoto!.MdInfo.Width);
+        Assert.Equal(cacheFirst.MdInfo.Path, singleCachedPhoto!.MdInfo.Path);
+        Assert.Equal(cacheFirst.MdInfo.Size, singleCachedPhoto!.MdInfo.Size);
+        Assert.Equal(cacheFirst.PrtInfo.Height, singleCachedPhoto!.PrtInfo.Height);
+        Assert.Equal(cacheFirst.PrtInfo.Width, singleCachedPhoto!.PrtInfo.Width);
+        Assert.Equal(cacheFirst.PrtInfo.Path, singleCachedPhoto!.PrtInfo.Path);
+        Assert.Equal(cacheFirst.PrtInfo.Size, singleCachedPhoto!.PrtInfo.Size);
+        Assert.Equal(cacheFirst.SmInfo.Height, singleCachedPhoto!.SmInfo.Height);
+        Assert.Equal(cacheFirst.SmInfo.Width, singleCachedPhoto!.SmInfo.Width);
+        Assert.Equal(cacheFirst.SmInfo.Path, singleCachedPhoto!.SmInfo.Path);
+        Assert.Equal(cacheFirst.SmInfo.Size, singleCachedPhoto!.SmInfo.Size);
+        Assert.Equal(cacheFirst.SrcInfo.Height, singleCachedPhoto!.SrcInfo.Height);
+        Assert.Equal(cacheFirst.SrcInfo.Width, singleCachedPhoto!.SrcInfo.Width);
+        Assert.Equal(cacheFirst.SrcInfo.Path, singleCachedPhoto!.SrcInfo.Path);
+        Assert.Equal(cacheFirst.SrcInfo.Size, singleCachedPhoto!.SrcInfo.Size);
+        Assert.Equal(cacheFirst.XsInfo.Height, singleCachedPhoto!.XsInfo.Height);
+        Assert.Equal(cacheFirst.XsInfo.Width, singleCachedPhoto!.XsInfo.Width);
+        Assert.Equal(cacheFirst.XsInfo.Path, singleCachedPhoto!.XsInfo.Path);
+        Assert.Equal(cacheFirst.XsInfo.Size, singleCachedPhoto!.XsInfo.Size);
+        Assert.Equal(cacheFirst.XsSqInfo.Height, singleCachedPhoto!.XsSqInfo.Height);
+        Assert.Equal(cacheFirst.XsSqInfo.Width, singleCachedPhoto!.XsSqInfo.Width);
+        Assert.Equal(cacheFirst.XsSqInfo.Path, singleCachedPhoto!.XsSqInfo.Path);
+        Assert.Equal(cacheFirst.XsSqInfo.Size, singleCachedPhoto!.XsSqInfo.Size);
+
+        var dbDetail = await TestHelper.PhotoRepository.GetDetailAsync(cacheFirst.Id, TestHelper.Roles);
+
+        await TestHelper.PhotoCache.AddPhotoDetailsAsync(cacheFirst.Id, dbDetail!);
+
+        var cacheDetail = await TestHelper.PhotoCache.GetPhotoDetailsAsync(TestHelper.Roles, cacheFirst.Id);
+
+        Assert.NotNull(cacheDetail);
+        Assert.Equal(dbDetail!.BitsPerSample, cacheDetail!.BitsPerSample);
+        Assert.Equal(dbDetail!.Compression, cacheDetail!.Compression);
+        Assert.Equal(dbDetail!.Contrast, cacheDetail!.Contrast);
+        Assert.Equal(dbDetail!.CreateDate, cacheDetail!.CreateDate);
+        Assert.Equal(dbDetail!.DigitalZoomRatio, cacheDetail!.DigitalZoomRatio);
+        Assert.Equal(dbDetail!.ExposureCompensation, cacheDetail!.ExposureCompensation);
+        Assert.Equal(dbDetail!.ExposureMode, cacheDetail!.ExposureMode);
+        Assert.Equal(dbDetail!.ExposureProgram, cacheDetail!.ExposureProgram);
+        Assert.Equal(dbDetail!.ExposureTime, cacheDetail!.ExposureTime);
+        Assert.Equal(dbDetail!.FNumber, cacheDetail!.FNumber);
+        Assert.Equal(dbDetail!.Flash, cacheDetail!.Flash);
+        Assert.Equal(dbDetail!.FocalLength, cacheDetail!.FocalLength);
+        Assert.Equal(dbDetail!.FocalLengthIn35mmFormat, cacheDetail!.FocalLengthIn35mmFormat);
+        Assert.Equal(dbDetail!.GainControl, cacheDetail!.GainControl);
+        Assert.Equal(dbDetail!.GpsAltitude, cacheDetail!.GpsAltitude);
+        Assert.Equal(dbDetail!.GpsAltitudeRef, cacheDetail!.GpsAltitudeRef);
+        Assert.Equal(dbDetail!.GpsDateStamp, cacheDetail!.GpsDateStamp);
+        Assert.Equal(dbDetail!.GpsDirection, cacheDetail!.GpsDirection);
+        Assert.Equal(dbDetail!.GpsDirectionRef, cacheDetail!.GpsDirectionRef);
+        Assert.Equal(dbDetail!.GpsLatitude, cacheDetail!.GpsLatitude);
+        Assert.Equal(dbDetail!.GpsLatitudeRef, cacheDetail!.GpsLatitudeRef);
+        Assert.Equal(dbDetail!.GpsLongitude, cacheDetail!.GpsLongitude);
+        Assert.Equal(dbDetail!.GpsLongitudeRef, cacheDetail!.GpsLongitudeRef);
+        Assert.Equal(dbDetail!.GpsMeasureMode, cacheDetail!.GpsMeasureMode);
+        Assert.Equal(dbDetail!.GpsSatellites, cacheDetail!.GpsSatellites);
+        Assert.Equal(dbDetail!.GpsStatus, cacheDetail!.GpsStatus);
+        Assert.Equal(dbDetail!.GpsVersionId, cacheDetail!.GpsVersionId);
+        Assert.Equal(dbDetail!.Iso, cacheDetail!.Iso);
+        Assert.Equal(dbDetail!.LightSource, cacheDetail!.LightSource);
+        Assert.Equal(dbDetail!.Make, cacheDetail!.Make);
+        Assert.Equal(dbDetail!.MeteringMode, cacheDetail!.MeteringMode);
+        Assert.Equal(dbDetail!.Model, cacheDetail!.Model);
+        Assert.Equal(dbDetail!.Orientation, cacheDetail!.Orientation);
+        Assert.Equal(dbDetail!.Saturation, cacheDetail!.Saturation);
+        Assert.Equal(dbDetail!.SceneCaptureType, cacheDetail!.SceneCaptureType);
+        Assert.Equal(dbDetail!.SceneType, cacheDetail!.SceneType);
+        Assert.Equal(dbDetail!.SensingMethod, cacheDetail!.SensingMethod);
+        Assert.Equal(dbDetail!.Sharpness, cacheDetail!.Sharpness);
+
+        Assert.Equal(dbDetail!.AutoFocusAreaMode, cacheDetail!.AutoFocusAreaMode);
+        Assert.Equal(dbDetail!.AutoFocusPoint, cacheDetail!.AutoFocusPoint);
+        Assert.Equal(dbDetail!.ActiveDLighting, cacheDetail!.ActiveDLighting);
+        Assert.Equal(dbDetail!.Colorspace, cacheDetail!.Colorspace);
+        Assert.Equal(dbDetail!.ExposureDifference, cacheDetail!.ExposureDifference);
+        Assert.Equal(dbDetail!.FlashColorFilter, cacheDetail!.FlashColorFilter);
+        Assert.Equal(dbDetail!.FlashCompensation, cacheDetail!.FlashCompensation);
+        Assert.Equal(dbDetail!.FlashControlMode, cacheDetail!.FlashControlMode);
+        Assert.Equal(dbDetail!.FlashExposureCompensation, cacheDetail!.FlashExposureCompensation);
+        Assert.Equal(dbDetail!.FlashFocalLength, cacheDetail!.FlashFocalLength);
+        Assert.Equal(dbDetail!.FlashMode, cacheDetail!.FlashMode);
+        Assert.Equal(dbDetail!.FlashSetting, cacheDetail!.FlashSetting);
+        Assert.Equal(dbDetail!.FlashType, cacheDetail!.FlashType);
+        Assert.Equal(dbDetail!.FocusDistance, cacheDetail!.FocusDistance);
+        Assert.Equal(dbDetail!.FocusMode, cacheDetail!.FocusMode);
+        Assert.Equal(dbDetail!.FocusPosition, cacheDetail!.FocusPosition);
+        Assert.Equal(dbDetail!.HighIsoNoiseReduction, cacheDetail!.HighIsoNoiseReduction);
+        Assert.Equal(dbDetail!.HueAdjustment, cacheDetail!.HueAdjustment);
+        Assert.Equal(dbDetail!.NoiseReduction, cacheDetail!.NoiseReduction);
+        Assert.Equal(dbDetail!.PictureControlName, cacheDetail!.PictureControlName);
+        Assert.Equal(dbDetail!.PrimaryAFPoint, cacheDetail!.PrimaryAFPoint);
+        Assert.Equal(dbDetail!.VRMode, cacheDetail!.VRMode);
+        Assert.Equal(dbDetail!.VibrationReduction, cacheDetail!.VibrationReduction);
+        Assert.Equal(dbDetail!.VignetteControl, cacheDetail!.VignetteControl);
+        Assert.Equal(dbDetail!.WhiteBalance, cacheDetail!.WhiteBalance);
+
+        Assert.Equal(dbDetail!.Aperture, cacheDetail!.Aperture);
+        Assert.Equal(dbDetail!.AutoFocus, cacheDetail!.AutoFocus);
+        Assert.Equal(dbDetail!.DepthOfField, cacheDetail!.DepthOfField);
+        Assert.Equal(dbDetail!.FieldOfView, cacheDetail!.FieldOfView);
+        Assert.Equal(dbDetail!.HyperfocalDistance, cacheDetail!.HyperfocalDistance);
+        Assert.Equal(dbDetail!.LensId, cacheDetail!.LensId);
+        Assert.Equal(dbDetail!.LightValue, cacheDetail!.LightValue);
+        Assert.Equal(dbDetail!.ScaleFactor35Efl, cacheDetail!.ScaleFactor35Efl);
+        Assert.Equal(dbDetail!.ShutterSpeed, cacheDetail!.ShutterSpeed);
     }
 }

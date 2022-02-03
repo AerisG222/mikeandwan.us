@@ -4,6 +4,7 @@ namespace Maw.Cache;
 
 interface ISerializer<T>
 {
+    RedisValue[] HashFields { get; }
     RedisValue[] SortLookupFields { get; }
 
     IEnumerable<T> Parse(RedisValue[] values);

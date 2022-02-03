@@ -83,6 +83,84 @@ class PhotoDetailSerializer
     const string KEY_SCALE_FACTOR_35_EFL = "scale-factor-35-efl";
     const string KEY_SHUTTER_SPEED = "shutter-speed";
 
+    static readonly RedisValue[] _hashFields = new RedisValue[]
+    {
+        KEY_BITS_PER_SAMPLE,
+        KEY_COMPRESSION,
+        KEY_CONTRAST,
+        KEY_CREATE_DATE,
+        KEY_DIGITAL_ZOOM_RATIO,
+        KEY_EXPOSURE_COMPENSATION,
+        KEY_EXPOSURE_MODE,
+        KEY_EXPOSURE_PROGRAM,
+        KEY_EXPOSURE_TIME,
+        KEY_F_NUMBER,
+        KEY_FLASH,
+        KEY_FOCAL_LENGTH,
+        KEY_FOCAL_LENGTH_IN_35MM_FORMAT,
+        KEY_GAIN_CONTROL,
+        KEY_GPS_ALTITUDE,
+        KEY_GPS_ALTITUDE_REF,
+        KEY_GPS_DATE_STAMP,
+        KEY_GPS_DIRECTION,
+        KEY_GPS_DIRECTION_REF,
+        KEY_GPS_LATITUDE,
+        KEY_GPS_LATITUDE_REF,
+        KEY_GPS_LONGITUDE,
+        KEY_GPS_LONGITUDE_REF,
+        KEY_GPS_MEASURE_MODE,
+        KEY_GPS_SATELLITES,
+        KEY_GPS_STATUS,
+        KEY_GPS_VERSION_ID,
+        KEY_ISO,
+        KEY_LIGHT_SOURCE,
+        KEY_MAKE,
+        KEY_METERING_MODE,
+        KEY_MODEL,
+        KEY_ORIENTATION,
+        KEY_SATURATION,
+        KEY_SCENE_CAPTURE_TYPE,
+        KEY_SCENE_TYPE,
+        KEY_SENSING_METHOD,
+        KEY_SHARPNESS,
+
+        KEY_AUTO_FOCUS_AREA_MODE,
+        KEY_AUTO_FOCUS_POINT,
+        KEY_ACTIVE_D_LIGHTING,
+        KEY_COLORSPACE,
+        KEY_EXPOSURE_DIFFERENCE,
+        KEY_FLASH_COLOR_FILTER,
+        KEY_FlASH_COMPENSATION,
+        KEY_FLASH_CONTROL_MODE,
+        KEY_FLASH_EXPOSURE_COMPENSATION,
+        KEY_FLASH_FOCAL_LENGTH,
+        KEY_FLASH_MODE,
+        KEY_FLASH_SETTING,
+        KEY_FLASH_TYPE,
+        KEY_FOCUS_DISTANCE,
+        KEY_FOCUS_MODE,
+        KEY_FOCUS_POSITION,
+        KEY_HIGH_ISO_NOISE_REDUCTION,
+        KEY_HUE_ADJUSTMENT,
+        KEY_NOISE_REDUCTION,
+        KEY_PICTURE_CONTROL_NAME,
+        KEY_PRIMARY_AF_POINT,
+        KEY_VR_MODE,
+        KEY_VIBRATION_REDUCTION,
+        KEY_VIGNETTE_CONTROL,
+        KEY_WHITE_BALANCE,
+
+        KEY_APERTURE,
+        KEY_AUTO_FOCUS,
+        KEY_DEPTH_OF_FIELD,
+        KEY_FIELD_OF_VIEW,
+        KEY_HYPERFOCAL_DISTANCE,
+        KEY_LENS_ID,
+        KEY_LIGHT_VALUE,
+        KEY_SCALE_FACTOR_35_EFL,
+        KEY_SHUTTER_SPEED
+    };
+
     static readonly RedisValue[] _sortLookup = new RedisValue[]
     {
         GetSortExternalLookup(PhotoKeys.EXIF_HASH_KEY_PATTERN, KEY_BITS_PER_SAMPLE),
@@ -161,6 +239,7 @@ class PhotoDetailSerializer
         GetSortExternalLookup(PhotoKeys.EXIF_HASH_KEY_PATTERN, KEY_SHUTTER_SPEED)
     };
 
+    public override RedisValue[] HashFields { get => _hashFields; }
     public override RedisValue[] SortLookupFields { get => _sortLookup; }
 
     public override HashEntry[] BuildHashSet(Detail item)
@@ -173,7 +252,7 @@ class PhotoDetailSerializer
         if(item.CreateDate != null) { entries.Add(new HashEntry(KEY_CREATE_DATE, SerializeDate((DateTime)item.CreateDate))); }
         if(item.DigitalZoomRatio != null) { entries.Add(new HashEntry(KEY_DIGITAL_ZOOM_RATIO, item.DigitalZoomRatio)); }
         if(item.ExposureCompensation != null) { entries.Add(new HashEntry(KEY_EXPOSURE_COMPENSATION, item.ExposureCompensation)); }
-        if(item.ExposureDifference != null) { entries.Add(new HashEntry(KEY_EXPOSURE_MODE, item.ExposureDifference)); }
+        if(item.ExposureMode != null) { entries.Add(new HashEntry(KEY_EXPOSURE_MODE, item.ExposureMode)); }
         if(item.ExposureProgram != null) { entries.Add(new HashEntry(KEY_EXPOSURE_PROGRAM, item.ExposureProgram)); }
         if(item.ExposureTime != null) { entries.Add(new HashEntry(KEY_EXPOSURE_TIME, item.ExposureTime)); }
         if(item.FNumber != null) { entries.Add(new HashEntry(KEY_F_NUMBER, item.FNumber)); }
@@ -254,7 +333,7 @@ class PhotoDetailSerializer
             BitsPerSample = (ushort?)(int?)values[i++],
             Compression = values[i++],
             Contrast = values[i++],
-            CreateDate = DeserializeDate(values[i++]),
+            CreateDate = values[i++] == RedisValue.Null ? null : DeserializeDate(values[i - 1]),
             DigitalZoomRatio = (double?)values[i++],
             ExposureCompensation = values[i++],
             ExposureMode = values[i++],
@@ -267,7 +346,7 @@ class PhotoDetailSerializer
             GainControl = values[i++],
             GpsAltitude = (double?)values[i++],
             GpsAltitudeRef = values[i++],
-            GpsDateStamp = DeserializeDate(values[i++]),
+            GpsDateStamp = values[i++] == RedisValue.Null ? null : DeserializeDate(values[i - 1]),
             GpsDirection = (double?)values[i++],
             GpsDirectionRef = values[i++],
             GpsLatitude = (double?)values[i++],

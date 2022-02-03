@@ -7,6 +7,7 @@ namespace Maw.Cache.Photos;
 class PhotoSerializer
     : BaseSerializer<Photo>
 {
+    const string KEY_ID = "id";
     const string KEY_CATEGORY_ID = "category-id";
     const string KEY_CREATE_DATE = "create-date";
     const string KEY_LATITUDE = "latitude";
@@ -39,6 +40,43 @@ class PhotoSerializer
     const string KEY_SRC_WIDTH = "src-width";
     const string KEY_SRC_PATH = "src-path";
     const string KEY_SRC_SIZE = "src-size";
+
+    static readonly RedisValue[] _hashFields = new RedisValue[]
+    {
+        KEY_ID,
+        KEY_CATEGORY_ID,
+        KEY_CREATE_DATE,
+        KEY_LATITUDE,
+        KEY_LONGITUDE,
+        KEY_XS_HEIGHT,
+        KEY_XS_WIDTH,
+        KEY_XS_PATH,
+        KEY_XS_SIZE,
+        KEY_XS_SQ_HEIGHT,
+        KEY_XS_SQ_WIDTH,
+        KEY_XS_SQ_PATH,
+        KEY_XS_SQ_SIZE,
+        KEY_SM_HEIGHT,
+        KEY_SM_WIDTH,
+        KEY_SM_PATH,
+        KEY_SM_SIZE,
+        KEY_MD_HEIGHT,
+        KEY_MD_WIDTH,
+        KEY_MD_PATH,
+        KEY_MD_SIZE,
+        KEY_LG_HEIGHT,
+        KEY_LG_WIDTH,
+        KEY_LG_PATH,
+        KEY_LG_SIZE,
+        KEY_PRT_HEIGHT,
+        KEY_PRT_WIDTH,
+        KEY_PRT_PATH,
+        KEY_PRT_SIZE,
+        KEY_SRC_HEIGHT,
+        KEY_SRC_WIDTH,
+        KEY_SRC_PATH,
+        KEY_SRC_SIZE
+    };
 
     static readonly RedisValue[] _sortLookup = new RedisValue[]
     {
@@ -77,12 +115,14 @@ class PhotoSerializer
         GetSortExternalLookup(PhotoKeys.PHOTO_HASH_KEY_PATTERN, KEY_SRC_SIZE)
     };
 
+    public override RedisValue[] HashFields { get => _hashFields; }
     public override RedisValue[] SortLookupFields { get => _sortLookup; }
 
     public override HashEntry[] BuildHashSet(Photo item)
     {
         List<HashEntry> entries = new();
 
+        entries.Add(new HashEntry(KEY_ID, item.Id));
         entries.Add(new HashEntry(KEY_CATEGORY_ID, item.CategoryId));
 
         if(item.CreateDate != null)

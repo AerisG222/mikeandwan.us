@@ -6,10 +6,20 @@ namespace Maw.Cache.Blogs;
 class BlogSerializer
     : BaseSerializer<Blog>
 {
+    const string KEY_ID = "id";
     const string KEY_TITLE = "title";
     const string KEY_COPYRIGHT = "copyright";
     const string KEY_DESCRIPTION = "description";
     const string KEY_LAST_POST_DATE = "last-post-date";
+
+    static readonly RedisValue[] _hashFields = new RedisValue[]
+    {
+        KEY_ID,
+        KEY_TITLE,
+        KEY_COPYRIGHT,
+        KEY_DESCRIPTION,
+        KEY_LAST_POST_DATE
+    };
 
     static readonly RedisValue[] _sortLookup = new RedisValue[]
     {
@@ -20,12 +30,14 @@ class BlogSerializer
         GetSortExternalLookup(BlogKeys.BLOG_HASH_KEY_PATTERN, KEY_LAST_POST_DATE)
     };
 
+    public override RedisValue[] HashFields { get => _hashFields; }
     public override RedisValue[] SortLookupFields { get => _sortLookup; }
 
     public override HashEntry[] BuildHashSet(Blog item)
     {
         return new HashEntry[]
         {
+            new HashEntry(KEY_ID, item.Id),
             new HashEntry(KEY_TITLE, item.Title),
             new HashEntry(KEY_COPYRIGHT, item.Copyright),
             new HashEntry(KEY_DESCRIPTION, item.Description),

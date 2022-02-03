@@ -314,12 +314,10 @@ public class PhotoCache
 
     async Task<bool> CanAccessCategoryAsync(short categoryId, string[] roles)
     {
-        var tran = Db.CreateTransaction();
-        var accessibleCategoriesSetKey = PrepareAccessibleCategoriesSet(tran, roles);
-        var canAccess = tran.SetContainsAsync(accessibleCategoriesSetKey, categoryId);
+        var accessibleSetKeys = roles
+            .Select(role => PhotoKeys.GetCategoriesInRoleSetKey(roles))
+            .ToArray();
 
-        await tran.ExecuteAsync();
-
-        return await canAccess;
+        return await IsMemberOfAnySet(categoryId, accessibleSetKeys);
     }
 }

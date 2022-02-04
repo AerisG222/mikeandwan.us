@@ -71,4 +71,18 @@ public class BlogTests
         Assert.Equal(dbFirst.PublishDate, cacheFirst.PublishDate);
         Assert.Equal(dbFirst.Title, cacheFirst.Title);
     }
+
+    [Fact]
+    public async Task VerifyCacheStatus()
+    {
+        var status = await TestHelper.BlogCache.GetStatusAsync();
+
+        Assert.Equal(CacheStatus.UnInitialized, status);
+
+        await TestHelper.BlogCache.SetStatusAsync(CacheStatus.InitializationSucceeded);
+
+        status = await TestHelper.BlogCache.GetStatusAsync();
+
+        Assert.Equal(CacheStatus.InitializationSucceeded, status);
+    }
 }

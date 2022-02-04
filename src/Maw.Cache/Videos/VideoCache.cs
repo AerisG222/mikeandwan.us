@@ -12,7 +12,7 @@ public class VideoCache
     readonly VideoSerializer _videoSerializer = new();
 
     public VideoCache(IDatabase redisDatabase)
-        : base(redisDatabase)
+        : base(redisDatabase, VideoKeys.CACHE_STATUS)
     {
 
     }

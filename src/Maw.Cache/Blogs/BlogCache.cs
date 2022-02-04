@@ -11,7 +11,7 @@ public class BlogCache
     readonly PostSerializer _postSerializer = new();
 
     public BlogCache(IDatabase redisDatabase)
-        : base(redisDatabase)
+        : base(redisDatabase, BlogKeys.CACHE_STATUS)
     {
 
     }

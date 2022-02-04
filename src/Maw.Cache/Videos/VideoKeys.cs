@@ -6,6 +6,7 @@ static class VideoKeys
 {
     const string ROOT = "maw:videos";
     const string CATEGORY_ROOT = $"{ROOT}:categories";
+    public const string CACHE_STATUS = $"{ROOT}:status";
     public const string VIDEO_HASH_KEY_PATTERN = $"{ROOT}:*";
     public const string CATEGORY_HASH_KEY_PATTERN = $"{CATEGORY_ROOT}:*";
 

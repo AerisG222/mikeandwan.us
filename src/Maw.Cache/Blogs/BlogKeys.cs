@@ -6,6 +6,7 @@ static class BlogKeys
 {
     const string ROOT = "maw:blogs";
     const string POST_ROOT = $"{ROOT}:posts";
+    public const string CACHE_STATUS = $"{ROOT}:status";
     public const string BLOG_HASH_KEY_PATTERN = $"{ROOT}:*";
     public const string POST_HASH_KEY_PATTERN = $"{POST_ROOT}:*";
     public const string ALL_BLOGS_SET_KEY = $"{ROOT}:all-blogs";

@@ -13,7 +13,7 @@ public class PhotoCache
     readonly PhotoSerializer _photoSerializer = new();
 
     public PhotoCache(IDatabase redisDatabase)
-        : base(redisDatabase)
+        : base(redisDatabase, PhotoKeys.CACHE_STATUS)
     {
 
     }

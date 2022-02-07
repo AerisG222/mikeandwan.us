@@ -14,6 +14,38 @@ public abstract class BaseCache
         StatusKey = statusKey ?? throw new ArgumentNullException(nameof(statusKey));
     }
 
+    public async Task<CacheStatus> GetStatusAsync()
+    {
+        var tran = Db.CreateTransaction();
+        var status = GetStatusAsync(tran);
+
+        await tran.ExecuteAsync();
+
+        return await status;
+    }
+
+    public Task SetStatusAsync(CacheStatus status)
+    {
+        return ExecuteAsync(tran =>
+        {
+            tran.StringSetAsync(StatusKey, status.ToString());
+        });
+    }
+
+    protected Task<CacheStatus> GetStatusAsync(ITransaction tran)
+    {
+        var task = tran.StringGetAsync(StatusKey);
+
+        return task.ContinueWith(status => {
+            if(Enum.TryParse(task.Result, true, out CacheStatus result))
+            {
+                return result;
+            }
+
+            return CacheStatus.UnInitialized;
+        });
+    }
+
     protected async Task ExecuteAsync(Action<ITransaction> action)
     {
         var tran = Db.CreateTransaction();
@@ -54,38 +86,6 @@ public abstract class BaseCache
         }
 
         return BuildResult(await status, isMember);
-    }
-
-    public async Task<CacheStatus> GetStatusAsync()
-    {
-        var tran = Db.CreateTransaction();
-        var status = GetStatusAsync(tran);
-
-        await tran.ExecuteAsync();
-
-        return await status;
-    }
-
-    public Task SetStatusAsync(CacheStatus status)
-    {
-        return ExecuteAsync(tran =>
-        {
-            tran.StringSetAsync(StatusKey, status.ToString());
-        });
-    }
-
-    protected Task<CacheStatus> GetStatusAsync(ITransaction tran)
-    {
-        var task = tran.StringGetAsync(StatusKey);
-
-        return task.ContinueWith(status => {
-            if(Enum.TryParse(task.Result, true, out CacheStatus result))
-            {
-                return result;
-            }
-
-            return CacheStatus.UnInitialized;
-        });
     }
 
     protected static CacheResult<T> BuildResult<T>(CacheStatus status, T result)

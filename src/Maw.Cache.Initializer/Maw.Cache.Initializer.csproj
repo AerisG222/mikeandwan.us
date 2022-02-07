@@ -13,5 +13,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Maw.Cache\Maw.Cache.csproj" />
       <ProjectReference Include="..\Maw.Data\Maw.Data.csproj" />
+      <ProjectReference Include="..\Maw.Cache.Abstractions\Maw.Cache.Abstractions.csproj" />
+      <ProjectReference Include="..\Maw.Data.Abstractions\Maw.Data.Abstractions.csproj" />
     </ItemGroup>
 </Project>

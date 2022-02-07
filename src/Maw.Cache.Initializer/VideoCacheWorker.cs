@@ -1,18 +1,18 @@
-using Maw.Cache.Videos;
-using Maw.Data;
+using Maw.Cache.Abstractions;
+using Maw.Data.Abstractions;
 
 namespace Maw.Cache.Initializer;
 
 public class VideoCacheWorker
     : BackgroundService
 {
-    readonly VideoRepository _repo;
-    readonly VideoCache _cache;
+    readonly IVideoRepository _repo;
+    readonly IVideoCache _cache;
     readonly ILogger _logger;
 
     public VideoCacheWorker(
-        VideoRepository repo,
-        VideoCache cache,
+        IVideoRepository repo,
+        IVideoCache cache,
         ILogger<VideoCacheWorker> logger)
     {
         _repo = repo ?? throw new ArgumentNullException(nameof(repo));
@@ -24,7 +24,7 @@ public class VideoCacheWorker
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("VideoCacheWorker running at: {time}", DateTimeOffset.Now);
             await Task.Delay(1000, stoppingToken);
         }
     }

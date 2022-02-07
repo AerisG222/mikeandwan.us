@@ -1,18 +1,18 @@
-using Maw.Data;
-using Maw.Cache.Blogs;
+using Maw.Data.Abstractions;
+using Maw.Cache.Abstractions;
 
 namespace Maw.Cache.Initializer;
 
 public class BlogCacheWorker
     : BackgroundService
 {
-    readonly BlogRepository _repo;
-    readonly BlogCache _cache;
+    readonly IBlogRepository _repo;
+    readonly IBlogCache _cache;
     readonly ILogger _logger;
 
     public BlogCacheWorker(
-        BlogRepository repo,
-        BlogCache cache,
+        IBlogRepository repo,
+        IBlogCache cache,
         ILogger<BlogCacheWorker> logger)
     {
         _repo = repo ?? throw new ArgumentNullException(nameof(repo));
@@ -24,7 +24,7 @@ public class BlogCacheWorker
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("BlogCacheWorker running at: {time}", DateTimeOffset.Now);
             await Task.Delay(1000, stoppingToken);
         }
     }

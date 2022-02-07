@@ -15,8 +15,9 @@ public class VideoTests
         var securedCategories = dbCategories.Select(x => new SecuredResource<Category>(x, TestHelper.Roles));
 
         await TestHelper.VideoCache.AddCategoriesAsync(securedCategories);
+        await TestHelper.VideoCache.SetStatusAsync(CacheStatus.InitializationSucceeded);
 
-        var cacheCategories = await TestHelper.VideoCache.GetCategoriesAsync(TestHelper.Roles);
+        var cacheCategories = (await TestHelper.VideoCache.GetCategoriesAsync(TestHelper.Roles)).Value;
 
         Assert.Equal(dbCategories.Count(), cacheCategories.Count());
 
@@ -50,7 +51,7 @@ public class VideoTests
 
         // YEARS
         var dbYears = await TestHelper.VideoRepository.GetYearsAsync(TestHelper.Roles);
-        var cacheYears = await TestHelper.VideoCache.GetYearsAsync(TestHelper.Roles);
+        var cacheYears = (await TestHelper.VideoCache.GetYearsAsync(TestHelper.Roles)).Value;
 
         Assert.Equal(dbYears.Count(), cacheYears.Count());
         Assert.Equal(dbYears.First(), cacheYears.First());
@@ -63,8 +64,9 @@ public class VideoTests
         var securedVideos = dbVideos.Select(x => new SecuredResource<Video>(x, TestHelper.Roles));
 
         await TestHelper.VideoCache.AddVideosAsync(securedVideos);
+        await TestHelper.VideoCache.SetStatusAsync(CacheStatus.InitializationSucceeded);
 
-        var cacheVideos = await TestHelper.VideoCache.GetVideosAsync(TestHelper.Roles, 123);
+        var cacheVideos = (await TestHelper.VideoCache.GetVideosAsync(TestHelper.Roles, 123)).Value;
 
         Assert.Equal(dbVideos.Count(), cacheVideos.Count());
 
@@ -98,7 +100,7 @@ public class VideoTests
         Assert.Equal(dbFirst.VideoScaled.Path, cacheFirst.VideoScaled.Path);
         Assert.Equal(dbFirst.VideoScaled.Size, cacheFirst.VideoScaled.Size);
 
-        var singleCachedVideo = await TestHelper.VideoCache.GetVideoAsync(TestHelper.Roles, cacheFirst.Id);
+        var singleCachedVideo = (await TestHelper.VideoCache.GetVideoAsync(TestHelper.Roles, cacheFirst.Id)).Value;
 
         Assert.NotNull(singleCachedVideo);
         Assert.Equal(cacheFirst.CategoryId, singleCachedVideo!.CategoryId);

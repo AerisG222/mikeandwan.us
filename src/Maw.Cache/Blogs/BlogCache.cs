@@ -16,10 +16,10 @@ public class BlogCache
 
     }
 
-    public async Task<IEnumerable<Blog>> GetBlogsAsync()
+    public async Task<CacheResult<IEnumerable<Blog>>> GetBlogsAsync()
     {
         var tran = Db.CreateTransaction();
-
+        var status = GetStatusAsync(tran);
         var blogs = tran.SortAsync(
             BlogKeys.ALL_BLOGS_SET_KEY,
             get: _blogSerializer.SortLookupFields
@@ -27,7 +27,7 @@ public class BlogCache
 
         await tran.ExecuteAsync();
 
-        return _blogSerializer.Parse(await blogs);
+        return BuildResult(await status, _blogSerializer.Parse(await blogs));
     }
 
     public Task AddBlogsAsync(IEnumerable<Blog> blogs)
@@ -54,10 +54,10 @@ public class BlogCache
         return AddBlogsAsync(new Blog[] { blog });
     }
 
-    public async Task<IEnumerable<Post>> GetPostsAsync(short blogId, long? count = null)
+    public async Task<CacheResult<IEnumerable<Post>>> GetPostsAsync(short blogId, long? count = null)
     {
         var tran = Db.CreateTransaction();
-
+        var status = GetStatusAsync(tran);
         var posts = tran.SortAsync(
             BlogKeys.GetBlogPostsKey(blogId),
             order: Order.Descending,
@@ -67,7 +67,7 @@ public class BlogCache
 
         await tran.ExecuteAsync();
 
-        return _postSerializer.Parse(await posts);
+        return BuildResult(await status, _postSerializer.Parse(await posts));
     }
 
     public Task AddPostsAsync(IEnumerable<Post> posts)

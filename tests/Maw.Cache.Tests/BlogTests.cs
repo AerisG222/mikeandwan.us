@@ -13,8 +13,9 @@ public class BlogTests
         var dbBlogs = await TestHelper.BlogRepository.GetBlogsAsync();
 
         await TestHelper.BlogCache.AddBlogsAsync(dbBlogs);
+        await TestHelper.BlogCache.SetStatusAsync(CacheStatus.InitializationSucceeded);
 
-        var cacheBlogs = await TestHelper.BlogCache.GetBlogsAsync();
+        var cacheBlogs = (await TestHelper.BlogCache.GetBlogsAsync()).Value;
 
         Assert.Equal(dbBlogs.Count(), cacheBlogs.Count());
 
@@ -35,8 +36,9 @@ public class BlogTests
         var dbPosts = await TestHelper.BlogRepository.GetAllPostsAsync(blogId);
 
         await TestHelper.BlogCache.AddPostsAsync(dbPosts);
+        await TestHelper.BlogCache.SetStatusAsync(CacheStatus.InitializationSucceeded);
 
-        var cachePosts = await TestHelper.BlogCache.GetPostsAsync(blogId);
+        var cachePosts = (await TestHelper.BlogCache.GetPostsAsync(blogId)).Value;
 
         Assert.Equal(dbPosts.Count(), cachePosts.Count());
 
@@ -57,8 +59,9 @@ public class BlogTests
         var dbPosts = await TestHelper.BlogRepository.GetAllPostsAsync(blogId);
 
         await TestHelper.BlogCache.AddPostsAsync(dbPosts);
+        await TestHelper.BlogCache.SetStatusAsync(CacheStatus.InitializationSucceeded);
 
-        var cachePosts = await TestHelper.BlogCache.GetPostsAsync(blogId);
+        var cachePosts = (await TestHelper.BlogCache.GetPostsAsync(blogId)).Value;
 
         Assert.Equal(dbPosts.Count(), cachePosts.Count());
 
@@ -75,14 +78,24 @@ public class BlogTests
     [Fact]
     public async Task VerifyCacheStatus()
     {
+        await TestHelper.BlogCache.SetStatusAsync(CacheStatus.UnInitialized);
+
         var status = await TestHelper.BlogCache.GetStatusAsync();
 
         Assert.Equal(CacheStatus.UnInitialized, status);
+
+        var blogs = await TestHelper.BlogCache.GetBlogsAsync();
+
+        Assert.False(blogs.ShouldUseResult);
 
         await TestHelper.BlogCache.SetStatusAsync(CacheStatus.InitializationSucceeded);
 
         status = await TestHelper.BlogCache.GetStatusAsync();
 
         Assert.Equal(CacheStatus.InitializationSucceeded, status);
+
+        blogs = await TestHelper.BlogCache.GetBlogsAsync();
+
+        Assert.True(blogs.ShouldUseResult);
     }
 }

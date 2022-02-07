@@ -17,11 +17,11 @@ public class VideoCache
 
     }
 
-    public async Task<IEnumerable<short>> GetYearsAsync(string[] roles)
+    public async Task<CacheResult<IEnumerable<short>>> GetYearsAsync(string[] roles)
     {
         var tran = Db.CreateTransaction();
+        var status = GetStatusAsync(tran);
         var accessibleCategoriesSetKey = PrepareAccessibleCategoriesSet(tran, roles);
-
         var years = tran.SortAsync(
             accessibleCategoriesSetKey,
             get: CategorySerializer.YearLookupField
@@ -29,13 +29,17 @@ public class VideoCache
 
         await tran.ExecuteAsync();
 
-        return (await years)
-            .Select(year => (short)year)
-            .Distinct()
-            .OrderByDescending(year => year);
+        return BuildResult(
+            await status,
+            (await years)
+                .Select(year => (short)year)
+                .Distinct()
+                .OrderByDescending(year => year)
+                .AsEnumerable()
+        );
     }
 
-    public async Task<IEnumerable<Category>> GetCategoriesAsync(string[] roles)
+    public async Task<CacheResult<IEnumerable<Category>>> GetCategoriesAsync(string[] roles)
     {
         var tran = Db.CreateTransaction();
         var accessibleCategoriesSetKey = PrepareAccessibleCategoriesSet(tran, roles);
@@ -43,7 +47,7 @@ public class VideoCache
         return await GetCategoriesInternalAsync(tran, accessibleCategoriesSetKey);
     }
 
-    public async Task<IEnumerable<Category>> GetCategoriesAsync(string[] roles, short year)
+    public async Task<CacheResult<IEnumerable<Category>>> GetCategoriesAsync(string[] roles, short year)
     {
         var tran = Db.CreateTransaction();
         var accessibleCategoriesSetKey = PrepareAccessibleCategoriesSet(tran, roles);
@@ -61,11 +65,13 @@ public class VideoCache
         return await GetCategoriesInternalAsync(tran, accessibleCategoriesInYearSetKey);
     }
 
-    public async Task<Category?> GetCategoryAsync(string[] roles, short categoryId)
+    public async Task<CacheResult<Category>> GetCategoryAsync(string[] roles, short categoryId)
     {
-        if(!await CanAccessCategoryAsync(categoryId, roles))
+        var canAccess = await CanAccessCategoryAsync(categoryId, roles);
+
+        if(!canAccess.ShouldUseResult || canAccess.Item == false)
         {
-            return null;
+            return new CacheResult<Category>(canAccess.ShouldUseResult, null);
         }
 
         var tran = Db.CreateTransaction();
@@ -77,7 +83,7 @@ public class VideoCache
 
         await tran.ExecuteAsync();
 
-        return _categorySerializer.ParseSingleOrDefault(await category);
+        return new CacheResult<Category>(true, _categorySerializer.ParseSingleOrDefault(await category));
     }
 
     public Task AddCategoriesAsync(IEnumerable<SecuredResource<Category>> securedCategories)
@@ -111,23 +117,27 @@ public class VideoCache
         return AddCategoriesAsync(new SecuredResource<Category>[] { securedCategory });
     }
 
-    public async Task<IEnumerable<Video>> GetVideosAsync(string[] roles, short categoryId)
+    public async Task<CacheResult<IEnumerable<Video>>> GetVideosAsync(string[] roles, short categoryId)
     {
-        if(await CanAccessCategoryAsync(categoryId, roles))
-        {
-            var tran = Db.CreateTransaction();
+        var canAccess = await CanAccessCategoryAsync(categoryId, roles);
 
-            return await GetVideosInternalAsync(tran, VideoKeys.GetVideosForCategorySetKey(categoryId));
+        if(!canAccess.ShouldUseResult || canAccess.Item == false)
+        {
+            return new CacheResult<IEnumerable<Video>>(canAccess.ShouldUseResult, null);
         }
 
-        return new List<Video>();
+        var tran = Db.CreateTransaction();
+
+        return await GetVideosInternalAsync(tran, VideoKeys.GetVideosForCategorySetKey(categoryId));
     }
 
-    public async Task<Video?> GetVideoAsync(string[] roles, int videoId)
+    public async Task<CacheResult<Video>> GetVideoAsync(string[] roles, int videoId)
     {
-        if(!await CanAccessVideoAsync(videoId, roles))
+        var canAccess = await CanAccessVideoAsync(videoId, roles);
+
+        if(!canAccess.ShouldUseResult || canAccess.Item == false)
         {
-            return null;
+            return new CacheResult<Video>(canAccess.ShouldUseResult, null);
         }
 
         var tran = Db.CreateTransaction();
@@ -139,7 +149,7 @@ public class VideoCache
 
         await tran.ExecuteAsync();
 
-        return _videoSerializer.ParseSingleOrDefault(await video);
+        return new CacheResult<Video>(true, _videoSerializer.ParseSingleOrDefault(await video));
     }
 
     public Task AddVideosAsync(IEnumerable<SecuredResource<Video>> securedVideos)
@@ -173,8 +183,9 @@ public class VideoCache
         return AddVideosAsync(new SecuredResource<Video>[] { securedVideo });
     }
 
-    async Task<IEnumerable<Category>> GetCategoriesInternalAsync(ITransaction tran, string setKey)
+    async Task<CacheResult<IEnumerable<Category>>> GetCategoriesInternalAsync(ITransaction tran, string setKey)
     {
+        var status = GetStatusAsync(tran);
         var categories = tran.SortAsync(
             setKey,
             get: _categorySerializer.SortLookupFields
@@ -182,11 +193,15 @@ public class VideoCache
 
         await tran.ExecuteAsync();
 
-        return _categorySerializer.Parse(await categories);
+        return BuildResult(
+            await status,
+            _categorySerializer.Parse(await categories)
+        );
     }
 
-    async Task<IEnumerable<Video>> GetVideosInternalAsync(ITransaction tran, string setKey)
+    async Task<CacheResult<IEnumerable<Video>>> GetVideosInternalAsync(ITransaction tran, string setKey)
     {
+        var status = GetStatusAsync(tran);
         var photos = tran.SortAsync(
             setKey,
             get: _videoSerializer.SortLookupFields
@@ -194,7 +209,10 @@ public class VideoCache
 
         await tran.ExecuteAsync();
 
-        return _videoSerializer.Parse(await photos);
+        return BuildResult(
+            await status,
+            _videoSerializer.Parse(await photos)
+        );
     }
 
     static string PrepareAccessibleCategoriesSet(ITransaction tran, string[] roles)
@@ -217,7 +235,7 @@ public class VideoCache
         }
     }
 
-    async Task<bool> CanAccessCategoryAsync(short categoryId, string[] roles)
+    async Task<CacheResult<bool>> CanAccessCategoryAsync(short categoryId, string[] roles)
     {
         var accessibleSetKeys = roles
             .Select(role => VideoKeys.GetCategoriesInRoleSetKey(roles))
@@ -226,7 +244,7 @@ public class VideoCache
         return await IsMemberOfAnySet(categoryId, accessibleSetKeys);
     }
 
-    async Task<bool> CanAccessVideoAsync(int videoId, string[] roles)
+    async Task<CacheResult<bool>> CanAccessVideoAsync(int videoId, string[] roles)
     {
         var accessibleSetKeys = roles
             .Select(role => VideoKeys.GetVideosInRoleSetKey(role))

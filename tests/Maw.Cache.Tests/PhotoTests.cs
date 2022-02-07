@@ -15,8 +15,9 @@ public class PhotoTests
         var securedCategories = dbCategories.Select(x => new SecuredResource<Category>(x, TestHelper.Roles));
 
         await TestHelper.PhotoCache.AddCategoriesAsync(securedCategories);
+        await TestHelper.PhotoCache.SetStatusAsync(CacheStatus.InitializationSucceeded);
 
-        var cacheCategories = await TestHelper.PhotoCache.GetCategoriesAsync(TestHelper.Roles);
+        var cacheCategories = (await TestHelper.PhotoCache.GetCategoriesAsync(TestHelper.Roles)).Value;
 
         Assert.Equal(dbCategories.Count(), cacheCategories.Count());
 
@@ -52,14 +53,14 @@ public class PhotoTests
         // RECENT CATEGORIES
         var nextToLastId = (short) (dbCategories.Last().Id - 1);
         var dbRecent = await TestHelper.PhotoRepository.GetRecentCategoriesAsync(nextToLastId, TestHelper.Roles);
-        var cacheRecent = await TestHelper.PhotoCache.GetRecentCategoriesAsync(TestHelper.Roles, nextToLastId);
+        var cacheRecent = (await TestHelper.PhotoCache.GetRecentCategoriesAsync(TestHelper.Roles, nextToLastId)).Value;
 
         Assert.Equal(dbRecent.Count(), cacheRecent.Count());
         Assert.Equal(dbRecent.First().Id, cacheRecent.First().Id);
 
         // YEARS
         var dbYears = await TestHelper.PhotoRepository.GetYearsAsync(TestHelper.Roles);
-        var cacheYears = await TestHelper.PhotoCache.GetYearsAsync(TestHelper.Roles);
+        var cacheYears = (await TestHelper.PhotoCache.GetYearsAsync(TestHelper.Roles)).Value;
 
         Assert.Equal(dbYears.Count(), cacheYears.Count());
         Assert.Equal(dbYears.First(), cacheYears.First());
@@ -72,8 +73,9 @@ public class PhotoTests
         var securedPhotos = dbPhotos.Select(x => new SecuredResource<Photo>(x, TestHelper.Roles));
 
         await TestHelper.PhotoCache.AddPhotosAsync(securedPhotos);
+        await TestHelper.PhotoCache.SetStatusAsync(CacheStatus.InitializationSucceeded);
 
-        var cachePhotos = await TestHelper.PhotoCache.GetPhotosAsync(TestHelper.Roles, 123);
+        var cachePhotos = (await TestHelper.PhotoCache.GetPhotosAsync(TestHelper.Roles, 123)).Value;
 
         Assert.Equal(dbPhotos.Count(), cachePhotos.Count());
 
@@ -114,11 +116,11 @@ public class PhotoTests
         Assert.Equal(dbFirst.XsSqInfo.Path, cacheFirst.XsSqInfo.Path);
         Assert.Equal(dbFirst.XsSqInfo.Size, cacheFirst.XsSqInfo.Size);
 
-        var cacheRandomPhotos = await TestHelper.PhotoCache.GetRandomPhotosAsync(TestHelper.Roles, 2);
+        var cacheRandomPhotos = (await TestHelper.PhotoCache.GetRandomPhotosAsync(TestHelper.Roles, 2)).Value;
 
         Assert.Equal(2, cacheRandomPhotos.Count());
 
-        var singleCachedPhoto = await TestHelper.PhotoCache.GetPhotoAsync(TestHelper.Roles, cacheFirst.Id);
+        var singleCachedPhoto = (await TestHelper.PhotoCache.GetPhotoAsync(TestHelper.Roles, cacheFirst.Id)).Value;
 
         Assert.NotNull(singleCachedPhoto);
         Assert.Equal(cacheFirst.Id, singleCachedPhoto!.Id);

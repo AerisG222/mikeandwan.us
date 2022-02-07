@@ -5,18 +5,18 @@ namespace Maw.Cache.Abstractions;
 
 public interface IPhotoCache
 {
-    Task<IEnumerable<short>> GetYearsAsync(string[] roles);
+    Task<CacheResult<IEnumerable<short>>> GetYearsAsync(string[] roles);
 
-    Task<IEnumerable<Category>> GetCategoriesAsync(string[] roles);
-    Task<IEnumerable<Category>> GetCategoriesAsync(string[] roles, short year);
-    Task<IEnumerable<Category>> GetRecentCategoriesAsync(string[] roles, short sinceId);
-    Task<Category?> GetCategoryAsync(string[] roles, short categoryId);
+    Task<CacheResult<IEnumerable<Category>>> GetCategoriesAsync(string[] roles);
+    Task<CacheResult<IEnumerable<Category>>> GetCategoriesAsync(string[] roles, short year);
+    Task<CacheResult<IEnumerable<Category>>> GetRecentCategoriesAsync(string[] roles, short sinceId);
+    Task<CacheResult<Category>> GetCategoryAsync(string[] roles, short categoryId);
     Task AddCategoriesAsync(IEnumerable<SecuredResource<Category>> securedCategories);
     Task AddCategoryAsync(SecuredResource<Category> securedCategory);
 
-    Task<IEnumerable<Photo>> GetPhotosAsync(string[] roles, short categoryId);
-    Task<IEnumerable<Photo>> GetRandomPhotosAsync(string[] roles, short count);
-    Task<Photo?> GetPhotoAsync(string[] roles, int photoId);
+    Task<CacheResult<IEnumerable<Photo>>> GetPhotosAsync(string[] roles, short categoryId);
+    Task<CacheResult<IEnumerable<Photo>>> GetRandomPhotosAsync(string[] roles, short count);
+    Task<CacheResult<Photo>> GetPhotoAsync(string[] roles, int photoId);
     Task<Detail?> GetPhotoDetailsAsync(string[] roles, int photoId);
     Task AddPhotosAsync(IEnumerable<SecuredResource<Photo>> securedPhotos);
     Task AddPhotoAsync(SecuredResource<Photo> securedPhoto);

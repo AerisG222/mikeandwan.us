@@ -18,11 +18,11 @@ public class PhotoCache
 
     }
 
-    public async Task<IEnumerable<short>> GetYearsAsync(string[] roles)
+    public async Task<CacheResult<IEnumerable<short>>> GetYearsAsync(string[] roles)
     {
         var tran = Db.CreateTransaction();
+        var status = GetStatusAsync(tran);
         var accessibleCategoriesSetKey = PrepareAccessibleCategoriesSet(tran, roles);
-
         var years = tran.SortAsync(
             accessibleCategoriesSetKey,
             get: CategorySerializer.YearLookupField
@@ -30,13 +30,17 @@ public class PhotoCache
 
         await tran.ExecuteAsync();
 
-        return (await years)
-            .Select(year => (short)year)
-            .Distinct()
-            .OrderByDescending(year => year);
+        return BuildResult(
+            await status,
+            (await years)
+                .Select(year => (short)year)
+                .Distinct()
+                .OrderByDescending(year => year)
+                .AsEnumerable()
+        );
     }
 
-    public async Task<IEnumerable<Category>> GetCategoriesAsync(string[] roles)
+    public async Task<CacheResult<IEnumerable<Category>>> GetCategoriesAsync(string[] roles)
     {
         var tran = Db.CreateTransaction();
         var accessibleCategoriesSetKey = PrepareAccessibleCategoriesSet(tran, roles);
@@ -44,7 +48,7 @@ public class PhotoCache
         return await GetCategoriesInternalAsync(tran, accessibleCategoriesSetKey);
     }
 
-    public async Task<IEnumerable<Category>> GetCategoriesAsync(string[] roles, short year)
+    public async Task<CacheResult<IEnumerable<Category>>> GetCategoriesAsync(string[] roles, short year)
     {
         var tran = Db.CreateTransaction();
         var accessibleCategoriesSetKey = PrepareAccessibleCategoriesSet(tran, roles);
@@ -63,11 +67,12 @@ public class PhotoCache
     }
 
     // TODO: consider using a sorted set for accessible categories so we can then use zrange to simplify the logic below?
-    public async Task<IEnumerable<Category>> GetRecentCategoriesAsync(string[] roles, short sinceId)
+    public async Task<CacheResult<IEnumerable<Category>>> GetRecentCategoriesAsync(string[] roles, short sinceId)
     {
         var tran = Db.CreateTransaction();
         var accessibleCategoriesSetKey = PrepareAccessibleCategoriesSet(tran, roles);
         var categoryIds = tran.SetMembersAsync(accessibleCategoriesSetKey);
+        var status = GetStatusAsync(tran);
 
         await tran.ExecuteAsync();
 
@@ -75,9 +80,14 @@ public class PhotoCache
             .Select(x => (short)x)
             .Where(x => x > sinceId);
 
-        if(!newIds.Any())
+        var theStatus = await status;
+
+        if(!newIds.Any() || !IsStatusUsable(theStatus))
         {
-            return new List<Category>();
+            return BuildResult(
+                theStatus,
+                new List<Category>().AsEnumerable()
+            );
         }
 
         tran = Db.CreateTransaction();
@@ -96,11 +106,13 @@ public class PhotoCache
         return await GetCategoriesInternalAsync(tran, recentCategorySet);
     }
 
-    public async Task<Category?> GetCategoryAsync(string[] roles, short categoryId)
+    public async Task<CacheResult<Category>> GetCategoryAsync(string[] roles, short categoryId)
     {
-        if(!await CanAccessCategoryAsync(categoryId, roles))
+        var canAccess = await CanAccessCategoryAsync(categoryId, roles);
+
+        if(!canAccess.ShouldUseResult || canAccess.Item == false)
         {
-            return null;
+            return new CacheResult<Category>(canAccess.ShouldUseResult, null);
         }
 
         var tran = Db.CreateTransaction();
@@ -112,7 +124,7 @@ public class PhotoCache
 
         await tran.ExecuteAsync();
 
-        return _categorySerializer.ParseSingleOrDefault(await category);
+        return new CacheResult<Category>(true, _categorySerializer.ParseSingleOrDefault(await category));
     }
 
     public Task AddCategoriesAsync(IEnumerable<SecuredResource<Category>> securedCategories)
@@ -146,25 +158,33 @@ public class PhotoCache
         return AddCategoriesAsync(new SecuredResource<Category>[] { securedCategory });
     }
 
-    public async Task<IEnumerable<Photo>> GetPhotosAsync(string[] roles, short categoryId)
+    public async Task<CacheResult<IEnumerable<Photo>>> GetPhotosAsync(string[] roles, short categoryId)
     {
-        if(await CanAccessCategoryAsync(categoryId, roles))
-        {
-            var tran = Db.CreateTransaction();
+        var canAccess = await CanAccessCategoryAsync(categoryId, roles);
 
-            return await GetPhotosInternalAsync(tran, PhotoKeys.GetPhotosForCategorySetKey(categoryId));
+        if(!canAccess.ShouldUseResult || canAccess.Item == false)
+        {
+            return new CacheResult<IEnumerable<Photo>>(canAccess.ShouldUseResult, null);
         }
 
-        return new List<Photo>();
+        var tran = Db.CreateTransaction();
+
+        return await GetPhotosInternalAsync(tran, PhotoKeys.GetPhotosForCategorySetKey(categoryId));
     }
 
-    public async Task<IEnumerable<Photo>> GetRandomPhotosAsync(string[] roles, short count)
+    public async Task<CacheResult<IEnumerable<Photo>>> GetRandomPhotosAsync(string[] roles, short count)
     {
         var tran = Db.CreateTransaction();
+        var status = GetStatusAsync(tran);
         var accessiblePhotosSetKey = PrepareAccessiblePhotosSet(tran, roles);
         var randomPhotoIds = tran.SetRandomMembersAsync(accessiblePhotosSetKey, count);
 
         await tran.ExecuteAsync();
+
+        if(!IsStatusUsable(await status))
+        {
+            return new CacheResult<IEnumerable<Photo>>(false, null);
+        }
 
         tran = Db.CreateTransaction();
 
@@ -182,11 +202,13 @@ public class PhotoCache
         return await GetPhotosInternalAsync(tran, PhotoKeys.RANDOM_PHOTO_SET_KEY);
     }
 
-    public async Task<Photo?> GetPhotoAsync(string[] roles, int photoId)
+    public async Task<CacheResult<Photo>> GetPhotoAsync(string[] roles, int photoId)
     {
-        if(!await CanAccessPhotoAsync(photoId, roles))
+        var canAccess = await CanAccessPhotoAsync(photoId, roles);
+
+        if(!canAccess.ShouldUseResult || canAccess.Item == false)
         {
-            return null;
+            return new CacheResult<Photo>(canAccess.ShouldUseResult, null);
         }
 
         var tran = Db.CreateTransaction();
@@ -198,7 +220,7 @@ public class PhotoCache
 
         await tran.ExecuteAsync();
 
-        return _photoSerializer.ParseSingleOrDefault(await photo);
+        return new CacheResult<Photo>(true, _photoSerializer.ParseSingleOrDefault(await photo));
     }
 
     public Task AddPhotosAsync(IEnumerable<SecuredResource<Photo>> securedPhotos)
@@ -234,7 +256,9 @@ public class PhotoCache
 
     public async Task<Detail?> GetPhotoDetailsAsync(string[] roles, int photoId)
     {
-        if(!await CanAccessPhotoAsync(photoId, roles))
+        var canAccess = await CanAccessPhotoAsync(photoId, roles);
+
+        if(!canAccess.ShouldUseResult || canAccess.Item == false)
         {
             return null;
         }
@@ -302,8 +326,9 @@ public class PhotoCache
         }
     }
 
-    async Task<IEnumerable<Category>> GetCategoriesInternalAsync(ITransaction tran, string setKey)
+    async Task<CacheResult<IEnumerable<Category>>> GetCategoriesInternalAsync(ITransaction tran, string setKey)
     {
+        var status = GetStatusAsync(tran);
         var categories = tran.SortAsync(
             setKey,
             get: _categorySerializer.SortLookupFields
@@ -311,11 +336,15 @@ public class PhotoCache
 
         await tran.ExecuteAsync();
 
-        return _categorySerializer.Parse(await categories);
+        return BuildResult(
+            await status,
+            _categorySerializer.Parse(await categories)
+        );
     }
 
-    async Task<IEnumerable<Photo>> GetPhotosInternalAsync(ITransaction tran, string setKey)
+    async Task<CacheResult<IEnumerable<Photo>>> GetPhotosInternalAsync(ITransaction tran, string setKey)
     {
+        var status = GetStatusAsync(tran);
         var photos = tran.SortAsync(
             setKey,
             get: _photoSerializer.SortLookupFields
@@ -323,10 +352,13 @@ public class PhotoCache
 
         await tran.ExecuteAsync();
 
-        return _photoSerializer.Parse(await photos);
+        return BuildResult(
+            await status,
+            _photoSerializer.Parse(await photos)
+        );
     }
 
-    async Task<bool> CanAccessCategoryAsync(short categoryId, string[] roles)
+    async Task<CacheResult<bool>> CanAccessCategoryAsync(short categoryId, string[] roles)
     {
         var accessibleSetKeys = roles
             .Select(role => PhotoKeys.GetCategoriesInRoleSetKey(role))
@@ -335,7 +367,7 @@ public class PhotoCache
         return await IsMemberOfAnySet(categoryId, accessibleSetKeys);
     }
 
-    async Task<bool> CanAccessPhotoAsync(int photoId, string[] roles)
+    async Task<CacheResult<bool>> CanAccessPhotoAsync(int photoId, string[] roles)
     {
         var accessibleSetKeys = roles
             .Select(role => PhotoKeys.GetPhotosInRoleSetKey(role))

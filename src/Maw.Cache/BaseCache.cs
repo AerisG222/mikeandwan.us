@@ -1,4 +1,5 @@
 using StackExchange.Redis;
+using Maw.Cache.Abstractions;
 
 namespace Maw.Cache;
 
@@ -27,9 +28,10 @@ public abstract class BaseCache
         }
     }
 
-    protected async Task<bool> IsMemberOfAnySet(RedisValue value, string[] accessSetKeys)
+    protected async Task<CacheResult<bool>> IsMemberOfAnySet(RedisValue value, string[] accessSetKeys)
     {
         var tran = Db.CreateTransaction();
+        var status = GetStatusAsync(tran);
         var allChecks = new List<Task<bool>>();
 
         foreach(var key in accessSetKeys)
@@ -39,17 +41,19 @@ public abstract class BaseCache
 
         await tran.ExecuteAsync();
 
+        var isMember = false;
+
         foreach(var check in allChecks)
         {
             var isInSet = await check;
 
             if(isInSet)
             {
-                return true;
+                isMember = true;
             }
         }
 
-        return false;
+        return BuildResult(await status, isMember);
     }
 
     public async Task<CacheStatus> GetStatusAsync()
@@ -82,5 +86,17 @@ public abstract class BaseCache
 
             return CacheStatus.UnInitialized;
         });
+    }
+
+    protected static CacheResult<T> BuildResult<T>(CacheStatus status, T result)
+    {
+        var usable = IsStatusUsable(status);
+
+        return new CacheResult<T>(usable, usable ? result : default!);
+    }
+
+    protected static bool IsStatusUsable(CacheStatus status)
+    {
+        return status == CacheStatus.InitializationSucceeded;
     }
 }

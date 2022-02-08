@@ -12,8 +12,8 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddMawCacheServices(this IServiceCollection services, string redisConnectionString)
     {
         return services
-            .AddSingleton<IConnectionMultiplexer, ConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(redisConnectionString))
-            .AddScoped(services => services.GetRequiredService<ConnectionMultiplexer>().GetDatabase())
+            .AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(redisConnectionString))
+            .AddScoped(services => services.GetRequiredService<IConnectionMultiplexer>().GetDatabase())
             .AddScoped<IBlogCache, BlogCache>()
             .AddScoped<IPhotoCache, PhotoCache>()
             .AddScoped<IVideoCache, VideoCache>();

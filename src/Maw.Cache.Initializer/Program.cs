@@ -20,15 +20,17 @@ if(string.IsNullOrWhiteSpace(redisConnString))
 }
 */
 
-IHost host = Host.CreateDefaultBuilder(args)
+IHost host = Host
+    .CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services
             .AddMawDataServices(dbConnString!)
             .AddMawCacheServices(redisConnString!)
-            .AddHostedService<BlogCacheWorker>()
-            .AddHostedService<PhotoCacheWorker>()
-            .AddHostedService<VideoCacheWorker>();
+            .AddScoped<IScopedProcessingService, BlogCacheProcessingService>()
+            .AddScoped<IScopedProcessingService, PhotoCacheProcessingService>()
+            .AddScoped<IScopedProcessingService, VideoCacheProcessingService>()
+            .AddHostedService<Worker>();
     })
     .Build();
 

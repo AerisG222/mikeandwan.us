@@ -1,12 +1,13 @@
 using Maw.Data.Abstractions;
 using Maw.Cache.Abstractions;
+using Maw.Domain.Models.Blogs;
 
 namespace Maw.Cache.Initializer;
 
 internal class BlogCacheProcessingService
     : IScopedProcessingService
 {
-    const int BASE_DELAY = 5_000;
+    const int BASE_DELAY = 60_000;
     const float DELAY_FLUCTUATION_PCT = 0.25f;
 
     readonly IBlogRepository _repo;
@@ -32,11 +33,73 @@ internal class BlogCacheProcessingService
         {
             _logger.LogInformation("{service} running at: {time}", nameof(BlogCacheProcessingService), DateTimeOffset.Now);
 
+            await UpdateBlogCache(stoppingToken);
+
             var jitteredDelay = _delay.CalculateRandomizedDelay(BASE_DELAY, DELAY_FLUCTUATION_PCT);
 
             _logger.LogInformation("{service} will run again in {delay} ms.", nameof(BlogCacheProcessingService), jitteredDelay);
 
             await Task.Delay(jitteredDelay, stoppingToken);
+        }
+    }
+
+    async Task UpdateBlogCache(CancellationToken stoppingToken)
+    {
+        if(stoppingToken.IsCancellationRequested)
+        {
+            return;
+        }
+
+        if(await _cache.GetStatusAsync() != CacheStatus.InitializationSucceeded)
+        {
+            await _cache.SetStatusAsync(CacheStatus.Initializing);
+        }
+
+        var dbBlogs = await _repo.GetBlogsAsync();
+        var cacheBlogs = await _cache.GetBlogsAsync();
+        var updatedBlogs = dbBlogs.Except(cacheBlogs.Item ?? new List<Blog>());
+
+        if(updatedBlogs.Count() > 0)
+        {
+            await _cache.AddBlogsAsync(updatedBlogs);
+
+            _logger.LogInformation("Updated {count} blog(s)", nameof(BlogCacheProcessingService));
+        }
+
+        await UpdatePostCache(dbBlogs, stoppingToken);
+
+        if(stoppingToken.IsCancellationRequested)
+        {
+            return;
+        }
+
+        await _cache.SetStatusAsync(CacheStatus.InitializationSucceeded);
+    }
+
+    async Task UpdatePostCache(IEnumerable<Blog> blogs, CancellationToken stoppingToken)
+    {
+        foreach(var blog in blogs)
+        {
+            if(stoppingToken.IsCancellationRequested)
+            {
+                return;
+            }
+
+            await UpdatePostCache(blog);
+        }
+    }
+
+    async Task UpdatePostCache(Blog blog)
+    {
+        var dbPosts = await _repo.GetAllPostsAsync(blog.Id);
+        var cachePosts = await _cache.GetPostsAsync(blog.Id, null);
+        var updatedPosts = dbPosts.Except(cachePosts.Item ?? new List<Post>());
+
+        if(updatedPosts.Count() > 0)
+        {
+            await _cache.AddPostsAsync(updatedPosts);
+
+            _logger.LogInformation("Updated {count} posts(s)", nameof(BlogCacheProcessingService));
         }
     }
 }

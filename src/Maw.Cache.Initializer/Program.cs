@@ -27,6 +27,7 @@ IHost host = Host
         services
             .AddMawDataServices(dbConnString!)
             .AddMawCacheServices(redisConnString!)
+            .AddSingleton<IDelayCalculator, DelayCalculator>()
             .AddScoped<IScopedProcessingService, BlogCacheProcessingService>()
             .AddScoped<IScopedProcessingService, PhotoCacheProcessingService>()
             .AddScoped<IScopedProcessingService, VideoCacheProcessingService>()

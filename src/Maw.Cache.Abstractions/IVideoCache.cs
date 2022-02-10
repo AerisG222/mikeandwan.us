@@ -4,6 +4,7 @@ using Maw.Domain.Models.Videos;
 namespace Maw.Cache.Abstractions;
 
 public interface IVideoCache
+    : IBaseCache
 {
     Task<CacheResult<IEnumerable<short>>> GetYearsAsync(string[] roles);
 

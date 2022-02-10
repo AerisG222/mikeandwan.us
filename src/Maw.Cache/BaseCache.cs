@@ -4,6 +4,7 @@ using Maw.Cache.Abstractions;
 namespace Maw.Cache;
 
 public abstract class BaseCache
+    : IBaseCache
 {
     protected IDatabase Db { get; init; }
     protected string StatusKey { get; }

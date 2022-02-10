@@ -4,6 +4,7 @@ using Maw.Domain.Models.Photos;
 namespace Maw.Cache.Abstractions;
 
 public interface IPhotoCache
+    : IBaseCache
 {
     Task<CacheResult<IEnumerable<short>>> GetYearsAsync(string[] roles);
 

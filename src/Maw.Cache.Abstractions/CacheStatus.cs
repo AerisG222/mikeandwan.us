@@ -1,4 +1,4 @@
-namespace Maw.Cache;
+namespace Maw.Cache.Abstractions;
 
 public enum CacheStatus
 {

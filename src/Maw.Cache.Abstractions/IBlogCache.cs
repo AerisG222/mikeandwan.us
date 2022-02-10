@@ -3,6 +3,7 @@
 namespace Maw.Cache.Abstractions;
 
 public interface IBlogCache
+    : IBaseCache
 {
     Task<CacheResult<IEnumerable<Blog>>> GetBlogsAsync();
     Task AddBlogsAsync(IEnumerable<Blog> blogs);

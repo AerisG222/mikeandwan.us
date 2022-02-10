@@ -1,6 +1,6 @@
 namespace Maw.Domain.Models.Videos;
 
-public class Category
+public record Category
 {
     public short Id { get; set; }
     public string Name { get; set; } = null!;

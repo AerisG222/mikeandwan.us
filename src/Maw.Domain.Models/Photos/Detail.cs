@@ -1,6 +1,6 @@
 namespace Maw.Domain.Models.Photos;
 
-public class Detail
+public record Detail
 {
     // exif
     public ushort? BitsPerSample { get; set; }

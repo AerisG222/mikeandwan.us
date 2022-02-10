@@ -1,6 +1,6 @@
 ﻿namespace Maw.Domain.Models.Blogs;
 
-public class Post
+public record Post
 {
     public short Id { get; set; }
     public short BlogId { get; set; }

@@ -1,6 +1,6 @@
 namespace Maw.Domain.Models.Photos;
 
-public class Photo
+public record Photo
 {
     public int Id { get; set; }
     public short CategoryId { get; set; }

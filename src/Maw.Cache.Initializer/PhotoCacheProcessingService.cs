@@ -11,6 +11,9 @@ public class PhotoCacheProcessingService
 {
     const int BASE_DELAY = 60_000;
     const float DELAY_FLUCTUATION_PCT = 0.25f;
+    const int FULL_SCAN_INTERVAL_MINUTES = 24 * 60;
+
+    static DateTime LastFullScan { get; set; } = DateTime.Now;
 
     readonly IPhotoRepository _repo;
     readonly IPhotoCache _cache;
@@ -54,8 +57,6 @@ public class PhotoCacheProcessingService
     {
         if(stoppingToken.IsCancellationRequested)
         {
-            _logger.LogWarning("a");
-
             return;
         }
 
@@ -82,18 +83,35 @@ public class PhotoCacheProcessingService
 
             await _cache.AddCategoriesAsync(securedCategories);
 
+            foreach(var securedCategory in securedCategories)
+            {
+                await UpdatePhotoCache(securedCategory.Item, securedCategory.Roles);
+            }
+
             _logger.LogInformation("{service} updated {count} photo categories", nameof(PhotoCacheProcessingService), updatedCategories.Count());
         }
 
-        await UpdatePhotoCache(dbCategories, dbCategoriesAndRoles, stoppingToken);
+        // reduce frequency when checking individual photos as:
+        //    - they change less frequently
+        //    - there are a lot of photos and expensive to run this check
+        if(ShouldPerformPhotoScan())
+        {
+            await UpdatePhotoCache(dbCategories, dbCategoriesAndRoles, stoppingToken);
+
+            LastFullScan = DateTime.Now;
+        }
 
         if(stoppingToken.IsCancellationRequested)
         {
-            _logger.LogWarning("b");
             return;
         }
 
         await _cache.SetStatusAsync(CacheStatus.InitializationSucceeded);
+    }
+
+    static bool ShouldPerformPhotoScan()
+    {
+        return DateTime.Now - LastFullScan > TimeSpan.FromMinutes(FULL_SCAN_INTERVAL_MINUTES);
     }
 
     async Task UpdatePhotoCache(
@@ -105,7 +123,6 @@ public class PhotoCacheProcessingService
         {
             if(stoppingToken.IsCancellationRequested)
             {
-                _logger.LogWarning("c");
                 return;
             }
 

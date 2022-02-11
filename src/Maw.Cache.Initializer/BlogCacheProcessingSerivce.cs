@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Maw.Data.Abstractions;
 using Maw.Cache.Abstractions;
 using Maw.Domain.Models.Blogs;
@@ -29,15 +30,19 @@ internal class BlogCacheProcessingService
 
     public async Task DoWorkAsync(CancellationToken stoppingToken)
     {
+        var stopwatch = new Stopwatch();
+
         while (!stoppingToken.IsCancellationRequested)
         {
             _logger.LogInformation("{service} running at: {time}", nameof(BlogCacheProcessingService), DateTimeOffset.Now);
 
+            stopwatch.Restart();
             await UpdateBlogCache(stoppingToken);
+            stopwatch.Stop();
 
             var jitteredDelay = _delay.CalculateRandomizedDelay(BASE_DELAY, DELAY_FLUCTUATION_PCT);
 
-            _logger.LogInformation("{service} will run again in {delay} ms.", nameof(BlogCacheProcessingService), jitteredDelay);
+            _logger.LogInformation("{service} took {duration} - will run again in {delay} ms.", nameof(BlogCacheProcessingService), stopwatch.Elapsed, jitteredDelay);
 
             await Task.Delay(jitteredDelay, stoppingToken);
         }
@@ -63,7 +68,7 @@ internal class BlogCacheProcessingService
         {
             await _cache.AddBlogsAsync(updatedBlogs);
 
-            _logger.LogInformation("Updated {count} blog(s)", nameof(BlogCacheProcessingService));
+            _logger.LogInformation("{service} updated {count} blog(s)", nameof(BlogCacheProcessingService), updatedBlogs.Count());
         }
 
         await UpdatePostCache(dbBlogs, stoppingToken);
@@ -99,7 +104,7 @@ internal class BlogCacheProcessingService
         {
             await _cache.AddPostsAsync(updatedPosts);
 
-            _logger.LogInformation("Updated {count} posts(s)", nameof(BlogCacheProcessingService));
+            _logger.LogInformation("{service} pdated {count} posts(s)", nameof(BlogCacheProcessingService), updatedPosts.Count());
         }
     }
 }

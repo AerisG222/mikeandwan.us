@@ -3,7 +3,7 @@ using Maw.Data.Abstractions;
 using Maw.Cache.Abstractions;
 using Maw.Domain.Models.Blogs;
 
-namespace Maw.Cache.Initializer;
+namespace Maw.Cache.Sync;
 
 internal class BlogCacheProcessingService
     : IScopedProcessingService

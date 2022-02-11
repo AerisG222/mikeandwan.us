@@ -1,4 +1,4 @@
-namespace Maw.Cache.Initializer;
+namespace Maw.Cache.Sync;
 
 public interface IDelayCalculator
 {

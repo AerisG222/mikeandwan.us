@@ -3,7 +3,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>dotnet-Maw.Cache.Initializer-68CA1484-0322-4A67-9EB6-2771EBB69A63</UserSecretsId>
+        <UserSecretsId>dotnet-Maw.Cache.Sync-68CA1484-0322-4A67-9EB6-2771EBB69A63</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>

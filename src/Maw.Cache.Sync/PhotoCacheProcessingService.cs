@@ -4,7 +4,7 @@ using Maw.Data.Abstractions;
 using Maw.Domain.Models;
 using Maw.Domain.Models.Photos;
 
-namespace Maw.Cache.Initializer;
+namespace Maw.Cache.Sync;
 
 public class PhotoCacheProcessingService
     : IScopedProcessingService

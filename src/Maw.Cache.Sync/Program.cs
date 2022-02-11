@@ -1,4 +1,4 @@
-using Maw.Cache.Initializer;
+using Maw.Cache.Sync;
 using Maw.Cache;
 using Maw.Data;
 

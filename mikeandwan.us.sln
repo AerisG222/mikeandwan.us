@@ -35,7 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E1C964A8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maw.Cache.Tests", "tests\Maw.Cache.Tests\Maw.Cache.Tests.csproj", "{23F4F721-44EB-405D-8DBD-DE2E3488C693}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maw.Cache.Initializer", "src\Maw.Cache.Initializer\Maw.Cache.Initializer.csproj", "{3643C40B-F5B6-4ED3-AF14-5097B87C5E0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maw.Cache.Sync", "src\Maw.Cache.Sync\Maw.Cache.Sync.csproj", "{3643C40B-F5B6-4ED3-AF14-5097B87C5E0C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maw.Domain.Models.Tests", "tests\Maw.Domain.Models.Tests\Maw.Domain.Models.Tests.csproj", "{19810D3B-5EAB-4D9C-ACEA-8522C3ABCDCB}"
 EndProject

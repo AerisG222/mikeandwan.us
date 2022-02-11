@@ -11,7 +11,7 @@ internal class DelayCalculator
         }
 
         var flux = Convert.ToInt32(baseDelayMs * fluctuationPercentage);
-        var min = Math.Min(0, baseDelayMs - flux);
+        var min = Math.Max(0, baseDelayMs - flux);
         var max = baseDelayMs + flux;
         var rand = new Random();
 

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Maw.Domain.Models;
 using Maw.Domain.Models.Videos;
+using Maw.Cache.Abstractions;
 
 namespace Maw.Cache.Tests;
 

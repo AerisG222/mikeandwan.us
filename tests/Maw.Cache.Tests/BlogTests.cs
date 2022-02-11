@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using Maw.Cache.Abstractions;
 
 namespace Maw.Cache.Tests;
 

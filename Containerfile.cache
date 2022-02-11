@@ -1,0 +1,27 @@
+# https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-3.1
+# https://github.com/dotnet/dotnet-docker/blob/master/samples/aspnetapp/Dockerfile.alpine-x64
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine-amd64 AS build
+
+RUN apk --no-cache add bash
+
+WORKDIR /
+
+COPY mikeandwan.us.sln     .
+COPY nuget.config          .
+#COPY src/.                 src/
+RUN cp -r /tmp/context/src .
+COPY tests/.               tests/
+
+# build with:  buildah bud -v "$(pwd)":/tmp/context:ro,Z -f Containerfile.cache -t maw-cache-sync-dev
+
+RUN dotnet publish -o /build -c Release -r linux-musl-x64 --self-contained false /src/Maw.Cache.Sync/Maw.Cache.Sync.csproj
+
+
+# build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine-amd64
+
+WORKDIR /maw-cache-sync
+
+COPY --from=build /build /maw-cache-sync/
+
+ENTRYPOINT [ "/maw-cache-sync/Maw.Cache.Sync" ]

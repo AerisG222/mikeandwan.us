@@ -17,3 +17,8 @@ buildah bud -v "$(pwd)":/tmp/context:ro,Z -f Containerfile.www -t maw-www --iidf
 IID=$(cat "${IID_FILE}")
 buildah push --creds "${DH_USER}:${DH_PASS}" "${IID}" docker://aerisg222/maw-www:"${TAG}"
 buildah push --creds "${DH_USER}:${DH_PASS}" "${IID}" docker://aerisg222/maw-www:latest
+
+buildah bud -v "$(pwd)":/tmp/context:ro,Z -f Containerfile.cache -t maw-cache-sync --iidfile "${IID_FILE}"
+IID=$(cat "${IID_FILE}")
+buildah push --creds "${DH_USER}:${DH_PASS}" "${IID}" docker://aerisg222/maw-cache-sync:"${TAG}"
+buildah push --creds "${DH_USER}:${DH_PASS}" "${IID}" docker://aerisg222/maw-cache-sync:latest

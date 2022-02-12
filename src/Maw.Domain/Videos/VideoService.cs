@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using Maw.Cache.Abstractions;
 using Maw.Data.Abstractions;
 using Maw.Domain.Models;
 using Maw.Domain.Models.Videos;
@@ -10,60 +10,72 @@ public class VideoService
     : BaseService, IVideoService
 {
     readonly IVideoRepository _repo;
+    readonly IVideoCache _cache;
 
     public VideoService(
-        IVideoRepository videoRepository,
-        ILogger<VideoService> log,
-        IDistributedCache cache)
-        : base("videos", log, cache)
+        IVideoRepository repo,
+        IVideoCache cache,
+        ILogger<VideoService> log)
+        : base(log)
     {
-        _repo = videoRepository ?? throw new ArgumentNullException(nameof(videoRepository));
+        _repo = repo ?? throw new ArgumentNullException(nameof(repo));
+        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
     public async Task<IEnumerable<short>> GetYearsAsync(string[] roles)
     {
-        var key = $"{nameof(GetYearsAsync)}_{GetRoleCacheKeyComponent(roles)}";
-        var years = await GetCachedValueAsync(key, () => _repo.GetYearsAsync(roles));
+        var years = await GetCachedValueAsync(
+            () => _cache.GetYearsAsync(roles),
+            () => _repo.GetYearsAsync(roles)
+        );
 
         return years ?? new List<short>();
     }
 
     public async Task<IEnumerable<Category>> GetAllCategoriesAsync(string[] roles)
     {
-        var key = $"{nameof(GetAllCategoriesAsync)}_{GetRoleCacheKeyComponent(roles)}";
-        var categories = await GetCachedValueAsync(key, () => _repo.GetAllCategoriesAsync(roles));
+        var categories = await GetCachedValueAsync(
+            () => _cache.GetCategoriesAsync(roles),
+            () => _repo.GetAllCategoriesAsync(roles)
+        );
 
         return categories ?? new List<Category>();
     }
 
     public async Task<IEnumerable<Category>> GetCategoriesAsync(short year, string[] roles)
     {
-        var key = $"{nameof(GetCategoriesAsync)}_{year}_{GetRoleCacheKeyComponent(roles)}";
-        var categories = await GetCachedValueAsync(key, () => _repo.GetCategoriesAsync(year, roles));
+        var categories = await GetCachedValueAsync(
+            () => _cache.GetCategoriesAsync(roles, year),
+            () => _repo.GetCategoriesAsync(year, roles)
+        );
 
         return categories ?? new List<Category>();
     }
 
     public async Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, string[] roles)
     {
-        var key = $"{nameof(GetVideosInCategoryAsync)}_{categoryId}_{GetRoleCacheKeyComponent(roles)}";
-        var videos = await GetCachedValueAsync(key, () => _repo.GetVideosInCategoryAsync(categoryId, roles), TimeSpan.FromHours(2));
+        var videos = await GetCachedValueAsync(
+            () => _cache.GetVideosAsync(roles, categoryId),
+            () => _repo.GetVideosInCategoryAsync(categoryId, roles)
+        );
 
         return videos ?? new List<Video>();
     }
 
-    public Task<Video?> GetVideoAsync(short id, string[] roles)
+    public async Task<Video?> GetVideoAsync(short id, string[] roles)
     {
-        var key = $"{nameof(GetVideoAsync)}_{id}_{GetRoleCacheKeyComponent(roles)}";
-
-        return GetCachedValueAsync(key, () => _repo.GetVideoAsync(id, roles), TimeSpan.FromHours(2));
+        return await GetNullableCachedValueAsync(
+            () => _cache.GetVideoAsync(roles, id),
+            () => _repo.GetVideoAsync(id, roles)
+        );
     }
 
-    public Task<Category?> GetCategoryAsync(short categoryId, string[] roles)
+    public async Task<Category?> GetCategoryAsync(short categoryId, string[] roles)
     {
-        var key = $"{nameof(GetCategoryAsync)}_{categoryId}_{GetRoleCacheKeyComponent(roles)}";
-
-        return GetCachedValueAsync(key, () => _repo.GetCategoryAsync(categoryId, roles), TimeSpan.FromHours(2));
+        return await GetNullableCachedValueAsync(
+            () => _cache.GetCategoryAsync(roles, categoryId),
+            () => _repo.GetCategoryAsync(categoryId, roles)
+        );
     }
 
     public Task<IEnumerable<Comment>> GetCommentsAsync(short videoId, string[] roles)
@@ -110,21 +122,21 @@ public class VideoService
             throw new ApplicationException("Did not update category teaser!");
         }
 
-        await ClearCacheAsync();
+        var cat = await _repo.GetCategoryAsync(categoryId, null);
+
+        if(cat != null)
+        {
+            await _cache.AddCategoryAsync(new SecuredResource<Category>(cat, Array.Empty<string>()));
+        }
     }
 
     public Task ClearCacheAsync()
     {
-        return InternalClearCacheAsync();
+        return Task.CompletedTask;
     }
 
     public Task<IEnumerable<CategoryAndRoles>> GetCategoriesAndRolesAsync()
     {
         return _repo.GetCategoriesAndRolesAsync();
-    }
-
-    static string GetRoleCacheKeyComponent(string[] roles)
-    {
-        return string.Join("_", roles);
     }
 }

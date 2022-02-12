@@ -15,7 +15,6 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddMawDomainServices(this IServiceCollection services)
     {
         services
-            .AddDistributedMemoryCache()
             .AddSingleton<IImageCropper, ImageCropper>()
             .AddSingleton<IPhotoZipper, PhotoZipper>()
             .AddSingleton<LinuxFileTypeIdentifier>()
@@ -23,7 +22,6 @@ public static class IServiceCollectionExtensions
             .AddScoped<IPhotoService, PhotoService>()
             .AddScoped<IVideoService, VideoService>()
             .AddScoped<ICaptchaService, GoogleCaptchaService>()
-            //.AddScoped<IEmailService, SmtpEmailService>()
             .AddScoped<IEmailService, GmailApiEmailService>()
             .AddScoped<ILoginService, LoginService>()
             .AddScoped<IUploadService, UploadService>();

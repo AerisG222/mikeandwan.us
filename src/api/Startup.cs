@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Logging;
 using NSwag.Generation.AspNetCore;
 using NWebsec.Core.Common.Middleware.Options;
 using SolrNet;
+using Maw.Cache;
 using Maw.Data;
 using Maw.Domain;
 using Maw.Domain.Models.Search;
@@ -39,6 +40,7 @@ public class Startup
             .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
             .Configure<UploadConfig>(_config.GetSection("FileUpload"))
             .Configure<UrlConfig>(_config.GetSection("UrlConfig"))
+            .AddMawCacheServices(_config["Environment:RedisConnectionString"])
             .AddMawDataServices(_config["Environment:DbConnectionString"])
             .AddSolrNet<MultimediaCategory>(_config["Search:CoreUrl"])
             .AddMawDomainServices()

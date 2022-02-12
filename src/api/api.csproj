@@ -27,6 +27,7 @@
         <ProjectReference Include="../Maw.Domain/Maw.Domain.csproj" />
         <ProjectReference Include="../Maw.Data/Maw.Data.csproj" />
         <ProjectReference Include="../Maw.Security/Maw.Security.csproj" />
+        <ProjectReference Include="..\Maw.Cache\Maw.Cache.csproj" />
     </ItemGroup>
 
     <ItemGroup>

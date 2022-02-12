@@ -10,6 +10,7 @@ using Microsoft.Extensions.FileProviders;
 using IdentityModel;
 using Mvc.RenderViewToString;
 using NWebsec.Core.Common.Middleware.Options;
+using Maw.Cache;
 using Maw.Data;
 using Maw.Domain;
 using Maw.Domain.Captcha;
@@ -57,6 +58,7 @@ public class Startup
             .AddHttpClient<MawApiService>()
                 .Services
             .AddMawDataServices(_config["Environment:DbConnectionString"])
+            .AddMawCacheServices(_config["Environment:RedisConnectionString"])
             .AddMawDomainServices()
             .AddTransient<RazorViewToStringRenderer>()
             .AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>()

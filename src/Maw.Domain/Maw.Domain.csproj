@@ -30,5 +30,6 @@
         <ProjectReference Include="..\Maw.Security\Maw.Security.csproj" />
         <ProjectReference Include="..\Maw.Domain.Models\Maw.Domain.Models.csproj" />
         <ProjectReference Include="..\Maw.Data.Abstractions\Maw.Data.Abstractions.csproj" />
+        <ProjectReference Include="..\Maw.Cache.Abstractions\Maw.Cache.Abstractions.csproj" />
     </ItemGroup>
 </Project>

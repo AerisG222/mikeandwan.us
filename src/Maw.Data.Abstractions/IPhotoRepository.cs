@@ -12,7 +12,7 @@ public interface IPhotoRepository
     Task<IEnumerable<Category>> GetCategoriesForYearAsync(short year, string[] roles);
     Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, string[] roles);
     Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, string[] roles);
-    Task<Category?> GetCategoryAsync(short categoryId, string[] roles);
+    Task<Category?> GetCategoryAsync(short categoryId, string[]? roles);
     Task<Photo?> GetPhotoAsync(int photoId, string[] roles);
     Task<Detail?> GetDetailAsync(int photoId, string[] roles);
     Task<IEnumerable<Comment>> GetCommentsAsync(int photoId, string[] roles);

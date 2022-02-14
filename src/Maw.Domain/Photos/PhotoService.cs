@@ -22,14 +22,19 @@ public class PhotoService
         _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
-    public Task<Photo?> GetRandomAsync(string[] roles)
+    public async Task<Photo?> GetRandomAsync(string[] roles)
     {
-        return _repo.GetRandomAsync(roles);
+        var result = await GetRandomAsync(1, roles);
+
+        return result.Any() ? result.First() : null;
     }
 
     public async Task<IEnumerable<Photo>> GetRandomAsync(byte count, string[] roles)
     {
-        var photos = await _repo.GetRandomAsync(count, roles);
+        var photos = await GetCachedValueAsync(
+            () => _cache.GetRandomPhotosAsync(roles, count),
+            () => _repo.GetRandomAsync(count, roles)
+        );
 
         return photos ?? new List<Photo>();
     }

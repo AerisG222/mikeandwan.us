@@ -171,7 +171,7 @@ class VideoSerializer
 
         return new Video
         {
-            Id = (int)values[0],
+            Id = (short)values[0],
             CategoryId = (short)values[1],
             CreateDate = createDate,
             Latitude = (float?)values[3],

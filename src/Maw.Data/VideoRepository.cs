@@ -67,7 +67,7 @@ public class VideoRepository
         );
     }
 
-    public Task<GpsDetail?> GetGpsDetailAsync(int videoId, string[] roles)
+    public Task<GpsDetail?> GetGpsDetailAsync(short videoId, string[] roles)
     {
         return RunAsync(async conn =>
         {
@@ -185,7 +185,7 @@ public class VideoRepository
         });
     }
 
-    public Task SetGpsOverrideAsync(int videoId, GpsCoordinate gps, string username)
+    public Task SetGpsOverrideAsync(short videoId, GpsCoordinate gps, string username)
     {
         return RunAsync(conn =>
             conn.QueryAsync<long>(
@@ -202,7 +202,7 @@ public class VideoRepository
         );
     }
 
-    public Task<long> SetCategoryTeaserAsync(short categoryId, int videoId)
+    public Task<long> SetCategoryTeaserAsync(short categoryId, short videoId)
     {
         return RunAsync(conn =>
             conn.QueryFirstAsync<long>(
@@ -287,7 +287,7 @@ public class VideoRepository
     {
         var video = new Video();
 
-        video.Id = (int)row.id;
+        video.Id = (short)row.id;
         video.CategoryId = (short)row.category_id;
         video.CreateDate = GetValueOrDefault<DateTime>(row.create_date);
         video.Latitude = row.latitude;

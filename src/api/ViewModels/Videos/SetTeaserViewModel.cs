@@ -2,5 +2,5 @@ namespace MawApi.ViewModels.Videos;
 
 public class SetTeaserViewModel
 {
-    public int VideoId { get; set; }
+    public short VideoId { get; set; }
 }

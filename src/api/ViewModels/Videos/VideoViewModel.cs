@@ -2,7 +2,7 @@ namespace MawApi.ViewModels.Videos;
 
 public class VideoViewModel
 {
-    public int Id { get; set; }
+    public short Id { get; set; }
     public short CategoryId { get; set; }
     public DateTime CreateDate { get; set; }
     public float? Latitude { get; set; }

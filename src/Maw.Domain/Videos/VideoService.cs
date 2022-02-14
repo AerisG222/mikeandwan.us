@@ -83,7 +83,7 @@ public class VideoService
         return _repo.GetCommentsAsync(videoId, roles);
     }
 
-    public Task<GpsDetail?> GetGpsDetailAsync(int videoId, string[] roles)
+    public Task<GpsDetail?> GetGpsDetailAsync(short videoId, string[] roles)
     {
         return _repo.GetGpsDetailAsync(videoId, roles);
     }
@@ -108,12 +108,12 @@ public class VideoService
         return _repo.RemoveRatingAsync(videoId, username, roles);
     }
 
-    public Task SetGpsOverrideAsync(int videoId, GpsCoordinate gps, string username)
+    public Task SetGpsOverrideAsync(short videoId, GpsCoordinate gps, string username)
     {
         return _repo.SetGpsOverrideAsync(videoId, gps, username);
     }
 
-    public async Task SetCategoryTeaserAsync(short categoryId, int videoId)
+    public async Task SetCategoryTeaserAsync(short categoryId, short videoId)
     {
         var count = await _repo.SetCategoryTeaserAsync(categoryId, videoId);
 

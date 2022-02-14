@@ -77,7 +77,7 @@ public class VideosController
     [ProducesResponseType(200)]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<GpsDetail>> GetGpsDetailAsync(int id)
+    public async Task<ActionResult<GpsDetail>> GetGpsDetailAsync(short id)
     {
         var gps = await _svc.GetGpsDetailAsync(id, User.GetAllRoles());
 
@@ -95,7 +95,7 @@ public class VideosController
     [ProducesResponseType(400)]
     [ProducesResponseType(401)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<GpsDetail>> SetGpsOverrideAsync(int id, GpsCoordinate gps)
+    public async Task<ActionResult<GpsDetail>> SetGpsOverrideAsync(short id, GpsCoordinate gps)
     {
         if (gps == null)
         {

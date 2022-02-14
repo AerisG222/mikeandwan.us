@@ -131,7 +131,7 @@ public class VideoCache
         return await GetVideosInternalAsync(tran, VideoKeys.GetVideosForCategorySetKey(categoryId));
     }
 
-    public async Task<CacheResult<Video>> GetVideoAsync(string[] roles, int videoId)
+    public async Task<CacheResult<Video>> GetVideoAsync(string[] roles, short videoId)
     {
         var canAccess = await CanAccessVideoAsync(videoId, roles);
 

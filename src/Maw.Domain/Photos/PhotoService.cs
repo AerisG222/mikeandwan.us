@@ -100,19 +100,11 @@ public class PhotoService
 
     public async Task<Detail?> GetDetailAsync(int photoId, string[] roles)
     {
-        var detail = await _cache.GetPhotoDetailsAsync(roles, photoId);
-
-        if(detail == null)
-        {
-            detail = await _repo.GetDetailAsync(photoId, roles);
-
-            if(detail != null)
-            {
-                await _cache.AddPhotoDetailsAsync(photoId, detail);
-            }
-        }
-
-        return detail;
+        return await GetOrSetCachedValueAsync(
+            () => _cache.GetPhotoDetailsAsync(roles, photoId),
+            () => _repo.GetDetailAsync(photoId, roles),
+            detail => _cache.AddPhotoDetailsAsync(photoId, detail)
+        );
     }
 
     public Task<IEnumerable<Comment>> GetCommentsAsync(int photoId, string[] roles)

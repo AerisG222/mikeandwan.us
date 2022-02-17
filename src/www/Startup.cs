@@ -108,7 +108,7 @@ public class Startup
 
             .UseResponseCompression()
             .UseNoCacheHttpHeaders()
-            // .UseXfo(xfo => xfo.Deny())  // needed for recaptcha
+            .UseXfo(xfo => xfo.SameOrigin())
             .UseXXssProtection(opts => opts.EnabledWithBlockMode())
             .UseRedirectValidation(opts => opts.AllowedDestinations(GetAllowedRedirectUrls()))
             .UseCsp(DefineContentSecurityPolicy)

@@ -16,16 +16,16 @@ For example, podman is heavily used across the environments, but that may
 need to be replaced with docker to achieve a similar architecture (or use WSL2
 on Windows).
 
-## local
+## dev
 
-The local environment is the primary environment used for development purposes.
+The dev environment is the primary environment used for development purposes.
 The main purpose of this environment is to most efficiently edit and run the
 application.  This translates to having tooling and runtimes installed on the
 workstation, so the application can be easily edited and run with minimal fuss.
 
-Requirements for the local environment:
+Requirements for the dev environment:
 
-- hosts file entries will be made with local. prefix (i.e. local.www.mikeandwan.us)
+- hosts file entries will be made with dev. prefix (i.e. dev.www.mikeandwan.us)
 - Relevant SDKs are installed / available
 - Preferred editor and tools are installed and available
 - Podman is installed and will be used to run supporting services in containers, like:
@@ -41,14 +41,14 @@ Requirements for the local environment:
 
 Note: we use local prefix, as this is required when configuring things like Google OAuth
 
-## dev
+## test
 
-The dev environment is the primary environment to test container images and
-can run side by side with the local environment.
+The test environment is the primary environment to test container images and
+can run side by side with the dev environment.
 
 Requirements for the dev environment:
 
-- hosts file entries will be made with .dev extension (i.e. www.mikeandwan.dev)
+- hosts file entries will be made with test. prefix (i.e. test.www.mikeandwan.us)
 - Container images are built using tooling from local environment and made
   available in the 'local' repository
 - Container port mapping should be used to publish ports on the local machine

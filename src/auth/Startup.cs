@@ -206,7 +206,6 @@ public class Startup
         };
 
         var scriptSources = new string[] {
-            "https://code.jquery.com",
             "https://cdn.jsdelivr.net",
             "https://stackpath.bootstrapcdn.com"
         };

@@ -211,8 +211,12 @@ public class Startup
 
     void DefineContentSecurityPolicy(IFluentCspOptions csp)
     {
+        // https://developers.google.com/maps/documentation/javascript/content-security-policy
         var connectSources = new string[] {
-                "https://www.google-analytics.com"
+                "https://*.googleapis.com",
+                "https://*.google.com",
+                "https://*.gstatic.com",
+                "https://*.google-analytics.com"
             };
 
         var fontSources = new string[] {
@@ -221,14 +225,16 @@ public class Startup
             };
 
         var frameSources = new string[] {
-                "https://www.google.com/recaptcha/"
+                "https://*.google.com"
             };
 
         var imageSources = new string[] {
                 "data:",
-                "https://maps.gstatic.com",
+                "https://*.google.com",
+                "https://*.gstatic.com",
                 "https://*.googleapis.com",
-                "https://www.google-analytics.com",
+                "https://*.googleusercontent.com",
+                "https://*.google-analytics.com",
                 "https://vortex.accuweather.com"
             };
 
@@ -238,15 +244,15 @@ public class Startup
 
         var scriptSources = new string[] {
                 // bootstrap
-                "https://code.jquery.com",
                 "https://cdn.jsdelivr.net",
                 "https://cdnjs.cloudflare.com",
                 "https://stackpath.bootstrapcdn.com",
-                "https://www.google.com/recaptcha/",
-                "https://www.gstatic.com/recaptcha/",
-                "https://maps.googleapis.com",
-                "https://www.google-analytics.com",
-                "https://ssl.google-analytics.com",
+                "https://*.google.com",
+                "https://*.gstatic.com",
+                "https://*.googleapis.com",
+                "https://*.google-analytics.com",
+                "https://*.ggpht.com",
+                "https://*.googleusercontent.com",
                 "https://www.googletagmanager.com",
                 "https://www.accuweather.com",
                 "https://oap.accuweather.com",

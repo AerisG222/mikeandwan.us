@@ -21,25 +21,21 @@ public static class Program
                 })
             .ConfigureLogging((context, factory) =>
                 {
-                    if(context.HostingEnvironment.IsDevelopment())
+                    if(context.HostingEnvironment.IsProduction())
                     {
                         factory
                             .AddConsole()
-                            .AddFilter("IdentityServer4", LogLevel.Debug)
-                            .AddFilter("Microsoft", LogLevel.Information)
-                            .AddFilter("System", LogLevel.Information)
-                            .AddFilter("Maw", LogLevel.Debug)
-                            .AddFilter("MawAuth", LogLevel.Debug);
+                            .SetMinimumLevel(LogLevel.Warning);
                     }
                     else
                     {
                         factory
                             .AddConsole()
-                            .AddFilter("IdentityServer4", LogLevel.Warning)
-                            .AddFilter("Microsoft", LogLevel.Warning)
-                            .AddFilter("System", LogLevel.Warning)
-                            .AddFilter("Maw", LogLevel.Warning)
-                            .AddFilter("MawAuth", LogLevel.Warning);
+                            .AddFilter(nameof(Duende), LogLevel.Debug)
+                            .AddFilter(nameof(Microsoft), LogLevel.Information)
+                            .AddFilter(nameof(System), LogLevel.Information)
+                            .AddFilter(nameof(Maw), LogLevel.Debug)
+                            .AddFilter(nameof(MawAuth), LogLevel.Debug);
                     }
                 })
             .UseDefaultServiceProvider((context, options) => {

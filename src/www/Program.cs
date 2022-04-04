@@ -22,23 +22,20 @@ public static class Program
                 })
             .ConfigureLogging((context, factory) =>
                 {
-                    if (context.HostingEnvironment.IsDevelopment())
+                    if (context.HostingEnvironment.IsProduction())
                     {
                         factory
                             .AddConsole()
-                            .AddFilter("Microsoft", LogLevel.Information)
-                            .AddFilter("System", LogLevel.Information)
-                            .AddFilter("Maw", LogLevel.Debug)
-                            .AddFilter("MawMvcApp", LogLevel.Debug);
+                            .SetMinimumLevel(LogLevel.Warning);
                     }
                     else
                     {
                         factory
                             .AddConsole()
-                            .AddFilter("Microsoft", LogLevel.Warning)
-                            .AddFilter("System", LogLevel.Warning)
-                            .AddFilter("Maw", LogLevel.Warning)
-                            .AddFilter("MawMvcApp", LogLevel.Warning);
+                            .AddFilter(nameof(Microsoft), LogLevel.Information)
+                            .AddFilter(nameof(System), LogLevel.Information)
+                            .AddFilter(nameof(Maw), LogLevel.Debug)
+                            .AddFilter(nameof(MawMvcApp), LogLevel.Debug);
                     }
                 })
             .UseDefaultServiceProvider((context, options) =>

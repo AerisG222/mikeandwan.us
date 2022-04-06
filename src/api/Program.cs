@@ -31,10 +31,7 @@ public static class Program
                     {
                         factory
                             .AddConsole()
-                            .AddFilter(nameof(Microsoft), LogLevel.Information)
-                            .AddFilter(nameof(System), LogLevel.Information)
-                            .AddFilter(nameof(Maw), LogLevel.Debug)
-                            .AddFilter(nameof(MawApi), LogLevel.Debug);
+                            .SetMinimumLevel(LogLevel.Debug);
                     }
                 })
             .UseDefaultServiceProvider((context, options) => {
@@ -54,7 +51,7 @@ public static class Program
 
                         var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
 
-                        opts.Listen(IPAddress.Loopback, 5011, listenOptions =>
+                        opts.Listen(IPAddress.Any, 5011, listenOptions =>
                             {
                                 listenOptions.UseHttps(config["KestrelPfxFile"], pwd);
                             });

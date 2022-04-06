@@ -31,11 +31,7 @@ public static class Program
                     {
                         factory
                             .AddConsole()
-                            .AddFilter(nameof(Duende), LogLevel.Debug)
-                            .AddFilter(nameof(Microsoft), LogLevel.Information)
-                            .AddFilter(nameof(System), LogLevel.Information)
-                            .AddFilter(nameof(Maw), LogLevel.Debug)
-                            .AddFilter(nameof(MawAuth), LogLevel.Debug);
+                            .SetMinimumLevel(LogLevel.Debug);
                     }
                 })
             .UseDefaultServiceProvider((context, options) => {
@@ -46,7 +42,7 @@ public static class Program
                     .CaptureStartupErrors(true)
                     .UseKestrel(opts =>
                     {
-                        opts.Listen(IPAddress.Loopback, 5001, listenOptions =>
+                        opts.Listen(IPAddress.Any, 5001, listenOptions =>
                             {
                                 var config = (IConfiguration?)opts.ApplicationServices.GetService(typeof(IConfiguration));
 

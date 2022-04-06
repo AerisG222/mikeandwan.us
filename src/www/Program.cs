@@ -32,10 +32,7 @@ public static class Program
                     {
                         factory
                             .AddConsole()
-                            .AddFilter(nameof(Microsoft), LogLevel.Information)
-                            .AddFilter(nameof(System), LogLevel.Information)
-                            .AddFilter(nameof(Maw), LogLevel.Debug)
-                            .AddFilter(nameof(MawMvcApp), LogLevel.Debug);
+                            .SetMinimumLevel(LogLevel.Debug);
                     }
                 })
             .UseDefaultServiceProvider((context, options) =>
@@ -48,7 +45,7 @@ public static class Program
                     .CaptureStartupErrors(true)
                     .UseKestrel(opts =>
                     {
-                        opts.Listen(IPAddress.Loopback, 5021, listenOptions =>
+                        opts.Listen(IPAddress.Any, 5021, listenOptions =>
                             {
                                 var config = (IConfiguration?)opts.ApplicationServices.GetService(typeof(IConfiguration));
 

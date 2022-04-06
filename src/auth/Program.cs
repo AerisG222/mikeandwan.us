@@ -17,22 +17,9 @@ public static class Program
             .UseSystemd()
             .ConfigureAppConfiguration((context, builder) =>
                 {
+                    builder.AddJsonFile("appsettings.json", true);
+                    builder.AddJsonFile("appsettings.{Environment}.json", true);
                     builder.AddEnvironmentVariables("MAW_AUTH_");
-                })
-            .ConfigureLogging((context, factory) =>
-                {
-                    if(context.HostingEnvironment.IsProduction())
-                    {
-                        factory
-                            .AddConsole()
-                            .SetMinimumLevel(LogLevel.Warning);
-                    }
-                    else
-                    {
-                        factory
-                            .AddConsole()
-                            .SetMinimumLevel(LogLevel.Debug);
-                    }
                 })
             .UseDefaultServiceProvider((context, options) => {
                 options.ValidateScopes = context.HostingEnvironment.IsDevelopment();

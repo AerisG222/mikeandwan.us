@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace MawAuth;
+﻿namespace MawAuth;
 
 public static class Program
 {
@@ -17,8 +15,10 @@ public static class Program
             .UseSystemd()
             .ConfigureAppConfiguration((context, builder) =>
                 {
+                    var env = context.HostingEnvironment.EnvironmentName;
+
                     builder.AddJsonFile("appsettings.json", true);
-                    builder.AddJsonFile("appsettings.{Environment}.json", true);
+                    builder.AddJsonFile($"appsettings.{env}.json", true);
                     builder.AddEnvironmentVariables("MAW_AUTH_");
                 })
             .UseDefaultServiceProvider((context, options) => {
@@ -27,22 +27,6 @@ public static class Program
             .ConfigureWebHostDefaults(webBuilder => {
                 webBuilder
                     .CaptureStartupErrors(true)
-                    .UseKestrel(opts =>
-                    {
-                        opts.Listen(IPAddress.Any, 5001, listenOptions =>
-                            {
-                                var config = (IConfiguration?)opts.ApplicationServices.GetService(typeof(IConfiguration));
-
-                                if(config == null)
-                                {
-                                    throw new InvalidOperationException("Did not find IConfiguration in application services!");
-                                }
-
-                                var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
-
-                                listenOptions.UseHttps(config["KestrelPfxFile"], pwd);
-                            });
-                    })
                     .UseStartup<Startup>();
             });
 }

@@ -1,5 +1,3 @@
-using System.Net;
-
 namespace MawMvcApp;
 
 public static class Program
@@ -17,8 +15,10 @@ public static class Program
             .UseSystemd()
             .ConfigureAppConfiguration((context, builder) =>
                 {
+                    var env = context.HostingEnvironment.EnvironmentName;
+
                     builder.AddJsonFile("appsettings.json", true);
-                    builder.AddJsonFile("appsettings.{Environment}.json", true);
+                    builder.AddJsonFile($"appsettings.{ env }.json", true);
                     builder.AddEnvironmentVariables("MAW_WWW_");
                 })
             .UseDefaultServiceProvider((context, options) =>
@@ -29,22 +29,6 @@ public static class Program
             {
                 webBuilder
                     .CaptureStartupErrors(true)
-                    .UseKestrel(opts =>
-                    {
-                        opts.Listen(IPAddress.Any, 5021, listenOptions =>
-                            {
-                                var config = (IConfiguration?)opts.ApplicationServices.GetService(typeof(IConfiguration));
-
-                                if(config == null)
-                                {
-                                    throw new InvalidOperationException("IConfiguration not available!");
-                                }
-
-                                var pwd = File.ReadAllText($"{config["KestrelPfxFile"]}.pwd").Trim();
-
-                                listenOptions.UseHttps(config["KestrelPfxFile"], pwd);
-                            });
-                    })
                     .UseStartup<Startup>();
             });
 }

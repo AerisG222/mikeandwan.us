@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Logging;
@@ -83,6 +84,10 @@ public class Startup
             .UseCsp(DefineContentSecurityPolicy)
 
             .UseRouting()
+            .UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            })
             .UseCors()
             .UseOpenApi(opts => {
                 opts.DocumentName = "openapi";

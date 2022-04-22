@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.Twitter;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.DataProtection;
@@ -80,6 +81,7 @@ public class Startup
                 .AddProfileService<IdentityServerProfileService>()
                 .Services
             .AddAuthorization(opts => MawPolicyBuilder.AddMawPolicies(opts))
+            .AddCors(opts => ConfigureDefaultCorsPolicy(opts))
             .AddResponseCompression()
             .AddControllersWithViews();
     }
@@ -180,6 +182,25 @@ public class Startup
         opts.ConsumerKey = _config["Twitter:ConsumerKey"];
         opts.ConsumerSecret = _config["Twitter:ConsumerSecret"];
         opts.RetrieveUserDetails = true;
+    }
+
+    void ConfigureDefaultCorsPolicy(CorsOptions opts)
+    {
+        opts.AddDefaultPolicy(builder =>
+        {
+            builder
+                .WithOrigins(GetCorsOrigins())
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+    }
+
+    string[] GetCorsOrigins()
+    {
+        return new string[] {
+            _config["Environment:PhotosUrl"],
+            _config["Environment:FilesUrl"]
+        };
     }
 
     string[] GetAllowedRedirectUrls()

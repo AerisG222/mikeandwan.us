@@ -22,8 +22,8 @@
         <PackageReference Include="IdentityModel" Version="6.0.0" />
         <PackageReference Include="MailKit" Version="3.2.0" />
         <PackageReference Include="MedallionShell" Version="1.6.2" />
-        <PackageReference Include="SixLabors.ImageSharp" Version="2.1.0" />
-        <PackageReference Include="SolrNet.Core" Version="1.0.19" />
+        <PackageReference Include="SixLabors.ImageSharp" Version="2.1.1" />
+        <PackageReference Include="SolrNet.Core" Version="1.1.0" />
     </ItemGroup>
 
     <ItemGroup>

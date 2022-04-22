@@ -8,6 +8,6 @@
 
     <ItemGroup>
         <PackageReference Include="IdentityModel" Version="6.0.0" />
-        <PackageReference Include="SolrNet.Core" Version="1.0.19" />
+        <PackageReference Include="SolrNet.Core" Version="1.1.0" />
     </ItemGroup>
 </Project>

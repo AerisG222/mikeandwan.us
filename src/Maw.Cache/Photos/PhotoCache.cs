@@ -169,7 +169,7 @@ public class PhotoCache
 
         var tran = Db.CreateTransaction();
 
-        return await GetPhotosInternalAsync(tran, PhotoKeys.GetPhotosForCategorySetKey(categoryId));
+        return await GetPhotosInternalAsync(tran, PhotoKeys.GetPhotosForCategorySetKey(categoryId), true);
     }
 
     public async Task<CacheResult<IEnumerable<Photo>>> GetRandomPhotosAsync(string[] roles, short count)
@@ -199,7 +199,7 @@ public class PhotoCache
 #pragma warning restore CS4014
         }
 
-        return await GetPhotosInternalAsync(tran, PhotoKeys.RANDOM_PHOTO_SET_KEY);
+        return await GetPhotosInternalAsync(tran, PhotoKeys.RANDOM_PHOTO_SET_KEY, false);
     }
 
     public async Task<CacheResult<Photo>> GetPhotoAsync(string[] roles, int photoId)
@@ -342,12 +342,14 @@ public class PhotoCache
         );
     }
 
-    async Task<CacheResult<IEnumerable<Photo>>> GetPhotosInternalAsync(ITransaction tran, string setKey)
+    async Task<CacheResult<IEnumerable<Photo>>> GetPhotosInternalAsync(ITransaction tran, string setKey, bool sortByFilename)
     {
+        var by = sortByFilename ? $"{ PhotoKeys.PHOTO_HASH_KEY_PATTERN }->xs-path" : "nosort";
         var status = GetStatusAsync(tran);
         var photos = tran.SortAsync(
             setKey,
-            get: _photoSerializer.SortLookupFields
+            get: _photoSerializer.SortLookupFields,
+            by: by
         );
 
         await tran.ExecuteAsync();

@@ -264,7 +264,8 @@ public class PhotoCache
         }
 
         var tran = Db.CreateTransaction();
-
+        var key = PhotoKeys.GetExifHashKey(photoId);
+        var exists = tran.KeyExistsAsync(key);
         var detail = tran.HashGetAsync(
             PhotoKeys.GetExifHashKey(photoId),
             _detailSerializer.HashFields
@@ -272,7 +273,12 @@ public class PhotoCache
 
         await tran.ExecuteAsync();
 
-        return _detailSerializer.ParseSingleOrDefault(await detail);
+        if(await exists)
+        {
+            return _detailSerializer.ParseSingleOrDefault(await detail);
+        }
+
+        return null;
     }
 
     public Task AddPhotoDetailsAsync(int photoId, Detail detail)

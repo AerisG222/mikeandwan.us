@@ -28,4 +28,14 @@ public static class IServiceCollectionExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddMawDomainAuthServices(this IServiceCollection services)
+    {
+        services
+            .AddScoped<ICaptchaService, GoogleCaptchaService>()
+            .AddScoped<IEmailService, GmailApiEmailService>()
+            .AddScoped<ILoginService, LoginService>();
+
+        return services;
+    }
 }

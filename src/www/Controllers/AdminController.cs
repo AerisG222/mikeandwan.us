@@ -16,20 +16,17 @@ namespace MawMvcApp.Controllers;
 public class AdminController
     : MawBaseController<AdminController>
 {
-    readonly MawApiService _apiSvc;
     readonly IBlogService _blogSvc;
     readonly IPhotoService _photoSvc;
     readonly IVideoService _videoSvc;
 
     public AdminController(
         ILogger<AdminController> log,
-        MawApiService apiService,
         IBlogService blogService,
         IPhotoService photoService,
         IVideoService videoService)
         : base(log)
     {
-        _apiSvc = apiService ?? throw new ArgumentNullException(nameof(apiService));
         _blogSvc = blogService ?? throw new ArgumentNullException(nameof(blogService));
         _photoSvc = photoService ?? throw new ArgumentNullException(nameof(photoService));
         _videoSvc = videoService ?? throw new ArgumentNullException(nameof(videoService));
@@ -106,45 +103,5 @@ public class AdminController
         ViewBag.NavigationZone = NavigationZone.Administration;
 
         return View(HttpContext);
-    }
-
-    [HttpGet("clear-photo-cache")]
-    public IActionResult ClearPhotoCache()
-    {
-        ViewBag.NavigationZone = NavigationZone.Administration;
-
-        return View(false);
-    }
-
-    [HttpPost("clear-photo-cache")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ClearPhotoCache(bool doClear)
-    {
-        ViewBag.NavigationZone = NavigationZone.Administration;
-
-        await _photoSvc.ClearCacheAsync();
-        await _apiSvc.ClearPhotoCacheAsync();
-
-        return View(true);
-    }
-
-    [HttpGet("clear-video-cache")]
-    public IActionResult ClearVideoCache()
-    {
-        ViewBag.NavigationZone = NavigationZone.Administration;
-
-        return View(false);
-    }
-
-    [HttpPost("clear-video-cache")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ClearVideoCache(bool doClear)
-    {
-        ViewBag.NavigationZone = NavigationZone.Administration;
-
-        await _videoSvc.ClearCacheAsync();
-        await _apiSvc.ClearVideoCacheAsync();
-
-        return View(true);
     }
 }

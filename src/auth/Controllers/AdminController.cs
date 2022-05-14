@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Maw.Data.Abstractions;
-using Maw.Domain.Blogs;
 using Maw.Domain.Email;
 using Maw.Domain.Models.Identity;
 using Maw.Domain.Utilities;
@@ -22,7 +21,6 @@ public class AdminController
     readonly IUserRepository _repo;
     readonly UserManager<MawUser> _userMgr;
     readonly RoleManager<MawRole> _roleMgr;
-    readonly IBlogService _blogSvc;
     readonly IEmailService _emailSvc;
     readonly RazorViewToStringRenderer _razorRenderer;
     readonly IPasswordValidator<MawUser> _pwdValidator;
@@ -32,7 +30,6 @@ public class AdminController
         IUserRepository userRepository,
         UserManager<MawUser> userManager,
         RoleManager<MawRole> roleManager,
-        IBlogService blogService,
         IEmailService emailService,
         RazorViewToStringRenderer razorRenderer,
         IPasswordValidator<MawUser> passwordValidator)
@@ -41,7 +38,6 @@ public class AdminController
         _repo = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         _userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
         _roleMgr = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
-        _blogSvc = blogService ?? throw new ArgumentNullException(nameof(blogService));
         _emailSvc = emailService ?? throw new ArgumentNullException(nameof(emailService));
         _razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
         _pwdValidator = passwordValidator ?? throw new ArgumentNullException(nameof(passwordValidator));

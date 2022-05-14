@@ -21,6 +21,5 @@ public interface IVideoService
     // admin functions
     Task SetGpsOverrideAsync(short videoId, GpsCoordinate gps, string username);
     Task SetCategoryTeaserAsync(short categoryId, short videoId);
-    Task ClearCacheAsync();
     Task<IEnumerable<CategoryAndRoles>> GetCategoriesAndRolesAsync();
 }

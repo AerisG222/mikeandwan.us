@@ -54,7 +54,7 @@ public class Startup
                 opts.WwwUrl = AddTrailingSlash(_config["Environment:WwwUrl"]);
             })
             .AddMawDataServices(_config["Environment:DbConnectionString"])
-            .AddMawDomainServices()
+            .AddMawDomainAuthServices()
             .AddMawIdentityServerServices(_config["Environment:IdsrvDbConnectionString"], _config["SigningCertDir"])
             .AddTransient<RazorViewToStringRenderer>()
             .AddIdentity<MawUser, MawRole>()

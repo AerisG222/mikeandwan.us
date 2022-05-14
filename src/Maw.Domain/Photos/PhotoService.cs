@@ -168,9 +168,4 @@ public class PhotoService
     {
         return _repo.GetCategoriesAndRolesAsync();
     }
-
-    public Task ClearCacheAsync()
-    {
-        return Task.CompletedTask;
-    }
 }

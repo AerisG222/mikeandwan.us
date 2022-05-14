@@ -130,11 +130,6 @@ public class VideoService
         }
     }
 
-    public Task ClearCacheAsync()
-    {
-        return Task.CompletedTask;
-    }
-
     public Task<IEnumerable<CategoryAndRoles>> GetCategoriesAndRolesAsync()
     {
         return _repo.GetCategoriesAndRolesAsync();

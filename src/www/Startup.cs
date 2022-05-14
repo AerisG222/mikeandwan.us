@@ -55,8 +55,6 @@ public class Startup
             .AddLogging()
             .AddHttpContextAccessor()
             .AddResponseCompression()
-            .AddHttpClient<MawApiService>()
-                .Services
             .AddMawDataServices(_config["Environment:DbConnectionString"])
             .AddMawCacheServices(_config["Environment:RedisConnectionString"])
             .AddMawDomainServices()

@@ -7,8 +7,8 @@
 DEBUG=y
 SSH_REMOTE_HOST=tifa
 SSH_USERNAME=svc_www_maw
-PATH_CONVERT_VIDEOS="/home/mmorano/git/ConvertVideos/src/ConvertVideos/bin/Release/net5.0/ConvertVideos.dll"
-PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup/bin/Release/net5.0/GlacierBackup.dll"
+PATH_CONVERT_VIDEOS="/home/mmorano/git/ConvertVideos/src/ConvertVideos/bin/Release/net6.0/ConvertVideos.dll"
+PATH_GLACIER_BACKUP="/home/mmorano/git/GlacierBackup/src/GlacierBackup/bin/Release/net6.0/GlacierBackup.dll"
 PATH_ASSET_ROOT="/srv/www/website_assets"
 PATH_VIDEO_SOURCE=
 CAT_NAME=
@@ -190,8 +190,8 @@ ssh -t "${SSH_USERNAME}"@"${SSH_REMOTE_HOST}" "
     sudo chmod -R go-w '${DEST_MOVIES_CATEGORY_ROOT}'
     sudo restorecon -R '${DEST_MOVIES_CATEGORY_ROOT}'
 
-    podman run -it --rm --pod maw-pod --env-file '/home/${SSH_USERNAME}/maw-postgres-backup.env' -v .:/tmp/context:ro --security-opt label=disable postgres:13.4 psql -h localhost -U postgres -d maw_website -f '/tmp/context/${SQL_FILE}'
-    podman run -it --rm --pod maw-pod --env-file '/home/${SSH_USERNAME}/maw-postgres-backup.env' -v .:/tmp/context:ro --security-opt label=disable postgres:13.4 psql -h localhost -U postgres -d maw_website -f '/tmp/context/${GLACIER_SQL_FILE}'
+    podman run -it --rm --pod prod-maw-pod --env-file '/home/${SSH_USERNAME}/maw_prod/podman-env/maw-postgres.env' -v .:/tmp/context:ro --security-opt label=disable postgres:14-alpine psql -h localhost -U postgres -d maw_website -f '/tmp/context/${SQL_FILE}'
+    podman run -it --rm --pod prod-maw-pod --env-file '/home/${SSH_USERNAME}/maw_prod/podman-env/maw-postgres.env' -v .:/tmp/context:ro --security-opt label=disable postgres:14-alpine psql -h localhost -U postgres -d maw_website -f '/tmp/context/${GLACIER_SQL_FILE}'
 
     rm '${SQL_FILE}'
     rm '${GLACIER_SQL_FILE}'

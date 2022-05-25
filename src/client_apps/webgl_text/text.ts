@@ -8,8 +8,8 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 
 import * as Stats from 'stats.js';
 
-import floorTexture from './floor_texture.jpg';
-import fontFile from './open_sans_bold.json';
+import * as floorTexture from './floor_texture.jpg';
+import * as fontFile from './open_sans_bold.json';
 
 export const _script_root = document.currentScript;
 

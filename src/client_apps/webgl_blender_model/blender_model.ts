@@ -9,8 +9,8 @@ import { AxesHelper } from 'three/src/helpers/AxesHelper';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as Stats from 'stats.js';
 
-import model from './bs.gltf';
-import bin from './bs.bin';
+import * as model from './bs.gltf';
+import * as bin from './bs.bin';
 
 export class BlenderModelDemo {
     private _scene: Scene;

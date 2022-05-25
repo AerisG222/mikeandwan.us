@@ -15,8 +15,8 @@ import { WebGLRenderer } from 'three/src/renderers/WebGLRenderer';
 import { AxesHelper } from 'three/src/helpers/AxesHelper';
 import * as Stats from 'stats.js';
 
-import floorTexture from './floor_texture.jpg';
-import cubeTexture from './DSC_8562.jpg';
+import * as floorTexture from './floor_texture.jpg';
+import * as cubeTexture from './DSC_8562.jpg';
 
 export class CubeDemo {
     scene: Scene;
@@ -58,20 +58,20 @@ export class CubeDemo {
         this.scene.add(this.ambientLight);
 
         // directional light
-        let directionalLight = new DirectionalLight(0xffffff, 0.9);
+        const directionalLight = new DirectionalLight(0xffffff, 0.9);
         directionalLight.position.set(-1, 1, 1);
         directionalLight.castShadow = true;
         this.scene.add(directionalLight);
 
         // axis helper
-        let axisHelper = new AxesHelper(100);
+        const axisHelper = new AxesHelper(100);
         this.scene.add(axisHelper);
 
         // cube
-        let textureLoader = new TextureLoader();
+        const textureLoader = new TextureLoader();
         textureLoader.load(cubeTexture, texture => {
-            let geometry = new BoxGeometry(50, 50, 50);
-            let material = new MeshPhongMaterial({ color: 0xffffff, map: texture });
+            const geometry = new BoxGeometry(50, 50, 50);
+            const material = new MeshPhongMaterial({ color: 0xffffff, map: texture });
             this.cube = new Mesh(geometry, material);
             this.cube.position.set(0, 70, 180);
             this.scene.add(this.cube);
@@ -83,12 +83,12 @@ export class CubeDemo {
 
         // floor
         textureLoader.load(floorTexture, texture => {
-            let floorPlane = new PlaneGeometry(1000, 1000);
+            const floorPlane = new PlaneGeometry(1000, 1000);
             texture.wrapS = RepeatWrapping;
             texture.wrapT = RepeatWrapping;
             texture.repeat.set(9, 9);
-            let floorMaterial = new MeshBasicMaterial({ map: texture, side: DoubleSide }); //
-            let floor = new Mesh(floorPlane, floorMaterial);
+            const floorMaterial = new MeshBasicMaterial({ map: texture, side: DoubleSide }); //
+            const floor = new Mesh(floorPlane, floorMaterial);
             floor.position.y = -30;
             floor.rotation.x = (Math.PI / 2) - .3;
             this.scene.add(floor);

@@ -17,7 +17,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="6.0.5" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="6.0.0" />
-        <PackageReference Include="NSwag.AspNetCore" Version="13.15.10" />
+        <PackageReference Include="NSwag.AspNetCore" Version="13.16.0" />
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
         <PackageReference Include="SolrNet.Core" Version="1.1.0" />
         <PackageReference Include="SolrNet.Microsoft.DependencyInjection" Version="1.1.0" />

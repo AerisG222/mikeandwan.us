@@ -20,23 +20,19 @@ module.exports = {
             },
             {
                 test: /\.gltf$/,
-                use: [{
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[contenthash].[ext]',
-                        publicPath: '/js/webgl_blender_model/'
-                    }
-                }]
+                type: 'asset/resource',
+                generator: {
+                    filename: '[name].[hash][ext]',
+                    publicPath: '/js/webgl_blender_model/'
+                }
             },
             {
                 test: /\.bin$/,
-                use: [{
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[ext]',
-                        publicPath: '/js/webgl_blender_model/'
-                    }
-                }]
+                type: 'asset/resource',
+                generator: {
+                    filename: '[name][ext]',
+                    publicPath: '/js/webgl_blender_model/'
+                }
             }
         ]
     },

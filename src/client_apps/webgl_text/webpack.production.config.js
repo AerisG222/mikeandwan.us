@@ -20,24 +20,19 @@ module.exports = {
             },
             {
                 test: /\.json$/,
-                type: 'javascript/auto',
-                use: [{
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[contenthash].[ext]',
-                        publicPath: '/js/webgl_text/'
-                    }
-                }]
+                type: 'asset/resource',
+                generator: {
+                    filename: '[name].[hash][ext]',
+                    publicPath: '/js/webgl_text/'
+                }
             },
             {
                 test: /\.(png|jpg|gif)$/,
-                use: [{
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[contenthash].[ext]',
-                        publicPath: '/js/webgl_text/'
-                    }
-                }]
+                type: 'asset/resource',
+                generator: {
+                    filename: '[name].[hash][ext]',
+                    publicPath: '/js/webgl_text/'
+                }
             }
         ]
     },

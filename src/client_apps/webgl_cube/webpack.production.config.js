@@ -20,13 +20,11 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif)$/,
-                use: [{
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[contenthash].[ext]',
-                        publicPath: '/js/webgl_cube/'
-                    }
-                }]
+                type: 'asset/resource',
+                generator: {
+                    filename: '[name].[hash][ext]',
+                    publicPath: '/js/webgl_cube/'
+                }
             }
         ]
     },

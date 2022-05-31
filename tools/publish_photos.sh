@@ -185,7 +185,7 @@ podman run -it --rm \
     --memory 0 \
     --cpus "${CPUS_SIZE_PHOTOS}" \
     --volume "${RAW_THERAPEE_CONFIG_DIR}:/config:ro" \
-    --volume "${PATH_IMAGE_SOURCE}:/src:rw" \
+    --volume "${ASSET_ROOT}:/src:rw" \
     --volume "${ASSET_ROOT}:/output:rw" \
     --env-file "${RAW_THERAPEE_ENV_FILE}" \
     --security-opt label=disable \
@@ -193,7 +193,7 @@ podman run -it --rm \
         -i \
         -c "${CAT_NAME}" \
         -o "/output/${SQL_FILE}" \
-        -p /src \
+        -p "/src/${CATEGORY_DIRECTORY_NAME}" \
         -w images \
         -y ${YEAR} \
         ${ALLOWED_ROLES}

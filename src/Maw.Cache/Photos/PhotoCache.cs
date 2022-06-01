@@ -93,15 +93,17 @@ public class PhotoCache
         tran = Db.CreateTransaction();
         var recentCategorySet = PhotoKeys.CATEGORY_RECENT_SET_KEY;
 
+#pragma warning disable CS4014
+        tran.KeyDeleteAsync(recentCategorySet);
+
         foreach(var id in newIds)
         {
-#pragma warning disable CS4014
             tran.SetAddAsync(
                 recentCategorySet,
                 id
             );
-#pragma warning restore CS4014
         }
+#pragma warning restore CS4014
 
         return await GetCategoriesInternalAsync(tran, recentCategorySet);
     }

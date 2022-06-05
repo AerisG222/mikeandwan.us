@@ -229,7 +229,7 @@ mv "${PATH_IMAGE_SOURCE}" "${DEST_IMAGES_YEAR_ROOT}"
 
 echo '* applying sql to local database...'
 podman run -it --rm \
-    --pod "${DEV_POD}"
+    --pod "${DEV_POD}" \
     --env-file "${DEV_PSQL_ENV_FILE}" \
     --volume "${ASSET_ROOT}:/output:ro" \
     --security-opt label=disable \
@@ -260,7 +260,7 @@ podman run -it --rm \
 
 echo '* applying glacier sql file to local database...'
 podman run -it --rm \
-    --pod "${DEV_POD}"
+    --pod "${DEV_POD}" \
     --env-file "${DEV_PSQL_ENV_FILE}" \
     --volume "${ASSET_ROOT}:/output:ro" \
     --security-opt label=disable \

@@ -744,7 +744,6 @@
       }
     }
   },
-  "defaultProject": "binary-clock",
   "cli": {
     "analytics": false
   }

@@ -72,12 +72,12 @@ if [ "${PREVIEWMODE}" = 'y' ]; then
         --memory 0 \
         --cpus "${CPUS_SIZE_PHOTOS}" \
         --volume "${RAW_THERAPEE_CONFIG_DIR}:/config:ro" \
-        --volume "${PATH_IMAGE_SOURCE}:/src:rw" \
+        --volume "${PATH_IMAGE_SOURCE}:/photodir:rw" \
         --env-file "${RAW_THERAPEE_ENV_FILE}" \
         --security-opt label=disable \
         "${IMG_SIZE_PHOTOS}" \
             -f \
-            -p /src
+            -p /photodir
 
     echo ''
     echo '****'
@@ -185,7 +185,7 @@ podman run -it --rm \
     --memory 0 \
     --cpus "${CPUS_SIZE_PHOTOS}" \
     --volume "${RAW_THERAPEE_CONFIG_DIR}:/config:ro" \
-    --volume "${ASSET_ROOT}:/src:rw" \
+    --volume "${ASSET_ROOT}:/photodir:rw" \
     --volume "${ASSET_ROOT}:/output:rw" \
     --env-file "${RAW_THERAPEE_ENV_FILE}" \
     --security-opt label=disable \
@@ -193,7 +193,7 @@ podman run -it --rm \
         -i \
         -c "${CAT_NAME}" \
         -o "/output/${SQL_FILE}" \
-        -p "/src/${CATEGORY_DIRECTORY_NAME}" \
+        -p "/photodir/${CATEGORY_DIRECTORY_NAME}" \
         -w images \
         -y ${YEAR} \
         ${ALLOWED_ROLES}
@@ -244,7 +244,7 @@ echo '* backing up photos to AWS Glacier...'
 podman run -it --rm \
     --cpus "${CPUS_GLACIER_BACKUP}" \
     --volume "/home/mmorano/.aws:/creds:ro" \
-    --volume "${DEST_IMAGES_ROOT}:/src:ro" \
+    --volume "${DEST_IMAGES_ROOT}:/photodir:ro" \
     --volume "${ASSET_ROOT}:/output:rw" \
     --security-opt label=disable \
     "${IMG_GLACIER_BACKUP}" \
@@ -252,8 +252,8 @@ podman run -it --rm \
         us-east-1 \
         photos \
         assets \
-        "/src/${YEAR}/${CATEGORY_DIRECTORY_NAME}/" \
-        "/src/" \
+        "/photodir/${YEAR}/${CATEGORY_DIRECTORY_NAME}/" \
+        "/photodir/" \
         photosql \
         "/output/${GLACIER_SQL_FILE}" \
         /creds/credentials

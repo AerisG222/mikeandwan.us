@@ -223,6 +223,7 @@ fi
 
 echo '* make sure dev podman pod is running...'
 systemctl --user start "${DEV_SVC}"
+sleep 3s
 
 echo '* moving photos for local site...'
 mv "${PATH_IMAGE_SOURCE}" "${DEST_IMAGES_YEAR_ROOT}"

@@ -167,7 +167,7 @@ class VideoSerializer
 
     protected override Video ParseSingleInternal(ReadOnlySpan<RedisValue> values)
     {
-        var createDate = values[2] == RedisValue.Null ? (DateTime?)null : DeserializeDate(values[2]);
+        var createDate = values[2] == RedisValue.Null ? (DateTime?)null : DeserializeDate(values[2]!);
 
         return new Video
         {
@@ -181,35 +181,35 @@ class VideoSerializer
             {
                 Height = (short)values[6],
                 Width = (short)values[7],
-                Path = values[8],
+                Path = values[8]!,
                 Size = (long)values[9]
             },
             ThumbnailSq = new MultimediaInfo
             {
                 Height = (short)values[10],
                 Width = (short)values[11],
-                Path = values[12],
+                Path = values[12]!,
                 Size = (long)values[13]
             },
             VideoScaled = new MultimediaInfo
             {
                 Height = (short)values[14],
                 Width = (short)values[15],
-                Path = values[16],
+                Path = values[16]!,
                 Size = (long)values[17]
             },
             VideoFull = new MultimediaInfo
             {
                 Height = (short)values[18],
                 Width = (short)values[19],
-                Path = values[20],
+                Path = values[20]!,
                 Size = (long)values[21]
             },
             VideoRaw = new MultimediaInfo
             {
                 Height = (short)values[22],
                 Width = (short)values[23],
-                Path = values[24],
+                Path = values[24]!,
                 Size = (long)values[25]
             }
         };

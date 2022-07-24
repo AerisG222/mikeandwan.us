@@ -156,12 +156,12 @@ class CategorySerializer
 
     protected override Category ParseSingleInternal(ReadOnlySpan<RedisValue> values)
     {
-        var createDate = values[3] == RedisValue.Null ? (DateTime?)null : DeserializeDate(values[3]);
+        var createDate = values[3] == RedisValue.Null ? (DateTime?)null : DeserializeDate(values[3]!);
 
         return new Category
         {
             Id = (short)values[0],
-            Name = values[1],
+            Name = values[1]!,
             Year = (short)values[2],
             CreateDate = createDate,
             IsMissingGpsData = (bool)values[4],
@@ -172,14 +172,14 @@ class CategorySerializer
             {
                 Height = (short)values[8],
                 Width = (short)values[9],
-                Path = values[10],
+                Path = values[10]!,
                 Size = (long)values[11]
             },
             TeaserImageSq = new MultimediaInfo
             {
                 Height = (short)values[12],
                 Width = (short)values[13],
-                Path = values[14],
+                Path = values[14]!,
                 Size = (long)values[15]
             },
             TotalSize = (long)values[16],

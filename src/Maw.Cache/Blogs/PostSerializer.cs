@@ -51,9 +51,9 @@ class PostSerializer
         {
             Id = (short)values[0],
             BlogId = (short)values[1],
-            Title = values[2],
-            Description = values[3],
-            PublishDate = DeserializeDate(values[4])
+            Title = values[2]!,
+            Description = values[3]!,
+            PublishDate = DeserializeDate(values[4]!)
         };
     }
 }

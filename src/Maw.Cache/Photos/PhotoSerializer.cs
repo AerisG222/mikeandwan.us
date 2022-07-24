@@ -201,7 +201,7 @@ class PhotoSerializer
 
     protected override Photo ParseSingleInternal(ReadOnlySpan<RedisValue> values)
     {
-        var createDate = values[2] == RedisValue.Null ? (DateTime?)null : DeserializeDate(values[2]);
+        var createDate = values[2] == RedisValue.Null ? (DateTime?)null : DeserializeDate(values[2]!);
 
         return new Photo
         {
@@ -214,49 +214,49 @@ class PhotoSerializer
             {
                 Height = (short)values[5],
                 Width = (short)values[6],
-                Path = values[7],
+                Path = values[7]!,
                 Size = (long)values[8]
             },
             XsSqInfo = new MultimediaInfo
             {
                 Height = (short)values[9],
                 Width = (short)values[10],
-                Path = values[11],
+                Path = values[11]!,
                 Size = (long)values[12]
             },
             SmInfo = new MultimediaInfo
             {
                 Height = (short)values[13],
                 Width = (short)values[14],
-                Path = values[15],
+                Path = values[15]!,
                 Size = (long)values[16]
             },
             MdInfo = new MultimediaInfo
             {
                 Height = (short)values[17],
                 Width = (short)values[18],
-                Path = values[19],
+                Path = values[19]!,
                 Size = (long)values[20]
             },
             LgInfo = new MultimediaInfo
             {
                 Height = (short)values[21],
                 Width = (short)values[22],
-                Path = values[23],
+                Path = values[23]!,
                 Size = (long)values[24]
             },
             PrtInfo = new MultimediaInfo
             {
                 Height = (short)values[25],
                 Width = (short)values[26],
-                Path = values[27],
+                Path = values[27]!,
                 Size = (long)values[28]
             },
             SrcInfo = new MultimediaInfo
             {
                 Height = (short)values[29],
                 Width = (short)values[30],
-                Path = values[31],
+                Path = values[31]!,
                 Size = (long)values[32]
             }
         };

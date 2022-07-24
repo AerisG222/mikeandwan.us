@@ -50,10 +50,10 @@ class BlogSerializer
         return new Blog
         {
             Id = (short)values[0],
-            Title = values[1],
-            Copyright = values[2],
-            Description = values[3],
-            LastPostDate = DeserializeDate(values[4])
+            Title = values[1]!,
+            Copyright = values[2]!,
+            Description = values[3]!,
+            LastPostDate = DeserializeDate(values[4]!)
         };
     }
 }

@@ -33,8 +33,8 @@ export class ShaderDemo {
             colors[c + 2] = color.b;
         }
 
-        geometry.addAttribute('displacement', new THREE.BufferAttribute(displacement, 1));
-        geometry.addAttribute('colors', new THREE.BufferAttribute(colors, 3));
+        geometry.setAttribute('displacement', new THREE.BufferAttribute(displacement, 1));
+        geometry.setAttribute('colors', new THREE.BufferAttribute(colors, 3));
 
         const sphere = new THREE.Mesh(
             geometry,

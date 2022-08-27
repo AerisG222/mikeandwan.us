@@ -38,17 +38,24 @@ public class PhotoCacheProcessingService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation("{service} running at: {time}", nameof(PhotoCacheProcessingService), DateTimeOffset.Now);
+            try
+            {
+                _logger.LogInformation("{service} running at: {time}", nameof(PhotoCacheProcessingService), DateTimeOffset.Now);
 
-            stopwatch.Restart();
-            await UpdateCategoryCache(stoppingToken);
-            stopwatch.Stop();
+                stopwatch.Restart();
+                await UpdateCategoryCache(stoppingToken);
+                stopwatch.Stop();
 
-            var jitteredDelay = _delay.CalculateRandomizedDelay(BASE_DELAY, DELAY_FLUCTUATION_PCT);
+                var jitteredDelay = _delay.CalculateRandomizedDelay(BASE_DELAY, DELAY_FLUCTUATION_PCT);
 
-            _logger.LogInformation("{service} took {duration} - will run again in {delay} ms.", nameof(PhotoCacheProcessingService), stopwatch.Elapsed, jitteredDelay);
+                _logger.LogInformation("{service} took {duration} - will run again in {delay} ms.", nameof(PhotoCacheProcessingService), stopwatch.Elapsed, jitteredDelay);
 
-            await Task.Delay(jitteredDelay, stoppingToken);
+                await Task.Delay(jitteredDelay, stoppingToken);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError("Error updating photo cache: {msg}", ex.Message);
+            }
         }
     }
 

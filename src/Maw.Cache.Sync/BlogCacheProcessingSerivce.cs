@@ -34,17 +34,24 @@ internal class BlogCacheProcessingService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation("{service} running at: {time}", nameof(BlogCacheProcessingService), DateTimeOffset.Now);
+            try
+            {
+                _logger.LogInformation("{service} running at: {time}", nameof(BlogCacheProcessingService), DateTimeOffset.Now);
 
-            stopwatch.Restart();
-            await UpdateBlogCache(stoppingToken);
-            stopwatch.Stop();
+                stopwatch.Restart();
+                await UpdateBlogCache(stoppingToken);
+                stopwatch.Stop();
 
-            var jitteredDelay = _delay.CalculateRandomizedDelay(BASE_DELAY, DELAY_FLUCTUATION_PCT);
+                var jitteredDelay = _delay.CalculateRandomizedDelay(BASE_DELAY, DELAY_FLUCTUATION_PCT);
 
-            _logger.LogInformation("{service} took {duration} - will run again in {delay} ms.", nameof(BlogCacheProcessingService), stopwatch.Elapsed, jitteredDelay);
+                _logger.LogInformation("{service} took {duration} - will run again in {delay} ms.", nameof(BlogCacheProcessingService), stopwatch.Elapsed, jitteredDelay);
 
-            await Task.Delay(jitteredDelay, stoppingToken);
+                await Task.Delay(jitteredDelay, stoppingToken);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError("Error updating video cache: {msg}", ex.Message);
+            }
         }
     }
 

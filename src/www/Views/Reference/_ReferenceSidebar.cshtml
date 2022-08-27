@@ -29,7 +29,7 @@
             <button class="btn border-0 text-start p-0" type="button" data-bs-toggle="collapse" data-bs-target="#http">HTTP</button>
         </div>
         <div id="http" class="@httpClass" data-bs-parent="#sidebarAccordion">
-            <div class="list-gdoup list-group-flush">
+            <div class="list-group list-group-flush">
                 <a class="list-group-item" asp-controller="reference" asp-action="httpStatusCodes" maw-active="@string.Equals(Model.Item, "http-status-codes", StringComparison.OrdinalIgnoreCase)">Status Codes</a>
                 <a class="list-group-item" asp-controller="reference" asp-action="httpRfcs" maw-active="@string.Equals(Model.Item, "http-rfcs", StringComparison.OrdinalIgnoreCase)">RFCs</a>
             </div>

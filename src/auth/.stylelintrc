@@ -4,6 +4,7 @@
     "stylelint-order"
   ],
   "rules": {
+    "annotation-no-unknown": null,
     "at-rule-empty-line-before": [null, {
       "except": ["first-nested"]
     }],

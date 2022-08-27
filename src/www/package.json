@@ -1,23 +1,8 @@
 {
   "name": "mikeandwan.us",
   "version": "1.1.0",
-  "description": "",
+  "license": "MIT",
   "main": "index.js",
-  "dependencies": {
-    "bootstrap": "^5.1.3",
-    "bootswatch": "^5.1.3"
-  },
-  "devDependencies": {
-    "chokidar-cli": "^3.0.0",
-    "npm-run-all": "^4.1.5",
-    "run-p": "0.0.0",
-    "sass": "^1.51.0",
-    "stylelint": "^14.8.2",
-    "stylelint-config-recommended-scss": "^6.0.0",
-    "stylelint-config-standard": "^25.0.0",
-    "stylelint-order": "^5.0.0",
-    "stylelint-scss": "^4.2.0"
-  },
   "scripts": {
     "all": "run-p sass",
     "sass": "run-p sass:lint sass:site sass:games",
@@ -26,6 +11,19 @@
     "sass:games": "sass --load-path node_modules scss/games.scss wwwroot/css/games.css",
     "sass:watch": "chokidar 'scss/**/*.scss' -c 'npm run sass'"
   },
-  "author": "",
-  "license": "MIT"
+  "dependencies": {
+    "bootstrap": "^5.2.0",
+    "bootswatch": "^5.2.0"
+  },
+  "devDependencies": {
+    "chokidar-cli": "^3.0.0",
+    "npm-run-all": "^4.1.5",
+    "run-p": "0.0.0",
+    "sass": "^1.54.5",
+    "stylelint": "^14.11.0",
+    "stylelint-config-recommended-scss": "^7.0.0",
+    "stylelint-config-standard": "^28.0.0",
+    "stylelint-order": "^5.0.0",
+    "stylelint-scss": "^4.3.0"
+  }
 }

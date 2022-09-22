@@ -20,7 +20,7 @@
     <ItemGroup>
         <PackageReference Include="Google.Apis.Gmail.v1" Version="1.57.0.2650" />
         <PackageReference Include="IdentityModel" Version="6.0.0" />
-        <PackageReference Include="MailKit" Version="3.3.0" />
+        <PackageReference Include="MailKit" Version="3.4.1" />
         <PackageReference Include="MedallionShell" Version="1.6.2" />
         <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
         <PackageReference Include="SolrNet.Core" Version="1.1.1" />

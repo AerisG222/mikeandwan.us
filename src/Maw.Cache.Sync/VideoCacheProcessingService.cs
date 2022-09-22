@@ -51,7 +51,7 @@ public class VideoCacheProcessingService
             }
             catch(Exception ex)
             {
-                _logger.LogError("Error updating video cache: {msg}", ex.Message);
+                _logger.LogError(ex, "Error updating video cache: {msg}", ex.Message);
             }
         }
     }

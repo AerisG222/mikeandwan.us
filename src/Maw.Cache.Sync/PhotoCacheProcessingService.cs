@@ -54,7 +54,7 @@ public class PhotoCacheProcessingService
             }
             catch(Exception ex)
             {
-                _logger.LogError("Error updating photo cache: {msg}", ex.Message);
+                _logger.LogError(ex, "Error updating photo cache: {msg}", ex.Message);
             }
         }
     }

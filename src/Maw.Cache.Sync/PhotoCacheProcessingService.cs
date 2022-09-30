@@ -139,18 +139,25 @@ public class PhotoCacheProcessingService
 
     async Task UpdatePhotoCache(Category category, string[] allRoles)
     {
-        var dbPhotos = await _repo.GetPhotosForCategoryAsync(category.Id, allRoles);
-        var cachePhotos = await _cache.GetPhotosAsync(allRoles, category.Id);
-        var updatedPhotos = dbPhotos.Except(cachePhotos.Item ?? new List<Photo>());
-
-        if(updatedPhotos.Count() > 0)
+        try
         {
-            var securedPhotos = updatedPhotos.Select(photo => new SecuredResource<Photo>(
-                photo,
-                allRoles
-            ));
+            var dbPhotos = await _repo.GetPhotosForCategoryAsync(category.Id, allRoles);
+            var cachePhotos = await _cache.GetPhotosAsync(allRoles, category.Id);
+            var updatedPhotos = dbPhotos.Except(cachePhotos.Item ?? new List<Photo>());
 
-            await _cache.AddPhotosAsync(securedPhotos);
+            if(updatedPhotos.Count() > 0)
+            {
+                var securedPhotos = updatedPhotos.Select(photo => new SecuredResource<Photo>(
+                    photo,
+                    allRoles
+                ));
+
+                await _cache.AddPhotosAsync(securedPhotos);
+            }
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex, "Error updating photo cache for {category_id}.", category.Id);
         }
     }
 }

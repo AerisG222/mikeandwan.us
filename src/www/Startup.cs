@@ -46,6 +46,7 @@ public class Startup
             .Configure<GmailApiEmailConfig>(_config.GetSection("Gmail"))
             .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
             .Configure<GoogleCaptchaConfig>(_config.GetSection("GoogleRecaptcha"))
+            .Configure<CloudflareTurnstileConfig>(_config.GetSection("CloudflareTurnstile"))
             .Configure<UrlConfig>(_config.GetSection("UrlConfig"))
             .ConfigureMawTagHelpers(opts =>
             {
@@ -223,7 +224,8 @@ public class Startup
             };
 
         var frameSources = new string[] {
-                "https://*.google.com"
+                "https://*.google.com",
+                "https://challenges.cloudflare.com"
             };
 
         var imageSources = new string[] {
@@ -254,7 +256,8 @@ public class Startup
                 "https://www.googletagmanager.com",
                 "https://www.accuweather.com",
                 "https://oap.accuweather.com",
-                "https://vortex.accuweather.com"
+                "https://vortex.accuweather.com",
+                "https://challenges.cloudflare.com"
             };
 
         var styleSources = new string[] {

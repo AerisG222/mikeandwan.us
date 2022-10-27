@@ -9,7 +9,8 @@
 }
 
 @section scripts_head {
-    <partial name="_js_GoogleRecaptcha" />
+    <!-- <partial name="_js_GoogleRecaptcha" /> -->
+    <partial name="_js_CloudflareTurnstile" />
 }
 
 @section sidebar {
@@ -71,7 +72,8 @@
 
         <div class="row mb-3">
             <div class="col">
-                <partial name="_GoogleRecaptcha" for="RecaptchaSiteKey" />
+                <!-- <partial name="_GoogleRecaptcha" for="RecaptchaSiteKey" /> -->
+                <partial name="_CloudflareTurnstile" for="RecaptchaSiteKey" />
                 @*<span asp-validation-for="IsHuman" class="form-text"></span>*@
             </div>
         </div>

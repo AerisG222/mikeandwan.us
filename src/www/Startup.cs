@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.FeatureManagement;
 using IdentityModel;
 using Mvc.RenderViewToString;
 using NWebsec.Core.Common.Middleware.Options;
@@ -53,6 +54,8 @@ public class Startup
                 opts.AuthUrl = AddTrailingSlash(_config["UrlConfig:Auth"]);
                 opts.WwwUrl = AddTrailingSlash(_config["UrlConfig:Www"]);
             })
+            .AddFeatureManagement()
+                .Services
             .AddLogging()
             .AddHttpContextAccessor()
             .AddResponseCompression()

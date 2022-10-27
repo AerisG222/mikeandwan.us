@@ -16,7 +16,7 @@ public class AboutController
     : MawBaseController<AboutController>
 {
     readonly ContactConfig _config;
-    readonly ICaptchaService _captchaService;
+    readonly ICaptchaFeature _captchaFeature;
     readonly IBlogService _blogService;
     readonly IEmailService _emailService;
     readonly RazorViewToStringRenderer _razorRenderer;
@@ -25,7 +25,7 @@ public class AboutController
         ILogger<AboutController> log,
         IOptions<ContactConfig> contactOpts,
         IBlogService blogService,
-        ICaptchaService captchaService,
+        ICaptchaFeature captchaFeature,
         IEmailService emailService,
         RazorViewToStringRenderer razorRenderer)
         : base(log)
@@ -38,7 +38,7 @@ public class AboutController
         _config = contactOpts.Value;
 
         _blogService = blogService ?? throw new ArgumentNullException(nameof(blogService));
-        _captchaService = captchaService ?? throw new ArgumentNullException(nameof(captchaService));
+        _captchaFeature = captchaFeature ?? throw new ArgumentNullException(nameof(captchaFeature));
         _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
         _razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
     }
@@ -52,13 +52,15 @@ public class AboutController
     }
 
     [HttpGet("contact")]
-    public IActionResult Contact()
+    public async Task<IActionResult> Contact()
     {
         ViewBag.NavigationZone = NavigationZone.About;
 
+        var captchaService = await _captchaFeature.GetServiceAsync();
+
         var model = new ContactModel
         {
-            RecaptchaSiteKey = _captchaService.SiteKey
+            RecaptchaSiteKey = captchaService.SiteKey
         };
 
         return View(model);
@@ -76,14 +78,16 @@ public class AboutController
         ViewBag.NavigationZone = NavigationZone.About;
 
         var model = new ContactModel();
+        var captchaService = await _captchaFeature.GetServiceAsync();
+
         await TryUpdateModelAsync<ContactModel>(model);
-        model.RecaptchaSiteKey = _captchaService.SiteKey;
+        model.RecaptchaSiteKey = captchaService.SiteKey;
         model.SubmitAttempted = true;
 
         if (ModelState.IsValid)
         {
-            var response = collection[_captchaService.ResponseFormFieldName];
-            model.IsHuman = await _captchaService.VerifyAsync(response);
+            var response = collection[captchaService.ResponseFormFieldName];
+            model.IsHuman = await captchaService.VerifyAsync(response);
 
             if (!model.IsHuman)
             {

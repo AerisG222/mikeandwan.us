@@ -25,13 +25,8 @@ public class GoogleCaptchaService
         _log = log ?? throw new ArgumentNullException(nameof(log));
     }
 
-    public virtual string SiteKey
-    {
-        get
-        {
-            return _config.SiteKey;
-        }
-    }
+    public virtual string ResponseFormFieldName => "g-recaptcha-response";
+    public virtual string SiteKey => _config.SiteKey;
 
     public virtual async Task<bool> VerifyAsync(string recaptchaResponse)
     {

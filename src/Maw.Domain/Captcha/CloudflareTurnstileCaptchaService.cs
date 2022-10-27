@@ -25,13 +25,8 @@ public class CloudflareTurnstileCaptchaService
         _log = log ?? throw new ArgumentNullException(nameof(log));
     }
 
-    public virtual string SiteKey
-    {
-        get
-        {
-            return _config.SiteKey;
-        }
-    }
+    public virtual string ResponseFormFieldName => "cf-turnstile-response";
+    public virtual string SiteKey => _config.SiteKey;
 
     public virtual async Task<bool> VerifyAsync(string recaptchaResponse)
     {

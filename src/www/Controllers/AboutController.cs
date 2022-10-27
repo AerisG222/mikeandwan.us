@@ -82,8 +82,8 @@ public class AboutController
 
         if (ModelState.IsValid)
         {
-            model.IsHuman = await _captchaService.VerifyAsync(collection["cf-turnstile-response"]);
-            //model.IsHuman = await _captchaService.VerifyAsync(collection["g-recaptcha-response"]);
+            var response = collection[_captchaService.ResponseFormFieldName];
+            model.IsHuman = await _captchaService.VerifyAsync(response);
 
             if (!model.IsHuman)
             {

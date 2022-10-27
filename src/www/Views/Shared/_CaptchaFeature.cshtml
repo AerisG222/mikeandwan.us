@@ -1,7 +1,9 @@
-<feature name="RECAPTCHA_USE_GOOGLE_RECAPTCHA">
+@using Maw.Domain.Captcha
+
+<feature name="@CaptchaFeature.CaptchaFeatureNameGoogle">
     <partial name="_GoogleRecaptcha" />
 </feature>
 
-<feature name="RECAPTCHA_USE_CLOUDFLARE_TURNSTILE">
+<feature name="@CaptchaFeature.CaptchaFeatureNameCloudflare">
     <partial name="_CloudflareTurnstile" />
 </feature>

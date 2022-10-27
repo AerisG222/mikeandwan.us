@@ -5,6 +5,9 @@ namespace Maw.Domain.Captcha;
 public class CaptchaFeature
     : ICaptchaFeature
 {
+    public const string CaptchaFeatureNameGoogle = "RecaptchaUseGoogle";
+    public const string CaptchaFeatureNameCloudflare = "RecaptchaUseCloudflare";
+
     readonly IFeatureManager _featureManager;
     readonly IEnumerable<ICaptchaService> _captchaServices;
     ICaptchaService? _service;
@@ -24,8 +27,8 @@ public class CaptchaFeature
             return _service;
         }
 
-        var useRecaptcha = await _featureManager.IsEnabledAsync("RECAPTCHA_USE_GOOGLE_RECAPTCHA");
-        var useTurnstile = await _featureManager.IsEnabledAsync("RECAPTCHA_USE_CLOUDFLARE_TURNSTILE");
+        var useRecaptcha = await _featureManager.IsEnabledAsync(CaptchaFeatureNameGoogle);
+        var useTurnstile = await _featureManager.IsEnabledAsync(CaptchaFeatureNameCloudflare);
 
         if(useRecaptcha)
         {

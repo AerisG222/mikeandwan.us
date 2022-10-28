@@ -38,24 +38,30 @@ public class PhotoCacheProcessingService
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            _logger.LogInformation("{service} running at: {time}", nameof(PhotoCacheProcessingService), DateTimeOffset.Now);
+
+            stopwatch.Restart();
+
+            // it appears that sometimes when executing UpdatePhotoCache, redis does not compute
+            // the score which causes an exception.  the block below just logs when this occurs
+            // and swallows the exception so that the process will continue to run at the next
+            // interval.
             try
             {
-                _logger.LogInformation("{service} running at: {time}", nameof(PhotoCacheProcessingService), DateTimeOffset.Now);
-
-                stopwatch.Restart();
                 await UpdateCategoryCache(stoppingToken);
-                stopwatch.Stop();
-
-                var jitteredDelay = _delay.CalculateRandomizedDelay(BASE_DELAY, DELAY_FLUCTUATION_PCT);
-
-                _logger.LogInformation("{service} took {duration} - will run again in {delay} ms.", nameof(PhotoCacheProcessingService), stopwatch.Elapsed, jitteredDelay);
-
-                await Task.Delay(jitteredDelay, stoppingToken);
             }
             catch(Exception ex)
             {
                 _logger.LogError(ex, "Error updating photo cache: {msg}", ex.Message);
             }
+
+            stopwatch.Stop();
+
+            var jitteredDelay = _delay.CalculateRandomizedDelay(BASE_DELAY, DELAY_FLUCTUATION_PCT);
+
+            _logger.LogInformation("{service} took {duration} - will run again in {delay} ms.", nameof(PhotoCacheProcessingService), stopwatch.Elapsed, jitteredDelay);
+
+            await Task.Delay(jitteredDelay, stoppingToken);
         }
     }
 
@@ -78,7 +84,7 @@ public class PhotoCacheProcessingService
         var cacheCategories = await _cache.GetCategoriesAsync(allRoles);
         var updatedCategories = dbCategories.Except(cacheCategories.Item ?? new List<Category>());
 
-        if(updatedCategories.Count() > 0)
+        if(updatedCategories.Any())
         {
             var securedCategories = updatedCategories
                 .Select(category => new SecuredResource<Category>(
@@ -139,25 +145,18 @@ public class PhotoCacheProcessingService
 
     async Task UpdatePhotoCache(Category category, string[] allRoles)
     {
-        try
-        {
-            var dbPhotos = await _repo.GetPhotosForCategoryAsync(category.Id, allRoles);
-            var cachePhotos = await _cache.GetPhotosAsync(allRoles, category.Id);
-            var updatedPhotos = dbPhotos.Except(cachePhotos.Item ?? new List<Photo>());
+        var dbPhotos = await _repo.GetPhotosForCategoryAsync(category.Id, allRoles);
+        var cachePhotos = await _cache.GetPhotosAsync(allRoles, category.Id);
+        var updatedPhotos = dbPhotos.Except(cachePhotos.Item ?? new List<Photo>());
 
-            if(updatedPhotos.Count() > 0)
-            {
-                var securedPhotos = updatedPhotos.Select(photo => new SecuredResource<Photo>(
-                    photo,
-                    allRoles
-                ));
-
-                await _cache.AddPhotosAsync(securedPhotos);
-            }
-        }
-        catch(Exception ex)
+        if(updatedPhotos.Any())
         {
-            _logger.LogError(ex, "Error updating photo cache for {category_id}.", category.Id);
+            var securedPhotos = updatedPhotos.Select(photo => new SecuredResource<Photo>(
+                photo,
+                allRoles
+            ));
+
+            await _cache.AddPhotosAsync(securedPhotos);
         }
     }
 }

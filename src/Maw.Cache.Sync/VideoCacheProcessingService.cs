@@ -35,24 +35,26 @@ public class VideoCacheProcessingService
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            _logger.LogInformation("{service} running at: {time}", nameof(VideoCacheProcessingService), DateTimeOffset.Now);
+
+            stopwatch.Restart();
+
             try
             {
-                _logger.LogInformation("{service} running at: {time}", nameof(VideoCacheProcessingService), DateTimeOffset.Now);
-
-                stopwatch.Restart();
                 await UpdateCategoryCache(stoppingToken);
-                stopwatch.Stop();
-
-                var jitteredDelay = _delay.CalculateRandomizedDelay(BASE_DELAY, DELAY_FLUCTUATION_PCT);
-
-                _logger.LogInformation("{service} took {duration} - will run again in {delay} ms.", nameof(VideoCacheProcessingService), stopwatch.Elapsed, jitteredDelay);
-
-                await Task.Delay(jitteredDelay, stoppingToken);
             }
             catch(Exception ex)
             {
                 _logger.LogError(ex, "Error updating video cache: {msg}", ex.Message);
             }
+
+            stopwatch.Stop();
+
+            var jitteredDelay = _delay.CalculateRandomizedDelay(BASE_DELAY, DELAY_FLUCTUATION_PCT);
+
+            _logger.LogInformation("{service} took {duration} - will run again in {delay} ms.", nameof(VideoCacheProcessingService), stopwatch.Elapsed, jitteredDelay);
+
+            await Task.Delay(jitteredDelay, stoppingToken);
         }
     }
 
@@ -75,7 +77,7 @@ public class VideoCacheProcessingService
         var cacheCategories = await _cache.GetCategoriesAsync(allRoles);
         var updatedCategories = dbCategories.Except(cacheCategories.Item ?? new List<Category>());
 
-        if(updatedCategories.Count() > 0)
+        if(updatedCategories.Any())
         {
             var securedCategories = updatedCategories
                 .Select(category => new SecuredResource<Category>(
@@ -122,7 +124,7 @@ public class VideoCacheProcessingService
         var cacheVideos = await _cache.GetVideosAsync(allRoles, category.Id);
         var updatedVideos = dbVideos.Except(cacheVideos.Item ?? new List<Video>());
 
-        if(updatedVideos.Count() > 0)
+        if(updatedVideos.Any())
         {
             var securedVideos = updatedVideos.Select(video => new SecuredResource<Video>(
                 video,

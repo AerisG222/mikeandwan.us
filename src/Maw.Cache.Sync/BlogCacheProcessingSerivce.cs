@@ -34,24 +34,26 @@ internal class BlogCacheProcessingService
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            _logger.LogInformation("{service} running at: {time}", nameof(BlogCacheProcessingService), DateTimeOffset.Now);
+
+            stopwatch.Restart();
+
             try
             {
-                _logger.LogInformation("{service} running at: {time}", nameof(BlogCacheProcessingService), DateTimeOffset.Now);
-
-                stopwatch.Restart();
                 await UpdateBlogCache(stoppingToken);
-                stopwatch.Stop();
-
-                var jitteredDelay = _delay.CalculateRandomizedDelay(BASE_DELAY, DELAY_FLUCTUATION_PCT);
-
-                _logger.LogInformation("{service} took {duration} - will run again in {delay} ms.", nameof(BlogCacheProcessingService), stopwatch.Elapsed, jitteredDelay);
-
-                await Task.Delay(jitteredDelay, stoppingToken);
             }
             catch(Exception ex)
             {
                 _logger.LogError(ex, "Error updating video cache: {msg}", ex.Message);
             }
+
+            stopwatch.Stop();
+
+            var jitteredDelay = _delay.CalculateRandomizedDelay(BASE_DELAY, DELAY_FLUCTUATION_PCT);
+
+            _logger.LogInformation("{service} took {duration} - will run again in {delay} ms.", nameof(BlogCacheProcessingService), stopwatch.Elapsed, jitteredDelay);
+
+            await Task.Delay(jitteredDelay, stoppingToken);
         }
     }
 
@@ -71,7 +73,7 @@ internal class BlogCacheProcessingService
         var cacheBlogs = await _cache.GetBlogsAsync();
         var updatedBlogs = dbBlogs.Except(cacheBlogs.Item ?? new List<Blog>());
 
-        if(updatedBlogs.Count() > 0)
+        if(updatedBlogs.Any())
         {
             await _cache.AddBlogsAsync(updatedBlogs);
 
@@ -107,11 +109,11 @@ internal class BlogCacheProcessingService
         var cachePosts = await _cache.GetPostsAsync(blog.Id, null);
         var updatedPosts = dbPosts.Except(cachePosts.Item ?? new List<Post>());
 
-        if(updatedPosts.Count() > 0)
+        if(updatedPosts.Any())
         {
             await _cache.AddPostsAsync(updatedPosts);
 
-            _logger.LogInformation("{service} pdated {count} posts(s)", nameof(BlogCacheProcessingService), updatedPosts.Count());
+            _logger.LogInformation("{service} updated {count} posts", nameof(BlogCacheProcessingService), updatedPosts.Count());
         }
     }
 }

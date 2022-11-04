@@ -1,0 +1,26 @@
+@{
+    Layout = "_LayoutSidebar";
+    ViewBag.NavigationZone = NavigationZone.Scratch;
+}
+
+@section header {
+    <h1>@ViewBag.Header</h1>
+}
+
+@section sidebar {
+    <partial name="_ScratchSidebar" model="ViewBag.Sidebar" />
+}
+
+<section>
+    <div class="row">
+        <div class="col">
+            @RenderBody()
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            <iframe src="/scratch-apps/@ViewBag.ScratchFile" width="600" height="534" allowtransparency="true" frameborder="0" scrolling="no" allowfullscreen />
+        </div>
+    </div>
+</section>
+

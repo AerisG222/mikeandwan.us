@@ -1,25 +1,8 @@
 @page
 @{
-    ViewBag.NavigationZone = NavigationZone.Scratch;
+    Layout = "_ScratchAppLayout";
     ViewBag.Title = "scratch | who's faster";
-    Layout = "_LayoutSidebar";
+    ViewBag.Header = "Who's Faster";
+    ViewBag.Sidebar = "whos-faster";
+    ViewBag.ScratchFile = "whos_faster.html";
 }
-
-@section header {
-    <h1>Who's Faster</h1>
-}
-
-@section sidebar {
-    @{
-        var sidebarModel = "whos-faster";
-    }
-    <partial name="_ScratchSidebar" model="sidebarModel" />
-}
-
-<section>
-    <div class="row">
-        <div class="col">
-            <iframe src="/scratch-apps/whos_faster.html" width="499" height="416" allowtransparency="true" frameborder="0" scrolling="no" allowfullscreen />
-        </div>
-    </div>
-</section>

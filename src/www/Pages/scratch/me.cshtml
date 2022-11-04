@@ -1,25 +1,8 @@
 @page
 @{
-    ViewBag.NavigationZone = NavigationZone.Scratch;
+    Layout = "_ScratchAppLayout";
     ViewBag.Title = "scratch | me";
-    Layout = "_LayoutSidebar";
+    ViewBag.Header = "Me";
+    ViewBag.Sidebar = "me";
+    ViewBag.ScratchFile = "me.html";
 }
-
-@section header {
-    <h1>Me</h1>
-}
-
-@section sidebar {
-    @{
-        var sidebarModel = "me";
-    }
-    <partial name="_ScratchSidebar" model="sidebarModel" />
-}
-
-<section>
-    <div class="row">
-        <div class="col">
-            <iframe src="/scratch-apps/me.html" width="499" height="416" allowtransparency="true" frameborder="0" scrolling="no" allowfullscreen />
-        </div>
-    </div>
-</section>

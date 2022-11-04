@@ -1,0 +1,25 @@
+@page
+@{
+    ViewBag.NavigationZone = NavigationZone.Scratch;
+    ViewBag.Title = "scratch | untitled";
+    Layout = "_LayoutSidebar";
+}
+
+@section header {
+    <h1>Untitled</h1>
+}
+
+@section sidebar {
+    @{
+        var sidebarModel = "untitled";
+    }
+    <partial name="_ScratchSidebar" model="sidebarModel" />
+}
+
+<section>
+    <div class="row">
+        <div class="col">
+            <iframe src="/scratch-apps/Untitled.html" width="499" height="416" allowtransparency="true" frameborder="0" scrolling="no" allowfullscreen />
+        </div>
+    </div>
+</section>

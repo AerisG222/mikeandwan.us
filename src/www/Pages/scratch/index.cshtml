@@ -1,0 +1,27 @@
+@page
+@{
+    ViewBag.NavigationZone = NavigationZone.Scratch;
+    ViewBag.Title = "scratch";
+    Layout = "_LayoutSidebar";
+}
+
+@section sidebar {
+    @{
+        var sidebarModel = "index";
+    }
+    <partial name="_ScratchSidebar" model="sidebarModel" />
+}
+
+@section header {
+    <h1>Scratch</h1>
+}
+
+<div class="row">
+    <div class="col">
+        <p>
+            Here are some of Alyssa's <a href="https://scratch.mit.edu/">Scratch</a> creations.  Thanks to the
+            <a href="https://turbowarp.org/">TurboWarp</a> project for providing a packager to make it very easy to share these via
+            this site.
+        </p>
+    </div>
+</div>

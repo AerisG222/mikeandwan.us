@@ -14,5 +14,6 @@ public enum NavigationZone
     Videos,
     Games,
     Webgl,
-    Upload
+    Upload,
+    Scratch
 }

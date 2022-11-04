@@ -13,6 +13,7 @@ namespace Maw.TagHelpers;
 public class PrimaryNavTagHelper
     : TagHelper
 {
+    const string PageAttributeName = "maw-page";
     const string ActionAttributeName = "maw-action";
     const string ControllerAttributeName = "maw-controller";
     const string LinkTextAttributeName = "maw-text";
@@ -25,6 +26,9 @@ public class PrimaryNavTagHelper
     [HtmlAttributeNotBound]
     [ViewContext]
     public ViewContext? ViewContext { get; set; }
+
+    [HtmlAttributeName(PageAttributeName)]
+    public string? Page { get; set; }
 
     [HtmlAttributeName(ControllerAttributeName)]
     public string? Controller { get; set; }
@@ -58,9 +62,9 @@ public class PrimaryNavTagHelper
             throw new ArgumentNullException(nameof(output));
         }
 
-        if (Action == null)
+        if (Action == null && Page == null)
         {
-            throw new InvalidOperationException("Action must be specified");
+            throw new InvalidOperationException("Action or Page must be specified");
         }
 
         if (LinkText == null)
@@ -78,8 +82,17 @@ public class PrimaryNavTagHelper
                 kvp => (object)kvp.Value,
                 StringComparer.OrdinalIgnoreCase);
 
-        var action = Action.Replace("-", string.Empty, StringComparison.OrdinalIgnoreCase);
-        var anchor = _htmlGenerator.GenerateActionLink(ViewContext, LinkText, action, Controller, null, null, null, routeValues, new { @class = "nav-link px-3" });
+        TagBuilder? anchor = null;
+
+        if(Page != null)
+        {
+            anchor = _htmlGenerator.GeneratePageLink(ViewContext, LinkText, Page, Controller, null, null, null, routeValues, new { @class = "nav-link px-3" });
+        }
+        else
+        {
+            var action = Action!.Replace("-", string.Empty, StringComparison.OrdinalIgnoreCase);
+            anchor = _htmlGenerator.GenerateActionLink(ViewContext, LinkText, action, Controller, null, null, null, routeValues, new { @class = "nav-link px-3" });
+        }
 
         anchor.InnerHtml.AppendHtml(await output.GetChildContentAsync());
         output.Content.AppendHtml(anchor);

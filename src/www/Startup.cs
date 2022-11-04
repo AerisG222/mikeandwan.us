@@ -72,7 +72,9 @@ public class Startup
                 .Services
             .AddAuthorization(opts => MawPolicyBuilder.AddMawPolicies(opts))
             .AddCors(opts => ConfigureDefaultCorsPolicy(opts))
-            .AddControllersWithViews();
+            .AddControllersWithViews()
+                .Services
+            .AddRazorPages();
 
         if (_env.IsDevelopment())
         {
@@ -125,6 +127,7 @@ public class Startup
             .UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
     }
 
@@ -278,7 +281,10 @@ public class Startup
                 s.CustomSources(connectSources);
             })
             .FontSources(s => s.CustomSources(fontSources))
-            .FrameSources(s => s.CustomSources(frameSources))
+            .FrameSources(s => {
+                s.Self();
+                s.CustomSources(frameSources);
+            })
             .ImageSources(s =>
             {
                 s.Self();

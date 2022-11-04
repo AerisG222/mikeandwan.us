@@ -1,0 +1,25 @@
+﻿@model string
+
+<div class="col">
+    <div class="card mb-4">
+        <div class="card-header">
+            <strong class="card-title">Apps</strong>
+        </div>
+        <div class="list-group list-group-flush">
+            <a asp-page="dress-up"  maw-active="@string.Equals(Model, "dress-up", StringComparison.OrdinalIgnoreCase)">Dress Up</a>
+            <a asp-page="fishy-fishy"  maw-active="@string.Equals(Model, "fishy-fishy", StringComparison.OrdinalIgnoreCase)">Fishy Fishy Cross My Ocean</a>
+            <a asp-page="goofy-car-race"  maw-active="@string.Equals(Model, "goofy-car-race", StringComparison.OrdinalIgnoreCase)">Goofy Car Race</a>
+            <a asp-page="hide-and-seek"  maw-active="@string.Equals(Model, "hide-and-seek", StringComparison.OrdinalIgnoreCase)">Hide and Seek</a>
+            <a asp-page="maze"  maw-active="@string.Equals(Model, "maze", StringComparison.OrdinalIgnoreCase)">Maze</a>
+            <a asp-page="me"  maw-active="@string.Equals(Model, "me", StringComparison.OrdinalIgnoreCase)">Me</a>
+            <a asp-page="moo-sic"  maw-active="@string.Equals(Model, "moo-sic", StringComparison.OrdinalIgnoreCase)">Moo-sic</a>
+            <a asp-page="pong"  maw-active="@string.Equals(Model, "pong", StringComparison.OrdinalIgnoreCase)">Pong</a>
+            <a asp-page="race-car-2000"  maw-active="@string.Equals(Model, "race-car-2000", StringComparison.OrdinalIgnoreCase)">Race Car 2000</a>
+            <a asp-page="super-man"  maw-active="@string.Equals(Model, "super-man", StringComparison.OrdinalIgnoreCase)">Super Man</a>
+            <a asp-page="untitled"  maw-active="@string.Equals(Model, "untitled", StringComparison.OrdinalIgnoreCase)">Untitled</a>
+            <a asp-page="whos-faster"  maw-active="@string.Equals(Model, "whos-faster", StringComparison.OrdinalIgnoreCase)">Who's Faster</a>
+            <a asp-page="work-and-fade"  maw-active="@string.Equals(Model, "work-and-fade", StringComparison.OrdinalIgnoreCase)">Work and Fade</a>
+            <a asp-page="yummy-yummy-baby"  maw-active="@string.Equals(Model, "yummy-yummy-baby", StringComparison.OrdinalIgnoreCase)">Yummy Yummy Baby</a>
+        </div>
+    </div>
+</div>

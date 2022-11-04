@@ -1,0 +1,25 @@
+@page
+@{
+    ViewBag.NavigationZone = NavigationZone.Scratch;
+    ViewBag.Title = "scratch | fishy fishy cross my ocean";
+    Layout = "_LayoutSidebar";
+}
+
+@section header {
+    <h1>Fishy Fishy Cross My Ocean</h1>
+}
+
+@section sidebar {
+    @{
+        var sidebarModel = "fishy-fishy";
+    }
+    <partial name="_ScratchSidebar" model="sidebarModel" />
+}
+
+<section>
+    <div class="row">
+        <div class="col">
+            <iframe src="/scratch-apps/fishy_fishy_cross_my_ocean.html" width="499" height="416" allowtransparency="true" frameborder="0" scrolling="no" allowfullscreen />
+        </div>
+    </div>
+</section>

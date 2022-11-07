@@ -13,7 +13,7 @@ public class PhotoCacheProcessingService
     const float DELAY_FLUCTUATION_PCT = 0.25f;
     const int FULL_SCAN_INTERVAL_MINUTES = 24 * 60;
 
-    static DateTime LastFullScan { get; set; } = DateTime.Now;
+    static DateTime LastFullScan { get; set; } = DateTime.MinValue;
 
     readonly IPhotoRepository _repo;
     readonly IPhotoCache _cache;

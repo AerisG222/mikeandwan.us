@@ -36,9 +36,16 @@ public class PhotoZipper
             {
                 var path = _fileProvider.GetFileInfo(photo.LgInfo.Path).PhysicalPath;
 
-                _log.LogDebug("Adding file {Path} to archive", path);
+                if(path != null)
+                {
+                    _log.LogDebug("Adding file {Path} to archive", path);
 
-                za.CreateEntryFromFile(path, Path.GetFileName(path));
+                    za.CreateEntryFromFile(path, Path.GetFileName(path));
+                }
+                else
+                {
+                    _log.LogWarning("{File} not found.  Skipping adding to archive", photo.LgInfo.Path);
+                }
             }
         }
 

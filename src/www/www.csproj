@@ -3,7 +3,7 @@
         <AssemblyName>MawWww</AssemblyName>
         <VersionPrefix>1.3.0</VersionPrefix>
         <Authors>Mike Morano &lt;mmorano@mikeandwan.us&gt;</Authors>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <DebugType>portable</DebugType>
         <DefaultItemExcludes>**/node_modules/**;$(DefaultItemExcludes)</DefaultItemExcludes>

@@ -86,7 +86,13 @@ public class AboutController
 
         if (ModelState.IsValid)
         {
-            var response = collection[captchaService.ResponseFormFieldName];
+            var response = collection[captchaService.ResponseFormFieldName].FirstOrDefault();
+
+            if(string.IsNullOrEmpty(response))
+            {
+                return BadRequest();
+            }
+
             model.IsHuman = await captchaService.VerifyAsync(response);
 
             if (!model.IsHuman)

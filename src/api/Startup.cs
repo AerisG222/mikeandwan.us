@@ -33,7 +33,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var urlConfig = _config.GetSection("UrlConfig").Get<UrlConfig>();
+        var urlConfig = _config.GetSection("UrlConfig").Get<UrlConfig>() ?? throw new InvalidOperationException("url config should not be null!");
 
         ConfigureDataProtection(services);
 
@@ -41,8 +41,8 @@ public class Startup
             .Configure<EnvironmentConfig>(_config.GetSection("Environment"))
             .Configure<UploadConfig>(_config.GetSection("FileUpload"))
             .Configure<UrlConfig>(_config.GetSection("UrlConfig"))
-            .AddMawCacheServices(_config["Environment:RedisConnectionString"])
-            .AddMawDataServices(_config["Environment:DbConnectionString"])
+            .AddMawCacheServices(_config["Environment:RedisConnectionString"] ?? throw new InvalidOperationException("redis connection string config cannot be null!"))
+            .AddMawDataServices(_config["Environment:DbConnectionString"] ?? throw new InvalidOperationException("db connection string config cannot be null!"))
             .AddSolrNet<MultimediaCategory>(_config["Search:CoreUrl"])
             .AddMawDomainServices()
             .AddMawApiServices()

@@ -362,12 +362,17 @@ public class AccountController
 
         var user = await _userMgr.FindByNameAsync(User.GetUsername());
 
+        if(user == null)
+        {
+            return BadRequest();
+        }
+
         var model = new ProfileModel
         {
             Username = user.Username,
-            FirstName = user.FirstName!,
-            LastName = user.LastName!,
-            Email = user.Email!,
+            FirstName = user.FirstName ?? string.Empty,
+            LastName = user.LastName ?? string.Empty,
+            Email = user.Email ?? string.Empty,
             EnableGithubAuth = user.IsGithubAuthEnabled,
             EnableGoogleAuth = user.IsGoogleAuthEnabled,
             EnableMicrosoftAuth = user.IsMicrosoftAuthEnabled,
@@ -396,6 +401,11 @@ public class AccountController
         if (ModelState.IsValid)
         {
             var user = await _userMgr.FindByNameAsync(model.Username);
+
+            if(user == null)
+            {
+                return BadRequest();
+            }
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;

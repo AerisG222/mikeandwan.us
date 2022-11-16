@@ -38,7 +38,7 @@ public class Startup
     {
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-        var authConfig = _config.GetSection("AuthConfig").Get<AuthConfig>();
+        var authConfig = _config.GetSection("AuthConfig").Get<AuthConfig>() ?? throw new InvalidOperationException("auth config cannot be null!");
 
         ConfigureDataProtection(services);
 
@@ -51,20 +51,20 @@ public class Startup
             .Configure<UrlConfig>(_config.GetSection("UrlConfig"))
             .ConfigureMawTagHelpers(opts =>
             {
-                opts.AuthUrl = AddTrailingSlash(_config["UrlConfig:Auth"]);
-                opts.WwwUrl = AddTrailingSlash(_config["UrlConfig:Www"]);
+                opts.AuthUrl = AddTrailingSlash(_config["UrlConfig:Auth"] ?? throw new InvalidOperationException("auth url config should not be null!"));
+                opts.WwwUrl = AddTrailingSlash(_config["UrlConfig:Www"] ?? throw new InvalidOperationException("www url config should not be null!"));
             })
             .AddFeatureManagement()
                 .Services
             .AddLogging()
             .AddHttpContextAccessor()
             .AddResponseCompression()
-            .AddMawDataServices(_config["Environment:DbConnectionString"])
-            .AddMawCacheServices(_config["Environment:RedisConnectionString"])
+            .AddMawDataServices(_config["Environment:DbConnectionString"] ?? throw new InvalidOperationException("db connection string config cannot be null!"))
+            .AddMawCacheServices(_config["Environment:RedisConnectionString"] ?? throw new InvalidOperationException("redis connection string config cannot be null!"))
             .AddMawDomainServices()
             .AddTransient<RazorViewToStringRenderer>()
             .AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>()
-            .AddSingleton<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"]))
+            .AddSingleton<IFileProvider>(x => new PhysicalFileProvider(_config["Environment:AssetsPath"] ?? throw new InvalidOperationException("assets path config cannot be null!")))
             .AddAntiforgery(opts => opts.HeaderName = "X-XSRF-TOKEN")
             .AddAuthentication(opts => ConfigureAuthenticationOptions(opts))
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts => ConfigureCookieOptions(opts))
@@ -200,17 +200,17 @@ public class Startup
     string[] GetCorsOrigins()
     {
         return new string[] {
-                _config["UrlConfig:Api"],
-                _config["UrlConfig:Photos"]
+                _config["UrlConfig:Api"] ?? throw new InvalidOperationException("api url config cannot be null!"),
+                _config["UrlConfig:Photos"] ?? throw new InvalidOperationException("photos url config cannot be null!")
             };
     }
 
     string[] GetAllowedRedirectUrls()
     {
         return new string[] {
-                AddTrailingSlash(_config["UrlConfig:Auth"]),
-                AddTrailingSlash(_config["UrlConfig:Files"]),
-                AddTrailingSlash(_config["UrlConfig:Photos"])
+                AddTrailingSlash(_config["UrlConfig:Auth"] ?? throw new InvalidOperationException("auth url config cannot be null!")),
+                AddTrailingSlash(_config["UrlConfig:Files"] ?? throw new InvalidOperationException("files url config cannot be null!")),
+                AddTrailingSlash(_config["UrlConfig:Photos"] ?? throw new InvalidOperationException("photos url config cannot be null!"))
             };
     }
 

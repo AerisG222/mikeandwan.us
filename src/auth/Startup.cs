@@ -35,10 +35,10 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         var config = new Config(
-            _config["Environment:WwwUrl"],
-            _config["Environment:WwwClientSecret"],
-            _config["Environment:PhotosUrl"],
-            _config["Environment:FilesUrl"]);
+            _config["Environment:WwwUrl"] ?? throw new InvalidOperationException("www url cannot be null!"),
+            _config["Environment:WwwClientSecret"] ?? throw new InvalidOperationException("www client secret cannot be null!"),
+            _config["Environment:PhotosUrl"] ?? throw new InvalidOperationException("photos url cannot be null!"),
+            _config["Environment:FilesUrl"] ?? throw new InvalidOperationException("files url cannot be null!"));
 
         ConfigureDataProtection(services);
 
@@ -50,12 +50,14 @@ public class Startup
                 })
             .Configure<GmailApiEmailConfig>(_config.GetSection("Gmail"))
             .ConfigureMawTagHelpers(opts => {
-                opts.AuthUrl = AddTrailingSlash(_config["Environment:AuthUrl"]);
-                opts.WwwUrl = AddTrailingSlash(_config["Environment:WwwUrl"]);
+                opts.AuthUrl = AddTrailingSlash(_config["Environment:AuthUrl"] ?? throw new InvalidOperationException("auth url cannot be null!"));
+                opts.WwwUrl = AddTrailingSlash(_config["Environment:WwwUrl"] ?? throw new InvalidOperationException("www url cannot be null!"));
             })
-            .AddMawDataServices(_config["Environment:DbConnectionString"])
+            .AddMawDataServices(_config["Environment:DbConnectionString"] ?? throw new InvalidOperationException("db connection string cannot be null!"))
             .AddMawDomainAuthServices()
-            .AddMawIdentityServerServices(_config["Environment:IdsrvDbConnectionString"], _config["SigningCertDir"])
+            .AddMawIdentityServerServices(
+                _config["Environment:IdsrvDbConnectionString"] ?? throw new InvalidOperationException("idsrv db connection string cannot be null!"),
+                _config["SigningCertDir"] ?? throw new InvalidOperationException("signing cert dir cannot be null!"))
             .AddTransient<RazorViewToStringRenderer>()
             .AddIdentity<MawUser, MawRole>()
                 .AddDefaultTokenProviders()
@@ -72,7 +74,7 @@ public class Startup
                     // we need to set this especially for dev otherwise the issuer becomes 10.0.2.2 when testing the android app
                     opts.IssuerUri = _config["Environment:AuthUrl"];
                 })
-                .AddMawIdentityServerKeyMaterial(_config["SigningCertDir"])
+                .AddMawIdentityServerKeyMaterial(_config["SigningCertDir"] ?? throw new InvalidOperationException("signing cert dir cannot be null!"))
                 .AddInMemoryApiScopes(config.GetApiScopes())
                 .AddInMemoryApiResources(config.GetApiResources())
                 .AddInMemoryClients(config.GetClients())
@@ -148,8 +150,8 @@ public class Startup
     void ConfigureGithubAuthOptions(GitHubAuthenticationOptions opts)
     {
         opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-        opts.ClientId = _config["GitHub:ClientId"];
-        opts.ClientSecret = _config["GitHub:ClientSecret"];
+        opts.ClientId = _config["GitHub:ClientId"] ?? throw new InvalidOperationException("github client id cannot be null!");
+        opts.ClientSecret = _config["GitHub:ClientSecret"] ?? throw new InvalidOperationException("github client secret cannot be null!");
         opts.Scope.Add("user:email");
     }
 
@@ -157,8 +159,8 @@ public class Startup
     {
         // https://github.com/aspnet/AspNetCore/issues/6486
         opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-        opts.ClientId = _config["GooglePlus:ClientId"];
-        opts.ClientSecret = _config["GooglePlus:ClientSecret"];
+        opts.ClientId = _config["GooglePlus:ClientId"] ?? throw new InvalidOperationException("google client id cannot be null!");
+        opts.ClientSecret = _config["GooglePlus:ClientSecret"] ?? throw new InvalidOperationException("google client secret cannot be null!");
         opts.UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
         opts.ClaimActions.Clear();
         opts.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
@@ -172,8 +174,8 @@ public class Startup
     void ConfigureMicrosoftAuthOptions(MicrosoftAccountOptions opts)
     {
         opts.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-        opts.ClientId = _config["Microsoft:ApplicationId"];
-        opts.ClientSecret = _config["Microsoft:Secret"];
+        opts.ClientId = _config["Microsoft:ApplicationId"] ?? throw new InvalidOperationException("microsoft application id cannot be null!");
+        opts.ClientSecret = _config["Microsoft:Secret"] ?? throw new InvalidOperationException("microsoft secret cannot be null!");
     }
 
     void ConfigureTwitterAuthOptions(TwitterOptions opts)
@@ -198,17 +200,17 @@ public class Startup
     string[] GetCorsOrigins()
     {
         return new string[] {
-            _config["Environment:PhotosUrl"],
-            _config["Environment:FilesUrl"]
+            _config["Environment:PhotosUrl"] ?? throw new InvalidOperationException("photos url cannot be null!"),
+            _config["Environment:FilesUrl"] ?? throw new InvalidOperationException("files url cannot be null!")
         };
     }
 
     string[] GetAllowedRedirectUrls()
     {
         return new string[] {
-            AddTrailingSlash(_config["Environment:FilesUrl"]),
-            AddTrailingSlash(_config["Environment:PhotosUrl"]),
-            AddTrailingSlash(_config["Environment:WwwUrl"]),
+            AddTrailingSlash(_config["Environment:FilesUrl"] ?? throw new InvalidOperationException("files url cannot be null!")),
+            AddTrailingSlash(_config["Environment:PhotosUrl"] ?? throw new InvalidOperationException("photos url cannot be null!")),
+            AddTrailingSlash(_config["Environment:WwwUrl"] ?? throw new InvalidOperationException("www url cannot be null!")),
             "https://accounts.google.com/o/oauth2/",
             "https://login.microsoftonline.com/common/oauth2/",
             "https://github.com/login/oauth/",

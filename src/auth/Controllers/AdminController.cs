@@ -166,6 +166,11 @@ public class AdminController
             {
                 var user = await _userMgr.FindByNameAsync(model.Username);
 
+                if(user == null)
+                {
+                    return RedirectToAction(nameof(ManageUsers));
+                }
+
                 try
                 {
                     model.Result = await _userMgr.DeleteAsync(user);
@@ -254,7 +259,11 @@ public class AdminController
             if (collection.Any(x => string.Equals(x.Key, "delete", StringComparison.OrdinalIgnoreCase)))
             {
                 var r = await _roleMgr.FindByNameAsync(model.Role);
-                model.Result = await _roleMgr.DeleteAsync(r);
+
+                if(r != null)
+                {
+                    model.Result = await _roleMgr.DeleteAsync(r);
+                }
 
                 return RedirectToAction(nameof(ManageRoles));
             }
@@ -289,10 +298,10 @@ public class AdminController
 
         var model = new EditProfileModel
         {
-            Username = user.Username,
-            FirstName = user.FirstName!,
-            LastName = user.LastName!,
-            Email = user.Email!
+            Username = user.Username ?? string.Empty,
+            FirstName = user.FirstName ?? string.Empty,
+            LastName = user.LastName ?? string.Empty,
+            Email = user.Email ?? string.Empty
         };
 
         return View(model);
@@ -311,16 +320,24 @@ public class AdminController
         {
             var user = await _userMgr.FindByNameAsync(model.Username);
 
-            if (string.IsNullOrEmpty(user.SecurityStamp))
+            if (user == null)
             {
-                await _userMgr.UpdateSecurityStampAsync(user);
+                model.Result = IdentityResult.Failed();
+                ModelState.AddModelError("Username", "Invalid username");
             }
+            else
+            {
+                if (string.IsNullOrEmpty(user.SecurityStamp))
+                {
+                    await _userMgr.UpdateSecurityStampAsync(user);
+                }
 
-            user.Email = model.Email;
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
+                user.Email = model.Email;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
 
-            model.Result = await _userMgr.UpdateAsync(user);
+                model.Result = await _userMgr.UpdateAsync(user);
+            }
         }
         else
         {
@@ -340,6 +357,12 @@ public class AdminController
         }
 
         var user = await _userMgr.FindByNameAsync(id);
+
+        if(user == null)
+        {
+            return BadRequest();
+        }
+
         var userRoles = await _userMgr.GetRolesAsync(user);
 
         var model = new ManageRolesForUserModel {
@@ -361,7 +384,13 @@ public class AdminController
             throw new ArgumentNullException(nameof(collection));
         }
 
-        string username = collection["Username"];
+        var username = collection["Username"].First();
+
+        if(string.IsNullOrWhiteSpace(username))
+        {
+            return BadRequest();
+        }
+
         var model = new ManageRolesForUserModel
         {
             Username = username
@@ -370,6 +399,12 @@ public class AdminController
         model.AllRoles.AddRange(await _repo.GetAllRoleNamesAsync());
 
         var user = await _userMgr.FindByNameAsync(username);
+
+        if(user == null)
+        {
+            return BadRequest();
+        }
+
         var currRoles = await _userMgr.GetRolesAsync(user);
         var newRoleList = new List<string>();
 
@@ -413,9 +448,9 @@ public class AdminController
             model.Result = IdentityResult.Success;
         }
 
-        // after the changes, get the new membership info (we are now
+        // after the changes, get the new membership info
         user = await _userMgr.FindByNameAsync(username);
-        currRoles = await _userMgr.GetRolesAsync(user);
+        currRoles = await _userMgr.GetRolesAsync(user ?? throw new InvalidOperationException("user should be found!"));
         model.GrantedRoles.AddRange(currRoles);
 
         return View(model);
@@ -434,7 +469,10 @@ public class AdminController
             Role = id
         };
 
-        model.Members = (await _userMgr.GetUsersInRoleAsync(model.Role)).Select(x => x.Username);
+        model.Members = (await _userMgr.GetUsersInRoleAsync(model.Role))
+            .Select(x => x.Username)
+            .Where(x => !string.IsNullOrEmpty(x))
+            .Cast<string>();
         model.AllUsers = await _repo.GetAllUsernamesAsync();
 
         return View(model);
@@ -462,11 +500,15 @@ public class AdminController
             foreach (var newMember in toAdd)
             {
                 var newUser = await _userMgr.FindByNameAsync(newMember);
-                var result = await _userMgr.AddToRoleAsync(newUser, model.Role);
 
-                if (!result.Succeeded)
+                if(newUser != null)
                 {
-                    errs.AddRange(result.Errors);
+                    var result = await _userMgr.AddToRoleAsync(newUser, model.Role);
+
+                    if (!result.Succeeded)
+                    {
+                        errs.AddRange(result.Errors);
+                    }
                 }
             }
 
@@ -496,7 +538,10 @@ public class AdminController
             LogValidationErrors();
         }
 
-        model.Members = (await _userMgr.GetUsersInRoleAsync(model.Role)).Select(x => x.Username);
+        model.Members = (await _userMgr.GetUsersInRoleAsync(model.Role))
+            .Select(x => x.Username)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Cast<string>();
 
         return View(model);
     }

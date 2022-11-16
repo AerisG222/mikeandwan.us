@@ -119,7 +119,7 @@ public class PhotosController
 
         var fi = _fileProvider.GetFileInfo(path);
 
-        if (!fi.Exists)
+        if (!fi.Exists || string.IsNullOrEmpty(fi.PhysicalPath))
         {
             return BadRequest();
         }

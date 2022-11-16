@@ -25,6 +25,6 @@ public interface IUserRepository
     Task<bool> AddUserToRoleAsync(string username, string roleName);
     Task<bool> RemoveUserFromRoleAsync(string username, string roleName);
     Task<bool> SetSecurityStampAsync(string username, string securityStamp);
-    Task<MawRole> GetRoleAsync(string roleName);
-    Task<MawRole> GetRoleAsync(short id);
+    Task<MawRole?> GetRoleAsync(string roleName);
+    Task<MawRole?> GetRoleAsync(short id);
 }

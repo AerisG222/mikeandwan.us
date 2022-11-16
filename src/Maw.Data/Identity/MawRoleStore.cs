@@ -30,6 +30,16 @@ public class MawRoleStore
             throw new ArgumentNullException(nameof(role));
         }
 
+        if(string.IsNullOrWhiteSpace(role.Name))
+        {
+            throw new ArgumentException("Role name should not be null or empty");
+        }
+
+        if(string.IsNullOrWhiteSpace(role.Description))
+        {
+            throw new ArgumentException("Role name should not be null or empty");
+        }
+
         var result = await _repo.CreateRoleAsync(role.Name, role.Description);
 
         return result ? IdentityResult.Success : IdentityResult.Failed();
@@ -47,6 +57,11 @@ public class MawRoleStore
             throw new ArgumentNullException(nameof(role));
         }
 
+        if(string.IsNullOrWhiteSpace(role.Name))
+        {
+            throw new ArgumentException("Role name should not be null or empty");
+        }
+
         var result = await _repo.RemoveRoleAsync(role.Name);
 
         return result ? IdentityResult.Success : IdentityResult.Failed();
@@ -62,7 +77,7 @@ public class MawRoleStore
         return Task.FromResult(role.Id.ToString(CultureInfo.InvariantCulture));
     }
 
-    public Task<string> GetRoleNameAsync(MawRole role, CancellationToken cancellationToken = default)
+    public Task<string?> GetRoleNameAsync(MawRole role, CancellationToken cancellationToken = default)
     {
         if (role == null)
         {
@@ -72,7 +87,7 @@ public class MawRoleStore
         return Task.FromResult(role.Name);
     }
 
-    public Task<string> GetNormalizedRoleNameAsync(MawRole role, CancellationToken cancellationToken = default)
+    public Task<string?> GetNormalizedRoleNameAsync(MawRole role, CancellationToken cancellationToken = default)
     {
         if (role == null)
         {
@@ -82,17 +97,17 @@ public class MawRoleStore
         return Task.FromResult(role.Name);
     }
 
-    public Task SetNormalizedRoleNameAsync(MawRole role, string normalizedName, CancellationToken cancellationToken = default)
+    public Task SetNormalizedRoleNameAsync(MawRole role, string? normalizedName, CancellationToken cancellationToken = default)
     {
         if (role == null)
         {
             throw new ArgumentNullException(nameof(role));
         }
 
-        return Task.FromResult(0);
+        return Task.CompletedTask;
     }
 
-    public Task SetRoleNameAsync(MawRole role, string roleName, CancellationToken cancellationToken = default)
+    public Task SetRoleNameAsync(MawRole role, string? roleName, CancellationToken cancellationToken = default)
     {
         if (role == null)
         {
@@ -106,10 +121,10 @@ public class MawRoleStore
 
         role.Name = roleName;
 
-        return Task.FromResult(0);
+        return Task.CompletedTask;
     }
 
-    public Task<MawRole> FindByIdAsync(string roleId, CancellationToken cancellationToken = default)
+    public Task<MawRole?> FindByIdAsync(string roleId, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(roleId))
         {
@@ -124,7 +139,7 @@ public class MawRoleStore
         throw new ArgumentException("roleId should be able to be parsed into a short.", nameof(roleId));
     }
 
-    public Task<MawRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken = default)
+    public Task<MawRole?> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(normalizedRoleName))
         {

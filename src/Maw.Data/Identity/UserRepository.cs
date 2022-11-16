@@ -66,7 +66,10 @@ public class UserRepository
 
         var roles = await InternalGetRolesForUserAsync(username);
 
-        return roles.Select(r => r.Name);
+        return roles
+            .Where(r => !string.IsNullOrWhiteSpace(r?.Name))
+            .Select(r => r?.Name)
+            .Cast<string>();
     }
 
     public Task<bool> UpdateUserPasswordAsync(MawUser user)
@@ -80,7 +83,7 @@ public class UserRepository
             var result = await conn.QuerySingleAsync<long>(
                 "SELECT * FROM maw.save_password(@username, @hashedPassword);",
                 new {
-                    username = user.Username.ToLowerInvariant(),
+                    username = user.Username?.ToLowerInvariant(),
                     hashedPassword = user.HashedPassword
                 }
             );
@@ -102,7 +105,7 @@ public class UserRepository
                     + " @username, @firstName, @lastName, @email, @hashedPassword, @securityStamp,"
                     + " @enableGithubAuth, @enableGoogleAuth, @enableMicrosoftAuth, @enableTwitterAuth);",
                 new {
-                    username = updatedUser.Username.ToLowerInvariant(),
+                    username = updatedUser.Username?.ToLowerInvariant(),
                     firstName = updatedUser.FirstName,
                     lastName = updatedUser.LastName,
                     email = updatedUser.Email?.ToLowerInvariant(),
@@ -117,7 +120,7 @@ public class UserRepository
 
             if(result != 1)
             {
-                throw new InvalidOperationException("Was not able to find user to update with username: " + updatedUser.Username.ToLowerInvariant());
+                throw new InvalidOperationException("Was not able to find user to update with username: " + updatedUser.Username?.ToLowerInvariant());
             }
 
             return true;
@@ -187,7 +190,7 @@ public class UserRepository
                 "SELECT * FROM maw.add_user(@username, @hashedPassword, @firstName,"
                                             + "@lastName, @email, @securityStamp, @passwordLastSetOn);",
                 new {
-                    username = user.Username.ToLowerInvariant(),
+                    username = user.Username?.ToLowerInvariant(),
                     hashedPassword = user.HashedPassword,
                     firstName = user.FirstName,
                     lastName = user.LastName,
@@ -343,7 +346,7 @@ public class UserRepository
         });
     }
 
-    public Task<MawRole> GetRoleAsync(string roleName)
+    public Task<MawRole?> GetRoleAsync(string roleName)
     {
         if(string.IsNullOrEmpty(roleName))
         {
@@ -353,7 +356,7 @@ public class UserRepository
         return InternalGetRoleAsync(name: roleName.ToLowerInvariant());
     }
 
-    public Task<MawRole> GetRoleAsync(short id)
+    public Task<MawRole?> GetRoleAsync(short id)
     {
         return InternalGetRoleAsync(id: id);
     }
@@ -379,10 +382,10 @@ public class UserRepository
         });
     }
 
-    Task<MawRole> InternalGetRoleAsync(short? id = null, string? name = null)
+    Task<MawRole?> InternalGetRoleAsync(short? id = null, string? name = null)
     {
         return RunAsync(conn =>
-            conn.QuerySingleOrDefaultAsync<MawRole>(
+            conn.QuerySingleOrDefaultAsync<MawRole?>(
                 "SELECT * FROM maw.get_roles(@id, @name);",
                 new {
                     id,
@@ -392,10 +395,10 @@ public class UserRepository
         );
     }
 
-    Task<IEnumerable<MawRole>> InternalGetRolesForUserAsync(string username)
+    Task<IEnumerable<MawRole?>> InternalGetRolesForUserAsync(string username)
     {
         return RunAsync(conn =>
-            conn.QueryAsync<MawRole>(
+            conn.QueryAsync<MawRole?>(
                 "SELECT * FROM maw.get_roles_for_user(@username);",
                 new { username = username.ToLowerInvariant() }
             )
@@ -404,11 +407,19 @@ public class UserRepository
 
     async Task AddRolesForUser(MawUser user)
     {
+        if(string.IsNullOrWhiteSpace(user.Username))
+        {
+            throw new ArgumentException("username must not be null or whitespace");
+        }
+
         var rolesResult = await InternalGetRolesForUserAsync(user.Username);
 
         foreach(var role in rolesResult)
         {
-            user.AddRole(role.Name);
+            if(role?.Name != null)
+            {
+                user.AddRole(role.Name);
+            }
         }
     }
 

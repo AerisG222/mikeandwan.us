@@ -3,6 +3,6 @@
 public class State
 {
     public short Id { get; set; }
-    public string Code { get; set; } = null!;
-    public string Name { get; set; } = null!;
+    public required string Code { get; set; }
+    public required string Name { get; set; }
 }

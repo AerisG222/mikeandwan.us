@@ -11,7 +11,7 @@ public static class StringUtils
             throw new ArgumentNullException(nameof(byteArray));
         }
 
-        StringBuilder builder = new StringBuilder(byteArray.Length);
+        StringBuilder builder = new(byteArray.Length);
 
         foreach (byte b in byteArray)
         {

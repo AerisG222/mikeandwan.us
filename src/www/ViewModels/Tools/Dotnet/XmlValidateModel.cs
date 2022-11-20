@@ -69,14 +69,8 @@ public class XmlValidateModel
         }
         finally
         {
-            if (xsdStream != null)
-            {
-                xsdStream.Close();
-            }
-            if (xmlStream != null)
-            {
-                xmlStream.Close();
-            }
+            xsdStream?.Close();
+            xmlStream?.Close();
         }
     }
 
@@ -137,15 +131,8 @@ public class XmlValidateModel
         }
         finally
         {
-            if (schemaReader != null)
-            {
-                schemaReader.Close();
-            }
-
-            if (reader != null)
-            {
-                reader.Close();
-            }
+            schemaReader?.Close();
+            reader?.Close();
         }
     }
 

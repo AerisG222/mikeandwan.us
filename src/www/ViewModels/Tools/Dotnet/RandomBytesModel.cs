@@ -24,7 +24,7 @@ public class RandomBytesModel
     {
         var randomBytes = CryptoUtils.GenerateRandom(Size);
 
-        RandomBytes = StringUtils.ToHexString(randomBytes).Substring(0, Size);
+        RandomBytes = StringUtils.ToHexString(randomBytes)[..Size];
         RandomBytesBase64 = Convert.ToBase64String(randomBytes);
     }
 }

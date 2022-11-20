@@ -31,7 +31,7 @@ public class RecordEqualityTest
         Assert.NotEqual(c1, c3);
     }
 
-    Blog GetBlog(short id)
+    private static Blog GetBlog(short id)
     {
         return new Blog
         {
@@ -43,7 +43,7 @@ public class RecordEqualityTest
         };
     }
 
-    Category GetCategory(short id)
+    private static Category GetCategory(short id)
     {
         return new Category
         {

@@ -155,7 +155,7 @@ public class ColorConverterModel
 
         if (HexColorCode.StartsWith("#", true, CultureInfo.InvariantCulture))
         {
-            return HexColorCode.Substring(1);
+            return HexColorCode[1..];
         }
 
         return HexColorCode;

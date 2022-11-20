@@ -54,7 +54,7 @@ public class XsdValidateModel
 
         try
         {
-            XmlReaderSettings settings = new XmlReaderSettings();
+            var settings = new XmlReaderSettings();
 
             xsdStream = StreamUtils.ConvertStringToStream(XmlSchemaSource);
 
@@ -81,14 +81,8 @@ public class XsdValidateModel
         }
         finally
         {
-            if (reader != null)
-            {
-                reader.Close();
-            }
-            if (xsdStream != null)
-            {
-                xsdStream.Close();
-            }
+            reader?.Close();
+            xsdStream?.Close();
         }
     }
 

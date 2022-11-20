@@ -100,12 +100,13 @@ class VideoSerializer
 
     public override HashEntry[] BuildHashSet(Video item)
     {
-        List<HashEntry> entries = new();
+        List<HashEntry> entries = new()
+        {
+            new HashEntry(KEY_ID, item.Id),
+            new HashEntry(KEY_CATEGORY_ID, item.CategoryId)
+        };
 
-        entries.Add(new HashEntry(KEY_ID, item.Id));
-        entries.Add(new HashEntry(KEY_CATEGORY_ID, item.CategoryId));
-
-        if(item.CreateDate != null)
+        if (item.CreateDate != null)
         {
             entries.Add(new HashEntry(KEY_CREATE_DATE, SerializeDate((DateTime)item.CreateDate)));
         }

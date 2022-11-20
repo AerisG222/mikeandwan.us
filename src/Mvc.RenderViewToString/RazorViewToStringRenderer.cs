@@ -15,9 +15,9 @@ namespace Mvc.RenderViewToString;
 
 public class RazorViewToStringRenderer
 {
-    private IRazorViewEngine _viewEngine;
-    private ITempDataProvider _tempDataProvider;
-    private IServiceProvider _serviceProvider;
+    private readonly IRazorViewEngine _viewEngine;
+    private readonly ITempDataProvider _tempDataProvider;
+    private readonly IServiceProvider _serviceProvider;
 
     public RazorViewToStringRenderer(
         IRazorViewEngine viewEngine,
@@ -34,27 +34,26 @@ public class RazorViewToStringRenderer
         var actionContext = GetActionContext();
         var view = FindView(actionContext, viewName);
 
-        using (var output = new StringWriter())
-        {
-            var viewContext = new ViewContext(
-                actionContext,
-                view,
-                new ViewDataDictionary<TModel>(
-                    metadataProvider: new EmptyModelMetadataProvider(),
-                    modelState: new ModelStateDictionary())
-                {
-                    Model = model
-                },
-                new TempDataDictionary(
-                    actionContext.HttpContext,
-                    _tempDataProvider),
-                output,
-                new HtmlHelperOptions());
+        using var output = new StringWriter();
 
-            await view.RenderAsync(viewContext);
+        var viewContext = new ViewContext(
+            actionContext,
+            view,
+            new ViewDataDictionary<TModel>(
+                metadataProvider: new EmptyModelMetadataProvider(),
+                modelState: new ModelStateDictionary())
+            {
+                Model = model
+            },
+            new TempDataDictionary(
+                actionContext.HttpContext,
+                _tempDataProvider),
+            output,
+            new HtmlHelperOptions());
 
-            return output.ToString();
-        }
+        await view.RenderAsync(viewContext);
+
+        return output.ToString();
     }
 
     private IView FindView(ActionContext actionContext, string viewName)
@@ -81,8 +80,11 @@ public class RazorViewToStringRenderer
 
     private ActionContext GetActionContext()
     {
-        var httpContext = new DefaultHttpContext();
-        httpContext.RequestServices = _serviceProvider;
+        var httpContext = new DefaultHttpContext
+        {
+            RequestServices = _serviceProvider
+        };
+
         return new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
     }
 }

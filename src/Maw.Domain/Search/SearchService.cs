@@ -34,13 +34,12 @@ public class SearchService
         {
             RequestHandler = new RequestHandlerParameters("/maw-photos-query"),
             StartOrCursor = new StartOrCursor.Start(start),
-            Rows = 24
-        };
-
-        opts.FilterQueries = new ISolrQuery[]
+            Rows = 24,
+            FilterQueries = new ISolrQuery[]
             {
                     new SolrQueryInList("allowed_roles", roles)
-            };
+            }
+        };
 
         return opts;
     }

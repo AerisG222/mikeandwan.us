@@ -8,7 +8,7 @@ namespace Maw.Domain.Captcha;
 public class CloudflareTurnstileCaptchaService
     : ICaptchaService
 {
-    static readonly Uri URL = new Uri("https://challenges.cloudflare.com/turnstile/v0/siteverify");
+    static readonly Uri URL = new("https://challenges.cloudflare.com/turnstile/v0/siteverify");
     readonly CloudflareTurnstileConfig _config;
     readonly ILogger _log;
 

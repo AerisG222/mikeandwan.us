@@ -9,9 +9,8 @@ public static class CryptoUtils
 
     public static byte[] Hash(string value)
     {
-        using var sha256 = SHA256.Create();
         var input = Encoding.UTF8.GetBytes(value);
-        var output = sha256.ComputeHash(input);
+        var output = SHA256.HashData(input);
 
         return output;
     }

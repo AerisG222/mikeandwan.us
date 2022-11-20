@@ -29,7 +29,7 @@ public class UrlWwwTagHelper
             throw new ArgumentNullException(nameof(output));
         }
 
-        Uri dest = new Uri(_wwwUri, Url);
+        Uri dest = new(_wwwUri, Url);
 
         output.Attributes.SetAttribute("href", dest);
     }

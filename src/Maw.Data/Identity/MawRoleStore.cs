@@ -10,15 +10,12 @@ public class MawRoleStore
     : IRoleStore<MawRole>, IDisposable
 {
     readonly IUserRepository _repo;
-    readonly ILogger _log;
 
     #region ctor
     public MawRoleStore(
-        IUserRepository repo,
-        ILogger<MawRoleStore> log)
+        IUserRepository repo)
     {
         _repo = repo ?? throw new ArgumentNullException(nameof(repo));
-        _log = log ?? throw new ArgumentNullException(nameof(log));
     }
     #endregion
 

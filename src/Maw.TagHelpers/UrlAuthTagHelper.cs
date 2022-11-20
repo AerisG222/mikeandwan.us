@@ -29,7 +29,7 @@ public class UrlAuthTagHelper
             throw new ArgumentNullException(nameof(output));
         }
 
-        Uri dest = new Uri(_authUri, Url);
+        Uri dest = new(_authUri, Url);
 
         output.Attributes.SetAttribute("href", dest);
     }

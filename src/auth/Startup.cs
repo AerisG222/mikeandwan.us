@@ -55,9 +55,7 @@ public class Startup
             })
             .AddMawDataServices(_config["Environment:DbConnectionString"] ?? throw new InvalidOperationException("db connection string cannot be null!"))
             .AddMawDomainAuthServices()
-            .AddMawIdentityServerServices(
-                _config["Environment:IdsrvDbConnectionString"] ?? throw new InvalidOperationException("idsrv db connection string cannot be null!"),
-                _config["SigningCertDir"] ?? throw new InvalidOperationException("signing cert dir cannot be null!"))
+            .AddMawIdentityServerServices(_config["Environment:IdsrvDbConnectionString"] ?? throw new InvalidOperationException("idsrv db connection string cannot be null!"))
             .AddTransient<RazorViewToStringRenderer>()
             .AddIdentity<MawUser, MawRole>()
                 .AddDefaultTokenProviders()

@@ -101,13 +101,14 @@ class CategorySerializer
 
     public override HashEntry[] BuildHashSet(Category item)
     {
-        List<HashEntry> entries = new();
+        List<HashEntry> entries = new()
+        {
+            new HashEntry(KEY_ID, item.Id),
+            new HashEntry(KEY_NAME, item.Name),
+            new HashEntry(KEY_YEAR, item.Year)
+        };
 
-        entries.Add(new HashEntry(KEY_ID, item.Id));
-        entries.Add(new HashEntry(KEY_NAME, item.Name));
-        entries.Add(new HashEntry(KEY_YEAR, item.Year));
-
-        if(item.CreateDate != null)
+        if (item.CreateDate != null)
         {
             entries.Add(new HashEntry(KEY_CREATE_DATE, SerializeDate((DateTime)item.CreateDate)));
         }

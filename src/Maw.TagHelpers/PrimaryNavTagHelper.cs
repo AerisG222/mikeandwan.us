@@ -67,10 +67,7 @@ public class PrimaryNavTagHelper
             throw new InvalidOperationException("Action or Page must be specified");
         }
 
-        if (LinkText == null)
-        {
-            LinkText = string.Empty;
-        }
+        LinkText ??= string.Empty;
 
         if (IsActive)
         {

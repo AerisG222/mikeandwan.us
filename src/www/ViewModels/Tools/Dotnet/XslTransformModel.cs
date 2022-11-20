@@ -129,26 +129,11 @@ public class XslTransformModel
         }
         finally
         {
-            if (xslReader != null)
-            {
-                xslReader.Close();
-            }
-            if (xmlReader != null)
-            {
-                xmlReader.Close();
-            }
-            if (xmlWriter != null)
-            {
-                xmlWriter.Close();
-            }
-            if (ms != null)
-            {
-                ms.Close();
-            }
-            if (tr != null)
-            {
-                tr.Close();
-            }
+            xslReader?.Close();
+            xmlReader?.Close();
+            xmlWriter?.Close();
+            ms?.Close();
+            tr?.Close();
         }
     }
 }

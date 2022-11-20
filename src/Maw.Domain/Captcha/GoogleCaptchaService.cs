@@ -8,7 +8,7 @@ namespace Maw.Domain.Captcha;
 public class GoogleCaptchaService
     : ICaptchaService
 {
-    static readonly Uri URL = new Uri("https://www.google.com/recaptcha/api/siteverify");
+    static readonly Uri URL = new("https://www.google.com/recaptcha/api/siteverify");
     readonly GoogleCaptchaConfig _config;
     readonly ILogger _log;
 

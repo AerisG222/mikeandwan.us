@@ -17,15 +17,15 @@ public static class TestHelper
 
     public static readonly string[] Roles = new string[] { "friend", "demo" };
 
-    public static BlogRepository BlogRepository { get => new BlogRepository(GetDbConnectionString()); }
-    public static PhotoRepository PhotoRepository { get => new PhotoRepository(GetDbConnectionString()); }
-    public static VideoRepository VideoRepository { get => new VideoRepository(GetDbConnectionString()); }
+    public static BlogRepository BlogRepository => new(GetDbConnectionString());
+    public static PhotoRepository PhotoRepository => new(GetDbConnectionString());
+    public static VideoRepository VideoRepository => new(GetDbConnectionString());
 
-    static ConnectionMultiplexer Redis = ConnectionMultiplexer.Connect("localhost");
+    static readonly ConnectionMultiplexer Redis = ConnectionMultiplexer.Connect("localhost");
 
-    public static BlogCache BlogCache { get => new BlogCache(Redis.GetDatabase()); }
-    public static PhotoCache PhotoCache { get => new PhotoCache(Redis.GetDatabase()); }
-    public static VideoCache VideoCache { get => new VideoCache(Redis.GetDatabase()); }
+    public static BlogCache BlogCache => new(Redis.GetDatabase());
+    public static PhotoCache PhotoCache => new(Redis.GetDatabase());
+    public static VideoCache VideoCache => new(Redis.GetDatabase());
 
     static string GetDbConnectionString()
     {

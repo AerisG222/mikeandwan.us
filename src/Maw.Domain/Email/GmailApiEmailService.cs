@@ -84,23 +84,22 @@ public class GmailApiEmailService
     // https://stackoverflow.com/questions/35655019/gmail-draft-html-with-attachment-with-mimekit-c-sharp-winforms-and-google-api
     static string Base64UrlEncode(MimeMessage message)
     {
-        using (var stream = new MemoryStream())
-        {
-            message.WriteTo(stream);
+        using var stream = new MemoryStream();
+        message.WriteTo(stream);
 
-            return Convert.ToBase64String(stream.GetBuffer(), 0, (int)stream.Length)
-                .Replace('+', '-')
-                .Replace('/', '_')
-                .Replace("=", "", StringComparison.Ordinal);
-        }
+        return Convert.ToBase64String(stream.GetBuffer(), 0, (int)stream.Length)
+            .Replace('+', '-')
+            .Replace('/', '_')
+            .Replace("=", "", StringComparison.Ordinal);
     }
 
     async Task<GmailService> GetService()
     {
         var cred = await GoogleCredential.GetApplicationDefaultAsync();
 
-        cred = cred.CreateScoped(Scopes)
-                   .CreateWithUser(_config.FromEmailAddress);
+        cred = cred
+            .CreateScoped(Scopes)
+            .CreateWithUser(_config.FromEmailAddress);
 
         var svc = new GmailService(new BaseClientService.Initializer()
         {

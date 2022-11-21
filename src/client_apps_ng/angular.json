@@ -280,7 +280,7 @@
               "projects/learning/src/styles.scss"
             ],
             "scripts": [
-                "projects/learning/src/modernizr.js"
+              "projects/learning/src/modernizr.js"
             ],
             "extractLicenses": false,
             "buildOptimizer": false,
@@ -746,5 +746,13 @@
   },
   "cli": {
     "analytics": false
+  },
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
   }
 }

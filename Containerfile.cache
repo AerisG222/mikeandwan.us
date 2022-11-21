@@ -1,6 +1,6 @@
 # https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-3.1
 # https://github.com/dotnet/dotnet-docker/blob/master/samples/aspnetapp/Dockerfile.alpine-x64
-FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine-amd64 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine-amd64 AS build
 
 RUN apk --no-cache add bash
 
@@ -18,7 +18,7 @@ RUN dotnet publish -o /build -c Release -r linux-musl-x64 --self-contained false
 
 
 # build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine-amd64
+FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine-amd64
 
 WORKDIR /maw-cache-sync
 

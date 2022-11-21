@@ -19,6 +19,7 @@ using Maw.Security;
 using MawApi.Hubs;
 using MawApi.Services;
 using MawApi.Models;
+using IdentityModel;
 
 namespace MawApi;
 
@@ -116,6 +117,7 @@ public class Startup
     {
         opts.Authority = urlConfig.Auth;
         opts.Audience = "maw_api_resource";
+        opts.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
 
         // https://damienbod.com/2017/10/16/securing-an-angular-signalr-client-using-jwt-tokens-with-asp-net-core-and-identityserver4/
         opts.Events = new JwtBearerEvents {

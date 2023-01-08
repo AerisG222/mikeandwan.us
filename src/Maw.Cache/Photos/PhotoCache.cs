@@ -352,12 +352,13 @@ public class PhotoCache
 
     async Task<CacheResult<IEnumerable<Photo>>> GetPhotosInternalAsync(ITransaction tran, string setKey, bool sortByFilename)
     {
-        var by = sortByFilename ? $"{ PhotoKeys.PHOTO_HASH_KEY_PATTERN }->xs-path alpha" : "nosort";
+        var by = sortByFilename ? $"{ PhotoKeys.PHOTO_HASH_KEY_PATTERN }->xs-path" : "nosort";
         var status = GetStatusAsync(tran);
         var photos = tran.SortAsync(
             setKey,
             get: _photoSerializer.SortLookupFields,
-            by: by
+            by: by,
+            sortType: SortType.Alphabetic
         );
 
         await tran.ExecuteAsync();

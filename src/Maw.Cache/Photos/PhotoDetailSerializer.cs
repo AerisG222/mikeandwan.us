@@ -3,7 +3,7 @@ using Maw.Domain.Models.Photos;
 
 namespace Maw.Cache.Photos;
 
-class PhotoDetailSerializer
+sealed class PhotoDetailSerializer
     : BaseSerializer<Detail>
 {
     const string KEY_BITS_PER_SAMPLE = "bits-per-sample";

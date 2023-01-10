@@ -4,7 +4,7 @@ using Maw.Domain.Models.Photos;
 
 namespace Maw.Cache.Photos;
 
-class CategorySerializer
+sealed class CategorySerializer
     : BaseSerializer<Category>
 {
     const string KEY_ID = "id";

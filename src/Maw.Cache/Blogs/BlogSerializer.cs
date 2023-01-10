@@ -3,7 +3,7 @@ using Maw.Domain.Models.Blogs;
 
 namespace Maw.Cache.Blogs;
 
-class BlogSerializer
+sealed class BlogSerializer
     : BaseSerializer<Blog>
 {
     const string KEY_ID = "id";

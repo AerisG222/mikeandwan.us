@@ -4,7 +4,7 @@ using Maw.Domain.Models.Videos;
 
 namespace Maw.Cache.Videos;
 
-class VideoSerializer
+sealed class VideoSerializer
     : BaseSerializer<Video>
 {
     const string KEY_ID = "id";

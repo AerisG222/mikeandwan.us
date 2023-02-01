@@ -16,7 +16,7 @@ PREVIEW_MODE=
 
 IMG_SIZE_PHOTOS=docker.io/aerisg222/maw-size-photos
 IMG_GLACIER_BACKUP=docker.io/aerisg222/maw-glacier-backup
-IMG_POSTGRES=docker.io/postgres:14-alpine
+IMG_POSTGRES=docker.io/postgres:15-alpine
 RAW_THERAPEE_CONFIG_DIR=/home/mmorano/maw_size_photos/rawtherapee-config/
 RAW_THERAPEE_ENV_FILE=/home/mmorano/maw_size_photos/podman-env/rawtherapee.env
 CPUS_SIZE_PHOTOS=24

@@ -54,6 +54,10 @@ public class Startup
                 opts.AuthUrl = AddTrailingSlash(_config["UrlConfig:Auth"] ?? throw new InvalidOperationException("auth url config should not be null!"));
                 opts.WwwUrl = AddTrailingSlash(_config["UrlConfig:Www"] ?? throw new InvalidOperationException("www url config should not be null!"));
             })
+            .Configure<ForwardedHeadersOptions>(opts =>
+            {
+                opts.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            })
             .AddFeatureManagement()
                 .Services
             .AddLogging()
@@ -88,7 +92,8 @@ public class Startup
         {
             app
                 .UseMiniProfiler()
-                .UseDeveloperExceptionPage();
+                .UseDeveloperExceptionPage()
+                .UseForwardedHeaders();
 
             AddDevPathMappings(app);
         }
@@ -96,6 +101,7 @@ public class Startup
         {
             app
                 .UseExceptionHandler("/error/")
+                .UseForwardedHeaders()
                 .UseHsts(hsts => hsts.MaxAge(365 * 2).IncludeSubdomains().Preload());
         }
 
@@ -118,10 +124,6 @@ public class Startup
             .UseCsp(DefineContentSecurityPolicy)
 
             .UseRouting()
-            .UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            })
             .UseAuthentication()
             .UseAuthorization()
             .UseEndpoints(endpoints =>

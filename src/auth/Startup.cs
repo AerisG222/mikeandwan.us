@@ -140,7 +140,7 @@ public class Startup
     void ConfigureCookieOptions(CookieAuthenticationOptions opts)
     {
         opts.AccessDeniedPath = "/account/access-denied";
-        opts.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        opts.ExpireTimeSpan = TimeSpan.FromSeconds(10);
         opts.LoginPath = "/account/login";
         opts.LogoutPath = "/account/logout";
     }
@@ -199,7 +199,9 @@ public class Startup
     {
         return new string[] {
             _config["Environment:PhotosUrl"] ?? throw new InvalidOperationException("photos url cannot be null!"),
-            _config["Environment:FilesUrl"] ?? throw new InvalidOperationException("files url cannot be null!")
+            _config["Environment:FilesUrl"] ?? throw new InvalidOperationException("files url cannot be null!"),
+            //"http://dev.photos.mikeandwan.us:3000"
+            "http://localhost:3000"
         };
     }
 
@@ -213,7 +215,9 @@ public class Startup
             "https://login.microsoftonline.com/common/oauth2/",
             "https://github.com/login/oauth/",
             "https://api.twitter.com/oauth/",
-            "us.mikeandwan.photos:/"
+            "us.mikeandwan.photos:/",
+            //"http://dev.photos.mikeandwan.us:3000"
+            "http://localhost:3000"
         };
     }
 

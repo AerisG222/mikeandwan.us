@@ -107,7 +107,10 @@ public class Config
 
                     // identity resources
                     JwtClaimTypes.Role
-                }
+                },
+                IdentityTokenLifetime = 5,
+                AccessTokenLifetime = 5,
+                AbsoluteRefreshTokenLifetime = 20
             },
             new Client
             {
@@ -129,6 +132,44 @@ public class Config
                 AllowedCorsOrigins = new List<string>
                 {
                     _photosUrl
+                },
+                AllowedScopes = new List<string>
+                {
+                    IdentityServerConstants.StandardScopes.OfflineAccess,
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+
+                    // apis
+                    "maw_api",
+
+                    // identity resources
+                    JwtClaimTypes.Role
+                }
+            },
+            new Client
+            {
+                ClientId = "maw-photos-solid",
+                ClientName = "mikeandwan.us Photo Application",
+                AllowedGrantTypes = GrantTypes.Code,
+                RequireClientSecret = false,
+                AllowAccessTokensViaBrowser = true,
+                AllowOfflineAccess = true,
+                RedirectUris = new List<string>
+                {
+                    $"{_photosUrl}/login",
+                    $"{_photosUrl}/silent-refresh.html",
+                    //"http://dev.photos.mikeandwan.us:3000/login/handle-response"
+                    "http://localhost:3000/login/handle-response"
+                },
+                PostLogoutRedirectUris = new List<string>
+                {
+                    $"{_photosUrl}/signout-callback.html"
+                },
+                AllowedCorsOrigins = new List<string>
+                {
+                    _photosUrl,
+                    //"http://dev.photos.mikeandwan.us:3000"
+                    "http://localhost:3000"
                 },
                 AllowedScopes = new List<string>
                 {

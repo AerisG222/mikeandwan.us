@@ -18,6 +18,11 @@ public class ImageCropper
     {
         var fi = _fileProvider.GetFileInfo(path);
 
+        if(fi?.PhysicalPath == null)
+        {
+            throw new ApplicationException($"File at path {path} not found or is not accessible!");
+        }
+
         if (fi.Exists)
         {
             using var image = Image.Load(fi.PhysicalPath);

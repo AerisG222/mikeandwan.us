@@ -184,9 +184,7 @@ public class AccountController
 
         await _signInManager.SignOutAsync();
 
-#pragma warning disable SCS0027
-        return Redirect(logout.PostLogoutRedirectUri);
-#pragma warning restore SCS0027
+        return Redirect(logout?.PostLogoutRedirectUri ?? "/login");
     }
 
     [HttpGet("forgot-password")]

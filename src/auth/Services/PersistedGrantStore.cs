@@ -40,7 +40,7 @@ public class PersistedGrantStore
         );
     }
 
-    public Task<PersistedGrant> GetAsync(string key)
+    public Task<PersistedGrant?> GetAsync(string key)
     {
         if(string.IsNullOrWhiteSpace(key))
         {
@@ -50,7 +50,7 @@ public class PersistedGrantStore
         Log.LogDebug("getting grant for key: {Key}", key);
 
         return RunAsync(conn =>
-            conn.QuerySingleOrDefaultAsync<PersistedGrant>(
+            conn.QuerySingleOrDefaultAsync<PersistedGrant?>(
                 "SELECT * FROM idsrv.get_persisted_grant(@key);",
                 new
                 {

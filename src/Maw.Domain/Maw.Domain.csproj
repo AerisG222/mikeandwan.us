@@ -18,12 +18,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Google.Apis.Gmail.v1" Version="1.60.0.2958" />
-        <PackageReference Include="IdentityModel" Version="6.0.0" />
-        <PackageReference Include="MailKit" Version="3.6.0" />
+        <PackageReference Include="Google.Apis.Gmail.v1" Version="1.60.0.3056" />
+        <PackageReference Include="IdentityModel" Version="6.1.0" />
+        <PackageReference Include="MailKit" Version="4.0.0" />
         <PackageReference Include="MedallionShell" Version="1.6.2" />
         <PackageReference Include="Microsoft.FeatureManagement" Version="2.5.1" />
-        <PackageReference Include="SixLabors.ImageSharp" Version="3.0.0" />
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
         <PackageReference Include="SolrNet.Core" Version="1.1.1" />
     </ItemGroup>
 

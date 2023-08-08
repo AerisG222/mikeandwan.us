@@ -146,7 +146,8 @@ public class Startup
             var origins = new string[] {
                 urlConfig.Www,
                 urlConfig.Photos,
-                urlConfig.Files
+                urlConfig.Files,
+                "http://localhost:3000"
             };
 
             policy.WithOrigins(origins)

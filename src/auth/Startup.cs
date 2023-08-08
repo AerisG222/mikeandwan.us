@@ -140,7 +140,7 @@ public class Startup
     void ConfigureCookieOptions(CookieAuthenticationOptions opts)
     {
         opts.AccessDeniedPath = "/account/access-denied";
-        opts.ExpireTimeSpan = TimeSpan.FromSeconds(10);
+        opts.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         opts.LoginPath = "/account/login";
         opts.LogoutPath = "/account/logout";
     }

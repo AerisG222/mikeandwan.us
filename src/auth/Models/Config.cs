@@ -10,13 +10,15 @@ public class Config
     readonly string _wwwSecret;
     readonly string _photosUrl;
     readonly string _filesUrl;
+    readonly string _photosSolidUrl;
 
-    public Config(string wwwUrl, string wwwSecret, string photosUrl, string filesUrl)
+    public Config(string wwwUrl, string wwwSecret, string photosUrl, string filesUrl, string photosSolidUrl)
     {
         _wwwUrl = wwwUrl ?? throw new ArgumentNullException(nameof(wwwUrl));
         _wwwSecret = wwwSecret ?? throw new ArgumentNullException(nameof(wwwSecret));
         _photosUrl = photosUrl ?? throw new ArgumentNullException(nameof(photosUrl));
         _filesUrl = filesUrl ?? throw new ArgumentNullException(nameof(filesUrl));
+        _photosSolidUrl = photosSolidUrl ?? throw new ArgumentNullException(nameof(photosSolidUrl));
     }
 
     // scopes define the API resources in your system
@@ -107,10 +109,10 @@ public class Config
 
                     // identity resources
                     JwtClaimTypes.Role
-                },
-                IdentityTokenLifetime = 5,
-                AccessTokenLifetime = 5,
-                AbsoluteRefreshTokenLifetime = 20
+                }
+                // IdentityTokenLifetime = 5,
+                // AccessTokenLifetime = 5,
+                // AbsoluteRefreshTokenLifetime = 20
             },
             new Client
             {
@@ -156,20 +158,15 @@ public class Config
                 AllowOfflineAccess = true,
                 RedirectUris = new List<string>
                 {
-                    $"{_photosUrl}/login",
-                    $"{_photosUrl}/silent-refresh.html",
-                    //"http://dev.photos.mikeandwan.us:3000/login/handle-response"
-                    "http://localhost:3000/login/handle-response"
+                    $"{_photosSolidUrl}/login/handle-response"
                 },
-                PostLogoutRedirectUris = new List<string>
-                {
-                    $"{_photosUrl}/signout-callback.html"
-                },
+                // PostLogoutRedirectUris = new List<string>
+                // {
+                //     $"{_photosUrl}/signout-callback.html"
+                // },
                 AllowedCorsOrigins = new List<string>
                 {
-                    _photosUrl,
-                    //"http://dev.photos.mikeandwan.us:3000"
-                    "http://localhost:3000"
+                    _photosSolidUrl
                 },
                 AllowedScopes = new List<string>
                 {

@@ -204,7 +204,7 @@ public class Startup
         return new string[] {
                 _config["UrlConfig:Api"] ?? throw new InvalidOperationException("api url config cannot be null!"),
                 _config["UrlConfig:Photos"] ?? throw new InvalidOperationException("photos url config cannot be null!"),
-                "http://localhost:3000"
+                _config["UrlConfig:PhotosSolid"] ?? throw new InvalidOperationException("photos-solid url config cannot be null!")
             };
     }
 
@@ -213,7 +213,8 @@ public class Startup
         return new string[] {
                 AddTrailingSlash(_config["UrlConfig:Auth"] ?? throw new InvalidOperationException("auth url config cannot be null!")),
                 AddTrailingSlash(_config["UrlConfig:Files"] ?? throw new InvalidOperationException("files url config cannot be null!")),
-                AddTrailingSlash(_config["UrlConfig:Photos"] ?? throw new InvalidOperationException("photos url config cannot be null!"))
+                AddTrailingSlash(_config["UrlConfig:Photos"] ?? throw new InvalidOperationException("photos url config cannot be null!")),
+                AddTrailingSlash(_config["UrlConfig:PhotosSolid"] ?? throw new InvalidOperationException("photos-solid url config cannot be null!"))
             };
     }
 

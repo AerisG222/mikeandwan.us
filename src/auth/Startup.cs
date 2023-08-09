@@ -38,7 +38,8 @@ public class Startup
             _config["Environment:WwwUrl"] ?? throw new InvalidOperationException("www url cannot be null!"),
             _config["Environment:WwwClientSecret"] ?? throw new InvalidOperationException("www client secret cannot be null!"),
             _config["Environment:PhotosUrl"] ?? throw new InvalidOperationException("photos url cannot be null!"),
-            _config["Environment:FilesUrl"] ?? throw new InvalidOperationException("files url cannot be null!"));
+            _config["Environment:FilesUrl"] ?? throw new InvalidOperationException("files url cannot be null!"),
+            _config["Environment:PhotosSolidUrl"] ?? throw new InvalidOperationException("photos-solid url cannot be null!"));
 
         ConfigureDataProtection(services);
 
@@ -200,8 +201,7 @@ public class Startup
         return new string[] {
             _config["Environment:PhotosUrl"] ?? throw new InvalidOperationException("photos url cannot be null!"),
             _config["Environment:FilesUrl"] ?? throw new InvalidOperationException("files url cannot be null!"),
-            //"http://dev.photos.mikeandwan.us:3000"
-            "http://localhost:3000"
+            _config["Environment:PhotosSolidUrl"] ?? throw new InvalidOperationException("photos url cannot be null!"),
         };
     }
 
@@ -210,14 +210,13 @@ public class Startup
         return new string[] {
             AddTrailingSlash(_config["Environment:FilesUrl"] ?? throw new InvalidOperationException("files url cannot be null!")),
             AddTrailingSlash(_config["Environment:PhotosUrl"] ?? throw new InvalidOperationException("photos url cannot be null!")),
+            AddTrailingSlash(_config["Environment:PhotosSolidUrl"] ?? throw new InvalidOperationException("photos-solid url cannot be null!")),
             AddTrailingSlash(_config["Environment:WwwUrl"] ?? throw new InvalidOperationException("www url cannot be null!")),
             "https://accounts.google.com/o/oauth2/",
             "https://login.microsoftonline.com/common/oauth2/",
             "https://github.com/login/oauth/",
             "https://api.twitter.com/oauth/",
-            "us.mikeandwan.photos:/",
-            //"http://dev.photos.mikeandwan.us:3000"
-            "http://localhost:3000"
+            "us.mikeandwan.photos:/"
         };
     }
 

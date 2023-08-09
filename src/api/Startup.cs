@@ -147,7 +147,7 @@ public class Startup
                 urlConfig.Www,
                 urlConfig.Photos,
                 urlConfig.Files,
-                "http://localhost:3000"
+                urlConfig.PhotosSolid
             };
 
             policy.WithOrigins(origins)

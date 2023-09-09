@@ -25,7 +25,7 @@ public class PhotoAdapter
         return new MawApi.ViewModels.Photos.PhotoViewModel {
             Id = p.Id,
             CategoryId = p.CategoryId,
-            CreateDate = DateTime.MinValue,
+            CreateDate = p.CreateDate ?? DateTime.MinValue,
             Latitude = p.Latitude,
             Longitude = p.Longitude,
             ImageXsSq = _adapter.Adapt(p.XsSqInfo, p.Id, "xs_sq"),

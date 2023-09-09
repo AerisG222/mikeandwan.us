@@ -27,7 +27,7 @@ public class VideoCategoryAdapter
             Id = c.Id,
             Name = c.Name,
             Year = c.Year,
-            CreateDate = DateTime.MinValue,
+            CreateDate = c.CreateDate,
             Latitude = c.Latitude,
             Longitude = c.Longitude,
             VideoCount = c.VideoCount,

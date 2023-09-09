@@ -27,7 +27,7 @@ public class PhotoCategoryAdapter
             Id = c.Id,
             Name = c.Name,
             Year = c.Year,
-            CreateDate = DateTime.MinValue,
+            CreateDate = c.CreateDate,
             Latitude = c.Latitude,
             Longitude = c.Longitude,
             PhotoCount = c.PhotoCount,

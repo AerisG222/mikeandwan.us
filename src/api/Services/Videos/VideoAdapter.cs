@@ -25,7 +25,7 @@ public class VideoAdapter
         return new MawApi.ViewModels.Videos.VideoViewModel {
             Id = v.Id,
             CategoryId = v.CategoryId,
-            CreateDate = DateTime.MinValue,
+            CreateDate = v.CreateDate ?? DateTime.MinValue,
             Latitude = v.Latitude,
             Longitude = v.Longitude,
             Duration = v.Duration,

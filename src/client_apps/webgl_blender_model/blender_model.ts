@@ -1,27 +1,20 @@
-import { Scene } from 'three/src/scenes/Scene';
-import { PerspectiveCamera } from 'three/src/cameras/PerspectiveCamera';
-import { Mesh } from 'three/src/objects/Mesh';
-import { MeshPhongMaterial } from 'three/src/materials/MeshPhongMaterial';
-import { AmbientLight } from 'three/src/lights/AmbientLight';
-import { DirectionalLight } from 'three/src/lights/DirectionalLight';
-import { WebGLRenderer } from 'three/src/renderers/WebGLRenderer';
-import { AxesHelper } from 'three/src/helpers/AxesHelper';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import * as THREE from 'three';
 import * as Stats from 'stats.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 import * as model from './bs.gltf';
 import * as bin from './bs.bin';
 
 export class BlenderModelDemo {
-    private _scene: Scene;
-    private _camera: PerspectiveCamera;
-    private _renderer: WebGLRenderer;
-    private _ambientLight: AmbientLight;
+    private _scene: THREE.Scene;
+    private _camera: THREE.PerspectiveCamera;
+    private _renderer: THREE.WebGLRenderer;
+    private _ambientLight: THREE.AmbientLight;
     private _stats: Stats;
-    private _loader: GLTFLoader;
-    private _smStar: Mesh;
-    private _mdStar: Mesh;
-    private _lgStar: Mesh;
+    private _loader: THREE.GLTFLoader;
+    private _smStar: THREE.Mesh;
+    private _mdStar: THREE.Mesh;
+    private _lgStar: THREE.Mesh;
     private _frameCounter = 0;
     private _rotateMultiplier = 1.0;
 
@@ -32,10 +25,10 @@ export class BlenderModelDemo {
 
     private prepareScene() {
         // this.scene
-        this._scene = new Scene();
+        this._scene = new THREE.Scene();
 
         // renderer
-        this._renderer = new WebGLRenderer({ antialias: true, alpha: true });
+        this._renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         this._renderer.setSize(window.innerWidth, window.innerHeight);
 
         document.body.appendChild(this._renderer.domElement);
@@ -45,22 +38,22 @@ export class BlenderModelDemo {
         document.body.appendChild(this._stats.dom);
 
         // camera
-        this._camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this._camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         this._camera.position.set(0, 10, 20);
         this._camera.lookAt(this._scene.position);
 
         // ambient light
-        this._ambientLight = new AmbientLight(0x404040);
+        this._ambientLight = new THREE.AmbientLight(0x404040);
         this._scene.add(this._ambientLight);
 
         // directional light
-        let directionalLight = new DirectionalLight(0xffffff, 0.9);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
         directionalLight.position.set(-1, 1, 1);
         directionalLight.castShadow = true;
         this._scene.add(directionalLight);
 
         // axis helper
-        let axisHelper = new AxesHelper(10);
+        const axisHelper = new THREE.AxesHelper(10);
         this._scene.add(axisHelper);
 
         // model loader
@@ -72,6 +65,7 @@ export class BlenderModelDemo {
         }
 
         this._loader.load(model, gltf => {
+            gltf.colorSpace = THREE.SRGBColorSpace;
             this.setupModel(gltf);
         });
     }
@@ -82,9 +76,9 @@ export class BlenderModelDemo {
         this._lgStar = this.prepareMesh(gltf, 'Large_Star',  '#acc5e9');
     }
 
-    private prepareMesh(gltf, name: string, color: string): Mesh {
+    private prepareMesh(gltf, name: string, color: string): THREE.Mesh {
         const mesh = gltf.scene.children.find(x => x.name === name  && x.type === 'Mesh');
-        const mat = new MeshPhongMaterial({
+        const mat = new THREE.MeshPhongMaterial({
             color: color,
             specular: 0xffffff,
             shininess: 20

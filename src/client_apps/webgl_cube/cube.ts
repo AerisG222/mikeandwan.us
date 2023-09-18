@@ -1,29 +1,15 @@
-import { DoubleSide, RepeatWrapping } from 'three/src/constants';
-
-import { Fog } from 'three/src/scenes/Fog';
-import { TextureLoader } from 'three/src/loaders/TextureLoader';
-import { BoxGeometry } from 'three/src/geometries/BoxGeometry';
-import { MeshBasicMaterial } from 'three/src/materials/MeshBasicMaterial';
-import { PlaneGeometry } from 'three/src/geometries/PlaneGeometry';
-import { Scene } from 'three/src/scenes/Scene';
-import { PerspectiveCamera } from 'three/src/cameras/PerspectiveCamera';
-import { Mesh } from 'three/src/objects/Mesh';
-import { MeshPhongMaterial } from 'three/src/materials/MeshPhongMaterial';
-import { AmbientLight } from 'three/src/lights/AmbientLight';
-import { DirectionalLight } from 'three/src/lights/DirectionalLight';
-import { WebGLRenderer } from 'three/src/renderers/WebGLRenderer';
-import { AxesHelper } from 'three/src/helpers/AxesHelper';
+import * as THREE from 'three';
 import * as Stats from 'stats.js';
 
 import * as floorTexture from './floor_texture.jpg';
 import * as cubeTexture from './DSC_8562.jpg';
 
 export class CubeDemo {
-    scene: Scene;
-    camera: PerspectiveCamera;
-    renderer: WebGLRenderer;
-    cube: Mesh;
-    ambientLight: AmbientLight;
+    scene: THREE.Scene;
+    camera: THREE.PerspectiveCamera;
+    renderer: THREE.WebGLRenderer;
+    cube: THREE.Mesh;
+    ambientLight: THREE.AmbientLight;
     stats: Stats;
     loadCounter = 0;
 
@@ -34,13 +20,13 @@ export class CubeDemo {
 
     private prepareScene() {
         // this.scene
-        this.scene = new Scene();
+        this.scene = new THREE.Scene();
 
         // fog
-        this.scene.fog = new Fog(0x9999ff, 400, 1000);
+        this.scene.fog = new THREE.Fog(0x9999ff, 400, 1000);
 
         // renderer
-        this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
 
@@ -49,30 +35,31 @@ export class CubeDemo {
         document.body.appendChild(this.stats.dom);
 
         // camera
-        this.camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.camera.position.set(0, 150, 400);
         this.camera.lookAt(this.scene.position);
 
         // ambient light
-        this.ambientLight = new AmbientLight(0x404040);
+        this.ambientLight = new THREE.AmbientLight(0x404040);
         this.scene.add(this.ambientLight);
 
         // directional light
-        const directionalLight = new DirectionalLight(0xffffff, 0.9);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
         directionalLight.position.set(-1, 1, 1);
         directionalLight.castShadow = true;
         this.scene.add(directionalLight);
 
         // axis helper
-        const axisHelper = new AxesHelper(100);
+        const axisHelper = new THREE.AxesHelper(100);
         this.scene.add(axisHelper);
 
         // cube
-        const textureLoader = new TextureLoader();
+        const textureLoader = new THREE.TextureLoader();
         textureLoader.load(cubeTexture, texture => {
-            const geometry = new BoxGeometry(50, 50, 50);
-            const material = new MeshPhongMaterial({ color: 0xffffff, map: texture });
-            this.cube = new Mesh(geometry, material);
+            texture.colorSpace = THREE.SRGBColorSpace;
+            const geometry = new THREE.BoxGeometry(50, 50, 50);
+            const material = new THREE.MeshPhongMaterial({ color: 0xffffff, map: texture });
+            this.cube = new THREE.Mesh(geometry, material);
             this.cube.position.set(0, 70, 180);
             this.scene.add(this.cube);
 
@@ -83,12 +70,13 @@ export class CubeDemo {
 
         // floor
         textureLoader.load(floorTexture, texture => {
-            const floorPlane = new PlaneGeometry(1000, 1000);
-            texture.wrapS = RepeatWrapping;
-            texture.wrapT = RepeatWrapping;
+            texture.colorSpace = THREE.SRGBColorSpace;
+            const floorPlane = new THREE.PlaneGeometry(1000, 1000);
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
             texture.repeat.set(9, 9);
-            const floorMaterial = new MeshBasicMaterial({ map: texture, side: DoubleSide }); //
-            const floor = new Mesh(floorPlane, floorMaterial);
+            const floorMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.TwoPassDoubleSide }); //
+            const floor = new THREE.Mesh(floorPlane, floorMaterial);
             floor.position.y = -30;
             floor.rotation.x = (Math.PI / 2) - .3;
             this.scene.add(floor);

@@ -1,28 +1,22 @@
-import { Scene, PerspectiveCamera, Renderer, Mesh, Object3D, AmbientLight, SpotLight, Font, Fog, WebGLRenderer,
-         AxesHelper, DirectionalLight, TextureLoader, PlaneGeometry, RepeatWrapping, DoubleSide,
-         MeshPhongMaterial, MeshBasicMaterial
-       } from 'three';
+import * as THREE from 'three';
+import * as Stats from 'stats.js';
 
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 
-import * as Stats from 'stats.js';
-
 import * as floorTexture from './floor_texture.jpg';
 import * as fontFile from './open_sans_bold.json';
 
-export const _script_root = document.currentScript;
-
 export class TextDemo {
-    scene: Scene;
-    camera: PerspectiveCamera;
-    renderer: Renderer;
-    textMesh: Mesh;
-    textPivot: Object3D;
-    ambientLight: AmbientLight;
-    spotLight: SpotLight;
+    scene: THREE.Scene;
+    camera: THREE.PerspectiveCamera;
+    renderer: THREE.Renderer;
+    textMesh: THREE.Mesh;
+    textPivot: THREE.Object3D;
+    ambientLight: THREE.AmbientLight;
+    spotLight: THREE.SpotLight;
     stats: Stats;
-    font: Font;
+    font: THREE.Font;
     rotationAngle: number;
     animate = false;
     loaderCount = 0;
@@ -60,11 +54,11 @@ export class TextDemo {
 
     private prepareScene() {
         // scene
-        this.scene = new Scene();
-        this.scene.fog = new Fog(0x449999, 400, 1000);
+        this.scene = new THREE.Scene();
+        this.scene.fog = new THREE.Fog(0x449999, 400, 1000);
 
         // renderer
-        this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
 
@@ -73,37 +67,38 @@ export class TextDemo {
         document.body.appendChild(this.stats.dom);
 
         // axis helper
-        let axisHelper = new AxesHelper(100);
+        const axisHelper = new THREE.AxesHelper(100);
         this.scene.add(axisHelper);
 
         // camera
-        this.camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.camera.position.set(0, 140, 400);
         this.camera.lookAt(this.scene.position);
 
         // ambient light
-        this.ambientLight = new AmbientLight(0x404040);
+        this.ambientLight = new THREE.AmbientLight(0x909090);
         this.scene.add(this.ambientLight);
 
-        let directionalLight = new DirectionalLight(0xffffff, 0.5);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
         directionalLight.position.set(0, 1, 0);
         this.scene.add(directionalLight);
 
         // spot light
-        this.spotLight = new SpotLight(0xffffff);
-        this.spotLight.position.set(-60, 200, 100);
+        this.spotLight = new THREE.SpotLight(0xffffff);
+        this.spotLight.position.set(-50, 180, 80);
         this.spotLight.castShadow = true;
         this.scene.add(this.spotLight);
 
         // floor
-        let textureLoader = new TextureLoader();
+        const textureLoader = new THREE.TextureLoader();
         textureLoader.load(floorTexture, texture => {
-            let floorPlane = new PlaneGeometry(1000, 1000);
-            texture.wrapS = RepeatWrapping;
-            texture.wrapT = RepeatWrapping;
+            texture.colorSpace = THREE.SRGBColorSpace;
+            const floorPlane = new THREE.PlaneGeometry(1000, 1000);
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
             texture.repeat.set(24, 24);
-            let floorMaterial = new MeshBasicMaterial({ map: texture, side: DoubleSide });
-            let floor = new Mesh(floorPlane, floorMaterial);
+            const floorMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+            const floor = new THREE.Mesh(floorPlane, floorMaterial);
             floor.position.y = -30;
             floor.rotation.x = (Math.PI / 2) - 0.2;
             this.scene.add(floor);
@@ -120,10 +115,10 @@ export class TextDemo {
     }
 
     private prepareText() {
-        let loader = new FontLoader();
+        const loader = new FontLoader();
 
         loader.load(fontFile, response => {
-            let textGeometry = new TextGeometry('WebGL', {
+            const textGeometry = new TextGeometry('WebGL', {
                 font: response,
                 size: 60,
                 curveSegments: 48,
@@ -133,21 +128,21 @@ export class TextDemo {
                 bevelSize: 0
             });
 
-            let textMaterial = new MeshPhongMaterial({
+            const textMaterial = new THREE.MeshPhongMaterial({
                 color: 0x006051,
                 specular: 0xffffff,
                 shininess: 50
             });
 
             textGeometry.computeBoundingBox();
-            let textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
+            const textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
 
-            this.textMesh = new Mesh(textGeometry, textMaterial);
+            this.textMesh = new THREE.Mesh(textGeometry, textMaterial);
             this.textMesh.position.set(-0.5 * textWidth, 30, 10);
             this.scene.add(this.textMesh);
 
             // pivot
-            this.textPivot = new Object3D();
+            this.textPivot = new THREE.Object3D();
             this.textPivot.add(this.textMesh);
             this.scene.add(this.textPivot);
 

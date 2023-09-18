@@ -16,7 +16,7 @@ export class ShaderDemo {
     }
 
     setupSphere() {
-        const geometry = new THREE.SphereBufferGeometry(100, 32, 32);
+        const geometry = new THREE.SphereGeometry(100, 32, 32);
 
         const verts = geometry.getAttribute('position');
         const displacement = new Float32Array(verts.count);

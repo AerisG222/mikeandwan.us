@@ -4,6 +4,8 @@
     "license": "MIT",
     "private": true,
     "scripts": {
+        "dev": "vite",
+        "build": "vite build",
         "dev_build": "rm -rf dist && webpack && eslint **/*.ts",
         "prod_build": "rm -rf dist && webpack --config ./webpack.production.config.js",
         "bundle-report": "webpack-bundle-analyzer dist/stats.json"
@@ -19,9 +21,6 @@
         "eslint": "^8.30.0",
         "ts-loader": "^9.4.2",
         "typescript": "^5.2.2",
-        "webpack": "^5.75.0",
-        "webpack-bundle-analyzer": "^4.7.0",
-        "webpack-cli": "^5.0.1",
-        "webpack-stats-plugin": "^1.1.1"
+        "vite": "^4.4.9"
     }
 }

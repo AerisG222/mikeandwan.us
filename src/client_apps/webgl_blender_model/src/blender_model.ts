@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import * as Stats from 'stats.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-import * as model from './bs.gltf';
-import * as bin from './bs.bin';
+//import * as model from './bs.gltf?raw';
+//import * as bin from './bs.bin?raw';
 
 export class BlenderModelDemo {
     private _scene: THREE.Scene;
@@ -59,12 +59,9 @@ export class BlenderModelDemo {
         // model loader
         this._loader = new GLTFLoader();
 
-        // force bin to not be treeshaked away
-        if (!!bin) {
-            this._frameCounter = 0;
-        }
+        this._frameCounter = 0;
 
-        this._loader.load(model, gltf => {
+        this._loader.load("./bs.gltf", gltf => {
             gltf.colorSpace = THREE.SRGBColorSpace;
             this.setupModel(gltf);
         });

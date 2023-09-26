@@ -100,9 +100,9 @@ export class BlenderModelDemo {
 
             this._frameCounter++;
 
-            if (this._frameCounter > 40) {
+            if (this._frameCounter > 60) {
                 this._frameCounter = 0;
-                this._rotateMultiplier = this._rotateMultiplier * -1.0;
+                this._rotateMultiplier *= -1.0;
             }
         }
 

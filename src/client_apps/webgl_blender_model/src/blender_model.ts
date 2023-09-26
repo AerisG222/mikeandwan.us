@@ -1,9 +1,6 @@
 import * as THREE from 'three';
-import * as Stats from 'stats.js';
+import Stats from 'stats.js/build/stats.min.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-
-//import * as model from './bs.gltf?raw';
-//import * as bin from './bs.bin?raw';
 
 export class BlenderModelDemo {
     private _scene: THREE.Scene;

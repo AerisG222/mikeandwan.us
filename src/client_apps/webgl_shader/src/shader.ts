@@ -1,5 +1,8 @@
 import * as THREE from 'three';
-import * as Stats from 'stats.js';
+import Stats from 'stats.js/build/stats.min.js';
+
+import fragmentShader from './shader.frag?raw';
+import vertexShader from './shader.vert?raw';
 
 export class ShaderDemo {
     readonly HEIGHT = 480;
@@ -39,8 +42,8 @@ export class ShaderDemo {
         const sphere = new THREE.Mesh(
             geometry,
             new THREE.ShaderMaterial({
-                vertexShader: document.getElementById('vertexshader').innerText,
-                fragmentShader: document.getElementById('fragmentshader').innerText
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader
             })
         );
 
@@ -56,16 +59,14 @@ export class ShaderDemo {
     }
 
     private prepareScene() {
-        const container = document.getElementById('container');
-
         this.scene = new THREE.Scene();
 
         this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         this.renderer.setSize(this.WIDTH, this.HEIGHT);
-        container.appendChild(this.renderer.domElement);
+        document.body.appendChild(this.renderer.domElement);
 
         this.stats = new Stats();
-        container.appendChild(this.stats.dom);
+        document.body.appendChild(this.stats.dom);
 
         this.camera = new THREE.PerspectiveCamera(45, this.WIDTH / this.HEIGHT, 0.1, 10000);
         this.camera.position.set(0, 0, 300);

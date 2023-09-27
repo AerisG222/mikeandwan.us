@@ -10,68 +10,18 @@
         canvas { width: 100%; height: 100% }
         #container { margin-left: auto; margin-right: auto; }
     </style>
+    <base href="/js/webgl_shader/" />
 }
 
-<div id="container">
-
-</div>
-
-<!-- REFERENCES -->
-<!--
-    https://aerotwist.com/tutorials/an-introduction-to-shaders-part-1/
-    https://threejs.org/examples/webgl_buffergeometry_custom_attributes_particles.html
--->
-
-<script type="x-shader/x-vertex" id="vertexshader">
-    // switch on high precision floats
-    #ifdef GL_ES
-    precision highp float;
-    #endif
-
-    attribute float displacement;
-    attribute vec3 colors;
-
-    varying vec3 vNormal;
-    varying vec3 vColor;
-
-    void main()
-    {
-        vColor = colors;
-        vNormal = normal;
-
-        vec3 newPosition = position + normal * vec3(displacement);
-
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition,1.0);
-    }
-</script>
-
-<script type="x-shader/x-fragment" id="fragmentshader">
-    #ifdef GL_ES
-    precision highp float;
-    #endif
-
-    uniform vec3 color;
-
-    varying vec3 vNormal;
-    varying vec3 vColor;
-
-    void main()
-    {
-        vec3 light = vec3(0.5, 0.2, 1.0);
-
-        light = normalize(light);
-
-        float dProd = max(0.0, dot(vNormal, light));
-
-        gl_FragColor = vec4(vColor, 1.0);
-        // gl_FragColor = gl_FragColor * vec4(dProd, dProd, dProd, 1.0);
-    }
-</script>
-
-<script src="/js/webgl_shader/main.bundle.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function(event) {
-        var demo = new WebGLDemo.ShaderDemo();
-        demo.run();
-    });
-</script>
+<environment names="Development">
+    @* update the src below after running a build in the client app to see this on the dev site *@
+    @*
+        this is annoying but not worth making dynamic right now, and testing the client app is now
+        easily done in the context of its own project thanks to vite
+    *@
+    <script type="module" crossorigin src="./assets/index-e97da4a4.js"></script>
+</environment>
+<environment exclude="Development">
+    @* the following should be updated by the build script / containerfile *@
+    <script type="module" crossorigin src="/js/webgl_shader/index.js"></script>
+</environment>

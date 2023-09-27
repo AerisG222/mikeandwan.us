@@ -1,11 +1,8 @@
 import * as THREE from 'three';
-import * as Stats from 'stats.js';
+import Stats from 'stats.js/build/stats.min.js';
 
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
-
-import * as floorTexture from './floor_texture.jpg';
-import * as fontFile from './open_sans_bold.json';
 
 export class TextDemo {
     scene: THREE.Scene;
@@ -91,7 +88,7 @@ export class TextDemo {
 
         // floor
         const textureLoader = new THREE.TextureLoader();
-        textureLoader.load(floorTexture, texture => {
+        textureLoader.load('./floor_texture.jpg', texture => {
             texture.colorSpace = THREE.SRGBColorSpace;
             const floorPlane = new THREE.PlaneGeometry(1000, 1000);
             texture.wrapS = THREE.RepeatWrapping;
@@ -117,7 +114,7 @@ export class TextDemo {
     private prepareText() {
         const loader = new FontLoader();
 
-        loader.load(fontFile, response => {
+        loader.load('./open_sans_bold.json', response => {
             const textGeometry = new TextGeometry('WebGL', {
                 font: response,
                 size: 60,

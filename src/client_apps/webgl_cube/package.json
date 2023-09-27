@@ -4,23 +4,21 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "dev_build": "rm -rf dist && webpack && eslint **/*.ts",
-        "prod_build": "rm -rf dist && webpack --config ./webpack.production.config.js",
-        "bundle-report": "webpack-bundle-analyzer dist/stats.json"
+        "dev": "vite",
+        "dev_build": "vite build",
+        "prod_build": "vite build"
     },
     "dependencies": {
         "stats.js": "~0.17.0",
         "three": "^0.156.1"
     },
     "devDependencies": {
+        "@types/three": "^0.156.0",
         "@typescript-eslint/eslint-plugin": "^6.7.2",
         "@typescript-eslint/parser": "^6.7.2",
         "eslint": "^8.30.0",
         "ts-loader": "^9.4.2",
         "typescript": "^5.2.2",
-        "webpack": "^5.75.0",
-        "webpack-bundle-analyzer": "^4.7.0",
-        "webpack-cli": "^5.0.1",
-        "webpack-stats-plugin": "^1.1.1"
+        "vite": "^4.4.9"
     }
 }

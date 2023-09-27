@@ -9,12 +9,18 @@
         body { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; }
         canvas { width: 100%; height: 100% }
     </style>
+    <base href="/js/webgl_cube/" />
 }
 
-<script src="/js/webgl_cube/main.bundle.js"></script>
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function(event) {
-        var demo = new WebGLDemo.CubeDemo();
-        demo.run();
-    });
-</script>
+<environment names="Development">
+    @* update the src below after running a build in the client app to see this on the dev site *@
+    @*
+        this is annoying but not worth making dynamic right now, and testing the client app is now
+        easily done in the context of its own project thanks to vite
+    *@
+    <script type="module" crossorigin src="./assets/index-aafd6736.js"></script>
+</environment>
+<environment exclude="Development">
+    @* the following should be updated by the build script / containerfile *@
+    <script type="module" crossorigin src="/js/webgl_cube/index.js"></script>
+</environment>

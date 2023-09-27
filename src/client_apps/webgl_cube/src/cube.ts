@@ -1,8 +1,5 @@
 import * as THREE from 'three';
-import * as Stats from 'stats.js';
-
-import * as floorTexture from './floor_texture.jpg';
-import * as cubeTexture from './DSC_8562.jpg';
+import Stats from 'stats.js/build/stats.min.js';
 
 export class CubeDemo {
     scene: THREE.Scene;
@@ -55,7 +52,7 @@ export class CubeDemo {
 
         // cube
         const textureLoader = new THREE.TextureLoader();
-        textureLoader.load(cubeTexture, texture => {
+        textureLoader.load('./DSC_8562.jpg', texture => {
             texture.colorSpace = THREE.SRGBColorSpace;
             const geometry = new THREE.BoxGeometry(50, 50, 50);
             const material = new THREE.MeshPhongMaterial({ color: 0xffffff, map: texture });
@@ -69,7 +66,7 @@ export class CubeDemo {
         });
 
         // floor
-        textureLoader.load(floorTexture, texture => {
+        textureLoader.load('./floor_texture.jpg', texture => {
             texture.colorSpace = THREE.SRGBColorSpace;
             const floorPlane = new THREE.PlaneGeometry(1000, 1000);
             texture.wrapS = THREE.RepeatWrapping;

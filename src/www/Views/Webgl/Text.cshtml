@@ -12,15 +12,4 @@
     <base href="/js/webgl_text/" />
 }
 
-<environment names="Development">
-    @* update the src below after running a build in the client app to see this on the dev site *@
-    @*
-        this is annoying but not worth making dynamic right now, and testing the client app is now
-        easily done in the context of its own project thanks to vite
-    *@
-    <script type="module" crossorigin src="./assets/index-f6d0e192.js"></script>
-</environment>
-<environment exclude="Development">
-    @* the following should be updated by the build script / containerfile *@
-    <script type="module" crossorigin src="/js/webgl_text/index.js"></script>
-</environment>
+<script type="module" crossorigin src="./assets/index.js"></script>

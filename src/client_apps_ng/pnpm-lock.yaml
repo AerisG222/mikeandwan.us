@@ -86,16 +86,16 @@ devDependencies:
     specifier: ^3.5.3
     version: 3.5.4
   '@types/node':
-    specifier: ^18.11.17
+    specifier: ^18.18.1
     version: 18.18.1
   '@types/three':
     specifier: ^0.146.0
     version: 0.146.0
   '@typescript-eslint/eslint-plugin':
-    specifier: ^5.59.2
+    specifier: ^5.62.0
     version: 5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.50.0)(typescript@5.1.6)
   '@typescript-eslint/parser':
-    specifier: ^5.59.2
+    specifier: ^5.62.0
     version: 5.62.0(eslint@8.50.0)(typescript@5.1.6)
   eslint:
     specifier: ^8.39.0

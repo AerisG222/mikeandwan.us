@@ -33,7 +33,7 @@ export class AppComponent {
             this.run();  // immediately start first character
             this.intervalId = window.setInterval(() => this.run(), 3000);  // schedule additional letters
         } else {
-            if (!!this.intervalId) {
+            if (this.intervalId) {
                 clearInterval(this.intervalId);
             }
         }
@@ -59,7 +59,7 @@ export class AppComponent {
 
             const el = this.audioElement?.nativeElement as HTMLMediaElement;
 
-            if (!!el) {
+            if (el) {
                 el.load();
             }
         }

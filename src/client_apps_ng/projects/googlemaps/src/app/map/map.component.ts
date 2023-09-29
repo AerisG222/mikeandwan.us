@@ -26,11 +26,11 @@ export class MapComponent {
     set otherMapBounds(bounds: google.maps.LatLngBounds | undefined) {
         this.rectangleBounds = bounds;
 
-        if (!!this.map)
+        if (this.map)
         {
             const ourBounds = this.map.getBounds();
 
-            if (!!ourBounds && !!bounds) {
+            if (ourBounds && bounds) {
                 const ourSize = Math.abs(ourBounds.getSouthWest().lat() - ourBounds.getNorthEast().lat());
                 const theirSize = Math.abs(bounds.getSouthWest().lat() - bounds.getNorthEast().lat());
 
@@ -40,11 +40,11 @@ export class MapComponent {
     }
 
     onBoundsChanged(): void {
-        if (!!this.map)
+        if (this.map)
         {
             const bounds = this.map.getBounds();
 
-            if (!!bounds)
+            if (bounds)
             {
                 this.boundsChanged.emit(bounds);
             }
@@ -52,7 +52,7 @@ export class MapComponent {
     }
 
     onCenterChanged(): void {
-        if (!!this.map)
+        if (this.map)
         {
             this.centerChanged.emit(this.map.getCenter());
         }

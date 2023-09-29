@@ -746,14 +746,9 @@
     },
     "cli": {
         "analytics": false,
-        "packageManager": "pnpm"
-    },
-    "schematics": {
-        "@angular-eslint/schematics:application": {
-            "setParserOptionsProject": true
-        },
-        "@angular-eslint/schematics:library": {
-            "setParserOptionsProject": true
-        }
+        "packageManager": "pnpm",
+        "schematicCollections": [
+            "@angular-eslint/schematics"
+        ]
     }
 }

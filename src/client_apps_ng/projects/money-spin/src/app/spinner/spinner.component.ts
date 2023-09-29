@@ -54,7 +54,7 @@ export class SpinnerComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        if (!!this.animationId) {
+        if (this.animationId) {
             cancelAnimationFrame(this.animationId);
         }
 
@@ -65,14 +65,14 @@ export class SpinnerComponent implements OnInit, OnDestroy {
         while (!!this.el && this.el.hasChildNodes()) {
             const child = this.el.firstChild;
 
-            if (!!child) {
+            if (child) {
                 this.el.removeChild(child);
             }
         }
     }
 
     prepareScene(): void {
-        if (!!!this.el) {
+        if (!this.el) {
             throw new Error('Unable to prepare scene as root element is not defined');
         }
 

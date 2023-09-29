@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { StateService } from '../services/state.service';
 
 @Injectable()
-export class CanPlayGuard implements CanActivate {
+export class CanPlayGuard  {
     constructor(private router: Router,
                 private stateService: StateService) {
 

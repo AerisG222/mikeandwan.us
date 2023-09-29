@@ -44,11 +44,11 @@ export class GameBoardComponent {
             const card1 = this.selectedCards?.card1;
             const card2 = this.selectedCards?.card2;
 
-            if (!!card1) {
+            if (card1) {
                 card1.isFlipped = false;
             }
 
-            if (!!card2) {
+            if (card2) {
                 card2.isFlipped = false;
             }
 

@@ -18,11 +18,11 @@ export class PlayComponent implements OnInit {
     private activePlayer?: IPlayer;
 
     constructor(private svc: MemoryService) {
-        if (!!!this.svc.player1) {
+        if (!this.svc.player1) {
             throw new Error('player1 cannot be null');
         }
 
-        if (!!!this.svc.player2) {
+        if (!this.svc.player2) {
             throw new Error('player2 cannot be null');
         }
 
@@ -79,7 +79,7 @@ export class PlayComponent implements OnInit {
     }
 
     onHit(isGameOver: boolean): void {
-        if (!!this.activePlayer) {
+        if (this.activePlayer) {
             this.activePlayer.score += 1;
         }
 

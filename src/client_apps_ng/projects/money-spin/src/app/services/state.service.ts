@@ -48,7 +48,7 @@ export class StateService {
     }
 
     startGame(): void {
-        if (!!this.player1 && !!this.player2) {
+        if (this.player1 && this.player2) {
             this.player1.resetScore();
             this.player2.resetScore();
 
@@ -59,7 +59,7 @@ export class StateService {
     }
 
     evaluateTurn(dollarValue: number): boolean {
-        if (!!!this.currentPlayer) {
+        if (!this.currentPlayer) {
             throw new Error('Current player not set');
         }
 
@@ -76,7 +76,7 @@ export class StateService {
     }
 
     private updateCurrentPlayer(): void {
-        if (!!!this.currentPlayer) {
+        if (!this.currentPlayer) {
             this.currentPlayer = this.player1;
         } else if (this.currentPlayer === this.player1) {
             this.currentPlayer = this.player2;

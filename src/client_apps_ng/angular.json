@@ -1,758 +1,759 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1,
-  "newProjectRoot": "projects",
-  "projects": {
-    "binary-clock": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        },
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
-      "root": "projects/binary-clock",
-      "sourceRoot": "projects/binary-clock/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/binary-clock",
-            "index": "projects/binary-clock/src/index.html",
-            "main": "projects/binary-clock/src/main.ts",
-            "polyfills": "projects/binary-clock/src/polyfills.ts",
-            "tsConfig": "projects/binary-clock/tsconfig.app.json",
-            "statsJson": true,
-            "assets": [
-              "projects/binary-clock/src/favicon.ico",
-              "projects/binary-clock/src/assets"
-            ],
-            "styles": [
-              "projects/binary-clock/src/styles.scss"
-            ],
-            "scripts": [],
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/binary-clock/src/environments/environment.ts",
-                  "with": "projects/binary-clock/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "version": 1,
+    "newProjectRoot": "projects",
+    "projects": {
+        "binary-clock": {
+            "projectType": "application",
+            "schematics": {
+                "@schematics/angular:component": {
+                    "style": "scss"
                 },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                "@schematics/angular:application": {
+                    "strict": true
                 }
-              ]
+            },
+            "root": "projects/binary-clock",
+            "sourceRoot": "projects/binary-clock/src",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist/binary-clock",
+                        "index": "projects/binary-clock/src/index.html",
+                        "main": "projects/binary-clock/src/main.ts",
+                        "polyfills": "projects/binary-clock/src/polyfills.ts",
+                        "tsConfig": "projects/binary-clock/tsconfig.app.json",
+                        "statsJson": true,
+                        "assets": [
+                            "projects/binary-clock/src/favicon.ico",
+                            "projects/binary-clock/src/assets"
+                        ],
+                        "styles": [
+                            "projects/binary-clock/src/styles.scss"
+                        ],
+                        "scripts": [],
+                        "extractLicenses": false,
+                        "buildOptimizer": false,
+                        "sourceMap": true,
+                        "optimization": false,
+                        "namedChunks": true
+                    },
+                    "configurations": {
+                        "production": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "projects/binary-clock/src/environments/environment.ts",
+                                    "with": "projects/binary-clock/src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kb",
+                                    "maximumError": "1mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "binary-clock:build"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "binary-clock:build:production"
+                        }
+                    }
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "binary-clock:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "projects/binary-clock/src/test.ts",
+                        "polyfills": "projects/binary-clock/src/polyfills.ts",
+                        "tsConfig": "projects/binary-clock/tsconfig.spec.json",
+                        "karmaConfig": "projects/binary-clock/karma.conf.js",
+                        "assets": [
+                            "projects/binary-clock/src/favicon.ico",
+                            "projects/binary-clock/src/assets"
+                        ],
+                        "styles": [
+                            "projects/binary-clock/src/styles.scss"
+                        ],
+                        "scripts": []
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "projects/binary-clock/**/*.ts",
+                            "projects/binary-clock/**/*.html"
+                        ]
+                    }
+                },
+                "e2e": {
+                    "builder": "@angular-devkit/build-angular:protractor",
+                    "options": {
+                        "protractorConfig": "projects/binary-clock/e2e/protractor.conf.js",
+                        "devServerTarget": "binary-clock:serve"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "binary-clock:serve:production"
+                        }
+                    }
+                }
             }
-          }
         },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "binary-clock:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "binary-clock:build:production"
+        "googlemaps": {
+            "projectType": "application",
+            "schematics": {
+                "@schematics/angular:component": {
+                    "style": "scss"
+                },
+                "@schematics/angular:application": {
+                    "strict": true
+                }
+            },
+            "root": "projects/googlemaps",
+            "sourceRoot": "projects/googlemaps/src",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist/googlemaps",
+                        "index": "projects/googlemaps/src/index.html",
+                        "main": "projects/googlemaps/src/main.ts",
+                        "polyfills": "projects/googlemaps/src/polyfills.ts",
+                        "tsConfig": "projects/googlemaps/tsconfig.app.json",
+                        "statsJson": true,
+                        "assets": [
+                            "projects/googlemaps/src/favicon.ico",
+                            "projects/googlemaps/src/assets"
+                        ],
+                        "styles": [
+                            "projects/googlemaps/src/styles.scss"
+                        ],
+                        "scripts": [],
+                        "extractLicenses": false,
+                        "buildOptimizer": false,
+                        "sourceMap": true,
+                        "optimization": false,
+                        "namedChunks": true
+                    },
+                    "configurations": {
+                        "production": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "projects/googlemaps/src/environments/environment.ts",
+                                    "with": "projects/googlemaps/src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kb",
+                                    "maximumError": "1mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "googlemaps:build"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "googlemaps:build:production"
+                        }
+                    }
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "googlemaps:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "projects/googlemaps/src/test.ts",
+                        "polyfills": "projects/googlemaps/src/polyfills.ts",
+                        "tsConfig": "projects/googlemaps/tsconfig.spec.json",
+                        "karmaConfig": "projects/googlemaps/karma.conf.js",
+                        "assets": [
+                            "projects/googlemaps/src/favicon.ico",
+                            "projects/googlemaps/src/assets"
+                        ],
+                        "styles": [
+                            "projects/googlemaps/src/styles.scss"
+                        ],
+                        "scripts": []
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "projects/googlemaps/**/*.ts",
+                            "projects/googlemaps/**/*.html"
+                        ]
+                    }
+                },
+                "e2e": {
+                    "builder": "@angular-devkit/build-angular:protractor",
+                    "options": {
+                        "protractorConfig": "projects/googlemaps/e2e/protractor.conf.js",
+                        "devServerTarget": "googlemaps:serve"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "googlemaps:serve:production"
+                        }
+                    }
+                }
             }
-          }
         },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "binary-clock:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/binary-clock/src/test.ts",
-            "polyfills": "projects/binary-clock/src/polyfills.ts",
-            "tsConfig": "projects/binary-clock/tsconfig.spec.json",
-            "karmaConfig": "projects/binary-clock/karma.conf.js",
-            "assets": [
-              "projects/binary-clock/src/favicon.ico",
-              "projects/binary-clock/src/assets"
-            ],
-            "styles": [
-              "projects/binary-clock/src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/binary-clock/**/*.ts",
-              "projects/binary-clock/**/*.html"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/binary-clock/e2e/protractor.conf.js",
-            "devServerTarget": "binary-clock:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "binary-clock:serve:production"
+        "learning": {
+            "projectType": "application",
+            "schematics": {
+                "@schematics/angular:component": {
+                    "style": "scss"
+                },
+                "@schematics/angular:application": {
+                    "strict": true
+                }
+            },
+            "root": "projects/learning",
+            "sourceRoot": "projects/learning/src",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist/learning",
+                        "index": "projects/learning/src/index.html",
+                        "main": "projects/learning/src/main.ts",
+                        "polyfills": "projects/learning/src/polyfills.ts",
+                        "tsConfig": "projects/learning/tsconfig.app.json",
+                        "statsJson": true,
+                        "assets": [
+                            "projects/learning/src/favicon.ico",
+                            "projects/learning/src/assets"
+                        ],
+                        "styles": [
+                            "projects/learning/src/styles.scss"
+                        ],
+                        "scripts": [
+                            "projects/learning/src/modernizr.js"
+                        ],
+                        "extractLicenses": false,
+                        "buildOptimizer": false,
+                        "sourceMap": true,
+                        "optimization": false,
+                        "namedChunks": true
+                    },
+                    "configurations": {
+                        "production": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "projects/learning/src/environments/environment.ts",
+                                    "with": "projects/learning/src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kb",
+                                    "maximumError": "1mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "learning:build"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "learning:build:production"
+                        }
+                    }
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "learning:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "projects/learning/src/test.ts",
+                        "polyfills": "projects/learning/src/polyfills.ts",
+                        "tsConfig": "projects/learning/tsconfig.spec.json",
+                        "karmaConfig": "projects/learning/karma.conf.js",
+                        "assets": [
+                            "projects/learning/src/favicon.ico",
+                            "projects/learning/src/assets"
+                        ],
+                        "styles": [
+                            "projects/learning/src/styles.scss"
+                        ],
+                        "scripts": []
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "projects/learning/**/*.ts",
+                            "projects/learning/**/*.html"
+                        ]
+                    }
+                },
+                "e2e": {
+                    "builder": "@angular-devkit/build-angular:protractor",
+                    "options": {
+                        "protractorConfig": "projects/learning/e2e/protractor.conf.js",
+                        "devServerTarget": "learning:serve"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "learning:serve:production"
+                        }
+                    }
+                }
             }
-          }
+        },
+        "memory": {
+            "projectType": "application",
+            "schematics": {
+                "@schematics/angular:component": {
+                    "style": "scss"
+                },
+                "@schematics/angular:application": {
+                    "strict": true
+                }
+            },
+            "root": "projects/memory",
+            "sourceRoot": "projects/memory/src",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist/memory",
+                        "index": "projects/memory/src/index.html",
+                        "main": "projects/memory/src/main.ts",
+                        "polyfills": "projects/memory/src/polyfills.ts",
+                        "tsConfig": "projects/memory/tsconfig.app.json",
+                        "statsJson": true,
+                        "assets": [
+                            "projects/memory/src/favicon.ico",
+                            "projects/memory/src/assets"
+                        ],
+                        "styles": [
+                            "projects/memory/src/styles.scss"
+                        ],
+                        "scripts": [],
+                        "extractLicenses": false,
+                        "buildOptimizer": false,
+                        "sourceMap": true,
+                        "optimization": false,
+                        "namedChunks": true
+                    },
+                    "configurations": {
+                        "production": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "projects/memory/src/environments/environment.ts",
+                                    "with": "projects/memory/src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kb",
+                                    "maximumError": "1mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "memory:build"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "memory:build:production"
+                        }
+                    }
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "memory:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "projects/memory/src/test.ts",
+                        "polyfills": "projects/memory/src/polyfills.ts",
+                        "tsConfig": "projects/memory/tsconfig.spec.json",
+                        "karmaConfig": "projects/memory/karma.conf.js",
+                        "assets": [
+                            "projects/memory/src/favicon.ico",
+                            "projects/memory/src/assets"
+                        ],
+                        "styles": [
+                            "projects/memory/src/styles.scss"
+                        ],
+                        "scripts": []
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "projects/memory/**/*.ts",
+                            "projects/memory/**/*.html"
+                        ]
+                    }
+                },
+                "e2e": {
+                    "builder": "@angular-devkit/build-angular:protractor",
+                    "options": {
+                        "protractorConfig": "projects/memory/e2e/protractor.conf.js",
+                        "devServerTarget": "memory:serve"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "memory:serve:production"
+                        }
+                    }
+                }
+            }
+        },
+        "money-spin": {
+            "projectType": "application",
+            "schematics": {
+                "@schematics/angular:component": {
+                    "style": "scss"
+                },
+                "@schematics/angular:application": {
+                    "strict": true
+                }
+            },
+            "root": "projects/money-spin",
+            "sourceRoot": "projects/money-spin/src",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist/money-spin",
+                        "index": "projects/money-spin/src/index.html",
+                        "main": "projects/money-spin/src/main.ts",
+                        "polyfills": "projects/money-spin/src/polyfills.ts",
+                        "tsConfig": "projects/money-spin/tsconfig.app.json",
+                        "statsJson": true,
+                        "assets": [
+                            "projects/money-spin/src/favicon.ico",
+                            "projects/money-spin/src/assets"
+                        ],
+                        "styles": [
+                            "projects/money-spin/src/styles.scss"
+                        ],
+                        "scripts": [],
+                        "extractLicenses": false,
+                        "buildOptimizer": false,
+                        "sourceMap": true,
+                        "optimization": false,
+                        "namedChunks": true
+                    },
+                    "configurations": {
+                        "production": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "projects/money-spin/src/environments/environment.ts",
+                                    "with": "projects/money-spin/src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kb",
+                                    "maximumError": "1mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "money-spin:build"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "money-spin:build:production"
+                        }
+                    }
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "money-spin:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "projects/money-spin/src/test.ts",
+                        "polyfills": "projects/money-spin/src/polyfills.ts",
+                        "tsConfig": "projects/money-spin/tsconfig.spec.json",
+                        "karmaConfig": "projects/money-spin/karma.conf.js",
+                        "assets": [
+                            "projects/money-spin/src/favicon.ico",
+                            "projects/money-spin/src/assets"
+                        ],
+                        "styles": [
+                            "projects/money-spin/src/styles.scss"
+                        ],
+                        "scripts": []
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "projects/money-spin/**/*.ts",
+                            "projects/money-spin/**/*.html"
+                        ]
+                    }
+                },
+                "e2e": {
+                    "builder": "@angular-devkit/build-angular:protractor",
+                    "options": {
+                        "protractorConfig": "projects/money-spin/e2e/protractor.conf.js",
+                        "devServerTarget": "money-spin:serve"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "money-spin:serve:production"
+                        }
+                    }
+                }
+            }
+        },
+        "weekend-countdown": {
+            "projectType": "application",
+            "schematics": {
+                "@schematics/angular:component": {
+                    "style": "scss"
+                },
+                "@schematics/angular:application": {
+                    "strict": true
+                }
+            },
+            "root": "projects/weekend-countdown",
+            "sourceRoot": "projects/weekend-countdown/src",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist/weekend-countdown",
+                        "index": "projects/weekend-countdown/src/index.html",
+                        "main": "projects/weekend-countdown/src/main.ts",
+                        "polyfills": "projects/weekend-countdown/src/polyfills.ts",
+                        "tsConfig": "projects/weekend-countdown/tsconfig.app.json",
+                        "statsJson": true,
+                        "assets": [
+                            "projects/weekend-countdown/src/favicon.ico",
+                            "projects/weekend-countdown/src/assets"
+                        ],
+                        "styles": [
+                            "projects/weekend-countdown/src/styles.scss"
+                        ],
+                        "scripts": [],
+                        "extractLicenses": false,
+                        "buildOptimizer": false,
+                        "sourceMap": true,
+                        "optimization": false,
+                        "namedChunks": true
+                    },
+                    "configurations": {
+                        "production": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "projects/weekend-countdown/src/environments/environment.ts",
+                                    "with": "projects/weekend-countdown/src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kb",
+                                    "maximumError": "1mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "weekend-countdown:build"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "weekend-countdown:build:production"
+                        }
+                    }
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "weekend-countdown:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "projects/weekend-countdown/src/test.ts",
+                        "polyfills": "projects/weekend-countdown/src/polyfills.ts",
+                        "tsConfig": "projects/weekend-countdown/tsconfig.spec.json",
+                        "karmaConfig": "projects/weekend-countdown/karma.conf.js",
+                        "assets": [
+                            "projects/weekend-countdown/src/favicon.ico",
+                            "projects/weekend-countdown/src/assets"
+                        ],
+                        "styles": [
+                            "projects/weekend-countdown/src/styles.scss"
+                        ],
+                        "scripts": []
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "projects/weekend-countdown/**/*.ts",
+                            "projects/weekend-countdown/**/*.html"
+                        ]
+                    }
+                },
+                "e2e": {
+                    "builder": "@angular-devkit/build-angular:protractor",
+                    "options": {
+                        "protractorConfig": "projects/weekend-countdown/e2e/protractor.conf.js",
+                        "devServerTarget": "weekend-countdown:serve"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "weekend-countdown:serve:production"
+                        }
+                    }
+                }
+            }
         }
-      }
     },
-    "googlemaps": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        },
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
-      "root": "projects/googlemaps",
-      "sourceRoot": "projects/googlemaps/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/googlemaps",
-            "index": "projects/googlemaps/src/index.html",
-            "main": "projects/googlemaps/src/main.ts",
-            "polyfills": "projects/googlemaps/src/polyfills.ts",
-            "tsConfig": "projects/googlemaps/tsconfig.app.json",
-            "statsJson": true,
-            "assets": [
-              "projects/googlemaps/src/favicon.ico",
-              "projects/googlemaps/src/assets"
-            ],
-            "styles": [
-              "projects/googlemaps/src/styles.scss"
-            ],
-            "scripts": [],
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/googlemaps/src/environments/environment.ts",
-                  "with": "projects/googlemaps/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "googlemaps:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "googlemaps:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "googlemaps:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/googlemaps/src/test.ts",
-            "polyfills": "projects/googlemaps/src/polyfills.ts",
-            "tsConfig": "projects/googlemaps/tsconfig.spec.json",
-            "karmaConfig": "projects/googlemaps/karma.conf.js",
-            "assets": [
-              "projects/googlemaps/src/favicon.ico",
-              "projects/googlemaps/src/assets"
-            ],
-            "styles": [
-              "projects/googlemaps/src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/googlemaps/**/*.ts",
-              "projects/googlemaps/**/*.html"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/googlemaps/e2e/protractor.conf.js",
-            "devServerTarget": "googlemaps:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "googlemaps:serve:production"
-            }
-          }
-        }
-      }
+    "cli": {
+        "analytics": false,
+        "packageManager": "pnpm"
     },
-    "learning": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
+    "schematics": {
+        "@angular-eslint/schematics:application": {
+            "setParserOptionsProject": true
         },
-        "@schematics/angular:application": {
-          "strict": true
+        "@angular-eslint/schematics:library": {
+            "setParserOptionsProject": true
         }
-      },
-      "root": "projects/learning",
-      "sourceRoot": "projects/learning/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/learning",
-            "index": "projects/learning/src/index.html",
-            "main": "projects/learning/src/main.ts",
-            "polyfills": "projects/learning/src/polyfills.ts",
-            "tsConfig": "projects/learning/tsconfig.app.json",
-            "statsJson": true,
-            "assets": [
-              "projects/learning/src/favicon.ico",
-              "projects/learning/src/assets"
-            ],
-            "styles": [
-              "projects/learning/src/styles.scss"
-            ],
-            "scripts": [
-              "projects/learning/src/modernizr.js"
-            ],
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/learning/src/environments/environment.ts",
-                  "with": "projects/learning/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "learning:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "learning:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "learning:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/learning/src/test.ts",
-            "polyfills": "projects/learning/src/polyfills.ts",
-            "tsConfig": "projects/learning/tsconfig.spec.json",
-            "karmaConfig": "projects/learning/karma.conf.js",
-            "assets": [
-              "projects/learning/src/favicon.ico",
-              "projects/learning/src/assets"
-            ],
-            "styles": [
-              "projects/learning/src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/learning/**/*.ts",
-              "projects/learning/**/*.html"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/learning/e2e/protractor.conf.js",
-            "devServerTarget": "learning:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "learning:serve:production"
-            }
-          }
-        }
-      }
-    },
-    "memory": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        },
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
-      "root": "projects/memory",
-      "sourceRoot": "projects/memory/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/memory",
-            "index": "projects/memory/src/index.html",
-            "main": "projects/memory/src/main.ts",
-            "polyfills": "projects/memory/src/polyfills.ts",
-            "tsConfig": "projects/memory/tsconfig.app.json",
-            "statsJson": true,
-            "assets": [
-              "projects/memory/src/favicon.ico",
-              "projects/memory/src/assets"
-            ],
-            "styles": [
-              "projects/memory/src/styles.scss"
-            ],
-            "scripts": [],
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/memory/src/environments/environment.ts",
-                  "with": "projects/memory/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "memory:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "memory:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "memory:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/memory/src/test.ts",
-            "polyfills": "projects/memory/src/polyfills.ts",
-            "tsConfig": "projects/memory/tsconfig.spec.json",
-            "karmaConfig": "projects/memory/karma.conf.js",
-            "assets": [
-              "projects/memory/src/favicon.ico",
-              "projects/memory/src/assets"
-            ],
-            "styles": [
-              "projects/memory/src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/memory/**/*.ts",
-              "projects/memory/**/*.html"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/memory/e2e/protractor.conf.js",
-            "devServerTarget": "memory:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "memory:serve:production"
-            }
-          }
-        }
-      }
-    },
-    "money-spin": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        },
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
-      "root": "projects/money-spin",
-      "sourceRoot": "projects/money-spin/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/money-spin",
-            "index": "projects/money-spin/src/index.html",
-            "main": "projects/money-spin/src/main.ts",
-            "polyfills": "projects/money-spin/src/polyfills.ts",
-            "tsConfig": "projects/money-spin/tsconfig.app.json",
-            "statsJson": true,
-            "assets": [
-              "projects/money-spin/src/favicon.ico",
-              "projects/money-spin/src/assets"
-            ],
-            "styles": [
-              "projects/money-spin/src/styles.scss"
-            ],
-            "scripts": [],
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/money-spin/src/environments/environment.ts",
-                  "with": "projects/money-spin/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "money-spin:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "money-spin:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "money-spin:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/money-spin/src/test.ts",
-            "polyfills": "projects/money-spin/src/polyfills.ts",
-            "tsConfig": "projects/money-spin/tsconfig.spec.json",
-            "karmaConfig": "projects/money-spin/karma.conf.js",
-            "assets": [
-              "projects/money-spin/src/favicon.ico",
-              "projects/money-spin/src/assets"
-            ],
-            "styles": [
-              "projects/money-spin/src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/money-spin/**/*.ts",
-              "projects/money-spin/**/*.html"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/money-spin/e2e/protractor.conf.js",
-            "devServerTarget": "money-spin:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "money-spin:serve:production"
-            }
-          }
-        }
-      }
-    },
-    "weekend-countdown": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        },
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
-      "root": "projects/weekend-countdown",
-      "sourceRoot": "projects/weekend-countdown/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/weekend-countdown",
-            "index": "projects/weekend-countdown/src/index.html",
-            "main": "projects/weekend-countdown/src/main.ts",
-            "polyfills": "projects/weekend-countdown/src/polyfills.ts",
-            "tsConfig": "projects/weekend-countdown/tsconfig.app.json",
-            "statsJson": true,
-            "assets": [
-              "projects/weekend-countdown/src/favicon.ico",
-              "projects/weekend-countdown/src/assets"
-            ],
-            "styles": [
-              "projects/weekend-countdown/src/styles.scss"
-            ],
-            "scripts": [],
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/weekend-countdown/src/environments/environment.ts",
-                  "with": "projects/weekend-countdown/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "weekend-countdown:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "weekend-countdown:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "weekend-countdown:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/weekend-countdown/src/test.ts",
-            "polyfills": "projects/weekend-countdown/src/polyfills.ts",
-            "tsConfig": "projects/weekend-countdown/tsconfig.spec.json",
-            "karmaConfig": "projects/weekend-countdown/karma.conf.js",
-            "assets": [
-              "projects/weekend-countdown/src/favicon.ico",
-              "projects/weekend-countdown/src/assets"
-            ],
-            "styles": [
-              "projects/weekend-countdown/src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/weekend-countdown/**/*.ts",
-              "projects/weekend-countdown/**/*.html"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/weekend-countdown/e2e/protractor.conf.js",
-            "devServerTarget": "weekend-countdown:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "weekend-countdown:serve:production"
-            }
-          }
-        }
-      }
     }
-  },
-  "cli": {
-    "analytics": false
-  },
-  "schematics": {
-    "@angular-eslint/schematics:application": {
-      "setParserOptionsProject": true
-    },
-    "@angular-eslint/schematics:library": {
-      "setParserOptionsProject": true
-    }
-  }
 }

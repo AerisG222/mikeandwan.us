@@ -2,19 +2,7 @@
 # https://github.com/dotnet/dotnet-docker/blob/master/samples/aspnetapp/Dockerfile.alpine-x64
 FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine-amd64 AS build
 
-RUN apk --no-cache add \
-    bash \
-    findutils \
-    g++ \
-    make \
-    nodejs \
-    npm \
-    rsync \
-    sed
-
-RUN npm install -g \
-    clean-css-cli \
-    uglify-js
+RUN apk --no-cache add bash
 
 WORKDIR /src
 
@@ -23,13 +11,8 @@ COPY _build.sh             .
 COPY build_client_apps.sh  .
 COPY mikeandwan.us.sln     .
 COPY nuget.config          .
-#COPY src/.                 src/
-RUN cp -r /tmp/context/src .
+COPY src/.                 src/
 COPY tests/.               tests/
-
-# build with:  buildah bud -v "$(pwd)":/tmp/context:ro,Z -f Containerfile.api -t maw-api-dev
-
-ENV NG_CLI_ANALYTICS=ci
 
 RUN ./_build.sh api
 

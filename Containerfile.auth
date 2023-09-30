@@ -8,15 +8,12 @@ RUN apk --no-cache add \
     g++ \
     make \
     nodejs \
-    npm \
     rsync \
     sed
 
-RUN npm install -g \
-    clean-css-cli \
-    uglify-js
-
 RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
+
+RUN sh -c 'source /root/.shrc && pnpm install -g clean-css-cli uglify-js'
 
 WORKDIR /src
 
@@ -25,13 +22,8 @@ COPY _build.sh             .
 COPY build_client_apps.sh  .
 COPY mikeandwan.us.sln     .
 COPY nuget.config          .
-#COPY src/.                 src/
-RUN cp -r /tmp/context/src .
+COPY src/.                 src/
 COPY tests/.               tests/
-
-# build with:  buildah bud -v "$(pwd)":/tmp/context:ro,Z -f Containerfile.auth -t maw-auth-dev
-
-ENV NG_CLI_ANALYTICS=ci
 
 RUN sh -c 'source /root/.shrc && ./_build.sh auth'
 

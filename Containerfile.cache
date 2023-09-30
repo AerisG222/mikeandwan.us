@@ -8,11 +8,8 @@ WORKDIR /
 
 COPY mikeandwan.us.sln     .
 COPY nuget.config          .
-#COPY src/.                 src/
-RUN cp -r /tmp/context/src .
+COPY src/.                 src/
 COPY tests/.               tests/
-
-# build with:  buildah bud -v "$(pwd)":/tmp/context:ro,Z -f Containerfile.cache -t maw-cache-sync-dev
 
 RUN dotnet publish -o /build -c Release -r linux-musl-x64 --self-contained false /src/Maw.Cache.Sync/Maw.Cache.Sync.csproj
 

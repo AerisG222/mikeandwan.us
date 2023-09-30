@@ -12,7 +12,7 @@ public class VideoRepositoryTests
     {
         var repo = GetRepo();
 
-        var categories = await repo.GetAllCategoriesAsync(new string[] { "friend" }).ConfigureAwait(false);
+        var categories = await repo.GetAllCategoriesAsync(new string[] { "friend" });
 
         Assert.NotNull(categories);
         Assert.NotNull(categories.First().TeaserImage);
@@ -24,7 +24,7 @@ public class VideoRepositoryTests
     {
         var repo = GetRepo();
 
-        var videos = await repo.GetVideosInCategoryAsync(1, new string[] { "friend" }).ConfigureAwait(false);
+        var videos = await repo.GetVideosInCategoryAsync(1, new string[] { "friend" });
 
         Assert.NotNull(videos);
         Assert.NotNull(videos.First().VideoScaled);

@@ -12,7 +12,7 @@ public class PhotoRepositoryTests
     {
         var repo = GetRepo();
 
-        var categories = await repo.GetAllCategoriesAsync(new string[] { "friend" }).ConfigureAwait(false);
+        var categories = await repo.GetAllCategoriesAsync(new string[] { "friend" });
 
         Assert.NotNull(categories);
         Assert.NotNull(categories.First().TeaserImage);
@@ -24,7 +24,7 @@ public class PhotoRepositoryTests
     {
         var repo = GetRepo();
 
-        var photos = await repo.GetPhotosForCategoryAsync(1, new string[] { "friend" }).ConfigureAwait(false);
+        var photos = await repo.GetPhotosForCategoryAsync(1, new string[] { "friend" });
 
         Assert.NotNull(photos);
         Assert.NotNull(photos.First().XsInfo);

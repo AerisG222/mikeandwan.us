@@ -14,8 +14,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Duende.IdentityServer" Version="6.3.4" />
-        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.3.4" />
+        <PackageReference Include="Duende.IdentityServer" Version="6.3.5" />
+        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.3.5" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="7.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="7.0.11" />

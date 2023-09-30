@@ -8,13 +8,12 @@ RUN apk --no-cache add \
     g++ \
     make \
     nodejs \
-    npm \
     rsync \
     sed
 
-RUN npm install -g \
-    clean-css-cli \
-    uglify-js
+RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
+
+RUN sh -c 'source /root/.shrc && pnpm install -g clean-css-cli uglify-js'
 
 WORKDIR /src
 
@@ -31,7 +30,7 @@ COPY tests/.               tests/
 
 ENV NG_CLI_ANALYTICS=ci
 
-RUN ./_build.sh www
+RUN sh -c 'source /root/.shrc && ./_build.sh www'
 
 
 # build runtime image

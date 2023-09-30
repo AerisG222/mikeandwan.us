@@ -16,6 +16,8 @@ RUN npm install -g \
     clean-css-cli \
     uglify-js
 
+RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
+
 WORKDIR /src
 
 COPY _client_app_vars.sh   .
@@ -31,7 +33,7 @@ COPY tests/.               tests/
 
 ENV NG_CLI_ANALYTICS=ci
 
-RUN ./_build.sh auth
+RUN sh -c 'source /root/.shrc && ./_build.sh auth'
 
 
 # build runtime image

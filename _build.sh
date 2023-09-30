@@ -180,8 +180,8 @@ build_assets() {
     # ensure clean builds
     rm -rf node_modules
 
-    npm ci
-    npm run all
+    pnpm i
+    pnpm run all
 
     popd
 }

@@ -9,7 +9,7 @@ clean_app() {
 
     rm -rf dist
     rm -rf node_modules
-    npm ci
+    pnpm i
 }
 
 build_app() {
@@ -25,7 +25,7 @@ build_app() {
     fi
 
     echo "building ${app}..."
-    npm run "${buildcmd}"
+    pnpm run "${buildcmd}"
 
     popd
 }
@@ -38,10 +38,8 @@ build_ng_apps() {
         clean_app
     fi
 
-    ng analytics off
-
     echo "building ${app}..."
-    npm run "${buildcmd}"
+    pnpm run "${buildcmd}"
 }
 
 build_all_apps() {

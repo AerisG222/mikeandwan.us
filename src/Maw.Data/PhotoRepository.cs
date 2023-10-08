@@ -49,6 +49,13 @@ public class PhotoRepository
         return result.FirstOrDefault();
     }
 
+    public async Task<Category?> GetCategoryForPhotoAsync(int photoId, string[]? roles)
+    {
+        var result = await InternalGetCategoriesAsync(roles, photoId: photoId);
+
+        return result.FirstOrDefault();
+    }
+
     public Task<IEnumerable<Photo>> GetPhotosForCategoryAsync(short categoryId, string[] roles)
     {
         return InternalGetPhotosAsync(roles, categoryId);
@@ -267,18 +274,19 @@ public class PhotoRepository
         return RunAsync(conn => conn.QueryAsync<CategoryAndRoles>("SELECT * FROM photo.get_category_roles();"));
     }
 
-    Task<IEnumerable<Category>> InternalGetCategoriesAsync(string[]? roles, short? year = null, short? categoryId = null, short? sinceCategoryId = null)
+    Task<IEnumerable<Category>> InternalGetCategoriesAsync(string[]? roles, short? year = null, short? categoryId = null, short? sinceCategoryId = null, int? photoId = null)
     {
         return RunAsync(async conn =>
         {
             var rows = await conn.QueryAsync(
-                "SELECT * FROM photo.get_categories(@roles, @year, @categoryId, @sinceCategoryId);",
+                "SELECT * FROM photo.get_categories(@roles, @year, @categoryId, @sinceCategoryId, @photoId);",
                 new
                 {
                     roles,
                     year,
                     categoryId,
-                    sinceCategoryId
+                    sinceCategoryId,
+                    photoId
                 }
             );
 

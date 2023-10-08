@@ -41,6 +41,13 @@ public class VideoRepository
         return result.FirstOrDefault();
     }
 
+    public async Task<Category?> GetCategoryForVideoAsync(short videoId, string[]? roles)
+    {
+        var result = await InternalGetCategoriesAsync(roles, videoId: videoId);
+
+        return result.FirstOrDefault();
+    }
+
     public Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, string[] roles)
     {
         return InternalGetVideosAsync(roles, categoryId);
@@ -221,17 +228,18 @@ public class VideoRepository
         return RunAsync(conn => conn.QueryAsync<CategoryAndRoles>("SELECT * FROM video.get_category_roles();"));
     }
 
-    Task<IEnumerable<Category>> InternalGetCategoriesAsync(string[]? roles, short? year = null, short? categoryId = null)
+    Task<IEnumerable<Category>> InternalGetCategoriesAsync(string[]? roles, short? year = null, short? categoryId = null, short? videoId = null)
     {
         return RunAsync(async conn =>
         {
             var rows = await conn.QueryAsync(
-                "SELECT * FROM video.get_categories(@roles, @year, @categoryId);",
+                "SELECT * FROM video.get_categories(@roles, @year, @categoryId, @videoId);",
                 new
                 {
                     roles,
                     year,
-                    categoryId
+                    categoryId,
+                    videoId
                 }
             );
 

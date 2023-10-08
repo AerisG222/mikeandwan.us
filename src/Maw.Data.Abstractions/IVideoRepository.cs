@@ -11,6 +11,7 @@ public interface IVideoRepository
     Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, string[] roles);
     Task<Video?> GetVideoAsync(short id, string[] roles);
     Task<Category?> GetCategoryAsync(short categoryId, string[]? roles);
+    Task<Category?> GetCategoryForVideoAsync(short videoId, string[]? roles);
     Task<IEnumerable<Comment>> GetCommentsAsync(short videoId, string[] roles);
     Task<Rating?> GetRatingsAsync(short videoId, string username, string[] roles);
     Task<GpsDetail?> GetGpsDetailAsync(short videoId, string[] roles);

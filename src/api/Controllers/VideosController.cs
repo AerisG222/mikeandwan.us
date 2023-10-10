@@ -102,7 +102,7 @@ public class VideosController
             throw new ArgumentNullException(nameof(gps));
         }
 
-        await _svc.SetGpsOverrideAsync(id, gps, User.GetUsername());
+        await _svc.SetGpsOverrideAsync(id, gps, User.GetUsername(), User.GetAllRoles());
 
         var detail = await _svc.GetGpsDetailAsync(id, User.GetAllRoles());
 

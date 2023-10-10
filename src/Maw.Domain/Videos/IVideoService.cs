@@ -19,7 +19,7 @@ public interface IVideoService
     Task<float?> RemoveRatingAsync(short videoId, string username, string[] roles);
 
     // admin functions
-    Task SetGpsOverrideAsync(short videoId, GpsCoordinate gps, string username);
+    Task SetGpsOverrideAsync(short videoId, GpsCoordinate gps, string username, string[] roles);
     Task SetCategoryTeaserAsync(short categoryId, short videoId);
     Task<IEnumerable<CategoryAndRoles>> GetCategoriesAndRolesAsync();
 }

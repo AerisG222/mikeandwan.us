@@ -142,9 +142,15 @@ public class PhotoService
         return _repo.RemoveRatingAsync(photoId, username, roles);
     }
 
-    public Task SetGpsOverrideAsync(int photoId, GpsCoordinate gps, string username)
+    public async Task SetGpsOverrideAsync(int photoId, GpsCoordinate gps, string username, string[] roles)
     {
-        return _repo.SetGpsOverrideAsync(photoId, gps, username);
+        await _repo.SetGpsOverrideAsync(photoId, gps, username);
+
+        var category = await _repo.GetCategoryForPhotoAsync(photoId, roles);
+
+        if(category != null && !category.IsMissingGpsData) {
+            await _cache.AddCategoryAsync(new SecuredResource<Category>(category, Array.Empty<string>()));
+        }
     }
 
     public async Task SetCategoryTeaserAsync(short categoryId, int photoId)

@@ -108,9 +108,15 @@ public class VideoService
         return _repo.RemoveRatingAsync(videoId, username, roles);
     }
 
-    public Task SetGpsOverrideAsync(short videoId, GpsCoordinate gps, string username)
+    public async Task SetGpsOverrideAsync(short videoId, GpsCoordinate gps, string username, string[] roles)
     {
-        return _repo.SetGpsOverrideAsync(videoId, gps, username);
+        await _repo.SetGpsOverrideAsync(videoId, gps, username);
+
+        var category = await _repo.GetCategoryForVideoAsync(videoId, roles);
+
+        if(category != null && !category.IsMissingGpsData) {
+            await _cache.AddCategoryAsync(new SecuredResource<Category>(category, Array.Empty<string>()));
+        }
     }
 
     public async Task SetCategoryTeaserAsync(short categoryId, short videoId)

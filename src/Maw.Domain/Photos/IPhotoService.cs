@@ -23,7 +23,7 @@ public interface IPhotoService
     Task<float?> RemoveRatingAsync(int photoId, string username, string[] roles);
 
     // admin functions
-    Task SetGpsOverrideAsync(int photoId, GpsCoordinate gps, string username);
+    Task SetGpsOverrideAsync(int photoId, GpsCoordinate gps, string username, string[] roles);
     Task SetCategoryTeaserAsync(short categoryId, int photoId);
     Task<IEnumerable<CategoryAndRoles>> GetCategoriesAndRolesAsync();
 }

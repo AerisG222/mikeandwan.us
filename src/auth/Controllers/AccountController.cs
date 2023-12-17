@@ -122,13 +122,20 @@ public class AccountController
         var result = await HttpContext.AuthenticateAsync(Duende.IdentityServer.IdentityServerConstants.ExternalCookieAuthenticationScheme);
         var items = result?.Properties?.Items;
 
-        if (result?.Succeeded != true || items == null || !items.ContainsKey("scheme"))
+        if (result?.Succeeded != true || items == null)
         {
             _log.LogError("Unable to obtain external login info");
             return View();
         }
 
-        var provider = items["scheme"];
+        items.TryGetValue("scheme", out string? provider);
+
+        if(provider == null)
+        {
+            _log.LogError("Unable to identify authentication provider");
+            return View();
+        }
+
         var email = result.Principal?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email);
 
         if (email == null)

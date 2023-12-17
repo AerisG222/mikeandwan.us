@@ -19,8 +19,8 @@ public class ErrorController
     {
         var feature = HttpContext.Features.Get<IExceptionHandlerFeature>();
 
-        _log.LogError("There was an error in the application: ", feature?.Error);
-        _log.LogError("Inner Exception: ", feature?.Error?.InnerException);
+        _log.LogError("There was an error in the application: {Error}", feature?.Error);
+        _log.LogError("Inner Exception: {Error}", feature?.Error?.InnerException);
 
         return View();
     }

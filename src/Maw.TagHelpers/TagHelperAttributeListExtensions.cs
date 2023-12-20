@@ -6,10 +6,7 @@ public static class TagHelperAttributeListExtensions
 {
     public static void Merge(this TagHelperAttributeList attributes, string name, string value)
     {
-        if (attributes == null)
-        {
-            throw new ArgumentNullException(nameof(attributes));
-        }
+        ArgumentNullException.ThrowIfNull(attributes);
 
         var curr = attributes.FirstOrDefault(att => string.Equals(att.Name, name, StringComparison.Ordinal));
 

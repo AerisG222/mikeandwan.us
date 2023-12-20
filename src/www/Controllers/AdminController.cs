@@ -58,10 +58,7 @@ public class AdminController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateBlogPost(BlogPostModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Administration;
 

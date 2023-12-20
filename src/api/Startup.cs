@@ -25,6 +25,10 @@ namespace MawApi;
 
 public class Startup
 {
+    static readonly string[] CORS_HEADERS_DEFAULT = [
+        "Content-Disposition"
+    ];
+
     readonly IConfiguration _config;
 
     public Startup(IConfiguration config)
@@ -143,17 +147,17 @@ public class Startup
     static void ConfigureDefaultCorsPolicy(CorsOptions opts, UrlConfig urlConfig)
     {
         opts.AddDefaultPolicy(policy => {
+#pragma warning disable CA1861
             var origins = new string[] {
                 urlConfig.Www,
                 urlConfig.Photos,
                 urlConfig.Files,
                 urlConfig.PhotosSolid
             };
+#pragma warning restore CA1861
 
             policy.WithOrigins(origins)
-                .WithExposedHeaders(new string[] {
-                    "Content-Disposition"
-                })
+                .WithExposedHeaders(CORS_HEADERS_DEFAULT)
                 .AllowCredentials()
                 .AllowAnyHeader()
                 .AllowAnyMethod();

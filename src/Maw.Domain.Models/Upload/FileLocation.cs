@@ -21,10 +21,7 @@ public class FileLocation
 
     public static FileLocation FromRelativePath(string relativePath)
     {
-        if (string.IsNullOrWhiteSpace(relativePath))
-        {
-            throw new ArgumentNullException(nameof(relativePath));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(relativePath);
 
         if (Path.IsPathRooted(relativePath))
         {

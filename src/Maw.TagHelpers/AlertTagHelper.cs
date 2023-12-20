@@ -13,10 +13,7 @@ public class AlertTagHelper
 
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
-        if (output == null)
-        {
-            throw new ArgumentNullException(nameof(output));
-        }
+        ArgumentNullException.ThrowIfNull(output);
 
         var klass = "alert ";
 

@@ -6,6 +6,10 @@ namespace MawAuth.Models;
 
 public class Config
 {
+    static readonly string[] RESOURCE_API_SCOPES = [
+        "maw_api"
+    ];
+
     readonly string _wwwUrl;
     readonly string _wwwSecret;
     readonly string _photosUrl;
@@ -27,7 +31,7 @@ public class Config
         return new List<ApiResource>
         {
             new ApiResource("maw_api_resource", "APIs to access photo and video data within mikeandwan.us") {
-                Scopes = new string[] { "maw_api" }
+                Scopes = RESOURCE_API_SCOPES
             }
         };
     }

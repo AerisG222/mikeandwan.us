@@ -230,10 +230,7 @@ public class GpsCoordinate
 
     public static void ParseGpsCoordinate(string coord, out float degrees, out float minutes, out float seconds)
     {
-        if (coord == null)
-        {
-            throw new ArgumentNullException(nameof(coord));
-        }
+        ArgumentNullException.ThrowIfNull(coord);
 
         string[] splitTerms = new string[] { " ", "'", "\"", "deg", "N", "S", "E", "W" };
 

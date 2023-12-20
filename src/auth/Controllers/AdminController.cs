@@ -82,10 +82,7 @@ public class AdminController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateUser(CreateUserModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         if (ModelState.IsValid)
         {
@@ -155,10 +152,7 @@ public class AdminController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteUser(DeleteUserModel model, IFormCollection collection)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         if (ModelState.IsValid)
         {
@@ -205,10 +199,7 @@ public class AdminController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateRole(CreateRoleModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         if (ModelState.IsValid)
         {
@@ -249,10 +240,7 @@ public class AdminController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteRole(DeleteRoleModel model, IFormCollection collection)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         if (ModelState.IsValid)
         {
@@ -311,10 +299,7 @@ public class AdminController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditProfile(EditProfileModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         if (ModelState.IsValid)
         {
@@ -379,10 +364,7 @@ public class AdminController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ManageRolesForUser(IFormCollection collection)
     {
-        if (collection == null)
-        {
-            throw new ArgumentNullException(nameof(collection));
-        }
+        ArgumentNullException.ThrowIfNull(collection);
 
         var username = collection["Username"].First();
 
@@ -439,7 +421,7 @@ public class AdminController
             }
         }
 
-        if (errs.Any())
+        if (errs.Count == 0)
         {
             model.Result = IdentityResult.Failed(errs.ToArray());
         }
@@ -482,10 +464,7 @@ public class AdminController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditRoleMembers(EditRoleMembersModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         // this follows the same logic as ManageRolesForUser, so see that for more info
         if (ModelState.IsValid)
@@ -523,7 +502,7 @@ public class AdminController
                 }
             }
 
-            if (errs.Any())
+            if (errs.Count == 0)
             {
                 model.Result = IdentityResult.Failed(errs.ToArray());
             }

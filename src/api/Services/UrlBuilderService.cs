@@ -14,20 +14,14 @@ public class UrlBuilderService
 
     public string BuildApiUrl(string relativePath)
     {
-        if(relativePath == null)
-        {
-            throw new ArgumentNullException(nameof(relativePath));
-        }
+        ArgumentNullException.ThrowIfNull(relativePath);
 
         return BuildAbsoluteUrl(_cfg.Api, relativePath);
     }
 
     public string BuildWwwUrl(string relativePath)
     {
-        if(relativePath == null)
-        {
-            throw new ArgumentNullException(nameof(relativePath));
-        }
+        ArgumentNullException.ThrowIfNull(relativePath);
 
         return BuildAbsoluteUrl(_cfg.Www, relativePath);
     }

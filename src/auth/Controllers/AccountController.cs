@@ -69,10 +69,7 @@ public class AccountController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         model.WasAttempted = true;
         model.ExternalSchemes = await GetExternalLoginSchemes();
@@ -204,10 +201,7 @@ public class AccountController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         model.WasEmailAttempted = true;
 
@@ -264,10 +258,7 @@ public class AccountController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         model.ResetAttempted = true;
 
@@ -315,10 +306,7 @@ public class AccountController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         model.ChangeAttempted = true;
 
@@ -392,10 +380,7 @@ public class AccountController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditProfile(ProfileModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.States = await GetStateSelectListItemsAsync();
         ViewBag.Countries = await GetCountrySelectListItemsAsync();
@@ -471,7 +456,7 @@ public class AccountController
         }
     }
 
-    IActionResult RedirectToLocal(string returnUrl)
+    RedirectResult RedirectToLocal(string returnUrl)
     {
         if (Url.IsLocalUrl(returnUrl))
         {

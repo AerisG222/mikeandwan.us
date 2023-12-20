@@ -30,10 +30,7 @@ public class AboutController
         RazorViewToStringRenderer razorRenderer)
         : base(log)
     {
-        if (contactOpts == null)
-        {
-            throw new ArgumentNullException(nameof(contactOpts));
-        }
+        ArgumentNullException.ThrowIfNull(contactOpts);
 
         _config = contactOpts.Value;
 
@@ -70,10 +67,7 @@ public class AboutController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Contact(IFormCollection collection)
     {
-        if (collection == null)
-        {
-            throw new ArgumentNullException(nameof(collection));
-        }
+        ArgumentNullException.ThrowIfNull(collection);
 
         ViewBag.NavigationZone = NavigationZone.About;
 

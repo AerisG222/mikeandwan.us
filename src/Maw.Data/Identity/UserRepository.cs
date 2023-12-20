@@ -74,10 +74,7 @@ public class UserRepository
 
     public Task<bool> UpdateUserPasswordAsync(MawUser user)
     {
-        if(user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         return RunAsync(async conn => {
             var result = await conn.QuerySingleAsync<long>(
@@ -94,10 +91,7 @@ public class UserRepository
 
     public Task<bool> UpdateUserAsync(MawUser updatedUser)
     {
-        if(updatedUser == null)
-        {
-            throw new ArgumentNullException(nameof(updatedUser));
-        }
+        ArgumentNullException.ThrowIfNull(updatedUser);
 
         return RunAsync(async conn => {
             var result = await conn.QuerySingleAsync<long>(
@@ -180,10 +174,7 @@ public class UserRepository
 
     public Task<short> AddUserAsync(MawUser user)
     {
-        if(user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         return RunAsync(conn =>
             conn.QuerySingleAsync<short>(

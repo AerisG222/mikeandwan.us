@@ -22,10 +22,7 @@ public class MawRoleStore
     #region IRoleStore
     public async Task<IdentityResult> CreateAsync(MawRole role, CancellationToken cancellationToken = default)
     {
-        if (role == null)
-        {
-            throw new ArgumentNullException(nameof(role));
-        }
+        ArgumentNullException.ThrowIfNull(role);
 
         if(string.IsNullOrWhiteSpace(role.Name))
         {
@@ -49,10 +46,7 @@ public class MawRoleStore
 
     public async Task<IdentityResult> DeleteAsync(MawRole role, CancellationToken cancellationToken = default)
     {
-        if (role == null)
-        {
-            throw new ArgumentNullException(nameof(role));
-        }
+        ArgumentNullException.ThrowIfNull(role);
 
         if(string.IsNullOrWhiteSpace(role.Name))
         {
@@ -66,50 +60,35 @@ public class MawRoleStore
 
     public Task<string> GetRoleIdAsync(MawRole role, CancellationToken cancellationToken = default)
     {
-        if (role == null)
-        {
-            throw new ArgumentNullException(nameof(role));
-        }
+        ArgumentNullException.ThrowIfNull(role);
 
         return Task.FromResult(role.Id.ToString(CultureInfo.InvariantCulture));
     }
 
     public Task<string?> GetRoleNameAsync(MawRole role, CancellationToken cancellationToken = default)
     {
-        if (role == null)
-        {
-            throw new ArgumentNullException(nameof(role));
-        }
+        ArgumentNullException.ThrowIfNull(role);
 
         return Task.FromResult(role.Name);
     }
 
     public Task<string?> GetNormalizedRoleNameAsync(MawRole role, CancellationToken cancellationToken = default)
     {
-        if (role == null)
-        {
-            throw new ArgumentNullException(nameof(role));
-        }
+        ArgumentNullException.ThrowIfNull(role);
 
         return Task.FromResult(role.Name);
     }
 
     public Task SetNormalizedRoleNameAsync(MawRole role, string? normalizedName, CancellationToken cancellationToken = default)
     {
-        if (role == null)
-        {
-            throw new ArgumentNullException(nameof(role));
-        }
+        ArgumentNullException.ThrowIfNull(role);
 
         return Task.CompletedTask;
     }
 
     public Task SetRoleNameAsync(MawRole role, string? roleName, CancellationToken cancellationToken = default)
     {
-        if (role == null)
-        {
-            throw new ArgumentNullException(nameof(role));
-        }
+        ArgumentNullException.ThrowIfNull(role);
 
         if (string.IsNullOrEmpty(roleName))
         {

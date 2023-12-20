@@ -13,10 +13,7 @@ public class SideNavTagHelper
 
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
-        if (output == null)
-        {
-            throw new ArgumentNullException(nameof(output));
-        }
+        ArgumentNullException.ThrowIfNull(output);
 
         var klass = "list-group-item";
 

@@ -16,10 +16,7 @@ public class CloudflareTurnstileCaptchaService
         IOptions<CloudflareTurnstileConfig> config,
         ILogger<CloudflareTurnstileCaptchaService> log)
     {
-        if (config == null)
-        {
-            throw new ArgumentNullException(nameof(config));
-        }
+        ArgumentNullException.ThrowIfNull(config);
 
         _config = config.Value;
         _log = log ?? throw new ArgumentNullException(nameof(log));

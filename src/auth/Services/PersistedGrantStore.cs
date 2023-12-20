@@ -19,10 +19,7 @@ public class PersistedGrantStore
 
     public Task<IEnumerable<PersistedGrant>> GetAllAsync(PersistedGrantFilter filter)
     {
-        if(filter == null)
-        {
-            throw new ArgumentNullException(nameof(filter));
-        }
+        ArgumentNullException.ThrowIfNull(filter);
 
         filter.Validate();
 
@@ -42,10 +39,7 @@ public class PersistedGrantStore
 
     public Task<PersistedGrant?> GetAsync(string key)
     {
-        if(string.IsNullOrWhiteSpace(key))
-        {
-            throw new ArgumentNullException(nameof(key));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
         Log.LogDebug("getting grant for key: {Key}", key);
 
@@ -62,10 +56,7 @@ public class PersistedGrantStore
 
     public Task RemoveAllAsync(PersistedGrantFilter filter)
     {
-        if(filter == null)
-        {
-            throw new ArgumentNullException(nameof(filter));
-        }
+        ArgumentNullException.ThrowIfNull(filter);
 
         filter.Validate();
 
@@ -85,10 +76,7 @@ public class PersistedGrantStore
 
     public Task RemoveAsync(string key)
     {
-        if(string.IsNullOrWhiteSpace(key))
-        {
-            throw new ArgumentNullException(nameof(key));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
         Log.LogDebug("removing grant for key: {Key}", key);
 
@@ -105,10 +93,7 @@ public class PersistedGrantStore
 
     public Task StoreAsync(PersistedGrant grant)
     {
-        if (grant == null)
-        {
-            throw new ArgumentNullException(nameof(grant));
-        }
+        ArgumentNullException.ThrowIfNull(grant);
 
         Log.LogDebug("storing grant for key: {Key}, type: {Type}, subject: {SubjectId}, client: {ClientId}, session: {SessionId}",
             grant.Key,

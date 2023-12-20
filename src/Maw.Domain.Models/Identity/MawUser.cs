@@ -100,10 +100,7 @@ public class MawUser
 
     public static MawUser Convert(ClaimsIdentity identity)
     {
-        if (identity == null)
-        {
-            throw new ArgumentNullException(nameof(identity));
-        }
+        ArgumentNullException.ThrowIfNull(identity);
 
         var mawUser = new MawUser();
 

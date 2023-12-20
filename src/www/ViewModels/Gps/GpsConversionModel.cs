@@ -156,15 +156,8 @@ public class GpsConversionModel
 
     float GetLatitudeDegrees(float? degree, LatitudeReference? latRef)
     {
-        if (degree == null)
-        {
-            throw new ArgumentNullException(nameof(degree));
-        }
-
-        if (latRef == null)
-        {
-            throw new ArgumentNullException(nameof(latRef));
-        }
+        ArgumentNullException.ThrowIfNull(degree);
+        ArgumentNullException.ThrowIfNull(latRef);
 
         if (latRef == LatitudeReference.South)
         {
@@ -176,15 +169,8 @@ public class GpsConversionModel
 
     float GetLongitudeDegrees(float? degree, LongitudeReference? lngRef)
     {
-        if (degree == null)
-        {
-            throw new ArgumentNullException(nameof(degree));
-        }
-
-        if (lngRef == null)
-        {
-            throw new ArgumentNullException(nameof(lngRef));
-        }
+        ArgumentNullException.ThrowIfNull(degree);
+        ArgumentNullException.ThrowIfNull(lngRef);
 
         if (lngRef == LongitudeReference.West)
         {

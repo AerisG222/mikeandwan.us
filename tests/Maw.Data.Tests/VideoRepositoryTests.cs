@@ -7,12 +7,14 @@ namespace Maw.Data.Tests;
 
 public class VideoRepositoryTests
 {
+    static readonly string[] ROLES_FRIEND = [ "friend" ];
+
     [Fact]
     public async Task GetAllCategories_ShouldReturnPopulatedObjects()
     {
         var repo = GetRepo();
 
-        var categories = await repo.GetAllCategoriesAsync(new string[] { "friend" });
+        var categories = await repo.GetAllCategoriesAsync(ROLES_FRIEND);
 
         Assert.NotNull(categories);
         Assert.NotNull(categories.First().TeaserImage);
@@ -24,7 +26,7 @@ public class VideoRepositoryTests
     {
         var repo = GetRepo();
 
-        var videos = await repo.GetVideosInCategoryAsync(1, new string[] { "friend" });
+        var videos = await repo.GetVideosInCategoryAsync(1, ROLES_FRIEND);
 
         Assert.NotNull(videos);
         Assert.NotNull(videos.First().VideoScaled);

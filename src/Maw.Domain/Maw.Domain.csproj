@@ -3,7 +3,7 @@
         <Description>Domain model classes for www.mikeandwan.us</Description>
         <VersionPrefix>1.1.0</VersionPrefix>
         <Authors>Mike Morano &lt;mmorano@mikeandwan.us&gt;</Authors>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <DebugType>portable</DebugType>
         <AssemblyName>Maw.Domain</AssemblyName>

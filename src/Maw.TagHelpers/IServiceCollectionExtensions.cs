@@ -6,10 +6,7 @@ public static class IServiceCollectionExtensions
 {
     public static IServiceCollection ConfigureMawTagHelpers(this IServiceCollection services, Action<TagHelperConfig> configureOpts)
     {
-        if (configureOpts == null)
-        {
-            throw new ArgumentNullException(nameof(configureOpts));
-        }
+        ArgumentNullException.ThrowIfNull(configureOpts);
 
         var config = new TagHelperConfig();
 

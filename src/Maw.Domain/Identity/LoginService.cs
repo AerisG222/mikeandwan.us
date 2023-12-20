@@ -48,10 +48,7 @@ public class LoginService
 
     public Task LogExternalLoginAttemptAsync(string email, string provider, bool wasSuccessful)
     {
-        if (provider == null)
-        {
-            throw new ArgumentNullException(nameof(provider));
-        }
+        ArgumentNullException.ThrowIfNull(provider);
 
         var activityType = wasSuccessful ? (short)1 : (short)2;
         short area;

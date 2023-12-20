@@ -4,20 +4,14 @@ public static class HostEnvironmentExtensions
 {
     public static bool IsStage(this IHostEnvironment hostEnvironment)
     {
-        if (hostEnvironment == null)
-        {
-            throw new ArgumentNullException(nameof(hostEnvironment));
-        }
+        ArgumentNullException.ThrowIfNull(hostEnvironment);
 
         return hostEnvironment.IsEnvironment("stage");
     }
 
     public static bool IsTest(this IHostEnvironment hostEnvironment)
     {
-        if (hostEnvironment == null)
-        {
-            throw new ArgumentNullException(nameof(hostEnvironment));
-        }
+        ArgumentNullException.ThrowIfNull(hostEnvironment);
 
         return hostEnvironment.IsEnvironment("test");
     }

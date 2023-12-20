@@ -50,10 +50,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult RollTheDice(RollTheDiceModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -130,10 +127,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult DotnetRegex(RegexViewModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -167,10 +161,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult NetworkingBandwidth(BandwidthViewModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -198,10 +189,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult NetworkingFileSize(FileSizeViewModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -229,10 +217,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult NetworkingTime(NetworkingTimeViewModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -276,10 +261,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult ByteCounter(ByteCounterViewModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -306,10 +288,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult DateDiff(DateDiff model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -336,10 +315,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult GpsConversion(GpsConversionModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -376,10 +352,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult HtmlEncode(HtmlEncodeDecodeModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -426,10 +399,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult RandomBytes(RandomBytesModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -458,10 +428,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult ColorConverter(ColorConverterModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -490,10 +457,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult UrlEncode(UrlEncodeModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -522,10 +486,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult XmlValidate(XmlValidateModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -554,10 +515,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult XsdValidate(XsdValidateModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 
@@ -586,10 +544,7 @@ public class ToolsController
     [ValidateAntiForgeryToken]
     public IActionResult XslTransform(XslTransformModel model)
     {
-        if (model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         ViewBag.NavigationZone = NavigationZone.Tools;
 

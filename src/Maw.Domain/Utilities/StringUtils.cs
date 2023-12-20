@@ -6,10 +6,7 @@ public static class StringUtils
 {
     public static string ToHexString(byte[] byteArray)
     {
-        if (byteArray == null)
-        {
-            throw new ArgumentNullException(nameof(byteArray));
-        }
+        ArgumentNullException.ThrowIfNull(byteArray);
 
         StringBuilder builder = new(byteArray.Length);
 

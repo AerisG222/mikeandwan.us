@@ -85,10 +85,7 @@ public class UploadService
 
     public IEnumerable<FileOperationResult> DeleteFiles(ClaimsPrincipal user, IEnumerable<string> relativePaths)
     {
-        if (relativePaths == null)
-        {
-            throw new ArgumentNullException(nameof(relativePaths));
-        }
+        ArgumentNullException.ThrowIfNull(relativePaths);
 
         var results = new List<FileOperationResult>();
 
@@ -204,12 +201,8 @@ public class UploadService
 
     public async Task<FileOperationResult> SaveFileAsync(ClaimsPrincipal user, string filename, Stream stream)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(filename);
         var username = user.GetUsername();
-
-        if (string.IsNullOrWhiteSpace(filename))
-        {
-            throw new ArgumentNullException(nameof(filename));
-        }
 
         var result = new FileOperationResult
         {
@@ -316,6 +309,7 @@ public class UploadService
         return ms;
     }
 
+#pragma warning disable CA1859
     IEnumerable<UploadedFile> GetAllFiles()
     {
         var list = new List<UploadedFile>();
@@ -329,6 +323,7 @@ public class UploadService
 
         return list;
     }
+#pragma warning restore CA1859
 
     IEnumerable<UploadedFile> GetUserFiles(string username)
     {
@@ -395,11 +390,7 @@ public class UploadService
 
     FileLocation GetValidatedLocation(ClaimsPrincipal user, string relativePath, bool verifyPermissions)
     {
-        if (string.IsNullOrWhiteSpace(relativePath))
-        {
-            throw new ArgumentNullException(nameof(relativePath));
-        }
-
+        ArgumentException.ThrowIfNullOrWhiteSpace(relativePath);
         FileLocation location;
 
         try

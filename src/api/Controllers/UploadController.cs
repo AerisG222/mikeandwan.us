@@ -51,10 +51,7 @@ public class UploadController
     [RequestSizeLimit(2_147_483_648)]  // 2GB
     public async Task<IActionResult> UploadAsync(IFormFile file)
     {
-        if (file == null)
-        {
-            throw new ArgumentNullException(nameof(file));
-        }
+        ArgumentNullException.ThrowIfNull(file);
 
         var result = await _uploadSvc.SaveFileAsync(User, file.FileName, file.OpenReadStream());
 
@@ -90,10 +87,7 @@ public class UploadController
     [ProducesResponseType(401)]
     public IActionResult Download([FromBody] string[] downloadFiles)
     {
-        if (downloadFiles == null)
-        {
-            throw new ArgumentNullException(nameof(downloadFiles));
-        }
+        ArgumentNullException.ThrowIfNull(downloadFiles);
 
         if (downloadFiles.Length == 0)
         {

@@ -6,10 +6,7 @@ public static class UserExtensions
 {
     public static string[] GetAllRoles(this ClaimsPrincipal user)
     {
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         var roles = user.Identities
             .SelectMany(identity => identity.FindAll(identity.RoleClaimType))
@@ -21,10 +18,7 @@ public static class UserExtensions
 
     public static bool IsAdmin(this ClaimsPrincipal user)
     {
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         return user.IsInRole(Role.Admin);
     }

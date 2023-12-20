@@ -153,7 +153,7 @@ public class ColorConverterModel
             throw new InvalidOperationException($"{nameof(HexColorCode)} should not be null");
         }
 
-        if (HexColorCode.StartsWith("#", true, CultureInfo.InvariantCulture))
+        if (HexColorCode.StartsWith('#'))
         {
             return HexColorCode[1..];
         }

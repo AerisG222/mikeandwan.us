@@ -24,10 +24,7 @@ public class UrlAuthTagHelper
 
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
-        if (output == null)
-        {
-            throw new ArgumentNullException(nameof(output));
-        }
+        ArgumentNullException.ThrowIfNull(output);
 
         Uri dest = new(_authUri, Url);
 

@@ -11,10 +11,7 @@ public abstract class Repository
 
     protected Repository(string connectionString)
     {
-        if(string.IsNullOrWhiteSpace(connectionString))
-        {
-            throw new ArgumentNullException(nameof(connectionString));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
         _connString = connectionString;
     }
@@ -22,10 +19,7 @@ public abstract class Repository
     // http://www.joesauve.com/async-dapper-and-async-sql-connection-management/
     protected async Task<T> RunAsync<T>(Func<IDbConnection, Task<T>> queryData)
     {
-        if(queryData == null)
-        {
-            throw new ArgumentNullException(nameof(queryData));
-        }
+        ArgumentNullException.ThrowIfNull(queryData);
 
         using var conn = GetConnection();
 
@@ -36,10 +30,7 @@ public abstract class Repository
 
     protected async Task RunAsync(Func<IDbConnection, Task> executeStatement)
     {
-        if(executeStatement == null)
-        {
-            throw new ArgumentNullException(nameof(executeStatement));
-        }
+        ArgumentNullException.ThrowIfNull(executeStatement);
 
         using var conn = GetConnection();
 

@@ -23,10 +23,7 @@ public class PhotoZipper
 
     public Stream Zip(IEnumerable<Photo> photos)
     {
-        if (photos == null)
-        {
-            throw new ArgumentNullException(nameof(photos));
-        }
+        ArgumentNullException.ThrowIfNull(photos);
 
         var ms = new MemoryStream(TWENTY_MB);
 

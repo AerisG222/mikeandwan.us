@@ -22,10 +22,7 @@ public class IdentityServerProfileService
 
     public async Task GetProfileDataAsync(ProfileDataRequestContext context)
     {
-        if (context == null)
-        {
-            throw new ArgumentNullException(nameof(context));
-        }
+        ArgumentNullException.ThrowIfNull(context);
 
         _log.LogDebug("requested claims:");
 
@@ -52,10 +49,7 @@ public class IdentityServerProfileService
 
     public virtual Task IsActiveAsync(IsActiveContext context)
     {
-        if (context == null)
-        {
-            throw new ArgumentNullException(nameof(context));
-        }
+        ArgumentNullException.ThrowIfNull(context);
 
         _log.LogDebug("IsActive called from: {Caller}", context.Caller);
 

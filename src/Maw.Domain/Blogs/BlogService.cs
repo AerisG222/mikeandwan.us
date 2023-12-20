@@ -53,10 +53,7 @@ public class BlogService
 
     public Task AddPostAsync(Post post)
     {
-        if (post == null)
-        {
-            throw new ArgumentNullException(nameof(post));
-        }
+        ArgumentNullException.ThrowIfNull(post);
 
         return Task.WhenAll(
             _repo.AddPostAsync(post),

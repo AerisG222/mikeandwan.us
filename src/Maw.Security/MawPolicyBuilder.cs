@@ -6,10 +6,7 @@ public static class MawPolicyBuilder
 {
     public static void AddMawPolicies(AuthorizationOptions opts)
     {
-        if (opts == null)
-        {
-            throw new ArgumentNullException(nameof(opts));
-        }
+        ArgumentNullException.ThrowIfNull(opts);
 
         opts.AddPolicy(MawPolicy.ViewPhotos, new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
         opts.AddPolicy(MawPolicy.ViewVideos, new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());

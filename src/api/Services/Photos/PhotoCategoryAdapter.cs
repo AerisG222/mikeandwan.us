@@ -18,10 +18,7 @@ public class PhotoCategoryAdapter
 
     public PhotoCategoryViewModel Adapt(Category c)
     {
-        if(c == null)
-        {
-            throw new ArgumentNullException(nameof(c));
-        }
+        ArgumentNullException.ThrowIfNull(c);
 
         return new PhotoCategoryViewModel {
             Id = c.Id,

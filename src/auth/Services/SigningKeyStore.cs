@@ -29,10 +29,7 @@ public class SigningKeyStore
 
     public Task StoreKeyAsync(SerializedKey key)
     {
-        if(key == null)
-        {
-            throw new ArgumentNullException(nameof(key));
-        }
+        ArgumentNullException.ThrowIfNull(key);
 
         Log.LogDebug("Storing signing key with id: {SigningKeyId}", key.Id);
 
@@ -46,10 +43,7 @@ public class SigningKeyStore
 
     public Task DeleteKeyAsync(string id)
     {
-        if(id == null)
-        {
-            throw new ArgumentNullException(nameof(id));
-        }
+        ArgumentNullException.ThrowIfNull(id);
 
         Log.LogDebug("Deleting signing key with id: {SigningKeyId}", id);
 

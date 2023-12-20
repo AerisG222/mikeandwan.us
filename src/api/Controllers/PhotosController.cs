@@ -93,10 +93,7 @@ public class PhotosController
     [ProducesResponseType(404)]
     public async Task<ApiCollectionResult<Comment>> AddCommentAsync(int id, CommentViewModel model)
     {
-        if(model == null)
-        {
-            throw new ArgumentNullException(nameof(model));
-        }
+        ArgumentNullException.ThrowIfNull(model);
 
         // TODO: handle invalid photo id?
         // TODO: remove photoId from commentViewModel?
@@ -146,10 +143,7 @@ public class PhotosController
     [ProducesResponseType(404)]
     public async Task<ActionResult<GpsDetail>> SetGpsOverrideAsync(int id, GpsCoordinate gps)
     {
-        if(gps == null)
-        {
-            throw new ArgumentNullException(nameof(gps));
-        }
+        ArgumentNullException.ThrowIfNull(gps);
 
         await _svc.SetGpsOverrideAsync(id, gps, User.GetUsername(), User.GetAllRoles());
 
@@ -186,10 +180,7 @@ public class PhotosController
     [ProducesResponseType(404)]
     public async Task<ActionResult<Rating>> RatePhotoAsync(int id, UserRating userRating)
     {
-        if(userRating == null)
-        {
-            throw new ArgumentNullException(nameof(userRating));
-        }
+        ArgumentNullException.ThrowIfNull(userRating);
 
         var username = User.GetUsername();
 

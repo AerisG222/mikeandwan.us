@@ -17,10 +17,7 @@ public class PhotoAdapter
 
     public MawApi.ViewModels.Photos.PhotoViewModel Adapt(Photo p)
     {
-        if(p == null)
-        {
-            throw new ArgumentNullException(nameof(p));
-        }
+        ArgumentNullException.ThrowIfNull(p);
 
         return new MawApi.ViewModels.Photos.PhotoViewModel {
             Id = p.Id,

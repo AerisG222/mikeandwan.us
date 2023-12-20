@@ -25,10 +25,7 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         _log.LogInformation("getting userid: {UserId}", user.Id);
 
@@ -39,10 +36,7 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         return Task.FromResult(user.Username);
     }
@@ -59,10 +53,7 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         return Task.FromResult(user.Username);
     }
@@ -79,10 +70,7 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         _log.LogInformation("creating new user: {Username}", user.Username);
 
@@ -102,10 +90,7 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         var success = await _repo.UpdateUserAsync(user);
 
@@ -123,10 +108,7 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         if (string.IsNullOrEmpty(user.Username))
         {
@@ -174,15 +156,8 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
-
-        if (string.IsNullOrWhiteSpace(passwordHash))
-        {
-            throw new ArgumentNullException(nameof(passwordHash));
-        }
+        ArgumentNullException.ThrowIfNull(user);
+        ArgumentException.ThrowIfNullOrWhiteSpace(passwordHash);
 
         user.HashedPassword = passwordHash;
 
@@ -193,10 +168,7 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         return Task.FromResult(user.HashedPassword);
     }
@@ -205,10 +177,7 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         var hasHash = !string.IsNullOrEmpty(user.HashedPassword);
 
@@ -221,10 +190,7 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         if (string.IsNullOrWhiteSpace(user.Username))
         {
@@ -243,10 +209,7 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         if (string.IsNullOrWhiteSpace(user.Username))
         {
@@ -267,10 +230,7 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         _log.LogDebug("getting roles for: {Username}", user.Username);
 
@@ -288,10 +248,7 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         if (String.IsNullOrWhiteSpace(roleName))
         {
@@ -324,10 +281,7 @@ public class MawUserStore
     #region ISecurityStampStore
     public virtual Task SetSecurityStampAsync(MawUser user, string stamp, CancellationToken cancellationToken = default)
     {
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         if (string.IsNullOrEmpty(stamp))
         {
@@ -341,10 +295,7 @@ public class MawUserStore
 
     public virtual Task<string?> GetSecurityStampAsync(MawUser user, CancellationToken cancellationToken = default)
     {
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         return Task.FromResult(user.SecurityStamp);
     }
@@ -353,10 +304,7 @@ public class MawUserStore
     #region IUserEmailStore
     public Task SetEmailAsync(MawUser user, string? email, CancellationToken cancellationToken)
     {
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         if (string.IsNullOrEmpty(email))
         {
@@ -370,10 +318,7 @@ public class MawUserStore
 
     public Task<string?> GetEmailAsync(MawUser user, CancellationToken cancellationToken)
     {
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         return Task.FromResult(user.Email);
     }
@@ -397,10 +342,7 @@ public class MawUserStore
 
     public Task<string?> GetNormalizedEmailAsync(MawUser user, CancellationToken cancellationToken)
     {
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         return Task.FromResult(user.Email);
     }

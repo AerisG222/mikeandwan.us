@@ -15,10 +15,7 @@ public abstract class BaseStore
         StoreConfig config,
         ILogger log)
     {
-        if (config == null)
-        {
-            throw new ArgumentNullException(nameof(config));
-        }
+        ArgumentNullException.ThrowIfNull(config);
 
         _connString = config.ConnectionString;
         Log = log ?? throw new ArgumentNullException(nameof(log));
@@ -26,10 +23,7 @@ public abstract class BaseStore
 
     protected async Task<T> RunAsync<T>(Func<IDbConnection, Task<T>> queryData)
     {
-        if(queryData == null)
-        {
-            throw new ArgumentNullException(nameof(queryData));
-        }
+        ArgumentNullException.ThrowIfNull(queryData);
 
         using var conn = GetConnection();
 
@@ -40,10 +34,7 @@ public abstract class BaseStore
 
     protected async Task RunAsync(Func<IDbConnection, Task> executeStatement)
     {
-        if(executeStatement == null)
-        {
-            throw new ArgumentNullException(nameof(executeStatement));
-        }
+        ArgumentNullException.ThrowIfNull(executeStatement);
 
         using var conn = GetConnection();
 
@@ -52,8 +43,10 @@ public abstract class BaseStore
         await executeStatement(conn);
     }
 
+#pragma warning disable CA1859
     DbConnection GetConnection()
     {
         return new NpgsqlConnection(_connString);
     }
+#pragma warning restore CA1859
 }

@@ -83,15 +83,8 @@ public class UploadHub
 
     public static async Task FileAddedAsync(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
     {
-        if(ctx == null)
-        {
-            throw new ArgumentNullException(nameof(ctx));
-        }
-
-        if(file == null)
-        {
-            throw new ArgumentNullException(nameof(file));
-        }
+        ArgumentNullException.ThrowIfNull(ctx);
+        ArgumentNullException.ThrowIfNull(file);
 
         //_log.LogDebug($"Sending [{CALL_FILE_ADDED}] for file [{file.Location.RelativePath}].");
 
@@ -105,15 +98,8 @@ public class UploadHub
 
     public static async Task FileDeletedAsync(IHubContext<UploadHub> ctx, ClaimsPrincipal user, UploadedFile file)
     {
-        if(ctx == null)
-        {
-            throw new ArgumentNullException(nameof(ctx));
-        }
-
-        if(file == null)
-        {
-            throw new ArgumentNullException(nameof(file));
-        }
+        ArgumentNullException.ThrowIfNull(ctx);
+        ArgumentNullException.ThrowIfNull(file);
 
         //_log.LogDebug($"Sending [{CALL_FILE_DELETED}] for file [{file.Location.RelativePath}].");
 

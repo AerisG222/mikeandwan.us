@@ -18,10 +18,7 @@ public class VideoCategoryAdapter
 
     public VideoCategoryViewModel Adapt(Category c)
     {
-        if(c == null)
-        {
-            throw new ArgumentNullException(nameof(c));
-        }
+        ArgumentNullException.ThrowIfNull(c);
 
         return new VideoCategoryViewModel {
             Id = c.Id,

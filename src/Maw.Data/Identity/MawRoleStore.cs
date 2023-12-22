@@ -25,16 +25,8 @@ public class MawRoleStore
     public async Task<IdentityResult> CreateAsync(MawRole role, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(role);
-
-        if(string.IsNullOrWhiteSpace(role.Name))
-        {
-            throw new ArgumentException("Role name should not be null or empty");
-        }
-
-        if(string.IsNullOrWhiteSpace(role.Description))
-        {
-            throw new ArgumentException("Role name should not be null or empty");
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(role.Name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(role.Description);
 
         var result = await _repo.CreateRoleAsync(role.Name, role.Description);
 
@@ -49,11 +41,7 @@ public class MawRoleStore
     public async Task<IdentityResult> DeleteAsync(MawRole role, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(role);
-
-        if(string.IsNullOrWhiteSpace(role.Name))
-        {
-            throw new ArgumentException("Role name should not be null or empty");
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(role.Name);
 
         var result = await _repo.RemoveRoleAsync(role.Name);
 

@@ -398,10 +398,7 @@ public class UserRepository
 
     async Task AddRolesForUser(MawUser user)
     {
-        if(string.IsNullOrWhiteSpace(user.Username))
-        {
-            throw new ArgumentException("username must not be null or whitespace");
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(user.Username);
 
         var rolesResult = await InternalGetRolesForUserAsync(user.Username);
 

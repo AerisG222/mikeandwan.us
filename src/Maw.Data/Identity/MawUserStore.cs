@@ -194,16 +194,8 @@ public class MawUserStore
         cancellationToken.ThrowIfCancellationRequested();
 
         ArgumentNullException.ThrowIfNull(user);
-
-        if (string.IsNullOrWhiteSpace(user.Username))
-        {
-            throw new ArgumentException("Username cannot be null or empty");
-        }
-
-        if (string.IsNullOrWhiteSpace(roleName))
-        {
-            throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(user.Username);
+        ArgumentException.ThrowIfNullOrWhiteSpace(roleName);
 
         return _repo.AddUserToRoleAsync(user.Username, roleName);
     }
@@ -213,16 +205,8 @@ public class MawUserStore
         cancellationToken.ThrowIfCancellationRequested();
 
         ArgumentNullException.ThrowIfNull(user);
-
-        if (string.IsNullOrWhiteSpace(user.Username))
-        {
-            throw new ArgumentException("Username cannot be null or empty");
-        }
-
-        if (String.IsNullOrWhiteSpace(roleName))
-        {
-            throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(user.Username);
+        ArgumentException.ThrowIfNullOrWhiteSpace(roleName);
 
         _log.LogInformation("removing user {Username} from role {Role}", user.Username, roleName);
 
@@ -252,11 +236,7 @@ public class MawUserStore
         cancellationToken.ThrowIfCancellationRequested();
 
         ArgumentNullException.ThrowIfNull(user);
-
-        if (String.IsNullOrWhiteSpace(roleName))
-        {
-            throw new ArgumentException("roleName cannot be null or empty", nameof(roleName));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(roleName);
 
         _log.LogInformation("is user {Username} in role: {Role}", user.Username, roleName);
 
@@ -270,10 +250,7 @@ public class MawUserStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (String.IsNullOrWhiteSpace(roleName))
-        {
-            throw new ArgumentException("roleName can not be null or empty", nameof(roleName));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(roleName);
 
         _log.LogDebug("getting users in role: {Role}", roleName);
 
@@ -285,11 +262,7 @@ public class MawUserStore
     public virtual Task SetSecurityStampAsync(MawUser user, string stamp, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(user);
-
-        if (string.IsNullOrEmpty(stamp))
-        {
-            throw new ArgumentException("stamp can not be null or empty", nameof(stamp));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(stamp);
 
         user.SecurityStamp = stamp;
 

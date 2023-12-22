@@ -11,8 +11,11 @@ public abstract class BaseCache
 
     public BaseCache(IDatabase redisDatabase, string statusKey)
     {
-        Db = redisDatabase ?? throw new ArgumentNullException(nameof(redisDatabase));
-        StatusKey = statusKey ?? throw new ArgumentNullException(nameof(statusKey));
+        ArgumentNullException.ThrowIfNull(redisDatabase);
+        ArgumentNullException.ThrowIfNull(statusKey);
+
+        Db = redisDatabase;
+        StatusKey = statusKey;
     }
 
     public async Task<CacheStatus> GetStatusAsync()

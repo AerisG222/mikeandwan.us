@@ -6,7 +6,9 @@ public class VideoUrlBuilderService
 
     public VideoUrlBuilderService(UrlBuilderService urlSvc)
     {
-        _urlSvc = urlSvc ?? throw new ArgumentNullException(nameof(urlSvc));
+        ArgumentNullException.ThrowIfNull(urlSvc);
+
+        _urlSvc = urlSvc;
     }
 
     public string GetCategoryUrl(short categoryId)

@@ -7,7 +7,10 @@ public class SecuredResource<T>
 
     public SecuredResource(T item, string[] roles)
     {
-        Item = item ?? throw new ArgumentNullException(nameof(item));
-        Roles = roles ?? throw new ArgumentNullException(nameof(roles));
+        ArgumentNullException.ThrowIfNull(item);
+        ArgumentNullException.ThrowIfNull(roles);
+
+        Item = item;
+        Roles = roles;
     }
 }

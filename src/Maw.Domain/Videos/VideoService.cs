@@ -18,8 +18,11 @@ public class VideoService
         ILogger<VideoService> log)
         : base(log)
     {
-        _repo = repo ?? throw new ArgumentNullException(nameof(repo));
-        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+        ArgumentNullException.ThrowIfNull(repo);
+        ArgumentNullException.ThrowIfNull(cache);
+
+        _repo = repo;
+        _cache = cache;
     }
 
     public async Task<IEnumerable<short>> GetYearsAsync(string[] roles)

@@ -9,7 +9,9 @@ public class UrlBuilderService
 
     public UrlBuilderService(IOptions<UrlConfig> cfg)
     {
-        _cfg = cfg.Value ?? throw new ArgumentNullException(nameof(cfg));
+        ArgumentNullException.ThrowIfNull(cfg.Value);
+
+        _cfg = cfg.Value;
     }
 
     public string BuildApiUrl(string relativePath)

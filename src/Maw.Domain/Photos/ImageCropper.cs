@@ -11,7 +11,9 @@ public class ImageCropper
 
     public ImageCropper(IFileProvider fileProvider)
     {
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        ArgumentNullException.ThrowIfNull(fileProvider);
+
+        _fileProvider = fileProvider;
     }
 
     public Stream? CropImage(string path, int maxDimension)

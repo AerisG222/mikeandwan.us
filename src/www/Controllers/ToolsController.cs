@@ -21,7 +21,9 @@ public class ToolsController
         IWebHostEnvironment env)
         : base(log)
     {
-        _fileProvider = env?.WebRootFileProvider ?? throw new ArgumentNullException(nameof(env));
+        ArgumentNullException.ThrowIfNull(env?.WebRootFileProvider);
+
+        _fileProvider = env?.WebRootFileProvider!;
     }
 
     [HttpGet("")]

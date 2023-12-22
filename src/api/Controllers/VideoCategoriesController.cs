@@ -24,9 +24,13 @@ public class VideoCategoriesController
         VideoAdapter videoAdapter,
         VideoCategoryAdapter categoryAdapter)
     {
-        _svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
-        _videoAdapter = videoAdapter ?? throw new ArgumentNullException(nameof(videoAdapter));
-        _categoryAdapter = categoryAdapter ?? throw new ArgumentNullException(nameof(categoryAdapter));
+        ArgumentNullException.ThrowIfNull(videoService);
+        ArgumentNullException.ThrowIfNull(videoAdapter);
+        ArgumentNullException.ThrowIfNull(categoryAdapter);
+
+        _svc = videoService;
+        _videoAdapter = videoAdapter;
+        _categoryAdapter = categoryAdapter;
     }
 
     [HttpGet]

@@ -16,9 +16,10 @@ public abstract class BaseStore
         ILogger log)
     {
         ArgumentNullException.ThrowIfNull(config);
+        ArgumentNullException.ThrowIfNull(log);
 
         _connString = config.ConnectionString;
-        Log = log ?? throw new ArgumentNullException(nameof(log));
+        Log = log;
     }
 
     protected async Task<T> RunAsync<T>(Func<IDbConnection, Task<T>> queryData)

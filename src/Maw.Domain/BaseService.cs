@@ -9,7 +9,9 @@ public class BaseService
 
     public BaseService(ILogger log)
     {
-        Log = log ?? throw new ArgumentNullException(nameof(log));
+        ArgumentNullException.ThrowIfNull(log);
+
+        Log = log;
     }
 
     // TODO: is there a better way to normalize these functions?

@@ -30,11 +30,17 @@ public class UploadController
         IContentTypeProvider contentTypeProvider,
         LinuxFileTypeIdentifier linuxFileTypeIdentifier)
     {
-        _log = log ?? throw new ArgumentNullException(nameof(log));
-        _uploadSvc = uploadSvc ?? throw new ArgumentNullException(nameof(uploadSvc));
-        _uploadHub = uploadHubCtx ?? throw new ArgumentNullException(nameof(uploadHubCtx));
-        _contentTypeProvider = contentTypeProvider ?? throw new ArgumentNullException(nameof(contentTypeProvider));
-        _linuxFileTypeIdentifier = linuxFileTypeIdentifier ?? throw new ArgumentNullException(nameof(linuxFileTypeIdentifier));
+        ArgumentNullException.ThrowIfNull(log);
+        ArgumentNullException.ThrowIfNull(uploadSvc);
+        ArgumentNullException.ThrowIfNull(uploadHubCtx);
+        ArgumentNullException.ThrowIfNull(contentTypeProvider);
+        ArgumentNullException.ThrowIfNull(linuxFileTypeIdentifier);
+
+        _log = log;
+        _uploadSvc = uploadSvc;
+        _uploadHub = uploadHubCtx;
+        _contentTypeProvider = contentTypeProvider;
+        _linuxFileTypeIdentifier = linuxFileTypeIdentifier;
     }
 
     [HttpGet("files")]

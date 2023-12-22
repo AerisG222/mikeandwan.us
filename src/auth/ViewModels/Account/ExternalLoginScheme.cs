@@ -26,6 +26,8 @@ public class ExternalLoginScheme
 
     public ExternalLoginScheme(AuthenticationScheme authScheme)
     {
-        ExternalAuth = authScheme ?? throw new ArgumentNullException(nameof(authScheme));
+        ArgumentNullException.ThrowIfNull(authScheme);
+
+        ExternalAuth = authScheme;
     }
 }

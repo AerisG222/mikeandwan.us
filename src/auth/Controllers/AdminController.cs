@@ -34,13 +34,21 @@ public class AdminController
         RazorViewToStringRenderer razorRenderer,
         IPasswordValidator<MawUser> passwordValidator)
     {
-        _log = log ?? throw new ArgumentNullException(nameof(log));
-        _repo = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
-        _userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
-        _roleMgr = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
-        _emailSvc = emailService ?? throw new ArgumentNullException(nameof(emailService));
-        _razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
-        _pwdValidator = passwordValidator ?? throw new ArgumentNullException(nameof(passwordValidator));
+        ArgumentNullException.ThrowIfNull(log);
+        ArgumentNullException.ThrowIfNull(userRepository);
+        ArgumentNullException.ThrowIfNull(userManager);
+        ArgumentNullException.ThrowIfNull(roleManager);
+        ArgumentNullException.ThrowIfNull(emailService);
+        ArgumentNullException.ThrowIfNull(razorRenderer);
+        ArgumentNullException.ThrowIfNull(passwordValidator);
+
+        _log = log;
+        _repo = userRepository;
+        _userMgr = userManager;
+        _roleMgr = roleManager;
+        _emailSvc = emailService;
+        _razorRenderer = razorRenderer;
+        _pwdValidator = passwordValidator;
     }
 
     [HttpGet("")]

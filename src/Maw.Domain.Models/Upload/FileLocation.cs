@@ -7,8 +7,11 @@ public class FileLocation
 
     public FileLocation(string username, string filename)
     {
-        Username = username ?? throw new ArgumentNullException(nameof(username));
-        Filename = filename ?? throw new ArgumentNullException(nameof(filename));
+        ArgumentNullException.ThrowIfNull(username);
+        ArgumentNullException.ThrowIfNull(filename);
+
+        Username = username;
+        Filename = filename;
     }
 
     public string RelativePath

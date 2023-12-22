@@ -22,10 +22,15 @@ internal class BlogCacheProcessingService
         IDelayCalculator delayCalculator,
         ILogger<BlogCacheProcessingService> logger)
     {
-        _repo = repo ?? throw new ArgumentNullException(nameof(repo));
-        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
-        _delay = delayCalculator ?? throw new ArgumentNullException(nameof(delayCalculator));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        ArgumentNullException.ThrowIfNull(repo);
+        ArgumentNullException.ThrowIfNull(cache);
+        ArgumentNullException.ThrowIfNull(delayCalculator);
+        ArgumentNullException.ThrowIfNull(logger);
+
+        _repo = repo;
+        _cache = cache;
+        _delay = delayCalculator;
+        _logger = logger;
     }
 
     public async Task DoWorkAsync(CancellationToken stoppingToken)

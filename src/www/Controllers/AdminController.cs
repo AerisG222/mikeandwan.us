@@ -27,9 +27,13 @@ public class AdminController
         IVideoService videoService)
         : base(log)
     {
-        _blogSvc = blogService ?? throw new ArgumentNullException(nameof(blogService));
-        _photoSvc = photoService ?? throw new ArgumentNullException(nameof(photoService));
-        _videoSvc = videoService ?? throw new ArgumentNullException(nameof(videoService));
+        ArgumentNullException.ThrowIfNull(blogService);
+        ArgumentNullException.ThrowIfNull(photoService);
+        ArgumentNullException.ThrowIfNull(videoService);
+
+        _blogSvc = blogService;
+        _photoSvc = photoService;
+        _videoSvc = videoService;
     }
 
     [HttpGet("")]

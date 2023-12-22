@@ -24,8 +24,11 @@ public class VideosController
         VideoAdapter videoAdapter,
         IVideoService videoService)
     {
-        _svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
-        _adapter = videoAdapter ?? throw new ArgumentNullException(nameof(videoAdapter));
+        ArgumentNullException.ThrowIfNull(videoService);
+        ArgumentNullException.ThrowIfNull(videoAdapter);
+
+        _svc = videoService;
+        _adapter = videoAdapter;
     }
 
     [HttpGet("{id}")]

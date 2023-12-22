@@ -17,8 +17,11 @@ public class PhotoZipper
         ILogger<PhotoZipper> log,
         IFileProvider fileProvider)
     {
-        _log = log ?? throw new ArgumentNullException(nameof(log));
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        ArgumentNullException.ThrowIfNull(log);
+        ArgumentNullException.ThrowIfNull(fileProvider);
+
+        _log = log;
+        _fileProvider= fileProvider;
     }
 
     public Stream Zip(IEnumerable<Photo> photos)

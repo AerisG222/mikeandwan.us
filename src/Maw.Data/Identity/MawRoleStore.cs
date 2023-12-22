@@ -15,7 +15,9 @@ public class MawRoleStore
     public MawRoleStore(
         IUserRepository repo)
     {
-        _repo = repo ?? throw new ArgumentNullException(nameof(repo));
+        ArgumentNullException.ThrowIfNull(repo);
+
+        _repo = repo;
     }
     #endregion
 

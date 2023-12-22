@@ -11,7 +11,9 @@ public class SearchService
 
     public SearchService(ISolrOperations<MultimediaCategory> solr)
     {
-        _solr = solr ?? throw new ArgumentNullException(nameof(solr));
+        ArgumentNullException.ThrowIfNull(solr);
+
+        _solr = solr;
     }
 
     public async Task<SearchResults<MultimediaCategory>> SearchAsync(string[] roles, string query, int start)

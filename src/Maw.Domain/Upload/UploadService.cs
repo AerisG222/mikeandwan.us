@@ -21,8 +21,11 @@ public class UploadService
         IOptions<UploadConfig> uploadConfig,
         ILogger<UploadService> log)
     {
-        _cfg = uploadConfig?.Value ?? throw new ArgumentNullException(nameof(uploadConfig));
-        _log = log ?? throw new ArgumentNullException(nameof(log));
+        ArgumentNullException.ThrowIfNull(uploadConfig?.Value);
+        ArgumentNullException.ThrowIfNull(log);
+
+        _cfg = uploadConfig?.Value!;
+        _log = log;
 
         if (!Directory.Exists(_cfg.RootDirectory))
         {

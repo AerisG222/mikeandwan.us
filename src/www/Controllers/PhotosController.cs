@@ -30,11 +30,17 @@ public class PhotosController
         IContentTypeProvider contentTypeProvider)
         : base(log)
     {
-        _svc = photoService ?? throw new ArgumentNullException(nameof(photoService));
-        _imageCropper = imageCropper ?? throw new ArgumentNullException(nameof(imageCropper));
-        _photoZipper = photoZipper ?? throw new ArgumentNullException(nameof(photoZipper));
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _contentTypeProvider = contentTypeProvider ?? throw new ArgumentNullException(nameof(contentTypeProvider));
+        ArgumentNullException.ThrowIfNull(photoService);
+        ArgumentNullException.ThrowIfNull(imageCropper);
+        ArgumentNullException.ThrowIfNull(photoZipper);
+        ArgumentNullException.ThrowIfNull(fileProvider);
+        ArgumentNullException.ThrowIfNull(contentTypeProvider);
+
+        _svc = photoService;
+        _imageCropper = imageCropper;
+        _photoZipper = photoZipper;
+        _fileProvider = fileProvider;
+        _contentTypeProvider = contentTypeProvider;
     }
 
     [HttpGet("{*extra}")]

@@ -10,7 +10,9 @@ public class MultimediaInfoAdapter
 
     public MultimediaInfoAdapter(PhotoUrlBuilderService urlSvc)
     {
-        _urlSvc = urlSvc ?? throw new ArgumentNullException(nameof(urlSvc));
+        ArgumentNullException.ThrowIfNull(urlSvc);
+
+        _urlSvc = urlSvc;
     }
 
     public MultimediaAsset Adapt(MultimediaInfo info)

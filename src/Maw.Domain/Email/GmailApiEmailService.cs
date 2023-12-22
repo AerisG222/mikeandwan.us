@@ -25,9 +25,10 @@ public class GmailApiEmailService
         IOptions<GmailApiEmailConfig> config)
     {
         ArgumentNullException.ThrowIfNull(config);
+        ArgumentNullException.ThrowIfNull(log);
 
         _config = config.Value;
-        _log = log ?? throw new ArgumentNullException(nameof(log));
+        _log = log;
     }
 
     public Task SendAsync(string recipient, string from, string subject, string body)

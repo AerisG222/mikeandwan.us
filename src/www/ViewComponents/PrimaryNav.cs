@@ -15,8 +15,11 @@ public class PrimaryNav
 
     public PrimaryNav(IAuthorizationService authorizationService, IOptions<UrlConfig> urlConfig)
     {
-        _authzService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
-        _urlConfig = urlConfig?.Value ?? throw new ArgumentNullException(nameof(urlConfig));
+        ArgumentNullException.ThrowIfNull(authorizationService);
+        ArgumentNullException.ThrowIfNull(urlConfig?.Value);
+
+        _authzService = authorizationService;
+        _urlConfig = urlConfig?.Value!;
     }
 
     public async Task<IViewComponentResult> InvokeAsync(NavigationZone activeZone)

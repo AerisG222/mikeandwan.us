@@ -26,8 +26,11 @@ public class PhotosController
         IPhotoService photoService,
         PhotoAdapter photoAdapter)
     {
-        _svc = photoService ?? throw new ArgumentNullException(nameof(photoService));
-        _photoAdapter = photoAdapter ?? throw new ArgumentNullException(nameof(photoAdapter));
+        ArgumentNullException.ThrowIfNull(photoService);
+        ArgumentNullException.ThrowIfNull(photoAdapter);
+
+        _svc = photoService;
+        _photoAdapter = photoAdapter;
     }
 
     [HttpGet("random")]

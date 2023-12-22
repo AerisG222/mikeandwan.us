@@ -6,6 +6,8 @@ public class StoreConfig
 
     public StoreConfig(string connString)
     {
-        ConnectionString = connString ?? throw new ArgumentNullException(nameof(connString));
+        ArgumentNullException.ThrowIfNull(connString);
+
+        ConnectionString = connString;
     }
 }

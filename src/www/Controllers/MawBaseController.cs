@@ -9,7 +9,9 @@ public class MawBaseController<T>
 
     public MawBaseController(ILogger<T> log)
     {
-        Log = log ?? throw new ArgumentNullException(nameof(log));
+        ArgumentNullException.ThrowIfNull(log);
+
+        Log = log;
     }
 
     protected void LogValidationErrors()

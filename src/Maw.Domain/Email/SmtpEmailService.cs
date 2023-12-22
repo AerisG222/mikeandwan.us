@@ -19,9 +19,10 @@ public class SmtpEmailService
         IOptions<SmtpEmailConfig> config)
     {
         ArgumentNullException.ThrowIfNull(config);
+        ArgumentNullException.ThrowIfNull(log);
 
         _config = config.Value;
-        _log = log ?? throw new ArgumentNullException(nameof(log));
+        _log = log;
     }
 
     public virtual Task SendHtmlAsync(string recipient, string from, string subject, string body)

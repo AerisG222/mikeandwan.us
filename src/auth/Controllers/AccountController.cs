@@ -43,14 +43,23 @@ public class AccountController
         IEmailService emailService,
         RazorViewToStringRenderer razorRenderer)
     {
-        _log = log ?? throw new ArgumentNullException(nameof(log));
-        _interaction = interaction ?? throw new ArgumentNullException(nameof(interaction));
-        _repo = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
-        _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
-        _userMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
-        _loginService = loginService ?? throw new ArgumentNullException(nameof(loginService));
-        _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
-        _razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
+        ArgumentNullException.ThrowIfNull(log);
+        ArgumentNullException.ThrowIfNull(interaction);
+        ArgumentNullException.ThrowIfNull(userRepository);
+        ArgumentNullException.ThrowIfNull(signInManager);
+        ArgumentNullException.ThrowIfNull(userManager);
+        ArgumentNullException.ThrowIfNull(loginService);
+        ArgumentNullException.ThrowIfNull(emailService);
+        ArgumentNullException.ThrowIfNull(razorRenderer);
+
+        _log = log;
+        _interaction = interaction;
+        _repo = userRepository;
+        _signInManager = signInManager;
+        _userMgr = userManager;
+        _loginService = loginService;
+        _emailService = emailService;
+        _razorRenderer = razorRenderer;
     }
 
     [HttpGet("login")]

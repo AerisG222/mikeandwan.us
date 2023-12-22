@@ -24,9 +24,13 @@ public class PhotoCategoriesController
         PhotoAdapter photoAdapter,
         PhotoCategoryAdapter categoryAdapter)
     {
-        _svc = photoService ?? throw new ArgumentNullException(nameof(photoService));
-        _photoAdapter = photoAdapter ?? throw new ArgumentNullException(nameof(photoAdapter));
-        _categoryAdapter = categoryAdapter ?? throw new ArgumentNullException(nameof(categoryAdapter));
+        ArgumentNullException.ThrowIfNull(photoService);
+        ArgumentNullException.ThrowIfNull(photoAdapter);
+        ArgumentNullException.ThrowIfNull(categoryAdapter);
+
+        _svc = photoService;
+        _photoAdapter = photoAdapter;
+        _categoryAdapter = categoryAdapter;
     }
 
     [HttpGet]

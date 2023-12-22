@@ -29,7 +29,9 @@ public class Startup
 
     public Startup(IConfiguration config)
     {
-        _config = config ?? throw new ArgumentNullException(nameof(config));
+        ArgumentNullException.ThrowIfNull(config);
+
+        _config = config;
     }
 
     public void ConfigureServices(IServiceCollection services)

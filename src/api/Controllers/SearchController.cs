@@ -19,7 +19,9 @@ public class SearchController
     public SearchController(
         ISearchService searchService)
     {
-        _svc = searchService ?? throw new ArgumentNullException(nameof(searchService));
+        ArgumentNullException.ThrowIfNull(searchService);
+
+        _svc = searchService;
     }
 
     [HttpGet("multimedia-categories")]

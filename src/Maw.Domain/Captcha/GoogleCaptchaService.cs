@@ -17,9 +17,10 @@ public class GoogleCaptchaService
         ILogger<GoogleCaptchaService> log)
     {
         ArgumentNullException.ThrowIfNull(config);
+        ArgumentNullException.ThrowIfNull(log);
 
         _config = config.Value;
-        _log = log ?? throw new ArgumentNullException(nameof(log));
+        _log = log;
     }
 
     public virtual string ResponseFormFieldName => "g-recaptcha-response";

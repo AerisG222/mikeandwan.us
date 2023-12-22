@@ -16,8 +16,11 @@ public class IdentityServerProfileService
         ILogger<IdentityServerProfileService> log,
         UserManager<MawUser> userManager)
     {
-        _log = log ?? throw new ArgumentNullException(nameof(log));
-        _usrMgr = userManager ?? throw new ArgumentNullException(nameof(userManager));
+        ArgumentNullException.ThrowIfNull(log);
+        ArgumentNullException.ThrowIfNull(userManager);
+
+        _log = log;
+        _usrMgr = userManager;
     }
 
     public async Task GetProfileDataAsync(ProfileDataRequestContext context)

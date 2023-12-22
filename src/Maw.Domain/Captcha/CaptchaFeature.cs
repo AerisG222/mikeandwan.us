@@ -16,8 +16,11 @@ public class CaptchaFeature
         IFeatureManager featureManager,
         IEnumerable<ICaptchaService> captchaServices
     ) {
-        _featureManager = featureManager ?? throw new ArgumentNullException(nameof(featureManager));
-        _captchaServices = captchaServices ?? throw new ArgumentNullException(nameof(captchaServices));
+        ArgumentNullException.ThrowIfNull(featureManager);
+        ArgumentNullException.ThrowIfNull(captchaServices);
+
+        _featureManager = featureManager;
+        _captchaServices = captchaServices;
     }
 
     public async Task<ICaptchaService> GetServiceAsync()

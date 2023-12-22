@@ -23,8 +23,11 @@ public class VideosController
         IImageCropper imageCropper)
         : base(log)
     {
-        _svc = videoService ?? throw new ArgumentNullException(nameof(videoService));
-        _imageCropper = imageCropper ?? throw new ArgumentNullException(nameof(imageCropper)); ;
+        ArgumentNullException.ThrowIfNull(videoService);
+        ArgumentNullException.ThrowIfNull(imageCropper);
+
+        _svc = videoService;
+        _imageCropper = imageCropper;
     }
 
     [HttpGet("{*extra}")]

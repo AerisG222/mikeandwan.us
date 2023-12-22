@@ -12,8 +12,11 @@ public class PhotoCategoryAdapter
         PhotoUrlBuilderService urlSvc,
         MultimediaInfoAdapter adapter)
     {
-        _urlSvc = urlSvc ?? throw new ArgumentNullException(nameof(urlSvc));
-        _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
+        ArgumentNullException.ThrowIfNull(urlSvc);
+        ArgumentNullException.ThrowIfNull(adapter);
+
+        _urlSvc = urlSvc;
+        _adapter = adapter;
     }
 
     public PhotoCategoryViewModel Adapt(Category c)

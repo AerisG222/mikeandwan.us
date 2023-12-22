@@ -18,8 +18,11 @@ public class PhotoService
         ILogger<PhotoService> log)
         : base(log)
     {
-        _repo = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
-        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+        ArgumentNullException.ThrowIfNull(photoRepository);
+        ArgumentNullException.ThrowIfNull(cache);
+
+        _repo = photoRepository;
+        _cache = cache;
     }
 
     public async Task<Photo?> GetRandomAsync(string[] roles)

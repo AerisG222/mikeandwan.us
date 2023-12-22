@@ -30,8 +30,11 @@ public class Startup
 
     public Startup(IConfiguration config, IWebHostEnvironment hostingEnvironment)
     {
-        _env = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
-        _config = config ?? throw new ArgumentNullException(nameof(config));
+        ArgumentNullException.ThrowIfNull(hostingEnvironment);
+        ArgumentNullException.ThrowIfNull(config);
+
+        _env = hostingEnvironment;
+        _config = config;
     }
 
     public void ConfigureServices(IServiceCollection services)
@@ -348,7 +351,7 @@ public class Startup
 
     string AddTrailingSlash(string val)
     {
-        _ = val ?? throw new ArgumentNullException(nameof(val));
+        ArgumentNullException.ThrowIfNull(val);
 
         return val.EndsWith('/') ? val : $"{val}/";
     }

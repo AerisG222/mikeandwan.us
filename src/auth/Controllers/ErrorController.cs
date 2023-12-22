@@ -11,7 +11,9 @@ public class ErrorController
 
     public ErrorController(ILogger<ErrorController> log)
     {
-        _log = log ?? throw new ArgumentNullException(nameof(log));
+        ArgumentNullException.ThrowIfNull(log);
+
+        _log = log;
     }
 
     [HttpGet("")]

@@ -17,9 +17,13 @@ public class LoginService
         SignInManager<MawUser> signInManager,
         ILogger<LoginService> log)
     {
-        _repo = repo ?? throw new ArgumentNullException(nameof(repo));
-        _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
-        _log = log ?? throw new ArgumentNullException(nameof(log));
+        ArgumentNullException.ThrowIfNull(repo);
+        ArgumentNullException.ThrowIfNull(signInManager);
+        ArgumentNullException.ThrowIfNull(log);
+
+        _repo = repo;
+        _signInManager = signInManager;
+        _log = log;
     }
 
     public async Task<SignInResult> AuthenticateAsync(string username, string password, short loginArea)

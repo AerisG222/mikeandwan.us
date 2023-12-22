@@ -24,13 +24,16 @@ public class UploadHub
         ILogger<UploadHub> log,
         IUploadService uploadService)
     {
-        _log = log ?? throw new ArgumentNullException(nameof(log));
-        _uploadSvc = uploadService ?? throw new ArgumentNullException(nameof(uploadService));
+        ArgumentNullException.ThrowIfNull(log);
+        ArgumentNullException.ThrowIfNull(uploadService);
+
+        _log = log;
+        _uploadSvc = uploadService;
     }
 
     public IEnumerable<UploadedFile> GetAllFiles()
     {
-        NullHelper.ThrowIfNull(Context.User);
+        ArgumentNullException.ThrowIfNull(Context.User);
 
         return _uploadSvc.GetFileList(Context.User);
     }
@@ -38,7 +41,7 @@ public class UploadHub
     [HubMethodName("DeleteFiles")]
     public async Task<IEnumerable<FileOperationResult>> DeleteFilesAsync(List<string> files)
     {
-        NullHelper.ThrowIfNull(Context.User);
+        ArgumentNullException.ThrowIfNull(Context.User);
 
         var results = _uploadSvc.DeleteFiles(Context.User, files);
 
@@ -55,7 +58,7 @@ public class UploadHub
 
     public override async Task OnConnectedAsync()
     {
-        NullHelper.ThrowIfNull(Context.User?.Identity);
+        ArgumentNullException.ThrowIfNull(Context.User?.Identity);
 
         _log.LogDebug("User [{Username}] connected to {Hub}.", Context.User.Identity.Name, nameof(UploadHub));
 
@@ -69,7 +72,7 @@ public class UploadHub
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        NullHelper.ThrowIfNull(Context.User?.Identity);
+        ArgumentNullException.ThrowIfNull(Context.User?.Identity);
 
         _log.LogDebug("User [{Username}] disconnected from {Hub}.", Context.User.Identity.Name, nameof(UploadHub));
 
@@ -113,7 +116,7 @@ public class UploadHub
 
     async Task FileDeletedAsync(UploadedFile file)
     {
-        NullHelper.ThrowIfNull(Context.User);
+        ArgumentNullException.ThrowIfNull(Context.User);
 
         if(!Context.User.IsAdmin())
         {

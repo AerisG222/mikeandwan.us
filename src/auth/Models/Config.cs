@@ -18,11 +18,17 @@ public class Config
 
     public Config(string wwwUrl, string wwwSecret, string photosUrl, string filesUrl, string photosSolidUrl)
     {
-        _wwwUrl = wwwUrl ?? throw new ArgumentNullException(nameof(wwwUrl));
-        _wwwSecret = wwwSecret ?? throw new ArgumentNullException(nameof(wwwSecret));
-        _photosUrl = photosUrl ?? throw new ArgumentNullException(nameof(photosUrl));
-        _filesUrl = filesUrl ?? throw new ArgumentNullException(nameof(filesUrl));
-        _photosSolidUrl = photosSolidUrl ?? throw new ArgumentNullException(nameof(photosSolidUrl));
+        ArgumentNullException.ThrowIfNull(wwwUrl);
+        ArgumentNullException.ThrowIfNull(wwwSecret);
+        ArgumentNullException.ThrowIfNull(photosUrl);
+        ArgumentNullException.ThrowIfNull(filesUrl);
+        ArgumentNullException.ThrowIfNull(photosSolidUrl);
+
+        _wwwUrl = wwwUrl;
+        _wwwSecret = wwwSecret;
+        _photosUrl = photosUrl;
+        _filesUrl = filesUrl;
+        _photosSolidUrl = photosSolidUrl;
     }
 
     // scopes define the API resources in your system

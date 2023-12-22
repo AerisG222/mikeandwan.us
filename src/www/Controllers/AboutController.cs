@@ -31,13 +31,16 @@ public class AboutController
         : base(log)
     {
         ArgumentNullException.ThrowIfNull(contactOpts);
+        ArgumentNullException.ThrowIfNull(blogService);
+        ArgumentNullException.ThrowIfNull(captchaFeature);
+        ArgumentNullException.ThrowIfNull(emailService);
+        ArgumentNullException.ThrowIfNull(razorRenderer);
 
         _config = contactOpts.Value;
-
-        _blogService = blogService ?? throw new ArgumentNullException(nameof(blogService));
-        _captchaFeature = captchaFeature ?? throw new ArgumentNullException(nameof(captchaFeature));
-        _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
-        _razorRenderer = razorRenderer ?? throw new ArgumentNullException(nameof(razorRenderer));
+        _blogService = blogService;
+        _captchaFeature = captchaFeature;
+        _emailService = emailService;
+        _razorRenderer = razorRenderer;
     }
 
     [HttpGet("")]

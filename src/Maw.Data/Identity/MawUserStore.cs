@@ -16,8 +16,11 @@ public class MawUserStore
         IUserRepository repo,
         ILogger<MawUserStore> log)
     {
-        _repo = repo ?? throw new ArgumentNullException(nameof(repo));
-        _log = log ?? throw new ArgumentNullException(nameof(log));
+        ArgumentNullException.ThrowIfNull(repo);
+        ArgumentNullException.ThrowIfNull(log);
+
+        _repo = repo;
+        _log = log;
     }
 
     #region IUserStore

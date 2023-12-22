@@ -52,7 +52,9 @@ public class PrimaryNavTagHelper
 
     public PrimaryNavTagHelper(IHtmlGenerator htmlGenerator)
     {
-        _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+        ArgumentNullException.ThrowIfNull(htmlGenerator);
+
+        _htmlGenerator = htmlGenerator;
     }
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

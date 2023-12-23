@@ -6,7 +6,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <DebugType>portable</DebugType>
-        <DefaultItemExcludes>**/node_modules/**;$(DefaultItemExcludes)</DefaultItemExcludes>
+        <DefaultItemExcludes>**/node_modules/**;package.json;$(DefaultItemExcludes)</DefaultItemExcludes>
         <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
         <AnalysisMode>Recommended</AnalysisMode>
         <ImplicitUsings>enable</ImplicitUsings>

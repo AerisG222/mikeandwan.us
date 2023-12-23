@@ -1,6 +1,6 @@
 # https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-3.1
 # https://github.com/dotnet/dotnet-docker/blob/master/samples/aspnetapp/Dockerfile.alpine-x64
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine-amd64 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine-amd64 AS build
 
 RUN apk --no-cache add \
     bash \
@@ -31,7 +31,7 @@ RUN sh -c 'source /root/.shrc && ./_build.sh www'
 
 
 # build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine-amd64
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine-amd64
 
 RUN apk --no-cache add \
     bash \
@@ -44,6 +44,10 @@ COPY --from=build /src/dist .
 COPY _start_site_in_container.sh /usr/local/bin/
 
 EXPOSE 5021
+
+# TODO: cant specify user yet given how we currently deal with certificates as it tries to write to filesystem:
+# cp: can't create '/usr/local/share/ca-certificates/ca_2022-05-12.crt': Permission denied
+#USER app
 
 ENTRYPOINT [ "_start_site_in_container.sh" ]
 CMD [ "./MawWww" ]

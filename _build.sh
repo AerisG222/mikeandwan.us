@@ -181,7 +181,9 @@ build_assets() {
     rm -rf node_modules
 
     pnpm i
-    pnpm run all
+    pnpm run sass:lint
+    pnpm run sass:site
+    pnpm run sass:games
 
     popd
 }

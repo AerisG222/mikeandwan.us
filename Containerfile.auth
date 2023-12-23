@@ -8,7 +8,6 @@ RUN apk --no-cache add \
     g++ \
     make \
     nodejs \
-    npm \
     rsync \
     sed
 

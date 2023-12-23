@@ -47,7 +47,6 @@ export class PlayComponent implements OnInit {
 
     endGame(): void {
         this.isGameOver = true;
-        let playerNumber = 1;
 
         if (this.player1.score === this.player2.score) {
             this.isTie = true;
@@ -57,7 +56,6 @@ export class PlayComponent implements OnInit {
             this.activePlayer = this.player1;
         } else {
             this.activePlayer = this.player2;
-            playerNumber = 2;
         }
 
         if (this.player1.character.name === this.player2.character.name) {

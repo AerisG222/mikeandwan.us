@@ -72,18 +72,18 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "binary-clock:build"
+                      "buildTarget": "binary-clock:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "binary-clock:build:production"
+                          "buildTarget": "binary-clock:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "binary-clock:build"
+                      "buildTarget": "binary-clock:build"
                     }
                 },
                 "test": {
@@ -195,18 +195,18 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "googlemaps:build"
+                      "buildTarget": "googlemaps:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "googlemaps:build:production"
+                          "buildTarget": "googlemaps:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "googlemaps:build"
+                      "buildTarget": "googlemaps:build"
                     }
                 },
                 "test": {
@@ -320,18 +320,18 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "learning:build"
+                      "buildTarget": "learning:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "learning:build:production"
+                          "buildTarget": "learning:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "learning:build"
+                      "buildTarget": "learning:build"
                     }
                 },
                 "test": {
@@ -443,18 +443,18 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "memory:build"
+                      "buildTarget": "memory:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "memory:build:production"
+                          "buildTarget": "memory:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "memory:build"
+                      "buildTarget": "memory:build"
                     }
                 },
                 "test": {
@@ -566,18 +566,18 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "money-spin:build"
+                      "buildTarget": "money-spin:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "money-spin:build:production"
+                          "buildTarget": "money-spin:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "money-spin:build"
+                      "buildTarget": "money-spin:build"
                     }
                 },
                 "test": {
@@ -689,18 +689,18 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "weekend-countdown:build"
+                      "buildTarget": "weekend-countdown:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "weekend-countdown:build:production"
+                          "buildTarget": "weekend-countdown:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "weekend-countdown:build"
+                      "buildTarget": "weekend-countdown:build"
                     }
                 },
                 "test": {

@@ -35,7 +35,7 @@ export class GameBoardComponent {
         }, 700);
 
         setTimeout(() => {
-            this.prepareNextTurn(true);
+            this.prepareNextTurn();
         }, 800);
     }
 
@@ -52,11 +52,11 @@ export class GameBoardComponent {
                 card2.isFlipped = false;
             }
 
-            this.prepareNextTurn(false);
+            this.prepareNextTurn();
         }, 800);
     }
 
-    prepareNextTurn(wasMatch: boolean): void {
+    prepareNextTurn(): void {
         this.selectedCards.card1 = null;
         this.selectedCards.card2 = null;
 

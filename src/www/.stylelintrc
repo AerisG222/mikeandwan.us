@@ -17,9 +17,6 @@
             }
         ],
         "at-rule-no-vendor-prefix": true,
-        "block-closing-brace-empty-line-before": null,
-        "block-closing-brace-newline-after": null,
-        "block-opening-brace-space-before": null,
         "color-named": "never",
         "declaration-empty-line-before": null,
         "declaration-no-important": true,
@@ -30,7 +27,6 @@
         "import-notation": "string",
         "keyframes-name-pattern": null,
         "length-zero-no-unit": true,
-        "max-line-length": null,
         "media-feature-name-no-vendor-prefix": true,
         "no-descending-specificity": null,
         "no-duplicate-selectors": true,

@@ -19,11 +19,11 @@
     "stylelint-scss": "^6.0.0"
   },
   "scripts": {
-    "all": "run-p sass",
-    "sass": "run-p sass:lint sass:site",
-    "sass:lint": "stylelint scss/*.scss 2> /dev/null",
-    "sass:site": "sass --load-path node_modules scss/site.scss wwwroot/css/site.css",
-    "sass:watch": "chokidar 'scss/**/*.scss' -c 'npm run sass'"
+    "all": "npx run-p sass",
+    "sass": "npx run-p sass:lint sass:site",
+    "sass:lint": "npx stylelint scss/*.scss 2> /dev/null",
+    "sass:site": "npx sass --load-path node_modules scss/site.scss wwwroot/css/site.css",
+    "sass:watch": "npx chokidar 'scss/**/*.scss' -c 'npm run sass'"
   },
   "author": "",
   "license": "MIT"

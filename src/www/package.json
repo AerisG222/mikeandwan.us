@@ -4,12 +4,12 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "all": "run-p sass",
-    "sass": "run-p sass:lint sass:site sass:games",
-    "sass:lint": "stylelint scss/*.scss 2> /dev/null",
-    "sass:site": "sass --load-path node_modules scss/site.scss wwwroot/css/site.css",
-    "sass:games": "sass --load-path node_modules scss/games.scss wwwroot/css/games.css",
-    "sass:watch": "chokidar 'scss/**/*.scss' -c 'npm run sass'"
+    "all": "npx run-p sass",
+    "sass": "npx run-p sass:lint sass:site sass:games",
+    "sass:lint": "npx stylelint scss/*.scss 2> /dev/null",
+    "sass:site": "npx sass --load-path node_modules scss/site.scss wwwroot/css/site.css",
+    "sass:games": "npx sass --load-path node_modules scss/games.scss wwwroot/css/games.css",
+    "sass:watch": "npx chokidar 'scss/**/*.scss' -c 'npm run sass'"
   },
   "dependencies": {
     "bootstrap": "^5.2.3",

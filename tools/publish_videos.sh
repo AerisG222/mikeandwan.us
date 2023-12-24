@@ -15,7 +15,7 @@ ALLOWED_ROLES=
 
 IMG_CONVERT_PHOTOS=docker.io/aerisg222/maw-convert-videos
 IMG_GLACIER_BACKUP=docker.io/aerisg222/maw-glacier-backup
-IMG_POSTGRES=docker.io/postgres:15-alpine
+IMG_POSTGRES=docker.io/postgres:16-alpine
 CPUS_CONVERT_VIDEOS=28
 CPUS_GLACIER_BACKUP=12
 

@@ -39,7 +39,6 @@ public class Startup
         var config = new Config(
             _config["Environment:WwwUrl"] ?? throw new InvalidOperationException("www url cannot be null!"),
             _config["Environment:WwwClientSecret"] ?? throw new InvalidOperationException("www client secret cannot be null!"),
-            _config["Environment:PhotosUrl"] ?? throw new InvalidOperationException("photos url cannot be null!"),
             _config["Environment:FilesUrl"] ?? throw new InvalidOperationException("files url cannot be null!"),
             _config["Environment:PhotosSolidUrl"] ?? throw new InvalidOperationException("photos-solid url cannot be null!"));
 

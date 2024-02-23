@@ -12,21 +12,18 @@ public class Config
 
     readonly string _wwwUrl;
     readonly string _wwwSecret;
-    readonly string _photosUrl;
     readonly string _filesUrl;
     readonly string _photosSolidUrl;
 
-    public Config(string wwwUrl, string wwwSecret, string photosUrl, string filesUrl, string photosSolidUrl)
+    public Config(string wwwUrl, string wwwSecret, string filesUrl, string photosSolidUrl)
     {
         ArgumentNullException.ThrowIfNull(wwwUrl);
         ArgumentNullException.ThrowIfNull(wwwSecret);
-        ArgumentNullException.ThrowIfNull(photosUrl);
         ArgumentNullException.ThrowIfNull(filesUrl);
         ArgumentNullException.ThrowIfNull(photosSolidUrl);
 
         _wwwUrl = wwwUrl;
         _wwwSecret = wwwSecret;
-        _photosUrl = photosUrl;
         _filesUrl = filesUrl;
         _photosSolidUrl = photosSolidUrl;
     }
@@ -126,46 +123,13 @@ public class Config
             },
             new Client
             {
-                ClientId = "maw-photos",
-                ClientName = "mikeandwan.us Photo Application",
-                AllowedGrantTypes = GrantTypes.Code,
-                RequireClientSecret = false,
-                AllowAccessTokensViaBrowser = true,
-                AllowOfflineAccess = true,
-                RedirectUris = new List<string>
-                {
-                    $"{_photosUrl}/login",
-                    $"{_photosUrl}/silent-refresh.html"
-                },
-                PostLogoutRedirectUris = new List<string>
-                {
-                    $"{_photosUrl}/signout-callback.html"
-                },
-                AllowedCorsOrigins = new List<string>
-                {
-                    _photosUrl
-                },
-                AllowedScopes = new List<string>
-                {
-                    IdentityServerConstants.StandardScopes.OfflineAccess,
-                    IdentityServerConstants.StandardScopes.OpenId,
-                    IdentityServerConstants.StandardScopes.Profile,
-
-                    // apis
-                    "maw_api",
-
-                    // identity resources
-                    JwtClaimTypes.Role
-                }
-            },
-            new Client
-            {
                 ClientId = "maw-photos-solid",
                 ClientName = "mikeandwan.us Photo Application",
                 AllowedGrantTypes = GrantTypes.Code,
                 RequireClientSecret = false,
                 AllowAccessTokensViaBrowser = true,
                 AllowOfflineAccess = true,
+                RefreshTokenUsage = TokenUsage.ReUse,
                 RedirectUris = new List<string>
                 {
                     $"{_photosSolidUrl}/login/handle-response"
@@ -199,6 +163,7 @@ public class Config
                 RequireClientSecret = false,
                 AllowAccessTokensViaBrowser = true,
                 AllowOfflineAccess = true,
+                RefreshTokenUsage = TokenUsage.ReUse,
                 RedirectUris = new List<string>
                 {
                     $"{_filesUrl}/login",

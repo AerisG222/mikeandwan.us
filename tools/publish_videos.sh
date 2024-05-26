@@ -146,6 +146,7 @@ fi
 echo '* processing videos...'
 
 podman run -it --rm \
+    --pull newer \
     --memory 0 \
     --cpus "${CPUS_CONVERT_VIDEOS}" \
     --volume "${ASSET_ROOT}:/videodir:rw" \
@@ -192,6 +193,7 @@ mv "${PATH_VIDEO_SOURCE}" "${DEST_MOVIES_YEAR_ROOT}"
 
 echo '* applying sql to local database...'
 podman run -it --rm \
+    --pull newer \
     --pod "${DEV_POD}" \
     --env-file "${DEV_PSQL_ENV_FILE}" \
     --volume "${ASSET_ROOT}:/output:ro" \
@@ -205,6 +207,7 @@ podman run -it --rm \
 
 echo '* backing up videos to AWS Glacier...'
 podman run -it --rm \
+    --pull newer \
     --cpus "${CPUS_GLACIER_BACKUP}" \
     --volume "/home/mmorano/.aws:/creds:ro" \
     --volume "${DEST_MOVIES_ROOT}:/videodir:ro" \
@@ -223,6 +226,7 @@ podman run -it --rm \
 
 echo '* applying glacier sql file to local database...'
 podman run -it --rm \
+    --pull newer \
     --pod "${DEV_POD}" \
     --env-file "${DEV_PSQL_ENV_FILE}" \
     --volume "${ASSET_ROOT}:/output:ro" \

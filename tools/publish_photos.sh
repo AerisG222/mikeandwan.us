@@ -69,6 +69,7 @@ if [ "${PREVIEWMODE}" = 'y' ]; then
     fi
 
     podman run -it --rm \
+        --pull newer \
         --memory 0 \
         --cpus "${CPUS_SIZE_PHOTOS}" \
         --volume "${RAW_THERAPEE_CONFIG_DIR}:/config:ro" \
@@ -182,6 +183,7 @@ fi
 echo '* processing photos...'
 
 podman run -it --rm \
+    --pull newer \
     --memory 0 \
     --cpus "${CPUS_SIZE_PHOTOS}" \
     --volume "${RAW_THERAPEE_CONFIG_DIR}:/config:ro" \
@@ -230,6 +232,7 @@ mv "${PATH_IMAGE_SOURCE}" "${DEST_IMAGES_YEAR_ROOT}"
 
 echo '* applying sql to local database...'
 podman run -it --rm \
+    --pull newer \
     --pod "${DEV_POD}" \
     --env-file "${DEV_PSQL_ENV_FILE}" \
     --volume "${ASSET_ROOT}:/output:ro" \
@@ -243,6 +246,7 @@ podman run -it --rm \
 
 echo '* backing up photos to AWS Glacier...'
 podman run -it --rm \
+    --pull newer \
     --cpus "${CPUS_GLACIER_BACKUP}" \
     --volume "/home/mmorano/.aws:/creds:ro" \
     --volume "${DEST_IMAGES_ROOT}:/photodir:ro" \
@@ -261,6 +265,7 @@ podman run -it --rm \
 
 echo '* applying glacier sql file to local database...'
 podman run -it --rm \
+    --pull newer \
     --pod "${DEV_POD}" \
     --env-file "${DEV_PSQL_ENV_FILE}" \
     --volume "${ASSET_ROOT}:/output:ro" \

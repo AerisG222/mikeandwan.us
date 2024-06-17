@@ -65,6 +65,48 @@ public class VideoCache
         return await GetCategoriesInternalAsync(tran, accessibleCategoriesInYearSetKey);
     }
 
+    // TODO: consider using a sorted set for accessible categories so we can then use zrange to simplify the logic below?
+    public async Task<CacheResult<IEnumerable<Category>>> GetRecentCategoriesAsync(string[] roles, short sinceId)
+    {
+        var tran = Db.CreateTransaction();
+        var accessibleCategoriesSetKey = PrepareAccessibleCategoriesSet(tran, roles);
+        var categoryIds = tran.SetMembersAsync(accessibleCategoriesSetKey);
+        var status = GetStatusAsync(tran);
+
+        await tran.ExecuteAsync();
+
+        var newIds = (await categoryIds)
+            .Select(x => (short)x)
+            .Where(x => x > sinceId);
+
+        var theStatus = await status;
+
+        if(!newIds.Any() || !IsStatusUsable(theStatus))
+        {
+            return BuildResult(
+                theStatus,
+                new List<Category>().AsEnumerable()
+            );
+        }
+
+        tran = Db.CreateTransaction();
+        var recentCategorySet = VideoKeys.CATEGORY_RECENT_SET_KEY;
+
+#pragma warning disable CS4014
+        tran.KeyDeleteAsync(recentCategorySet);
+
+        foreach(var id in newIds)
+        {
+            tran.SetAddAsync(
+                recentCategorySet,
+                id
+            );
+        }
+#pragma warning restore CS4014
+
+        return await GetCategoriesInternalAsync(tran, recentCategorySet);
+    }
+
     public async Task<CacheResult<Category>> GetCategoryAsync(string[] roles, short categoryId)
     {
         var canAccess = await CanAccessCategoryAsync(categoryId, roles);

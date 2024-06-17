@@ -9,6 +9,7 @@ static class VideoKeys
     public const string CACHE_STATUS = $"{ROOT}:status";
     public const string VIDEO_HASH_KEY_PATTERN = $"{ROOT}:*";
     public const string CATEGORY_HASH_KEY_PATTERN = $"{CATEGORY_ROOT}:*";
+    public const string CATEGORY_RECENT_SET_KEY = $"{CATEGORY_ROOT}:recent";
 
     public static string GetVideoHashKey(Video video) => GetVideoHashKey(video.Id);
     public static string GetVideoHashKey(int videoId) => $"{ROOT}:{videoId}";

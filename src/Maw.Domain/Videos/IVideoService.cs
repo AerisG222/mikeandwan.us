@@ -8,6 +8,7 @@ public interface IVideoService
     Task<IEnumerable<short>> GetYearsAsync(string[] roles);
     Task<IEnumerable<Category>> GetAllCategoriesAsync(string[] roles);
     Task<IEnumerable<Category>> GetCategoriesAsync(short year, string[] roles);
+    Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, string[] roles);
     Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, string[] roles);
     Task<Video?> GetVideoAsync(short id, string[] roles);
     Task<Category?> GetCategoryAsync(short categoryId, string[] roles);

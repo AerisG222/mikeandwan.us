@@ -55,6 +55,14 @@ public class VideoService
         return categories ?? new List<Category>();
     }
 
+    public async Task<IEnumerable<Category>> GetRecentCategoriesAsync(short sinceId, string[] roles)
+    {
+        return await GetCachedValueAsync(
+            () => _cache.GetRecentCategoriesAsync(roles, sinceId),
+            () => _repo.GetRecentCategoriesAsync(sinceId, roles)
+        ) ;
+    }
+
     public async Task<IEnumerable<Video>> GetVideosInCategoryAsync(short categoryId, string[] roles)
     {
         var videos = await GetCachedValueAsync(

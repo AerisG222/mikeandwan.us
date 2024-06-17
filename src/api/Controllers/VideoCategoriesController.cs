@@ -44,6 +44,17 @@ public class VideoCategoriesController
         return new ApiCollectionResult<VideoCategoryViewModel>(result.ToList());
     }
 
+    [HttpGet("recent/{sinceId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    public async Task<ActionResult<ApiCollectionResult<VideoCategoryViewModel>>> GetRecent(short sinceId)
+    {
+        var categories = await _svc.GetRecentCategoriesAsync(sinceId, User.GetAllRoles());
+        var result = _categoryAdapter.Adapt(categories);
+
+        return new ApiCollectionResult<VideoCategoryViewModel>(result.ToList());
+    }
+
     [HttpGet("{id}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(401)]

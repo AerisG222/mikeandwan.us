@@ -244,7 +244,7 @@ public class VideoCache
     async Task<CacheResult<IEnumerable<Video>>> GetVideosInternalAsync(ITransaction tran, string setKey)
     {
         var status = GetStatusAsync(tran);
-        var photos = tran.SortAsync(
+        var videos = tran.SortAsync(
             setKey,
             get: _videoSerializer.SortLookupFields
         );
@@ -253,7 +253,7 @@ public class VideoCache
 
         return BuildResult(
             await status,
-            _videoSerializer.Parse(await photos)
+            _videoSerializer.Parse(await videos)
         );
     }
 

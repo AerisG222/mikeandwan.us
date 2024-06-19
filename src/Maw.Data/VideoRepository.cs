@@ -188,7 +188,7 @@ public class VideoRepository
                 {
                     videoId,
                     username = username.ToLowerInvariant(),
-                    score = 0,
+                    score = (short)0,
                     roles
                 }
             );

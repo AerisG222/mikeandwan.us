@@ -229,7 +229,7 @@ public class PhotoRepository
                 {
                     photoId,
                     username = username.ToLowerInvariant(),
-                    score = 0,
+                    score = (short)0,
                     roles
                 }
             );

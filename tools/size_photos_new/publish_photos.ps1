@@ -146,6 +146,17 @@ function PrintStats {
     Write-Host -ForegroundColor Green "Average per photo: $([math]::Round($timer.Elapsed.TotalSeconds / $filecount, 2))s"
 }
 
+function CorrectIntermediateFilenames {
+    param(
+        [Parameter(Mandatory = $true)] [string] $dir
+    )
+
+    # default pure raw filename will include the orig extension as "-NEF", remove that if present so the intermediate
+    # file names (dng/pp3) are in line w/ the original filenames
+    rename -- '-NEF' '' $(Join-Path $dir "*.dng")
+    rename -- '-NEF' '' $(Join-Path $dir "*.pp3")
+}
+
 function Main {
     $dir = "/home/mmorano/Desktop/testing"
     $sizeSpecs = BuildSizeSpecs -dir $dir
@@ -153,6 +164,7 @@ function Main {
 
     # new process assumes all RAW files will be converted to dng first (via DxO PureRaw 4)
     MoveSourceFiles -dir $dir -pattern "*.NEF"
+    CorrectIntermediateFilenames -dir $dir
     CleanSidecarPp3Files -dir $dir
     ResizePhotos -dir $dir -sizeSpecs $sizeSpecs
     MoveSourceFiles -dir $dir -pattern "*.jpg"

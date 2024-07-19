@@ -280,6 +280,42 @@ function ReadExif {
         | ConvertFrom-Json
 }
 
+function ReadFilesystemInfo {
+    param(
+        [Parameter(Mandatory = $true)] [string] $dir
+    )
+
+    $result = @{}
+    $output = du -b (Join-Path $dir "**/*")
+
+    foreach($line in $output) {
+        $parts = $line.Split("`t")
+
+        $result[$parts[1]] = $parts[0]
+    }
+
+    return $result
+}
+
+function ReadImageProperties {
+    param(
+        [Parameter(Mandatory = $true)] [string] $dir
+    )
+
+    $result = @{}
+    $output = magick identify (Join-Path $dir "**/*") `
+        2>$null
+
+    foreach($line in $output) {
+        $parts = $line.Split(' ')
+        $dimensions = $parts[2].Split('x')
+
+        $result[$parts[0]] = @{ width = $dimensions[0]; height = $dimensions[1] }
+    }
+
+    return $result
+}
+
 function Main {
     $dir = "/home/mmorano/Desktop/testing"
     $sizeSpecs = BuildSizeSpecs -dir $dir
@@ -293,8 +329,8 @@ function Main {
     # MoveSourceFiles -dir $dir -pattern "*.jpg"
     # MoveSourceFiles -dir $dir -pattern "*.pp3"
     $exif = ReadExif -dir (BuildSrcDir $dir)
-
-    write-host $exif
+    $fsInfo = ReadFilesystemInfo -dir $dir
+    $imgInfo = ReadImageProperties -dir $dir
 
     $timer.Stop()
 

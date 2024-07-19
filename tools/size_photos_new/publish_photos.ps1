@@ -1,5 +1,85 @@
 #!~/.dotnet/tools/pwsh
 
+$exifTags = @(
+    # exif
+    "BitsPerSample"
+    "Compression"
+    "Contrast"
+    "CreateDate"
+    "DigitalZoomRatio"
+    "ExposureCompensation"
+    "ExposureMode"
+    "ExposureProgram"
+    "ExposureTime"
+    "FNumber"
+    "Flash"
+    "FocalLength"
+    "FocalLengthIn35mmFormat"
+    "GainControl"
+    "GPSAltitude"
+    "GPSAltitudeRef"
+    "GPSDateStamp"
+    "GPSImgDirection"
+    "GPSImgDirectionRef"
+    "GPSLatitude"
+    "GPSLatitudeRef"
+    "GPSLongitude"
+    "GPSLongitudeRef"
+    "GPSMeasureMode"
+    "GPSSatellites"
+    "GPSStatus"
+    "GPSVersionID"
+    "ISO"
+    "LightSource"
+    "Make"
+    "MeteringMode"
+    "Model"
+    "Orientation"
+    "Saturation"
+    "SceneCaptureType"
+    "SceneType"
+    "SensingMethod"
+    "Sharpness"
+
+    # nikon
+    "AFAreaMode"
+    "AFPoint"
+    "ActiveD-Lighting"
+    "ColorSpace"
+    "ExposureDifference"
+    "FlashColorFilter"
+    "FlashCompensation"
+    "FlashControlMode"
+    "FlashExposureComp"
+    "FlashFocalLength"
+    "FlashMode"
+    "FlashSetting"
+    "FlashType"
+    "FocusDistance"
+    "FocusMode"
+    "FocusPosition"
+    "HighIsoNoiseReduction"
+    "HueAdjustment"
+    "NoiseReduction"
+    "PictureControlName"
+    "PrimaryAFPoint"
+    "VRMode"
+    "VibrationReduction"
+    "VignetteControl"
+    "WhiteBalance"
+
+    # composite
+    "Aperture"
+    "AutoFocus"
+    "DOF"
+    "FOV"
+    "HyperfocalDistance"
+    "LensID"
+    "LightValue"
+    "ScaleFactor35efl"
+    "ShutterSpeed"
+)
+
 function BuildSizeSpecs {
     param(
         [Parameter(Mandatory = $true)] [string] $dir
@@ -91,13 +171,21 @@ function ResizePhotos {
     }
 }
 
+function BuildSrcDir {
+    param(
+        [Parameter(Mandatory = $true)] [string] $dir
+    )
+
+    return Join-Path $dir "src"
+}
+
 function MoveSourceFiles {
     param(
         [Parameter(Mandatory = $true)] [string] $dir,
         [Parameter(Mandatory = $true)] [string] $pattern
     )
 
-    $srcDir = Join-Path $dir "src"
+    $srcDir = BuildSrcDir $dir
 
     if(-not (Test-Path $srcDir)) {
         mkdir "${srcDir}"
@@ -157,23 +245,61 @@ function CorrectIntermediateFilenames {
     rename -- '-NEF' '' $(Join-Path $dir "*.pp3")
 }
 
+function BuildExifToolArgs {
+    param(
+        [Parameter(Mandatory = $true)] [string] $dir
+    )
+
+    foreach($tag in $exifTags) {
+        $etArgs += @( "-${tag}" )
+    }
+
+    $etArgs += @(
+        "-json"
+        "-tab"
+        "-long"
+        $dir
+    )
+
+    return $etArgs
+}
+
+function ReadExif {
+    param(
+        [Parameter(Mandatory = $true)] [string] $dir
+    )
+
+    # i first looked to see if exiv2 could replace exiftool (it seems faster)
+    # but does not support all the tags i've used (one example is flashinfo data which is extracted by exiftool)
+    # given this: sticking w/ exiftool for now
+
+    $etArgs = BuildExifToolArgs -dir $dir
+
+    return exiftool @etArgs `
+        2>$null `
+        | ConvertFrom-Json
+}
+
 function Main {
     $dir = "/home/mmorano/Desktop/testing"
     $sizeSpecs = BuildSizeSpecs -dir $dir
     $timer = [Diagnostics.Stopwatch]::StartNew()
 
     # new process assumes all RAW files will be converted to dng first (via DxO PureRaw 4)
-    MoveSourceFiles -dir $dir -pattern "*.NEF"
-    CorrectIntermediateFilenames -dir $dir
-    CleanSidecarPp3Files -dir $dir
-    ResizePhotos -dir $dir -sizeSpecs $sizeSpecs
-    MoveSourceFiles -dir $dir -pattern "*.jpg"
-    MoveSourceFiles -dir $dir -pattern "*.pp3"
+    # MoveSourceFiles -dir $dir -pattern "*.NEF"
+    # CorrectIntermediateFilenames -dir $dir
+    # CleanSidecarPp3Files -dir $dir
+    # ResizePhotos -dir $dir -sizeSpecs $sizeSpecs
+    # MoveSourceFiles -dir $dir -pattern "*.jpg"
+    # MoveSourceFiles -dir $dir -pattern "*.pp3"
+    $exif = ReadExif -dir (BuildSrcDir $dir)
+
+    write-host $exif
 
     $timer.Stop()
 
-    DeleteDngFiles -dir $dir
-    PrintStats -sizeSpecs $sizeSpecs -timer $timer
+    # DeleteDngFiles -dir $dir
+    # PrintStats -sizeSpecs $sizeSpecs -timer $timer
 }
 
 Main

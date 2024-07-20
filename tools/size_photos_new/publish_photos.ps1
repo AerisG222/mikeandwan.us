@@ -105,6 +105,15 @@ function BuildSizeSpecs {
             name = "Large"
             subdir = Join-Path $dir "lg"
         }
+
+        # secondary conversions
+        @{
+            name = "Thumbnail Fixed Size"
+            subdir = Join-Path $dir "xs_sq"
+            resizeGeometry = "160x120^"
+            cropGeometry = "160x120+0+0"
+            resizeSourceDir = Join-Path $dir "md"
+        }
     )
 
     return $sizeSpecs
@@ -165,9 +174,20 @@ function ResizePhotos {
             mkdir "$($spec.subdir)"
         }
 
-        $rtArgs = BuildRawTherapeeArgs -dir $dir -spec $spec
+        if(-not $spec.resizeSourceDir) {
+            $rtArgs = BuildRawTherapeeArgs -dir $dir -spec $spec
 
-        rawtherapee-cli @rtArgs > $null 2>&1
+            rawtherapee-cli @rtArgs > $null 2>&1
+        } else {
+            # could not figure out how to resize and center crop with rawtherapee,so using imagemagick here
+            # https://stackoverflow.com/questions/32466048/imagemagick-convert-resize-then-crop
+            magick mogrify `
+                -path $spec.subdir `
+                -resize $spec.resizeGeometry `
+                -gravity center `
+                -crop $spec.cropGeometry `
+                (Join-Path $spec.resizeSourceDir "*.*")
+        }
     }
 }
 
@@ -379,10 +399,10 @@ function Main {
     # MoveSourceFiles -dir $dir -pattern "*.NEF"
     # CorrectIntermediateFilenames -dir $dir
     # CleanSidecarPp3Files -dir $dir
-    # ResizePhotos -dir $dir -sizeSpecs $sizeSpecs
+    ResizePhotos -dir $dir -sizeSpecs $sizeSpecs
     # MoveSourceFiles -dir $dir -pattern "*.jpg"
     # MoveSourceFiles -dir $dir -pattern "*.pp3"
-    $metadata = GetMetadata -dir $dir
+    # $metadata = GetMetadata -dir $dir
 
     $timer.Stop()
 

@@ -331,7 +331,7 @@ function MergeMetadata {
             $fs = $fileSizes[$dimKey]
             $sizeDir = Get-Item ([System.IO.Path]::GetDirectoryName($dimKey))
             $sizeKey = $sizeDir.Name
-            $file = [System.IO.Path]::GetFilenameWithoutExtension($exifFile.SourceFile)
+            $file = [System.IO.Path]::GetFilenameWithoutExtension($dimKey)
 
             if(-not $metadata.ContainsKey($file)) {
                 $metadata.Add($file, @{})
@@ -348,11 +348,8 @@ function MergeMetadata {
 
     foreach($exifFile in $exif) {
         $file = [System.IO.Path]::GetFilenameWithoutExtension($exifFile.SourceFile)
-        $info = @{exif = $exifFile}
 
-        $metadata.Add($file, $info)
-
-
+        $metadata[$file].Add("exif", $exifFile)
     }
 
     return $metadata

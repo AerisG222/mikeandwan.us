@@ -297,7 +297,7 @@ function ReadFilesystemInfo {
     return $result
 }
 
-function ReadImageProperties {
+function ReadImageDimensions {
     param(
         [Parameter(Mandatory = $true)] [string] $dir
     )
@@ -316,6 +316,63 @@ function ReadImageProperties {
     return $result
 }
 
+function MergeMetadata {
+    param(
+        [Parameter(Mandatory = $true)] [array] $exif,
+        [Parameter(Mandatory = $true)] [hashtable] $dimensions,
+        [Parameter(Mandatory = $true)] [hashtable] $fileSizes
+    )
+
+    $metadata = @{}
+
+    foreach($dimKey in $dimensions.Keys) {
+        if($fileSizes.ContainsKey($dimKey)) {
+            $dim = $dimensions[$dimKey]
+            $fs = $fileSizes[$dimKey]
+            $sizeDir = Get-Item ([System.IO.Path]::GetDirectoryName($dimKey))
+            $sizeKey = $sizeDir.Name
+            $file = [System.IO.Path]::GetFilenameWithoutExtension($exifFile.SourceFile)
+
+            if(-not $metadata.ContainsKey($file)) {
+                $metadata.Add($file, @{})
+            }
+
+            $metadata[$file].Add($sizeKey, @{
+                path = $dimKey
+                width = $dim.width
+                height = $dim.height
+                size = $fs
+            })
+        }
+    }
+
+    foreach($exifFile in $exif) {
+        $file = [System.IO.Path]::GetFilenameWithoutExtension($exifFile.SourceFile)
+        $info = @{exif = $exifFile}
+
+        $metadata.Add($file, $info)
+
+
+    }
+
+    return $metadata
+}
+
+function GetMetadata {
+    param(
+        [Parameter(Mandatory = $true)] [string] $dir
+    )
+
+    $exif = ReadExif -dir (BuildSrcDir $dir)
+    $fs = ReadFilesystemInfo -dir $dir
+    $dim = ReadImageDimensions -dir $dir
+
+    return MergeMetadata `
+        -exif $exif `
+        -dimensions $dim `
+        -fileSizes $fs `
+}
+
 function Main {
     $dir = "/home/mmorano/Desktop/testing"
     $sizeSpecs = BuildSizeSpecs -dir $dir
@@ -328,9 +385,7 @@ function Main {
     # ResizePhotos -dir $dir -sizeSpecs $sizeSpecs
     # MoveSourceFiles -dir $dir -pattern "*.jpg"
     # MoveSourceFiles -dir $dir -pattern "*.pp3"
-    $exif = ReadExif -dir (BuildSrcDir $dir)
-    $fsInfo = ReadFilesystemInfo -dir $dir
-    $imgInfo = ReadImageProperties -dir $dir
+    $metadata = GetMetadata -dir $dir
 
     $timer.Stop()
 

@@ -508,7 +508,7 @@ function SqlLookupId {
         return "NULL";
     }
 
-    return "(SELECT id FROM ${table} WHERE name = $(SqlString -val $value)";
+    return "(SELECT id FROM ${table} WHERE name = $(SqlString -val $value))";
 }
 
 function WriteSqlHeader {
@@ -535,15 +535,17 @@ function WriteSqlLookup {
     param(
         [Parameter(Mandatory = $true)] [System.IO.StreamWriter] $writer,
         [Parameter(Mandatory = $true)] [string] $table,
-        [Parameter(Mandatory = $true)] [array] $values
+        [Parameter(Mandatory = $false)] [array] $values
     )
 
     foreach ($val in $values)
     {
-        $lookup = SqlCreateLookup -table $table -value $val
+        if($val) {
+            $lookup = SqlCreateLookup -table $table -value $val
 
-        if (-not [string]::IsNullOrWhiteSpace($lookup)) {
-            $writer.WriteLine($lookup)
+            if (-not [string]::IsNullOrWhiteSpace($lookup)) {
+                $writer.WriteLine($lookup)
+            }
         }
     }
 }
@@ -554,28 +556,47 @@ function WriteSqlLookups {
         [Parameter(Mandatory = $true)] [hashtable] $metadata
     )
 
-    WriteSqlLookup -writer $writer -table "photo.active_d_lighting" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.ActiveDLighting -Unique)
-    WriteSqlLookup -writer $writer -table "photo.af_area_mode" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.AutoFocusAreaMode -Unique)
-    WriteSqlLookup -writer $writer -table "photo.af_point" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.AutoFocusPoint -Unique)
-    WriteSqlLookup -writer $writer -table "photo.colorspace" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.Colorspace -Unique)
-    WriteSqlLookup -writer $writer -table "photo.flash_color_filter" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.FlashColorFilter -Unique)
-    WriteSqlLookup -writer $writer -table "photo.flash_mode" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.FlashMode -Unique)
-    WriteSqlLookup -writer $writer -table "photo.flash_setting" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.FlashSetting -Unique)
-    WriteSqlLookup -writer $writer -table "photo.flash_type" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.FlashType -Unique)
-    WriteSqlLookup -writer $writer -table "photo.focus_mode" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.FocusMode -Unique)
-    WriteSqlLookup -writer $writer -table "photo.high_iso_noise_reduction" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.HighIsoNoiseReduction -Unique)
-    WriteSqlLookup -writer $writer -table "photo.hue_adjustment" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.HueAdjustment -Unique)
-    WriteSqlLookup -writer $writer -table "photo.lens" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.LensId -Unique)
-    WriteSqlLookup -writer $writer -table "photo.make" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.Make -Unique)
-    WriteSqlLookup -writer $writer -table "photo.model" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.Model -Unique)
-    WriteSqlLookup -writer $writer -table "photo.noise_reduction" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.NoiseReduction -Unique)
-    WriteSqlLookup -writer $writer -table "photo.picture_control_name" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.PictureControlName -Unique)
-    WriteSqlLookup -writer $writer -table "photo.saturation" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.Saturation -Unique)
-    WriteSqlLookup -writer $writer -table "photo.vibration_reduction" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.VibrationReduction -Unique)
-    WriteSqlLookup -writer $writer -table "photo.vignette_control" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.VignetteControl -Unique)
-    WriteSqlLookup -writer $writer -table "photo.vr_mode" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.VRMode -Unique)
-    WriteSqlLookup -writer $writer -table "photo.white_balance" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.WhiteBalance -Unique)
-    WriteSqlLookup -writer $writer -table "photo.gps_altitude_ref" -values ($metadata.Values | Select-Object $_.exif | Select-Object $_.GpsAltitudeRef -Unique)
+    WriteSqlLookup -writer $writer -table "photo.compression" -values ($metadata.Values.exif?.Compression?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.contrast" -values ($metadata.Values.exif?.Contrast?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.exposure_mode" -values ($metadata.Values.exif?.ExposureMode?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.exposure_program" -values ($metadata.Values.exif?.ExposureProgram?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.flash" -values ($metadata.Values.exif?.Flash?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.gain_control" -values ($metadata.Values.exif?.GainControl?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.gps_altitude_ref" -values ($metadata.Values.exif?.GpsAltitudeRef?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.gps_direction_ref" -values ($metadata.Values.exif?.GpsImgDirectionRef?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.gps_latitude_ref" -values ($metadata.Values.exif?.GpsLatitudeRef?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.gps_longitude_ref" -values ($metadata.Values.exif?.GpsLongitudeRef?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.gps_measure_mode" -values ($metadata.Values.exif?.GpsMeasureMode?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.gps_status" -values ($metadata.Values.exif?.GpsStatus?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.light_source" -values ($metadata.Values.exif?.LightSource?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.make" -values ($metadata.Values.exif?.Make?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.metering_mode" -values ($metadata.Values.exif?.MeteringMode?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.model" -values ($metadata.Values.exif?.Model?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.orientation" -values ($metadata.Values.exif?.Orientation?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.saturation" -values ($metadata.Values.exif?.Saturation?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.scene_capture_type" -values ($metadata.Values.exif?.SceneCaptureType?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.scene_type" -values ($metadata.Values.exif?.SceneType?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.sensing_method" -values ($metadata.Values.exif?.SensingMethod?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.sharpness" -values ($metadata.Values.exif?.Sharpness?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.af_area_mode" -values ($metadata.Values.exif?.AFAreaMode?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.af_point" -values ($metadata.Values.exif?.AFPoint?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.active_d_lighting" -values ($metadata.Values.exif?.'ActiveD-Lighting'?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.colorspace" -values ($metadata.Values.exif?.Colorspace?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.flash_color_filter" -values ($metadata.Values.exif?.FlashColorFilter?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.flash_mode" -values ($metadata.Values.exif?.FlashMode?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.flash_setting" -values ($metadata.Values.exif?.FlashSetting?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.flash_type" -values ($metadata.Values.exif?.FlashType?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.focus_mode" -values ($metadata.Values.exif?.FocusMode?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.high_iso_noise_reduction" -values ($metadata.Values.exif?.HighIsoNoiseReduction?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.hue_adjustment" -values ($metadata.Values.exif?.HueAdjustment?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.noise_reduction" -values ($metadata.Values.exif?.NoiseReduction?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.picture_control_name" -values ($metadata.Values.exif?.PictureControlName?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.vibration_reduction" -values ($metadata.Values.exif?.VibrationReduction?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.vignette_control" -values ($metadata.Values.exif?.VignetteControl?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.vr_mode" -values ($metadata.Values.exif?.VRMode?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.white_balance" -values ($metadata.Values.exif?.WhiteBalance?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.auto_focus" -values ($metadata.Values.exif?.AutoFocus?.val | Select-Object -Unique)
+    WriteSqlLookup -writer $writer -table "photo.lens" -values ($metadata.Values.exif?.LensId?.val | Select-Object -Unique)
 }
 
 function BuildUrl {
@@ -611,8 +632,8 @@ function WriteSqlResult {
             "xs_sq_width" = $photo.xs_sq.width
             "xs_sq_size" = $photo.xs_sq.size
             "xs_sq_path" = SqlString -val (BuildUrl -category $category -file $photo.xs_sq.path)
-            "sm_height" = $photo.sm.Height
-            "sm_width" = $photo.sm.Width
+            "sm_height" = $photo.sm.height
+            "sm_width" = $photo.sm.width
             "sm_size" = $photo.sm.size
             "sm_path" = SqlString -val (BuildUrl -category $category -file $photo.sm.path)
             "md_height" = $photo.md.height
@@ -621,110 +642,110 @@ function WriteSqlResult {
             "md_path" = SqlString -val (BuildUrl -category $category -file $photo.md.path)
             "lg_height" = $photo.lg.height
             "lg_width" = $photo.lg.width
-            "lg_size" = $photo.lg.sizeInBytes
+            "lg_size" = $photo.lg.size
             "lg_path" = SqlString -val (BuildUrl -category $category -file $photo.lg.path)
-            "prt_height" = "NULL" # prt
-            "prt_width" = "NULL" # prt
-            "prt_size" = "NULL" # prt
-            "prt_path" = "NULL" # prt
+            "prt_height" = $photo.lg.height
+            "prt_width" = $photo.lg.width
+            "prt_size" = 0 # seeing we are referencing lg, specify 0b so we don't double count what is actually on disk
+            "prt_path" = SqlString -val (BuildUrl -category $category -file $photo.lg.path)  # just use lg for prt until we remove
             "src_height" = $photo.src.height
             "src_width" = $photo.src.width
             "src_size" = $photo.src.size
             "src_path" = SqlString -val (BuildUrl -category $category -file $photo.src.path)
             # exif
-            "bits_per_sample" = SqlNumber -val "$($photo.exif?.BitsPerSample?.val)"
-            "compression_id" = SqlNumber -val "$($photo.exif?.Compression?.val)"
-            "contrast_id" = SqlString -val "$($photo.exif?.Contrast?.val)"
-            "create_date" = SqlTimestamp -dt "$($photo.exif?.CreateDate?.val)"
-            "digital_zoom_ratio" = SqlNumber -val "$($photo.exif?.DigitalZoomRatio?.val)"
-            "exposure_compensation" = SqlString -val "$($photo.exif?.ExposureCompensation?.val)"
-            "exposure_mode_id" = SqlNumber -val "$($photo.exif?.ExposureMode?.val)"
-            "exposure_program_id" = SqlNumber -val "$($photo.exif?.ExposureProgram?.val)"
-            "exposure_time" = SqlString -val "$($photo.exif?.ExposureTime?.val)"
-            "f_number" = SqlNumber -val "$($photo.exif?.FNumber?.val)"
-            "flash_id" = SqlNumber -val "$($photo.exif?.Flash?.val)"
-            "focal_length" = SqlNumber -val "$($photo.exif?.FocalLength?.val)"
-            "focal_length_in_35_mm_format" = SqlNumber -val "$($photo.exif?.FocalLengthIn35mmFormat?.val)"
-            "gain_control_id" = SqlNumber -val "$($photo.exif?.GainControl?.val)"
-            "gps_altitude" = SqlNumber -val "$($photo.exif?.GpsAltitude?.val)"
-            "gps_altitude_ref_id" = SqlLookupId -table "photo.gps_altitude_ref" -value "$($photo.exif?.GpsAltitudeRef?.val)"
-            "gps_date_time_stamp" = SqlTimestamp -dt "$($photo.exif?.GpsDateStamp?.val)"
-            "gps_direction" = SqlNumber -val "$($photo.exif?.GpsDirection?.val)"
-            "gps_direction_ref_id" = SqlString -val "$($photo.exif?.GpsDirectionRef?.val)"
-            "gps_latitude" = SqlNumber -val "$($photo.exif?.GpsLatitude?.val)"
-            "gps_latitude_ref_id" = SqlString -val "$($photo.exif?.GpsLatitudeRef?.val)"
-            "gps_longitude" = SqlNumber -val "$($photo.exif?.GpsLongitude?.val)"
-            "gps_longitude_ref_id" = SqlString -val "$($photo.exif?.GpsLongitudeRef?.val)"
-            "gps_measure_mode_id" = SqlString -val "$($photo.exif?.GpsMeasureMode?.val)"
-            "gps_satellites" = SqlString -val "$($photo.exif?.GpsSatellites?.val)"
-            "gps_status_id" = SqlString -val "$($photo.exif?.GpsStatus?.val)"
-            "gps_version_id" = SqlString -val "$($photo.exif?.GpsVersionId?.val)"
-            "iso" = SqlNumber -val "$($photo.exif?.Iso?.val)"
-            "light_source_id" = SqlNumber -val "$($photo.exif?.LightSource?.val)"
-            "make_id" = SqlLookupId -table "photo.make" -value "$($photo.exif?.Make?.val)"
-            "metering_mode_id" = SqlNumber -val "$($photo.exif?.MeteringMode?.val)"
-            "model_id" = SqlLookupId -table "photo.model" -value "$($photo.exif?.Model?.val)"
-            "orientation_id" = SqlNumber -val "$($photo.exif?.Orientation?.val)"
-            "saturation_id" = SqlLookupId -table "photo.saturation" -value "$($photo.exif?.Saturation?.val)"
-            "scene_capture_type_id" = SqlNumber -val "$($photo.exif?.SceneCaptureType?.val)"
-            "scene_type_id" = SqlNumber -val "$($photo.exif?.SceneType?.val)"
-            "sensing_method_id" = SqlNumber -val "$($photo.exif?.SensingMethod?.val)"
-            "sharpness_id" = SqlNumber -val "$($photo.exif?.Sharpness?.val)"
+            "bits_per_sample" = SqlNumber -val ($photo.exif?.BitsPerSample?.num ?? $photo.exif?.BitsPerSample?.val)
+            "compression_id" = SqlLookupId -table "photo.compression" -value $photo.exif?.Compression?.val
+            "contrast_id" = SqlLookupId -table "photo.contrast" -value $photo.exif?.Contrast?.val
+            "create_date" = SqlTimestamp -dt $photo.exif?.CreateDate?.val
+            "digital_zoom_ratio" = SqlNumber -val ($photo.exif?.DigitalZoomRatio?.num ?? $photo.exif?.DigitalZoomRatio?.val)
+            "exposure_compensation" = SqlString -val $photo.exif?.ExposureCompensation?.val
+            "exposure_mode_id" = SqlLookupId -table "photo.exposure_mode" -value $photo.exif?.ExposureMode?.val
+            "exposure_program_id" = SqlLookupId -table "photo.exposure_program" -value $photo.exif?.ExposureProgram?.val
+            "exposure_time" = SqlString -val $photo.exif?.ExposureTime?.val
+            "f_number" = SqlNumber -val ($photo.exif?.FNumber?.num ?? $photo.exif?.FNumber?.val)
+            "flash_id" = SqlLookupId -table "photo.flash" -value $photo.exif?.Flash?.val
+            "focal_length" = SqlNumber -val ($photo.exif?.FocalLength?.num ?? $photo.exif?.FocalLength?.val)
+            "focal_length_in_35_mm_format" = SqlNumber -val ($photo.exif?.FocalLengthIn35mmFormat?.num ?? $photo.exif?.FocalLengthIn35mmFormat?.val)
+            "gain_control_id" = SqlLookupId -table "photo.gain_control" -value $photo.exif?.GainControl?.val
+            "gps_altitude" = SqlNumber -val ($photo.exif?.GpsAltitude?.num ?? $photo.exif?.GpsAltitude?.val)
+            "gps_altitude_ref_id" = SqlLookupId -table "photo.gps_altitude_ref" -value $photo.exif?.GpsAltitudeRef?.val
+            "gps_date_time_stamp" = SqlTimestamp -dt $photo.exif?.GpsDateStamp?.val
+            "gps_direction" = SqlNumber -val ($photo.exif?.GpsImgDirection?.num ?? $photo.exif?.GpsImgDirection?.val)
+            "gps_direction_ref_id" = SqlLookupId -table "photo.gps_direction_ref" -value $photo.exif?.GpsImgDirectionRef?.val
+            "gps_latitude" = SqlNumber -val ($photo.exif?.GpsLatitude?.num ?? $photo.exif?.GpsLatitude?.val)
+            "gps_latitude_ref_id" = SqlLookupId -table "photo.gps_latitude_ref" -value $photo.exif?.GpsLatitudeRef?.val
+            "gps_longitude" = SqlNumber -val ($photo.exif?.GpsLongitude?.num ?? $photo.exif?.GpsLongitude?.val)
+            "gps_longitude_ref_id" = SqlLookupId -table "photo.gps_longitude_ref" -value $photo.exif?.GpsLongitudeRef?.val
+            "gps_measure_mode_id" = SqlLookupId -table "photo.gps_measure_mode" -value $photo.exif?.GpsMeasureMode?.val
+            "gps_satellites" = SqlString -val $photo.exif?.GpsSatellites?.val
+            "gps_status_id" = SqlLookupId -table "photo.gps_status" -value $photo.exif?.GpsStatus?.val
+            "gps_version_id" = SqlString -val $photo.exif?.GpsVersionId?.val
+            "iso" = SqlNumber -val ($photo.exif?.Iso?.num ?? $photo.exif?.Iso?.val)
+            "light_source_id" = SqlLookupId -table "photo.light_source" -value $photo.exif?.LightSource?.val
+            "make_id" = SqlLookupId -table "photo.make" -value $photo.exif?.Make?.val
+            "metering_mode_id" = SqlLookupId -table "photo.metering_mode" -value $photo.exif?.MeteringMode?.val
+            "model_id" = SqlLookupId -table "photo.model" -value $photo.exif?.Model?.val
+            "orientation_id" = SqlLookupId -table "photo.orientation" -value $photo.exif?.Orientation?.val
+            "saturation_id" = SqlLookupId -table "photo.saturation" -value $photo.exif?.Saturation?.val
+            "scene_capture_type_id" = SqlLookupId -table "photo.scene_capture_type" -value $photo.exif?.SceneCaptureType?.val
+            "scene_type_id" = SqlLookupId -table "photo.scene_type" -value $photo.exif?.SceneType?.val
+            "sensing_method_id" = SqlLookupId -table "photo.sensing_method" -value $photo.exif?.SensingMethod?.val
+            "sharpness_id" = SqlLookupId -table "photo.sharpness" -value $photo.exif?.Sharpness?.val
             # nikon
-            "af_area_mode_id" = SqlLookupId -table "photo.af_area_mode" -value "$($photo.exif?.AutoFocusAreaMode?.val)"
-            "af_point_id" = SqlLookupId -table "photo.af_point" -value "$($photo.exif?.AutoFocusPoint?.val)"
-            "active_d_lighting_id" = SqlLookupId -table "photo.active_d_lighting" -value "$($photo.exif?.ActiveDLighting?.val)"
-            "colorspace_id" = SqlLookupId -table "photo.colorspace" -value "$($photo.exif?.Colorspace?.val)"
-            "exposure_difference" = SqlNumber -val "$($photo.exif?.ExposureDifference?.val)"
-            "flash_color_filter_id" = SqlLookupId -table "photo.flash_color_filter" -value "$($photo.exif?.FlashColorFilter?.val)"
-            "flash_compensation" = SqlString -val "$($photo.exif?.FlashCompensation?.val)"
-            "flash_control_mode" = SqlNumber -val "$($photo.exif?.FlashControlMode?.val)"
-            "flash_exposure_compensation" = SqlString -val "$($photo.exif?.FlashExposureCompensation?.val)"
-            "flash_focal_length" = SqlNumber -val "$($photo.exif?.FlashFocalLength?.val)"
-            "flash_mode_id" = SqlLookupId -table "photo.flash_mode" -value "$($photo.exif?.FlashMode?.val)"
-            "flash_setting_id" = SqlLookupId -table "photo.flash_setting" -value "$($photo.exif?.FlashSetting?.val)"
-            "flash_type_id" = SqlLookupId -table "photo.flash_type" -value "$($photo.exif?.FlashType?.val)"
-            "focus_distance" = SqlNumber -val "$($photo.exif?.FocusDistance?.val)"
-            "focus_mode_id" = SqlLookupId -table "photo.focus_mode" -value "$($photo.exif?.FocusMode?.val)"
-            "focus_position" = SqlNumber -val "$($photo.exif?.FocusPosition?.val)"
-            "high_iso_noise_reduction_id" = SqlLookupId -table "photo.high_iso_noise_reduction" -value "$($photo.exif?.HighIsoNoiseReduction?.val)"
-            "hue_adjustment_id" = SqlLookupId -table "photo.hue_adjustment" -value "$($photo.exif?.HueAdjustment?.val)"
-            "noise_reduction_id" = SqlLookupId -table "photo.noise_reduction" -value "$($photo.exif?.NoiseReduction?.val)"
-            "picture_control_name_id" = SqlLookupId -table "photo.picture_control_name" -value "$($photo.exif?.PictureControlName?.val)"
-            "primary_af_point" = SqlString -val "$($photo.exif?.PrimaryAFPoint?.val)"
-            "vibration_reduction_id" = SqlLookupId -table "photo.vibration_reduction" -value "$($photo.exif?.VibrationReduction?.val)"
-            "vignette_control_id" = SqlLookupId -table "photo.vignette_control" -value "$($photo.exif?.VignetteControl?.val)"
-            "vr_mode_id" = SqlLookupId -table "photo.vr_mode" -value "$($photo.exif?.VRMode?.val)"
-            "white_balance_id" = SqlLookupId -table "photo.white_balance" -value "$($photo.exif?.WhiteBalance?.val)"
+            "af_area_mode_id" = SqlLookupId -table "photo.af_area_mode" -value $photo.exif?.AFAreaMode?.val
+            "af_point_id" = SqlLookupId -table "photo.af_point" -value $photo.exif?.AFPoint?.val
+            "active_d_lighting_id" = SqlLookupId -table "photo.active_d_lighting" -value $photo.exif?.'ActiveD-Lighting'?.val
+            "colorspace_id" = SqlLookupId -table "photo.colorspace" -value $photo.exif?.Colorspace?.val
+            "exposure_difference" = SqlNumber -val ($photo.exif?.ExposureDifference?.num ?? $photo.exif?.ExposureDifference?.val)
+            "flash_color_filter_id" = SqlLookupId -table "photo.flash_color_filter" -value $photo.exif?.FlashColorFilter?.val
+            "flash_compensation" = SqlString -val $photo.exif?.FlashCompensation?.val
+            "flash_control_mode" = SqlNumber -val ($photo.exif?.FlashControlMode?.num ?? $photo.exif?.FlashControlMode?.val)
+            "flash_exposure_compensation" = SqlString -val $photo.exif?.FlashExposureComp?.val
+            "flash_focal_length" = SqlNumber -val ($photo.exif?.FlashFocalLength?.num ?? $photo.exif?.FlashFocalLength?.val)
+            "flash_mode_id" = SqlLookupId -table "photo.flash_mode" -value $photo.exif?.FlashMode?.val
+            "flash_setting_id" = SqlLookupId -table "photo.flash_setting" -value $photo.exif?.FlashSetting?.val
+            "flash_type_id" = SqlLookupId -table "photo.flash_type" -value $photo.exif?.FlashType?.val
+            "focus_distance" = SqlNumber -val ($photo.exif?.FocusDistance?.num ?? $photo.exif?.FocusDistance?.val)
+            "focus_mode_id" = SqlLookupId -table "photo.focus_mode" -value $photo.exif?.FocusMode?.val
+            "focus_position" = SqlNumber -val ($photo.exif?.FocusPosition?.num ?? $photo.exif?.FocusPosition?.val)
+            "high_iso_noise_reduction_id" = SqlLookupId -table "photo.high_iso_noise_reduction" -value $photo.exif?.HighIsoNoiseReduction?.val
+            "hue_adjustment_id" = SqlLookupId -table "photo.hue_adjustment" -value $photo.exif?.HueAdjustment?.val
+            "noise_reduction_id" = SqlLookupId -table "photo.noise_reduction" -value $photo.exif?.NoiseReduction?.val
+            "picture_control_name_id" = SqlLookupId -table "photo.picture_control_name" -value $photo.exif?.PictureControlName?.val
+            "primary_af_point" = SqlString -val $photo.exif?.PrimaryAFPoint?.val
+            "vibration_reduction_id" = SqlLookupId -table "photo.vibration_reduction" -value $photo.exif?.VibrationReduction?.val
+            "vignette_control_id" = SqlLookupId -table "photo.vignette_control" -value $photo.exif?.VignetteControl?.val
+            "vr_mode_id" = SqlLookupId -table "photo.vr_mode" -value $photo.exif?.VRMode?.val
+            "white_balance_id" = SqlLookupId -table "photo.white_balance" -value $photo.exif?.WhiteBalance?.val
             # composite
-            "aperture" = SqlNumber -val "$($photo.exif?.Aperture?.val)"
-            "auto_focus_id" = SqlNumber -val "$($photo.exif?.AutoFocus?.val)"
-            "depth_of_field" = SqlString -val "$($photo.exif?.DepthOfField?.val)"
-            "field_of_view" = SqlString -val "$($photo.exif?.FieldOfView?.val)"
-            "hyperfocal_distance" = SqlNumber -val "$($photo.exif?.HyperfocalDistance?.val)"
-            "lens_id" = SqlLookupId -table "photo.lens" -value "$($photo.exif?.LensId?.val)"
-            "light_value" = SqlNumber -val "$($photo.exif?.LightValue?.val)"
-            "scale_factor_35_efl" = SqlNumber -val "$($photo.exif?.ScaleFactor35Efl?.val)"
-            "shutter_speed" = SqlString -val "$($photo.exif?.ShutterSpeed?.val)"
+            "aperture" = SqlNumber -val ($photo.exif?.Aperture?.num ?? $photo.exif?.Aperture?.val)
+            "auto_focus_id" = SqlLookupId -table "photo.auto_focus" -value $photo.exif?.AutoFocus?.val
+            "depth_of_field" = SqlString -val $photo.exif?.DOF?.val
+            "field_of_view" = SqlString -val $photo.exif?.FOV?.val
+            "hyperfocal_distance" = SqlNumber -val ($photo.exif?.HyperfocalDistance?.num ?? $photo.exif?.HyperfocalDistance?.val)
+            "lens_id" = SqlLookupId -table "photo.lens" -value $photo.exif?.LensId?.val
+            "light_value" = SqlNumber -val ($photo.exif?.LightValue?.num ?? $photo.exif?.LightValue?.val)
+            "scale_factor_35_efl" = SqlNumber -val ($photo.exif?.ScaleFactor35Efl?.num ?? $photo.exif?.ScaleFactor35Efl?.val)
+            "shutter_speed" = SqlString -val $photo.exif?.ShutterSpeed?.val
         }
 
         $colNames = @()
         $colValues = @()
 
         # hashtables make no guarantees about ordering, so build lists to enforce this
-        foreach($item in $items) {
-            $colNames += $item.Key
-            $colValues += $item.Value
+        foreach($key in $items.Keys) {
+            $colNames += $key
+            $colValues += $items[$key]   # "$($items[$key])    -- $key"
         }
 
         $writer.WriteLine(@"
 INSERT INTO photo.photo
 (
-    $([string]::Join(", ", $colNames))
+    $([string]::Join("`n    , ", $colNames))
 )
 VALUES
 (
-    $([string]::Join(", ", $colValues))
+    $([string]::Join("`n    , ", $colValues))
 );
 
 "@
@@ -758,8 +779,8 @@ INSERT INTO photo.category
 )
 VALUES
 (
-    $(SqlString -val categorySpec.name),
-    $($category.year),
+    $(SqlString -val $categorySpec.name),
+    $($categorySpec.year),
     $($photo.xs.width),
     $($photo.xs.height),
     $($photo.xs.size),
@@ -773,7 +794,7 @@ VALUES
 "@
     )
 
-    foreach ($role in $category.allowedRoles) {
+    foreach ($role in $categorySpec.allowedRoles) {
         $writer.WriteLine(@"
 INSERT INTO photo.category_role
 (

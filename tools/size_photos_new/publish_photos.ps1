@@ -202,16 +202,38 @@ function BuildSrcDir {
 function MoveSourceFiles {
     param(
         [Parameter(Mandatory = $true)] [string] $dir,
+        [Parameter(Mandatory = $true)] [string] $destDir,
         [Parameter(Mandatory = $true)] [string] $pattern
     )
 
-    $srcDir = BuildSrcDir $dir
-
-    if(-not (Test-Path $srcDir)) {
-        mkdir "${srcDir}"
+    if(-not (Test-Path $destDir)) {
+        mkdir "${destDir}"
     }
 
-    mv $(Join-Path $dir $pattern) "${srcDir}"
+    mv $(Join-Path $dir $pattern) "${destDir}"
+}
+
+function MoveSourceFilesWithDng {
+    param(
+        [Parameter(Mandatory = $true)] [string] $dir,
+        [Parameter(Mandatory = $true)] [string] $destDir
+    )
+
+    $dngPrefixes = Get-ChildItem (Join-Path $dir "*.dng") `
+        | Select-Object -Property BaseName -ExpandProperty BaseName
+
+    $filesWithDng = Get-ChildItem -File $dir `
+        | Where-Object { `
+            [System.IO.Path]::GetExtension($_.Name) -ne ".dng" `
+            -and `
+            $dngPrefixes.Contains($_.BaseName) `
+        }
+
+    foreach($file in $filesWithDng) {
+        $dest = Join-Path $destDir $file.Name
+
+        $file.MoveTo($dest)
+    }
 }
 
 function DeleteDngFiles {
@@ -883,16 +905,18 @@ function GetCategoryDetails {
 function Main {
     $categorySpec = GetCategoryDetails
     $timer = [Diagnostics.Stopwatch]::StartNew()
+    $srcDir = BuildSrcDir -dir $categorySpec.srcDir
 
     # new process assumes all RAW files will be converted to dng first (via DxO PureRaw 4)
-    # MoveSourceFiles -dir $dir -pattern "*.NEF"
-    # CorrectIntermediateFilenames -dir $dir
-    # CleanSidecarPp3Files -dir $dir
+    # category's src dir will contain original NEF and pp3s at end of process, though may delete dngs
+    #CorrectIntermediateFilenames -dir $categorySpec.srcDir
+    #CleanSidecarPp3Files -dir $categorySpec.srcDir
+    MoveSourceFilesWithDng -dir $categorySpec.srcDir -destDir $srcDir
     # ResizePhotos -dir $dir -sizeSpecs $sizeSpecs
-    # MoveSourceFiles -dir $dir -pattern "*.jpg"
-    # MoveSourceFiles -dir $dir -pattern "*.pp3"
-    $metadata = GetMetadata -dir $categorySpec.srcDir
-    WriteSql -categorySpec $categorySpec -metadata $metadata
+    # MoveSourceFiles -dir $dir -destDir $srcDir -pattern "*.jpg"
+    # MoveSourceFiles -dir $dir -destDir $srcDir -pattern "*.pp3"
+    #$metadata = GetMetadata -dir $categorySpec.srcDir
+    #WriteSql -categorySpec $categorySpec -metadata $metadata
 
     $timer.Stop()
 

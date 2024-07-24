@@ -147,10 +147,10 @@ function BuildRawTherapeeArgs {
 
 function CleanSidecarPp3Files {
     param(
-        [Parameter(Mandatory = $true)] [string] $dir
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec
     )
 
-    $files = Get-ChildItem "$(Join-Path $dir "*.pp3")"
+    $files = Get-ChildItem "$(Join-Path $categorySpec.rootDir "*.pp3")"
 
     # sidecar file will contain resize settings that would overrule the ones passed in the -p arg
     # to make sure resizing works, remove those settings from the sidecars
@@ -163,11 +163,10 @@ function CleanSidecarPp3Files {
 
 function ResizePhotos {
     param(
-        [Parameter(Mandatory = $true)] [string] $dir,
-        [Parameter(Mandatory = $true)] [array] $sizeSpecs
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec
     )
 
-    foreach($spec in $sizeSpecs) {
+    foreach($spec in $categorySpec.sizeSpecs) {
         Write-Host -ForegroundColor Blue "Resizing: $($spec.name)"
 
         if(-not (Test-Path $spec.subdir)) {
@@ -175,7 +174,7 @@ function ResizePhotos {
         }
 
         if(-not $spec.resizeSourceDir) {
-            $rtArgs = BuildRawTherapeeArgs -dir $dir -spec $spec
+            $rtArgs = BuildRawTherapeeArgs -dir $categorySpec.rootDir -spec $spec
 
             rawtherapee-cli @rtArgs > $null 2>&1
         } else {
@@ -193,16 +192,14 @@ function ResizePhotos {
 
 function CleanPriorAttempts {
     param(
-        [Parameter(Mandatory = $true)] [string] $dir,
-        [Parameter(Mandatory = $true)] [string] $srcDir,
         [Parameter(Mandatory = $true)] [hashtable] $categorySpec
     )
 
-    if(Test-Path -PathType Container $srcDir) {
-        mv (Join-Path $srcDir "*") $dir
+    if(Test-Path -PathType Container $categorySpec.srcDir) {
+        mv (Join-Path $categorySpec.srcDir "*") $categorySpec.rootDir
 
         # remove all the subdirs
-        rmdir "${srcDir}"
+        rmdir "$($categorySpec.srcDir)"
 
         foreach($spec in $categorySpec.sizeSpecs) {
             rm -rf "$($spec.subdir)"
@@ -214,29 +211,20 @@ function CleanPriorAttempts {
     }
 }
 
-function BuildSrcDir {
-    param(
-        [Parameter(Mandatory = $true)] [string] $dir
-    )
-
-    return Join-Path $dir "src"
-}
-
 function MoveSourceFiles {
     param(
-        [Parameter(Mandatory = $true)] [string] $dir,
-        [Parameter(Mandatory = $true)] [string] $destDir
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec
     )
 
-    if(-not (Test-Path $destDir)) {
-        mkdir "${destDir}"
+    if(-not (Test-Path $categorySpec.srcDir)) {
+        mkdir "$($categorySpec.srcDir)"
     }
 
-    $nonDngFiles = Get-ChildItem -File $dir `
+    $nonDngFiles = Get-ChildItem -File $categorySpec.rootDir `
         | Where-Object { [System.IO.Path]::GetExtension($_.Name) -ne ".dng" }
 
     foreach($file in $nonDngFiles) {
-        $dest = Join-Path $destDir $file.Name
+        $dest = Join-Path $categorySpec.srcDir $file.Name
 
         $file.MoveTo($dest)
     }
@@ -244,18 +232,17 @@ function MoveSourceFiles {
 
 function MoveSourceFilesWithDng {
     param(
-        [Parameter(Mandatory = $true)] [string] $dir,
-        [Parameter(Mandatory = $true)] [string] $destDir
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec
     )
 
-    if(-not (Test-Path $destDir)) {
-        mkdir "${destDir}"
+    if(-not (Test-Path $categorySpec.srcDir)) {
+        mkdir "$($categorySpec.srcDir)"
     }
 
-    $dngPrefixes = Get-ChildItem (Join-Path $dir "*.dng") `
+    $dngPrefixes = Get-ChildItem (Join-Path $categorySpec.rootDir "*.dng") `
         | Select-Object -Property BaseName -ExpandProperty BaseName
 
-    $filesWithDng = Get-ChildItem -File $dir `
+    $filesWithDng = Get-ChildItem -File $categorySpec.rootDir `
         | Where-Object { `
             [System.IO.Path]::GetExtension($_.Name) -ne ".dng" `
             -and `
@@ -263,10 +250,16 @@ function MoveSourceFilesWithDng {
         }
 
     foreach($file in $filesWithDng) {
-        $dest = Join-Path $destDir $file.Name
+        $dest = Join-Path $categorySpec.srcDir $file.Name
 
         $file.MoveTo($dest)
     }
+}
+
+function MoveProcessedImagesToDestination {
+    param(
+        [Parameter(Mandatory = $true)] [string] $configSpec
+    )
 }
 
 function DeleteDngFiles {
@@ -333,13 +326,13 @@ function PrintStats {
 
 function CorrectIntermediateFilenames {
     param(
-        [Parameter(Mandatory = $true)] [string] $dir
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec
     )
 
     # default pure raw filename will include the orig extension as "-NEF", remove that if present so the intermediate
     # file names (dng/pp3) are in line w/ the original filenames
-    rename -- '-NEF' '' $(Join-Path $dir "*.dng")
-    rename -- '-NEF' '' $(Join-Path $dir "*.pp3")
+    rename -- '-NEF' '' $(Join-Path $categorySpec.rootDir "*.dng")
+    rename -- '-NEF' '' $(Join-Path $categorySpec.rootDir "*.pp3")
 }
 
 function BuildExifToolArgs {
@@ -454,12 +447,12 @@ function MergeMetadata {
 
 function GetMetadata {
     param(
-        [Parameter(Mandatory = $true)] [string] $dir
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec
     )
 
-    $exif = ReadExif -dir (BuildSrcDir $dir)
-    $fs = ReadFilesystemInfo -dir $dir
-    $dim = ReadImageDimensions -dir $dir
+    $exif = ReadExif -dir $categorySpec.srcDir
+    $fs = ReadFilesystemInfo -dir $categorySpec.rootDir
+    $dim = ReadImageDimensions -dir $categorySpec.rootDir
 
     return MergeMetadata `
         -exif $exif `
@@ -981,7 +974,7 @@ function GetCategoryDetails {
     $sqlFile = (Join-Path $dir.FullName "photocategory.sql")
     $sizeSpecs = BuildSizeSpecs -dir $dir.FullName
 
-    return @{
+    $spec = @{
         rootDir = $dir.FullName
         year = $year
         name = $name
@@ -990,9 +983,14 @@ function GetCategoryDetails {
         sizeSpecs = $sizeSpecs
 
         deploySpec = @{
+            yearDir = Join-Path $cfg.dirAssetRoot "images" $year
             destDir = Join-Path $cfg.dirAssetRoot "images" $year $dir.Name
         }
     }
+
+    $spec.srcDir = Join-Path $spec.rootDir "src"
+
+    return $spec
 }
 
 function VerifyDirectoryNotUsed {
@@ -1012,29 +1010,70 @@ function VerifyDirectoryNotUsed {
     }
 }
 
+function ProcessPhotos {
+    param(
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec
+    )
+
+    $timer = [Diagnostics.Stopwatch]::StartNew()
+
+    # new process assumes all RAW files will be converted to dng first (via DxO PureRaw 4)
+    # category's src dir will contain original NEF and pp3s at end of process, though may delete dngs
+    CleanPriorAttempts -categorySpec $categorySpec
+    CorrectIntermediateFilenames -categorySpec $categorySpec
+    CleanSidecarPp3Files -categorySpec $categorySpec
+    MoveSourceFilesWithDng -categorySpec $categorySpec
+    ResizePhotos -categorySpec $categorySpec
+    MoveSourceFiles -categorySpec $categorySpec
+    $metadata = GetMetadata -categorySpec $categorySpec
+    WriteSql -categorySpec $categorySpec -metadata $metadata
+
+    $timer.Stop()
+    return $timer.Elapsed
+}
+
+function Deploy {
+    param(
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec,
+        [Parameter(Mandatory = $true)] [hashtable] $config
+    )
+
+    $timer = [Diagnostics.Stopwatch]::StartNew()
+
+    # -- local deploly
+    StartDevPod -cfg $config
+    MoveProcessedImagesToDestination -configSpec $configSpec
+
+    if(-not (Test-Path -PathType Container $categorySpec.deploySpec.yearDir)) {
+        mkdir -p "$($categorySpec.deploySpec.yearDir)"
+    }
+
+    # -- remote deploy
+
+    $timer.Stop()
+    return $timer.Elapsed
+}
+
+function Backup {
+    param(
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec
+    )
+
+    $timer = [Diagnostics.Stopwatch]::StartNew()
+
+    # AWS Backup
+
+    $timer.Stop()
+    return $timer.Elapsed
+}
+
 function Main {
     $config = BuildConfig
     $categorySpec = GetCategoryDetails -cfg $config
 
     VerifyDirectoryNotUsed -categorySpec $categorySpec
 
-    # -- PROCESS / RESIZE --
-    $timer = [Diagnostics.Stopwatch]::StartNew()
-    $srcDir = BuildSrcDir -dir $categorySpec.rootDir
-
-    # new process assumes all RAW files will be converted to dng first (via DxO PureRaw 4)
-    # category's src dir will contain original NEF and pp3s at end of process, though may delete dngs
-    # CleanPriorAttempts -dir $categorySpec.rootDir -srcDir $srcDir -categorySpec $categorySpec
-    # CorrectIntermediateFilenames -dir $categorySpec.rootDir
-    # CleanSidecarPp3Files -dir $categorySpec.rootDir
-    # MoveSourceFilesWithDng -dir $categorySpec.rootDir -destDir $srcDir
-    # ResizePhotos -dir $dir -sizeSpecs $sizeSpecs
-    # MoveSourceFiles -dir $categorySpec.rootDir -destDir $srcDir
-    # $metadata = GetMetadata -dir $categorySpec.rootDir
-    # WriteSql -categorySpec $categorySpec -metadata $metadata
-
-    $timer.Stop()
-    $resizeDuration = $timer.Elapsed
+    $resizeDuration = ProcessPhotos -categorySpec $categorySpec
 
     $doContinue = Read-Host "Would you like to backup and deploy at this time? [y|N]"
 
@@ -1042,22 +1081,11 @@ function Main {
         Exit
     }
 
-    # -- BACKUP --
-    $timer.Restart()
-
-    # AWS Backup
-
-    $timer.Stop()
-    $backupDuration = $timer.Elapsed
-
-    # -- DEPLOY --
-    $timer.Restart()
-
-    # StartDevPod -cfg $config
-    # DEPLOY
-
-    $timer.Stop()
-    $deployDuration = $timer.Elapsed
+    # note: we no longer get aws hashtree ids from storing in s3 glacier deep archive
+    #       so we might as well push sooner than later so we can verify the images on
+    #       the site while the backup runs
+    # $deployDuration = Deploy -categorySpec $categorySpec -config $config
+    # $backupDuration = Backup -categorySpec $categorySpec
 
     # DeleteDngFiles -dir $dir
 

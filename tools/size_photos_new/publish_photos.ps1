@@ -903,7 +903,7 @@ function GetCategoryDetails {
     $sizeSpecs = BuildSizeSpecs -dir $dir
 
     return @{
-        srcDir = $dir
+        rootDir = $dir
         year = $year
         name = $name
         allowedRoles = $roles
@@ -915,17 +915,17 @@ function GetCategoryDetails {
 function Main {
     $categorySpec = GetCategoryDetails
     $timer = [Diagnostics.Stopwatch]::StartNew()
-    $srcDir = BuildSrcDir -dir $categorySpec.srcDir
+    $srcDir = BuildSrcDir -dir $categorySpec.rootDir
 
     # new process assumes all RAW files will be converted to dng first (via DxO PureRaw 4)
     # category's src dir will contain original NEF and pp3s at end of process, though may delete dngs
-    #CorrectIntermediateFilenames -dir $categorySpec.srcDir
-    #CleanSidecarPp3Files -dir $categorySpec.srcDir
-    MoveSourceFilesWithDng -dir $categorySpec.srcDir -destDir $srcDir
+    # CorrectIntermediateFilenames -dir $categorySpec.rootDir
+    # CleanSidecarPp3Files -dir $categorySpec.rootDir
+    # MoveSourceFilesWithDng -dir $categorySpec.rootDir -destDir $srcDir
     # ResizePhotos -dir $dir -sizeSpecs $sizeSpecs
-    MoveSourceFiles -dir $categorySpec.srcDir -destDir $srcDir
-    #$metadata = GetMetadata -dir $categorySpec.srcDir
-    #WriteSql -categorySpec $categorySpec -metadata $metadata
+    # MoveSourceFiles -dir $categorySpec.rootDir -destDir $srcDir
+    # $metadata = GetMetadata -dir $categorySpec.rootDir
+    # WriteSql -categorySpec $categorySpec -metadata $metadata
 
     $timer.Stop()
 

@@ -917,6 +917,25 @@ function WriteSql {
     $writer.Close()
 }
 
+function StartDevPod {
+    param(
+        [Parameter(Mandatory = $true)] [hashtable] $cfg
+    )
+
+    systemctl --user start "$($cfg.devPodSystemdService)"
+    sleep 3s
+}
+
+function BuildConfig {
+    $cfg = @{
+        devPod = "dev-maw-pod"
+    }
+
+    $cfg.devPodSystemdService = "pod-$($cfg.devPod)"
+
+    return $cfg
+}
+
 function GetCategoryDetails {
     $dir = "/home/mmorano/Desktop/testing"
     $year = 2024
@@ -936,13 +955,15 @@ function GetCategoryDetails {
 }
 
 function Main {
+    $config = BuildConfig
     $categorySpec = GetCategoryDetails
     $timer = [Diagnostics.Stopwatch]::StartNew()
     $srcDir = BuildSrcDir -dir $categorySpec.rootDir
 
     # new process assumes all RAW files will be converted to dng first (via DxO PureRaw 4)
     # category's src dir will contain original NEF and pp3s at end of process, though may delete dngs
-    CleanPriorAttempts -dir $categorySpec.rootDir -srcDir $srcDir -categorySpec $categorySpec
+    # StartDevPod -cfg $config
+    # CleanPriorAttempts -dir $categorySpec.rootDir -srcDir $srcDir -categorySpec $categorySpec
     # CorrectIntermediateFilenames -dir $categorySpec.rootDir
     # CleanSidecarPp3Files -dir $categorySpec.rootDir
     # MoveSourceFilesWithDng -dir $categorySpec.rootDir -destDir $srcDir

@@ -928,35 +928,74 @@ function StartDevPod {
 
 function BuildConfig {
     $cfg = @{
-        devPod = "dev-maw-pod"
+        sshRemoteHost = "tifa"
+        sshUsername = "svc_www_maw"
+        dirAssetRoot = "/srv/www/website_assets"
+        postgresImage = "docker.io/postgres:16-alpine"
+        dev = @{
+            pod = "dev-maw-pod"
+            postgresEnvFile = "/home/mmorano/maw_dev/podman-env/maw-postgres.env"
+        }
+        prod = @{
+            pod = "prod-maw-pod"
+            postgresEnvFile = "/home/svc_www_maw/maw_prod/podman-env/maw-postgres.env"
+        }
     }
 
-    $cfg.devPodSystemdService = "pod-$($cfg.devPod)"
+    $cfg.devPodSystemdService = "pod-$($cfg.dev.pod)"
 
     return $cfg
 }
 
 function GetCategoryDetails {
-    $dir = "/home/mmorano/Desktop/testing"
+    param(
+        [Parameter(Mandatory = $true)] [hashtable] $cfg
+    )
+
+    $dir = Get-Item "/home/mmorano/Desktop/testing"
     $year = 2024
     $name = "Testing"
     $roles = @( "friend", "admin" )
-    $sqlFile = (Join-Path $dir "photocategory.sql")
-    $sizeSpecs = BuildSizeSpecs -dir $dir
+    $sqlFile = (Join-Path $dir.FullName "photocategory.sql")
+    $sizeSpecs = BuildSizeSpecs -dir $dir.FullName
 
     return @{
-        rootDir = $dir
+        rootDir = $dir.FullName
         year = $year
         name = $name
         allowedRoles = $roles
         sqlFile = $sqlFile
         sizeSpecs = $sizeSpecs
+
+        deploySpec = @{
+            destDir = Join-Path $cfg.dirAssetRoot "images" $year $dir.Name
+        }
+    }
+}
+
+function VerifyDirectoryNotUsed {
+    param(
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec
+    )
+
+    if(Test-Path -PathType Container $categorySpec.deploySpec.destDir) {
+        Write-Host -ForegroundColor Red ''
+        Write-Host -ForegroundColor Red '****'
+        Write-Host -ForegroundColor Red '  This directory already exists in the destination.'
+        Write-Host -ForegroundColor Red '  If you are trying to add images to a previously published directory, you must do this manually.'
+        Write-Host -ForegroundColor Red '  Otherwise, please give the directory a unique name and then try again.'
+        Write-Host -ForegroundColor Red '****'
+
+        Exit
     }
 }
 
 function Main {
     $config = BuildConfig
-    $categorySpec = GetCategoryDetails
+    $categorySpec = GetCategoryDetails -cfg $config
+
+    VerifyDirectoryNotUsed -categorySpec $categorySpec
+
     $timer = [Diagnostics.Stopwatch]::StartNew()
     $srcDir = BuildSrcDir -dir $categorySpec.rootDir
 

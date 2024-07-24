@@ -1,4 +1,4 @@
-#!~/.dotnet/tools/pwsh
+#! ~/.dotnet/tools/pwsh
 
 $exifTags = @(
     # exif
@@ -281,32 +281,54 @@ function DeleteDngFiles {
     }
 }
 
+function FormatDuration {
+    param(
+        [Parameter(Mandatory = $true)] [TimeSpan] $duration
+    )
+
+    $formattedTime = @()
+
+    if($duration.Days -gt 0) {
+        $formattedTime += "$($duration.Days)d"
+    }
+
+    if($duration.Hours -gt 0) {
+        $formattedTime += "$($duration.Hours)h"
+    }
+
+    if($duration.Minutes -gt 0) {
+        $formattedTime += "$($duration.Minutes)m"
+    }
+
+    $formattedTime += "$($duration.Seconds)s"
+
+    return [string]::Join(" ", $formattedTime)
+}
+
 function PrintStats {
     param(
         [Parameter(Mandatory = $true)] [array] $sizeSpecs,
-        [Parameter(Mandatory = $true)] [Diagnostics.Stopwatch] $timer
+        [Parameter(Mandatory = $true)] [TimeSpan] $resizeDuration,
+        [Parameter(Mandatory = $true)] [TimeSpan] $backupDuration,
+        [Parameter(Mandatory = $true)] [TimeSpan] $deployDuration
     )
 
     $filecount = (Get-ChildItem $sizeSpecs[0].subdir).Length
-    $totalTime = @()
+    $totalTime = $resizeDuration + $backupDuration + $deployDuration
 
-    if($timer.Elapsed.Days -gt 0) {
-        $totalTime += @("$($timer.Elapsed.Days)d")
-    }
+    Write-Host -ForegroundColor Magenta "Processed Files: ${filecount}"
 
-    if($timer.Elapsed.Hours -gt 0) {
-        $totalTime += @("$($timer.Elapsed.Hours)h")
-    }
+    Write-Host -ForegroundColor Green " - Total Resize Time: $(FormatDuration $resizeDuration)"
+    Write-Host -ForegroundColor Green " - Average Resize Time per Photo: $(FormatDuration ($resizeDuration / $filecount))"
 
-    if($timer.Elapsed.Minutes -gt 0) {
-        $totalTime += @("$($timer.Elapsed.Minutes)m")
-    }
+    Write-Host -ForegroundColor Blue " - Total Backup Time: $(FormatDuration $backupDuration)"
+    Write-Host -ForegroundColor Blue " - Average Backup Time per Photo: $(FormatDuration ($backupDuration / $filecount))"
 
-    $totalTime += @("$($timer.Elapsed.Seconds)s")
+    Write-Host -ForegroundColor Cyan " - Total Deploy Time: $(FormatDuration $deployDuration)"
+    Write-Host -ForegroundColor Cyan " - Average Deploy Time per Photo: $(FormatDuration ($deployDuration / $filecount))"
 
-    Write-Host -ForegroundColor Green "Processed Files: ${filecount}"
-    Write-Host -ForegroundColor Green "Total Execution Time: ${totalTime}"
-    Write-Host -ForegroundColor Green "Average per photo: $([math]::Round($timer.Elapsed.TotalSeconds / $filecount, 2))s"
+    Write-Host -ForegroundColor Yellow " - Total Time: $(FormatDuration $totalTime)"
+    Write-Host -ForegroundColor Yellow " - Average Time per Photo: $(FormatDuration ($totalTime / $filecount))"
 }
 
 function CorrectIntermediateFilenames {
@@ -996,12 +1018,12 @@ function Main {
 
     VerifyDirectoryNotUsed -categorySpec $categorySpec
 
+    # -- PROCESS / RESIZE --
     $timer = [Diagnostics.Stopwatch]::StartNew()
     $srcDir = BuildSrcDir -dir $categorySpec.rootDir
 
     # new process assumes all RAW files will be converted to dng first (via DxO PureRaw 4)
     # category's src dir will contain original NEF and pp3s at end of process, though may delete dngs
-    # StartDevPod -cfg $config
     # CleanPriorAttempts -dir $categorySpec.rootDir -srcDir $srcDir -categorySpec $categorySpec
     # CorrectIntermediateFilenames -dir $categorySpec.rootDir
     # CleanSidecarPp3Files -dir $categorySpec.rootDir
@@ -1012,9 +1034,38 @@ function Main {
     # WriteSql -categorySpec $categorySpec -metadata $metadata
 
     $timer.Stop()
+    $resizeDuration = $timer.Elapsed
+
+    $doContinue = Read-Host "Would you like to backup and deploy at this time? [y|N]"
+
+    if($doContinue -ne "y") {
+        Exit
+    }
+
+    # -- BACKUP --
+    $timer.Restart()
+
+    # AWS Backup
+
+    $timer.Stop()
+    $backupDuration = $timer.Elapsed
+
+    # -- DEPLOY --
+    $timer.Restart()
+
+    # StartDevPod -cfg $config
+    # DEPLOY
+
+    $timer.Stop()
+    $deployDuration = $timer.Elapsed
 
     # DeleteDngFiles -dir $dir
-    # PrintStats -sizeSpecs $sizeSpecs -timer $timer
+
+    PrintStats `
+        -sizeSpecs $categorySpec.sizeSpecs `
+        -resizeDuration $resizeDuration `
+        -backupDuration $backupDuration `
+        -deployDuration $deployDuration
 }
 
 Main

@@ -195,7 +195,7 @@ function CleanPriorAttempts {
     param(
         [Parameter(Mandatory = $true)] [string] $dir,
         [Parameter(Mandatory = $true)] [string] $srcDir,
-        [Parameter(Mandatory = $true)] [array] $sizeSpecs
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec
     )
 
     if(Test-Path -PathType Container $srcDir) {
@@ -204,14 +204,12 @@ function CleanPriorAttempts {
         # remove all the subdirs
         rmdir "${srcDir}"
 
-        foreach($spec in $sizeSpecs) {
+        foreach($spec in $categorySpec.sizeSpecs) {
             rm -rf "$($spec.subdir)"
         }
 
-        $sql = Join-Path $dir "photocategory.sql"
-
-        if(Test-Path -PathType Leaf ($sql)) {
-            rm "${sql}"
+        if(Test-Path -PathType Leaf $categorySpec.sqlFile) {
+            rm "$($categorySpec.sqlFile)"
         }
     }
 }
@@ -944,7 +942,7 @@ function Main {
 
     # new process assumes all RAW files will be converted to dng first (via DxO PureRaw 4)
     # category's src dir will contain original NEF and pp3s at end of process, though may delete dngs
-    CleanPriorAttempts -dir $categorySpec.rootDir -srcDir $srcDir -sizeSpecs $categorySpec.sizeSpecs
+    CleanPriorAttempts -dir $categorySpec.rootDir -srcDir $srcDir -categorySpec $categorySpec
     # CorrectIntermediateFilenames -dir $categorySpec.rootDir
     # CleanSidecarPp3Files -dir $categorySpec.rootDir
     # MoveSourceFilesWithDng -dir $categorySpec.rootDir -destDir $srcDir

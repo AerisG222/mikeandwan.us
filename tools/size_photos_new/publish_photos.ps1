@@ -202,15 +202,21 @@ function BuildSrcDir {
 function MoveSourceFiles {
     param(
         [Parameter(Mandatory = $true)] [string] $dir,
-        [Parameter(Mandatory = $true)] [string] $destDir,
-        [Parameter(Mandatory = $true)] [string] $pattern
+        [Parameter(Mandatory = $true)] [string] $destDir
     )
 
     if(-not (Test-Path $destDir)) {
         mkdir "${destDir}"
     }
 
-    mv $(Join-Path $dir $pattern) "${destDir}"
+    $nonDngFiles = Get-ChildItem -File $dir `
+        | Where-Object { [System.IO.Path]::GetExtension($_.Name) -ne ".dng" }
+
+    foreach($file in $nonDngFiles) {
+        $dest = Join-Path $destDir $file.Name
+
+        $file.MoveTo($dest)
+    }
 }
 
 function MoveSourceFilesWithDng {
@@ -218,6 +224,10 @@ function MoveSourceFilesWithDng {
         [Parameter(Mandatory = $true)] [string] $dir,
         [Parameter(Mandatory = $true)] [string] $destDir
     )
+
+    if(-not (Test-Path $destDir)) {
+        mkdir "${destDir}"
+    }
 
     $dngPrefixes = Get-ChildItem (Join-Path $dir "*.dng") `
         | Select-Object -Property BaseName -ExpandProperty BaseName
@@ -913,8 +923,7 @@ function Main {
     #CleanSidecarPp3Files -dir $categorySpec.srcDir
     MoveSourceFilesWithDng -dir $categorySpec.srcDir -destDir $srcDir
     # ResizePhotos -dir $dir -sizeSpecs $sizeSpecs
-    # MoveSourceFiles -dir $dir -destDir $srcDir -pattern "*.jpg"
-    # MoveSourceFiles -dir $dir -destDir $srcDir -pattern "*.pp3"
+    MoveSourceFiles -dir $categorySpec.srcDir -destDir $srcDir
     #$metadata = GetMetadata -dir $categorySpec.srcDir
     #WriteSql -categorySpec $categorySpec -metadata $metadata
 

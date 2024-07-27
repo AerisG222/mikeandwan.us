@@ -1207,20 +1207,20 @@ function Main {
     $config = BuildConfig
     $categorySpec = GetCategoryDetails -cfg $config
 
-    # VerifyDirectoryNotUsed -categorySpec $categorySpec
+    VerifyDirectoryNotUsed -categorySpec $categorySpec
 
-    # $resizeDuration = ProcessPhotos -categorySpec $categorySpec
+    $resizeDuration = ProcessPhotos -categorySpec $categorySpec
 
-    # $doContinue = Read-Host "Would you like to backup and deploy at this time? [y|N]"
+    $doContinue = Read-Host "Would you like to backup and deploy at this time? [y|N]"
 
-    # if($doContinue -ne "y") {
-    #     Exit
-    # }
+    if($doContinue -ne "y") {
+        Exit
+    }
 
     # note: we no longer get aws hashtree ids from storing in s3 glacier deep archive
     #       so we might as well push sooner than later so we can verify the images on
     #       the site while the backup runs
-    # $deployDuration = Deploy -categorySpec $categorySpec -config $config
+    $deployDuration = Deploy -categorySpec $categorySpec -config $config
     $backupDuration = Backup -categorySpec $categorySpec -config $config
 
     # DeleteDngFiles -dir $dir

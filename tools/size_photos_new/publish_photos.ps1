@@ -1039,7 +1039,7 @@ function GetCategoryDetails {
             yearDir = Join-Path $cfg.dirAssetRoot "images" $year
             destDir = Join-Path $cfg.dirAssetRoot "images" $year $dir.Name
             srcDir = Join-Path $cfg.dirAssetRoot "images" $year $dir.Name "src"
-            awsBackupPath = "s3://mikeandwan-us-testing/${year}/$($dir.Name)"
+            awsBackupPath = "s3://mikeandwan-us-photos/${year}/$($dir.Name)"
         }
     }
 

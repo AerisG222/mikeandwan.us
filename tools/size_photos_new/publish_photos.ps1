@@ -302,6 +302,14 @@ function MoveProcessedImagesToLocalDestination {
     mv "$($categorySpec.rootDir)" "$($categorySpec.deploySpec.yearDir)"
 }
 
+function ZipPp3s {
+    param(
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec
+    )
+
+    cd "$($categorySpec.srcDir)" && tar --remove-files -czf pp3s.tar.gz *.pp3 && cd -
+}
+
 function DeleteDngFiles {
     param(
         [Parameter(Mandatory = $true)] [string] $dir
@@ -1149,6 +1157,7 @@ function Deploy {
 
     # -- local deploly
     StartDevPod -cfg $config
+    ZipPp3s -categorySpec $categorySpec
     MoveProcessedImagesToLocalDestination -categorySpec $categorySpec -config $config
     ApplySqlToLocalDatabase -categorySpec $categorySpec -config $config
 

@@ -1,4 +1,4 @@
-#! ~/.dotnet/tools/pwsh
+#!/home/mmorano/.dotnet/tools/pwsh
 
 $exifTags = @(
     # exif

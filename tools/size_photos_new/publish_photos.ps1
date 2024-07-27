@@ -256,10 +256,50 @@ function MoveSourceFilesWithDng {
     }
 }
 
-function MoveProcessedImagesToDestination {
+function ApplySqlToLocalDatabase {
     param(
-        [Parameter(Mandatory = $true)] [string] $configSpec
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec,
+        [Parameter(Mandatory = $true)] [hashtable] $config
     )
+
+    podman run -it --rm `
+        --pull "newer" `
+        --pod "$($config.dev.pod)" `
+        --env-file "$($config.dev.postgresEnvFile)" `
+        --volume "$($categorySpec.deploySpec.destDir):/output:ro" `
+        --security-opt label=disable `
+        "$($config.postgresImage)" `
+            psql `
+                -h "localhost" `
+                -U "postgres" `
+                -d "maw_website" `
+                -f "/output/$([System.IO.Path]::GetFilename($categorySpec.sqlFile))"
+}
+
+function CopyImagesAndSqlToRemoteDestination {
+    param(
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec,
+        [Parameter(Mandatory = $true)] [hashtable] $config
+    )
+
+    rsync -ah `
+        --exclude "*/src*" `
+        --exclude "*.dng" `
+        "$($categorySpec.deploySpec.destDir)" `
+        "$($config.sshUsername)@$($config.sshRemoteHost):~/"
+}
+
+function MoveProcessedImagesToLocalDestination {
+    param(
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec,
+        [Parameter(Mandatory = $true)] [hashtable] $config
+    )
+
+    if(-not (Test-Path -PathType Container $categorySpec.deploySpec.yearDir)) {
+        mkdir -p "$($categorySpec.deploySpec.yearDir)"
+    }
+
+    mv "$($categorySpec.rootDir)" "$($categorySpec.deploySpec.yearDir)"
 }
 
 function DeleteDngFiles {
@@ -599,6 +639,8 @@ function WriteSqlFooter {
 
     $writer.WriteLine("END");
     $writer.WriteLine("`$`$");
+    $writer.WriteLine("");
+    $writer.WriteLine("\q");
 }
 
 function WriteSqlLookup {
@@ -938,6 +980,8 @@ function StartDevPod {
     )
 
     systemctl --user start "$($cfg.devPodSystemdService)"
+
+    # give some time for services to start
     sleep 3s
 }
 
@@ -1032,6 +1076,69 @@ function ProcessPhotos {
     return $timer.Elapsed
 }
 
+function BuildDeployScript {
+    param(
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec,
+        [Parameter(Mandatory = $true)] [hashtable] $config
+    )
+
+    return @"
+#!/bin/bash
+ssh -t "$($config.sshUsername)@$($config.sshRemoteHost)" "
+    echo \"These commands will be run on: \`$( uname -n )\"
+
+    if [ ! -d '$($categorySpec.deploySpec.yearDir)' ]; then
+        sudo mkdir '$($categorySpec.deploySpec.yearDir)'
+    fi
+
+    sudo mv '$([System.IO.Path]::GetFilename($categorySpec.deploySpec.destDir))' '$($categorySpec.deploySpec.yearDir)'
+    sudo chown -R root:root '$($categorySpec.deploySpec.destDir)'
+    sudo chmod -R go-w '$($categorySpec.deploySpec.destDir)'
+    sudo restorecon -R '$($categorySpec.deploySpec.destDir)'
+
+    podman run -it --rm \
+        --pod '$($config.prod.pod)' \
+        --env-file '$($config.prod.postgresEnvFile)' \
+        --volume $($categorySpec.deploySpec.destDir):/sql:ro \
+        --security-opt label=disable \
+        $($config.postgresImage) \
+            psql \
+                -h localhost \
+                -U postgres \
+                -d maw_website \
+                -f '/sql/$([System.IO.Path]::GetFilename($categorySpec.sqlFile))'
+
+    sudo rm '$( Join-Path $categorySpec.deploySpec.destDir ([System.IO.Path]::GetFilename($categorySpec.sqlFile)) )'
+"
+"@
+}
+
+function ExecuteDeployOnRemote {
+    param(
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec,
+        [Parameter(Mandatory = $true)] [hashtable] $config
+    )
+
+    try {
+        $file = New-TemporaryFile
+        rm $file.FullName
+        $file = "$($file.FullName).sh"
+
+        $script = BuildDeployScript `
+            -categorySpec $categorySpec `
+            -config $config
+
+        #Write-Host $script
+        $script > $file
+        chmod u+x $file
+
+        # hmm, cant figure out how to run the script remotely, so let's tell the user to do it manually YUCK!
+        Write-Host -ForegroundColor Yellow "Please run the following to complete the deploy: .$file"
+    } finally {
+        #rm $file
+    }
+}
+
 function Deploy {
     param(
         [Parameter(Mandatory = $true)] [hashtable] $categorySpec,
@@ -1042,13 +1149,12 @@ function Deploy {
 
     # -- local deploly
     StartDevPod -cfg $config
-    MoveProcessedImagesToDestination -configSpec $configSpec
-
-    if(-not (Test-Path -PathType Container $categorySpec.deploySpec.yearDir)) {
-        mkdir -p "$($categorySpec.deploySpec.yearDir)"
-    }
+    MoveProcessedImagesToLocalDestination -categorySpec $categorySpec -config $config
+    ApplySqlToLocalDatabase -categorySpec $categorySpec -config $config
 
     # -- remote deploy
+    CopyImagesAndSqlToRemoteDestination -categorySpec $categorySpec -config $config
+    ExecuteDeployOnRemote -categorySpec $categorySpec -config $config
 
     $timer.Stop()
     return $timer.Elapsed
@@ -1073,7 +1179,7 @@ function Main {
 
     VerifyDirectoryNotUsed -categorySpec $categorySpec
 
-    $resizeDuration = ProcessPhotos -categorySpec $categorySpec
+    # $resizeDuration = ProcessPhotos -categorySpec $categorySpec
 
     $doContinue = Read-Host "Would you like to backup and deploy at this time? [y|N]"
 
@@ -1084,7 +1190,7 @@ function Main {
     # note: we no longer get aws hashtree ids from storing in s3 glacier deep archive
     #       so we might as well push sooner than later so we can verify the images on
     #       the site while the backup runs
-    # $deployDuration = Deploy -categorySpec $categorySpec -config $config
+    $deployDuration = Deploy -categorySpec $categorySpec -config $config
     # $backupDuration = Backup -categorySpec $categorySpec
 
     # DeleteDngFiles -dir $dir

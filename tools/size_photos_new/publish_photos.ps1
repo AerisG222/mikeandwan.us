@@ -999,6 +999,7 @@ function BuildConfig {
         sshUsername = "svc_www_maw"
         dirAssetRoot = "/srv/www/website_assets"
         postgresImage = "docker.io/postgres:16-alpine"
+        awsProfile = "mawpower"
         dev = @{
             pod = "dev-maw-pod"
             postgresEnvFile = "/home/mmorano/maw_dev/podman-env/maw-postgres.env"
@@ -1037,6 +1038,8 @@ function GetCategoryDetails {
         deploySpec = @{
             yearDir = Join-Path $cfg.dirAssetRoot "images" $year
             destDir = Join-Path $cfg.dirAssetRoot "images" $year $dir.Name
+            srcDir = Join-Path $cfg.dirAssetRoot "images" $year $dir.Name "src"
+            awsBackupPath = "s3://mikeandwan-us-testing/${year}/$($dir.Name)"
         }
     }
 
@@ -1153,6 +1156,8 @@ function Deploy {
         [Parameter(Mandatory = $true)] [hashtable] $config
     )
 
+    Write-Host -ForegroundColor Blue "Deploying..."
+
     $timer = [Diagnostics.Stopwatch]::StartNew()
 
     # -- local deploly
@@ -1171,12 +1176,28 @@ function Deploy {
 
 function Backup {
     param(
-        [Parameter(Mandatory = $true)] [hashtable] $categorySpec
+        [Parameter(Mandatory = $true)] [hashtable] $categorySpec,
+        [Parameter(Mandatory = $true)] [hashtable] $config
     )
+
+    Write-Host -ForegroundColor Blue "Executing Backup..."
 
     $timer = [Diagnostics.Stopwatch]::StartNew()
 
-    # AWS Backup
+    # check to see if we currently logged in to aws
+    aws sts get-caller-identity --profile "$($config.awsProfile)" 2>&1 | out-null
+
+    if(-not $?) {
+        Write-Host -ForegroundColor Cyan "You will be prompted to authenticate with AWS to backup files to S3 Glacier"
+        Write-Host -ForegroundColor Yellow "Note: this is also buggy from pwsh, it is not printing the verification code"
+        aws sso login --profile "$($config.awsProfile)"
+    }
+
+    aws s3 sync `
+        "$($categorySpec.deploySpec.srcDir)" "$($categorySpec.deploySpec.awsBackupPath)" `
+        --storage-class "DEEP_ARCHIVE" `
+        --profile "$($config.awsProfile)" `
+        --quiet
 
     $timer.Stop()
     return $timer.Elapsed
@@ -1186,21 +1207,21 @@ function Main {
     $config = BuildConfig
     $categorySpec = GetCategoryDetails -cfg $config
 
-    VerifyDirectoryNotUsed -categorySpec $categorySpec
+    # VerifyDirectoryNotUsed -categorySpec $categorySpec
 
     # $resizeDuration = ProcessPhotos -categorySpec $categorySpec
 
-    $doContinue = Read-Host "Would you like to backup and deploy at this time? [y|N]"
+    # $doContinue = Read-Host "Would you like to backup and deploy at this time? [y|N]"
 
-    if($doContinue -ne "y") {
-        Exit
-    }
+    # if($doContinue -ne "y") {
+    #     Exit
+    # }
 
     # note: we no longer get aws hashtree ids from storing in s3 glacier deep archive
     #       so we might as well push sooner than later so we can verify the images on
     #       the site while the backup runs
-    $deployDuration = Deploy -categorySpec $categorySpec -config $config
-    # $backupDuration = Backup -categorySpec $categorySpec
+    # $deployDuration = Deploy -categorySpec $categorySpec -config $config
+    $backupDuration = Backup -categorySpec $categorySpec -config $config
 
     # DeleteDngFiles -dir $dir
 
@@ -1209,6 +1230,9 @@ function Main {
         -resizeDuration $resizeDuration `
         -backupDuration $backupDuration `
         -deployDuration $deployDuration
+
+    Write-Host("")
+    Write-Host -ForegroundColor Yellow "Completed!"
 }
 
 Main

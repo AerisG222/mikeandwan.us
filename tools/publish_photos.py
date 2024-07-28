@@ -1,7 +1,10 @@
 #!/usr/bin/python
+import glob
 import os
 import readline
+import shutil
 import subprocess
+import sys
 from dataclasses import dataclass
 from multiprocessing import Pool
 
@@ -38,6 +41,7 @@ class CategorySpec:
         self.year = year
         self.allowedRoles = allowedRoles
         self.sizeSpecs = build_size_specs(photoDir)
+        self.srcDir = next(filter(lambda spec: spec.isOrig, self.sizeSpecs)).subdir
         self.deployYearRoot = os.path.join(assetRoot, str(year))
         self.deployCategoryRoot = os.path.join(assetRoot, str(year), os.path.basename(photoDir))
 
@@ -168,7 +172,9 @@ def resize_photos(ctx: Context):
     return 1
 
 def verify_destination_does_not_exist(ctx: Context):
-    return os.path.isDir()
+    if os.path.isdir(ctx.categorySpec.deployCategoryRoot):
+        print(f"{Colors.WARNING}Destination is already taken, please ensure unique category names!{Colors.ENDC}")
+        sys.exit()
 
 def prompt_directory(prompt: str):
     val = None
@@ -176,7 +182,7 @@ def prompt_directory(prompt: str):
     readline.set_completer_delims(' \t\n=')
     readline.parse_and_bind("tab: complete")
 
-    while not os.path.isDir(val):
+    while not os.path.isdir(val):
         val = input(prompt)
 
     return val
@@ -207,6 +213,21 @@ def prompt_string_list(prompt: str, default: list):
     else:
         return default
 
+def clean_prior_attempts(ctx: Context):
+    if(not os.path.isdir(ctx.categorySpec.srcDir)):
+        return
+
+    for f in glob.glob(os.path.join(ctx.categorySpec.srcDir, "*")):
+        shutil.move(f, ctx.categorySpec.rootDir)
+
+    for size in ctx.categorySpec.sizeSpecs:
+        if(os.path.isdir(size.subdir)):
+            shutil.rmtree(size.subdir)
+
+def process_photos(ctx: Context):
+    clean_prior_attempts(ctx)
+    # resize_photos(ctx)
+
 def build_context():
     # dir = prompt_directory("Please enter the path to the photos: ")
     # name = prompt_string_required("Please enter the name of the category: ")
@@ -222,7 +243,8 @@ def build_context():
 
 def main():
     ctx = build_context()
-    resize_photos(ctx)
+    verify_destination_does_not_exist(ctx)
+    process_photos(ctx)
 
 if __name__=="__main__":
     main()

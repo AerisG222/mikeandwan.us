@@ -142,7 +142,7 @@ function BuildRawTherapeeArgs {
         $rtArgs += @("-p", "$($spec.resizePp3)")
     }
 
-    $rtArgs += "-j82"
+    $rtArgs += "-j88"
     $rtArgs += "-js3"
     $rtArgs += @("-c", "${dir}")
 

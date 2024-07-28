@@ -149,21 +149,21 @@ function BuildRawTherapeeArgs {
     return $rtArgs
 }
 
-function CleanSidecarPp3Files {
-    param(
-        [Parameter(Mandatory = $true)] [hashtable] $categorySpec
-    )
+# function CleanSidecarPp3Files {
+#     param(
+#         [Parameter(Mandatory = $true)] [hashtable] $categorySpec
+#     )
 
-    $files = Get-ChildItem "$(Join-Path $categorySpec.rootDir "*.pp3")"
+#     $files = Get-ChildItem "$(Join-Path $categorySpec.rootDir "*.pp3")"
 
-    # sidecar file will contain resize settings that would overrule the ones passed in the -p arg
-    # to make sure resizing works, remove those settings from the sidecars
-    foreach($file in $files) {
-        crudini `
-            --del "$($file.FullName)" Resize `
-            --del "$($file.FullName)" PostResizeSharpening
-    }
-}
+#     # sidecar file will contain resize settings that would overrule the ones passed in the -p arg
+#     # to make sure resizing works, remove those settings from the sidecars
+#     foreach($file in $files) {
+#         crudini `
+#             --del "$($file.FullName)" Resize `
+#             --del "$($file.FullName)" PostResizeSharpening
+#     }
+# }
 
 function ResizePhotos {
     param(
@@ -1130,7 +1130,10 @@ function ProcessPhotos {
     # category's src dir will contain original NEF and pp3s at end of process, though may delete dngs
     CleanPriorAttempts -categorySpec $categorySpec
     CorrectIntermediateFilenames -categorySpec $categorySpec
-    CleanSidecarPp3Files -categorySpec $categorySpec
+
+    # given how we moved the rt args, this should not be needed
+    # CleanSidecarPp3Files -categorySpec $categorySpec
+
     MoveSourceFilesWithDng -categorySpec $categorySpec
     ResizePhotos -categorySpec $categorySpec
     MoveSourceFiles -categorySpec $categorySpec

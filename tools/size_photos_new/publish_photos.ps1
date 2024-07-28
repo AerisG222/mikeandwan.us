@@ -134,6 +134,7 @@ function BuildRawTherapeeArgs {
     $rtArgs = @(
         "-o", "$($spec.subdir)"
         "-d"
+        "-s"
         "-p", "${pp3StripMetadata}"
     )
 
@@ -141,7 +142,6 @@ function BuildRawTherapeeArgs {
         $rtArgs += @("-p", "$($spec.resizePp3)")
     }
 
-    $rtArgs += "-s"
     $rtArgs += "-j82"
     $rtArgs += "-js3"
     $rtArgs += @("-c", "${dir}")

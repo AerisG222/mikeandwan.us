@@ -1,5 +1,9 @@
 #!/home/mmorano/.dotnet/tools/pwsh
 
+param(
+    [Parameter(Mandatory = $true)] [string] $photoDir
+)
+
 $exifTags = @(
     # exif
     "BitsPerSample"
@@ -1015,16 +1019,66 @@ function BuildConfig {
     return $cfg
 }
 
+function PromptPath {
+    while($true) {
+        $path = Read-Host -Prompt "Enter path to photos"
+
+        if(Test-Path $path) {
+            return Get-Item $path
+        } else {
+            Write-Host -ForegroundColor Red "Path [$path] does not exist!"
+        }
+    }
+}
+
+function PromptYear {
+    while($true) {
+        $year = -1
+        $yrStr = Read-Host -Prompt "Enter year"
+
+        if([int]::TryParse($yrStr, [ref]$year)) {
+            return $year
+        } else {
+            Write-Host "Please enter the year as a number"
+        }
+    }
+}
+
+function PromptString {
+    param(
+        [Parameter(Mandatory = $true)] [string] $prompt,
+        [Parameter(Mandatory = $false)] [string] $def = $null
+    )
+
+    while($true) {
+        $val = Read-Host -Prompt $prompt
+
+        if($val) {
+            return $val
+        } elseif($def) {
+            return $def
+        }
+    }
+}
+
 function GetCategoryDetails {
     param(
+        [Parameter(Mandatory = $true)] [string] $photoDir,
         [Parameter(Mandatory = $true)] [hashtable] $cfg
     )
 
-    $dir = Get-Item "/home/mmorano/Desktop/testing"
-    $year = 2024
-    $name = "Testing"
-    $roles = @( "friend", "admin" )
-    $sqlFile = (Join-Path $dir.FullName "photocategory.sql")
+    if(Test-Path $photoDir) {
+        $dir = Get-Item $photoDir
+    } else {
+        Write-Host -ForegroundColor Red "Path [$photoDir] does not exist!"
+        Exit
+    }
+
+    #$dir = GetDir
+    $year = PromptYear
+    $name = PromptString -prompt "Enter category name"
+    $roles = (PromptString -def "friend admin" -prompt "Enter role names (space delimited).  Defaults to: [admin friend]").Split(" ")
+    $sqlFile = Join-Path $dir.FullName "photocategory.sql"
     $sizeSpecs = BuildSizeSpecs -dir $dir.FullName
 
     $spec = @{
@@ -1204,8 +1258,12 @@ function Backup {
 }
 
 function Main {
+    param(
+        [Parameter(Mandatory = $false)] [string] $photoDir = $null
+    )
+
     $config = BuildConfig
-    $categorySpec = GetCategoryDetails -cfg $config
+    $categorySpec = GetCategoryDetails -photoDir $photoDir -cfg $config
 
     VerifyDirectoryNotUsed -categorySpec $categorySpec
 
@@ -1235,4 +1293,4 @@ function Main {
     Write-Host -ForegroundColor Yellow "Completed!"
 }
 
-Main
+Main -photoDir $photoDir

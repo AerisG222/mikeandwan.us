@@ -232,14 +232,8 @@ def resize_photos(ctx: Context):
     # same amount of time, so we div by 2 and sub two to try and leave one core avail
     poolSize = max(2, int(len(os.sched_getaffinity(0)) / 2) - 2)
 
-    start = time.time()
-
     with Pool(poolSize) as pool:
         pool.starmap(resize_photo, zip(imageFiles, repeat(ctx)))
-
-    end = time.time()
-
-    return end - start
 
 def verify_destination_does_not_exist(ctx: Context):
     if os.path.isdir(ctx.categorySpec.deployCategoryRoot):
@@ -413,6 +407,8 @@ def read_metadata(ctx: Context):
     return merge_metadata(exif, fs, dims)
 
 def process_photos(ctx: Context):
+    start = time.time()
+
     # clean_prior_attempts(ctx)
     # prepare_size_dirs(ctx)
     # correct_intermediate_filenames(ctx)
@@ -421,11 +417,44 @@ def process_photos(ctx: Context):
     # move_non_dng_source_files(ctx)
     metadata = read_metadata(ctx)
 
+    end = time.time()
+
+    return end - start
+
 def deploy(ctx: Context):
+    start = time.time()
+
     print("deploy: todo")
 
+    end = time.time()
+
+    return end - start
+
 def backup(ctx: Context):
+    start = time.time()
+
     print("backup: todo")
+
+    end = time.time()
+
+    return end - start
+
+def print_stats(photoCount: int, resizeDuration: float, deployDuration: float, backupDuration: float):
+    totalTime = resizeDuration + deployDuration + backupDuration
+
+    print(f"{Colors.HEADER}Processed Files: {photoCount}{Colors.ENDC}")
+
+    print(f"{Colors.OKGREEN} - Total Resize Time: {round(resizeDuration, 1)}s{Colors.ENDC}")
+    print(f"{Colors.OKGREEN} - Average Resize Time per Photo: {round(resizeDuration / photoCount, 1)}s{Colors.ENDC}")
+
+    print(f"{Colors.OKBLUE} - Total Backup Time: {round(backupDuration, 1)}s{Colors.ENDC}")
+    print(f"{Colors.OKBLUE} - Average Backup Time per Photo: {round(backupDuration / photoCount, 1)}s{Colors.ENDC}")
+
+    print(f"{Colors.OKCYAN} - Total Deploy Time: {round(deployDuration, 1)}s{Colors.ENDC}")
+    print(f"{Colors.OKCYAN} - Average Deploy Time per Photo: {round(deployDuration / photoCount, 1)}s{Colors.ENDC}")
+
+    print(f"{Colors.WARNING} - Total Time: {round(totalTime, 1)}s{Colors.ENDC}")
+    print(f"{Colors.WARNING} - Average Time per Photo: {round(totalTime / photoCount, 1)}s{Colors.ENDC}")
 
 def build_context():
     # dir = prompt_directory("Please enter the path to the photos: ")
@@ -443,7 +472,7 @@ def build_context():
 def main():
     ctx = build_context()
     verify_destination_does_not_exist(ctx)
-    process_photos(ctx)
+    resizeDuration = process_photos(ctx)
 
     doContinue = prompt_string_required("Would you like to backup and deploy at this time? [y|N]: ")
 
@@ -453,10 +482,15 @@ def main():
     # note: we no longer get aws hashtree ids from storing in s3 glacier deep archive
     #       so we might as well push sooner than later so we can verify the images on
     #       the site while the backup runs
-    deploy(ctx)
-    backup(ctx)
+    deployDuration = deploy(ctx)
+    backupDuration = backup(ctx)
 
-    print(f"{Colors.OKGREEN}Completed!{Colors.ENDC}")
+    # 1 = thumbnail folder
+    photos = len(glob.glob(os.path.join(ctx.categorySpec.sizeSpecs[1].subdir, "*")))
+
+    print_stats(photos, resizeDuration, deployDuration, backupDuration)
+
+    print(f"{Colors.HEADER}Completed!{Colors.ENDC}")
 
 if __name__=="__main__":
     main()

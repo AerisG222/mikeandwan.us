@@ -211,6 +211,9 @@ def resize_photo(srcFile: str, ctx: Context):
 
         finalize_image(srcFile, sizeSpec)
 
+    if PurePath(srcFile).suffix == ".tif":
+        os.remove(srcFile)
+
 def resize_photos(ctx: Context):
     print(f"{Colors.HEADER}Resizing Photos{Colors.ENDC}")
 

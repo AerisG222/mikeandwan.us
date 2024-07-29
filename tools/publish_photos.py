@@ -314,12 +314,22 @@ def move_source_files_with_dng(ctx: Context):
         if PurePath(f).stem in stemmedDngs:
             shutil.move(f, ctx.categorySpec.srcDir)
 
+def move_non_dng_source_files(ctx: Context):
+    nonDngs = list(filter(
+        lambda x: os.path.isfile(x),
+        glob.glob(os.path.join(ctx.categorySpec.rootDir, "*[!.dng]"))
+    ))
+
+    for f in nonDngs:
+        shutil.move(f, ctx.categorySpec.srcDir)
+
 def process_photos(ctx: Context):
     clean_prior_attempts(ctx)
     prepare_size_dirs(ctx)
     correct_intermediate_filenames(ctx)
     move_source_files_with_dng(ctx)
     resizeDuration = resize_photos(ctx)
+    move_non_dng_source_files(ctx)
 
 def deploy(ctx: Context):
     print("deploy: todo")

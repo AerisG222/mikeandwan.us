@@ -5,6 +5,7 @@ import readline
 import shutil
 import subprocess
 import sys
+import time
 from dataclasses import dataclass
 from itertools import repeat
 from multiprocessing import Pool
@@ -157,26 +158,79 @@ def build_size_specs(dir):
         SizeSpec("Large",           os.path.join(dir, "lg"),    False)
     ]
 
-def exportTif(file):
+def is_raw(file):
+    return (
+        file.casefold().endswith(".NEF".casefold())
+        or
+        file.casefold().endswith(".DNG".casefold())
+    )
+
+def export_tif(file):
     subprocess.run([
         "rawtherapee-cli",
         "-d",  # default profile
         "-s",  # sidecar pp3 profile (if exists)
         "-t",  # tif output
         "-c", file
-    ])
+    ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
+
+def change_extension(path: str, newExtension: str):
+    return path.replace(PurePath(path).suffix, newExtension)
+
+def finalize_image(file: str, spec: SizeSpec):
+    magickArgs = [
+        "magick",
+        file
+    ]
+
+    if spec.resizeGeometry:
+        magickArgs += [ "-resize", spec.resizeGeometry ]
+
+    if spec.cropGeometry:
+        magickArgs += [
+            "-gravity", "center",
+            "-crop", spec.cropGeometry
+        ]
+
+    magickArgs += [
+        "-strip",
+        "-quality", "88",
+        os.path.join(spec.subdir, change_extension(PurePath(file).name, ".jpg"))
+    ]
+
+    subprocess.run(magickArgs, stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
 
 def resize_photo(srcFile: str, ctx: Context):
-    print(srcFile)
+    if is_raw(srcFile):
+        export_tif(srcFile)
+        srcFile = change_extension(srcFile, ".tif")
+
+    for sizeSpec in ctx.categorySpec.sizeSpecs:
+        if sizeSpec.isOrig:
+            continue
+
+        finalize_image(srcFile, sizeSpec)
 
 def resize_photos(ctx: Context):
     print(f"{Colors.HEADER}Resizing Photos{Colors.ENDC}")
 
-    imageFiles = glob.glob(os.path.join(ctx.categorySpec.rootDir, "*[!.dng]"))
-    poolSize = max(2, len(os.sched_getaffinity(0)) - 1)
+    imageFiles = list(filter(
+        lambda x: os.path.isfile(x),
+        glob.glob(os.path.join(ctx.categorySpec.rootDir, "*[!.pp3]"))
+    ))
+
+    # my 16core/32thread cpu reports 32. observed optimal time was using ~12, where 8-16 were roughly
+    # same amount of time, so we div by 2 and sub two to try and leave one core avail
+    poolSize = max(2, int(len(os.sched_getaffinity(0)) / 2) - 2)
+
+    start = time.time()
 
     with Pool(poolSize) as pool:
         pool.starmap(resize_photo, zip(imageFiles, repeat(ctx)))
+
+    end = time.time()
+
+    return end - start
 
 def verify_destination_does_not_exist(ctx: Context):
     if os.path.isdir(ctx.categorySpec.deployCategoryRoot):
@@ -262,7 +316,7 @@ def process_photos(ctx: Context):
     prepare_size_dirs(ctx)
     correct_intermediate_filenames(ctx)
     move_source_files_with_dng(ctx)
-    resize_photos(ctx)
+    resizeDuration = resize_photos(ctx)
 
 def deploy(ctx: Context):
     print("deploy: todo")

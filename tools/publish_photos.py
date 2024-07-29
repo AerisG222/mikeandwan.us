@@ -7,6 +7,7 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from multiprocessing import Pool
+from pathlib import PurePath
 
 # https://stackoverflow.com/questions/287871/how-do-i-print-colored-text-to-the-terminal
 class Colors:
@@ -188,8 +189,13 @@ def prompt_directory(prompt: str):
     return val
 
 def prompt_string_required(prompt: str):
-    val = input(prompt)
-    print(type(val))
+    val = None
+
+    while True:
+        val = input(prompt)
+
+        if val:
+            return val
 
 def prompt_int(prompt: str):
     val = None
@@ -224,9 +230,39 @@ def clean_prior_attempts(ctx: Context):
         if(os.path.isdir(size.subdir)):
             shutil.rmtree(size.subdir)
 
+def prepare_size_dirs(ctx: Context):
+    for size in ctx.categorySpec.sizeSpecs:
+        if(not os.path.isdir(size.subdir)):
+            os.mkdir(size.subdir)
+
+def correct_intermediate_filenames(ctx: Context):
+    for f in glob.glob(os.path.join(ctx.categorySpec.rootDir, "*-NEF.*")):
+        os.rename(f, f.replace("-NEF", ""))
+
+def move_source_files_with_dng(ctx: Context):
+    dngs = glob.glob(os.path.join(ctx.categorySpec.rootDir, "*.dng"))
+    stemmedDngs = list(map(lambda x: PurePath(x).stem, dngs))
+    nonDngs = list(filter(
+        lambda x: (os.path.isfile(x)) and (not x.endswith(".dng")),
+        glob.glob(os.path.join(ctx.categorySpec.rootDir, "*"))
+    ))
+
+    for f in nonDngs:
+        if PurePath(f).stem in stemmedDngs:
+            shutil.move(f, ctx.categorySpec.srcDir)
+
 def process_photos(ctx: Context):
     clean_prior_attempts(ctx)
+    prepare_size_dirs(ctx)
+    correct_intermediate_filenames(ctx)
+    move_source_files_with_dng(ctx)
     # resize_photos(ctx)
+
+def deploy(ctx: Context):
+    print("deploy: todo")
+
+def backup(ctx: Context):
+    print("backup: todo")
 
 def build_context():
     # dir = prompt_directory("Please enter the path to the photos: ")
@@ -245,6 +281,19 @@ def main():
     ctx = build_context()
     verify_destination_does_not_exist(ctx)
     process_photos(ctx)
+
+    doContinue = prompt_string_required("Would you like to backup and deploy at this time? [y|N]: ")
+
+    if(doContinue != "y"):
+        sys.exit()
+
+    # note: we no longer get aws hashtree ids from storing in s3 glacier deep archive
+    #       so we might as well push sooner than later so we can verify the images on
+    #       the site while the backup runs
+    deploy(ctx)
+    backup(ctx)
+
+    print(f"{Colors.OKGREEN}Completed!{Colors.ENDC}")
 
 if __name__=="__main__":
     main()

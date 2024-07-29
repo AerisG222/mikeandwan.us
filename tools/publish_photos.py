@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import glob
+import json
 import os
 import readline
 import shutil
@@ -22,6 +23,11 @@ class Colors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+
+@dataclass
+class Dimension:
+    width: int
+    height: int
 
 @dataclass
 class SizeSpec:
@@ -323,13 +329,97 @@ def move_non_dng_source_files(ctx: Context):
     for f in nonDngs:
         shutil.move(f, ctx.categorySpec.srcDir)
 
+def read_exif(ctx: Context):
+    etArgs = [
+        "exiftool"
+    ]
+
+    for t in exifTags:
+        etArgs.append(f"-{t}")
+
+    etArgs += [
+        "-json",
+        "-tab",
+        "-long",
+        ctx.categorySpec.srcDir
+    ]
+
+    result = subprocess.run(etArgs, capture_output=True, text=True)
+
+    return json.loads(result.stdout)
+
+def read_filesystem_info(ctx: Context):
+    sizes = {}
+    result = subprocess.run(["du", "-ab", ctx.categorySpec.rootDir], capture_output=True, text=True)
+
+    for line in result.stdout.splitlines():
+        parts = line.split("\t")
+
+        sizes[parts[1]] = int(parts[0])
+
+    return sizes
+
+def read_image_dimensions(ctx: Context):
+    files = list(filter(
+        lambda x: os.path.isfile(x),
+        glob.glob(os.path.join(ctx.categorySpec.rootDir, "*/*[!.pp3]"))
+    ))
+
+    dimensions = {}
+
+    for f in files:
+        result = subprocess.run(["magick", "identify", f], capture_output=True, text=True)
+
+        for line in result.stdout.splitlines():
+            parts = line.split(" ")
+            dim = parts[2].split("x")
+
+            dimensions[parts[0]] = Dimension(int(dim[0]), int(dim[1]))
+
+    return dimensions
+
+def merge_metadata(exif, fileSizes, dimensions):
+    metadata = {}
+
+    for dimKey in dimensions:
+        if dimKey in fileSizes.keys():
+            dim = dimensions[dimKey]
+            fs = fileSizes[dimKey]
+            sizeKey = PurePath(dimKey).parent.name
+            file = PurePath(dimKey).stem
+
+            if not file in metadata.keys():
+                metadata[file] = {}
+
+            metadata[file][sizeKey] = {
+                'path': dimKey,
+                'width': dim.width,
+                'height': dim.height,
+                'size': fs
+            }
+
+    for e in exif:
+        file = PurePath(e["SourceFile"]).stem
+
+        metadata[file]["exif"] = e
+
+    return metadata
+
+def read_metadata(ctx: Context):
+    exif = read_exif(ctx)
+    fs = read_filesystem_info(ctx)
+    dims = read_image_dimensions(ctx)
+
+    return merge_metadata(exif, fs, dims)
+
 def process_photos(ctx: Context):
-    clean_prior_attempts(ctx)
-    prepare_size_dirs(ctx)
-    correct_intermediate_filenames(ctx)
-    move_source_files_with_dng(ctx)
-    resizeDuration = resize_photos(ctx)
-    move_non_dng_source_files(ctx)
+    # clean_prior_attempts(ctx)
+    # prepare_size_dirs(ctx)
+    # correct_intermediate_filenames(ctx)
+    # move_source_files_with_dng(ctx)
+    # resizeDuration = resize_photos(ctx)
+    # move_non_dng_source_files(ctx)
+    metadata = read_metadata(ctx)
 
 def deploy(ctx: Context):
     print("deploy: todo")

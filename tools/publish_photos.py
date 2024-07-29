@@ -6,6 +6,7 @@ import shutil
 import subprocess
 import sys
 from dataclasses import dataclass
+from itertools import repeat
 from multiprocessing import Pool
 from pathlib import PurePath
 
@@ -165,12 +166,17 @@ def exportTif(file):
         "-c", file
     ])
 
-def resize_photo(srcFile, categorySpec):
-    return 1
+def resize_photo(srcFile: str, ctx: Context):
+    print(srcFile)
 
 def resize_photos(ctx: Context):
     print(f"{Colors.HEADER}Resizing Photos{Colors.ENDC}")
-    return 1
+
+    imageFiles = glob.glob(os.path.join(ctx.categorySpec.rootDir, "*[!.dng]"))
+    poolSize = max(2, len(os.sched_getaffinity(0)) - 1)
+
+    with Pool(poolSize) as pool:
+        pool.starmap(resize_photo, zip(imageFiles, repeat(ctx)))
 
 def verify_destination_does_not_exist(ctx: Context):
     if os.path.isdir(ctx.categorySpec.deployCategoryRoot):
@@ -256,7 +262,7 @@ def process_photos(ctx: Context):
     prepare_size_dirs(ctx)
     correct_intermediate_filenames(ctx)
     move_source_files_with_dng(ctx)
-    # resize_photos(ctx)
+    resize_photos(ctx)
 
 def deploy(ctx: Context):
     print("deploy: todo")

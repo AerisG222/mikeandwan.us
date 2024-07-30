@@ -525,7 +525,7 @@ END IF;
 def unique_lookups(metadata, exifField: str):
     valSet = set()
 
-    for v in iter(metadata.values()):
+    for v in metadata.values():
         if exifField in v["exif"]:
             val = v["exif"][exifField]
 

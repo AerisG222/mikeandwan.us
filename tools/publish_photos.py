@@ -8,6 +8,7 @@ import subprocess
 import sys
 import time
 from dataclasses import dataclass
+from datetime import datetime
 from itertools import repeat
 from multiprocessing import Pool
 from pathlib import PurePath
@@ -421,6 +422,20 @@ def sql_str(val):
     val.replace("'", "''")
     return f"'{val}'"
 
+def sql_number(val):
+    if not val:
+        return "NULL"
+
+    return val
+
+def sql_time(val):
+    if not val:
+        return "NULL"
+
+    dt = datetime.strptime(val, "%Y:%m:%d %H:%M:%S")
+
+    return f"'{dt.strftime("%Y-%m-%d %H:%M:%S%z")}'"
+
 def write_sql_header(f):
     f.write(
 """
@@ -522,6 +537,12 @@ END IF;
 """
         )
 
+def sql_lookup_id(table: str, value: str):
+    if not value:
+        return "NULL"
+
+    return f"(SELECT id FROM {table} WHERE name = {sql_str(value)})"
+
 def unique_lookups(metadata, exifField: str):
     valSet = set()
 
@@ -577,13 +598,148 @@ def write_sql_lookups(f, metadata):
     write_sql_lookup(f, "photo.auto_focus", unique_lookups(metadata, "AutoFocus"))
     write_sql_lookup(f, "photo.lens", unique_lookups(metadata, "LensId"))
 
+def get_exif_num_or_val(photo, field: str):
+    return photo["exif"].get(field, {}).get("num", None) or photo["exif"].get(field, {}).get("val", None)
+
+def get_exif_val(photo, field: str):
+    return photo["exif"].get(field, {}).get("val", None)
+
+def write_sql_result(f, ctx: Context, metadata):
+    for photo in metadata.values():
+        items = {
+            "category_id": "(SELECT currval('photo.category_id_seq'))",
+            # scaled images
+            "xs_height": photo["xs"]["height"],
+            "xs_width": photo["xs"]["width"],
+            "xs_size": photo["xs"]["size"],
+            "xs_path": sql_str(build_url(ctx, photo["xs"]["path"])),
+            "xs_sq_height": photo["xs_sq"]["height"],
+            "xs_sq_width": photo["xs_sq"]["width"],
+            "xs_sq_size": photo["xs_sq"]["size"],
+            "xs_sq_path": sql_str(build_url(ctx, photo["xs_sq"]["path"])),
+            "sm_height": photo["sm"]["height"],
+            "sm_width": photo["sm"]["width"],
+            "sm_size": photo["sm"]["size"],
+            "sm_path": sql_str(build_url(ctx, photo["sm"]["path"])),
+            "md_height": photo["md"]["height"],
+            "md_width": photo["md"]["width"],
+            "md_size": photo["md"]["size"],
+            "md_path": sql_str(build_url(ctx, photo["md"]["path"])),
+            "lg_height": photo["lg"]["height"],
+            "lg_width": photo["lg"]["width"],
+            "lg_size": photo["lg"]["size"],
+            "lg_path": sql_str(build_url(ctx, photo["lg"]["path"])),
+            "prt_height": photo["lg"]["height"],
+            "prt_width": photo["lg"]["width"],
+            "prt_size": 0, # seeing we are referencing lg, specify 0b so we don't double count what is actually on disk
+            "prt_path": sql_str(build_url(ctx, photo["lg"]["path"])),  # just use lg for prt until we remove
+            "src_height": photo["src"]["height"],
+            "src_width": photo["src"]["width"],
+            "src_size": photo["src"]["size"],
+            "src_path": sql_str(build_url(ctx, photo["src"]["path"])),
+            # exif
+            "bits_per_sample": sql_number(get_exif_num_or_val(photo, "BitsPerSample")),
+            "compression_id": sql_lookup_id("photo.compression", get_exif_val(photo, "Compression")),
+            "contrast_id": sql_lookup_id("photo.contrast", get_exif_val(photo, "Contrast")),
+            "create_date": sql_time(get_exif_val(photo, "CreateDate")),
+            "digital_zoom_ratio": sql_number(get_exif_num_or_val(photo, "DigitalZoomRatio")),
+            "exposure_compensation": sql_str(get_exif_val(photo, "ExposureCompensation")),
+            "exposure_mode_id": sql_lookup_id("photo.exposure_mode", get_exif_val(photo, "ExposureMode")),
+            "exposure_program_id": sql_lookup_id("photo.exposure_program", get_exif_val(photo, "ExposureProgram")),
+            "exposure_time": sql_str(get_exif_val(photo, "ExposureTime")),
+            "f_number": sql_number(get_exif_num_or_val(photo, "FNumber")),
+            "flash_id": sql_lookup_id("photo.flash", get_exif_val(photo, "Flash")),
+            "focal_length": sql_number(get_exif_num_or_val(photo, "FocalLength")),
+            "focal_length_in_35_mm_format": sql_number(get_exif_num_or_val(photo, "FocalLengthIn35mmFormat")),
+            "gain_control_id": sql_lookup_id("photo.gain_control", get_exif_val(photo, "GainControl")),
+            "gps_altitude": sql_number(get_exif_num_or_val(photo, "GpsAltitude")),
+            "gps_altitude_ref_id": sql_lookup_id("photo.gps_altitude_ref", get_exif_val(photo, "GpsAltitudeRef")),
+            "gps_date_time_stamp": sql_time(get_exif_val(photo, "GpsDateStamp")),
+            "gps_direction": sql_number(get_exif_num_or_val(photo, "GpsImgDirection")),
+            "gps_direction_ref_id": sql_lookup_id("photo.gps_direction_ref", get_exif_val(photo, "GpsImgDirectionRef")),
+            "gps_latitude": sql_number(get_exif_num_or_val(photo, "GpsLatitude")),
+            "gps_latitude_ref_id": sql_lookup_id("photo.gps_latitude_ref", get_exif_val(photo, "GpsLatitudeRef")),
+            "gps_longitude": sql_number(get_exif_num_or_val(photo, "GpsLongitude")),
+            "gps_longitude_ref_id": sql_lookup_id("photo.gps_longitude_ref", get_exif_val(photo, "GpsLongitudeRef")),
+            "gps_measure_mode_id": sql_lookup_id("photo.gps_measure_mode", get_exif_val(photo, "GpsMeasureMode")),
+            "gps_satellites": sql_str(get_exif_val(photo, "GpsSatellites")),
+            "gps_status_id": sql_lookup_id("photo.gps_status", get_exif_val(photo, "GpsStatus")),
+            "gps_version_id": sql_str(get_exif_val(photo, "GpsVersionId")),
+            "iso": sql_number(get_exif_num_or_val(photo, "Iso")),
+            "light_source_id": sql_lookup_id("photo.light_source", get_exif_val(photo, "LightSource")),
+            "make_id": sql_lookup_id("photo.make", get_exif_val(photo, "Make")),
+            "metering_mode_id": sql_lookup_id("photo.metering_mode", get_exif_val(photo, "MeteringMode")),
+            "model_id": sql_lookup_id("photo.model", get_exif_val(photo, "Model")),
+            "orientation_id": sql_lookup_id("photo.orientation", get_exif_val(photo, "Orientation")),
+            "saturation_id": sql_lookup_id("photo.saturation", get_exif_val(photo, "Saturation")),
+            "scene_capture_type_id": sql_lookup_id("photo.scene_capture_type", get_exif_val(photo, "SceneCaptureType")),
+            "scene_type_id": sql_lookup_id("photo.scene_type", get_exif_val(photo, "SceneType")),
+            "sensing_method_id": sql_lookup_id("photo.sensing_method", get_exif_val(photo, "SensingMethod")),
+            "sharpness_id": sql_lookup_id("photo.sharpness", get_exif_val(photo, "Sharpness")),
+            # nikon
+            "af_area_mode_id": sql_lookup_id("photo.af_area_mode", get_exif_val(photo, "AFAreaMode")),
+            "af_point_id": sql_lookup_id("photo.af_point", get_exif_val(photo, "AFPoint")),
+            "active_d_lighting_id": sql_lookup_id("photo.active_d_lighting", get_exif_val(photo, "ActiveD-Lighting")),
+            "colorspace_id": sql_lookup_id("photo.colorspace", get_exif_val(photo, "Colorspace")),
+            "exposure_difference": sql_number(get_exif_num_or_val(photo, "ExposureDifference")),
+            "flash_color_filter_id": sql_lookup_id("photo.flash_color_filter", get_exif_val(photo, "FlashColorFilter")),
+            "flash_compensation": sql_str(get_exif_val(photo, "FlashCompensation")),
+            "flash_control_mode": sql_number(get_exif_num_or_val(photo, "FlashControlMode")),
+            "flash_exposure_compensation": sql_str(get_exif_val(photo, "FlashExposureComp")),
+            "flash_focal_length": sql_number(get_exif_num_or_val(photo, "FlashFocalLength")),
+            "flash_mode_id": sql_lookup_id("photo.flash_mode", get_exif_val(photo, "FlashMode")),
+            "flash_setting_id": sql_lookup_id("photo.flash_setting", get_exif_val(photo, "FlashSetting")),
+            "flash_type_id": sql_lookup_id("photo.flash_type", get_exif_val(photo, "FlashType")),
+            "focus_distance": sql_number(get_exif_num_or_val(photo, "FocusDistance")),
+            "focus_mode_id": sql_lookup_id("photo.focus_mode", get_exif_val(photo, "FocusMode")),
+            "focus_position": sql_number(get_exif_num_or_val(photo, "FocusPosition")),
+            "high_iso_noise_reduction_id": sql_lookup_id("photo.high_iso_noise_reduction", get_exif_val(photo, "HighIsoNoiseReduction")),
+            "hue_adjustment_id": sql_lookup_id("photo.hue_adjustment", get_exif_val(photo, "HueAdjustment")),
+            "noise_reduction_id": sql_lookup_id("photo.noise_reduction", get_exif_val(photo, "NoiseReduction")),
+            "picture_control_name_id": sql_lookup_id("photo.picture_control_name", get_exif_val(photo, "PictureControlName")),
+            "primary_af_point": sql_str(get_exif_val(photo, "PrimaryAFPoint")),
+            "vibration_reduction_id": sql_lookup_id("photo.vibration_reduction", get_exif_val(photo, "VibrationReduction")),
+            "vignette_control_id": sql_lookup_id("photo.vignette_control", get_exif_val(photo, "VignetteControl")),
+            "vr_mode_id": sql_lookup_id("photo.vr_mode", get_exif_val(photo, "VRMode")),
+            "white_balance_id": sql_lookup_id("photo.white_balance", get_exif_val(photo, "WhiteBalance")),
+            # composite
+            "aperture": sql_number(get_exif_num_or_val(photo, "Aperture")),
+            "auto_focus_id": sql_lookup_id("photo.auto_focus", get_exif_val(photo, "AutoFocus")),
+            "depth_of_field": sql_str(get_exif_val(photo, "DOF")),
+            "field_of_view": sql_str(get_exif_val(photo, "FOV")),
+            "hyperfocal_distance": sql_number(get_exif_num_or_val(photo, "HyperfocalDistance")),
+            "lens_id": sql_lookup_id("photo.lens", get_exif_val(photo, "LensId")),
+            "light_value": sql_number(get_exif_num_or_val(photo, "LightValue")),
+            "scale_factor_35_efl": sql_number(get_exif_num_or_val(photo, "ScaleFactor35Efl")),
+            "shutter_speed": sql_str(get_exif_val(photo, "ShutterSpeed"))
+        }
+
+        colNames = []
+        colValues = []
+
+        for key in items.keys():
+            colNames.append(key)
+            colValues.append(str(items[key]))
+
+        f.write(f"""
+INSERT INTO photo.photo
+(
+    {"\n    , ".join(colNames)}
+)
+VALUES
+(
+    {"\n    , ".join(colValues)}
+);
+"""
+        )
+
 def write_sql(ctx: Context, metadata):
     f = open(ctx.categorySpec.sqlFile, "w")
 
     write_sql_header(f)
     write_sql_category_create(f, ctx, metadata)
     write_sql_lookups(f, metadata)
-    # write_sql_result(f, ctx, metadata)
+    write_sql_result(f, ctx, metadata)
     write_sql_category_update(f)
     write_sql_footer(f)
 

@@ -49,6 +49,7 @@ class CategorySpec:
         self.name = name
         self.year = year
         self.allowedRoles = allowedRoles
+        self.sqlFile = os.path.join(photoDir, "photocategory.sql")
         self.sizeSpecs = build_size_specs(photoDir)
         self.srcDir = next(filter(lambda spec: spec.isOrig, self.sizeSpecs)).subdir
         self.deployYearRoot = os.path.join(assetRoot, str(year))
@@ -406,6 +407,19 @@ def read_metadata(ctx: Context):
 
     return merge_metadata(exif, fs, dims)
 
+def write_sql_header(f):
+    f.write("DO\n")
+    f.write("$$\n")
+    f.write("BEGIN\n")
+    f.write("\n")
+
+def write_sql(ctx: Context, metadata):
+    f = open(ctx.categorySpec.sqlFile, "w")
+
+    write_sql_header(f)
+
+    f.close()
+
 def process_photos(ctx: Context):
     start = time.time()
 
@@ -416,9 +430,9 @@ def process_photos(ctx: Context):
     # resizeDuration = resize_photos(ctx)
     # move_non_dng_source_files(ctx)
     metadata = read_metadata(ctx)
+    write_sql(ctx, metadata)
 
     end = time.time()
-
     return end - start
 
 def deploy(ctx: Context):
@@ -427,7 +441,6 @@ def deploy(ctx: Context):
     print("deploy: todo")
 
     end = time.time()
-
     return end - start
 
 def backup(ctx: Context):
@@ -436,7 +449,6 @@ def backup(ctx: Context):
     print("backup: todo")
 
     end = time.time()
-
     return end - start
 
 def print_stats(photoCount: int, resizeDuration: float, deployDuration: float, backupDuration: float):

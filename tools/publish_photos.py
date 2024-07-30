@@ -407,16 +407,107 @@ def read_metadata(ctx: Context):
 
     return merge_metadata(exif, fs, dims)
 
+def build_url(ctx: Context, path: str):
+    filePath = PurePath(path)
+    sizePart = filePath.parent.name
+    categoryPart = filePath.parent.parent.name
+
+    return f"/images/{ctx.categorySpec.year}/{categoryPart}/{sizePart}/{filePath.name}"
+
 def write_sql_header(f):
-    f.write("DO\n")
-    f.write("$$\n")
-    f.write("BEGIN\n")
-    f.write("\n")
+    f.write(
+"""
+DO
+$$
+BEGIN
+"""
+    )
+
+def write_sql_footer(f):
+    f.write(
+"""
+END
+$$
+
+\\q
+"""
+    )
+
+def sql_str(val):
+    if not val:
+        return "NULL"
+
+    val.replace("'", "''")
+    return f"'{val}'"
+
+def write_sql_category_create(f, ctx: Context, metadata):
+    photo = next(iter(metadata.values()))
+
+    f.write(f"""
+INSERT INTO photo.category
+(
+    name,
+    year,
+    teaser_photo_width,
+    teaser_photo_height,
+    teaser_photo_size,
+    teaser_photo_path,
+    teaser_photo_sq_width,
+    teaser_photo_sq_height,
+    teaser_photo_sq_size,
+    teaser_photo_sq_path
+)
+VALUES
+(
+    {sql_str(ctx.categorySpec.name)},
+    {ctx.categorySpec.year},
+    {photo["xs"]["width"]},
+    {photo["xs"]["height"]},
+    {photo["xs"]["size"]},
+    {sql_str(build_url(ctx, photo["xs"]["path"]))},
+    {photo["xs_sq"]["width"]},
+    {photo["xs_sq"]["height"]},
+    {photo["xs_sq"]["size"]},
+    {sql_str(build_url(ctx, photo["xs_sq"]["path"]))}
+);
+"""
+    )
+
+def write_sql_category_update(f):
+    f.write(
+"""
+UPDATE photo.category c
+   SET photo_count = (SELECT COUNT(1) FROM photo.photo WHERE category_id = c.id),
+       create_date = (SELECT create_date FROM photo.photo WHERE id = (SELECT MIN(id) FROM photo.photo where category_id = c.id AND create_date IS NOT NULL)),
+       gps_latitude = (SELECT gps_latitude FROM photo.photo WHERE id = (SELECT MIN(id) FROM photo.photo WHERE category_id = c.id AND gps_latitude IS NOT NULL)),
+       gps_latitude_ref_id = (SELECT gps_latitude_ref_id FROM photo.photo WHERE id = (SELECT MIN(id) FROM photo.photo WHERE category_id = c.id AND gps_latitude IS NOT NULL)),
+       gps_longitude = (SELECT gps_longitude FROM photo.photo WHERE id = (SELECT MIN(id) FROM photo.photo WHERE category_id = c.id AND gps_latitude IS NOT NULL)),
+       gps_longitude_ref_id = (SELECT gps_longitude_ref_id FROM photo.photo WHERE id = (SELECT MIN(id) FROM photo.photo WHERE category_id = c.id AND gps_latitude IS NOT NULL)),
+       total_size_xs = (SELECT SUM(xs_size) FROM photo.photo WHERE category_id = c.id),
+       total_size_xs_sq = (SELECT SUM(xs_sq_size) FROM photo.photo WHERE category_id = c.id),
+       total_size_sm = (SELECT SUM(sm_size) FROM photo.photo WHERE category_id = c.id),
+       total_size_md = (SELECT SUM(md_size) FROM photo.photo WHERE category_id = c.id),
+       total_size_lg = (SELECT SUM(lg_size) FROM photo.photo WHERE category_id = c.id),
+       total_size_prt = (SELECT SUM(prt_size) FROM photo.photo WHERE category_id = c.id),
+       total_size_src = (SELECT SUM(src_size) FROM photo.photo WHERE category_id = c.id),
+       teaser_photo_size = (SELECT xs_size FROM photo.photo WHERE category_id = c.id AND xs_path = c.teaser_photo_path),
+       teaser_photo_sq_height = (SELECT xs_sq_height FROM photo.photo WHERE category_id = c.id AND xs_path = c.teaser_photo_path),
+       teaser_photo_sq_width = (SELECT xs_sq_width FROM photo.photo WHERE category_id = c.id AND xs_path = c.teaser_photo_path),
+       teaser_photo_sq_path = (SELECT xs_sq_path FROM photo.photo WHERE category_id = c.id AND xs_path = c.teaser_photo_path),
+       teaser_photo_sq_size = (SELECT xs_sq_size FROM photo.photo WHERE category_id = c.id AND xs_path = c.teaser_photo_path)
+ WHERE c.id = (SELECT currval('photo.category_id_seq'));
+"""
+    )
 
 def write_sql(ctx: Context, metadata):
     f = open(ctx.categorySpec.sqlFile, "w")
 
     write_sql_header(f)
+    write_sql_category_create(f, ctx, metadata)
+    # write_sql_lookups(f, metadata)
+    # write_sql_result(f, ctx, metadata)
+    write_sql_category_update(f)
+    write_sql_footer(f)
 
     f.close()
 

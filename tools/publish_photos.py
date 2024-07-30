@@ -55,6 +55,8 @@ class CategorySpec:
         self.srcDir = next(filter(lambda spec: spec.isOrig, self.sizeSpecs)).subdir
         self.deployYearRoot = os.path.join(assetRoot, str(year))
         self.deployCategoryRoot = os.path.join(assetRoot, str(year), os.path.basename(photoDir))
+        self.deployCategorySrcDir = os.path.join(assetRoot, str(year), os.path.basename(photoDir), "src")
+        self.awsBackupRoot = f"s3://mikeandwan-us-photos/{year}/{PurePath(photoDir).name}"
 
 class Context:
     sshRemoteHost = "tifa"
@@ -745,6 +747,23 @@ def write_sql(ctx: Context, metadata):
 
     f.close()
 
+def ensure_aws_is_logged_in(ctx: Context):
+    result = subprocess.run([
+        "aws",
+        "sts get-caller-identity",
+        "--profile", ctx.awsProfile
+    ])
+
+    while result.returncode != 0:
+        print(f"{Colors.WARNING}You will be prompted to authenticate with AWS to backup files to S3 Glacier{Colors.ENDC}")
+
+        result = subprocess.run([
+            "aws",
+            "sso",
+            "login",
+            "--profile", ctx.awsProfile
+        ])
+
 def process_photos(ctx: Context):
     start = time.time()
 
@@ -771,7 +790,14 @@ def deploy(ctx: Context):
 def backup(ctx: Context):
     start = time.time()
 
-    print("backup: todo")
+    ensure_aws_is_logged_in(ctx)
+    subprocess.run([
+        "aws",
+        "s3",
+        "sync",
+        ctx.categorySpec.deployCategorySrcDir, ctx.categorySpec.awsBackupRoot,
+        "--quiet"
+    ])
 
     end = time.time()
     return end - start
@@ -799,7 +825,7 @@ def build_context():
     # year = prompt_int("Please enter the category year: ")
     # roles = prompt_string_list("Please enter role names that should have access to category (default: 'admin friend'): ", ["admin", "friend"])
 
-    dir = "/home/mmorano/Desktop/testing"
+    dir = "/home/mmorano/Desktop/testing2"
     name = "Test"
     year = 2024
     roles = ["admin", "friend"]

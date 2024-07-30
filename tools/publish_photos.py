@@ -414,6 +414,13 @@ def build_url(ctx: Context, path: str):
 
     return f"/images/{ctx.categorySpec.year}/{categoryPart}/{sizePart}/{filePath.name}"
 
+def sql_str(val):
+    if not val:
+        return "NULL"
+
+    val.replace("'", "''")
+    return f"'{val}'"
+
 def write_sql_header(f):
     f.write(
 """
@@ -433,17 +440,11 @@ $$
 """
     )
 
-def sql_str(val):
-    if not val:
-        return "NULL"
-
-    val.replace("'", "''")
-    return f"'{val}'"
-
 def write_sql_category_create(f, ctx: Context, metadata):
     photo = next(iter(metadata.values()))
 
-    f.write(f"""
+    f.write(
+f"""
 INSERT INTO photo.category
 (
     name,
@@ -499,12 +500,89 @@ UPDATE photo.category c
 """
     )
 
+def write_sql_lookup(f, table: str, values: list):
+    for v in values:
+        if not v:
+            continue
+
+        val = sql_str(v)
+
+        f.write(
+f"""
+IF NOT EXISTS (SELECT 1 FROM {table} WHERE name = {val}) THEN
+    INSERT INTO {table}
+    (
+        name
+    )
+    VALUES
+    (
+        {val}
+    );
+END IF;
+"""
+        )
+
+def unique_lookups(metadata, exifField: str):
+    valSet = set()
+
+    for v in iter(metadata.values()):
+        if exifField in v["exif"]:
+            val = v["exif"][exifField]
+
+            if val:
+                valSet.add(val["val"])
+
+    return valSet
+
+def write_sql_lookups(f, metadata):
+    write_sql_lookup(f, "photo.compression", unique_lookups(metadata, "Compression"))
+    write_sql_lookup(f, "photo.contrast", unique_lookups(metadata, "Contrast"))
+    write_sql_lookup(f, "photo.exposure_mode", unique_lookups(metadata, "ExposureMode"))
+    write_sql_lookup(f, "photo.exposure_program", unique_lookups(metadata, "ExposureProgram"))
+    write_sql_lookup(f, "photo.flash", unique_lookups(metadata, "Flash"))
+    write_sql_lookup(f, "photo.gain_control", unique_lookups(metadata, "GainControl"))
+    write_sql_lookup(f, "photo.gps_altitude_ref", unique_lookups(metadata, "GpsAltitudeRef"))
+    write_sql_lookup(f, "photo.gps_direction_ref", unique_lookups(metadata, "GpsImgDirectionRef"))
+    write_sql_lookup(f, "photo.gps_latitude_ref", unique_lookups(metadata, "GpsLatitudeRef"))
+    write_sql_lookup(f, "photo.gps_longitude_ref", unique_lookups(metadata, "GpsLongitudeRef"))
+    write_sql_lookup(f, "photo.gps_measure_mode", unique_lookups(metadata, "GpsMeasureMode"))
+    write_sql_lookup(f, "photo.gps_status", unique_lookups(metadata, "GpsStatus"))
+    write_sql_lookup(f, "photo.light_source", unique_lookups(metadata, "LightSource"))
+    write_sql_lookup(f, "photo.make", unique_lookups(metadata, "Make"))
+    write_sql_lookup(f, "photo.metering_mode", unique_lookups(metadata, "MeteringMode"))
+    write_sql_lookup(f, "photo.model", unique_lookups(metadata, "Model"))
+    write_sql_lookup(f, "photo.orientation", unique_lookups(metadata, "Orientation"))
+    write_sql_lookup(f, "photo.saturation", unique_lookups(metadata, "Saturation"))
+    write_sql_lookup(f, "photo.scene_capture_type", unique_lookups(metadata, "SceneCaptureType"))
+    write_sql_lookup(f, "photo.scene_type", unique_lookups(metadata, "SceneType"))
+    write_sql_lookup(f, "photo.sensing_method", unique_lookups(metadata, "SensingMethod"))
+    write_sql_lookup(f, "photo.sharpness", unique_lookups(metadata, "Sharpness"))
+    write_sql_lookup(f, "photo.af_area_mode", unique_lookups(metadata, "AFAreaMode"))
+    write_sql_lookup(f, "photo.af_point", unique_lookups(metadata, "AFPoint"))
+    write_sql_lookup(f, "photo.active_d_lighting", unique_lookups(metadata, "'"))
+    write_sql_lookup(f, "photo.colorspace", unique_lookups(metadata, "Colorspace"))
+    write_sql_lookup(f, "photo.flash_color_filter", unique_lookups(metadata, "FlashColorFilter"))
+    write_sql_lookup(f, "photo.flash_mode", unique_lookups(metadata, "FlashMode"))
+    write_sql_lookup(f, "photo.flash_setting", unique_lookups(metadata, "FlashSetting"))
+    write_sql_lookup(f, "photo.flash_type", unique_lookups(metadata, "FlashType"))
+    write_sql_lookup(f, "photo.focus_mode", unique_lookups(metadata, "FocusMode"))
+    write_sql_lookup(f, "photo.high_iso_noise_reduction", unique_lookups(metadata, "HighIsoNoiseReduction"))
+    write_sql_lookup(f, "photo.hue_adjustment", unique_lookups(metadata, "HueAdjustment"))
+    write_sql_lookup(f, "photo.noise_reduction", unique_lookups(metadata, "NoiseReduction"))
+    write_sql_lookup(f, "photo.picture_control_name", unique_lookups(metadata, "PictureControlName"))
+    write_sql_lookup(f, "photo.vibration_reduction", unique_lookups(metadata, "VibrationReduction"))
+    write_sql_lookup(f, "photo.vignette_control", unique_lookups(metadata, "VignetteControl"))
+    write_sql_lookup(f, "photo.vr_mode", unique_lookups(metadata, "VRMode"))
+    write_sql_lookup(f, "photo.white_balance", unique_lookups(metadata, "WhiteBalance"))
+    write_sql_lookup(f, "photo.auto_focus", unique_lookups(metadata, "AutoFocus"))
+    write_sql_lookup(f, "photo.lens", unique_lookups(metadata, "LensId"))
+
 def write_sql(ctx: Context, metadata):
     f = open(ctx.categorySpec.sqlFile, "w")
 
     write_sql_header(f)
     write_sql_category_create(f, ctx, metadata)
-    # write_sql_lookups(f, metadata)
+    write_sql_lookups(f, metadata)
     # write_sql_result(f, ctx, metadata)
     write_sql_category_update(f)
     write_sql_footer(f)

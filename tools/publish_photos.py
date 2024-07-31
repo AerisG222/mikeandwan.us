@@ -244,7 +244,7 @@ def verify_destination_does_not_exist(ctx: Context):
         sys.exit()
 
 def prompt_directory(prompt: str):
-    val = None
+    val = ""
 
     readline.set_completer_delims(' \t\n=')
     readline.parse_and_bind("tab: complete")
@@ -935,15 +935,15 @@ def print_stats(photoCount: int, resizeDuration: float, deployDuration: float, b
     print(f"{Colors.WARNING} - Average Time per Photo: {round(totalTime / photoCount, 1)}s{Colors.ENDC}")
 
 def build_context():
-    # dir = prompt_directory("Please enter the path to the photos: ")
-    # name = prompt_string_required("Please enter the name of the category: ")
-    # year = prompt_int("Please enter the category year: ")
-    # roles = prompt_string_list("Please enter role names that should have access to category (default: 'admin friend'): ", ["admin", "friend"])
+    dir = prompt_directory("Please enter the path to the photos: ")
+    name = prompt_string_required("Please enter the name of the category: ")
+    year = prompt_int("Please enter the category year: ")
+    roles = prompt_string_list("Please enter role names that should have access to category (default: 'admin friend'): ", ["admin", "friend"])
 
-    dir = "/home/mmorano/Desktop/testing2"
-    name = "Test"
-    year = 2024
-    roles = ["admin", "friend"]
+    # dir = "/home/mmorano/Desktop/testing2"
+    # name = "Test"
+    # year = 2024
+    # roles = ["admin", "friend"]
 
     return Context(dir, name, year, roles)
 

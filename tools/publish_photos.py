@@ -745,6 +745,17 @@ VALUES
 """
         )
 
+def write_sql_permissions(f, ctx: Context):
+    for r in ctx.categorySpec.allowedRoles:
+        f.write(f"""
+INSERT INTO photo.category_role (category_id, role_id)
+VALUES (
+    (SELECT currval('photo.category_id_seq')),
+    (SELECT id FROM maw.role WHERE name = '{r}')
+);
+"""
+        )
+
 def write_sql(ctx: Context, metadata):
     f = open(ctx.categorySpec.sqlFile, "w")
 
@@ -753,6 +764,7 @@ def write_sql(ctx: Context, metadata):
     write_sql_lookups(f, metadata)
     write_sql_result(f, ctx, metadata)
     write_sql_category_update(f)
+    write_sql_permissions(f, ctx)
     write_sql_footer(f)
 
     f.close()

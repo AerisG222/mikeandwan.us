@@ -876,14 +876,14 @@ def execute_remote_deploy(ctx: Context):
 def process_photos(ctx: Context):
     start = time.time()
 
-    # clean_prior_attempts(ctx)
-    # prepare_size_dirs(ctx)
-    # correct_intermediate_filenames(ctx)
-    # move_source_files_with_dng(ctx)
-    # resizeDuration = resize_photos(ctx)
-    # move_non_dng_source_files(ctx)
-    # metadata = read_metadata(ctx)
-    # write_sql(ctx, metadata)
+    clean_prior_attempts(ctx)
+    prepare_size_dirs(ctx)
+    correct_intermediate_filenames(ctx)
+    move_source_files_with_dng(ctx)
+    resize_photos(ctx)
+    move_non_dng_source_files(ctx)
+    metadata = read_metadata(ctx)
+    write_sql(ctx, metadata)
 
     end = time.time()
     return end - start
@@ -892,13 +892,13 @@ def deploy(ctx: Context):
     start = time.time()
 
     # local deploy
-    # start_dev_pod(ctx)
-    # zip_pp3s(ctx)
-    # move_to_local_archive(ctx)
-    # apply_sql_to_local(ctx)
+    start_dev_pod(ctx)
+    zip_pp3s(ctx)
+    move_to_local_archive(ctx)
+    apply_sql_to_local(ctx)
 
     # remote deploy
-    #copy_to_remote(ctx)
+    copy_to_remote(ctx)
     execute_remote_deploy(ctx)
 
     end = time.time()
@@ -951,24 +951,24 @@ def build_context():
 
 def main():
     ctx = build_context()
-    # verify_destination_does_not_exist(ctx)
+    verify_destination_does_not_exist(ctx)
     resizeDuration = process_photos(ctx)
 
-    # doContinue = prompt_string_required("Would you like to backup and deploy at this time? [y|N]: ")
+    doContinue = prompt_string_required("Would you like to backup and deploy at this time? [y|N]: ")
 
-    # if(doContinue != "y"):
-    #     sys.exit()
+    if(doContinue != "y"):
+        sys.exit()
 
     # note: we no longer get aws hashtree ids from storing in s3 glacier deep archive
     #       so we might as well push sooner than later so we can verify the images on
     #       the site while the backup runs
     deployDuration = deploy(ctx)
-    #backupDuration = backup(ctx)
+    backupDuration = backup(ctx)
 
     # 1 = thumbnail folder
     photos = len(glob.glob(os.path.join(ctx.categorySpec.sizeSpecs[1].subdir, "*")))
 
-    #print_stats(photos, resizeDuration, deployDuration, backupDuration)
+    print_stats(photos, resizeDuration, deployDuration, backupDuration)
 
     print(f"{Colors.HEADER}Completed!{Colors.ENDC}")
 

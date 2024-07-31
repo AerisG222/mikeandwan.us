@@ -324,8 +324,8 @@ def move_source_files_with_dng(ctx: Context):
 
 def move_non_dng_source_files(ctx: Context):
     nonDngs = list(filter(
-        lambda x: os.path.isfile(x),
-        glob.glob(os.path.join(ctx.categorySpec.rootDir, "*[!.dng]"))
+        lambda x: os.path.isfile(x) and PurePath(x).suffix != ".dng",
+        glob.glob(os.path.join(ctx.categorySpec.rootDir, "*"))
     ))
 
     for f in nonDngs:

@@ -819,6 +819,56 @@ def apply_sql_to_local(ctx: Context):
                 "-f", f"/output/{os.path.basename(ctx.categorySpec.sqlFile)}"
     ])
 
+def copy_to_remote(ctx: Context):
+    subprocess.run([
+        "rsync",
+        "-ah",
+        "--exclude", "*/src*",
+        "--exclude", "*.dng",
+        ctx.categorySpec.deployCategoryRoot,
+        f"{ctx.sshUsername}@{ctx.sshRemoteHost}:~/"
+    ])
+
+def build_remote_deploy_script(ctx: Context):
+    return f"""
+echo \"These commands will be run on: $( uname -n )\"
+
+if [ ! -d '{ctx.categorySpec.deployYearRoot}' ]; then
+    sudo mkdir '{ctx.categorySpec.deployYearRoot}'
+fi
+
+sudo mv '{os.path.basename(ctx.categorySpec.deployCategoryRoot)}' '{ctx.categorySpec.deployYearRoot}'
+sudo chown -R root:root '{ctx.categorySpec.deployCategoryRoot}'
+sudo chmod -R go-w '{ctx.categorySpec.deployCategoryRoot}'
+sudo restorecon -R '{ctx.categorySpec.deployCategoryRoot}'
+
+podman run -it --rm \
+    --pod '{ctx.prod.pod}' \
+    --env-file '{ctx.prod.pgEnvFile}' \
+    --volume {ctx.categorySpec.deployCategoryRoot}:/sql:ro \
+    --security-opt label=disable \
+    {ctx.postgresImage} \
+        psql \
+            -h localhost \
+            -U postgres \
+            -d maw_website \
+            -f '/sql/{os.path.basename(ctx.categorySpec.sqlFile)}'
+
+sudo rm '{os.path.join(ctx.categorySpec.deployCategoryRoot, os.path.basename(ctx.categorySpec.sqlFile))}'
+"""
+
+def execute_remote_deploy(ctx: Context):
+    script = build_remote_deploy_script(ctx)
+
+    res = subprocess.run([
+        "ssh",
+        "-t",
+        f"{ctx.sshUsername}@{ctx.sshRemoteHost}",
+        script
+    ])
+
+    print(res.returncode)
+
 def process_photos(ctx: Context):
     start = time.time()
 
@@ -828,8 +878,8 @@ def process_photos(ctx: Context):
     # move_source_files_with_dng(ctx)
     # resizeDuration = resize_photos(ctx)
     # move_non_dng_source_files(ctx)
-    metadata = read_metadata(ctx)
-    write_sql(ctx, metadata)
+    # metadata = read_metadata(ctx)
+    # write_sql(ctx, metadata)
 
     end = time.time()
     return end - start
@@ -844,6 +894,8 @@ def deploy(ctx: Context):
     # apply_sql_to_local(ctx)
 
     # remote deploy
+    #copy_to_remote(ctx)
+    execute_remote_deploy(ctx)
 
     end = time.time()
     return end - start

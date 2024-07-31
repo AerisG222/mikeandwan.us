@@ -212,6 +212,8 @@ def finalize_image(file: str, spec: SizeSpec):
     subprocess.run(magickArgs, stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
 
 def resize_photo(srcFile: str, ctx: Context):
+    print(f"{Colors.OKBLUE}  - {os.path.basename(srcFile)}{Colors.ENDC}")
+
     if is_raw(srcFile):
         export_tif(srcFile)
         srcFile = change_extension(srcFile, ".tif")

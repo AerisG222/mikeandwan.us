@@ -925,8 +925,10 @@ def backup(ctx: Context):
         "aws",
         "s3",
         "sync",
-        ctx.categorySpec.deployCategorySrcDir, ctx.categorySpec.awsBackupRoot,
-        "--quiet"
+        ctx.categorySpec.deployCategorySrcDir,
+        ctx.categorySpec.awsBackupRoot,
+        "--storage-class", "DEEP_ARCHIVE",
+        "--profile", ctx.awsProfile
     ])
 
     end = time.time()

@@ -985,9 +985,7 @@ def main():
     print(f"{Colors.HEADER}Backing Up Photos...{Colors.ENDC}")
     backupDuration = backup(ctx)
 
-    # 1 = thumbnail folder
-    photos = len(glob.glob(os.path.join(ctx.categorySpec.sizeSpecs[1].subdir, "*")))
-
+    photos = len(glob.glob(os.path.join(ctx.categorySpec.deployCategoryRoot, "xs", "*")))
     print_stats(photos, resizeDuration, deployDuration, backupDuration)
 
     print(f"{Colors.HEADER}Completed!{Colors.ENDC}")

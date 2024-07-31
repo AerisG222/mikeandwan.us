@@ -252,7 +252,7 @@ def prompt_directory(prompt: str):
     while not os.path.isdir(val):
         val = input(prompt)
 
-    return val
+    return os.path.normpath(val)
 
 def prompt_string_required(prompt: str):
     val = None

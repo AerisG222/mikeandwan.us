@@ -770,6 +770,55 @@ def ensure_aws_is_logged_in(ctx: Context):
             "--profile", ctx.awsProfile
         ])
 
+def start_dev_pod(ctx: Context):
+    subprocess.run([
+        "systemctl",
+        "--user",
+        "start",
+        ctx.dev.systemdService
+    ])
+
+    # allow services to start
+    time.sleep(3)
+
+def zip_pp3s(ctx: Context):
+    pp3Files = []
+    tarArgs = [
+        "tar",
+        "--remove-files",
+        "-czf",
+        "pp3s.tar.gz"
+    ]
+
+    for f in glob.glob(os.path.join(ctx.categorySpec.srcDir, "*.pp3")):
+        pp3Files.append(os.path.basename(f))
+
+    tarArgs += pp3Files
+
+    subprocess.run(tarArgs, cwd = ctx.categorySpec.srcDir)
+
+def move_to_local_archive(ctx: Context):
+    if(not os.path.isdir(ctx.categorySpec.deployYearRoot)):
+        os.mkdir(ctx.categorySpec.deployYearRoot)
+
+    shutil.move(ctx.categorySpec.rootDir, ctx.categorySpec.deployCategoryRoot)
+
+def apply_sql_to_local(ctx: Context):
+    subprocess.run([
+        "podman", "run", "-it", "--rm",
+        "--pull", "newer",
+        "--pod", ctx.dev.pod,
+        "--env-file", ctx.dev.pgEnvFile,
+        "--volume", f"{ctx.categorySpec.deployCategoryRoot}:/output:ro",
+        "--security-opt", "label=disable",
+        ctx.postgresImage,
+            "psql",
+                "-h", "localhost",
+                "-U", "postgres",
+                "-d", "maw_website",
+                "-f", f"/output/{os.path.basename(ctx.categorySpec.sqlFile)}"
+    ])
+
 def process_photos(ctx: Context):
     start = time.time()
 
@@ -788,7 +837,13 @@ def process_photos(ctx: Context):
 def deploy(ctx: Context):
     start = time.time()
 
-    print("deploy: todo")
+    # local deploy
+    # start_dev_pod(ctx)
+    # zip_pp3s(ctx)
+    # move_to_local_archive(ctx)
+    # apply_sql_to_local(ctx)
+
+    # remote deploy
 
     end = time.time()
     return end - start
@@ -840,24 +895,24 @@ def build_context():
 
 def main():
     ctx = build_context()
-    verify_destination_does_not_exist(ctx)
+    # verify_destination_does_not_exist(ctx)
     resizeDuration = process_photos(ctx)
 
-    doContinue = prompt_string_required("Would you like to backup and deploy at this time? [y|N]: ")
+    # doContinue = prompt_string_required("Would you like to backup and deploy at this time? [y|N]: ")
 
-    if(doContinue != "y"):
-        sys.exit()
+    # if(doContinue != "y"):
+    #     sys.exit()
 
     # note: we no longer get aws hashtree ids from storing in s3 glacier deep archive
     #       so we might as well push sooner than later so we can verify the images on
     #       the site while the backup runs
     deployDuration = deploy(ctx)
-    backupDuration = backup(ctx)
+    #backupDuration = backup(ctx)
 
     # 1 = thumbnail folder
     photos = len(glob.glob(os.path.join(ctx.categorySpec.sizeSpecs[1].subdir, "*")))
 
-    print_stats(photos, resizeDuration, deployDuration, backupDuration)
+    #print_stats(photos, resizeDuration, deployDuration, backupDuration)
 
     print(f"{Colors.HEADER}Completed!{Colors.ENDC}")
 

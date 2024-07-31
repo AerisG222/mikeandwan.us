@@ -298,6 +298,9 @@ def clean_prior_attempts(ctx: Context):
         if(os.path.isdir(size.subdir)):
             shutil.rmtree(size.subdir)
 
+    if os.path.isfile(ctx.categorySpec.sqlFile):
+        os.remove(ctx.categorySpec.sqlFile)
+
 def prepare_size_dirs(ctx: Context):
     for size in ctx.categorySpec.sizeSpecs:
         if(not os.path.isdir(size.subdir)):

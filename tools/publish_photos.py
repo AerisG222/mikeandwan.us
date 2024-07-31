@@ -760,7 +760,8 @@ def write_sql(ctx: Context, metadata):
 def ensure_aws_is_logged_in(ctx: Context):
     result = subprocess.run([
         "aws",
-        "sts get-caller-identity",
+        "sts",
+        "get-caller-identity",
         "--profile", ctx.awsProfile
     ])
 

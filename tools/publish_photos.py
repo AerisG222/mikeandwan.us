@@ -194,13 +194,14 @@ def finalize_image(file: str, spec: SizeSpec):
     ]
 
     if spec.resizeGeometry:
-        magickArgs += [ "-resize", spec.resizeGeometry ]
-
-    if spec.cropGeometry:
-        magickArgs += [
-            "-gravity", "center",
-            "-crop", spec.cropGeometry
-        ]
+        if spec.cropGeometry:
+            magickArgs += [
+                "-resize", f"{spec.resizeGeometry}^",
+                "-gravity", "center",
+                "-crop", spec.cropGeometry
+            ]
+        else:
+            magickArgs += [ "-resize", spec.resizeGeometry ]
 
     magickArgs += [
         "-strip",

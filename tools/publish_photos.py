@@ -226,8 +226,6 @@ def resize_photo(srcFile: str, ctx: Context):
         os.remove(srcFile)
 
 def resize_photos(ctx: Context):
-    print(f"{Colors.HEADER}Resizing Photos{Colors.ENDC}")
-
     imageFiles = list(filter(
         lambda x: os.path.isfile(x),
         glob.glob(os.path.join(ctx.categorySpec.rootDir, "*[!.pp3]"))
@@ -952,6 +950,8 @@ def build_context():
 def main():
     ctx = build_context()
     verify_destination_does_not_exist(ctx)
+
+    print(f"{Colors.HEADER}Processing Photos...{Colors.ENDC}")
     resizeDuration = process_photos(ctx)
 
     doContinue = prompt_string_required("Would you like to backup and deploy at this time? [y|N]: ")
@@ -962,7 +962,10 @@ def main():
     # note: we no longer get aws hashtree ids from storing in s3 glacier deep archive
     #       so we might as well push sooner than later so we can verify the images on
     #       the site while the backup runs
+    print(f"{Colors.HEADER}Deploying Photos...{Colors.ENDC}")
     deployDuration = deploy(ctx)
+
+    print(f"{Colors.HEADER}Backing Up Photos...{Colors.ENDC}")
     backupDuration = backup(ctx)
 
     # 1 = thumbnail folder

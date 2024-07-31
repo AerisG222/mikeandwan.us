@@ -601,7 +601,13 @@ def write_sql_lookups(f, metadata):
     write_sql_lookup(f, "photo.lens", unique_lookups(metadata, "LensId"))
 
 def get_exif_num_or_val(photo, field: str):
-    return photo["exif"].get(field, {}).get("num", None) or photo["exif"].get(field, {}).get("val", None)
+    num = photo["exif"].get(field, {}).get("num", None)
+
+    # 0 is treated as false, but this is a legit number here, so check for it explicitly
+    if num == 0 or num:
+        return num
+
+    return photo["exif"].get(field, {}).get("val", None)
 
 def get_exif_val(photo, field: str):
     return photo["exif"].get(field, {}).get("val", None)
@@ -686,7 +692,7 @@ def write_sql_result(f, ctx: Context, metadata):
             "exposure_difference": sql_number(get_exif_num_or_val(photo, "ExposureDifference")),
             "flash_color_filter_id": sql_lookup_id("photo.flash_color_filter", get_exif_val(photo, "FlashColorFilter")),
             "flash_compensation": sql_str(get_exif_val(photo, "FlashCompensation")),
-            "flash_control_mode": sql_number(get_exif_num_or_val(photo, "FlashControlMode")),
+            "flash_control_mode": sql_number(get_exif_num_or_val(photo, "FlashControlMode")),  # todo: consider making this a lookup
             "flash_exposure_compensation": sql_str(get_exif_val(photo, "FlashExposureComp")),
             "flash_focal_length": sql_number(get_exif_num_or_val(photo, "FlashFocalLength")),
             "flash_mode_id": sql_lookup_id("photo.flash_mode", get_exif_val(photo, "FlashMode")),

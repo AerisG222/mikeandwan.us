@@ -425,7 +425,7 @@ def sql_str(val):
     if not val:
         return "NULL"
 
-    val.replace("'", "''")
+    val = val.replace("'", "''")
     return f"'{val}'"
 
 def sql_number(val):
@@ -991,4 +991,5 @@ def main():
     print(f"{Colors.HEADER}Completed!{Colors.ENDC}")
 
 if __name__=="__main__":
-    main()
+    print(sql_str("Cow Foo's Birthday"))
+    #main()

@@ -991,5 +991,4 @@ def main():
     print(f"{Colors.HEADER}Completed!{Colors.ENDC}")
 
 if __name__=="__main__":
-    print(sql_str("Cow Foo's Birthday"))
-    #main()
+    main()

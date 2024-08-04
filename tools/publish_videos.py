@@ -685,13 +685,13 @@ def main():
     # note: we no longer get aws hashtree ids from storing in s3 glacier deep archive
     #       so we might as well push sooner than later so we can verify the images on
     #       the site while the backup runs
-    # print(f"{Colors.HEADER}Deploying Videos...{Colors.ENDC}")
-    # deployDuration = deploy(ctx)
+    print(f"{Colors.HEADER}Deploying Videos...{Colors.ENDC}")
+    deployDuration = deploy(ctx)
 
-    # print(f"{Colors.HEADER}Backing Up Videos...{Colors.ENDC}")
-    # backupDuration = backup(ctx)
+    print(f"{Colors.HEADER}Backing Up Videos...{Colors.ENDC}")
+    backupDuration = backup(ctx)
 
-    videos = len(glob.glob(os.path.join(ctx.categorySpec.deployCategoryRoot, "xs", "*")))
+    videos = len(glob.glob(os.path.join(ctx.categorySpec.deployCategoryRoot, "thumbnails", "*")))
     print_stats(videos, resizeDuration, deployDuration, backupDuration)
 
     print(f"{Colors.HEADER}Completed!{Colors.ENDC}")

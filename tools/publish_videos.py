@@ -79,6 +79,7 @@ class Context:
         self.categorySpec = CategorySpec(videoDir, name, year, allowedRoles, Context.dirAssetRoot)
 
 exifTags = [
+    "FileSize",
     "ImageWidth",
     "ImageHeight",
     "Rotation",
@@ -251,6 +252,7 @@ def read_exif(ctx: Context):
         etArgs.append(f"-{t}")
 
     etArgs += [
+        "-recurse",
         "-json",
         "-tab",
         "-long",
@@ -355,7 +357,7 @@ def gen_thumbnail(file: str, spec: SizeSpec):
 
     # now use imagemagick and its scaling calc to generate the thumbs
     scale_thumbnail(origjpg, jpg, spec)
-    #os.remove(origjpg)
+    os.remove(origjpg)
 
 def resize_video(srcFile: str, ctx: Context, exif):
     print(f"{Colors.OKBLUE}  - {os.path.basename(srcFile)}{Colors.ENDC}")
@@ -396,6 +398,35 @@ def fixup_rotation(exif):
             e["ImageHeight"]["val"] = w
             e["ImageWidth"]["val"] = h
 
+def read_metadata(ctx: Context, orientationCorrectedSrcExif):
+    metadata = {}
+    exif = read_exif(ctx)
+
+    for e in orientationCorrectedSrcExif:
+        file = PurePath(e["SourceFile"]).stem
+
+        if not file in metadata.keys():
+            metadata[file] = {}
+
+        metadata[file]["exif"] = e
+
+    for e in exif:
+        file = PurePath(e["SourceFile"]).stem
+        size = PurePath(e["SourceFile"]).parent.name
+
+        metadata[file][size] = e
+
+    return metadata
+
+def move_source_files(ctx: Context):
+    files = list(filter(
+        lambda x: os.path.isfile(x),
+        glob.glob(os.path.join(ctx.categorySpec.rootDir, "*"))
+    ))
+
+    for f in files:
+        shutil.move(f, ctx.categorySpec.rawDir)
+
 def process_videos(ctx: Context):
     start = time.time()
 
@@ -404,8 +435,8 @@ def process_videos(ctx: Context):
     exif = read_exif(ctx)
     fixup_rotation(exif)
     resize_videos(ctx, exif)
-    # metadata = read_metadata(ctx)
-    # move_source_files(ctx)
+    metadata = read_metadata(ctx, exif)
+    move_source_files(ctx)
     # write_sql(ctx, metadata)
 
     end = time.time()

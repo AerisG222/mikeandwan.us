@@ -8,6 +8,7 @@ import subprocess
 import sys
 import time
 from dataclasses import dataclass
+from datetime import datetime
 from itertools import repeat
 from multiprocessing import Pool
 from pathlib import PurePath
@@ -80,6 +81,7 @@ class Context:
 
 exifTags = [
     "FileSize",
+    "Duration",
     "ImageWidth",
     "ImageHeight",
     "Rotation",
@@ -427,6 +429,187 @@ def move_source_files(ctx: Context):
     for f in files:
         shutil.move(f, ctx.categorySpec.rawDir)
 
+def build_url(ctx: Context, path: str):
+    filePath = PurePath(path)
+    sizePart = filePath.parent.name
+    categoryPart = filePath.parent.parent.name
+
+    return f"/movies/{ctx.categorySpec.year}/{categoryPart}/{sizePart}/{filePath.name}"
+
+def sql_str(val):
+    if not val:
+        return "NULL"
+
+    val = val.replace("'", "''")
+    return f"'{val}'"
+
+def sql_number(val):
+    if not val:
+        return "NULL"
+
+    return val
+
+def sql_time(val):
+    if not val:
+        return "NULL"
+
+    dt = datetime.strptime(val, "%Y:%m:%d %H:%M:%S")
+
+    return f"'{dt.strftime("%Y-%m-%d %H:%M:%S%z")}'"
+
+def write_sql_header(f):
+    f.write(
+"""
+DO
+$$
+BEGIN
+"""
+    )
+
+def write_sql_footer(f):
+    f.write(
+"""
+END
+$$
+
+\\q
+"""
+    )
+
+def write_sql_category_insert(f, ctx: Context, metadata):
+    video = next(iter(metadata.values()))
+
+    f.write(
+f"""
+INSERT INTO video.category
+(
+    name,
+    year,
+    teaser_image_width,
+    teaser_image_height,
+    teaser_image_size,
+    teaser_image_path,
+    teaser_image_sq_width,
+    teaser_image_sq_height,
+    teaser_image_sq_size,
+    teaser_image_sq_path
+)
+VALUES
+(
+    {sql_str(ctx.categorySpec.name)},
+    {ctx.categorySpec.year},
+    {get_exif_num_or_val(video["thumbnails"], "ImageWidth")},
+    {get_exif_num_or_val(video["thumbnails"], "ImageHeight")},
+    {get_exif_num_or_val(video["thumbnails"], "FileSize")},
+    {sql_str(build_url(ctx, video["thumbnails"]["SourceFile"]))},
+    {get_exif_num_or_val(video["thumb_sq"], "ImageWidth")},
+    {get_exif_num_or_val(video["thumb_sq"], "ImageHeight")},
+    {get_exif_num_or_val(video["thumb_sq"], "FileSize")},
+    {sql_str(build_url(ctx, video["thumb_sq"]["SourceFile"]))}
+);
+"""
+    )
+
+def write_sql_category_update(f):
+    f.write(
+"""
+UPDATE video.category c
+   SET video_count = (SELECT COUNT(1) FROM video.video WHERE category_id = c.id),
+       create_date = (SELECT create_date FROM video.video WHERE id = (SELECT MIN(id) FROM video.video where category_id = c.id AND create_date IS NOT NULL)),
+       gps_latitude = (SELECT gps_latitude FROM video.video WHERE id = (SELECT MIN(id) FROM video.video WHERE category_id = c.id AND gps_latitude IS NOT NULL)),
+       gps_latitude_ref_id = (SELECT gps_latitude_ref_id FROM video.video WHERE id = (SELECT MIN(id) FROM video.video WHERE category_id = c.id AND gps_latitude IS NOT NULL)),
+       gps_longitude = (SELECT gps_longitude FROM video.video WHERE id = (SELECT MIN(id) FROM video.video WHERE category_id = c.id AND gps_latitude IS NOT NULL)),
+       gps_longitude_ref_id = (SELECT gps_longitude_ref_id FROM video.video WHERE id = (SELECT MIN(id) FROM video.video WHERE category_id = c.id AND gps_latitude IS NOT NULL)),
+       total_duration = (SELECT SUM(duration) FROM video.video WHERE category_id = c.id),
+       total_size_thumb = (SELECT SUM(thumb_size) FROM video.video WHERE category_id = c.id),
+       total_size_thumb_sq = (SELECT SUM(thumb_sq_size) FROM video.video WHERE category_id = c.id),
+       total_size_scaled = (SELECT SUM(scaled_size) FROM video.video WHERE category_id = c.id),
+       total_size_full = (SELECT SUM(full_size) FROM video.video WHERE category_id = c.id),
+       total_size_raw = (SELECT SUM(raw_size) FROM video.video WHERE category_id = c.id)
+ WHERE id = (SELECT currval('video.category_id_seq'));
+"""
+    )
+
+def get_exif_num(data):
+    return data.get("num", None)
+
+def get_exif_val(data):
+    return data.get("val", None)
+
+def write_sql_video_insert(f, ctx: Context, metadata):
+    for video in metadata.values():
+        items = {
+            "category_id": "(SELECT currval('video.category_id_seq'))",
+            "thumb_height": get_exif_num_or_val(video["thumbnails"], "ImageHeight"),
+            "thumb_width": get_exif_num_or_val(video["thumbnails"], "ImageWidth"),
+            "thumb_size": get_exif_num_or_val(video["thumbnails"], "FileSize"),
+            "thumb_path": sql_str(build_url(ctx, video["thumbnails"]["SourceFile"])),
+            "thumb_sq_height": get_exif_num_or_val(video["thumb_sq"], "ImageHeight"),
+            "thumb_sq_width": get_exif_num_or_val(video["thumb_sq"], "ImageWidth"),
+            "thumb_sq_size": get_exif_num_or_val(video["thumb_sq"], "FileSize"),
+            "thumb_sq_path": sql_str(build_url(ctx, video["thumb_sq"]["SourceFile"])),
+            "full_height": get_exif_num_or_val(video["full"], "ImageHeight"),
+            "full_width": get_exif_num_or_val(video["full"], "ImageWidth"),
+            "full_size": get_exif_num_or_val(video["full"], "FileSize"),
+            "full_path": sql_str(build_url(ctx, video["full"]["SourceFile"])),
+            "scaled_height": get_exif_num_or_val(video["scaled"], "ImageHeight"),
+            "scaled_width": get_exif_num_or_val(video["scaled"], "ImageWidth"),
+            "scaled_size": get_exif_num_or_val(video["scaled"], "FileSize"),
+            "scaled_path": sql_str(build_url(ctx, video["scaled"]["SourceFile"])),
+            "raw_height": get_exif_num_or_val(video["exif"], "ImageHeight"),
+            "raw_width": get_exif_num_or_val(video["exif"], "ImageWidth"),
+            "raw_size": get_exif_num_or_val(video["exif"], "FileSize"),
+            "raw_path": sql_str(build_url(ctx, video["exif"]["SourceFile"])),
+            "duration": get_exif_num(video["exif"]["Duration"]),
+            "create_date": sql_time(get_exif_val(video["exif"]["CreateDate"])),
+            "gps_latitude": sql_number(get_exif_num_or_val(video["exif"], "GPSLatitude")),
+            "gps_latitude_ref_id": sql_str(get_exif_num_or_val(video["exif"], "GPSLatitudeRef")),
+            "gps_longitude": sql_number(get_exif_num_or_val(video["exif"], "GPSLongitude")),
+            "gps_longitude_ref_id": sql_str(get_exif_num_or_val(video["exif"],"GPSLongitudeRef"))
+        }
+
+        colNames = []
+        colValues = []
+
+        for key in items.keys():
+            colNames.append(key)
+            colValues.append(str(items[key]))
+
+        f.write(f"""
+INSERT INTO video.video
+(
+    {"\n    , ".join(colNames)}
+)
+VALUES
+(
+    {"\n    , ".join(colValues)}
+);
+"""
+        )
+
+def write_sql_permissions(f, ctx: Context):
+    for r in ctx.categorySpec.allowedRoles:
+        f.write(f"""
+INSERT INTO video.category_role (category_id, role_id)
+VALUES (
+    (SELECT currval('video.category_id_seq')),
+    (SELECT id FROM maw.role WHERE name = '{r}')
+);
+"""
+        )
+
+def write_sql(ctx: Context, metadata):
+    f = open(ctx.categorySpec.sqlFile, "w")
+
+    write_sql_header(f)
+    write_sql_category_insert(f, ctx, metadata)
+    write_sql_video_insert(f, ctx, metadata)
+    write_sql_category_update(f)
+    write_sql_permissions(f, ctx)
+    write_sql_footer(f)
+
+    f.close()
+
 def process_videos(ctx: Context):
     start = time.time()
 
@@ -437,7 +620,7 @@ def process_videos(ctx: Context):
     resize_videos(ctx, exif)
     metadata = read_metadata(ctx, exif)
     move_source_files(ctx)
-    # write_sql(ctx, metadata)
+    write_sql(ctx, metadata)
 
     end = time.time()
     return end - start

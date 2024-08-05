@@ -14,11 +14,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Duende.IdentityServer" Version="7.0.5" />
-        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.0.5" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.6" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="8.0.6" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="8.0.6" />
+        <PackageReference Include="Duende.IdentityServer" Version="7.0.6" />
+        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.0.6" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="8.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="8.0.7" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.0" />
         <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="8.1.0" />
         <PackageReference Include="Dapper" Version="2.1.35" />

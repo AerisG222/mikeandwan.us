@@ -202,16 +202,16 @@ def print_stats(photoCount: int, resizeDuration: float, deployDuration: float, b
     print(f"{Colors.HEADER}Processed Files: {photoCount}{Colors.ENDC}")
 
     print(f"{Colors.OKGREEN} - Total Resize Time: {round(resizeDuration, 1)}s{Colors.ENDC}")
-    print(f"{Colors.OKGREEN} - Average Resize Time per Photo: {round(resizeDuration / photoCount, 1)}s{Colors.ENDC}")
+    print(f"{Colors.OKGREEN} - Average Resize Time per file: {round(resizeDuration / photoCount, 1)}s{Colors.ENDC}")
 
     print(f"{Colors.OKBLUE} - Total Backup Time: {round(backupDuration, 1)}s{Colors.ENDC}")
-    print(f"{Colors.OKBLUE} - Average Backup Time per Photo: {round(backupDuration / photoCount, 1)}s{Colors.ENDC}")
+    print(f"{Colors.OKBLUE} - Average Backup Time per file: {round(backupDuration / photoCount, 1)}s{Colors.ENDC}")
 
     print(f"{Colors.OKCYAN} - Total Deploy Time: {round(deployDuration, 1)}s{Colors.ENDC}")
-    print(f"{Colors.OKCYAN} - Average Deploy Time per Photo: {round(deployDuration / photoCount, 1)}s{Colors.ENDC}")
+    print(f"{Colors.OKCYAN} - Average Deploy Time per file: {round(deployDuration / photoCount, 1)}s{Colors.ENDC}")
 
     print(f"{Colors.WARNING} - Total Time: {round(totalTime, 1)}s{Colors.ENDC}")
-    print(f"{Colors.WARNING} - Average Time per Photo: {round(totalTime / photoCount, 1)}s{Colors.ENDC}")
+    print(f"{Colors.WARNING} - Average Time per file: {round(totalTime / photoCount, 1)}s{Colors.ENDC}")
 
 def move_to_local_archive(ctx: Context):
     if not os.path.isdir(ctx.categorySpec.deployYearRoot):
@@ -303,11 +303,11 @@ def transcode_video(file: str, spec: SizeSpec, videoExif):
     res = subprocess.run([
         "ffmpeg",
         "-i", file,
-        "-vf", f"scale={w}:{h}",
+        "-vf", f"scale={w}:{h},format=yuv420p",
         "-c:v", "libx264",
         "-crf", str(22),
+        "-c:a", "aac",
         "-movflags", "+faststart",
-        "-c:a", "copy",
         os.path.join(spec.subdir, dest)
     ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
 
@@ -382,9 +382,9 @@ def resize_videos(ctx: Context, exif):
         glob.glob(os.path.join(ctx.categorySpec.rootDir, "*"))
     ))
 
-    # my 16core/32thread cpu reports 32. observed optimal time was using ~12, where 8-16 were roughly
-    # same amount of time, so we div by 2 and sub two to try and leave one core avail
-    poolSize = max(2, int(len(os.sched_getaffinity(0)) / 2) - 2)
+    # ffmpeg seems pretty good about maximizing use of cpu, so we can specify a lower poolsize
+    # 2 almost fills my 16c/32t cpu, 4 maxes it out
+    poolSize = 4 #max(2, int(len(os.sched_getaffinity(0)) / 2) - 2)
 
     with Pool(poolSize) as pool:
         pool.starmap(resize_video, zip(files, repeat(ctx), repeat(exif)))

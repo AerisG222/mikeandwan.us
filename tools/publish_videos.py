@@ -178,14 +178,14 @@ def start_dev_pod(ctx: Context):
     time.sleep(3)
 
 def clean_prior_attempts(ctx: Context):
-    if(not os.path.isdir(ctx.categorySpec.rawDir)):
+    if not os.path.isdir(ctx.categorySpec.rawDir):
         return
 
     for f in glob.glob(os.path.join(ctx.categorySpec.rawDir, "*")):
         shutil.move(f, ctx.categorySpec.rootDir)
 
     for size in ctx.categorySpec.sizeSpecs:
-        if(os.path.isdir(size.subdir)):
+        if os.path.isdir(size.subdir):
             shutil.rmtree(size.subdir)
 
     if os.path.isfile(ctx.categorySpec.sqlFile):
@@ -193,7 +193,7 @@ def clean_prior_attempts(ctx: Context):
 
 def prepare_size_dirs(ctx: Context):
     for size in ctx.categorySpec.sizeSpecs:
-        if(not os.path.isdir(size.subdir)):
+        if not os.path.isdir(size.subdir):
             os.mkdir(size.subdir)
 
 def print_stats(photoCount: int, resizeDuration: float, deployDuration: float, backupDuration: float):
@@ -214,7 +214,7 @@ def print_stats(photoCount: int, resizeDuration: float, deployDuration: float, b
     print(f"{Colors.WARNING} - Average Time per Photo: {round(totalTime / photoCount, 1)}s{Colors.ENDC}")
 
 def move_to_local_archive(ctx: Context):
-    if(not os.path.isdir(ctx.categorySpec.deployYearRoot)):
+    if not os.path.isdir(ctx.categorySpec.deployYearRoot):
         os.mkdir(ctx.categorySpec.deployYearRoot)
 
     shutil.move(ctx.categorySpec.rootDir, ctx.categorySpec.deployCategoryRoot)
@@ -311,7 +311,7 @@ def transcode_video(file: str, spec: SizeSpec, videoExif):
         os.path.join(spec.subdir, dest)
     ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
 
-    if(res.returncode != 0):
+    if res.returncode != 0:
         print("** ERROR - transcode_video **")
 
 def scale_thumbnail(tifPath: str, jpgPath: str, spec: SizeSpec):
@@ -338,7 +338,7 @@ def scale_thumbnail(tifPath: str, jpgPath: str, spec: SizeSpec):
 
     res = subprocess.run(magickArgs, stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
 
-    if(res.returncode != 0):
+    if res.returncode != 0:
         print("** ERROR - scale_thumbnail **")
 
 def gen_thumbnail(file: str, spec: SizeSpec):
@@ -354,7 +354,7 @@ def gen_thumbnail(file: str, spec: SizeSpec):
         origjpg
     ], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
 
-    if(res.returncode != 0):
+    if res.returncode != 0:
         print("** ERROR - gen_thumbnail **")
 
     # now use imagemagick and its scaling calc to generate the thumbs
@@ -610,6 +610,47 @@ def write_sql(ctx: Context, metadata):
 
     f.close()
 
+def build_remote_deploy_script(ctx: Context):
+    return f"""
+echo \"These commands will be run on: $( uname -n )\"
+
+if [ ! -d '{ctx.categorySpec.deployYearRoot}' ]; then
+    sudo mkdir '{ctx.categorySpec.deployYearRoot}'
+fi
+
+sudo mv '{os.path.basename(ctx.categorySpec.deployCategoryRoot)}' '{ctx.categorySpec.deployYearRoot}'
+sudo chown -R root:root '{ctx.categorySpec.deployCategoryRoot}'
+sudo chmod -R go-w '{ctx.categorySpec.deployCategoryRoot}'
+sudo restorecon -R '{ctx.categorySpec.deployCategoryRoot}'
+
+podman run -it --rm \
+    --pod '{ctx.prod.pod}' \
+    --env-file '{ctx.prod.pgEnvFile}' \
+    --volume {ctx.categorySpec.deployCategoryRoot}:/sql:ro \
+    --security-opt label=disable \
+    {ctx.postgresImage} \
+        psql \
+            -h localhost \
+            -U postgres \
+            -d maw_website \
+            -f '/sql/{os.path.basename(ctx.categorySpec.sqlFile)}'
+
+sudo rm '{os.path.join(ctx.categorySpec.deployCategoryRoot, os.path.basename(ctx.categorySpec.sqlFile))}'
+"""
+
+def execute_remote_deploy(ctx: Context):
+    script = build_remote_deploy_script(ctx)
+
+    res = subprocess.run([
+        "ssh",
+        "-t",
+        f"{ctx.sshUsername}@{ctx.sshRemoteHost}",
+        script
+    ])
+
+    if res.returncode != 0:
+        print("** Error: execute_remote_deploy **")
+
 def process_videos(ctx: Context):
     start = time.time()
 
@@ -635,7 +676,7 @@ def deploy(ctx: Context):
 
     # remote deploy
     copy_to_remote(ctx)
-    # execute_remote_deploy(ctx)
+    execute_remote_deploy(ctx)
 
     end = time.time()
     return end - start
@@ -658,15 +699,15 @@ def backup(ctx: Context):
     return end - start
 
 def build_context():
-    # dir = prompt_directory("Please enter the path to the videos: ")
-    # name = prompt_string_required("Please enter the name of the category: ")
-    # year = prompt_int("Please enter the category year: ")
-    # roles = prompt_string_list("Please enter role names that should have access to category (default: 'admin friend'): ", ["admin", "friend"])
+    dir = prompt_directory("Please enter the path to the videos: ")
+    name = prompt_string_required("Please enter the name of the category: ")
+    year = prompt_int("Please enter the category year: ")
+    roles = prompt_string_list("Please enter role names that should have access to category (default: 'admin friend'): ", ["admin", "friend"])
 
-    dir = "/home/mmorano/Desktop/testing"
-    name = "Test"
-    year = 2024
-    roles = ["admin", "friend"]
+    # dir = "/home/mmorano/Desktop/testing"
+    # name = "Test"
+    # year = 2024
+    # roles = ["admin", "friend"]
 
     return Context(dir, name, year, roles)
 
@@ -679,12 +720,9 @@ def main():
 
     doContinue = prompt_string_required("Would you like to backup and deploy at this time? [y|N]: ")
 
-    if(doContinue != "y"):
+    if doContinue != "y":
         sys.exit()
 
-    # note: we no longer get aws hashtree ids from storing in s3 glacier deep archive
-    #       so we might as well push sooner than later so we can verify the images on
-    #       the site while the backup runs
     print(f"{Colors.HEADER}Deploying Videos...{Colors.ENDC}")
     deployDuration = deploy(ctx)
 

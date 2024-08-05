@@ -2,14 +2,27 @@
 # https://github.com/dotnet/dotnet-docker/blob/master/samples/aspnetapp/Dockerfile.alpine-x64
 FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine-amd64 AS build
 
+
+
 RUN apk --no-cache add \
     bash \
     findutils \
     g++ \
     make \
     nodejs \
+    openssl \
     rsync \
     sed
+
+# arrgh!
+# https://docs.duendesoftware.com/identityserver/v7/overview/security/#package-signing
+# https://github.com/DuendeSoftware/Support/issues/1352
+# once resolved - also remove openssl above
+RUN wget http://crt.sectigo.com/SectigoPublicCodeSigningRootR46.p7c -O sectigo.p7c && \
+    openssl pkcs7 -inform DER -outform PEM -in sectigo.p7c -print_certs -out sectigo.pem && \
+    [[ "$(openssl x509 -in sectigo.pem -fingerprint -sha1 -noout)" = 'sha1 Fingerprint=CC:BB:F9:E1:48:5A:F6:3C:E4:7A:BF:8E:9E:64:8C:25:04:FC:31:9D' ]] && \
+    cat sectigo.pem >> /usr/share/dotnet/sdk/8.0.303/trustedroots/codesignctl.pem && \
+    rm -v sectigo.p7c sectigo.pem
 
 RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
 

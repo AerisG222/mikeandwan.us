@@ -288,14 +288,14 @@ def prompt_string_list(prompt: str, default: list):
         return default
 
 def clean_prior_attempts(ctx: Context):
-    if(not os.path.isdir(ctx.categorySpec.srcDir)):
+    if not os.path.isdir(ctx.categorySpec.srcDir):
         return
 
     for f in glob.glob(os.path.join(ctx.categorySpec.srcDir, "*")):
         shutil.move(f, ctx.categorySpec.rootDir)
 
     for size in ctx.categorySpec.sizeSpecs:
-        if(os.path.isdir(size.subdir)):
+        if os.path.isdir(size.subdir):
             shutil.rmtree(size.subdir)
 
     if os.path.isfile(ctx.categorySpec.sqlFile):
@@ -303,7 +303,7 @@ def clean_prior_attempts(ctx: Context):
 
 def prepare_size_dirs(ctx: Context):
     for size in ctx.categorySpec.sizeSpecs:
-        if(not os.path.isdir(size.subdir)):
+        if not os.path.isdir(size.subdir):
             os.mkdir(size.subdir)
 
 def correct_intermediate_filenames(ctx: Context):
@@ -815,7 +815,7 @@ def zip_pp3s(ctx: Context):
     subprocess.run(tarArgs, cwd = ctx.categorySpec.srcDir)
 
 def move_to_local_archive(ctx: Context):
-    if(not os.path.isdir(ctx.categorySpec.deployYearRoot)):
+    if not os.path.isdir(ctx.categorySpec.deployYearRoot):
         os.mkdir(ctx.categorySpec.deployYearRoot)
 
     shutil.move(ctx.categorySpec.rootDir, ctx.categorySpec.deployCategoryRoot)
@@ -884,7 +884,8 @@ def execute_remote_deploy(ctx: Context):
         script
     ])
 
-    print(res.returncode)
+    if res.returncode != 0:
+        print("** Error: execute_remote_deploy **")
 
 def process_photos(ctx: Context):
     start = time.time()
@@ -973,7 +974,7 @@ def main():
 
     doContinue = prompt_string_required("Would you like to backup and deploy at this time? [y|N]: ")
 
-    if(doContinue != "y"):
+    if doContinue != "y":
         sys.exit()
 
     # note: we no longer get aws hashtree ids from storing in s3 glacier deep archive

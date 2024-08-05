@@ -4,8 +4,6 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        Console.WriteLine("starting: mawauth");
-
         CreateHostBuilder(args)
             .Build()
             .Run();

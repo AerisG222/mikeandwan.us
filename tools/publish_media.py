@@ -171,6 +171,8 @@ def build_size_specs(dir):
 
         # new sizes (2024 - 16:9)
         # https://en.wikipedia.org/wiki/16%3A9_aspect_ratio
+        SizeSpec("QQVGA Crop (160x120)", os.path.join(dir, "qqvga"),    False, "160x120", "160x120+0+0"),
+        SizeSpec("QVGA Crop (320x240)",  os.path.join(dir, "qvga"),     False, "320x240", "320x240+0+0"),
         SizeSpec("NHD (640x360)",        os.path.join(dir, "nhd"),      False, "640x360"),
         SizeSpec("HD (1280x720)",        os.path.join(dir, "hd"),       False, "1280x720"),
         SizeSpec("Full HD (1920x1080)",  os.path.join(dir, "full-hd"),  False, "1920x1080"),

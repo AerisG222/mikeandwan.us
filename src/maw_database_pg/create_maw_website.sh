@@ -50,6 +50,9 @@ run_psql_script "tables/media.media.sql"
 header "seed"
 run_psql_script "seed/media.type.sql"
 
+header "functions"
+run_psql_script "functions/uuid_generate_v7.sql"
+
 header "migrations"
 
 header "completed ${DBNAME}"

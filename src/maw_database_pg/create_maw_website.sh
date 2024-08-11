@@ -44,6 +44,7 @@ run_psql_script "schemas/media.sql"
 header "tables"
 run_psql_script "tables/media.type.sql"
 run_psql_script "tables/media.category.sql"
+run_psql_script "tables/media.category_role.sql"
 run_psql_script "tables/media.media.sql"
 
 header "seed"

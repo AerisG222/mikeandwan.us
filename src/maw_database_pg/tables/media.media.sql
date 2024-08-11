@@ -17,10 +17,10 @@ CREATE TABLE IF NOT EXISTS media.media (
     qvg_bytes SMALLINT,
 
     -- nhd (640x360)
-    qvg_height SMALLINT,
-    qvg_width SMALLINT,
-    qvg_path TEXT,
-    qvg_bytes SMALLINT,
+    nhd_height SMALLINT,
+    nhd_width SMALLINT,
+    nhd_path TEXT,
+    nhd_bytes SMALLINT,
 
     -- hd (1280x720)
     hd_height SMALLINT,
@@ -41,22 +41,22 @@ CREATE TABLE IF NOT EXISTS media.media (
     qhd_bytes SMALLINT,
 
     -- 4k (3840x2160)
-    4k_height SMALLINT,
-    4k_width SMALLINT,
-    4k_path TEXT,
-    4k_bytes SMALLINT,
+    k4_height SMALLINT,
+    k4_width SMALLINT,
+    k4_path TEXT,
+    k4_bytes SMALLINT,
 
     -- 5k (5120x2880)
-    5k_height SMALLINT,
-    5k_width SMALLINT,
-    5k_path TEXT,
-    5k_bytes SMALLINT,
+    k5_height SMALLINT,
+    k5_width SMALLINT,
+    k5_path TEXT,
+    k5_bytes SMALLINT,
 
     -- 8k (5120x2880)
-    8k_height SMALLINT,
-    8k_width SMALLINT,
-    8k_path TEXT,
-    8k_bytes SMALLINT,
+    k8_height SMALLINT,
+    k8_width SMALLINT,
+    k8_path TEXT,
+    k8_bytes SMALLINT,
 
     -- src
     src_height SMALLINT NOT NULL,

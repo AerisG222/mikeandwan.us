@@ -26,8 +26,8 @@ function run_psql_script() {
     fi
 }
 
-header "database ${DBNAME}"
-database/create.sh "${DBNAME}"
+# header "database ${DBNAME}"
+# database/create.sh "${DBNAME}"
 
 header "roles"
 run_psql_script "roles/website.sql"

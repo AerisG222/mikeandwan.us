@@ -29,6 +29,10 @@ function run_psql_script() {
 # header "database ${DBNAME}"
 # database/create.sh "${DBNAME}"
 
+# pgcrypto required for uuidv7 func below
+header "extensions"
+run_psql_script "extensions/pgcrypto.sql"
+
 header "roles"
 run_psql_script "roles/website.sql"
 

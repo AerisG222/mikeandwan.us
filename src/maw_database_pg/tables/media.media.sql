@@ -72,6 +72,10 @@ CREATE TABLE IF NOT EXISTS media.media (
     -- metadata
     exif jsonb,
 
+    -- legacy fields to support migrations / updates - to be removed in future
+    legacy_id INTEGER NOT NULL,
+    legacy_type CHAR(1) NOT NULL,  -- p = photo, v = video
+
     CONSTRAINT pk_media_media PRIMARY KEY (id),
 
     CONSTRAINT fk_media_media_category FOREIGN KEY (category_id) REFERENCES media.category(id),

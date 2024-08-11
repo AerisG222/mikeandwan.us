@@ -18,6 +18,10 @@ CREATE TABLE IF NOT EXISTS media.category (
     -- add video / mjpeg teasers?
     -- add tags?
 
+    -- legacy fields to support migrations / updates - to be removed in future
+    legacy_id SMALLINT NOT NULL,
+    legacy_type CHAR(1) NOT NULL,  -- p = photo, v = video
+
     CONSTRAINT pk_media_category PRIMARY KEY (id)
 );
 

@@ -46,6 +46,8 @@ run_psql_script "schemas/maw.sql"
 run_psql_script "schemas/media.sql"
 
 header "tables"
+run_psql_script "tables/temp_cleanup.sql"
+
 run_psql_script "tables/media.type.sql"
 run_psql_script "tables/media.category.sql"
 run_psql_script "tables/media.category_role.sql"
@@ -58,5 +60,6 @@ header "functions"
 run_psql_script "functions/uuid_generate_v7.sql"
 
 header "migrations"
+#run_psql_script "tables/media.category.sql"
 
 header "completed ${DBNAME}"

@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS media.category (
     teaser_qvg_bytes SMALLINT NOT NULL,
 
     -- add video / mjpeg teasers?
+    -- add tags?
 
     CONSTRAINT pk_media_category PRIMARY KEY (id)
 );

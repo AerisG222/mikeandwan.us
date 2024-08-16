@@ -52,6 +52,7 @@ header "temp cleanup  ** REMOVE WHEN FINAL **"
 run_psql_script "tables/temp_cleanup.sql"
 
 header "pre-migration"
+run_psql_script "_migrations/2024/pre_create/blog.drop_functions.sql"
 run_psql_script "_migrations/2024/pre_create/blog.drop_fks.sql"
 run_psql_script "_migrations/2024/pre_create/blog.blog.sql"
 run_psql_script "_migrations/2024/pre_create/blog.post.sql"
@@ -73,7 +74,9 @@ header "seed"
 run_psql_script "seed/media.type.sql"
 
 header "functions"
-# ...
+run_psql_script "functions/blog.add_post.sql"
+run_psql_script "functions/blog.get_blogs.sql"
+run_psql_script "functions/blog.get_posts.sql"
 
 header "migrations"
 #run_psql_script "tables/media.category.sql"

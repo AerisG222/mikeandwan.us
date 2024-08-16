@@ -1,0 +1,3 @@
+DROP FUNCTION IF EXISTS blog.add_post;
+DROP FUNCTION IF EXISTS blog.get_blogs;
+DROP FUNCTION IF EXISTS blog.get_posts;

@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS media.type (
-    id SMALLINT NOT NULL,
+    id UUID NOT NULL,
     code VARCHAR(2) NOT NULL,
     name TEXT NOT NULL,
 

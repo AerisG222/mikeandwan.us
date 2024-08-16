@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS media.category (
-    id UUID,
+    id UUID NOT NULL,
     published TIMESTAMP NOT NULL,
     name TEXT NOT NULL,
 

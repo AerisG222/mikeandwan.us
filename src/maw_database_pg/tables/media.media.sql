@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS media.media (
-    id UUID,
+    id UUID NOT NULL,
     category_id UUID NOT NULL,
     created TIMESTAMP NOT NULL,
-    type_id SMALLINT NOT NULL,
+    type_id UUID NOT NULL,
 
     -- qqvg (160x120)
     qqvg_height SMALLINT NOT NULL,

@@ -45,6 +45,9 @@ run_psql_script "schemas/blog.sql"
 run_psql_script "schemas/maw.sql"
 run_psql_script "schemas/media.sql"
 
+header "common functions"
+run_psql_script "functions/uuid_generate_v7.sql"
+
 header "tables"
 run_psql_script "tables/temp_cleanup.sql"
 
@@ -57,7 +60,7 @@ header "seed"
 run_psql_script "seed/media.type.sql"
 
 header "functions"
-run_psql_script "functions/uuid_generate_v7.sql"
+# ...
 
 header "migrations"
 #run_psql_script "tables/media.category.sql"

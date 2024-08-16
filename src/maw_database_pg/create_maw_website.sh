@@ -48,13 +48,26 @@ run_psql_script "schemas/media.sql"
 header "common functions"
 run_psql_script "functions/uuid_generate_v7.sql"
 
-header "tables"
+header "temp cleanup  ** REMOVE WHEN FINAL **"
 run_psql_script "tables/temp_cleanup.sql"
 
+header "pre-migration"
+run_psql_script "_migrations/2024/pre_create/blog.drop_fks.sql"
+run_psql_script "_migrations/2024/pre_create/blog.blog.sql"
+run_psql_script "_migrations/2024/pre_create/blog.post.sql"
+
+header "tables"
+run_psql_script "tables/blog.blog.sql"
+run_psql_script "tables/blog.post.sql"
 run_psql_script "tables/media.type.sql"
 run_psql_script "tables/media.category.sql"
 run_psql_script "tables/media.category_role.sql"
 run_psql_script "tables/media.media.sql"
+
+header "post-migration"
+run_psql_script "_migrations/2024/post_create/blog.blog.sql"
+run_psql_script "_migrations/2024/post_create/blog.post.sql"
+run_psql_script "_migrations/2024/post_create/blog.drop_old.sql"
 
 header "seed"
 run_psql_script "seed/media.type.sql"

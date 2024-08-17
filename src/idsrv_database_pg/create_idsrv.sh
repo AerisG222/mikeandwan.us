@@ -49,7 +49,8 @@ header "pre-migration"
 #...
 
 header "tables"
-#...
+run_psql_script "tables/idsrv.persisted_grant.sql"
+run_psql_script "tables/idsrv.signing_key.sql"
 
 header "post-migration"
 #...

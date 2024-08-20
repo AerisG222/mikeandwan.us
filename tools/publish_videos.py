@@ -440,7 +440,7 @@ def sql_str(val):
     if not val:
         return "NULL"
 
-    val = val.replace("'", "''")
+    val = str(val).replace("'", "''")
     return f"'{val}'"
 
 def sql_number(val):

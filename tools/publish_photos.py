@@ -812,7 +812,8 @@ def zip_pp3s(ctx: Context):
 
     tarArgs += pp3Files
 
-    subprocess.run(tarArgs, cwd = ctx.categorySpec.srcDir)
+    if len(pp3Files) > 0:
+        subprocess.run(tarArgs, cwd = ctx.categorySpec.srcDir)
 
 def move_to_local_archive(ctx: Context):
     if not os.path.isdir(ctx.categorySpec.deployYearRoot):

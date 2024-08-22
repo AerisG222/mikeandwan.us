@@ -453,9 +453,12 @@ def sql_time(val):
     if not val:
         return "NULL"
 
-    dt = datetime.strptime(val, "%Y:%m:%d %H:%M:%S")
+    try:
+        dt = datetime.strptime(val, "%Y:%m:%d %H:%M:%S")
 
-    return f"'{dt.strftime("%Y-%m-%d %H:%M:%S%z")}'"
+        return f"'{dt.strftime("%Y-%m-%d %H:%M:%S%z")}'"
+    except:
+        return "NULL"
 
 def write_sql_header(f):
     f.write(

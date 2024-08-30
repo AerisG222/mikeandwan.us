@@ -103,7 +103,10 @@ public class Config
                 RequireClientSecret = false,
                 AllowOfflineAccess = true,
                 RedirectUris = { "us.mikeandwan.photos:/signin-oidc" },
-                RefreshTokenUsage = TokenUsage.ReUse,
+                AbsoluteRefreshTokenLifetime = 0,
+                RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                RefreshTokenExpiration = TokenExpiration.Sliding,
+                SlidingRefreshTokenLifetime = (int) TimeSpan.FromDays(10).TotalSeconds,
                 AllowedScopes = new List<string>
                 {
                     IdentityServerConstants.StandardScopes.Email,
@@ -116,10 +119,9 @@ public class Config
 
                     // identity resources
                     JwtClaimTypes.Role
-                }
-                // IdentityTokenLifetime = 5,
-                // AccessTokenLifetime = 5,
-                // AbsoluteRefreshTokenLifetime = 20
+                },
+                //,IdentityTokenLifetime = 10,
+                //AccessTokenLifetime = 10,
             },
             new Client
             {

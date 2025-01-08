@@ -165,6 +165,8 @@ def build_size_specs(dir):
         SizeSpec("Thumbnail Fixed", os.path.join(dir, "xs_sq"), False, "160x120", "160x120+0+0"),
         SizeSpec("Small",           os.path.join(dir, "sm"),    False, "640x480"),
         SizeSpec("Medium",          os.path.join(dir, "md"),    False, "1024x768"),
+        SizeSpec("2k",              os.path.join(dir, "2k"),    False, "2560x1440"),
+        SizeSpec("4k",              os.path.join(dir, "4k"),    False, "3840x2160"),
         SizeSpec("Large",           os.path.join(dir, "lg"),    False)
     ]
 

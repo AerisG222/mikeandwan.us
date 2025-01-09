@@ -847,6 +847,8 @@ def copy_to_remote(ctx: Context):
         "rsync",
         "-ah",
         "--exclude", "*/src*",
+        "--exclude", "*/2k*",
+        "--exclude", "*/4k*",
         "--exclude", "*.dng",
         ctx.categorySpec.deployCategoryRoot,
         f"{ctx.sshUsername}@{ctx.sshRemoteHost}:~/"

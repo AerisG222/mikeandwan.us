@@ -58,25 +58,28 @@ class CategorySpec:
         self.deployCategorySrcDir = os.path.join(assetRoot, str(year), os.path.basename(photoDir), "src")
         self.awsBackupRoot = f"s3://mikeandwan-us-photos/{year}/{PurePath(photoDir).name}"
 
-class Context:
+class LocalContext:
+    dirAssetRoot = "/data/www/website_assets/images"
+    postgresImage = "docker.io/postgres:16-alpine"
+    awsProfile = "mawpower"
+    pod = "dev-maw-pod"
+    pgEnvFile = "/home/mmorano/maw_dev/podman-env/maw-postgres.env"
+    systemdService = "pod-dev-maw-pod"
+
+    def __init__(self, photoDir, name, year, allowedRoles):
+        self.categorySpec = CategorySpec(photoDir, name, year, allowedRoles, LocalContext.dirAssetRoot)
+
+class RemoteContext:
     sshRemoteHost = "tifa"
     sshUsername = "svc_www_maw"
     dirAssetRoot = "/srv/www/website_assets/images"
     postgresImage = "docker.io/postgres:16-alpine"
-    awsProfile = "mawpower"
-    dev = EnvContext(
-        "dev-maw-pod",
-        "/home/mmorano/maw_dev/podman-env/maw-postgres.env",
-        "pod-dev-maw-pod"
-    )
-    prod = EnvContext(
-        "prod-maw-pod",
-        "/home/svc_www_maw/maw_prod/podman-env/maw-postgres.env",
-        "pod-prod-maw-pod"
-    )
+    pod = "prod-maw-pod"
+    pgEnvFile = "/home/svc_www_maw/maw_prod/podman-env/maw-postgres.env"
+    systemdService = "pod-prod-maw-pod"
 
     def __init__(self, photoDir, name, year, allowedRoles):
-        self.categorySpec = CategorySpec(photoDir, name, year, allowedRoles, Context.dirAssetRoot)
+        self.categorySpec = CategorySpec(photoDir, name, year, allowedRoles, RemoteContext.dirAssetRoot)
 
 exifTags = [
     # exif
@@ -213,7 +216,7 @@ def finalize_image(file: str, spec: SizeSpec):
 
     subprocess.run(magickArgs, stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
 
-def resize_photo(srcFile: str, ctx: Context):
+def resize_photo(srcFile: str, ctx: LocalContext):
     print(f"{Colors.OKBLUE}  - {os.path.basename(srcFile)}{Colors.ENDC}")
 
     if is_raw(srcFile):
@@ -229,7 +232,7 @@ def resize_photo(srcFile: str, ctx: Context):
     if PurePath(srcFile).suffix == ".tif":
         os.remove(srcFile)
 
-def resize_photos(ctx: Context):
+def resize_photos(ctx: LocalContext):
     imageFiles = list(filter(
         lambda x: os.path.isfile(x),
         glob.glob(os.path.join(ctx.categorySpec.rootDir, "*[!.pp3]"))
@@ -242,7 +245,7 @@ def resize_photos(ctx: Context):
     with Pool(poolSize) as pool:
         pool.starmap(resize_photo, zip(imageFiles, repeat(ctx)))
 
-def verify_destination_does_not_exist(ctx: Context):
+def verify_destination_does_not_exist(ctx: LocalContext):
     if os.path.isdir(ctx.categorySpec.deployCategoryRoot):
         print(f"{Colors.WARNING}Destination is already taken, please ensure unique category names!{Colors.ENDC}")
         sys.exit()
@@ -289,7 +292,7 @@ def prompt_string_list(prompt: str, default: list):
     else:
         return default
 
-def clean_prior_attempts(ctx: Context):
+def clean_prior_attempts(ctx: LocalContext):
     if not os.path.isdir(ctx.categorySpec.srcDir):
         return
 
@@ -303,16 +306,16 @@ def clean_prior_attempts(ctx: Context):
     if os.path.isfile(ctx.categorySpec.sqlFile):
         os.remove(ctx.categorySpec.sqlFile)
 
-def prepare_size_dirs(ctx: Context):
+def prepare_size_dirs(ctx: LocalContext):
     for size in ctx.categorySpec.sizeSpecs:
         if not os.path.isdir(size.subdir):
             os.mkdir(size.subdir)
 
-def correct_intermediate_filenames(ctx: Context):
+def correct_intermediate_filenames(ctx: LocalContext):
     for f in glob.glob(os.path.join(ctx.categorySpec.rootDir, "*-NEF.*")):
         os.rename(f, f.replace("-NEF", ""))
 
-def move_source_files_with_dng(ctx: Context):
+def move_source_files_with_dng(ctx: LocalContext):
     dngs = glob.glob(os.path.join(ctx.categorySpec.rootDir, "*.dng"))
     stemmedDngs = list(map(lambda x: PurePath(x).stem, dngs))
     nonDngs = list(filter(
@@ -324,7 +327,7 @@ def move_source_files_with_dng(ctx: Context):
         if PurePath(f).stem in stemmedDngs:
             shutil.move(f, ctx.categorySpec.srcDir)
 
-def move_non_dng_source_files(ctx: Context):
+def move_non_dng_source_files(ctx: LocalContext):
     nonDngs = list(filter(
         lambda x: os.path.isfile(x) and PurePath(x).suffix != ".dng",
         glob.glob(os.path.join(ctx.categorySpec.rootDir, "*"))
@@ -333,7 +336,7 @@ def move_non_dng_source_files(ctx: Context):
     for f in nonDngs:
         shutil.move(f, ctx.categorySpec.srcDir)
 
-def read_exif(ctx: Context):
+def read_exif(ctx: LocalContext):
     etArgs = [
         "exiftool"
     ]
@@ -352,7 +355,7 @@ def read_exif(ctx: Context):
 
     return json.loads(result.stdout)
 
-def read_filesystem_info(ctx: Context):
+def read_filesystem_info(ctx: LocalContext):
     sizes = {}
     result = subprocess.run(["du", "-ab", ctx.categorySpec.rootDir], capture_output=True, text=True)
 
@@ -363,7 +366,7 @@ def read_filesystem_info(ctx: Context):
 
     return sizes
 
-def read_image_dimensions(ctx: Context):
+def read_image_dimensions(ctx: LocalContext):
     files = list(filter(
         lambda x: os.path.isfile(x),
         glob.glob(os.path.join(ctx.categorySpec.rootDir, "*/*[!.pp3]"))
@@ -409,14 +412,14 @@ def merge_metadata(exif, fileSizes, dimensions):
 
     return metadata
 
-def read_metadata(ctx: Context):
+def read_metadata(ctx: LocalContext):
     exif = read_exif(ctx)
     fs = read_filesystem_info(ctx)
     dims = read_image_dimensions(ctx)
 
     return merge_metadata(exif, fs, dims)
 
-def build_url(ctx: Context, path: str):
+def build_url(ctx: LocalContext, path: str):
     filePath = PurePath(path)
     sizePart = filePath.parent.name
     categoryPart = filePath.parent.parent.name
@@ -466,7 +469,7 @@ $$
 """
     )
 
-def write_sql_category_create(f, ctx: Context, metadata):
+def write_sql_category_create(f, ctx: LocalContext, metadata):
     photo = next(iter(metadata.values()))
 
     f.write(
@@ -621,7 +624,7 @@ def get_exif_num_or_val(photo, field: str):
 def get_exif_val(photo, field: str):
     return photo["exif"].get(field, {}).get("val", None)
 
-def write_sql_result(f, ctx: Context, metadata):
+def write_sql_result(f, ctx: LocalContext, metadata):
     for photo in metadata.values():
         items = {
             "category_id": "(SELECT currval('photo.category_id_seq'))",
@@ -750,7 +753,7 @@ VALUES
 """
         )
 
-def write_sql_permissions(f, ctx: Context):
+def write_sql_permissions(f, ctx: LocalContext):
     for r in ctx.categorySpec.allowedRoles:
         f.write(f"""
 INSERT INTO photo.category_role (category_id, role_id)
@@ -761,7 +764,7 @@ VALUES (
 """
         )
 
-def write_sql(ctx: Context, metadata):
+def write_sql(ctx: LocalContext, metadata):
     f = open(ctx.categorySpec.sqlFile, "w")
 
     write_sql_header(f)
@@ -774,7 +777,7 @@ def write_sql(ctx: Context, metadata):
 
     f.close()
 
-def ensure_aws_is_logged_in(ctx: Context):
+def ensure_aws_is_logged_in(ctx: LocalContext):
     result = subprocess.run([
         "aws",
         "sts",
@@ -792,18 +795,18 @@ def ensure_aws_is_logged_in(ctx: Context):
             "--profile", ctx.awsProfile
         ])
 
-def start_dev_pod(ctx: Context):
+def start_dev_pod(ctx: LocalContext):
     subprocess.run([
         "systemctl",
         "--user",
         "start",
-        ctx.dev.systemdService
+        ctx.systemdService
     ])
 
     # allow services to start
     time.sleep(3)
 
-def zip_pp3s(ctx: Context):
+def zip_pp3s(ctx: LocalContext):
     pp3Files = []
     tarArgs = [
         "tar",
@@ -820,18 +823,18 @@ def zip_pp3s(ctx: Context):
     if len(pp3Files) > 0:
         subprocess.run(tarArgs, cwd = ctx.categorySpec.srcDir)
 
-def move_to_local_archive(ctx: Context):
+def move_to_local_archive(ctx: LocalContext):
     if not os.path.isdir(ctx.categorySpec.deployYearRoot):
         os.mkdir(ctx.categorySpec.deployYearRoot)
 
     shutil.move(ctx.categorySpec.rootDir, ctx.categorySpec.deployCategoryRoot)
 
-def apply_sql_to_local(ctx: Context):
+def apply_sql_to_local(ctx: LocalContext):
     subprocess.run([
         "podman", "run", "-it", "--rm",
         "--pull", "newer",
-        "--pod", ctx.dev.pod,
-        "--env-file", ctx.dev.pgEnvFile,
+        "--pod", ctx.pod,
+        "--env-file", ctx.pgEnvFile,
         "--volume", f"{ctx.categorySpec.deployCategoryRoot}:/output:ro",
         "--security-opt", "label=disable",
         ctx.postgresImage,
@@ -842,7 +845,7 @@ def apply_sql_to_local(ctx: Context):
                 "-f", f"/output/{os.path.basename(ctx.categorySpec.sqlFile)}"
     ])
 
-def copy_to_remote(ctx: Context):
+def copy_to_remote(localCtx: LocalContext, remoteCtx: RemoteContext):
     subprocess.run([
         "rsync",
         "-ah",
@@ -850,11 +853,11 @@ def copy_to_remote(ctx: Context):
         "--exclude", "*/2k*",
         "--exclude", "*/4k*",
         "--exclude", "*.dng",
-        ctx.categorySpec.deployCategoryRoot,
-        f"{ctx.sshUsername}@{ctx.sshRemoteHost}:~/"
+        localCtx.categorySpec.deployCategoryRoot,
+        f"{remoteCtx.sshUsername}@{remoteCtx.sshRemoteHost}:~/"
     ])
 
-def build_remote_deploy_script(ctx: Context):
+def build_remote_deploy_script(ctx: RemoteContext):
     return f"""
 echo \"These commands will be run on: $( uname -n )\"
 
@@ -868,8 +871,8 @@ sudo chmod -R go-w '{ctx.categorySpec.deployCategoryRoot}'
 sudo restorecon -R '{ctx.categorySpec.deployCategoryRoot}'
 
 podman run -it --rm \
-    --pod '{ctx.prod.pod}' \
-    --env-file '{ctx.prod.pgEnvFile}' \
+    --pod '{ctx.pod}' \
+    --env-file '{ctx.pgEnvFile}' \
     --volume {ctx.categorySpec.deployCategoryRoot}:/sql:ro \
     --security-opt label=disable \
     {ctx.postgresImage} \
@@ -882,7 +885,7 @@ podman run -it --rm \
 sudo rm '{os.path.join(ctx.categorySpec.deployCategoryRoot, os.path.basename(ctx.categorySpec.sqlFile))}'
 """
 
-def execute_remote_deploy(ctx: Context):
+def execute_remote_deploy(ctx: RemoteContext):
     script = build_remote_deploy_script(ctx)
 
     res = subprocess.run([
@@ -895,7 +898,7 @@ def execute_remote_deploy(ctx: Context):
     if res.returncode != 0:
         print("** Error: execute_remote_deploy **")
 
-def process_photos(ctx: Context):
+def process_photos(ctx: LocalContext):
     start = time.time()
 
     clean_prior_attempts(ctx)
@@ -910,23 +913,23 @@ def process_photos(ctx: Context):
     end = time.time()
     return end - start
 
-def deploy(ctx: Context):
+def deploy(localCtx: LocalContext, remoteCtx: RemoteContext):
     start = time.time()
 
     # local deploy
-    start_dev_pod(ctx)
-    zip_pp3s(ctx)
-    move_to_local_archive(ctx)
-    apply_sql_to_local(ctx)
+    start_dev_pod(localCtx)
+    zip_pp3s(localCtx)
+    move_to_local_archive(localCtx)
+    apply_sql_to_local(localCtx)
 
     # remote deploy
-    copy_to_remote(ctx)
-    execute_remote_deploy(ctx)
+    copy_to_remote(localCtx, remoteCtx)
+    execute_remote_deploy(remoteCtx)
 
     end = time.time()
     return end - start
 
-def backup(ctx: Context):
+def backup(ctx: LocalContext):
     start = time.time()
 
     ensure_aws_is_logged_in(ctx)
@@ -971,14 +974,17 @@ def build_context():
     # year = 2024
     # roles = ["admin", "friend"]
 
-    return Context(dir, name, year, roles)
+    return (
+        LocalContext(dir, name, year, roles),
+        RemoteContext(dir, name, year, roles)
+    )
 
 def main():
-    ctx = build_context()
-    verify_destination_does_not_exist(ctx)
+    localCtx, remoteCtx = build_context()
+    verify_destination_does_not_exist(localCtx)
 
     print(f"{Colors.HEADER}Processing Photos...{Colors.ENDC}")
-    resizeDuration = process_photos(ctx)
+    resizeDuration = process_photos(localCtx)
 
     doContinue = prompt_string_required("Would you like to backup and deploy at this time? [y|N]: ")
 
@@ -989,12 +995,12 @@ def main():
     #       so we might as well push sooner than later so we can verify the images on
     #       the site while the backup runs
     print(f"{Colors.HEADER}Deploying Photos...{Colors.ENDC}")
-    deployDuration = deploy(ctx)
+    deployDuration = deploy(localCtx, remoteCtx)
 
     print(f"{Colors.HEADER}Backing Up Photos...{Colors.ENDC}")
-    backupDuration = backup(ctx)
+    backupDuration = backup(localCtx)
 
-    photos = len(glob.glob(os.path.join(ctx.categorySpec.deployCategoryRoot, "xs", "*")))
+    photos = len(glob.glob(os.path.join(localCtx.categorySpec.deployCategoryRoot, "xs", "*")))
     print_stats(photos, resizeDuration, deployDuration, backupDuration)
 
     print(f"{Colors.HEADER}Completed!{Colors.ENDC}")

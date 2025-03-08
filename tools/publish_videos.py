@@ -62,7 +62,7 @@ class CategorySpec:
 class Context:
     sshRemoteHost = "tifa"
     sshUsername = "svc_www_maw"
-    dirAssetRoot = "/srv/www/website_assets/movies"
+    dirAssetRoot = "/data/www/website_assets/movies"
     postgresImage = "docker.io/postgres:16-alpine"
     awsProfile = "mawpower"
     dev = EnvContext(

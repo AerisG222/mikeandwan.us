@@ -40,12 +40,6 @@ class SizeSpec:
     resizeGeometry: str = None
     cropGeometry: str = None
 
-@dataclass
-class EnvContext:
-    pod: str
-    pgEnvFile: str
-    systemdService: str
-
 class CategorySpec:
     def __init__(self, videoDir: str, name: str, year: int, allowedRoles: list, assetRoot: str):
         self.rootDir = videoDir
@@ -60,25 +54,28 @@ class CategorySpec:
         self.deployCategoryRawDir = os.path.join(assetRoot, str(year), os.path.basename(videoDir), "raw")
         self.awsBackupRoot = f"s3://mikeandwan-us-videos/{year}/{PurePath(videoDir).name}"
 
-class Context:
-    sshRemoteHost = "tifa"
-    sshUsername = "svc_www_maw"
+class LocalContext:
     dirAssetRoot = "/data/www/website_assets/movies"
     postgresImage = "docker.io/postgres:16-alpine"
     awsProfile = "mawpower"
-    dev = EnvContext(
-        "dev-maw-pod",
-        "/home/mmorano/maw_dev/podman-env/maw-postgres.env",
-        "pod-dev-maw-pod"
-    )
-    prod = EnvContext(
-        "prod-maw-pod",
-        "/home/svc_www_maw/maw_prod/podman-env/maw-postgres.env",
-        "pod-prod-maw-pod"
-    )
+    pod = "dev-maw-pod"
+    pgEnvFile = "/home/mmorano/maw_dev/podman-env/maw-postgres.env"
+    systemdService = "pod-dev-maw-pod"
 
     def __init__(self, videoDir, name, year, allowedRoles):
-        self.categorySpec = CategorySpec(videoDir, name, year, allowedRoles, Context.dirAssetRoot)
+        self.categorySpec = CategorySpec(videoDir, name, year, allowedRoles, LocalContext.dirAssetRoot)
+
+class RemoteContext:
+    sshRemoteHost = "tifa"
+    sshUsername = "svc_www_maw"
+    dirAssetRoot = "/srv/www/website_assets/movies"
+    postgresImage = "docker.io/postgres:16-alpine"
+    pod = "prod-maw-pod"
+    pgEnvFile = "/home/svc_www_maw/maw_prod/podman-env/maw-postgres.env"
+    systemdService = "pod-prod-maw-pod"
+
+    def __init__(self, photoDir, name, year, allowedRoles):
+        self.categorySpec = CategorySpec(photoDir, name, year, allowedRoles, RemoteContext.dirAssetRoot)
 
 exifTags = [
     "FileSize",
@@ -102,7 +99,7 @@ def build_size_specs(dir):
         SizeSpec("Thumbnail Fixed", os.path.join(dir, "thumb_sq"),   False, None, "160x120", "160x120+0+0")
     ]
 
-def verify_destination_does_not_exist(ctx: Context):
+def verify_destination_does_not_exist(ctx: LocalContext):
     if os.path.isdir(ctx.categorySpec.deployCategoryRoot):
         print(f"{Colors.WARNING}Destination is already taken, please ensure unique category names!{Colors.ENDC}")
         sys.exit()
@@ -149,7 +146,7 @@ def prompt_string_list(prompt: str, default: list):
     else:
         return default
 
-def ensure_aws_is_logged_in(ctx: Context):
+def ensure_aws_is_logged_in(ctx: LocalContext):
     result = subprocess.run([
         "aws",
         "sts",
@@ -167,18 +164,18 @@ def ensure_aws_is_logged_in(ctx: Context):
             "--profile", ctx.awsProfile
         ])
 
-def start_dev_pod(ctx: Context):
+def start_dev_pod(ctx: LocalContext):
     subprocess.run([
         "systemctl",
         "--user",
         "start",
-        ctx.dev.systemdService
+        ctx.systemdService
     ])
 
     # allow services to start
     time.sleep(3)
 
-def clean_prior_attempts(ctx: Context):
+def clean_prior_attempts(ctx: LocalContext):
     if not os.path.isdir(ctx.categorySpec.rawDir):
         return
 
@@ -192,7 +189,7 @@ def clean_prior_attempts(ctx: Context):
     if os.path.isfile(ctx.categorySpec.sqlFile):
         os.remove(ctx.categorySpec.sqlFile)
 
-def prepare_size_dirs(ctx: Context):
+def prepare_size_dirs(ctx: LocalContext):
     for size in ctx.categorySpec.sizeSpecs:
         if not os.path.isdir(size.subdir):
             os.mkdir(size.subdir)
@@ -214,18 +211,18 @@ def print_stats(photoCount: int, resizeDuration: float, deployDuration: float, b
     print(f"{Colors.WARNING} - Total Time: {round(totalTime, 1)}s{Colors.ENDC}")
     print(f"{Colors.WARNING} - Average Time per file: {round(totalTime / photoCount, 1)}s{Colors.ENDC}")
 
-def move_to_local_archive(ctx: Context):
+def move_to_local_archive(ctx: LocalContext):
     if not os.path.isdir(ctx.categorySpec.deployYearRoot):
         os.mkdir(ctx.categorySpec.deployYearRoot)
 
     shutil.move(ctx.categorySpec.rootDir, ctx.categorySpec.deployCategoryRoot)
 
-def apply_sql_to_local(ctx: Context):
+def apply_sql_to_local(ctx: LocalContext):
     subprocess.run([
         "podman", "run", "-it", "--rm",
         "--pull", "newer",
-        "--pod", ctx.dev.pod,
-        "--env-file", ctx.dev.pgEnvFile,
+        "--pod", ctx.pod,
+        "--env-file", ctx.pgEnvFile,
         "--volume", f"{ctx.categorySpec.deployCategoryRoot}:/output:ro",
         "--security-opt", "label=disable",
         ctx.postgresImage,
@@ -236,17 +233,17 @@ def apply_sql_to_local(ctx: Context):
                 "-f", f"/output/{os.path.basename(ctx.categorySpec.sqlFile)}"
     ])
 
-def copy_to_remote(ctx: Context):
+def copy_to_remote(localCtx: LocalContext, remoteCtx: RemoteContext):
     subprocess.run([
         "rsync",
         "-ah",
         "--exclude", "*/raw*",
         "--exclude", "*.dng",
-        ctx.categorySpec.deployCategoryRoot,
-        f"{ctx.sshUsername}@{ctx.sshRemoteHost}:~/"
+        localCtx.categorySpec.deployCategoryRoot,
+        f"{remoteCtx.sshUsername}@{remoteCtx.sshRemoteHost}:~/"
     ])
 
-def read_exif(ctx: Context):
+def read_exif(ctx: LocalContext):
     etArgs = [
         "exiftool"
     ]
@@ -382,7 +379,7 @@ def gen_thumbnail(file: str, spec: SizeSpec):
     scale_thumbnail(origjpg, jpg, spec)
     os.remove(origjpg)
 
-def resize_video(srcFile: str, ctx: Context, exif):
+def resize_video(srcFile: str, ctx: LocalContext, exif):
     print(f"{Colors.OKBLUE}  - {os.path.basename(srcFile)}{Colors.ENDC}")
 
     for sizeSpec in ctx.categorySpec.sizeSpecs:
@@ -397,7 +394,7 @@ def resize_video(srcFile: str, ctx: Context, exif):
         if sizeSpec.resizeGeometry:
             gen_thumbnail(srcFile, sizeSpec)
 
-def resize_videos(ctx: Context, exif):
+def resize_videos(ctx: LocalContext, exif):
     files = list(filter(
         lambda x: os.path.isfile(x),
         glob.glob(os.path.join(ctx.categorySpec.rootDir, "*"))
@@ -421,7 +418,7 @@ def fixup_rotation(exif):
             e["ImageHeight"]["val"] = w
             e["ImageWidth"]["val"] = h
 
-def read_metadata(ctx: Context, orientationCorrectedSrcExif):
+def read_metadata(ctx: LocalContext, orientationCorrectedSrcExif):
     metadata = {}
     exif = read_exif(ctx)
 
@@ -441,7 +438,7 @@ def read_metadata(ctx: Context, orientationCorrectedSrcExif):
 
     return metadata
 
-def move_source_files(ctx: Context):
+def move_source_files(ctx: LocalContext):
     files = list(filter(
         lambda x: os.path.isfile(x),
         glob.glob(os.path.join(ctx.categorySpec.rootDir, "*"))
@@ -450,7 +447,7 @@ def move_source_files(ctx: Context):
     for f in files:
         shutil.move(f, ctx.categorySpec.rawDir)
 
-def build_url(ctx: Context, path: str):
+def build_url(ctx: LocalContext, path: str):
     filePath = PurePath(path)
     sizePart = filePath.parent.name
     categoryPart = filePath.parent.parent.name
@@ -500,7 +497,7 @@ $$
 """
     )
 
-def write_sql_category_insert(f, ctx: Context, metadata):
+def write_sql_category_insert(f, ctx: LocalContext, metadata):
     video = next(iter(metadata.values()))
 
     f.write(
@@ -554,7 +551,7 @@ UPDATE video.category c
 """
     )
 
-def write_sql_video_insert(f, ctx: Context, metadata):
+def write_sql_video_insert(f, ctx: LocalContext, metadata):
     for video in metadata.values():
         items = {
             "category_id": "(SELECT currval('video.category_id_seq'))",
@@ -605,7 +602,7 @@ VALUES
 """
         )
 
-def write_sql_permissions(f, ctx: Context):
+def write_sql_permissions(f, ctx: LocalContext):
     for r in ctx.categorySpec.allowedRoles:
         f.write(f"""
 INSERT INTO video.category_role (category_id, role_id)
@@ -616,7 +613,7 @@ VALUES (
 """
         )
 
-def write_sql(ctx: Context, metadata):
+def write_sql(ctx: LocalContext, metadata):
     f = open(ctx.categorySpec.sqlFile, "w")
 
     write_sql_header(f)
@@ -628,7 +625,7 @@ def write_sql(ctx: Context, metadata):
 
     f.close()
 
-def build_remote_deploy_script(ctx: Context):
+def build_remote_deploy_script(ctx: RemoteContext):
     return f"""
 echo \"These commands will be run on: $( uname -n )\"
 
@@ -642,8 +639,8 @@ sudo chmod -R go-w '{ctx.categorySpec.deployCategoryRoot}'
 sudo restorecon -R '{ctx.categorySpec.deployCategoryRoot}'
 
 podman run -it --rm \
-    --pod '{ctx.prod.pod}' \
-    --env-file '{ctx.prod.pgEnvFile}' \
+    --pod '{ctx.pod}' \
+    --env-file '{ctx.pgEnvFile}' \
     --volume {ctx.categorySpec.deployCategoryRoot}:/sql:ro \
     --security-opt label=disable \
     {ctx.postgresImage} \
@@ -656,7 +653,7 @@ podman run -it --rm \
 sudo rm '{os.path.join(ctx.categorySpec.deployCategoryRoot, os.path.basename(ctx.categorySpec.sqlFile))}'
 """
 
-def execute_remote_deploy(ctx: Context):
+def execute_remote_deploy(ctx: RemoteContext):
     script = build_remote_deploy_script(ctx)
 
     res = subprocess.run([
@@ -669,7 +666,7 @@ def execute_remote_deploy(ctx: Context):
     if res.returncode != 0:
         print("** Error: execute_remote_deploy **")
 
-def process_videos(ctx: Context):
+def process_videos(ctx: LocalContext):
     start = time.time()
 
     clean_prior_attempts(ctx)
@@ -684,22 +681,22 @@ def process_videos(ctx: Context):
     end = time.time()
     return end - start
 
-def deploy(ctx: Context):
+def deploy(localCtx: LocalContext, remoteCtx: RemoteContext):
     start = time.time()
 
     # local deploy
-    start_dev_pod(ctx)
-    move_to_local_archive(ctx)
-    apply_sql_to_local(ctx)
+    start_dev_pod(localCtx)
+    move_to_local_archive(localCtx)
+    apply_sql_to_local(localCtx)
 
     # remote deploy
-    copy_to_remote(ctx)
-    execute_remote_deploy(ctx)
+    copy_to_remote(localCtx, remoteCtx)
+    execute_remote_deploy(remoteCtx)
 
     end = time.time()
     return end - start
 
-def backup(ctx: Context):
+def backup(ctx: LocalContext):
     start = time.time()
 
     ensure_aws_is_logged_in(ctx)
@@ -727,14 +724,17 @@ def build_context():
     # year = 2024
     # roles = ["admin", "friend"]
 
-    return Context(dir, name, year, roles)
+    return (
+        LocalContext(dir, name, year, roles),
+        RemoteContext(dir, name, year, roles)
+    )
 
 def main():
-    ctx = build_context()
-    verify_destination_does_not_exist(ctx)
+    localCtx, remoteCtx = build_context()
+    verify_destination_does_not_exist(localCtx)
 
     print(f"{Colors.HEADER}Processing Videos...{Colors.ENDC}")
-    resizeDuration = process_videos(ctx)
+    resizeDuration = process_videos(localCtx)
 
     doContinue = prompt_string_required("Would you like to backup and deploy at this time? [y|N]: ")
 
@@ -742,12 +742,12 @@ def main():
         sys.exit()
 
     print(f"{Colors.HEADER}Deploying Videos...{Colors.ENDC}")
-    deployDuration = deploy(ctx)
+    deployDuration = deploy(localCtx, remoteCtx)
 
     print(f"{Colors.HEADER}Backing Up Videos...{Colors.ENDC}")
-    backupDuration = backup(ctx)
+    backupDuration = backup(localCtx)
 
-    videos = len(glob.glob(os.path.join(ctx.categorySpec.deployCategoryRoot, "thumbnails", "*")))
+    videos = len(glob.glob(os.path.join(localCtx.categorySpec.deployCategoryRoot, "thumbnails", "*")))
     print_stats(videos, resizeDuration, deployDuration, backupDuration)
 
     print(f"{Colors.HEADER}Completed!{Colors.ENDC}")

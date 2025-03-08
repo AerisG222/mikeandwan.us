@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import glob
 import json
+import numbers
 import os
 import readline
 import shutil
@@ -274,6 +275,26 @@ def get_exif_num_or_val(exif, field: str):
 
     return exif.get(field, {}).get("val", None)
 
+def get_exif_val(exif, field: str):
+    return exif.get(field, {}).get("val", None)
+
+def get_exif_duration(exif, field: str):
+    val = get_exif_num_or_val(exif, field)
+
+    if val is None:
+        return val
+
+    if isinstance(val, numbers.Number):
+        return val
+
+    try:
+        duration = datetime.strptime(val.rstrip('0'), "%H:%M:%S.%f")
+        total_seconds = (duration - datetime(1900, 1, 1)).total_seconds()
+
+        return total_seconds
+    except:
+        return None
+
 def calc_scaled_dimension(targetMinDimension: int, actualMinDimension: int, actualMaxDimension: int):
     targetMaxDimension = int(targetMinDimension * (actualMaxDimension / actualMinDimension))
 
@@ -533,12 +554,6 @@ UPDATE video.category c
 """
     )
 
-def get_exif_num(data):
-    return data.get("num", None)
-
-def get_exif_val(data):
-    return data.get("val", None)
-
 def write_sql_video_insert(f, ctx: Context, metadata):
     for video in metadata.values():
         items = {
@@ -563,8 +578,8 @@ def write_sql_video_insert(f, ctx: Context, metadata):
             "raw_width": get_exif_num_or_val(video["exif"], "ImageWidth"),
             "raw_size": get_exif_num_or_val(video["exif"], "FileSize"),
             "raw_path": sql_str(build_url(ctx, video["exif"]["SourceFile"])),
-            "duration": get_exif_num(video["exif"]["Duration"]),
-            "create_date": sql_time(get_exif_val(video["exif"]["CreateDate"])),
+            "duration": sql_number(get_exif_duration(video["exif"], "Duration")),
+            "create_date": sql_time(get_exif_val(video["exif"], "CreateDate")),
             "gps_latitude": sql_number(get_exif_num_or_val(video["exif"], "GPSLatitude")),
             "gps_latitude_ref_id": sql_str(get_exif_num_or_val(video["exif"], "GPSLatitudeRef")),
             "gps_longitude": sql_number(get_exif_num_or_val(video["exif"], "GPSLongitude")),

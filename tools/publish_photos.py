@@ -38,12 +38,6 @@ class SizeSpec:
     resizeGeometry: str = None
     cropGeometry: str = None
 
-@dataclass
-class EnvContext:
-    pod: str
-    pgEnvFile: str
-    systemdService: str
-
 class CategorySpec:
     def __init__(self, photoDir: str, name: str, year: int, allowedRoles: list, assetRoot: str):
         self.rootDir = photoDir
